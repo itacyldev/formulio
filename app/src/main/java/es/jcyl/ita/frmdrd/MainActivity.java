@@ -1,32 +1,29 @@
 package es.jcyl.ita.frmdrd;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import es.jcyl.ita.frmdrd.context.JexlTest;
+import es.jcyl.ita.frmdrd.ui.form.Form;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Integer result = JexlTest.test();
+        initialize();
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -49,5 +46,38 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initialize() {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_previous:
+                        Toast.makeText(MainActivity.this, "Previous",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_new:
+                        Toast.makeText(MainActivity.this, "New",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_next:
+                        Toast.makeText(MainActivity.this, "Next",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onListFragmentInteraction(Form form) {
+        final Intent intent = new Intent(this,
+                UserFormAlphaEditActivity.class);
+
+        intent.putExtra("form", form);
+        startActivity(intent);
     }
 }
