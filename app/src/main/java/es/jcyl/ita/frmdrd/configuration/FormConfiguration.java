@@ -27,7 +27,7 @@ public class FormConfiguration {
         field_3.setType(Field.TYPE.TEXT);
         field_3.setName("campo 3");
         field_3.setId("campo3");
-        field_3.setRenderCondition("this.campo2 = true");
+        field_3.setRenderCondition("${this.campo2 = true}");
 
         Field field_4 = new Field();
         field_4.setType(Field.TYPE.DATE);
