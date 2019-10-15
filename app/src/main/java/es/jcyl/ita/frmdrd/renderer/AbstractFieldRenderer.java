@@ -3,10 +3,21 @@ package es.jcyl.ita.frmdrd.renderer;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
+import es.jcyl.ita.frmdrd.DaggerDiComponent;
 import es.jcyl.ita.frmdrd.ui.form.Field;
 
 public abstract class AbstractFieldRenderer implements IFieldRenderer{
 
+    @Inject
+    protected OnChangeFieldInterceptor onChangeInterceptor;
+
+
+    public AbstractFieldRenderer(){
+        //onChangeInterceptor = new OnChangeFieldInterceptor();
+        DaggerDiComponent.create().inject(this);
+    }
 
     public abstract void render(Context context, Field field,
                                 ViewGroup parent);

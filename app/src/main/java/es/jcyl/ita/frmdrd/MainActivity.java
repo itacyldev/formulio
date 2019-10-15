@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initializeDagger();
+
         Integer result = JexlTest.test();
         initialize();
 
@@ -46,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initializeDagger(){
+
     }
 
     private void initialize() {

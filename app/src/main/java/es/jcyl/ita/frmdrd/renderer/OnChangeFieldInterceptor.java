@@ -1,57 +1,42 @@
 package es.jcyl.ita.frmdrd.renderer;
 
-import android.app.DatePickerDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
+import org.apache.commons.lang.StringUtils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import javax.inject.Inject;
 
-import es.jcyl.ita.frmdrd.util.DataUtils;
+import es.jcyl.ita.frmdrd.ui.form.Field;
 
-public class OnChangeFieldInterceptor implements TextWatcher,
-        CompoundButton.OnCheckedChangeListener, DatePickerDialog.OnDateSetListener {
-
-    private Button dateButton;
+public class OnChangeFieldInterceptor {
 
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        String value = s.toString();
-
-
+    @Inject
+    public OnChangeFieldInterceptor() {
 
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+    public void onChange(Field field, Object value) {
+
+        if (validate(field, value)) {
+            updateContext(field, value);
+
+            String rerender = field.getRerender();
+            if (StringUtils.isNotEmpty(rerender)) {
+                this.rerender(rerender);
+            }
+        }
+    }
+
+    private boolean validate(Field field, Object value) {
+
+        return true;
+    }
+
+    private void updateContext(Field field, Object value) {
 
     }
 
-    public void setDateButton(Button dateButton) {
-        this.dateButton = dateButton;
+    private void rerender(String rerender) {
+
     }
 
-    @Override
-    public void onDateSet(final DatePicker view, final int year,
-                          final int monthOfYear, final int dayOfMonth) {
-        view.updateDate(year, monthOfYear, dayOfMonth);
-        final Calendar c = new GregorianCalendar();
-        c.set(year, monthOfYear, dayOfMonth);
-
-        final Date dateValue = c.getTime();
-        dateButton.setText(DataUtils.DATE_FORMAT.format(dateValue));
-    }
 }

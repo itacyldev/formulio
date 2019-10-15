@@ -6,6 +6,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +22,11 @@ import es.jcyl.ita.frmdrd.ui.form.Field;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 public class DateFieldRenderer extends AbstractFieldRenderer {
+
+    public DateFieldRenderer(){
+        super();
+    }
+
     @Override
     public void render(Context context, Field field, ViewGroup parent) {
         String renderCondition = field.getRenderCondition();
@@ -46,8 +52,20 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
             fieldName.setText(field.getName());
 
             DatePickerDialog.OnDateSetListener listener =
-                    new OnChangeFieldInterceptor();
-            ((OnChangeFieldInterceptor) listener).setDateButton(input);
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(final DatePicker view, final int year,
+                                              final int monthOfYear, final int dayOfMonth) {
+                            view.updateDate(year, monthOfYear, dayOfMonth);
+                            final Calendar c = new GregorianCalendar();
+                            c.set(year, monthOfYear, dayOfMonth);
+
+                            final Date dateValue = c.getTime();
+                            input.setText(DataUtils.DATE_FORMAT.format(dateValue));
+
+                            onChangeInterceptor.onChange(field, dateValue);
+                        }
+                    };
 
             input.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,5 +89,10 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
 
             parent.addView(linearLayout);
         }
+    }
+
+    @Override
+    public void render(int viewId, Field field) {
+
     }
 }

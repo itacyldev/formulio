@@ -18,8 +18,13 @@ import es.jcyl.ita.frmdrd.ui.form.Field;
 
 public class TextFieldRenderer extends AbstractFieldRenderer {
 
+    public TextFieldRenderer() {
+        super();
+    }
+
     @Override
-    public void render(Context context, final Field field, ViewGroup parent) {
+    public void render(Context context, final Field field,
+                       final ViewGroup parent) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -35,33 +40,35 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
                     .findViewById(R.id.field_layout_name);
             final EditText input = (EditText) linearLayout
                     .findViewById(R.id.field_layout_value);
+
             final ImageView resetButton = (ImageView) linearLayout
                     .findViewById(R.id.field_layout_x);
 
             input.setInputType(InputType.TYPE_CLASS_TEXT);
-
             input.addTextChangedListener(new TextWatcher() {
-
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    String rerender = field.getRerender();
+                    onChangeInterceptor.onChange(field, editable);
                 }
             });
 
             fieldName.setText(field.getName());
             parent.addView(linearLayout);
+
         }
     }
 
 
+    @Override
+    public void render(int viewId, Field field) {
+
+    }
 }
