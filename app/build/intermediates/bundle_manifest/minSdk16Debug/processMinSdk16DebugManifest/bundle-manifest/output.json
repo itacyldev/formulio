@@ -1,1 +1,0 @@
-[{"outputType":{"type":"BUNDLE_MANIFEST"},"apkData":{"type":"MAIN","splits":[],"versionCode":10001,"versionName":"0.1.0-minApi16","enabled":true,"outputFile":"Formudroid_minSdk16-debug_0.1.0-minApi16.apk","fullName":"minSdk16Debug","baseName":"minSdk16-debug"},"path":"AndroidManifest.xml","properties":{"packageId":"es.jcyl.ita.frmdrd.debug","split":"","minSdkVersion":"16"}}]
