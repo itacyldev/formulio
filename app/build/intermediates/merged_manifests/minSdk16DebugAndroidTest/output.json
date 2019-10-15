@@ -1,0 +1,1 @@
+[{"outputType":{"type":"MERGED_MANIFESTS"},"apkData":{"type":"MAIN","splits":[],"versionCode":10001,"versionName":"0.1.0-minApi16","enabled":true,"outputFile":"app-minSdk16-debug-androidTest.apk","fullName":"minSdk16DebugAndroidTest","baseName":"minSdk16-debug-androidTest"},"path":"AndroidManifest.xml","properties":{}}]
