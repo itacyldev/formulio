@@ -4,5 +4,5 @@ package es.jcyl.ita.frmdrd.dao.persister;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-class PersisterException extends Exception {
+public class PersisterException extends Exception {
 }

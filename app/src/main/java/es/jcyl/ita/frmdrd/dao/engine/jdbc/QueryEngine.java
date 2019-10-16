@@ -21,7 +21,7 @@ public class QueryEngine {
     public PaginatedList<Map<String, Object>> retrieve(DBSourceDescriptor source, String query, Context context) {
         PaginatedList<Map<String, Object>> lst = new PaginatedList<Map<String, Object>>();
 
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(path, null, 0);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(source.getPath(), null, 0);
 
 
         // TODO: Android api bug, binding parameters have to be forced to String. Create new implementation

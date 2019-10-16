@@ -1,44 +1,24 @@
 package es.jcyl.ita.frmdrd;
 
-import org.junit.After;
-import org.junit.Before;
+import android.database.sqlite.SQLiteDatabase;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public class BasicDBTest {
 
-
-    lateinit var dbHelper: DbHelper
-
-    @Before
-    fun setup() {
-        dbHelper = DbHelper(RuntimeEnvironment.application)
-        dbHelper.clearDbAndRecreate()
-    }
-
     @Test
-    @Throws(Exception::class)
-    fun testDbInsertion() {
+    public void myfirstTest(){
 
-        // Given
-        val testStr1 = "testing"
-        val testStr2 = "testing"
+        TestDatabase db = new TestDatabase(ApplicationProvider.getApplicationContext());
+        System.out.println(db.getDatabaseName());
 
-        // When
-        dbHelper.insertText(testStr1)
-        dbHelper.insertText(testStr2)
-
-        // Then
-        assertEquals(dbHelper.getAllText(), "$testStr1-$testStr2-")
-    }
-
-    @After
-    fun tearDown() {
-        dbHelper.clearDb()
+        SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase("mynewdb.db", null);
+        System.out.println(sqDb.getPath());
     }
 
 }

@@ -12,9 +12,8 @@ public class SQLEntityPersiser implements EntityLoader, EntityPersister {
 
     @Override
     public void save(Entity entity) {
-        entity.getMetadata().
 
-    }
+   }
 
     @Override
     public void delete(Object[] id) {
