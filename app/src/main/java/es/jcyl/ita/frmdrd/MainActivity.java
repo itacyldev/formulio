@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         return super.onOptionsItemSelected(item);
     }
 
-    private void initializeDagger(){
+    private void initializeDagger() {
 
     }
 
