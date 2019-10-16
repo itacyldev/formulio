@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/action_previous"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_previous_item"
+        android:title="Previous"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_new"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_new"
+        android:title="New"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_next"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_next_item"
+        android:title="Next"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/media_route_menu_item"
+        android:title="Cast"
+        app:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"
+        tools:icon="@drawable/mr_button_light" />
+</menu>

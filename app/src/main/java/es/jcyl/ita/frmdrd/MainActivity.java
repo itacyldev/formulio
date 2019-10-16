@@ -1,6 +1,5 @@
 package es.jcyl.ita.frmdrd;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,10 +79,8 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
 
     @Override
     public void onListFragmentInteraction(Form form) {
-        final Intent intent = new Intent(this,
-                UserFormAlphaEditActivity.class);
-
-        intent.putExtra("form", form);
-        startActivity(intent);
+        NavigationManager navigationManager = new NavigationManager();
+        navigationManager.navigate(this,  UserFormAlphaEditActivity.class,
+                form);
     }
 }
