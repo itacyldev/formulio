@@ -1,5 +1,13 @@
 package es.jcyl.ita.frmdrd.context.impl;
 
+/**
+ *
+ * Data structure to store the information of a date operation (add/substract, access to date field,
+ * ..) obtained by the DateExpressionInterpreter during the parsing process.
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
+
 
 public class CalendarOperation {
 

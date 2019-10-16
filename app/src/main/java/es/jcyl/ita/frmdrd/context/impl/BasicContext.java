@@ -4,6 +4,9 @@ import org.apache.commons.jexl3.JexlExpression;
 
 import es.jcyl.ita.frmdrd.context.AbstractContext;
 
+/**
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
 
 public class BasicContext extends AbstractContext {
 
@@ -27,7 +30,6 @@ public class BasicContext extends AbstractContext {
 
     @Override
     public Object get(Object key) {
-        // intentamos obtener el valor directamente con la clave
         Object obj = super.get(key);
         if (obj != null) {
             return obj;
@@ -35,11 +37,8 @@ public class BasicContext extends AbstractContext {
             if (!hasExlExpressison((String) key)) {
                 return super.get(key);
             } else {
-                // comprobar si existe la propiedad sobre la que se quiere
-                // obtener la expresión
                 String prp = getPropertyForExpression((String) key);
                 if (prp == null || !this.containsKey(prp)) {
-                    // la propiedad no existe, devolver null directamente
                     return null;
                 }
                 JexlExpression e = jexl.createExpression((String) key);

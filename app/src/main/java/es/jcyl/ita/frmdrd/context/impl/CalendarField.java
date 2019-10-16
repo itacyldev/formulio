@@ -4,10 +4,11 @@ package es.jcyl.ita.frmdrd.context.impl;
 /**
  * Stores the Calendar field codes related to the format constant to used them
  * in the expression processor.
- * 
- * @author ita-riobrigu See:
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  *         https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
  */
+
 public enum CalendarField {
 	ERA(0, "G"), YEAR(1, "y"), MONTH(2, "M"), WEEK_OF_YEAR(3,
 			"w"), WEEK_OF_MONTH(4, "W"), DAY_OF_MONTH(5, "d"), DAY_OF_YEAR(6,
