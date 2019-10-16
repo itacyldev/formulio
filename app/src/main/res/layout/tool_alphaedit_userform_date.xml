@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/field_layout_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp">
+
+    <TextView
+        android:id="@+id/field_layout_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textColor="#adadad"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/field_layout_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="2dp"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:textColor="#adadad"
+        android:textSize="11sp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/field_layout_innerlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <Button
+            android:id="@+id/field_layout_value"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:textColor="#fff"
+            android:textSize="16sp">
+        </Button>
+
+        <Button
+            android:id="@+id/field_layout_today"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="0"
+            android:clickable="true"
+            android:text="@string/today"
+            android:textColor="#fff"
+            android:textSize="16sp">
+        </Button>
+
+        <ImageView
+            android:id="@+id/field_layout_x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0"
+            android:background="@drawable/selectablebuttonbackground"
+            android:clickable="true"
+            android:contentDescription="@string/tool_buttons_x"
+            android:padding="5dp"
+            android:src="@drawable/ic_tool_x"/>
+    </LinearLayout>
+
+</LinearLayout>

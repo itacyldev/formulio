@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:keepScreenOn="true"
+              android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/fields_linear_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        />
+
+    <LinearLayout
+        android:id="@+id/tool_alphaeditxml_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <androidx.viewpager.widget.PagerTitleStrip
+                android:id="@+id/pager_title_strip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                style="@style/UserFormPagerTitleStrip"/>
+        </androidx.viewpager.widget.ViewPager>
+
+        <LinearLayout
+            android:id="@+id/tool_alphaeditxml_buttons"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/tool_alphaeditxml_cancel"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginTop="0dip"
+                android:layout_weight="1"
+                android:paddingBottom="20dip"
+                android:paddingTop="20dip"
+                android:text="@string/cancel"
+                android:textColor="#fff"
+                android:textSize="16sp">
+            </Button>
+
+            <Button
+                android:id="@+id/tool_alphaeditxml_accept"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginTop="0dip"
+                android:layout_weight="1"
+                android:paddingBottom="20dip"
+                android:paddingTop="20dip"
+                android:text="@string/accept"
+                android:textColor="#fff"
+                android:textSize="16sp">
+            </Button>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
