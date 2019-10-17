@@ -21,7 +21,7 @@ public class FormConfiguration {
         field_2.setType(Field.TYPE.BOOLEAN);
         field_2.setName("campo 2");
         field_2.setId("campo2");
-        field_2.setRerender("form.campo3");
+        field_2.setUpdate("form.campo3");
 
         Field field_3 = new Field();
         field_3.setType(Field.TYPE.TEXT);

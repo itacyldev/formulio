@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     @Override
     public void onListFragmentInteraction(Form form) {
         NavigationManager navigationManager = new NavigationManager();
-        navigationManager.navigate(this,  UserFormAlphaEditActivity.class,
-                form);
+        navigationManager.navigate(this, UserFormAlphaEditActivity.class,
+                "form", form);
     }
 }

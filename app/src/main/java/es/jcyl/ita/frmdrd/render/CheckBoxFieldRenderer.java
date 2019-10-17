@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.renderer;
+package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
 import android.view.View;
@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.configuration.DataBinder;
 import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
 
@@ -21,7 +22,7 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(Context context, Field field, ViewGroup parent) {
+    public void render(Context context, UIComponent field, ViewGroup parent) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -47,7 +48,7 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton,
                                              boolean value) {
-                    onChangeInterceptor.onChange(field, value);
+                    onChangeInterceptor.onChange((Field)field, value);
                 }
             });
             DataBinder.registerBinding(input.hashCode(), field);
@@ -57,7 +58,7 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(int viewId, Field field) {
+    public void render(int viewId, UIComponent field) {
 
     }
 }

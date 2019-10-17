@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.renderer;
+package es.jcyl.ita.frmdrd.render;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -19,16 +19,17 @@ import java.util.GregorianCalendar;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 public class DateFieldRenderer extends AbstractFieldRenderer {
 
-    public DateFieldRenderer(){
+    public DateFieldRenderer() {
         super();
     }
 
     @Override
-    public void render(Context context, Field field, ViewGroup parent) {
+    public void render(Context context, UIComponent field, ViewGroup parent) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -63,7 +64,8 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
                             final Date dateValue = c.getTime();
                             input.setText(DataUtils.DATE_FORMAT.format(dateValue));
 
-                            onChangeInterceptor.onChange(field, dateValue);
+                            onChangeInterceptor.onChange((Field) field,
+                                    dateValue);
                         }
                     };
 
@@ -92,7 +94,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(int viewId, Field field) {
+    public void render(int viewId, UIComponent field) {
 
     }
 }

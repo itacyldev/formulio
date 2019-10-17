@@ -24,7 +24,7 @@ import java.util.GregorianCalendar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import es.jcyl.ita.frmdrd.ui.form.Form;
-import es.jcyl.ita.frmdrd.renderer.FormRenderer;
+import es.jcyl.ita.frmdrd.render.FormRenderer;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 public class UserFormAlphaEditActivity extends FragmentActivity {

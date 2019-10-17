@@ -1,6 +1,6 @@
 package es.jcyl.ita.frmdrd.ui.form;
 
-public class Field extends FormEntity {
+public class Field extends UIComponent {
     public enum TYPE {
         TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN
     }

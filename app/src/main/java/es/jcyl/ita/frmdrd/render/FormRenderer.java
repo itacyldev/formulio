@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.renderer;
+package es.jcyl.ita.frmdrd.render;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.form.Field;
 import es.jcyl.ita.frmdrd.ui.form.Form;
 import es.jcyl.ita.frmdrd.ui.form.Tab;
+import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class FormRenderer {
 
@@ -33,21 +34,24 @@ public class FormRenderer {
 
         Map<String, Tab> tabs = form.getTabs();
 
-        for(Tab tab: tabs.values()){
-            renderFields(context,tab.getFields(), layout);
+        for (Tab tab : tabs.values()) {
+            renderFields(context, tab.getFields(), layout);
         }
 
 
         return layout;
     }
 
-    private void renderFields(Context context, Map<String, Field> fields, ViewGroup parent) {
+    private void renderFields(Context context,
+                              Map<String, Field> components,
+                              ViewGroup parent) {
         RendererFactory rendererFact = new RendererFactory();
 
-        for (Field field : fields.values()) {
-            IFieldRenderer fieldRenderer = rendererFact.getFieldRenderer(field);
+        for (UIComponent component : components.values()) {
+            UIComponentRenderer componentRenderer =
+                    rendererFact.getComponentRenderer((Field) component);
 
-            fieldRenderer.render(context, field, parent);
+            componentRenderer.render(context, component, parent);
         }
 
     }

@@ -1,13 +1,17 @@
 package es.jcyl.ita.frmdrd.ui.form;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class FormEntity implements Serializable {
+public class UIComponent implements Serializable {
     protected String id;
     protected String name;
 
+    protected UIComponent parent;
+    protected List<UIComponent> children;
+
     protected String renderCondition;
-    protected String rerender;
+    protected String update;
 
     public String getId() {
         return id;
@@ -33,12 +37,12 @@ public class FormEntity implements Serializable {
         this.renderCondition = renderCondition;
     }
 
-    public String getRerender() {
-        return rerender;
+    public String getUpdate() {
+        return update;
     }
 
-    public void setRerender(String rerender) {
-        this.rerender = rerender;
+    public void setUpdate(String update) {
+        this.update = update;
     }
 
 

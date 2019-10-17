@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.renderer;
+package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
 import android.text.Editable;
@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class TextFieldRenderer extends AbstractFieldRenderer {
 
@@ -23,9 +24,9 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(Context context, final Field field,
+    public void render(Context context, final UIComponent component,
                        final ViewGroup parent) {
-        String renderCondition = field.getRenderCondition();
+        String renderCondition = component.getRenderCondition();
 
         boolean render = true;
         if (StringUtils.isNotEmpty(renderCondition)) {
@@ -56,19 +57,19 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    onChangeInterceptor.onChange(field, editable);
+                    onChangeInterceptor.onChange((Field) component, editable);
                 }
             });
 
-            fieldName.setText(field.getName());
+            fieldName.setText(component.getName());
             parent.addView(linearLayout);
 
         }
     }
 
-
     @Override
-    public void render(int viewId, Field field) {
+    public void render(int viewId, UIComponent component) {
 
     }
+
 }
