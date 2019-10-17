@@ -14,11 +14,11 @@ public class NavigationManager {
      * @param param
      */
     void navigate(Context context, Class<? extends Activity> dest,
-                  Serializable param) {
+                  String paramName, Serializable param) {
         final Intent intent = new Intent(context,
                 dest);
 
-        intent.putExtra("form", param);
+        intent.putExtra(paramName, param);
         context.startActivity(intent);
 
     }

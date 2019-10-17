@@ -3,7 +3,7 @@ package es.jcyl.ita.frmdrd.ui.form;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Tab extends FormEntity {
+public class Tab extends UIComponent {
     private Map<String, Field> fields = new LinkedHashMap<>();
 
     public Map<String, Field> getFields(){
