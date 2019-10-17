@@ -33,8 +33,7 @@ import java.util.StringTokenizer;
  * Example: now.+1d.format_YYYY/mm/dd --> format next day, now.-1m.m --> last
  * month.
  * 
- * @author ita-riobrigu
- *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class DateExpressionInterpreter {
