@@ -1,11 +1,11 @@
-package es.jcyl.ita.frmdrd.renderer;
+package es.jcyl.ita.frmdrd.render;
 
 import es.jcyl.ita.frmdrd.ui.form.Field;
 
 public class RendererFactory {
 
-    public IFieldRenderer getFieldRenderer(Field field) {
-        IFieldRenderer renderer = null;
+    public UIComponentRenderer getComponentRenderer(Field field) {
+        UIComponentRenderer renderer = null;
 
         String type = field.getType();
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.renderer;
+package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import es.jcyl.ita.frmdrd.DaggerDiComponent;
-import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
-public abstract class AbstractFieldRenderer implements IFieldRenderer{
+public abstract class AbstractFieldRenderer implements UIComponentRenderer {
 
     @Inject
     protected OnChangeFieldInterceptor onChangeInterceptor;
@@ -19,10 +19,10 @@ public abstract class AbstractFieldRenderer implements IFieldRenderer{
         DaggerDiComponent.create().inject(this);
     }
 
-    public abstract void render(Context context, Field field,
+    public abstract void render(Context context, UIComponent component,
                                 ViewGroup parent);
 
-    public abstract void render(int viewId, Field field);
+    public abstract void render(int viewId, UIComponent component);
 
 
     protected boolean validateCondition(String renderCondition) {

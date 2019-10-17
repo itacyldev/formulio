@@ -3,18 +3,18 @@ package es.jcyl.ita.frmdrd.configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.ui.form.FormEntity;
+import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class DataBinder {
 
-    private static Map<Integer, FormEntity> bindings = new HashMap<>();
+    private static Map<Integer, UIComponent> bindings = new HashMap<>();
 
 
-    public static void registerBinding(Integer id, FormEntity formEntity) {
-        bindings.put(id, formEntity);
+    public static void registerBinding(Integer id, UIComponent UIComponent) {
+        bindings.put(id, UIComponent);
     }
 
-    public static FormEntity getBinding(Integer id) {
+    public static UIComponent getBinding(Integer id) {
         return bindings.get(id);
     }
 

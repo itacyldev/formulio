@@ -20,10 +20,7 @@ public class PhaseEvent {
         this.context = context;
 
     }
-
-    public Context getFacesContext() {
-        return this.context;
-    }
+    
 
     public Integer getPhaseId() {
         return this.phaseId;

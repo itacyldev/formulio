@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.renderer;
+package es.jcyl.ita.frmdrd.render;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -19,7 +19,7 @@ public class OnChangeFieldInterceptor {
         if (validate(field, value)) {
             updateContext(field, value);
 
-            String rerender = field.getRerender();
+            String rerender = field.getUpdate();
             if (StringUtils.isNotEmpty(rerender)) {
                 this.rerender(rerender);
             }
