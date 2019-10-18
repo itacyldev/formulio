@@ -3,12 +3,12 @@ package es.jcyl.ita.frmdrd.dummy;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.ui.form.Form;
+import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 
 public class DummyContent {
 
-    public static final Map<String, Form> FORM_CONFIGS = new HashMap<String, Form>();
+    public static final Map<String, UIForm> FORM_CONFIGS = new HashMap<String, UIForm>();
 
     public static final Map<String, FormListItem> ITEM_MAP = new HashMap<String, FormListItem>();
 

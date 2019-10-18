@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 
-import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 public class OnChangeFieldInterceptor {
 
@@ -14,24 +14,24 @@ public class OnChangeFieldInterceptor {
 
     }
 
-    public void onChange(Field field, Object value) {
+    public void onChange(UIField UIField, Object value) {
 
-        if (validate(field, value)) {
-            updateContext(field, value);
+        if (validate(UIField, value)) {
+            updateContext(UIField, value);
 
-            String rerender = field.getUpdate();
+            String rerender = UIField.getUpdate();
             if (StringUtils.isNotEmpty(rerender)) {
                 this.rerender(rerender);
             }
         }
     }
 
-    private boolean validate(Field field, Object value) {
+    private boolean validate(UIField UIField, Object value) {
 
         return true;
     }
 
-    private void updateContext(Field field, Object value) {
+    private void updateContext(UIField UIField, Object value) {
 
     }
 

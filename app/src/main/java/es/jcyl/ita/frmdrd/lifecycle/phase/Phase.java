@@ -1,10 +1,7 @@
 package es.jcyl.ita.frmdrd.lifecycle.phase;
 
-import java.util.ListIterator;
-
 import androidx.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.context.Context;
-import es.jcyl.ita.frmdrd.lifecycle.PhaseListener;
 
 public abstract class Phase {
 
@@ -15,8 +12,8 @@ public abstract class Phase {
 
     protected PhaseId id;
 
-    public void doPhase(Context context, Lifecycle lifecycle, ListIterator<PhaseListener> listeners) {
-
+    public void doPhase(Context context, Lifecycle lifecycle) {
+        execute(context);
     }
 
     public abstract void execute(Context context);

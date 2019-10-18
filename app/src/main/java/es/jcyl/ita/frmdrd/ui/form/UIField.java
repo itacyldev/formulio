@@ -1,13 +1,13 @@
 package es.jcyl.ita.frmdrd.ui.form;
 
-public class Field extends UIComponent {
+public class UIField extends UIComponent {
     public enum TYPE {
         TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN
     }
 
     private String hint;
     private String extendedHint;
-    private TYPE type = Field.TYPE.TEXT;
+    private TYPE type = UIField.TYPE.TEXT;
     private int inputType = 1;
     private String persistedField;
     private String regexp;

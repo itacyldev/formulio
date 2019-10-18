@@ -4,17 +4,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Tab extends UIComponent {
-    private Map<String, Field> fields = new LinkedHashMap<>();
+    private Map<String, UIField> fields = new LinkedHashMap<>();
 
-    public Map<String, Field> getFields(){
+    public Map<String, UIField> getFields(){
         return fields;
     }
 
-    public Field getField(String id) {
+    public UIField getField(String id) {
         return fields.get(id);
     }
 
-    public void addField(final Field field) {
-        fields.put(field.getId(), field);
+    public void addField(final UIField UIField) {
+        fields.put(UIField.getId(), UIField);
     }
 }

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class TextFieldRenderer extends AbstractFieldRenderer {
@@ -37,7 +37,7 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
             LinearLayout linearLayout = (LinearLayout) View.inflate(context,
                     R.layout.tool_alphaedit_text, null);
 
-            final TextView fieldName = (TextView) linearLayout
+            final TextView fieldLabel = (TextView) linearLayout
                     .findViewById(R.id.field_layout_name);
             final EditText input = (EditText) linearLayout
                     .findViewById(R.id.field_layout_value);
@@ -57,11 +57,11 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    onChangeInterceptor.onChange((Field) component, editable);
+                    onChangeInterceptor.onChange((UIField) component, editable);
                 }
             });
 
-            fieldName.setText(component.getName());
+            fieldLabel.setText(component.getLabel());
             parent.addView(linearLayout);
 
         }

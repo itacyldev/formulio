@@ -14,17 +14,19 @@ public class Lifecycle {
     private Phase[] phases;
 
     private Context context;
+    private String formId;
 
 
-    public Lifecycle() {
+    public Lifecycle(String formId) {
         this.phases = new Phase[]{new BuildParamContextPhase(),
                 new BuildFormContextPhase(), new ProcessValidationsPhase(),
                 new LoadLocalContextsPhase(), new RenderViewPhase()};
+
+        this.formId = formId;
     }
 
     public void doExecute(Context context) {
         this.context = context;
-        String formId = (String)context.get("formId");
         execute(context, 0);
     }
 

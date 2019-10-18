@@ -9,14 +9,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
+import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
 import es.jcyl.ita.frmdrd.context.JexlTest;
-import es.jcyl.ita.frmdrd.ui.form.Form;
+import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loadFormConfig();
+
         setContentView(R.layout.activity_main);
 
         initializeDagger();
@@ -25,6 +30,11 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         initialize();
 
 
+    }
+
+    private void loadFormConfig() {
+        FormConfigParser parser = new DummyFormConfigParser();
+        parser.parseFormConfig("");
     }
 
     @Override
@@ -78,9 +88,9 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     @Override
-    public void onListFragmentInteraction(Form form) {
+    public void onListFragmentInteraction(UIForm UIForm) {
         NavigationManager navigationManager = new NavigationManager();
         navigationManager.navigate(this, UserFormAlphaEditActivity.class,
-                "form", form);
+                "UIForm", UIForm);
     }
 }

@@ -20,7 +20,7 @@ public class UserFormAlphaEditActivity extends FragmentActivity {
     protected static final Log LOGGER = LogFactory
             .getLog(UserFormAlphaEditActivity.class);
 
-    Lifecycle lifecycle = new Lifecycle();
+    Lifecycle lifecycle;
 
     protected Context context;
     protected Activity parentActivity;
@@ -55,17 +55,11 @@ public class UserFormAlphaEditActivity extends FragmentActivity {
         this.formId = this.getIntent().getStringExtra("form");
 
         if (StringUtils.isNotEmpty(formId)) {
+            lifecycle = new Lifecycle(formId);
             BasicContext lifecycleContext = new BasicContext("lifecycle");
-            lifecycleContext.put("formId", formId);
             lifecycleContext.put("activity", this);
             lifecycle.doExecute(lifecycleContext);
         }
-
-    }
-
-    protected void prepareForm() {
-        //containerLayout.setVisibility(View.VISIBLE);
-
 
     }
 

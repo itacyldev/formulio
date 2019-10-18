@@ -85,6 +85,8 @@ ext {
             commonsLang  : 'commons-lang:commons-lang:2.6',
             commonsLogging  : 'commons-logging:commons-logging:1.2',
             dagger: 'com.google.dagger:dagger:2.15',
+            commonsBeanutils: 'commons-beanutils:commons-beanutils:1.9.3'
+
 
     ]
 }

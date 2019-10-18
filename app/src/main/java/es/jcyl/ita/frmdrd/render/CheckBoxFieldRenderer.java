@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.configuration.DataBinder;
-import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
@@ -36,19 +36,19 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
             linearLayout = (LinearLayout) View.inflate(context,
                     R.layout.tool_alphaedit_boolean, null);
 
-            final TextView fieldName = (TextView) linearLayout
+            final TextView fieldLabel = (TextView) linearLayout
                     .findViewById(R.id.field_layout_name);
             final Switch input = (Switch) linearLayout
                     .findViewById(R.id.field_layout_value);
 
 
-            fieldName.setText(field.getName());
+            fieldLabel.setText(field.getLabel());
 
             input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton,
                                              boolean value) {
-                    onChangeInterceptor.onChange((Field)field, value);
+                    onChangeInterceptor.onChange((UIField)field, value);
                 }
             });
             DataBinder.registerBinding(input.hashCode(), field);

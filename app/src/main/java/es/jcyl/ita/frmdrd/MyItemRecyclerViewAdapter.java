@@ -12,7 +12,7 @@ import java.util.Map;
 import androidx.recyclerview.widget.RecyclerView;
 import es.jcyl.ita.frmdrd.FormListFragment.OnListFragmentInteractionListener;
 import es.jcyl.ita.frmdrd.dummy.DummyContent.FormListItem;
-import es.jcyl.ita.frmdrd.ui.form.Form;
+import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link FormListItem} and makes a call to the
@@ -21,10 +21,10 @@ import es.jcyl.ita.frmdrd.ui.form.Form;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final Map<String , Form> mValues;
+    private final Map<String , UIForm> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(Map<String ,Form> items,
+    public MyItemRecyclerViewAdapter(Map<String , UIForm> items,
                                      OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -39,10 +39,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        List<Form> forms = new ArrayList(mValues.values());
-        holder.mItem = forms.get(position);
+        List<UIForm> UIForms = new ArrayList(mValues.values());
+        holder.mItem = UIForms.get(position);
         holder.mIdView.setText(holder.mItem.getId());
-        holder.mContentView.setText(holder.mItem.getName());
+        holder.mContentView.setText(holder.mItem.getLabel());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +65,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Form mItem;
+        public UIForm mItem;
 
         public ViewHolder(View view) {
             super(view);
