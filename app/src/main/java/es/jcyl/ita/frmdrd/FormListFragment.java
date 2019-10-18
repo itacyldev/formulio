@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import es.jcyl.ita.frmdrd.configuration.FormConfiguration;
+import es.jcyl.ita.frmdrd.configuration.FormConfigurationHandler;
 import es.jcyl.ita.frmdrd.ui.form.Form;
 
 /**
@@ -69,7 +69,7 @@ public class FormListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(FormConfiguration.getForms(),
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(FormConfigurationHandler.getForms(),
                     mListener));
             recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                 @Override

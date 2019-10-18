@@ -7,7 +7,7 @@ import es.jcyl.ita.frmdrd.ui.form.Field;
 import es.jcyl.ita.frmdrd.ui.form.Form;
 import es.jcyl.ita.frmdrd.ui.form.Tab;
 
-public class FormConfiguration {
+public class FormConfigurationHandler {
 
     private static Map<String, Form> Forms = new HashMap<String, Form>();
 
