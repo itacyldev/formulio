@@ -5,7 +5,7 @@ package es.jcyl.ita.frmdrd.context.impl;
  * Stores the Calendar field codes related to the format constant to used them
  * in the expression processor.
  *
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  *         https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
  */
 

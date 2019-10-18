@@ -24,4 +24,6 @@ public class ExampleInstrumentedTest {
 
         assertEquals("es.jcyl.ita.jsqlite.test", appContext.getPackageName());
     }
+
+
 }

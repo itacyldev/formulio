@@ -58,7 +58,7 @@ public class UserFormAlphaEditActivity extends FragmentActivity {
             BasicContext lifecycleContext = new BasicContext("lifecycle");
             lifecycleContext.put("formId", formId);
             lifecycleContext.put("activity", this);
-            lifecycle.doExecute(lifecycleContext);
+            lifecycle.doExecute(lifecycleContext, );
         }
 
     }

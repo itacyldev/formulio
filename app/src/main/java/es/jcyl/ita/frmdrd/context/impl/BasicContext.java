@@ -5,7 +5,7 @@ import org.apache.commons.jexl3.JexlExpression;
 import es.jcyl.ita.frmdrd.context.AbstractContext;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
 public class BasicContext extends AbstractContext {
