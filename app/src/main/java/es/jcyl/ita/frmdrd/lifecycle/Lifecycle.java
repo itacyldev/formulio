@@ -13,13 +13,22 @@ public class Lifecycle {
 
     private Phase[] phases;
 
+    private Context context;
+
+
     public Lifecycle() {
         this.phases = new Phase[]{new BuildParamContextPhase(),
                 new BuildFormContextPhase(), new ProcessValidationsPhase(),
                 new LoadLocalContextsPhase(), new RenderViewPhase()};
     }
 
-    void execute(Context context, Integer phaseId) {
+    public void doExecute(Context context) {
+        this.context = context;
+        String formId = (String)context.get("formId");
+        execute(context, 0);
+    }
+
+    public void execute(Context context, Integer phaseId) {
 
         for (int i = phaseId; i < phases.length; i++) {
             phases[i].execute(context);
