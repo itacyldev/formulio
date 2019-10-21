@@ -14,19 +14,19 @@ import android.widget.TextView;
 import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
-import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class TextFieldRenderer extends AbstractFieldRenderer {
 
-    public TextFieldRenderer() {
-        super();
+    public TextFieldRenderer(Lifecycle lifecycle) {
+        super(lifecycle);
     }
 
     @Override
-    public void render(Context context, final UIComponent component,
+    public void render(Context context, final UIField field,
                        final ViewGroup parent) {
-        String renderCondition = component.getRenderCondition();
+        String renderCondition = field.getRenderCondition();
 
         boolean render = true;
         if (StringUtils.isNotEmpty(renderCondition)) {
@@ -57,18 +57,18 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    onChangeInterceptor.onChange((UIField) component, editable);
+                    onChangeInterceptor.onChange(field, editable);
                 }
             });
 
-            fieldLabel.setText(component.getLabel());
+            fieldLabel.setText(field.getLabel());
             parent.addView(linearLayout);
 
         }
     }
 
     @Override
-    public void render(int viewId, UIComponent component) {
+    public void render(int viewId, UIField field) {
 
     }
 

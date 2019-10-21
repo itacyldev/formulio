@@ -1,9 +1,12 @@
 package es.jcyl.ita.frmdrd.lifecycle.phase;
 
-import androidx.lifecycle.Lifecycle;
+
 import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 
 public abstract class Phase {
+
+    protected Lifecycle lifecycle;
 
     public enum PhaseId {
         BUILD_PARAM_CONTEXT, BUILD_FORM_CONTEXT,
@@ -13,6 +16,7 @@ public abstract class Phase {
     protected PhaseId id;
 
     public void doPhase(Context context, Lifecycle lifecycle) {
+        this.lifecycle = lifecycle;
         execute(context);
     }
 

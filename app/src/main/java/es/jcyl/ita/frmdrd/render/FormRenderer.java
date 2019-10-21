@@ -9,12 +9,18 @@ import android.widget.LinearLayout;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
+import es.jcyl.ita.frmdrd.ui.form.Tab;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.form.Tab;
-import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class FormRenderer {
+
+    private Lifecycle lifecycle;
+
+    public FormRenderer(Lifecycle lifecycle){
+        this.lifecycle = lifecycle;
+    }
 
     public View render(Context context, UIForm UIForm) {
         View view = null;
@@ -43,15 +49,15 @@ public class FormRenderer {
     }
 
     private void renderFields(Context context,
-                              Map<String, UIField> components,
+                              Map<String, UIField> fields,
                               ViewGroup parent) {
         RendererFactory rendererFact = new RendererFactory();
 
-        for (UIComponent component : components.values()) {
-            UIComponentRenderer componentRenderer =
-                    rendererFact.getComponentRenderer((UIField) component);
+        for (UIField field : fields.values()) {
+            UIFieldRenderer fieldRenderer =
+                    rendererFact.getComponentRenderer(field, lifecycle);
 
-            componentRenderer.render(context, component, parent);
+            fieldRenderer.render(context, field, parent);
         }
 
     }

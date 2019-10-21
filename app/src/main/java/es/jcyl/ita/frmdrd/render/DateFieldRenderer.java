@@ -18,18 +18,18 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
-import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 public class DateFieldRenderer extends AbstractFieldRenderer {
 
-    public DateFieldRenderer() {
-        super();
+    public DateFieldRenderer(Lifecycle lifecycle) {
+        super(lifecycle);
     }
 
     @Override
-    public void render(Context context, UIComponent field, ViewGroup parent) {
+    public void render(Context context, UIField field, ViewGroup parent) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -94,7 +94,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(int viewId, UIComponent field) {
+    public void render(int viewId, UIField field) {
 
     }
 }

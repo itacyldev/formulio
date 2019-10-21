@@ -52,13 +52,13 @@ public class UserFormAlphaEditActivity extends FragmentActivity {
         this.themeWrapper = new ContextThemeWrapper(context,
                 android.R.style.Theme_Holo_Dialog);
 
-        this.formId = this.getIntent().getStringExtra("form");
+        this.formId = this.getIntent().getStringExtra("formId");
 
         if (StringUtils.isNotEmpty(formId)) {
             lifecycle = new Lifecycle(formId);
             BasicContext lifecycleContext = new BasicContext("lifecycle");
             lifecycleContext.put("activity", this);
-            lifecycle.doExecute(lifecycleContext, );
+            lifecycle.doExecute(lifecycleContext);
         }
 
     }

@@ -12,17 +12,17 @@ import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.configuration.DataBinder;
+import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
-import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 
 public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
 
-    public CheckBoxFieldRenderer() {
-        super();
+    public CheckBoxFieldRenderer(Lifecycle lifecycle) {
+        super(lifecycle);
     }
 
     @Override
-    public void render(Context context, UIComponent field, ViewGroup parent) {
+    public void render(Context context, UIField field, ViewGroup parent) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -48,7 +48,7 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton,
                                              boolean value) {
-                    onChangeInterceptor.onChange((UIField)field, value);
+                    onChangeInterceptor.onChange((UIField) field, value);
                 }
             });
             DataBinder.registerBinding(input.hashCode(), field);
@@ -58,7 +58,7 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(int viewId, UIComponent field) {
+    public void render(int viewId, UIField field) {
 
     }
 }

@@ -1,7 +1,9 @@
 package es.jcyl.ita.frmdrd.lifecycle;
 
 
+import es.jcyl.ita.frmdrd.context.CompositeContext;
 import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.frmdrd.context.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.lifecycle.phase.BuildFormContextPhase;
 import es.jcyl.ita.frmdrd.lifecycle.phase.BuildParamContextPhase;
 import es.jcyl.ita.frmdrd.lifecycle.phase.LoadLocalContextsPhase;
@@ -13,7 +15,8 @@ public class Lifecycle {
 
     private Phase[] phases;
 
-    private Context context;
+    private CompositeContext context;
+
     private String formId;
 
 
@@ -26,14 +29,20 @@ public class Lifecycle {
     }
 
     public void doExecute(Context context) {
-        this.context = context;
-        execute(context, 0);
+        this.context = new OrderedCompositeContext();
+        this.context.addContext(context);
+
+        execute(this.context, 0);
     }
 
     public void execute(Context context, Integer phaseId) {
 
         for (int i = phaseId; i < phases.length; i++) {
-            phases[i].execute(context);
+            phases[i].doPhase(context, this);
         }
+    }
+
+    public String getFormId() {
+        return formId;
     }
 }

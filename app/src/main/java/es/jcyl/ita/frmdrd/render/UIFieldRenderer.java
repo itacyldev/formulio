@@ -3,10 +3,10 @@ package es.jcyl.ita.frmdrd.render;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import es.jcyl.ita.frmdrd.ui.form.UIComponent;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 
-interface UIComponentRenderer {
+interface UIFieldRenderer {
 
-    void render(Context context, UIComponent component,
+    void render(Context context, UIField field,
                 ViewGroup parent);
 }

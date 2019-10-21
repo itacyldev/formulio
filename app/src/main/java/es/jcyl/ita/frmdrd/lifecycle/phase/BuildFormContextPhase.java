@@ -1,6 +1,7 @@
 package es.jcyl.ita.frmdrd.lifecycle.phase;
 
 
+import es.jcyl.ita.frmdrd.context.CompositeContext;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.BasicContext;
 
@@ -12,12 +13,11 @@ public class BuildFormContextPhase extends Phase {
 
     @Override
     public void execute(Context context) {
-        String formId = (String) context.get("lifecycle.formId");
-
-
         Context formContext = new BasicContext("form");
 
+        //TODO create form context
 
+        ((CompositeContext)context).addContext(formContext);
     }
 
 }

@@ -3,26 +3,24 @@ package es.jcyl.ita.frmdrd.render;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import javax.inject.Inject;
+import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 
-import es.jcyl.ita.frmdrd.DaggerDiComponent;
-import es.jcyl.ita.frmdrd.ui.form.UIComponent;
+public abstract class AbstractFieldRenderer implements UIFieldRenderer {
 
-public abstract class AbstractFieldRenderer implements UIComponentRenderer {
-
-    @Inject
+    //@Inject
     protected OnChangeFieldInterceptor onChangeInterceptor;
 
 
-    public AbstractFieldRenderer(){
-        //onChangeInterceptor = new OnChangeFieldInterceptor();
-        DaggerDiComponent.create().inject(this);
+    public AbstractFieldRenderer(Lifecycle lifecycle) {
+        onChangeInterceptor = new OnChangeFieldInterceptor(lifecycle);
+        //DaggerDiComponent.create().inject(this);
     }
 
-    public abstract void render(Context context, UIComponent component,
+    public abstract void render(Context context, UIField field,
                                 ViewGroup parent);
 
-    public abstract void render(int viewId, UIComponent component);
+    public abstract void render(int viewId, UIField field);
 
 
     protected boolean validateCondition(String renderCondition) {

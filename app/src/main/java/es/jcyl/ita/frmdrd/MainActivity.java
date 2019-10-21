@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     @Override
-    public void onListFragmentInteraction(UIForm UIForm) {
+    public void onListFragmentInteraction(UIForm form) {
         NavigationManager navigationManager = new NavigationManager();
         navigationManager.navigate(this, UserFormAlphaEditActivity.class,
-                "UIForm", UIForm);
+                "formId", form.getId());
     }
 }
