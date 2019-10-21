@@ -5,7 +5,7 @@ import java.util.List;
 
 public class UIComponent implements Serializable {
     protected String id;
-    protected String name;
+    protected String label;
 
     protected UIComponent parent;
     protected List<UIComponent> children;
@@ -21,12 +21,12 @@ public class UIComponent implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getLabel() {
+        return label;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setLabel(final String label) {
+        this.label = label;
     }
 
     public String getRenderCondition() {
@@ -53,11 +53,11 @@ public class UIComponent implements Serializable {
         if (id != null) {
             output += id;
         }
-        if (id != null && name != null) {
+        if (id != null && label != null) {
             output += " / ";
         }
-        if (name != null) {
-            output += name;
+        if (label != null) {
+            output += label;
         }
 
         if (output.length() > 0) {

@@ -1,13 +1,13 @@
 package es.jcyl.ita.frmdrd.render;
 
-import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 public class RendererFactory {
 
-    public UIComponentRenderer getComponentRenderer(Field field) {
+    public UIComponentRenderer getComponentRenderer(UIField UIField) {
         UIComponentRenderer renderer = null;
 
-        String type = field.getType();
+        String type = UIField.getType();
 
         switch (type) {
             case "TEXT":

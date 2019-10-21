@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.render.FormRenderer;
-import es.jcyl.ita.frmdrd.ui.form.Form;
+import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 public class RenderViewPhase extends Phase {
 
@@ -19,14 +19,14 @@ public class RenderViewPhase extends Phase {
     @Override
     public void execute(Context context) {
         this.parentActivity = (Activity) context.get("lifecycle.acticity");
-        Form form = (Form) context.get("form");
-        this.render(form);
+        UIForm UIForm = (UIForm) context.get("UIForm");
+        this.render(UIForm);
     }
 
 
-    private void render(Form form) {
+    private void render(UIForm UIForm) {
         FormRenderer renderer = new FormRenderer();
-        LinearLayout fieldsLayout = (LinearLayout) renderer.render(parentActivity, form);
+        LinearLayout fieldsLayout = (LinearLayout) renderer.render(parentActivity, UIForm);
         fieldsLayout.setVisibility(View.VISIBLE);
     }
 }

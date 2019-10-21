@@ -21,3 +21,33 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+<<<<<<< HEAD
+=======
+
+ext {
+    versionCode = 1
+    versionName = '0.1.0'
+    applicationId = "es.jcyl.ita.frmdrd"
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    minSdkVersion = 21
+    buildToolsVersion = '29.0.1'
+    encoding = "ISO-8859-1"
+
+    commonDependencies = [
+
+            appCompat        : 'androidx.appcompat:appcompat:1.0.2',
+            cardView         : 'androidx.cardview:cardview:1.0.0',
+            design           : 'com.google.android.material:material:1.0.0-rc01',
+            constraint_layout: 'androidx.constraintlayout:constraintlayout:1.1.3',
+            coordinatorlayout: 'androidx.coordinatorlayout:coordinatorlayout:1.0.0-alpha1',
+            jexl: 'org.apache.commons:commons-jexl3:3.1',
+            commonsLang  : 'commons-lang:commons-lang:2.6',
+            commonsLogging  : 'commons-logging:commons-logging:1.2',
+            dagger: 'com.google.dagger:dagger:2.15',
+            commonsBeanutils: 'commons-beanutils:commons-beanutils:1.9.3'
+
+
+    ]
+}
+>>>>>>> 41dcbaad348941ee0fd822142759c2d14ccbe42b

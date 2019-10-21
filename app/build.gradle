@@ -25,7 +25,24 @@ android {
 }
 
 dependencies {
+<<<<<<< HEAD
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+=======
+    Map<String, String> dependencies = globalConf.commonDependencies
+
+    implementation dependencies.appCompat
+    implementation dependencies.cardView
+    implementation dependencies.design
+    implementation dependencies.constraint_layout
+    implementation dependencies.coordinatorlayout
+    implementation dependencies.jexl
+    implementation dependencies.dagger
+
+
+    implementation dependencies.commonsLang
+    implementation dependencies.commonsLogging
+    implementation dependencies.commonsBeanutils
+>>>>>>> 41dcbaad348941ee0fd822142759c2d14ccbe42b
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import es.jcyl.ita.frmdrd.configuration.FormConfigurationHandler;
-import es.jcyl.ita.frmdrd.ui.form.Form;
+import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
+import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 /**
  * A fragment representing a list of Items.
@@ -69,7 +69,7 @@ public class FormListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(FormConfigurationHandler.getForms(),
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(FormConfigHandler.getForms(),
                     mListener));
             recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                 @Override
@@ -120,6 +120,6 @@ public class FormListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Form form);
+        void onListFragmentInteraction(UIForm UIForm);
     }
 }

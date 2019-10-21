@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.ui.form.Field;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
@@ -41,7 +41,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
             LinearLayout linearLayout = (LinearLayout) View.inflate(context,
                     R.layout.tool_alphaedit_date, null);
 
-            final TextView fieldName = linearLayout
+            final TextView fieldLabel = linearLayout
                     .findViewById(R.id.field_layout_name);
             final Button input = linearLayout
                     .findViewById(R.id.field_layout_value);
@@ -50,7 +50,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
             final ImageView resetButton = linearLayout
                     .findViewById(R.id.field_layout_x);
 
-            fieldName.setText(field.getName());
+            fieldLabel.setText(field.getLabel());
 
             DatePickerDialog.OnDateSetListener listener =
                     new DatePickerDialog.OnDateSetListener() {
@@ -64,7 +64,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
                             final Date dateValue = c.getTime();
                             input.setText(DataUtils.DATE_FORMAT.format(dateValue));
 
-                            onChangeInterceptor.onChange((Field) field,
+                            onChangeInterceptor.onChange((UIField) field,
                                     dateValue);
                         }
                     };
