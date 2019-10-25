@@ -5,14 +5,15 @@ import java.util.Map;
 
 public class UIForm extends UIComponent {
 
-    private Map<String, Tab> tabs = new LinkedHashMap<>();
+    private Map<String, UITab> tabs = new LinkedHashMap<>();
 
-    public Map<String, Tab> getTabs() {
+    public Map<String, UITab> getTabs() {
         return tabs;
     }
 
-    public void addTab(final Tab tab) {
+    public void addTab(final UITab tab) {
+        tab.setParent(this);
+        this.addChild(tab);
         tabs.put(tab.getId(), tab);
     }
-
 }

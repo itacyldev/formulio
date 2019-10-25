@@ -10,7 +10,7 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
-import es.jcyl.ita.frmdrd.ui.form.Tab;
+import es.jcyl.ita.frmdrd.ui.form.UITab;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
@@ -38,9 +38,9 @@ public class FormRenderer {
     private View renderLinearLayout(Context context, UIForm UIForm) {
         LinearLayout layout = ((Activity) context).findViewById(R.id.fields_linear_layout);
 
-        Map<String, Tab> tabs = UIForm.getTabs();
+        Map<String, UITab> tabs = UIForm.getTabs();
 
-        for (Tab tab : tabs.values()) {
+        for (UITab tab : tabs.values()) {
             renderFields(context, tab.getFields(), layout);
         }
 

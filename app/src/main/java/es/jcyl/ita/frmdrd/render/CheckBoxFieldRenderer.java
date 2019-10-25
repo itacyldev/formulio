@@ -11,7 +11,6 @@ import android.widget.TextView;
 import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.configuration.DataBinder;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 
@@ -36,9 +35,9 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
             linearLayout = (LinearLayout) View.inflate(context,
                     R.layout.tool_alphaedit_boolean, null);
 
-            final TextView fieldLabel = (TextView) linearLayout
+            final TextView fieldLabel = linearLayout
                     .findViewById(R.id.field_layout_name);
-            final Switch input = (Switch) linearLayout
+            final Switch input = linearLayout
                     .findViewById(R.id.field_layout_value);
 
 
@@ -51,9 +50,10 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
                     onChangeInterceptor.onChange((UIField) field, value);
                 }
             });
-            DataBinder.registerBinding(input.hashCode(), field);
+
             parent.addView(linearLayout);
 
+            bindField(field, input);
         }
     }
 

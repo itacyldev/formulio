@@ -7,6 +7,10 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
@@ -90,7 +94,9 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     @Override
     public void onListFragmentInteraction(UIForm form) {
         NavigationManager navigationManager = new NavigationManager();
-        navigationManager.navigate(this, UserFormAlphaEditActivity.class,
-                "formId", form.getId());
+
+        Map<String, Serializable> params = new HashMap<>();
+        params.put("formId", form.getId());
+        navigationManager.navigate(this, UserFormAlphaEditActivity.class, params);
     }
 }

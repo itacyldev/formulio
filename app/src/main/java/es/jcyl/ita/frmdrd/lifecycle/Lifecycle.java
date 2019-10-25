@@ -32,10 +32,10 @@ public class Lifecycle {
         this.context = new OrderedCompositeContext();
         this.context.addContext(context);
 
-        execute(this.context, 0);
+        execute(0);
     }
 
-    public void execute(Context context, Integer phaseId) {
+    public void execute(Integer phaseId) {
 
         for (int i = phaseId; i < phases.length; i++) {
             phases[i].doPhase(context, this);

@@ -1,9 +1,16 @@
 package es.jcyl.ita.frmdrd.lifecycle.phase;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.CompositeContext;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.BasicContext;
+import es.jcyl.ita.frmdrd.ui.form.UIComponent;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
+import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 public class BuildFormContextPhase extends Phase {
 
@@ -11,13 +18,47 @@ public class BuildFormContextPhase extends Phase {
         this.id = PhaseId.BUILD_FORM_CONTEXT;
     }
 
+    /**
+     * @param context
+     */
     @Override
     public void execute(Context context) {
+        UIForm form = FormConfigHandler.getForm(lifecycle.getFormId());
+        Context formContext = buildContext(form);
+
+        ((CompositeContext) context).addContext(formContext);
+    }
+
+    /**
+     * @param form
+     * @return
+     */
+    private Context buildContext(UIForm form) {
         Context formContext = new BasicContext("form");
 
-        //TODO create form context
+        List<UIField> fields = new ArrayList<>();
+        getFields(form, fields);
 
-        ((CompositeContext)context).addContext(formContext);
+        for (UIField field : fields) {
+            formContext.put(field.getId(), field);
+        }
+
+        return formContext;
+    }
+
+    /**
+     * @param component
+     * @param fields
+     */
+    private void getFields(UIComponent component, List<UIField> fields) {
+        if (component instanceof UIField) {
+            fields.add((UIField) component);
+        } else {
+            for (UIComponent child : component.getChildren()) {
+                getFields(child, fields);
+            }
+        }
+
     }
 
 }

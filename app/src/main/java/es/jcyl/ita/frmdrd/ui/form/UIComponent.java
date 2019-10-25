@@ -1,14 +1,15 @@
 package es.jcyl.ita.frmdrd.ui.form;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UIComponent implements Serializable {
     protected String id;
-    protected String label;
-
     protected UIComponent parent;
     protected List<UIComponent> children;
+
+    protected String label;
 
     protected String renderCondition;
     protected String update;
@@ -19,6 +20,25 @@ public class UIComponent implements Serializable {
 
     public void setId(final String id) {
         this.id = id;
+    }
+
+    public UIComponent getParent() {
+        return parent;
+    }
+
+    public void setParent(UIComponent parent) {
+        this.parent = parent;
+    }
+
+    public List<UIComponent> getChildren() {
+        return children;
+    }
+
+    public void addChild(UIComponent child) {
+        if (children == null) {
+            children = new ArrayList<>();
+        }
+        children.add(child);
     }
 
     public String getLabel() {

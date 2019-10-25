@@ -1,6 +1,6 @@
 package es.jcyl.ita.frmdrd.configuration.parser;
 
-import es.jcyl.ita.frmdrd.ui.form.Tab;
+import es.jcyl.ita.frmdrd.ui.form.UITab;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
@@ -30,7 +30,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         UIField_4.setLabel("campo 4");
         UIField_4.setId("campo4");
 
-        Tab tab1_1 = new Tab();
+        UITab tab1_1 = new UITab();
         tab1_1.setId("tab1");
         tab1_1.addField(UIField_1);
         tab1_1.addField(UIField_2);

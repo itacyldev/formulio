@@ -1,8 +1,10 @@
 package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 
+import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 
@@ -21,6 +23,10 @@ public abstract class AbstractFieldRenderer implements UIFieldRenderer {
                                 ViewGroup parent);
 
     public abstract void render(int viewId, UIField field);
+
+    public void bindField(UIField field, View input){
+        DataBindings.registerView(field.getId(),input);
+    }
 
 
     protected boolean validateCondition(String renderCondition) {

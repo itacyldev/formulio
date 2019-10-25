@@ -17,9 +17,7 @@ public class OnChangeFieldInterceptor {
     }
 
     public void onChange(UIField UIField, Object value) {
-
-        Context context = null;
-        lifecycle.execute(context, Phase.PhaseId.PROCESS_VALIDATIONS.ordinal());
+        lifecycle.execute(Phase.PhaseId.PROCESS_VALIDATIONS.ordinal());
 
         if (validate(UIField, value)) {
             updateContext(UIField, value);
@@ -42,7 +40,7 @@ public class OnChangeFieldInterceptor {
 
     private void update(String update) {
         Context context = null;
-        lifecycle.execute(context, Phase.PhaseId.RENDER_VIEW.ordinal());
+        lifecycle.execute(Phase.PhaseId.RENDER_VIEW.ordinal());
     }
 
 }
