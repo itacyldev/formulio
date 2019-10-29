@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.render.FormRenderer;
+import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 public class RenderViewPhase extends Phase {
@@ -18,17 +22,46 @@ public class RenderViewPhase extends Phase {
     }
 
     @Override
-    public void execute(Context context) {
-        this.parentActivity = (Activity) context.get("lifecycle.activity");
-        String formId =  lifecycle.getFormId();
-        UIForm UIForm = FormConfigHandler.getForm(formId);
-        this.render(UIForm);
+    public void execute(Context updateContext) {
+        // If we're updating the view only render the updated fields
+        if (updateContext != null) {
+            Context formContext = lifecycle.getMainContext().getContext("form");
+
+            List<UIField> updateFields = new ArrayList<>();
+            for (String idField : updateContext.keySet()) {
+
+                UIField field = (UIField) formContext.get(idField);
+                updateFields.add(field);
+                String newValue = (String) updateContext.get(idField);
+                String updateStr = field.getUpdate();
+                updateFields.addAll(getFields(updateStr, formContext));
+            }
+
+            render(updateFields);
+        } else {
+            Context mainContext = lifecycle.getMainContext();
+            this.parentActivity = (Activity) mainContext.get("lifecycle.activity");
+            String formId = lifecycle.getFormId();
+            UIForm UIForm = FormConfigHandler.getForm(formId);
+            this.render(UIForm);
+        }
+
     }
 
 
-    private void render(UIForm UIForm) {
+    private void render(UIForm form) {
         FormRenderer renderer = new FormRenderer(lifecycle);
-        LinearLayout fieldsLayout = (LinearLayout) renderer.render(parentActivity, UIForm);
+        LinearLayout fieldsLayout =
+                (LinearLayout) renderer.render(parentActivity, form);
         fieldsLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void render(List<UIField> fields) {
+
+    }
+
+    private List<UIField> getFields(String fieldsStr, Context formContext) {
+        List<UIField> fields = new ArrayList<>();
+        return fields;
     }
 }

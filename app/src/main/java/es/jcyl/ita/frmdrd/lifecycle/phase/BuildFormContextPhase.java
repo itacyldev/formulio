@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
-import es.jcyl.ita.frmdrd.context.CompositeContext;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.ui.form.UIComponent;
@@ -26,7 +25,7 @@ public class BuildFormContextPhase extends Phase {
         UIForm form = FormConfigHandler.getForm(lifecycle.getFormId());
         Context formContext = buildContext(form);
 
-        ((CompositeContext) context).addContext(formContext);
+        lifecycle.addContext(formContext);
     }
 
     /**

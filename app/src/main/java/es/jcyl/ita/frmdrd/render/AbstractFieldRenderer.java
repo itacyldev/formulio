@@ -24,8 +24,8 @@ public abstract class AbstractFieldRenderer implements UIFieldRenderer {
 
     public abstract void render(int viewId, UIField field);
 
-    public void bindField(UIField field, View input){
-        DataBindings.registerView(field.getId(),input);
+    public void bindField(UIField field, View view){
+        DataBindings.registerView(field.getId(),view);
     }
 
 

@@ -15,7 +15,7 @@ public class Lifecycle {
 
     private Phase[] phases;
 
-    private CompositeContext context;
+    private CompositeContext mainContext;
 
     private String formId;
 
@@ -29,20 +29,28 @@ public class Lifecycle {
     }
 
     public void doExecute(Context context) {
-        this.context = new OrderedCompositeContext();
-        this.context.addContext(context);
+        this.mainContext = new OrderedCompositeContext();
+        this.mainContext.addContext(context);
 
-        execute(0);
+        execute(0, null);
     }
 
-    public void execute(Integer phaseId) {
-
+    public void execute(Integer phaseId, Context context) {
         for (int i = phaseId; i < phases.length; i++) {
-            phases[i].doPhase(context, this);
+            phases[i].doPhase(this, context);
         }
     }
 
     public String getFormId() {
         return formId;
+    }
+
+    public void addContext(Context context) {
+        mainContext.addContext(context);
+
+    }
+
+    public CompositeContext getMainContext() {
+        return mainContext;
     }
 }

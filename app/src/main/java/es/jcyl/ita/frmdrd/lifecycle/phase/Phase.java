@@ -15,9 +15,9 @@ public abstract class Phase {
 
     protected PhaseId id;
 
-    public void doPhase(Context context, Lifecycle lifecycle) {
+    public void doPhase(Lifecycle lifecycle, Context phaseContext) {
         this.lifecycle = lifecycle;
-        execute(context);
+        execute(phaseContext);
     }
 
     public abstract void execute(Context context);
