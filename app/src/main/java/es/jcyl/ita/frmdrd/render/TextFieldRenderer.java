@@ -57,7 +57,7 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    onChangeInterceptor.onChange(field, editable);
+                    onChangeInterceptor.onChange(field.getId());
                 }
             });
 

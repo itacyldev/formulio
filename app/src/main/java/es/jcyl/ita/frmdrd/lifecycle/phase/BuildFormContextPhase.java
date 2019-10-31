@@ -6,7 +6,7 @@ import java.util.List;
 
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.Context;
-import es.jcyl.ita.frmdrd.context.impl.BasicContext;
+import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.form.UIComponent;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
@@ -33,11 +33,11 @@ public class BuildFormContextPhase extends Phase {
      * @return
      */
     private Context buildContext(UIForm form) {
-        Context formContext = new BasicContext("form");
+        FormContext formContext = new FormContext("form");
+        formContext.setRoot(form);
 
         List<UIField> fields = new ArrayList<>();
         getFields(form, fields);
-
         for (UIField field : fields) {
             formContext.put(field.getId(), field);
         }

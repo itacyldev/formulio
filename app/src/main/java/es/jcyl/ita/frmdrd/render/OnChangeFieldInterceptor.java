@@ -4,7 +4,6 @@ import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.lifecycle.phase.Phase;
-import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 public class OnChangeFieldInterceptor {
 
@@ -15,19 +14,10 @@ public class OnChangeFieldInterceptor {
         this.lifecycle = lifecycle;
     }
 
-    public void onChange(UIField field, Object value) {
-        Context updateContext = new BasicContext("update");
-        updateContext.put(field.getId(), value);
-
-        lifecycle.execute(Phase.PhaseId.PROCESS_VALIDATIONS.ordinal(), updateContext);
+    public void onChange(String fieldId) {
+        Context eventContext = new BasicContext();
+        eventContext.put("updatedComponent", fieldId);
+        lifecycle.execute(Phase.PhaseId.PROCESS_VALIDATIONS.ordinal(), eventContext);
     }
 
-    private boolean validate(UIField field, Object value) {
-
-        return true;
-    }
-
-    private void updateContext(UIField field, Object value) {
-
-    }
 }

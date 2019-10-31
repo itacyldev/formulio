@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UIComponent implements Serializable {
+import es.jcyl.ita.frmdrd.context.Context;
+
+public abstract class UIComponent implements Serializable {
     protected String id;
     protected UIComponent parent;
     protected List<UIComponent> children;
@@ -86,4 +88,6 @@ public class UIComponent implements Serializable {
             return super.toString();
         }
     }
+
+    public abstract void processValidators(Context context);
 }

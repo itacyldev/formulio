@@ -64,8 +64,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
                             final Date dateValue = c.getTime();
                             input.setText(DataUtils.DATE_FORMAT.format(dateValue));
 
-                            onChangeInterceptor.onChange((UIField) field,
-                                    dateValue);
+                            onChangeInterceptor.onChange(field.getId());
                         }
                     };
 

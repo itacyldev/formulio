@@ -24,21 +24,12 @@ public abstract class AbstractFieldRenderer implements UIFieldRenderer {
 
     public abstract void render(int viewId, UIField field);
 
-    public void bindField(UIField field, View view){
-        DataBindings.registerView(field.getId(),view);
+    public void bindField(UIField field, View view) {
+        DataBindings.registerView(field.getId(), view);
     }
 
 
     protected boolean validateCondition(String renderCondition) {
-        /*JexlBuilder builder = new JexlBuilder();
-        JexlEngine jexl = builder.cache(512).strict(true).silent(false).create();
-        JexlExpression e = jexl.createExpression(renderCondition);
-
-        JexlContext context = new MapContext();
-        context.set("$1", 1);
-        context.set("$2", 2);
-
-        Boolean result = (Boolean) e.evaluate(context);*/
 
         return true;
     }

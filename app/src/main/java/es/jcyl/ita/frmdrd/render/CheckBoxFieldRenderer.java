@@ -47,7 +47,7 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton,
                                              boolean value) {
-                    onChangeInterceptor.onChange((UIField) field, value);
+                    onChangeInterceptor.onChange(field.getId());
                 }
             });
 

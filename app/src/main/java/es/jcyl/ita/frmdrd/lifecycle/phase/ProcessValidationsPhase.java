@@ -1,7 +1,9 @@
 package es.jcyl.ita.frmdrd.lifecycle.phase;
 
 import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
+import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 public class ProcessValidationsPhase extends Phase {
 
@@ -11,21 +13,16 @@ public class ProcessValidationsPhase extends Phase {
 
     @Override
     public void execute(Context updateContext) {
+        FormContext formContext = (FormContext) lifecycle.getMainContext().getContext(
+                "form");
         if (updateContext != null) {
-            Context formContext = lifecycle.getMainContext().getContext("form");
-
             for (String idField : updateContext.keySet()) {
                 UIField fieldConfig = (UIField) formContext.get(idField);
-                String newValue = (String) updateContext.get(idField);
-                validateField(fieldConfig, newValue);
+                fieldConfig.processValidators(lifecycle.getMainContext());
             }
+        } else {
+            UIForm form = formContext.getRoot();
+            form.processValidators(lifecycle.getMainContext());
         }
-
-
-    }
-
-    private boolean validateField(UIField fieldConfig, String newValue) {
-
-        return true;
     }
 }

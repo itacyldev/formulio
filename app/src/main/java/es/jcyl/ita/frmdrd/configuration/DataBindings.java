@@ -15,6 +15,7 @@ public class DataBindings {
      * @param input
      */
     public static void registerView(String id, View input) {
+
         bindings.put(id, input);
     }
 

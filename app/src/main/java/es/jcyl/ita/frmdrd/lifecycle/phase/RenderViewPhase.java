@@ -22,17 +22,15 @@ public class RenderViewPhase extends Phase {
     }
 
     @Override
-    public void execute(Context updateContext) {
+    public void execute(Context phaseContext) {
         // If we're updating the view only render the updated fields
-        if (updateContext != null) {
+        if (phaseContext != null) {
             Context formContext = lifecycle.getMainContext().getContext("form");
 
             List<UIField> updateFields = new ArrayList<>();
-            for (String idField : updateContext.keySet()) {
-
+            for (String idField : phaseContext.keySet()) {
                 UIField field = (UIField) formContext.get(idField);
                 updateFields.add(field);
-                String newValue = (String) updateContext.get(idField);
                 String updateStr = field.getUpdate();
                 updateFields.addAll(getFields(updateStr, formContext));
             }

@@ -1,6 +1,9 @@
 package es.jcyl.ita.frmdrd.ui.form;
 
+import es.jcyl.ita.frmdrd.context.Context;
+
 public class UIField extends UIComponent {
+
     public enum TYPE {
         TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN
     }
@@ -92,6 +95,11 @@ public class UIField extends UIComponent {
 
     public void setDeletable(final boolean deletable) {
         this.deletable = deletable;
+    }
+
+    @Override
+    public void processValidators(Context context) {
+
     }
 
 }
