@@ -29,7 +29,7 @@ public class FormContext extends AbstractContext {
 
         UIField field = (UIField) super.get(key);
 
-        if (field == null) {
+        if (field != null) {
             View view = DataBindings.getView(key.toString());
 
             String fieldType = field.getType();
@@ -47,6 +47,11 @@ public class FormContext extends AbstractContext {
         }
 
         return value;
+    }
+
+    public UIField getFieldConfig(Object key) {
+        UIField field = (UIField) super.get(key);
+        return field;
     }
 
     private String getTextValue(View view) {

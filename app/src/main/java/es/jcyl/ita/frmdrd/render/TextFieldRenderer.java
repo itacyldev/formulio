@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +23,7 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(Context context, final UIField field,
-                       final ViewGroup parent) {
+    public View render(Context context, final UIField field) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -33,43 +31,48 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
             render = this.validateCondition(renderCondition);
         }
 
-        if (render) {
-            LinearLayout linearLayout = (LinearLayout) View.inflate(context,
-                    R.layout.tool_alphaedit_text, null);
 
-            final TextView fieldLabel = (TextView) linearLayout
-                    .findViewById(R.id.field_layout_name);
-            final EditText input = (EditText) linearLayout
-                    .findViewById(R.id.field_layout_value);
+        LinearLayout linearLayout = (LinearLayout) View.inflate(context,
+                R.layout.tool_alphaedit_text, null);
 
-            final ImageView resetButton = (ImageView) linearLayout
-                    .findViewById(R.id.field_layout_x);
+        final TextView fieldLabel = (TextView) linearLayout
+                .findViewById(R.id.field_layout_name);
+        fieldLabel.setText(field.getLabel());
+        fieldLabel.setTag("label");
+        final EditText input = (EditText) linearLayout
+                .findViewById(R.id.field_layout_value);
+        input.setTag("input");
 
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
-            input.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
+        final ImageView resetButton = (ImageView) linearLayout
+                .findViewById(R.id.field_layout_x);
+        resetButton.setTag("reset");
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    onChangeInterceptor.onChange(field.getId());
-                }
-            });
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-            fieldLabel.setText(field.getLabel());
-            parent.addView(linearLayout);
+            @Override
+            public void afterTextChanged(Editable editable) {
+                onChangeInterceptor.onChange(field.getId());
+            }
+        });
 
-        }
+
+        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
+
+        bindField(field, linearLayout);
+
+
+        return linearLayout;
+
     }
 
-    @Override
-    public void render(int viewId, UIField field) {
 
-    }
 
 }

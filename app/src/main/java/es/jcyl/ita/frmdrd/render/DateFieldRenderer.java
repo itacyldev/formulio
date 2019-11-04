@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -29,7 +28,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(Context context, UIField field, ViewGroup parent) {
+    public View render(Context context, UIField field) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -37,63 +36,63 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
             render = this.validateCondition(renderCondition);
         }
 
-        if (render) {
-            LinearLayout linearLayout = (LinearLayout) View.inflate(context,
-                    R.layout.tool_alphaedit_date, null);
 
-            final TextView fieldLabel = linearLayout
-                    .findViewById(R.id.field_layout_name);
-            final Button input = linearLayout
-                    .findViewById(R.id.field_layout_value);
-            final Button today = linearLayout
-                    .findViewById(R.id.field_layout_today);
-            final ImageView resetButton = linearLayout
-                    .findViewById(R.id.field_layout_x);
+        LinearLayout linearLayout = (LinearLayout) View.inflate(context,
+                R.layout.tool_alphaedit_date, null);
 
-            fieldLabel.setText(field.getLabel());
+        final TextView fieldLabel = linearLayout
+                .findViewById(R.id.field_layout_name);
+        final Button input = linearLayout
+                .findViewById(R.id.field_layout_value);
+        final Button today = linearLayout
+                .findViewById(R.id.field_layout_today);
+        final ImageView resetButton = linearLayout
+                .findViewById(R.id.field_layout_x);
 
-            DatePickerDialog.OnDateSetListener listener =
-                    new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(final DatePicker view, final int year,
-                                              final int monthOfYear, final int dayOfMonth) {
-                            view.updateDate(year, monthOfYear, dayOfMonth);
-                            final Calendar c = new GregorianCalendar();
-                            c.set(year, monthOfYear, dayOfMonth);
+        fieldLabel.setText(field.getLabel());
 
-                            final Date dateValue = c.getTime();
-                            input.setText(DataUtils.DATE_FORMAT.format(dateValue));
+        DatePickerDialog.OnDateSetListener listener =
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(final DatePicker view, final int year,
+                                          final int monthOfYear, final int dayOfMonth) {
+                        view.updateDate(year, monthOfYear, dayOfMonth);
+                        final Calendar c = new GregorianCalendar();
+                        c.set(year, monthOfYear, dayOfMonth);
 
-                            onChangeInterceptor.onChange(field.getId());
-                        }
-                    };
+                        final Date dateValue = c.getTime();
+                        input.setText(DataUtils.DATE_FORMAT.format(dateValue));
 
-            input.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View arg0) {
-                    final Calendar c = new GregorianCalendar();
-                    final Dialog dateDialog = new DatePickerDialog(context,
-                            listener, c.get(Calendar.YEAR), c
-                            .get(Calendar.MONTH), c
-                            .get(Calendar.DAY_OF_MONTH));
-                    dateDialog.show();
-                }
-            });
+                        onChangeInterceptor.onChange(field.getId());
+                    }
+                };
 
-            today.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View arg0) {
-                    final Date dateToday = new Date();
-                    input.setText("" + DataUtils.DATE_FORMAT.format(dateToday));
-                }
-            });
+        input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                final Calendar c = new GregorianCalendar();
+                final Dialog dateDialog = new DatePickerDialog(context,
+                        listener, c.get(Calendar.YEAR), c
+                        .get(Calendar.MONTH), c
+                        .get(Calendar.DAY_OF_MONTH));
+                dateDialog.show();
+            }
+        });
 
-            parent.addView(linearLayout);
-        }
+        today.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                final Date dateToday = new Date();
+                input.setText("" + DataUtils.DATE_FORMAT.format(dateToday));
+            }
+        });
+
+        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
+
+        bindField(field, input);
+
+        return linearLayout;
     }
 
-    @Override
-    public void render(int viewId, UIField field) {
 
-    }
 }

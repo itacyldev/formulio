@@ -35,9 +35,9 @@ public class Lifecycle {
         execute(0, null);
     }
 
-    public void execute(Integer phaseId, Context eventContext) {
+    public void execute(Integer phaseId, Context phaseContext) {
         for (int i = phaseId; i < phases.length; i++) {
-            phases[i].doPhase(this, null);
+            phases[i].doPhase(this, phaseContext);
         }
     }
 

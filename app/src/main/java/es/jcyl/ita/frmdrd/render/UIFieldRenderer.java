@@ -1,12 +1,13 @@
 package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
-import android.view.ViewGroup;
+import android.view.View;
 
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 interface UIFieldRenderer {
 
-    void render(Context context, UIField field,
-                ViewGroup parent);
+    View render(Context context, UIField field);
+
+    void update(UIField field);
 }

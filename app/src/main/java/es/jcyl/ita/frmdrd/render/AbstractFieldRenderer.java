@@ -2,7 +2,8 @@ package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
+
+import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
@@ -19,10 +20,21 @@ public abstract class AbstractFieldRenderer implements UIFieldRenderer {
         //DaggerDiComponent.create().inject(this);
     }
 
-    public abstract void render(Context context, UIField field,
-                                ViewGroup parent);
+    public abstract View render(Context context, UIField field);
 
-    public abstract void render(int viewId, UIField field);
+
+    @Override
+    public void update(UIField field) {
+        View view = DataBindings.getView(field.getId());
+        String renderCondition = field.getRenderCondition();
+
+        boolean render = true;
+        if (StringUtils.isNotEmpty(renderCondition)) {
+            render = this.validateCondition(renderCondition);
+        }
+
+        view.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
+    }
 
     public void bindField(UIField field, View view) {
         DataBindings.registerView(field.getId(), view);

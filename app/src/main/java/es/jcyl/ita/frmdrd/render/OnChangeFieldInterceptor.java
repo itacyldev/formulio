@@ -16,7 +16,7 @@ public class OnChangeFieldInterceptor {
 
     public void onChange(String fieldId) {
         Context eventContext = new BasicContext();
-        eventContext.put("updatedComponent", fieldId);
+        eventContext.put("fieldId", fieldId);
         lifecycle.execute(Phase.PhaseId.PROCESS_VALIDATIONS.ordinal(), eventContext);
     }
 

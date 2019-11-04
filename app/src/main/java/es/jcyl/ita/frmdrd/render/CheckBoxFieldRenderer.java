@@ -2,7 +2,6 @@ package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -21,7 +20,7 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
     }
 
     @Override
-    public void render(Context context, UIField field, ViewGroup parent) {
+    public View render(Context context, UIField field) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
@@ -29,36 +28,36 @@ public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
             render = this.validateCondition(renderCondition);
         }
 
-        if (render) {
-            LinearLayout linearLayout = null;
 
-            linearLayout = (LinearLayout) View.inflate(context,
-                    R.layout.tool_alphaedit_boolean, null);
+        LinearLayout linearLayout = null;
 
-            final TextView fieldLabel = linearLayout
-                    .findViewById(R.id.field_layout_name);
-            final Switch input = linearLayout
-                    .findViewById(R.id.field_layout_value);
+        linearLayout = (LinearLayout) View.inflate(context,
+                R.layout.tool_alphaedit_boolean, null);
+
+        final TextView fieldLabel = linearLayout
+                .findViewById(R.id.field_layout_name);
+        fieldLabel.setTag("label");
+        final Switch input = linearLayout
+                .findViewById(R.id.field_layout_value);
+        input.setTag("input");
 
 
-            fieldLabel.setText(field.getLabel());
+        fieldLabel.setText(field.getLabel());
 
-            input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton,
-                                             boolean value) {
-                    onChangeInterceptor.onChange(field.getId());
-                }
-            });
+        input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton,
+                                         boolean value) {
+                onChangeInterceptor.onChange(field.getId());
+            }
+        });
 
-            parent.addView(linearLayout);
+        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
 
-            bindField(field, input);
-        }
+        bindField(field, input);
+
+        return linearLayout;
     }
 
-    @Override
-    public void render(int viewId, UIField field) {
 
-    }
 }
