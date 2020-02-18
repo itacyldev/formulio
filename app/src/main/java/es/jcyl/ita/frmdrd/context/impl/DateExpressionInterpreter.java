@@ -1,6 +1,5 @@
 package es.jcyl.ita.frmdrd.context.impl;
 
-
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import java.util.StringTokenizer;
  * Example: now.+1d.format_YYYY/mm/dd --> format next day, now.-1m.m --> last
  * month.
  * 
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
 public class DateExpressionInterpreter {

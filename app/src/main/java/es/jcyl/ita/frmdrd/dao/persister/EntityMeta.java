@@ -1,9 +1,7 @@
 package es.jcyl.ita.frmdrd.dao.persister;
 
-import es.jcyl.ita.frmdrd.dao.persister.jdbc.ParsedQuery;
-
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
 public class EntityMeta {

@@ -5,27 +5,13 @@
     <string name="today">Today</string>
 
     <!-- common no-data menssages -->
-    <string name="noname">No name</string>
-    <string name="nodata">No data</string>
-    <string name="nodirectory">The directory doesn\'t exist</string>
 
     <!-- basic actions -->
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="close">Close</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="clear">Clear</string>
 
     <!-- tool button descriptions -->
     <string name="tool_buttons_x">Cancel</string>
-    <string name="tool_buttons_alphaedit">Edit entity data</string>
 
-
-    <string name="sign_here_title">Sign here</string>
-    <string name="signature">Signature</string>
-    <string name="sign">Sign</string>
 
 </resources>

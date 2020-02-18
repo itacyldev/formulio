@@ -15,7 +15,8 @@ public class NavigationManager {
      * @param dest
      * @param params
      */
-    void navigate(Context context, Class<? extends Activity> dest, Map<String,
+    public void navigate(Context context, Class<? extends Activity> dest,
+                     Map<String,
             Serializable> params) {
         final Intent intent = new Intent(context,
                 dest);

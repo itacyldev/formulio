@@ -23,17 +23,17 @@ import es.jcyl.ita.frmdrd.util.DataUtils;
 
 public class DateFieldRenderer extends AbstractFieldRenderer {
 
-    public DateFieldRenderer(Lifecycle lifecycle) {
-        super(lifecycle);
+    public DateFieldRenderer(Context context, Lifecycle lifecycle) {
+        super(context, lifecycle);
     }
 
     @Override
-    public View render(Context context, UIField field) {
+    public View render(final UIField field) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
         if (StringUtils.isNotEmpty(renderCondition)) {
-            render = this.validateCondition(renderCondition);
+            render = this.validateCondition(renderCondition, field.getId());
         }
 
 
@@ -51,7 +51,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
 
         fieldLabel.setText(field.getLabel());
 
-        DatePickerDialog.OnDateSetListener listener =
+        final DatePickerDialog.OnDateSetListener listener =
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(final DatePicker view, final int year,
@@ -86,6 +86,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
                 input.setText("" + DataUtils.DATE_FORMAT.format(dateToday));
             }
         });
+
 
         linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
 

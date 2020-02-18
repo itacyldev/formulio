@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DataUtils {
-    public static final String NULL_VALUE = "<vacío>";
+    public static final String NULL_VALUE = "<vacio>";
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
             "dd/MM/yyyy");
     private final static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();

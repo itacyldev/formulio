@@ -15,17 +15,17 @@ import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
 
-    public CheckBoxFieldRenderer(Lifecycle lifecycle) {
-        super(lifecycle);
+    public CheckBoxFieldRenderer(Context context, Lifecycle lifecycle) {
+        super(context, lifecycle);
     }
 
     @Override
-    public View render(Context context, UIField field) {
+    public View render(final UIField field) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
         if (StringUtils.isNotEmpty(renderCondition)) {
-            render = this.validateCondition(renderCondition);
+            render = this.validateCondition(renderCondition, field.getId());
         }
 
 

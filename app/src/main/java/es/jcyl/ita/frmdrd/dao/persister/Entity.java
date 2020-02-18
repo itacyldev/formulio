@@ -1,12 +1,13 @@
 package es.jcyl.ita.frmdrd.dao.persister;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
-public class Entity {
+public class Entity implements Serializable {
 
     private EntityMeta metadata;
     private Object id;

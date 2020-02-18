@@ -16,7 +16,7 @@ import es.jcyl.ita.frmdrd.context.ContextException;
  * Context Wrapper to give access to date and time basic funcions using context notation (date.now,
  * date.now.1d, etc).
  *
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
 public class DateTimeContext extends AbstractContext implements Context {

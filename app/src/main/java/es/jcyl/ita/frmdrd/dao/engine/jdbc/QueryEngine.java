@@ -11,7 +11,7 @@ import es.jcyl.ita.frmdrd.dao.collection.PaginatedList;
 import es.jcyl.ita.frmdrd.dao.sources.DBSourceDescriptor;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  * @since 15/10/2019.
  */
 

@@ -3,7 +3,7 @@ package es.jcyl.ita.frmdrd.dao.collection;
 import java.util.ArrayList;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  * @since 15/10/2019.
  */
 
@@ -39,7 +39,7 @@ public class PaginatedList<E> extends ArrayList<E> implements PaginationInfo {
     @Override
     public int currentPage() {
         if(this.first >= this.totalResult() || this.first < 0){
-            // pedimos un datos fuera de rango la página devuelta es -1
+            // pedimos un datos fuera de rango la pagina devuelta es -1
             return -1;
         } else {
             return this.first / this.pageSize;

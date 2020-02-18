@@ -33,4 +33,7 @@ public abstract interface Context extends Map<String, Object> {
 	 */
 	public String getString(String key);
 
+
+	public Object getValue(String key);
+
 }

@@ -3,7 +3,7 @@ package es.jcyl.ita.frmdrd.dao.persister.jdbc;
 import es.jcyl.ita.frmdrd.dao.persister.PersisterException;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
 public interface ParsedQuery {

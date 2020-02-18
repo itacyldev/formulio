@@ -5,7 +5,7 @@ import es.jcyl.ita.frmdrd.dao.persister.Entity;
 import es.jcyl.ita.frmdrd.dao.persister.EntityPersister;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
 public class SQLEntityPersiser implements EntityLoader, EntityPersister {

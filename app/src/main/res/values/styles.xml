@@ -7,8 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="LoadingProgress" parent="@android:style/Widget.ProgressBar.Small"/>
-
     <style name="UserFormPagerTitleStrip">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>

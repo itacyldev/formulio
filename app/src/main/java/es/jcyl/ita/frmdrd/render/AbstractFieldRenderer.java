@@ -7,20 +7,26 @@ import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
+import es.jcyl.ita.frmdrd.processors.GroovyProcessor;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 public abstract class AbstractFieldRenderer implements UIFieldRenderer {
+
+    Context context;
+    Lifecycle lifecycle;
 
     //@Inject
     protected OnChangeFieldInterceptor onChangeInterceptor;
 
 
-    public AbstractFieldRenderer(Lifecycle lifecycle) {
+    public AbstractFieldRenderer(Context context, Lifecycle lifecycle) {
+        this.context = context;
+        this.lifecycle = lifecycle;
         onChangeInterceptor = new OnChangeFieldInterceptor(lifecycle);
         //DaggerDiComponent.create().inject(this);
     }
 
-    public abstract View render(Context context, UIField field);
+    public abstract View render(UIField field);
 
 
     @Override
@@ -28,9 +34,10 @@ public abstract class AbstractFieldRenderer implements UIFieldRenderer {
         View view = DataBindings.getView(field.getId());
         String renderCondition = field.getRenderCondition();
 
+
         boolean render = true;
         if (StringUtils.isNotEmpty(renderCondition)) {
-            render = this.validateCondition(renderCondition);
+            render = this.validateCondition(renderCondition, field.getId());
         }
 
         view.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
@@ -41,8 +48,15 @@ public abstract class AbstractFieldRenderer implements UIFieldRenderer {
     }
 
 
-    protected boolean validateCondition(String renderCondition) {
+    protected boolean validateCondition(String renderCondition,
+                                        String fieldId) {
+        GroovyProcessor processor =
+                new GroovyProcessor(context.getDir(
+                        "dynclasses", 0), context.getClassLoader());
+        String filename = fieldId+"_renderCond";
+        Object result = processor.evaluate(renderCondition, filename,
+                lifecycle.getMainContext());
 
-        return true;
+        return Boolean.parseBoolean(result.toString());
     }
 }

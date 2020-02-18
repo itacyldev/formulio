@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
 import es.jcyl.ita.frmdrd.context.JexlTest;
+import es.jcyl.ita.frmdrd.data.SavedData;
+import es.jcyl.ita.frmdrd.render.AsListLayerDialog;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
@@ -95,8 +96,19 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     public void onListFragmentInteraction(UIForm form) {
         NavigationManager navigationManager = new NavigationManager();
 
-        Map<String, Serializable> params = new HashMap<>();
-        params.put("formId", form.getId());
-        navigationManager.navigate(this, UserFormAlphaEditActivity.class, params);
+        Map savedData = SavedData.getForm(form.getId());
+        //if(savedData!= null){
+        Map<String, Object> params = new HashMap<>();
+        params.put("savedForms", savedData);
+        final AsListLayerDialog asListDialog = new AsListLayerDialog(this);
+        asListDialog.show();
+        /*}else{
+            Map<String, Serializable> params = new HashMap<>();
+            params.put("formId", form.getId());
+            navigationManager.navigate(this, UserFormAlphaEditActivity.class, params);
+        }*/
+
     }
+
+
 }

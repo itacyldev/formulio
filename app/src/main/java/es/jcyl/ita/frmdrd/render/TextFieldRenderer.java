@@ -18,17 +18,17 @@ import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 public class TextFieldRenderer extends AbstractFieldRenderer {
 
-    public TextFieldRenderer(Lifecycle lifecycle) {
-        super(lifecycle);
+    public TextFieldRenderer(Context context, Lifecycle lifecycle) {
+        super(context, lifecycle);
     }
 
     @Override
-    public View render(Context context, final UIField field) {
+    public View render(final UIField field) {
         String renderCondition = field.getRenderCondition();
 
         boolean render = true;
         if (StringUtils.isNotEmpty(renderCondition)) {
-            render = this.validateCondition(renderCondition);
+            render = this.validateCondition(renderCondition, field.getId());
         }
 
 
@@ -67,7 +67,6 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
         linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
 
         bindField(field, linearLayout);
-
 
         return linearLayout;
 

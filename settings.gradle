@@ -1,2 +1,2 @@
-include ':app', ':jsqlite' //, ':jsqlite', ':jsqlite', ':mynewlib', ':libvfvv'
+include ':app'
 rootProject.name='FormuDruid'

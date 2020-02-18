@@ -23,7 +23,8 @@ public class RenderViewPhase extends Phase {
     @Override
     public void execute(Context phaseContext) {
         FormRenderer renderer = new FormRenderer(lifecycle);
-
+        Context mainContext = lifecycle.getMainContext();
+        this.parentActivity = (Activity) mainContext.get("lifecycle.activity");
 
         // If we're updating the view only render the updated fields
         if (phaseContext != null) {
@@ -37,11 +38,10 @@ public class RenderViewPhase extends Phase {
                 updateFields.addAll(getFields(updateStr, formContext));
             }
 
-            renderer.render(updateFields);
+            renderer.render(parentActivity, updateFields);
 
         } else {
-            Context mainContext = lifecycle.getMainContext();
-            this.parentActivity = (Activity) mainContext.get("lifecycle.activity");
+
             String formId = lifecycle.getFormId();
             UIForm form = FormConfigHandler.getForm(formId);
             renderer.render(parentActivity, form);
@@ -49,8 +49,10 @@ public class RenderViewPhase extends Phase {
 
     }
 
-    private List<UIField> getFields(String fieldsStr, Context formContext) {
+    private List<UIField> getFields(String fieldsStr, FormContext formContext) {
+        UIField field = formContext.getFieldConfig(fieldsStr);
         List<UIField> fields = new ArrayList<>();
+        fields.add(field);
         return fields;
     }
 }

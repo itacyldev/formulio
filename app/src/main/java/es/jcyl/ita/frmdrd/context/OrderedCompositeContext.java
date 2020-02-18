@@ -1,6 +1,13 @@
 package es.jcyl.ita.frmdrd.context;
 
 
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JexlExpression;
+import org.apache.commons.jexl3.MapContext;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
@@ -17,16 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-
-import org.apache.commons.jexl3.JexlContext;
-import org.apache.commons.jexl3.JexlExpression;
-import org.apache.commons.jexl3.MapContext;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Implements Context aggregation ordering returning keys by context insertion order.
@@ -63,11 +62,11 @@ public class OrderedCompositeContext extends AbstractContext
      * java.lang.Object)
      */
     public void setProperty(final String key, final Object value) {
-        // Si no existe la clave la añadimos al primer objeto de configuración
+        //If the key doesn't exist is added to the first configuration object
         if (!this.containsKey(key)) {
             this.first().put(key, value);
         } else {
-            // Buscamos en la última fuente que contenga esa clave
+            // Buscamos en la ultima fuente que contenga esa clave
             this.last(key).put(key, value);
         }
     }
@@ -106,7 +105,7 @@ public class OrderedCompositeContext extends AbstractContext
             throw new RuntimeException(String.format(
                     "No existe un contexto con el prefijo: [%s].", prefix));
         } else {
-            return this.contexts.get(prKey).get(key);
+            return this.contexts.get(prKey).getValue(key);
         }
     }
 
@@ -150,7 +149,7 @@ public class OrderedCompositeContext extends AbstractContext
             String prefix = parts[0];
             String new_key = parts[1];
             if (parts.length > 2) {
-                // si hay más de un punto, se ha incluido un expresión EXL para
+                // si hay mas de un punto, se ha incluido un expresion EXL para
                 // acceder, se concatenan las partes
                 new_key = key.substring(prefix.length() + 1);
             }
@@ -166,7 +165,7 @@ public class OrderedCompositeContext extends AbstractContext
             }
 
             // busqueda de la clave dentro de los contextos en orden inverso
-            // (último contexto añadido tiene prioridad)
+            // (ï¿½ltimo contexto aï¿½adido tiene prioridad)
             List<String> keyList = new ArrayList<String>(
                     this.contexts.keySet());
 
@@ -184,7 +183,7 @@ public class OrderedCompositeContext extends AbstractContext
 
     private Object getValuesByKey(String key) {
         List<Object> result = new LinkedList<Object>();
-        // si hay una expresión posterior, hay que extraerla antes de acceder a
+        // si hay una expresiï¿½n posterior, hay que extraerla antes de acceder a
         // las variables
         String new_key = key;
         String expression = "";
@@ -199,7 +198,7 @@ public class OrderedCompositeContext extends AbstractContext
             expression = key.substring(new_key.length() + 1);
             separator = "[";
         }
-        // recorrer contexto en orden inverso al que se añaden buscando
+        // recorrer contexto en orden inverso al que se aï¿½aden buscando
         // propiedades con la misma clave.
         List<String> keyList = new ArrayList<String>(this.contexts.keySet());
         Collections.reverse(keyList);
@@ -211,10 +210,10 @@ public class OrderedCompositeContext extends AbstractContext
             }
         }
 
-        if (StringUtils.isBlank(expression)) {
+        if (StringUtils.isEmpty(expression)) {
             return result;
         } else {
-            // aplicamos la expresion sobre la colección resultante de añadir
+            // aplicamos la expresion sobre la colecciï¿½n resultante de aï¿½adir
             // todas las variables
             JexlContext context = new MapContext();
             context.set("list", result);
@@ -224,7 +223,7 @@ public class OrderedCompositeContext extends AbstractContext
                 return exl.evaluate(context);
             } catch (Exception e) {
                 throw new RuntimeException(String.format(
-                        "Se ha producido un error al intentar interpretar la expresión \"%s\". "
+                        "Se ha producido un error al intentar interpretar la expresiï¿½n \"%s\". "
                                 + "Comprueba que existen las propiedades necesarias en el contexto.",
                         key), e);
             }
@@ -235,6 +234,7 @@ public class OrderedCompositeContext extends AbstractContext
     public Object get(Object key) {
         return getValue((String) key);
     }
+
 
     /*
      * (non-Javadoc)
@@ -353,7 +353,7 @@ public class OrderedCompositeContext extends AbstractContext
     }
 
     /**
-     * Busca la última configuración jerárquicamente donde se encuetra la clave
+     * Busca la ï¿½ltima configuraciï¿½n jerï¿½rquicamente donde se encuetra la clave
      * buscada. Devuelve <code>null</code> si no la encuentra.
      *
      * @param key
@@ -445,7 +445,7 @@ public class OrderedCompositeContext extends AbstractContext
                 if (!isComposite(context)) {
                     configDest.add(context);
                 } else {
-                    // añadimos solo las hijas
+                    // aï¿½adimos solo las hijas
                     configDest
                             .addAll(((CompositeContext) context).getContexts());
                     hayConfigCompuestas = true;
@@ -555,7 +555,7 @@ public class OrderedCompositeContext extends AbstractContext
             String prefix = parts[0];
             String new_key = parts[1];
             if (parts.length > 2) {
-                // If there's more that oune point, there's and EXL expression, concat all parts
+                // If there's more that one point, there's and EXL expression, concat all parts
                 new_key = key.substring(prefix.length() + 1);
             }
             putValue(prefix, new_key, value);

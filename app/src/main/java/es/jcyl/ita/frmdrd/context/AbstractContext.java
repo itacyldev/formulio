@@ -97,4 +97,10 @@ public abstract class AbstractContext extends HashMap<String, Object>
             return o.toString();
         }
     }
+
+    @Override
+    public Object getValue(String key) {
+        Object o = this.get(key);
+        return o;
+    }
 }

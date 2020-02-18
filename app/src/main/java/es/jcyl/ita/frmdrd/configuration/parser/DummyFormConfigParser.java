@@ -4,6 +4,26 @@ import es.jcyl.ita.frmdrd.ui.form.UITab;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
+/*
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @author Javier Ramos (javier.ramos@itacyl.es)
+ */
+
 public class DummyFormConfigParser extends FormConfigParser {
     @Override
     public String parseFormConfig(String formConfigStr) {
@@ -17,13 +37,13 @@ public class DummyFormConfigParser extends FormConfigParser {
         UIField_2.setType(UIField.TYPE.BOOLEAN);
         UIField_2.setLabel("campo 2");
         UIField_2.setId("campo2");
-        UIField_2.setUpdate("form.campo3");
+        UIField_2.setUpdate("campo3");
 
         UIField UIField_3 = new UIField();
         UIField_3.setType(UIField.TYPE.TEXT);
         UIField_3.setLabel("campo 3");
         UIField_3.setId("campo3");
-        UIField_3.setRenderCondition("${form.campo2 = true}");
+        UIField_3.setRenderCondition("ctx[\"form.campo2\"] == true");
 
         UIField UIField_4 = new UIField();
         UIField_4.setType(UIField.TYPE.DATE);
