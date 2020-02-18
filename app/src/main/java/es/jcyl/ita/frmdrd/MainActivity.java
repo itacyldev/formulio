@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         //if(savedData!= null){
         Map<String, Object> params = new HashMap<>();
         params.put("savedForms", savedData);
-        final AsListLayerDialog asListDialog = new AsListLayerDialog(this);
+        final AsListLayerDialog asListDialog = new AsListLayerDialog(this,
+                form.getId());
         asListDialog.show();
         /*}else{
             Map<String, Serializable> params = new HashMap<>();
