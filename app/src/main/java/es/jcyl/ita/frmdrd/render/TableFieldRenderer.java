@@ -99,7 +99,6 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
             public void onScroll(final AbsListView view,
                                  final int firstVisibleItem, final int visibleItemCount,
                                  final int totalItemCount) {
-                loadNextPage();
             }
         });
 
