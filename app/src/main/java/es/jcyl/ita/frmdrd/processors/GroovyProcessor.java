@@ -30,6 +30,26 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.Script;
 
+/*
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @author Javier Ramos (javier.ramos@itacyl.es)
+ */
+
 public class GroovyProcessor {
 
     private static final String DEX_IN_JAR_NAME = "classes.dex";
@@ -57,8 +77,9 @@ public class GroovyProcessor {
     }
 
 
-    public Object evaluate(String scriptText, String filename,
-                           Context context) {
+    public EvalResult evaluate(String scriptText, String filename,
+                               Context context) {
+        long sd = System.nanoTime();
         //check if script file exists
         File scriptFile = new File(tmpDynamicFiles, filename);
 
@@ -72,14 +93,12 @@ public class GroovyProcessor {
                 buf.read(dalvikBytecode, 0, dalvikBytecode.length);
                 buf.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } else {
-            dalvikBytecode = loadDalvikByteCode(scriptText, filename,
-                    context);
-            FileOutputStream fos = null;
-            try {
+            dalvikBytecode = loadDalvikByteCode(scriptText, filename);
+             FileOutputStream fos = null;
+             try {
                 fos = new FileOutputStream(scriptFile);
                 fos.write(dalvikBytecode);
             } catch (IOException e) {
@@ -100,8 +119,10 @@ public class GroovyProcessor {
 
         Class scriptClass = loadScriptClass(dalvikBytecode, filename);
         Object result = null;
-
+        long compilationTime = System.nanoTime() - sd;
+        long execTime = 0;
         if (Script.class.isAssignableFrom(scriptClass)) {
+            sd = System.nanoTime();
             Script script = null;
             try {
                 script = (Script) scriptClass.newInstance();
@@ -112,14 +133,14 @@ public class GroovyProcessor {
                 Log.e("GroovyDroidShell", "Unable to create script", e);
             }
             result = script.run();
+            execTime = System.nanoTime() - sd;
 
         }
 
-        return result;
+        return new EvalResult(compilationTime, execTime, result);
     }
 
-    private byte[] loadDalvikByteCode(String scriptText, String filename,
-                                      Context context) {
+    private byte[] loadDalvikByteCode(String scriptText, String filename) {
         byte[] dalvikBytecode = new byte[0];
         final DexFile dexFile = new DexFile(dexOptions);
         CompilerConfiguration config = new CompilerConfiguration();
@@ -173,5 +194,32 @@ public class GroovyProcessor {
             tmpDex.delete();
         }
         return null;
+    }
+
+    public static class EvalResult {
+        final long compilationTime;
+        final long execTime;
+        final Object result;
+
+        public Object getResult() {
+            return result;
+        }
+
+        public EvalResult(long compilationTime, long execTime, Object result) {
+            this.compilationTime = compilationTime;
+            this.execTime = execTime;
+            this.result = result;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Compilation time = ").append(compilationTime / 1000000).append("ms");
+            sb.append("\n");
+            sb.append("Execution time = ").append(execTime / 1000000).append("ms");
+            sb.append("\n");
+            sb.append("Result = ").append(result);
+            return sb.toString();
+        }
     }
 }

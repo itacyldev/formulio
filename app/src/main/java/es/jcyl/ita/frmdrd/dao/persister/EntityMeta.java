@@ -1,10 +1,12 @@
 package es.jcyl.ita.frmdrd.dao.persister;
 
+import java.io.Serializable;
+
 /**
  * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
-public class EntityMeta {
+public class EntityMeta implements Serializable {
 
     String name;
     String[] idColumns;

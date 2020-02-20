@@ -8,9 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,29 +20,40 @@ import es.jcyl.ita.frmdrd.UserFormAlphaEditActivity;
 import es.jcyl.ita.frmdrd.dao.persister.Entity;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
-/**
- * Created by cuedieje on 10/06/2019.
+/*
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-class AsListLayerAdapter extends ArrayAdapter<Entity> {
-    protected static final Log LOGGER = LogFactory
-            .getLog(AsListLayerAdapter.class);
+/**
+ * @author Javier Ramos (javier.ramos@itacyl.es)
+ */
 
+class ListEntityAdapter extends ArrayAdapter<Entity> {
     private Context context;
 
-    private final AsListLayerDialog asListLayerDialog;
     private LayoutInflater inflater;
     private View[] cacheViews;
 
     private final int FIELD_LIMIT;
     private static final int RECORDS_CACHE = 20;
 
-    public AsListLayerAdapter(final Context context,
-                              final int textViewResourceId, final
-                              List<Entity> entities, AsListLayerDialog asListLayerDialog, int field_limit) {
+    public ListEntityAdapter(final Context context,
+                             final int textViewResourceId,
+                             final List<Entity> entities, int field_limit) {
         super(context, textViewResourceId, entities);
         this.context = context;
-        this.asListLayerDialog = asListLayerDialog;
         this.FIELD_LIMIT = field_limit;
         this.cacheViews = new View[RECORDS_CACHE];
         this.inflater = LayoutInflater.from(getContext());
@@ -62,13 +70,13 @@ class AsListLayerAdapter extends ArrayAdapter<Entity> {
 
         if (item == null) {
 
-            item = inflater.inflate(R.layout.aslist_list_item, parent, false);
+            item = inflater.inflate(R.layout.list_item, parent, false);
 
             holder = new ViewHolder();
             holder.position = position;
             holder.charged = false;
             holder.layout =
-                    (LinearLayout) item.findViewById(R.id.aslistitem_layoutlabels);
+                    (LinearLayout) item.findViewById(R.id.list_item_layout);
             holder.viewList = new ArrayList<>();
 
             createViewsLayout(holder, parent, currentEntity);
@@ -94,10 +102,9 @@ class AsListLayerAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                asListLayerDialog.dismiss();
                 NavigationManager navigationManager = new NavigationManager();
                 Map<String, Serializable> params = new HashMap<>();
-                params.put("formId", "UIForm1");
+                params.put("formId", "Form_1");
                 params.put("entity", currentEntity);
                 navigationManager.navigate(context, UserFormAlphaEditActivity.class, params);
             }
@@ -118,7 +125,6 @@ class AsListLayerAdapter extends ArrayAdapter<Entity> {
             Object value = entity.getProperties().get(fieldName);
             textView.setText(DataUtils.nullFormat(value.toString()));
         }
-
     }
 
     private void createViewsLayout(final ViewHolder holder,
@@ -145,13 +151,12 @@ class AsListLayerAdapter extends ArrayAdapter<Entity> {
                 }
             }
         }
-
     }
 
     private TextView createTextView(final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         TextView output = (TextView) inflater.inflate(
-                R.layout.aslist_list_item_textview, parent, false);
+                R.layout.list_item_textview, parent, false);
         return output;
     }
 

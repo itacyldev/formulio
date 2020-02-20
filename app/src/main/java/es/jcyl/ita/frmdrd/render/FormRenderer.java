@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
@@ -112,19 +115,41 @@ public class FormRenderer {
                 GroovyProcessor processor =
                         new GroovyProcessor(context.getDir(
                                 "dynclasses", 0), context.getClassLoader());
-                //processor.process(lifecycle.getMainContext(), "1+1");
-                Object result = processor.evaluate("if (ctx[\"form.campo1\"] " +
-                                "== 'a') { " +
-                                "ctx[\"form.campo3\"] = 'b'} " +
-                                "else { " +
-                                "ctx[\"form.campo3\"] = 'c'}","",
+
+                BufferedReader reader = null;
+                StringBuffer sb = new StringBuffer();
+                try {
+                    reader = new BufferedReader(
+                            new InputStreamReader(context.getAssets().open(
+                                    "test.groovy")));
+
+                    // do reading, usually loop until end of file reading
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                        sb.append("\n");
+                    }
+                } catch (IOException e) {
+                    //log the exception
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            //log the exception
+                        }
+                    }
+                }
+
+
+                GroovyProcessor.EvalResult result = processor.evaluate(sb.toString(), "test_groovy",
                         lifecycle.getMainContext());
                 Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
 
             }
         });
-        groovyButton.setText("groovy");
-        parent.addView(groovyButton);
+        groovyButton.setText("test groovy");
+        //parent.addView(groovyButton);
 
         Button jexlButton = new Button(context);
         jexlButton.setOnClickListener(new View.OnClickListener() {
@@ -134,17 +159,7 @@ public class FormRenderer {
             }
         });
         jexlButton.setText("jexl");
-        parent.addView(jexlButton);
-
-        Button mvelButton = new Button(context);
-        mvelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        mvelButton.setText("mvel");
-        parent.addView(mvelButton);
+        //parent.addView(jexlButton);
     }
 
     private void renderFields(Context context,

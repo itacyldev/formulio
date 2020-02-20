@@ -24,6 +24,8 @@ public class RendererFactory {
             case "DATE":
                 renderer = new DateFieldRenderer(context, lifecycle);
                 break;
+            case "TABLE":
+                renderer = new TableFieldRenderer(context, lifecycle);
             default:
                 break;
         }

@@ -5,7 +5,7 @@ import es.jcyl.ita.frmdrd.context.Context;
 public class UIField extends UIComponent {
 
     public enum TYPE {
-        TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN
+        TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN, TABLE
     }
 
     private String hint;
@@ -83,9 +83,11 @@ public class UIField extends UIComponent {
         this.editable = editable;
     }
 
-    public boolean isRequired() {return required;}
+    public boolean isRequired() {
+        return required;
+    }
 
-    public void setRequired(final boolean required){
+    public void setRequired(final boolean required) {
         this.required = required;
     }
 
