@@ -11,15 +11,16 @@ import com.android.dx.dex.file.ClassDefItem;
 import com.android.dx.dex.file.DexFile;
 
 import org.codehaus.groovy.control.BytecodeProcessor;
+import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.ErrorCollector;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -60,6 +61,7 @@ public class GroovyProcessor {
 
     private File tmpDynamicFiles;
     private ClassLoader classLoader;
+    private ErrorCollector errorCollector;
 
     public GroovyProcessor(File tmpDir, ClassLoader parent) {
         this.tmpDynamicFiles = tmpDir;
@@ -79,13 +81,13 @@ public class GroovyProcessor {
 
     public EvalResult evaluate(String scriptText, String filename,
                                Context context) {
-        long sd = System.nanoTime();
-        //check if script file exists
-        File scriptFile = new File(tmpDynamicFiles, filename);
+            long sd = System.nanoTime();
+            //check if script file exists
+            File scriptFile = new File(tmpDynamicFiles, filename);
 
-        byte[] dalvikBytecode = null;
+            byte[] dalvikBytecode = null;
 
-        if (scriptFile.exists()) {
+        /*if (scriptFile.exists()) {
             int size = (int) scriptFile.length();
             dalvikBytecode = new byte[size];
             try {
@@ -95,10 +97,10 @@ public class GroovyProcessor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
+        } else {*/
             dalvikBytecode = loadDalvikByteCode(scriptText, filename);
-             FileOutputStream fos = null;
-             try {
+            FileOutputStream fos = null;
+            try {
                 fos = new FileOutputStream(scriptFile);
                 fos.write(dalvikBytecode);
             } catch (IOException e) {
@@ -112,38 +114,45 @@ public class GroovyProcessor {
                     }
                 }
             }
-        }
+            //}
 
-        Binding binding = new Binding();
-        binding.setVariable(CONTEXT_VAR_NAME, context);
+            Binding binding = new Binding();
+            binding.setVariable(CONTEXT_VAR_NAME, context);
 
-        Class scriptClass = loadScriptClass(dalvikBytecode, filename);
-        Object result = null;
-        long compilationTime = System.nanoTime() - sd;
-        long execTime = 0;
-        if (Script.class.isAssignableFrom(scriptClass)) {
-            sd = System.nanoTime();
-            Script script = null;
-            try {
-                script = (Script) scriptClass.newInstance();
-                script.setBinding(binding);
-            } catch (InstantiationException e) {
-                Log.e("GroovyDroidShell", "Unable to create script", e);
-            } catch (IllegalAccessException e) {
-                Log.e("GroovyDroidShell", "Unable to create script", e);
+
+            Class scriptClass = loadScriptClass(dalvikBytecode, filename);
+            Object result = null;
+            long compilationTime = System.nanoTime() - sd;
+            long execTime = 0;
+            if (Script.class.isAssignableFrom(scriptClass)) {
+                sd = System.nanoTime();
+                Script script = null;
+                try {
+                    script = (Script) scriptClass.newInstance();
+                    script.setBinding(binding);
+                } catch (InstantiationException e) {
+                    Log.e("GroovyProcessor", "Unable to create script", e);
+                } catch (IllegalAccessException e) {
+                    Log.e("GroovyProcessor", "Unable to create script", e);
+                }
+
+                try {
+                    result = script.run();
+                } catch (Exception e) {
+                    Log.e("GroovyProcessor", "", e);
+
+                }
+                execTime = System.nanoTime() - sd;
+
             }
-            result = script.run();
-            execTime = System.nanoTime() - sd;
-
-        }
-
-        return new EvalResult(compilationTime, execTime, result);
+            return new EvalResult(compilationTime, execTime, result);
     }
 
     private byte[] loadDalvikByteCode(String scriptText, String filename) {
         byte[] dalvikBytecode = new byte[0];
         final DexFile dexFile = new DexFile(dexOptions);
         CompilerConfiguration config = new CompilerConfiguration();
+        errorCollector = new ErrorCollector(config);
         config.setBytecodePostprocessor(new BytecodeProcessor() {
             @Override
             public byte[] processBytecode(String s, byte[] bytes) {
@@ -155,9 +164,11 @@ public class GroovyProcessor {
 
         GroovyClassLoader gcl = new GroovyClassLoader(this.classLoader, config);
         try {
-            gcl.parseClass(scriptText, filename);
-        } catch (Throwable e) {
-            Log.e("GrooidShell", "Dynamic loading failed!", e);
+             gcl.parseClass(scriptText, filename);
+        } catch (CompilationFailedException e) {
+
+            List errors = errorCollector.getErrors();
+            Log.e("GrooidShell", e.getMessage(), e);
         }
 
         try {
@@ -194,6 +205,11 @@ public class GroovyProcessor {
             tmpDex.delete();
         }
         return null;
+    }
+
+
+    private void getErrors() {
+
     }
 
     public static class EvalResult {
