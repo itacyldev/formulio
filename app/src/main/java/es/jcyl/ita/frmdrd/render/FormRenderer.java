@@ -18,6 +18,7 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.processors.GroovyProcessor;
+import es.jcyl.ita.frmdrd.processors.JexlProcessor;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.form.UITab;
@@ -86,7 +87,7 @@ public class FormRenderer {
             renderFields(context, tab.getFields(), layout);
         }
 
-        renderTestButtons(context, layout);
+        //renderTestButtons(context, layout);
 
         renderSaveButoon(context, layout);
 
@@ -121,7 +122,7 @@ public class FormRenderer {
                 try {
                     reader = new BufferedReader(
                             new InputStreamReader(context.getAssets().open(
-                                    "test.groovy")));
+                                    "fibonacci.groovy")));
 
                     // do reading, usually loop until end of file reading
                     String line;
@@ -142,24 +143,57 @@ public class FormRenderer {
                 }
 
 
-                GroovyProcessor.EvalResult result = processor.evaluate(sb.toString(), "test_groovy",
-                        lifecycle.getMainContext());
+                GroovyProcessor.EvalResult result =
+                        (GroovyProcessor.EvalResult) processor.evaluate(sb.toString(), "fibonacci_groovy",
+                                lifecycle.getMainContext());
+
+                long init = System.nanoTime();
+                fib(100);
+                String execTime = (System.nanoTime() - init) / 1000000 + " ms";
+
+
                 Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
 
             }
         });
         groovyButton.setText("test groovy");
-        //parent.addView(groovyButton);
+        parent.addView(groovyButton);
 
         Button jexlButton = new Button(context);
         jexlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                JexlProcessor processor = new JexlProcessor();
+                BufferedReader reader = null;
+                StringBuffer sb = new StringBuffer();
+                try {
+                    reader = new BufferedReader(
+                            new InputStreamReader(context.getAssets().open(
+                                    "test.jexl")));
 
+                    // do reading, usually loop until end of file reading
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                        sb.append("\n");
+                    }
+                } catch (IOException e) {
+                    //log the exception
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            //log the exception
+                        }
+                    }
+                }
+                Object result = processor.evaluate(sb.toString(), "", lifecycle.getMainContext());
+                Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
             }
         });
-        jexlButton.setText("jexl");
-        //parent.addView(jexlButton);
+        jexlButton.setText("test jexl");
+        parent.addView(jexlButton);
     }
 
     private void renderFields(Context context,
@@ -175,5 +209,17 @@ public class FormRenderer {
             View view = fieldRenderer.render(field);
             parent.addView(view);
         }
+    }
+
+    private int fib(int n) {
+        int a = 0;
+        int b = 1;
+        int aux = 0;
+        for (int i = 0; i < n; i++) {
+            aux = a;
+            a = b;
+            b = aux + b;
+        }
+        return a;
     }
 }

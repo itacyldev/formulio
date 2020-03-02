@@ -13,14 +13,12 @@ import com.android.dx.dex.file.DexFile;
 import org.codehaus.groovy.control.BytecodeProcessor;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.ErrorCollector;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -51,7 +49,7 @@ import groovy.lang.Script;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class GroovyProcessor {
+public class GroovyProcessor implements Processor {
 
     private static final String DEX_IN_JAR_NAME = "classes.dex";
     private static final String CONTEXT_VAR_NAME = "ctx";
@@ -61,7 +59,6 @@ public class GroovyProcessor {
 
     private File tmpDynamicFiles;
     private ClassLoader classLoader;
-    private ErrorCollector errorCollector;
 
     public GroovyProcessor(File tmpDir, ClassLoader parent) {
         this.tmpDynamicFiles = tmpDir;
@@ -78,8 +75,8 @@ public class GroovyProcessor {
         cfOptions.statistics = false;
     }
 
-
-    public EvalResult evaluate(String scriptText, String filename,
+    @Override
+    public Object evaluate(String scriptText, String filename,
                                Context context) {
             long sd = System.nanoTime();
             //check if script file exists
@@ -152,7 +149,6 @@ public class GroovyProcessor {
         byte[] dalvikBytecode = new byte[0];
         final DexFile dexFile = new DexFile(dexOptions);
         CompilerConfiguration config = new CompilerConfiguration();
-        errorCollector = new ErrorCollector(config);
         config.setBytecodePostprocessor(new BytecodeProcessor() {
             @Override
             public byte[] processBytecode(String s, byte[] bytes) {
@@ -166,8 +162,6 @@ public class GroovyProcessor {
         try {
              gcl.parseClass(scriptText, filename);
         } catch (CompilationFailedException e) {
-
-            List errors = errorCollector.getErrors();
             Log.e("GrooidShell", e.getMessage(), e);
         }
 
@@ -205,11 +199,6 @@ public class GroovyProcessor {
             tmpDex.delete();
         }
         return null;
-    }
-
-
-    private void getErrors() {
-
     }
 
     public static class EvalResult {

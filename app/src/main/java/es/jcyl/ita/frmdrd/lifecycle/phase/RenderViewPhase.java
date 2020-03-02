@@ -2,6 +2,8 @@ package es.jcyl.ita.frmdrd.lifecycle.phase;
 
 import android.app.Activity;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +36,11 @@ public class RenderViewPhase extends Phase {
             for (Object idField : phaseContext.values()) {
                 UIField field = formContext.getFieldConfig(idField);
                 updateFields.add(field);
+
                 String updateStr = field.getUpdate();
-                updateFields.addAll(getFields(updateStr, formContext));
+                if(StringUtils.isNotEmpty(updateStr)){
+                    updateFields.addAll(getFields(updateStr, formContext));
+                }
             }
 
             renderer.render(parentActivity, updateFields);
@@ -49,6 +54,11 @@ public class RenderViewPhase extends Phase {
 
     }
 
+    /**
+     * @param fieldsStr
+     * @param formContext
+     * @return
+     */
     private List<UIField> getFields(String fieldsStr, FormContext formContext) {
         UIField field = formContext.getFieldConfig(fieldsStr);
         List<UIField> fields = new ArrayList<>();

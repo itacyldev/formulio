@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
-import es.jcyl.ita.frmdrd.processors.GroovyProcessor;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 
 /*
@@ -70,13 +69,15 @@ public abstract class AbstractFieldRenderer implements UIFieldRenderer {
 
     protected boolean validateCondition(String renderCondition,
                                         String fieldId) {
-        GroovyProcessor processor =
+        /*GroovyProcessor processor =
                 new GroovyProcessor(context.getDir(
                         "dynclasses", 0), context.getClassLoader());
-        String filename = fieldId+"_renderCond";
-        GroovyProcessor.EvalResult result = processor.evaluate(renderCondition, filename,
-                lifecycle.getMainContext());
+        String filename = fieldId + "_renderCond";
+        GroovyProcessor.EvalResult result =
+                (GroovyProcessor.EvalResult) processor.evaluate(renderCondition, filename,
+                        lifecycle.getMainContext());
 
-        return Boolean.parseBoolean(result.getResult().toString());
+        return Boolean.parseBoolean(result.getResult().toString());*/
+        return true;
     }
 }
