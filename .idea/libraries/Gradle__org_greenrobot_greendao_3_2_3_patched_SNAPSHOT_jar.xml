@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: org.greenrobot:greendao:3.2.3-patched-SNAPSHOT@jar">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/greenrobot/greendao/3.2.3-patched-SNAPSHOT/greendao-3.2.3-patched-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
