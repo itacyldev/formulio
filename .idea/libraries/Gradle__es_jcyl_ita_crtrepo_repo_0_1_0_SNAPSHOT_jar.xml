@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT@jar">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/es/jcyl/ita/crtrepo/repo/0.1.0-SNAPSHOT/repo-0.1.0-SNAPSHOT.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
