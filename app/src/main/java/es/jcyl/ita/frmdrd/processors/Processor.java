@@ -1,10 +1,5 @@
 package es.jcyl.ita.frmdrd.processors;
 
-import org.apache.commons.jexl3.JexlBuilder;
-import org.apache.commons.jexl3.JexlEngine;
-import org.apache.commons.jexl3.JexlScript;
-
-import es.jcyl.ita.frmdrd.context.AbstractContext;
 import es.jcyl.ita.frmdrd.context.Context;
 
 /*
@@ -23,18 +18,8 @@ import es.jcyl.ita.frmdrd.context.Context;
  * limitations under the License.
  */
 
-public class JexlProcessor implements Processor {
+public interface Processor {
 
-    @Override
-    public Object evaluate(String scriptText, String filename, Context context) {
-
-        JexlBuilder builder = new JexlBuilder();
-        JexlEngine jexl = builder.cache(512).strict(true).silent(false).create();
-
-        JexlScript e = jexl.createScript(scriptText);
-
-        Object result = e.execute((AbstractContext) context);
-
-        return result;
-    }
+    Object evaluate(String scriptText, String filename,
+                               Context context);
 }

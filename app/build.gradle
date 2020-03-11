@@ -63,16 +63,26 @@ dependencies {
     implementation 'commons-lang:commons-lang:20030203.000129'
     implementation 'commons-collections:commons-collections:20040616'
     implementation 'org.apache.commons:commons-jexl3:3.1'
+<<<<<<< HEAD
     implementation 'org.apache.commons:commons-lang3:3.6'
+=======
+    implementation 'org.apache.commons:commons-lang3:3.5'
+
+>>>>>>> 298dc4030679ab7bdb9d6b19fdd519fc9778d0af
     //implementation 'es.jcyl.ita.groovy:groovy-android:2.4.16'
     implementation 'com.google.android.tools:dx:1.7'
     implementation 'es.jcyl.ita.crtcyl:crtcyl-core:2.37.0'
 
+<<<<<<< HEAD
     // repo
     implementation 'es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT'
     implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
 
 
+=======
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+>>>>>>> 298dc4030679ab7bdb9d6b19fdd519fc9778d0af
 }
 
 

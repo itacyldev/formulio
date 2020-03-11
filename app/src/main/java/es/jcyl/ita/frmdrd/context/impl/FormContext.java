@@ -1,8 +1,10 @@
 package es.jcyl.ita.frmdrd.context.impl;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -45,28 +47,23 @@ public class FormContext extends AbstractContext {
 
     @Override
     public Object get(Object key) {
-        return super.get(key);
-    }
-
-    @Override
-    public Object getValue(String key) {
         Object value = null;
 
         UIField field = (UIField) super.get(key);
 
         if (field != null) {
-            View view = DataBindings.getView(key.toString());
+            LinearLayout layout = (LinearLayout)DataBindings.getView(key.toString());
 
             String fieldType = field.getType();
             switch (fieldType) {
                 case "TEXT":
-                    value = getTextValue(view);
+                    value = getTextValue(layout);
                     break;
                 case "DATE":
-                    value = getDateValue(view);
+                    value = getDateValue(layout);
                     break;
                 case "BOOLEAN":
-                    value = getBooleanValue(view);
+                    value = getBooleanValue(layout);
                     break;
             }
         }
@@ -82,20 +79,22 @@ public class FormContext extends AbstractContext {
             super.put(key, value);
 
         } else {
-            field = (UIField) get(key);
+
+            field = this.getFieldConfig(key);
             if (field != null) {
-                View view = DataBindings.getView(key.toString());
+                LinearLayout layout =
+                        (LinearLayout) DataBindings.getView(key.toString());
 
                 String fieldType = field.getType();
                 switch (fieldType) {
                     case "TEXT":
-                        setTextValue(view, value);
+                        setTextValue(layout, value);
                         break;
                     case "DATE":
-                        setDateValue(view, value);
+                        setDateValue(layout, value);
                         break;
                     case "BOOLEAN":
-                        setBooleanValue(view, value);
+                        setBooleanValue(layout, value);
                         break;
                 }
             }
@@ -109,23 +108,25 @@ public class FormContext extends AbstractContext {
         return field;
     }
 
-    private String getTextValue(View view) {
+    private String getTextValue(ViewGroup viewGroup) {
         String value = null;
+        View view = this.getInputView(viewGroup);
         if (view instanceof EditText) {
             value = ((EditText) view).getText().toString();
         }
-
         return value;
     }
 
-    private void setTextValue(View view, Object value) {
+    private void setTextValue(ViewGroup viewGroup, Object value) {
+        View view = this.getInputView(viewGroup);
         if (view instanceof EditText) {
             ((EditText) view).setText(value.toString());
         }
     }
 
-    private Boolean getBooleanValue(View view) {
+    private Boolean getBooleanValue(ViewGroup viewGroup) {
         Boolean value = null;
+        View view = this.getInputView(viewGroup);
         if (view instanceof Switch) {
             if (((Switch) view).isChecked()) {
                 value = Boolean.TRUE;
@@ -137,8 +138,9 @@ public class FormContext extends AbstractContext {
         return value;
     }
 
-    private void setBooleanValue(View view, Object value) {
+    private void setBooleanValue(ViewGroup viewGroup, Object value) {
         Boolean booleanValue = Boolean.parseBoolean(value.toString());
+        View view = this.getInputView(viewGroup);
         if (view instanceof Switch) {
 
             ((Switch) view).setChecked(booleanValue);
@@ -146,8 +148,9 @@ public class FormContext extends AbstractContext {
     }
 
 
-    private Date getDateValue(View view) {
+    private Date getDateValue(ViewGroup viewGroup) {
         Date value = null;
+        View view = this.getInputView(viewGroup);
         if (view instanceof TextView) {
             try {
                 value = DataUtils.DATE_FORMAT.parse(
@@ -161,10 +164,23 @@ public class FormContext extends AbstractContext {
         return value;
     }
 
-    private void setDateValue(View view, Object value) {
+    private void setDateValue(ViewGroup viewGroup, Object value) {
+        View view = this.getInputView(viewGroup);
         if (view instanceof TextView) {
 
         }
+    }
+
+    private View getInputView(ViewGroup viewGroup) {
+        View inputView = null;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View view = viewGroup.getChildAt(i);
+            if (view.getTag().equals("input")) {
+                inputView = view;
+            }
+        }
+
+        return inputView;
     }
 
     public UIForm getRoot() {
@@ -174,5 +190,4 @@ public class FormContext extends AbstractContext {
     public void setRoot(UIForm root) {
         this.root = root;
     }
-
 }
