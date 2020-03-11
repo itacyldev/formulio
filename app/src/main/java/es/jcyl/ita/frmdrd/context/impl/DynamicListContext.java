@@ -15,9 +15,37 @@ package es.jcyl.ita.frmdrd.context.impl;
  * limitations under the License.
  */
 
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
+import es.jcyl.ita.frmdrd.context.AbstractContext;
+import es.jcyl.ita.frmdrd.context.Context;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class DynamicListContext {
+public class DynamicListContext extends AbstractContext implements Context {
+
+    private final Repository repo;
+    private SQLQueryFilter filter;
+
+    public DynamicListContext(Repository repo) {
+        this.repo = repo;
+        this.filter = new SQLQueryFilter();
+    }
+
+    public List<Entity> getList() {
+        return repo.find(filter);
+    }
+
+    public SQLQueryFilter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(SQLQueryFilter filter) {
+        this.filter = filter;
+    }
 }

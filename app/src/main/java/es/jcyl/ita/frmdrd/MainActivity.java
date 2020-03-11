@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,17 +10,22 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
 import es.jcyl.ita.frmdrd.context.JexlTest;
 import es.jcyl.ita.frmdrd.ui.form.UIForm;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
+    private static final int PERMISSION_REQUEST = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +34,9 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         loadFormConfig();
 
         setContentView(R.layout.activity_main);
-
         initializeDagger();
-
         Integer result = JexlTest.test();
-        initialize();
-
-
+        checkPermissions();
     }
 
     private void loadFormConfig() {
@@ -108,5 +111,29 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         navigationManager.navigate(this, UserFormAlphaEditActivity.class, params);
         //}
 
+    }
+
+
+    protected void checkPermissions() {
+        List permsList = new ArrayList();
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            permsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            permsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (permsList.size() > 0) {
+            ActivityCompat.requestPermissions(this, (String[]) permsList
+                            .toArray(new String[]{}),
+                    PERMISSION_REQUEST);
+        } else {
+            initialize();
+        }
     }
 }

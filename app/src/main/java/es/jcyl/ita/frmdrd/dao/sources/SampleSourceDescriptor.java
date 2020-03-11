@@ -16,7 +16,7 @@ public class SampleSourceDescriptor implements SourceDescriptor {
     public List<Entity> getEntities() {
 
         List<Entity> entities = new ArrayList<>();
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 5; i++) {
             Entity newEntity = newEntity("entidad_" + i);
             entities.add(newEntity);
         }

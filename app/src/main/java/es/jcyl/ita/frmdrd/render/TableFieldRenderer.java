@@ -1,6 +1,8 @@
 package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +12,30 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.apache.commons.lang.StringUtils;
+import org.greenrobot.greendao.database.StandardDatabase;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.crtrepo.builders.RepositoryBuilder;
+import es.jcyl.ita.crtrepo.builders.SQLiteGreenDAORepoBuilder;
+import es.jcyl.ita.crtrepo.db.DBTableEntitySource;
+import es.jcyl.ita.crtrepo.db.sqlite.converter.SQLiteConverterFactory;
+import es.jcyl.ita.crtrepo.db.sqlite.converter.SQLitePropertyConverter;
+import es.jcyl.ita.crtrepo.db.sqlite.greendao.DaoMaster;
+import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDao;
+import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDaoConfig;
+import es.jcyl.ita.crtrepo.db.sqlite.meta.SQLiteMetaModeler;
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.dao.persister.Entity;
-import es.jcyl.ita.frmdrd.dao.sources.SampleSourceDescriptor;
+import es.jcyl.ita.frmdrd.context.impl.DynamicListContext;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.util.DataUtils;
@@ -46,10 +65,25 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
     private static final int FIELD_LIMIT = 50;
 
     private List<Entity> entities = new ArrayList<>();
+    private EntityMeta meta;
+    private DaoMaster daoMaster;
+    private EntityDao dao;
+    private SQLiteConverterFactory convFactory = SQLiteConverterFactory.getInstance();
+
+    private int offset = 0;
+    private int pageSize = 20;
+    private DynamicListContext listContext;
 
     public TableFieldRenderer(Context context, Lifecycle lifecycle) {
         super(context, lifecycle);
+        try {
+            initDatabase();
+        } catch (Exception e) {
+            Log.e("repo", "Error trying to open database.", e);
+        }
+
     }
+
 
     @Override
     public View render(UIField field) {
@@ -73,8 +107,8 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
         ListView listView = tableView.findViewById(R.id.list_view);
         LinearLayout headersLayout = tableView.findViewById(R.id.list_layout_headers);
 
+        fillHeader(headersLayout);
         loadEntities();
-        fillHeader(entities.get(0), headersLayout);
 
         ListEntityAdapter dataAdapter = new ListEntityAdapter(this.context,
                 R.layout.list_item, entities, FIELD_LIMIT);
@@ -106,8 +140,7 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
     }
 
     private void loadEntities() {
-        SampleSourceDescriptor source = new SampleSourceDescriptor();
-        entities = source.getEntities();
+        loadNextPage();
     }
 
     private View createHeaderView(final ViewGroup parent,
@@ -117,7 +150,6 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
         LayoutInflater inflater = LayoutInflater.from(this.context);
         output = inflater.inflate(R.layout.list_item_header, parent,
                 false);
-
         final TextView fieldName = output
                 .findViewById(R.id.list_header_textview);
 
@@ -125,29 +157,69 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
         return output;
     }
 
-    private void fillHeader(final Entity entity, LinearLayout headersLayout) {
-        if (entity == null || headersLayout.getChildCount() > 0) {
-            return;
-        }
+    private void fillHeader(LinearLayout headersLayout) {
         headersLayout.removeAllViews();
 
-
-        final String[] columns = entity.getMetadata().getColumnNames();
-        if (columns != null) {
-
-            for (final String column : columns) {
-                if (column != null) {
-                    final View dataHeader = createHeaderView(
-                            headersLayout, column);
-                    headersLayout.addView(dataHeader);
-                }
-            }
-
-            headersLayout.setVisibility(View.VISIBLE);
+        for (PropertyType p : this.meta.getProperties()) {
+            final View dataHeader = createHeaderView(
+                    headersLayout, p.getName());
+            headersLayout.addView(dataHeader);
         }
+        headersLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void initDatabase() {
+        // ESTA PARTE TIENE QUE QUEDAR OCULTA POR LA CONFIGURACIÓN
+        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+
+        String entityType = "inspecciones";
+        File dbFile = new File("/sdcard/test/ribera.sqlite");
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+        DBTableEntitySource source = new DBTableEntitySource(new StandardDatabase(db), entityType);
+        // obtain repository builder
+        RepositoryBuilder builder = repoFactory.getBuilder(entityType, source);
+
+        // read meta information from source
+        SQLiteMetaModeler modeler = new SQLiteMetaModeler();
+        EntityMeta meta = modeler.readFromSource(source);
+
+        // create repository using repo builder using entityDaoConfig
+        EntityDaoConfig conf = new EntityDaoConfig(meta, source, createDefaultConverters(meta),
+                createDefaultMapper(meta));
+        builder.setProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
+        builder.register();
+
+        // ESTO ES LO QUE TIENE QUE QUEDAR AL INTENTAR ACCEDER A UN REPOSITORIO DESDE PRESENTACIÓN
+        Repository repo = repoFactory.getRepo(entityType);
+
+        // ESto tiene que quedar oculto por la configuración de los contextos
+        this.listContext = new DynamicListContext(repo);
     }
 
     private void loadNextPage() {
-        //TODO
+        listContext.getFilter().setOffset(this.offset);
+        listContext.getFilter().setPageSize(this.pageSize);
+        this.entities = this.listContext.getList();
+        this.offset += this.pageSize;
     }
+
+    private Map<String, String> createDefaultMapper(EntityMeta meta) {
+        Map<String, String> mapper = new HashMap<String, String>();
+        for (PropertyType p : meta.getProperties()) {
+            mapper.put(p.getName(), p.getName()); // Property name as columnName
+        }
+        return mapper;
+    }
+
+    private Map<String, SQLitePropertyConverter> createDefaultConverters(EntityMeta meta) {
+        Map<String, SQLitePropertyConverter> converters = new HashMap<String, SQLitePropertyConverter>();
+        SQLitePropertyConverter conv;
+        for (PropertyType p : meta.getProperties()) {
+            conv = convFactory.getDefaultConverter(p.getType());
+            converters.put(p.getName(), conv);
+        }
+        return converters;
+    }
+
+
 }

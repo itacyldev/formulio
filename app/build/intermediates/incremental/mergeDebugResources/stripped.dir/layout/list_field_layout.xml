@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/field_layout_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingTop="10dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/field_layout_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="15dp"
+        android:gravity="center_vertical"
+        android:textColor="#fff"
+        android:textSize="16sp" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/aslist_scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:background="#000">
+
+        <LinearLayout
+            android:id="@+id/list_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/list_layout_headers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#282828"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="8dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="8dp" />
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:padding="5dp" />
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

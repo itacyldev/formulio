@@ -14,10 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.NavigationManager;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.UserFormAlphaEditActivity;
-import es.jcyl.ita.frmdrd.dao.persister.Entity;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*
@@ -105,7 +106,7 @@ class ListEntityAdapter extends ArrayAdapter<Entity> {
                 NavigationManager navigationManager = new NavigationManager();
                 Map<String, Serializable> params = new HashMap<>();
                 params.put("formId", "Form_1");
-                params.put("entity", currentEntity);
+//                params.put("entity", currentEntity);
                 navigationManager.navigate(context, UserFormAlphaEditActivity.class, params);
             }
         });
@@ -113,44 +114,69 @@ class ListEntityAdapter extends ArrayAdapter<Entity> {
 
 
     private void setViewsLayout(final ViewHolder holder, Entity entity) {
-        final String[] columnNames = entity.getMetadata().getColumnNames();
-        int numberOfColumns = columnNames.length;
-
-        for (int index = 0; index < numberOfColumns; index++) {
-
-            String fieldName = columnNames[index].toLowerCase();
-
+        Object value;
+        int index = 0;
+        for (PropertyType p : entity.getMetadata().getProperties()) {
+            value = entity.get(p.getName());
             TextView textView = (TextView) holder.viewList.get(index);
-
-            Object value = entity.getProperties().get(fieldName);
             textView.setText(DataUtils.nullFormat(value.toString()));
+            index++;
         }
+//
+//        for (int index = 0; index < numberOfColumns; index++) {
+//
+//            String fieldName = columnNames[index].toLowerCase();
+//
+//            TextView textView = (TextView) holder.viewList.get(index);
+//
+//            Object value = entity.getProperties().get(fieldName);
+//            textView.setText(DataUtils.nullFormat(value.toString()));
+//        }
     }
 
     private void createViewsLayout(final ViewHolder holder,
                                    final ViewGroup parent, Entity entity) {
+
         LinearLayout layout = holder.layout;
-        final String[] columnNames = entity.getMetadata().getColumnNames();
-        if (columnNames != null) {
-            int i = 0;
-            for (final String columnName : columnNames) {
-                View view = null;
-                if (columnName != null) {
 
-                    view = createTextView(parent);
-                }
-                layout.addView(view);
+        Object value;
+        int index = 0;
+        for (PropertyType p : entity.getMetadata().getProperties()) {
+            value = entity.get(p.getName());
+            View view = createTextView(parent);
+            layout.addView(view);
+            holder.viewList.add(view);
+
+            index++;
+            if (index >= FIELD_LIMIT) {
+                final TextView overflowTextView = createTextView(parent);
+                layout.addView(overflowTextView);
                 holder.viewList.add(view);
-
-                i++;
-                if (i >= FIELD_LIMIT) {
-                    final TextView overflowTextView = createTextView(parent);
-                    layout.addView(overflowTextView);
-                    holder.viewList.add(view);
-                    break;
-                }
+                break;
             }
         }
+
+//        final String[] columnNames = entity.getMetadata().getColumnNames();
+//        if (columnNames != null) {
+//            int i = 0;
+//            for (final String columnName : columnNames) {
+//                View view = null;
+//                if (columnName != null) {
+//
+//                    view = createTextView(parent);
+//                }
+//                layout.addView(view);
+//                holder.viewList.add(view);
+//
+//                i++;
+//                if (i >= FIELD_LIMIT) {
+//                    final TextView overflowTextView = createTextView(parent);
+//                    layout.addView(overflowTextView);
+//                    holder.viewList.add(view);
+//                    break;
+//                }
+//            }
+//        }
     }
 
     private TextView createTextView(final ViewGroup parent) {
