@@ -188,7 +188,7 @@ public class ListEntityDialog extends Dialog {
         // create dao configuration
         Map<String, SQLitePropertyConverter> converters = createDefaultConverters(meta);
         Map<String, String> mappers = createDefaultMapper(meta);
-        EntityDaoConfig daoConfig = new EntityDaoConfig(meta, source, converters, mappers);
+        EntityDaoConfig daoConfig = new EntityDaoConfig(meta, source);
         daoMaster.register(entityType, daoConfig);
 //        daoMaster.createAllTables(true);
 

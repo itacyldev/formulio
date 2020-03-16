@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
@@ -68,7 +69,6 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
     private EntityMeta meta;
     private DaoMaster daoMaster;
     private EntityDao dao;
-    private SQLiteConverterFactory convFactory = SQLiteConverterFactory.getInstance();
 
     private int offset = 0;
     private int pageSize = 20;
@@ -171,29 +171,8 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
     private void initDatabase() {
         // ESTA PARTE TIENE QUE QUEDAR OCULTA POR LA CONFIGURACIÓN
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-
-        String entityType = "inspecciones";
-        File dbFile = new File("/sdcard/test/ribera.sqlite");
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
-        DBTableEntitySource source = new DBTableEntitySource(new StandardDatabase(db), entityType);
-        // obtain repository builder
-        RepositoryBuilder builder = repoFactory.getBuilder(entityType, source);
-
-        // read meta information from source
-        SQLiteMetaModeler modeler = new SQLiteMetaModeler();
-        EntityMeta meta = modeler.readFromSource(source);
-
-        // create repository using repo builder using entityDaoConfig
-        EntityDaoConfig conf = new EntityDaoConfig(meta, source, createDefaultConverters(meta),
-                createDefaultMapper(meta));
-        builder.setProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
-        builder.register();
-
-        // ESTO ES LO QUE TIENE QUE QUEDAR AL INTENTAR ACCEDER A UN REPOSITORIO DESDE PRESENTACIÓN
-        Repository repo = repoFactory.getRepo(entityType);
-
-        // ESto tiene que quedar oculto por la configuración de los contextos
-        this.listContext = new DynamicListContext(repo);
+        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+        this.listContext = new DynamicListContext(contactsRepo);
     }
 
     private void loadNextPage() {
@@ -201,24 +180,6 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
         listContext.getFilter().setPageSize(this.pageSize);
         this.entities = this.listContext.getList();
         this.offset += this.pageSize;
-    }
-
-    private Map<String, String> createDefaultMapper(EntityMeta meta) {
-        Map<String, String> mapper = new HashMap<String, String>();
-        for (PropertyType p : meta.getProperties()) {
-            mapper.put(p.getName(), p.getName()); // Property name as columnName
-        }
-        return mapper;
-    }
-
-    private Map<String, SQLitePropertyConverter> createDefaultConverters(EntityMeta meta) {
-        Map<String, SQLitePropertyConverter> converters = new HashMap<String, SQLitePropertyConverter>();
-        SQLitePropertyConverter conv;
-        for (PropertyType p : meta.getProperties()) {
-            conv = convFactory.getDefaultConverter(p.getType());
-            converters.put(p.getName(), conv);
-        }
-        return converters;
     }
 
 
