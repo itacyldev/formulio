@@ -77,23 +77,23 @@ dependencies {
 
 
     // Core library
-    androidTestImplementation 'androidx.test:core:1.0.0'
-    // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation ('androidx.test:runner:1.2.0'){
-        exclude group: 'net.sf.kxml', module: ''
-    }
-    androidTestImplementation ('androidx.test:rules:1.2.0') {
-        exclude group: 'androidx.test', module: ''
-    }
-    // Assertions
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.ext:truth:1.0.0'
-    androidTestImplementation 'com.google.truth:truth:0.46'
-    // Espresso dependencies
-    androidTestImplementation ('androidx.test.espresso:espresso-core:3.2.0'){
-        exclude group: 'androidx.test', module: 'runner'
-    }
-//    androidTestImplementation "org.mini2Dx:android-beans:1.0.0"
+//    androidTestImplementation 'androidx.test:core:1.0.0'
+//    // AndroidJUnitRunner and JUnit Rules
+//    androidTestImplementation ('androidx.test:runner:1.2.0'){
+//        exclude group: 'net.sf.kxml', module: ''
+//    }
+//    androidTestImplementation ('androidx.test:rules:1.2.0') {
+//        exclude group: 'androidx.test', module: ''
+//    }
+//    // Assertions
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+//    androidTestImplementation 'androidx.test.ext:truth:1.0.0'
+//    androidTestImplementation 'com.google.truth:truth:0.46'
+//    // Espresso dependencies
+//    androidTestImplementation ('androidx.test.espresso:espresso-core:3.2.0'){
+//        exclude group: 'androidx.test', module: 'runner'
+//    }
+////    androidTestImplementation "org.mini2Dx:android-beans:1.0.0"
 
 
 }

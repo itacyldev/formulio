@@ -1,7 +1,6 @@
 package es.jcyl.ita.frmdrd.render;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,32 +11,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.apache.commons.lang.StringUtils;
-import org.greenrobot.greendao.database.StandardDatabase;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
-import es.jcyl.ita.crtrepo.builders.RepositoryBuilder;
-import es.jcyl.ita.crtrepo.builders.SQLiteGreenDAORepoBuilder;
-import es.jcyl.ita.crtrepo.db.DBTableEntitySource;
-import es.jcyl.ita.crtrepo.db.sqlite.converter.SQLiteConverterFactory;
-import es.jcyl.ita.crtrepo.db.sqlite.converter.SQLitePropertyConverter;
-import es.jcyl.ita.crtrepo.db.sqlite.greendao.DaoMaster;
-import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDao;
-import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDaoConfig;
-import es.jcyl.ita.crtrepo.db.sqlite.meta.SQLiteMetaModeler;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.context.impl.DynamicListContext;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
+import es.jcyl.ita.frmdrd.repo.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.ui.form.UIField;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
@@ -66,13 +52,11 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
     private static final int FIELD_LIMIT = 50;
 
     private List<Entity> entities = new ArrayList<>();
-    private EntityMeta meta;
-    private DaoMaster daoMaster;
-    private EntityDao dao;
 
     private int offset = 0;
     private int pageSize = 20;
     private DynamicListContext listContext;
+    private EntityMeta meta;
 
     public TableFieldRenderer(Context context, Lifecycle lifecycle) {
         super(context, lifecycle);
@@ -169,9 +153,14 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
     }
 
     private void initDatabase() {
+        // read configuration
+        RepositoryProjectConfReader config = new RepositoryProjectConfReader();
+        config.read();
+
         // ESTA PARTE TIENE QUE QUEDAR OCULTA POR LA CONFIGURACIÓN
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+        this.meta = contactsRepo.getMeta();
         this.listContext = new DynamicListContext(contactsRepo);
     }
 

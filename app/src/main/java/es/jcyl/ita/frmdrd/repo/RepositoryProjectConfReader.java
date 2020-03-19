@@ -17,6 +17,8 @@ package es.jcyl.ita.frmdrd.repo;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import org.greenrobot.greendao.database.StandardDatabase;
+
 import java.io.File;
 
 import es.jcyl.ita.crtrepo.EntitySource;
@@ -62,23 +64,24 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         builder.build();
 
         // create repository against spatialite database
-        eSource = sourceFactory.getEntitySource("inspecciones");
-        metaModeler = new SpatiaLiteMetaModeler();
-        meta = metaModeler.readFromSource(eSource);
-        builder = repoFactory.getBuilder(eSource);
-        conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
-        conf.setPropertyBinder(new SpatialitePropertyBinder());
-        conf.setTableStatementsProvider(new SpatialTableStatementsProvider());
-        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
-        builder.build();
+//        eSource = sourceFactory.getEntitySource("inspecciones");
+//        metaModeler = new SpatiaLiteMetaModeler();
+//        meta = metaModeler.readFromSource(eSource);
+//        builder = repoFactory.getBuilder(eSource);
+//        conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
+//        conf.setPropertyBinder(new SpatialitePropertyBinder());
+//        conf.setTableStatementsProvider(new SpatialTableStatementsProvider());
+//        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
+//        builder.build();
     }
 
     private void createEntitySources() {
-        EntitySourceBuilder builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("ribera"));
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "inspecciones");
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "inspecciones");
-        builder.build();
+        EntitySourceBuilder builder;
+//        builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
+//        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("ribera"));
+//        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "inspecciones");
+//        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "inspecciones");
+//        builder.build();
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
@@ -88,12 +91,12 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
     }
 
     private void createDBSource() {
-        File dbFile = new File("/sdcard/test/ribera.sqlite");
-        SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new Database());
-        this.sourceFactory.registerSource(new Source<>("ribera", dbFile.getAbsolutePath(), db));
+//        File dbFile = new File("/sdcard/test/ribera.sqlite");
+//        SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new Database());
+//        this.sourceFactory.registerSource(new Source<>("ribera", dbFile.getAbsolutePath(), db));
 
-        dbFile = new File("/sdcard/test/test.sqlite");
+        File dbFile = new File("/sdcard/test/dbTest.sqlite");
         SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
-        this.sourceFactory.registerSource(new Source<>("dbTest", dbFile.getAbsolutePath(), db));
+        this.sourceFactory.registerSource(new Source<>("dbTest", dbFile.getAbsolutePath(), new StandardDatabase(sqDb)));
     }
 }
