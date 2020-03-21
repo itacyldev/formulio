@@ -89,12 +89,12 @@ public class FormRenderer {
 
         //renderTestButtons(context, layout);
 
-        renderSaveButoon(context, layout);
+        renderSaveButton(context, layout);
 
         return layout;
     }
 
-    private void renderSaveButoon(Context context, ViewGroup parent) {
+    private void renderSaveButton(Context context, ViewGroup parent) {
         Button saveButton = new Button(context);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
