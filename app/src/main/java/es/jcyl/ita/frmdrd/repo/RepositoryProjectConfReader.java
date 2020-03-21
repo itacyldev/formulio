@@ -29,15 +29,11 @@ import es.jcyl.ita.crtrepo.builders.RepositoryBuilder;
 import es.jcyl.ita.crtrepo.builders.SQLiteGreenDAORepoBuilder;
 import es.jcyl.ita.crtrepo.config.AbstractRepoConfigurationReader;
 import es.jcyl.ita.crtrepo.db.DBTableEntitySource;
-import es.jcyl.ita.crtrepo.db.spatialite.SpatialitePropertyBinder;
+import es.jcyl.ita.crtrepo.db.NativeSQLEntitySource;
 import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDaoConfig;
-import es.jcyl.ita.crtrepo.db.sqlite.greendao.spatialite.SpatialTableStatementsProvider;
-import es.jcyl.ita.crtrepo.db.sqlite.greendao.spatialite.SpatialiteDataBase;
 import es.jcyl.ita.crtrepo.db.sqlite.meta.SQLiteMetaModeler;
-import es.jcyl.ita.crtrepo.db.sqlite.meta.SpatiaLiteMetaModeler;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.MetaModeler;
-import jsqlite.Database;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -63,6 +59,10 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
         builder.build();
 
+        eSource = sourceFactory.getEntitySource("filteredContacts");
+        builder = repoFactory.getBuilder(eSource);
+        builder.build();
+
         // create repository against spatialite database
 //        eSource = sourceFactory.getEntitySource("inspecciones");
 //        metaModeler = new SpatiaLiteMetaModeler();
@@ -85,9 +85,18 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "contacts");
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "contacts");
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "contacts");
         builder.build();
+
+        builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE_CURSOR);
+        builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.ENTITY_TYPE_ID, "filteredContacts");
+        String query = "select * from contacts where first_name like '%SA%'";
+        builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.QUERY, query);
+        builder.build();
+
+
     }
 
     private void createDBSource() {

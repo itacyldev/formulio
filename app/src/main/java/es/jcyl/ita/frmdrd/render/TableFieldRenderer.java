@@ -17,6 +17,7 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
@@ -159,7 +160,9 @@ public class TableFieldRenderer extends AbstractFieldRenderer {
 
         // ESTA PARTE TIENE QUE QUEDAR OCULTA POR LA CONFIGURACIÓN
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+//        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+
         this.meta = contactsRepo.getMeta();
         this.listContext = new DynamicListContext(contactsRepo);
     }
