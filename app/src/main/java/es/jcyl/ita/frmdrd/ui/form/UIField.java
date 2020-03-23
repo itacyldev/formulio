@@ -19,6 +19,8 @@ public class UIField extends UIComponent {
     private boolean deletable = true;
     private boolean required = false;
 
+    private Object source;
+
     public String getHint() {
         return hint;
     }
@@ -97,6 +99,14 @@ public class UIField extends UIComponent {
 
     public void setDeletable(final boolean deletable) {
         this.deletable = deletable;
+    }
+
+    public Object getSource() {
+        return source;
+    }
+
+    public void setSource(Object source) {
+        this.source = source;
     }
 
     @Override

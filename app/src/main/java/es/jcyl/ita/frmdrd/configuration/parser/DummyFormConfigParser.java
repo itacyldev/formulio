@@ -46,9 +46,10 @@ public class DummyFormConfigParser extends FormConfigParser {
         UIField_3.setRenderCondition("ctx[\"form.campo2\"] == true");
 
         UIField UIField_4 = new UIField();
-        UIField_4.setType(UIField.TYPE.TABLE);
+        UIField_4.setType(UIField.TYPE.TEXT);
         UIField_4.setLabel("campo 4");
         UIField_4.setId("campo4");
+        UIField_4.setSource("");
 
         UITab tab1_1 = new UITab();
         tab1_1.setId("tab1");
