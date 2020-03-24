@@ -17,6 +17,7 @@ public abstract class UIComponent implements Serializable {
 
     protected String label;
 
+    protected String reRender;
     protected String renderCondition;
     protected String update;
     private String rendererType;
@@ -60,6 +61,14 @@ public abstract class UIComponent implements Serializable {
 
     public void setLabel(final String label) {
         this.label = label;
+    }
+
+    public String getReRender() {
+        return reRender;
+    }
+
+    public void setReRender(String reRender) {
+        this.reRender = reRender;
     }
 
     public String getRenderCondition() {

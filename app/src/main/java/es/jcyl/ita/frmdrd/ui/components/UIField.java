@@ -1,7 +1,5 @@
 package es.jcyl.ita.frmdrd.ui.components;
 
-import es.jcyl.ita.frmdrd.context.Context;
-
 import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
 
 public class UIField extends UIComponent {
@@ -21,7 +19,6 @@ public class UIField extends UIComponent {
     private boolean deletable = true;
     private boolean required = false;
 
-
     @Override
     public String getRendererType() {
         switch (type) {
@@ -35,6 +32,8 @@ public class UIField extends UIComponent {
                 throw new UnsupportedOperationException(type.toString());
         }
     }
+
+    private Object source;
 
     public String getHint() {
         return hint;
@@ -116,9 +115,15 @@ public class UIField extends UIComponent {
         this.deletable = deletable;
     }
 
-    public void processValidators(Context context) {
 
+    public Object getSource() {
+        return source;
     }
+
+    public void setSource(Object source) {
+        this.source = source;
+    }
+
 
     @Override
     public String toString() {

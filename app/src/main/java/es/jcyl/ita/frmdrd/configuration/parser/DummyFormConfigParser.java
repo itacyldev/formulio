@@ -65,6 +65,12 @@ public class DummyFormConfigParser extends FormConfigParser {
         table.setRepo(contactsRepo);
         lst.add(table);
 
+        UIField UIField_4 = new UIField();
+        UIField_4.setType(UIField.TYPE.TEXT);
+        UIField_4.setLabel("campo 4");
+        UIField_4.setId("campo4");
+        UIField_4.setSource("");
+
         UIForm form1 = new UIForm();
         form1.setId("form1");
         form1.setLabel("Formulario 1");
