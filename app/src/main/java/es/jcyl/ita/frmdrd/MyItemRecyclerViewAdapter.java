@@ -12,7 +12,7 @@ import java.util.Map;
 import androidx.recyclerview.widget.RecyclerView;
 import es.jcyl.ita.frmdrd.FormListFragment.OnListFragmentInteractionListener;
 import es.jcyl.ita.frmdrd.dummy.DummyContent.FormListItem;
-import es.jcyl.ita.frmdrd.ui.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.UIForm;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link FormListItem} and makes a call to the

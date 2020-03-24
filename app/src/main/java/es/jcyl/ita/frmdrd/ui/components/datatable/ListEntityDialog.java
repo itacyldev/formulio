@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.ui.components.datatable;
 
 import android.app.Dialog;
 import android.content.Context;

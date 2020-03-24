@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
-import es.jcyl.ita.frmdrd.ui.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.UIForm;
 
 /**
  * A fragment representing a list of Items.

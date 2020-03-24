@@ -1,12 +1,16 @@
-package es.jcyl.ita.frmdrd.ui.form;
+package es.jcyl.ita.frmdrd.ui.components;
+
+import android.content.Context;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.frmdrd.render.Renderer;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 public abstract class UIComponent implements Serializable {
+    protected UIComponent root;
     protected String id;
     protected UIComponent parent;
     protected List<UIComponent> children;
@@ -15,6 +19,13 @@ public abstract class UIComponent implements Serializable {
 
     protected String renderCondition;
     protected String update;
+    private String rendererType;
+
+    /** if the children of this component have to be rendered individually */
+    private boolean renderChildren;
+
+    // behaviour
+    // save/restore state from context
 
     public String getId() {
         return id;
@@ -67,6 +78,13 @@ public abstract class UIComponent implements Serializable {
         this.update = update;
     }
 
+    public String getRendererType() {
+        return rendererType;
+    }
+
+    public void setRendererType(String rendererType) {
+        this.rendererType = rendererType;
+    }
 
     @Override
     public String toString() {
@@ -89,5 +107,25 @@ public abstract class UIComponent implements Serializable {
         }
     }
 
-    public abstract void processValidators(Context context);
+
+    public UIComponent getRoot() {
+        return root;
+    }
+
+    public void setRoot(UIComponent root) {
+        this.root = root;
+    }
+
+    public void setChildren(List<UIComponent> children) {
+        this.children = children;
+    }
+
+    public boolean isRenderChildren() {
+        return renderChildren;
+    }
+
+    public void setRenderChildren(boolean renderChildren) {
+        this.renderChildren = renderChildren;
+    }
+
 }

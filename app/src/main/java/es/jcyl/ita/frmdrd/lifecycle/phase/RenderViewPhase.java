@@ -11,8 +11,11 @@ import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.render.FormRenderer;
-import es.jcyl.ita.frmdrd.ui.form.UIField;
-import es.jcyl.ita.frmdrd.ui.form.UIForm;
+import es.jcyl.ita.frmdrd.render.Renderer;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 public class RenderViewPhase extends Phase {
 
@@ -24,9 +27,19 @@ public class RenderViewPhase extends Phase {
 
     @Override
     public void execute(Context phaseContext) {
-        FormRenderer renderer = new FormRenderer(lifecycle);
+
+        // get view handler
+        // get view id from context
+        // build view ViewRoot (get view configuration, restores if it it's already read)
+        // check view Change
+        // viewHandler.render(view, context)
+
+
+        FormRenderer renderer = new FormRenderer();
         Context mainContext = lifecycle.getMainContext();
         this.parentActivity = (Activity) mainContext.get("lifecycle.activity");
+
+
 
         // If we're updating the view only render the updated fields
         if (phaseContext != null) {
@@ -38,18 +51,18 @@ public class RenderViewPhase extends Phase {
                 updateFields.add(field);
 
                 String updateStr = field.getUpdate();
-                if(StringUtils.isNotEmpty(updateStr)){
+                if (StringUtils.isNotEmpty(updateStr)) {
                     updateFields.addAll(getFields(updateStr, formContext));
                 }
             }
 
-            renderer.render(parentActivity, updateFields);
+//            renderer.render(parentActivity, updateFields);
 
         } else {
 
             String formId = lifecycle.getFormId();
             UIForm form = FormConfigHandler.getForm(formId);
-            renderer.render(parentActivity, form);
+//            renderer.render(parentActivity, form);
         }
 
     }
@@ -65,4 +78,44 @@ public class RenderViewPhase extends Phase {
         fields.add(field);
         return fields;
     }
+
+//    @Override
+//    public void execute(Context phaseContext) {
+//
+//        // get view handler
+//        // get view id from context
+//        // build view ViewRoot (get view configuration, restores if it it's already read)
+//        // check view Change
+//        // viewHandler.render(view, context)
+//
+//
+//        FormRenderer renderer = new FormRenderer(lifecycle);
+//        Context mainContext = lifecycle.getMainContext();
+//        this.parentActivity = (Activity) mainContext.get("lifecycle.activity");
+//
+//        // If we're updating the view only render the updated fields
+//        if (phaseContext != null) {
+//            FormContext formContext = (FormContext) lifecycle.getMainContext().getContext(
+//                    "form");
+//            List<UIField> updateFields = new ArrayList<>();
+//            for (Object idField : phaseContext.values()) {
+//                UIField field = formContext.getFieldConfig(idField);
+//                updateFields.add(field);
+//
+//                String updateStr = field.getUpdate();
+//                if (StringUtils.isNotEmpty(updateStr)) {
+//                    updateFields.addAll(getFields(updateStr, formContext));
+//                }
+//            }
+//
+//            renderer.render(parentActivity, updateFields);
+//
+//        } else {
+//
+//            String formId = lifecycle.getFormId();
+//            UIForm form = FormConfigHandler.getForm(formId);
+//            renderer.render(parentActivity, form);
+//        }
+//
+//    }
 }

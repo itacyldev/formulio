@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.ui.components.datatable;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,7 +18,6 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.NavigationManager;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.UserFormAlphaEditActivity;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*
@@ -41,7 +40,7 @@ import es.jcyl.ita.frmdrd.util.DataUtils;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-class ListEntityAdapter extends ArrayAdapter<Entity> {
+public class ListEntityAdapter extends ArrayAdapter<Entity> {
     private Context context;
 
     private LayoutInflater inflater;
@@ -105,9 +104,9 @@ class ListEntityAdapter extends ArrayAdapter<Entity> {
             public void onClick(final View v) {
                 NavigationManager navigationManager = new NavigationManager();
                 Map<String, Serializable> params = new HashMap<>();
-                params.put("formId", "Form_1");
+                params.put("entityId", "xxxx"); // id of the selected record
 //                params.put("entity", currentEntity);
-                navigationManager.navigate(context, UserFormAlphaEditActivity.class, params);
+                navigationManager.navigate(context, "form2", params);
             }
         });
     }
@@ -156,27 +155,6 @@ class ListEntityAdapter extends ArrayAdapter<Entity> {
             }
         }
 
-//        final String[] columnNames = entity.getMetadata().getColumnNames();
-//        if (columnNames != null) {
-//            int i = 0;
-//            for (final String columnName : columnNames) {
-//                View view = null;
-//                if (columnName != null) {
-//
-//                    view = createTextView(parent);
-//                }
-//                layout.addView(view);
-//                holder.viewList.add(view);
-//
-//                i++;
-//                if (i >= FIELD_LIMIT) {
-//                    final TextView overflowTextView = createTextView(parent);
-//                    layout.addView(overflowTextView);
-//                    holder.viewList.add(view);
-//                    break;
-//                }
-//            }
-//        }
     }
 
     private TextView createTextView(final ViewGroup parent) {

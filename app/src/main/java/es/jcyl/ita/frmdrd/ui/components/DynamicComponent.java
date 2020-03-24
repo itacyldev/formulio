@@ -1,10 +1,6 @@
-package es.jcyl.ita.frmdrd.configuration.parser;
-
-import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
-
+package es.jcyl.ita.frmdrd.ui.components;
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +16,9 @@ import es.jcyl.ita.frmdrd.ui.components.UIForm;
  */
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public abstract class FormConfigParser {
-
-    /**
-     *
-     * @param formConfigStr
-     * @return the form's ID
-     */
-    public abstract String parseFormConfig(String formConfigStr);
-
-    protected void loadConfig(UIForm form) {
-        FormConfigHandler.addForm(form);
-    }
+public interface DynamicComponent {
+    void load();
 }

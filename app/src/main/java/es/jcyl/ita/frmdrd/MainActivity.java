@@ -9,11 +9,8 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +19,7 @@ import androidx.core.content.ContextCompat;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
 import es.jcyl.ita.frmdrd.context.JexlTest;
-import es.jcyl.ita.frmdrd.ui.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.UIForm;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
     private static final int PERMISSION_REQUEST = 1234;
@@ -106,10 +103,8 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
                 form.getId());
         asListDialog.show();
         }else{*/
-        Map<String, Serializable> params = new HashMap<>();
-        params.put("formId", form.getId());
-        navigationManager.navigate(this, UserFormAlphaEditActivity.class, params);
-        //}
+
+        navigationManager.navigate(this, "form1");
 
     }
 

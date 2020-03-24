@@ -1,16 +1,18 @@
-package es.jcyl.ita.frmdrd.ui.form;
+package es.jcyl.ita.frmdrd.ui.components;
 
 import es.jcyl.ita.frmdrd.context.Context;
+
+import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
 
 public class UIField extends UIComponent {
 
     public enum TYPE {
-        TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN, TABLE
+        TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN
     }
 
     private String hint;
     private String extendedHint;
-    private TYPE type = UIField.TYPE.TEXT;
+    private TYPE type = TEXT;
     private int inputType = 1;
     private String persistedField;
     private String regexp;
@@ -18,6 +20,21 @@ public class UIField extends UIComponent {
     private boolean editable = true;
     private boolean deletable = true;
     private boolean required = false;
+
+
+    @Override
+    public String getRendererType() {
+        switch (type) {
+            case TEXT:
+                return "textfield";
+            case DATE:
+                return "date";
+            case BOOLEAN:
+                return "checkbox";
+            default:
+                throw new UnsupportedOperationException(type.toString());
+        }
+    }
 
     public String getHint() {
         return hint;
@@ -99,9 +116,12 @@ public class UIField extends UIComponent {
         this.deletable = deletable;
     }
 
-    @Override
     public void processValidators(Context context) {
 
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%s]: %s/%s", this.type, this.id, this.getLabel());
+    }
 }

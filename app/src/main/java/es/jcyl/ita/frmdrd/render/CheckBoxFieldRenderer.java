@@ -10,8 +10,11 @@ import android.widget.TextView;
 import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
-import es.jcyl.ita.frmdrd.ui.form.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -33,51 +36,80 @@ import es.jcyl.ita.frmdrd.ui.form.UIField;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class CheckBoxFieldRenderer extends AbstractFieldRenderer {
+public class CheckBoxFieldRenderer extends BaseRenderer {
 
-    public CheckBoxFieldRenderer(Context context, Lifecycle lifecycle) {
-        super(context, lifecycle);
+    public CheckBoxFieldRenderer() {
+    }
+
+//    public CheckBoxFieldRenderer(Context context, Lifecycle lifecycle) {
+//        super(context, lifecycle);
+//    }
+//
+//    @Override
+//    public View render(final UIField field) {
+//        String renderCondition = field.getRenderCondition();
+//
+//        boolean render = true;
+//        if (StringUtils.isNotEmpty(renderCondition)) {
+//            render = this.validateCondition(renderCondition, field.getId());
+//        }
+//
+//
+//        LinearLayout linearLayout = null;
+//
+//        linearLayout = (LinearLayout) View.inflate(context,
+//                R.layout.tool_alphaedit_boolean, null);
+//
+//        final TextView fieldLabel = linearLayout
+//                .findViewById(R.id.field_layout_name);
+//        fieldLabel.setTag("label");
+//        final Switch input = linearLayout
+//                .findViewById(R.id.field_layout_value);
+//        input.setTag("input");
+//
+//
+//        fieldLabel.setText(field.getLabel());
+//
+//        input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton,
+//                                         boolean value) {
+//                onChangeInterceptor.onChange(field.getId());
+//            }
+//        });
+//
+//        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
+//
+//        bindField(field, input);
+//
+//        return linearLayout;
+//    }
+
+
+    @Override
+    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+        return View.inflate(viewContext,
+                R.layout.tool_alphaedit_boolean, null);
     }
 
     @Override
-    public View render(final UIField field) {
-        String renderCondition = field.getRenderCondition();
-
-        boolean render = true;
-        if (StringUtils.isNotEmpty(renderCondition)) {
-            render = this.validateCondition(renderCondition, field.getId());
-        }
-
-
-        LinearLayout linearLayout = null;
-
-        linearLayout = (LinearLayout) View.inflate(context,
-                R.layout.tool_alphaedit_boolean, null);
-
-        final TextView fieldLabel = linearLayout
+    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+        final TextView fieldLabel = baseView
                 .findViewById(R.id.field_layout_name);
         fieldLabel.setTag("label");
-        final Switch input = linearLayout
+        final Switch input = baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag("input");
 
-
-        fieldLabel.setText(field.getLabel());
+        fieldLabel.setText(component.getLabel());
 
         input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
-                onChangeInterceptor.onChange(field.getId());
+                OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
+                interceptor.onChange(component.getId());
             }
         });
-
-        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
-
-        bindField(field, input);
-
-        return linearLayout;
     }
-
-
 }

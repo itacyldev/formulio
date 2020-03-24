@@ -1,11 +1,6 @@
 package es.jcyl.ita.frmdrd.render;
-
-import android.view.View;
-
-import es.jcyl.ita.frmdrd.ui.form.UIField;
-
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +15,18 @@ import es.jcyl.ita.frmdrd.ui.form.UIField;
  * limitations under the License.
  */
 
+import android.content.Context;
+import android.view.View;
+
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.view.ExecEnvironment;
+
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-interface UIFieldRenderer {
+public interface Renderer {
 
-    View render(UIField field);
+    View render (Context viewContext, ExecEnvironment env, UIComponent component);
 
-    void update(UIField field);
 }

@@ -1,36 +1,37 @@
 package es.jcyl.ita.frmdrd.render;
 
-import android.content.Context;
+import java.util.HashMap;
+import java.util.Map;
 
-import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
-import es.jcyl.ita.frmdrd.ui.form.UIField;
+import es.jcyl.ita.frmdrd.ui.components.datatable.DatatableRenderer;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 public class RendererFactory {
 
-    public UIFieldRenderer getComponentRenderer(Context context,
-                                                UIField UIField,
-                                                Lifecycle lifecycle) {
-        UIFieldRenderer renderer = null;
+    private static RendererFactory _instance;
 
-        String type = UIField.getType();
+    private static final Map<String, Renderer> renderInstances = new HashMap<String, Renderer>();
 
-        switch (type) {
-            case "TEXT":
-                renderer = new TextFieldRenderer(context, lifecycle);
-                break;
-            case "BOOLEAN":
-                renderer = new CheckBoxFieldRenderer(context, lifecycle);
-                break;
-            case "DATE":
-                renderer = new DateFieldRenderer(context, lifecycle);
-                break;
-            case "TABLE":
-                renderer = new TableFieldRenderer(context, lifecycle);
-            default:
-                break;
+    private RendererFactory() {
+        renderInstances.put("form", new FormRenderer());
+        renderInstances.put("textfield", new TextFieldRenderer());
+        renderInstances.put("date", new DateFieldRenderer());
+        renderInstances.put("checkbox", new CheckBoxFieldRenderer());
+        renderInstances.put("datatable", new DatatableRenderer());
+
+    }
+
+    public static RendererFactory getInstance() {
+        if (_instance == null) {
+            _instance = new RendererFactory();
         }
+        return _instance;
+    }
 
-
-        return renderer;
+    public Renderer getRenderer(String rendererType) {
+        if (!renderInstances.containsKey(rendererType.toLowerCase())) {
+            throw new ViewConfigException("No renderer found for renderType: " + rendererType);
+        }
+        return renderInstances.get(rendererType);
     }
 }

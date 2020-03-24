@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.apache.commons.lang.StringUtils;
-
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
-import es.jcyl.ita.frmdrd.ui.form.UIField;
+import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIView;
+import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -36,34 +36,29 @@ import es.jcyl.ita.frmdrd.ui.form.UIField;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class TextFieldRenderer extends AbstractFieldRenderer {
+public class TextFieldRenderer extends BaseRenderer {
 
-    public TextFieldRenderer(Context context, Lifecycle lifecycle) {
-        super(context, lifecycle);
+    public TextFieldRenderer() {
     }
 
     @Override
-    public View render(final UIField field) {
-        String renderCondition = field.getRenderCondition();
-
-        boolean render = true;
-        if (StringUtils.isNotEmpty(renderCondition)) {
-            render = this.validateCondition(renderCondition, field.getId());
-        }
-
-
-        LinearLayout linearLayout = (LinearLayout) View.inflate(context,
+    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+        LinearLayout linearLayout = (LinearLayout) View.inflate(viewContext,
                 R.layout.tool_alphaedit_text, null);
+        return linearLayout;
+    }
 
-        final TextView fieldLabel = (TextView) linearLayout
+    @Override
+    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+        final TextView fieldLabel = (TextView) baseView
                 .findViewById(R.id.field_layout_name);
-        fieldLabel.setText(field.getLabel());
+        fieldLabel.setText(component.getLabel());
         fieldLabel.setTag("label");
-        final EditText input = (EditText) linearLayout
+        final EditText input = (EditText) baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag("input");
 
-        final ImageView resetButton = (ImageView) linearLayout
+        final ImageView resetButton = (ImageView) baseView
                 .findViewById(R.id.field_layout_x);
         resetButton.setTag("reset");
 
@@ -79,19 +74,9 @@ public class TextFieldRenderer extends AbstractFieldRenderer {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                onChangeInterceptor.onChange(field.getId());
+                OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
+                interceptor.onChange(component.getId());
             }
         });
-
-
-        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
-
-        bindField(field, linearLayout);
-
-        return linearLayout;
-
     }
-
-
-
 }

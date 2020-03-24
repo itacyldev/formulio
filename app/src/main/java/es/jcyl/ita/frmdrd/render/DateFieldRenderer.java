@@ -10,16 +10,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
-import es.jcyl.ita.frmdrd.ui.form.UIField;
+import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIView;
 import es.jcyl.ita.frmdrd.util.DataUtils;
+import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -41,35 +41,28 @@ import es.jcyl.ita.frmdrd.util.DataUtils;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DateFieldRenderer extends AbstractFieldRenderer {
+public class DateFieldRenderer extends BaseRenderer {
 
-    public DateFieldRenderer(Context context, Lifecycle lifecycle) {
-        super(context, lifecycle);
+    @Override
+    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+        LinearLayout linearLayout = (LinearLayout) View.inflate(viewContext,
+                R.layout.tool_alphaedit_date, null);
+        return linearLayout;
     }
 
     @Override
-    public View render(final UIField field) {
-        String renderCondition = field.getRenderCondition();
+    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
 
-        boolean render = true;
-        if (StringUtils.isNotEmpty(renderCondition)) {
-            render = this.validateCondition(renderCondition, field.getId());
-        }
-
-
-        LinearLayout linearLayout = (LinearLayout) View.inflate(context,
-                R.layout.tool_alphaedit_date, null);
-
-        final TextView fieldLabel = linearLayout
+        final TextView fieldLabel = baseView
                 .findViewById(R.id.field_layout_name);
-        final Button input = linearLayout
+        final Button input = baseView
                 .findViewById(R.id.field_layout_value);
-        final Button today = linearLayout
+        final Button today = baseView
                 .findViewById(R.id.field_layout_today);
-        final ImageView resetButton = linearLayout
+        final ImageView resetButton = baseView
                 .findViewById(R.id.field_layout_x);
 
-        fieldLabel.setText(field.getLabel());
+        fieldLabel.setText(component.getLabel());
 
         final DatePickerDialog.OnDateSetListener listener =
                 new DatePickerDialog.OnDateSetListener() {
@@ -83,7 +76,8 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
                         final Date dateValue = c.getTime();
                         input.setText(DataUtils.DATE_FORMAT.format(dateValue));
 
-                        onChangeInterceptor.onChange(field.getId());
+                        OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
+                        interceptor.onChange(component.getId());
                     }
                 };
 
@@ -91,7 +85,7 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
             @Override
             public void onClick(final View arg0) {
                 final Calendar c = new GregorianCalendar();
-                final Dialog dateDialog = new DatePickerDialog(context,
+                final Dialog dateDialog = new DatePickerDialog(baseView.getContext(),
                         listener, c.get(Calendar.YEAR), c
                         .get(Calendar.MONTH), c
                         .get(Calendar.DAY_OF_MONTH));
@@ -107,13 +101,5 @@ public class DateFieldRenderer extends AbstractFieldRenderer {
             }
         });
 
-
-        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
-
-        bindField(field, input);
-
-        return linearLayout;
     }
-
-
 }

@@ -13,8 +13,8 @@ import java.util.Date;
 
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.context.AbstractContext;
-import es.jcyl.ita.frmdrd.ui.form.UIField;
-import es.jcyl.ita.frmdrd.ui.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIForm;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*

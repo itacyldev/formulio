@@ -3,7 +3,7 @@ package es.jcyl.ita.frmdrd.dummy;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.ui.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.UIForm;
 
 
 public class DummyContent {
