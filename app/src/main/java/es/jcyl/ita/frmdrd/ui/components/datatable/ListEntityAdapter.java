@@ -164,6 +164,15 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         return output;
     }
 
+    @Override
+    public void notifyDataSetChanged(){
+        super.notifyDataSetChanged();
+        for(View item:cacheViews){
+            ViewHolder holder = (ViewHolder) item.getTag();
+            holder.charged = false;
+        }
+    }
+
     static class ViewHolder {
         int position;
         boolean charged;

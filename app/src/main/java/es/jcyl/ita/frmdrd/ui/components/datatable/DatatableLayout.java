@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
@@ -45,7 +46,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     private int pageSize = 20;
     private EntityMeta meta;
     private Repository repo;
-    private List<Entity> entities;
+    private List<Entity> entities = new ArrayList<>();
 
     // inner view elements
     private LinearLayout headerView;
@@ -55,9 +56,11 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     public DatatableLayout(Context context) {
         super(context);
     }
+
     public DatatableLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
     public DatatableLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -72,7 +75,15 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         SQLQueryFilter f = new SQLQueryFilter();
         f.setPageSize(this.pageSize);
         f.setOffset(this.offset);
-        this.entities = this.repo.find(f);
+        //this.entities.clear();
+        this.entities.addAll(this.repo.find(f));
+
+        //notify that the model changed
+        ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+
         this.offset += this.pageSize;
     }
 
