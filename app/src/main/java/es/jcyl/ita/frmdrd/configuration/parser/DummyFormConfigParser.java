@@ -35,25 +35,25 @@ public class DummyFormConfigParser extends FormConfigParser {
     @Override
     public String parseFormConfig(String formConfigStr) {
         List<UIComponent> lst = new ArrayList<UIComponent>();
-        UIField UIField_1 = new UIField();
-        UIField_1.setType(UIField.TYPE.TEXT);
-        UIField_1.setLabel("campo 1");
-        UIField_1.setId("campo1");
-        lst.add(UIField_1);
+        UIField field1 = new UIField();
+        field1.setType(UIField.TYPE.TEXT);
+        field1.setLabel("campo 1");
+        field1.setId("campo1");
+        lst.add(field1);
 
-        UIField UIField_2 = new UIField();
-        UIField_2.setType(UIField.TYPE.BOOLEAN);
-        UIField_2.setLabel("campo 2");
-        UIField_2.setId("campo2");
-        UIField_2.setUpdate("campo3");
-        lst.add(UIField_2);
+        UIField field2 = new UIField();
+        field2.setType(UIField.TYPE.BOOLEAN);
+        field2.setLabel("campo 2");
+        field2.setId("campo2");
+        field2.setUpdate("campo3");
+        lst.add(field2);
 
-        UIField UIField_3 = new UIField();
-        UIField_3.setType(UIField.TYPE.TEXT);
-        UIField_3.setLabel("campo 3");
-        UIField_3.setId("campo3");
-        UIField_3.setRenderCondition("ctx[\"form.campo2\"] == true");
-        lst.add(UIField_3);
+        UIField field3 = new UIField();
+        field3.setType(UIField.TYPE.TEXT);
+        field3.setLabel("campo 3");
+        field3.setId("campo3");
+        field3.setRenderCondition("ctx[\"form.campo2\"] == true");
+        lst.add(field3);
 
         UIDatatable table = new UIDatatable();
         table.setId("table1");
@@ -65,11 +65,11 @@ public class DummyFormConfigParser extends FormConfigParser {
         table.setRepo(contactsRepo);
         lst.add(table);
 
-        UIField UIField_4 = new UIField();
-        UIField_4.setType(UIField.TYPE.TEXT);
-        UIField_4.setLabel("campo 4");
-        UIField_4.setId("campo4");
-        UIField_4.setSource("");
+        UIField field4 = new UIField();
+        field4.setType(UIField.TYPE.TEXT);
+        field4.setLabel("campo 4");
+        field4.setId("campo4");
+        field4.setSource("");
 
         UIForm form1 = new UIForm();
         form1.setId("form1");
@@ -78,37 +78,58 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         loadConfig(form1);
 
+        List<UIComponent> lst2 = new ArrayList<UIComponent>();
+        UIField field2_1 = new UIField();
+        field2_1.setType(UIField.TYPE.TEXT);
+        field2_1.setLabel("campo 1");
+        field2_1.setId("campo1");
+        lst2.add(field2_1);
+
+        UIField field2_2 = new UIField();
+        field2_2.setType(UIField.TYPE.TEXT);
+        field2_2.setLabel("campo 2");
+        field2_2.setId("campo2");
+        lst2.add(field2_2);
+
+        UIForm form2 = new UIForm();
+        form2.setId("form2");
+        form2.setLabel("Formulario 2");
+        form2.setChildren(lst2);
+
+        loadConfig(form2);
+
+
         return form1.getId();
     }
 
 //
 //    public String parseFormConfig2(String formConfigStr) {
 //
-//        UIField UIField_1 = new UIField();
-//        UIField_1.setType(UIField.TYPE.TEXT);
-//        UIField_1.setLabel("campo 1");
-//        UIField_1.setId("campo1");
+//        UIField field1 = new UIField();
+//        field1.setType(UIField.TYPE.TEXT);
+//        field1.setLabel("campo 1");
+//        field1.setId("campo1");
 //
-//        UIField UIField_2 = new UIField();
-//        UIField_2.setType(UIField.TYPE.BOOLEAN);
-//        UIField_2.setLabel("campo 2");
-//        UIField_2.setId("campo2");
-//        UIField_2.setUpdate("campo3");
+//        UIField field2 = new UIField();
+//        field2.setType(UIField.TYPE.BOOLEAN);
+//        field2.setLabel("campo 2");
+//        field2.setId("campo2");
+//        field2.setUpdate("campo3");
 //
-//        UIField UIField_3 = new UIField();
-//        UIField_3.setType(UIField.TYPE.TEXT);
-//        UIField_3.setLabel("campo 3");
-//        UIField_3.setId("campo3");
-//        UIField_3.setRenderCondition("ctx[\"form.campo2\"] == true");
+//        UIField field3 = new UIField();
+//        field3.setType(UIField.TYPE.TEXT);
+//        field3.setLabel("campo 3");
+//        field3.setId("campo3");
+//        field3.setRenderCondition("ctx[\"form.campo2\"] == true");
 //
 //        UIDatatable table = new UIDatatable();
 //        table.setId("table1");
 //
 //        UITab tab1_1 = new UITab();
 //        tab1_1.setId("tab1");
-//        tab1_1.addComponent(UIField_1);
-//        tab1_1.addComponent(UIField_2);
-//        tab1_1.addComponent(UIField_3);
+//        tab1_1.addComponent(field1);
+//        tab1_1.addComponent(field2);
+//        tab1_1.addComponent(field3);
 //        tab1_1.addComponent(table);
 //
 //
@@ -119,34 +140,34 @@ public class DummyFormConfigParser extends FormConfigParser {
 //
 //        loadConfig(form1);
 //
-//        UIField UIField_2_1 = new UIField();
-//        UIField_2_1.setType(UIField.TYPE.TEXT);
-//        UIField_2_1.setLabel("campo 1");
-//        UIField_2_1.setId("campo1");
+//        UIField field2_1 = new UIField();
+//        field2_1.setType(UIField.TYPE.TEXT);
+//        field2_1.setLabel("campo 1");
+//        field2_1.setId("campo1");
 //
-//        UIField UIField_2_2 = new UIField();
-//        UIField_2_2.setType(UIField.TYPE.BOOLEAN);
-//        UIField_2_2.setLabel("campo 2");
-//        UIField_2_2.setId("campo2");
-//        UIField_2_2.setUpdate("campo3");
+//        UIField field2_2 = new UIField();
+//        field2_2.setType(UIField.TYPE.BOOLEAN);
+//        field2_2.setLabel("campo 2");
+//        field2_2.setId("campo2");
+//        field2_2.setUpdate("campo3");
 //
-//        UIField UIField_2_3 = new UIField();
-//        UIField_2_3.setType(UIField.TYPE.TEXT);
-//        UIField_2_3.setLabel("campo 3");
-//        UIField_2_3.setId("campo3");
-//        UIField_2_3.setRenderCondition("ctx[\"form.campo2\"] == true");
+//        UIField field2_3 = new UIField();
+//        field2_3.setType(UIField.TYPE.TEXT);
+//        field2_3.setLabel("campo 3");
+//        field2_3.setId("campo3");
+//        field2_3.setRenderCondition("ctx[\"form.campo2\"] == true");
 //
-//        UIField UIField_2_4 = new UIField();
-//        UIField_2_4.setType(UIField.TYPE.DATE);
-//        UIField_2_4.setLabel("campo 4");
-//        UIField_2_4.setId("campo4");
+//        UIField field2_4 = new UIField();
+//        field2_4.setType(UIField.TYPE.DATE);
+//        field2_4.setLabel("campo 4");
+//        field2_4.setId("campo4");
 //
 //        UITab tab_2_1_1 = new UITab();
 //        tab_2_1_1.setId("tab1");
-//        tab_2_1_1.addComponent(UIField_2_1);
-//        tab_2_1_1.addComponent(UIField_2_2);
-//        tab_2_1_1.addComponent(UIField_2_3);
-//        tab_2_1_1.addComponent(UIField_2_4);
+//        tab_2_1_1.addComponent(field2_1);
+//        tab_2_1_1.addComponent(field2_2);
+//        tab_2_1_1.addComponent(field2_3);
+//        tab_2_1_1.addComponent(field2_4);
 //
 //
 //        UIForm form2 = new UIForm();
