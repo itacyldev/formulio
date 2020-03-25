@@ -106,7 +106,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 Map<String, Serializable> params = new HashMap<>();
                 params.put("entityId", "xxxx"); // id of the selected record
 //                params.put("entity", currentEntity);
-                //navigationManager.navigate(context, "form2", params);
+                navigationManager.navigate(context, "form2", params);
             }
         });
     }
