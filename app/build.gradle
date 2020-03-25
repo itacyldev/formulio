@@ -70,12 +70,14 @@ dependencies {
     implementation 'es.jcyl.ita.crtcyl:crtcyl-core:2.37.0'
     //repo
     implementation('es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT') {
-        exclude group: 'com.google.android', module:'android'
+        exclude group: 'com.google.android', module: 'android'
     }
     implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
     // rxAndroid
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+    implementation 'org.jgrapht:jgrapht-core:1.4.0'
 
 
     // Core library
@@ -95,9 +97,12 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
         exclude group: 'androidx.test', module: 'runner'
     }
-//    androidTestImplementation "org.mini2Dx:android-beans:1.0.0"
+
+    testImplementation "org.mini2Dx:android-beans:1.0.0"
 
 
 }
+
+
 
 
