@@ -106,7 +106,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 Map<String, Serializable> params = new HashMap<>();
                 params.put("entityId", "xxxx"); // id of the selected record
 //                params.put("entity", currentEntity);
-                navigationManager.navigate(context, "form2", params);
+                //navigationManager.navigate(context, "form2", params);
             }
         });
     }
@@ -162,6 +162,15 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         TextView output = (TextView) inflater.inflate(
                 R.layout.list_item_textview, parent, false);
         return output;
+    }
+
+    @Override
+    public void notifyDataSetChanged(){
+        super.notifyDataSetChanged();
+        for(View item:cacheViews){
+            ViewHolder holder = (ViewHolder) item.getTag();
+            holder.charged = false;
+        }
     }
 
     static class ViewHolder {
