@@ -1,19 +1,15 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
 import android.content.Context;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import org.apache.commons.lang.StringUtils;
-
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
+import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
@@ -108,7 +104,7 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component.getId());
+                interceptor.onChange(component);
             }
         });
     }

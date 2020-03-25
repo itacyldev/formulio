@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 
 

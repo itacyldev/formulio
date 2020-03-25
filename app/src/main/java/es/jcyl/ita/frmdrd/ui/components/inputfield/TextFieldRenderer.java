@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
 import android.content.Context;
 import android.text.Editable;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
+import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIView;
 import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
@@ -75,7 +75,7 @@ public class TextFieldRenderer extends BaseRenderer {
             @Override
             public void afterTextChanged(Editable editable) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component.getId());
+                interceptor.onChange(component);
             }
         });
     }

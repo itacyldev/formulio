@@ -13,7 +13,9 @@ public abstract class UIComponent implements Serializable {
     protected UIComponent root;
     protected String id;
     protected UIComponent parent;
+    protected UIComponent parentForm;
     protected List<UIComponent> children;
+
 
     protected String label;
 
@@ -46,6 +48,27 @@ public abstract class UIComponent implements Serializable {
 
     public List<UIComponent> getChildren() {
         return children;
+    }
+    public boolean hasChildren(){
+        return this.children != null  && this.children.size() == 0;
+    }
+
+    public UIComponent findChild(String id){
+        if(this.getId().equalsIgnoreCase(id)){
+            return this;
+        } else {
+            if(!this.hasChildren()){
+                return null;
+            } else {
+                for (UIComponent kid: this.getChildren()){
+                    UIComponent found = kid.findChild(id);
+                    if(found != null){
+                        return found;
+                    }
+                }
+                return null;
+            }
+        }
     }
 
     public void addChild(UIComponent child) {
@@ -136,5 +159,15 @@ public abstract class UIComponent implements Serializable {
     public void setRenderChildren(boolean renderChildren) {
         this.renderChildren = renderChildren;
     }
+
+    public UIComponent getParentForm() {
+        return parentForm;
+    }
+
+    public void setParentForm(UIComponent parentForm) {
+        this.parentForm = parentForm;
+    }
+
+    public abstract void validate(es.jcyl.ita.frmdrd.context.Context context);
 
 }

@@ -334,7 +334,10 @@ public class OrderedCompositeContext extends AbstractContext
     public void removeContext(final Context context) {
         this.contexts.remove(context.getPrefix());
     }
-
+    @Override
+    public void removeContext(final String contextId) {
+        this.contexts.remove(contextId);
+    }
     @Override
     public void addAllContext(Collection<Context> contexts) {
         for (Context ctx : contexts) {

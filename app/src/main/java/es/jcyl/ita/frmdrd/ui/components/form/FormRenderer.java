@@ -1,6 +1,5 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.ui.components.form;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,10 @@ import android.widget.LinearLayout;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
+import es.jcyl.ita.frmdrd.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
@@ -180,11 +181,7 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
             @Override
             public void onClick(View view) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component.getId());
-
-//                es.jcyl.ita.frmdrd.context.Context formContext =
-//                        lifecycle.getMainContext().getContext("form");
-                //formContext.
+                interceptor.onChange(component);
             }
         });
         saveButton.setText("Save");

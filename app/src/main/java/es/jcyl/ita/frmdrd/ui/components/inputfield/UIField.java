@@ -1,6 +1,9 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
-import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
+import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+
+import static es.jcyl.ita.frmdrd.ui.components.inputfield.UIField.TYPE.TEXT;
 
 public class UIField extends UIComponent {
 
@@ -124,6 +127,11 @@ public class UIField extends UIComponent {
         this.source = source;
     }
 
+
+    @Override
+    public void validate(Context context) {
+
+    }
 
     @Override
     public String toString() {

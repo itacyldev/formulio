@@ -3,21 +3,21 @@ package es.jcyl.ita.frmdrd.configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class FormConfigHandler {
 
-    private static Map<String, UIForm> forms = new HashMap<String, UIForm>();
+    private static Map<String, UIView> forms = new HashMap<String, UIView>();
 
-    public static Map<String, UIForm> getForms() {
+    public static Map<String, UIView> getForms() {
         return forms;
     }
 
-    public static UIForm getForm(String formId) {
+    public static UIView getView(String formId) {
         return forms.get(formId);
     }
 
-    public static void addForm(UIForm form) {
+    public static void addForm(UIView form) {
         forms.put(form.getId(), form);
     }
 

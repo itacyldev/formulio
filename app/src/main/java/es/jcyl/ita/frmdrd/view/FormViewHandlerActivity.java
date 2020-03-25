@@ -5,21 +5,17 @@ import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import androidx.fragment.app.FragmentActivity;
-import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
+import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.context.impl.BasicContext;
-import es.jcyl.ita.frmdrd.lifecycle.Lifecycle;
 import es.jcyl.ita.frmdrd.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.render.Renderer;
 import es.jcyl.ita.frmdrd.render.RendererFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -56,26 +52,21 @@ public class FormViewHandlerActivity extends FragmentActivity {
         this.themeWrapper = new ContextThemeWrapper(this,
                 android.R.style.Theme_Holo_Dialog);
 
-        String viewId = this.getIntent().getStringExtra("viewId");
-
-        Lifecycle lifecycle = new Lifecycle(viewId);
-        BasicContext lifecycleContext = new BasicContext("lifecycle");
-        lifecycleContext.put("activity", this);
-//        lifecycle.doExecute(lifecycleContext);
-
-        // create view
-        UIComponent root = buildView(viewId);
-        ExecEnvironment env = new ExecEnvironment(lifecycleContext);
+        UIComponent root = MainController.getInstance().getViewRoot();
+        es.jcyl.ita.frmdrd.context.Context context = buildContext();
+        ExecEnvironment env = new ExecEnvironment(context);
         View rootView = doRender(this, env, root);
-
         setContentView(rootView);
     }
 
-    private UIComponent buildView(String viewId) {
-        // find view in repository and inflate it from xml configuration if it already doesn't exits
-        UIForm form = FormConfigHandler.getForm(viewId);
-        return form;
+    private es.jcyl.ita.frmdrd.context.Context buildContext() {
+        // parameter context
+        // form context
+        // local context
+        BasicContext lifecycleContext = new BasicContext("lifecycle");
+        return lifecycleContext;
     }
+
 
     private View doRender(Context viewContext, ExecEnvironment env, UIComponent root) {
         String rendererType = root.getRendererType();
@@ -109,6 +100,5 @@ public class FormViewHandlerActivity extends FragmentActivity {
     protected void close() {
         finish();
     }
-
 
 }

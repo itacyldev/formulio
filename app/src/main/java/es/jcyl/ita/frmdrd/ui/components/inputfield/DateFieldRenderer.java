@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -16,8 +16,8 @@ import java.util.GregorianCalendar;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
+import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIView;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
@@ -77,7 +77,7 @@ public class DateFieldRenderer extends BaseRenderer {
                         input.setText(DataUtils.DATE_FORMAT.format(dateValue));
 
                         OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                        interceptor.onChange(component.getId());
+                        interceptor.onChange(component);
                     }
                 };
 

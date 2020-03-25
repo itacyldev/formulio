@@ -2,8 +2,8 @@ package es.jcyl.ita.frmdrd.lifecycle.phase;
 
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 public class ProcessValidationsPhase extends Phase {
 
@@ -19,12 +19,12 @@ public class ProcessValidationsPhase extends Phase {
             for (Object idField : updateContext.values()) {
                 UIField fieldConfig = formContext.getFieldConfig(idField);
                 if (fieldConfig != null) {
-                    fieldConfig.processValidators(lifecycle.getMainContext());
+//                    fieldConfig.processValidators(lifecycle.getMainContext());
                 }
             }
         } else {
             UIForm form = formContext.getRoot();
-            form.processValidators(lifecycle.getMainContext());
+            form.validate(lifecycle.getMainContext());
         }
     }
 }

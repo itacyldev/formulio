@@ -1,7 +1,7 @@
 package es.jcyl.ita.frmdrd.configuration.parser;
 
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -32,7 +32,7 @@ public abstract class FormConfigParser {
      */
     public abstract String parseFormConfig(String formConfigStr);
 
-    protected void loadConfig(UIForm form) {
-        FormConfigHandler.addForm(form);
+    protected void loadConfig(UIView view) {
+        FormConfigHandler.addForm(view);
     }
 }

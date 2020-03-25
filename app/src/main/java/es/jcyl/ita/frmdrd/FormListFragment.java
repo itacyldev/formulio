@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 /**
  * A fragment representing a list of Items.
@@ -120,6 +120,6 @@ public class FormListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(UIForm UIForm);
+        void onListFragmentInteraction(UIView view);
     }
 }

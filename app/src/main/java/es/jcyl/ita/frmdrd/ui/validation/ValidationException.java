@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.ui.validation;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,24 +15,9 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
-import android.content.Context;
-
-import java.io.IOException;
-
-import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.render.Renderer;
-import es.jcyl.ita.frmdrd.render.RendererFactory;
-import es.jcyl.ita.frmdrd.view.ViewConfigException;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIView extends UIComponent {
-
-
-    @Override
-    public boolean isRenderChildren() {
-        return true;
-    }
+public class ValidationException extends RuntimeException {
 }

@@ -8,8 +8,9 @@ import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class BuildFormContextPhase extends Phase {
 
@@ -22,10 +23,10 @@ public class BuildFormContextPhase extends Phase {
      */
     @Override
     public void execute(Context context) {
-        UIForm form = FormConfigHandler.getForm(lifecycle.getFormId());
-        Context formContext = buildContext(form);
+        UIView view = FormConfigHandler.getView(lifecycle.getFormId());
+//        Context formContext = buildContext(form);
 
-        lifecycle.addContext(formContext);
+//        lifecycle.addContext(formContext);
     }
 
     /**
@@ -33,8 +34,7 @@ public class BuildFormContextPhase extends Phase {
      * @return
      */
     private Context buildContext(UIForm form) {
-        FormContext formContext = new FormContext("form");
-        formContext.setRoot(form);
+        FormContext formContext = new FormContext("form", form);
 
         List<UIField> fields = new ArrayList<>();
         getFields(form, fields);

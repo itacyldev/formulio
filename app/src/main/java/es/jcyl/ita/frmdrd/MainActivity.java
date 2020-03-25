@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
 import es.jcyl.ita.frmdrd.context.JexlTest;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
     private static final int PERMISSION_REQUEST = 1234;
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     @Override
-    public void onListFragmentInteraction(UIForm form) {
+    public void onListFragmentInteraction(UIView form) {
         NavigationManager navigationManager = new NavigationManager();
 
         /*Map savedData = SavedData.getForm(form.getId());
@@ -104,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         asListDialog.show();
         }else{*/
 
-        navigationManager.navigate(this, "form1");
+        MainController.getInstance().navigate(this, "view1");
+//
+//        navigationManager.navigate(this, "form1");
 
     }
 

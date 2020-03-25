@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
  */
 
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
@@ -45,5 +46,10 @@ public class UIDatatable extends UIComponent {
 
     public void setRepo(Repository repo) {
         this.repo = repo;
+    }
+
+    @Override
+    public void validate(Context context) {
+
     }
 }

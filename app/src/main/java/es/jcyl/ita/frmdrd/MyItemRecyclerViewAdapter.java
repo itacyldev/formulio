@@ -12,7 +12,7 @@ import java.util.Map;
 import androidx.recyclerview.widget.RecyclerView;
 import es.jcyl.ita.frmdrd.FormListFragment.OnListFragmentInteractionListener;
 import es.jcyl.ita.frmdrd.dummy.DummyContent.FormListItem;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link FormListItem} and makes a call to the
@@ -21,10 +21,10 @@ import es.jcyl.ita.frmdrd.ui.components.UIForm;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final Map<String , UIForm> mValues;
+    private final Map<String, UIView> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(Map<String , UIForm> items,
+    public MyItemRecyclerViewAdapter(Map<String, UIView> items,
                                      OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -39,8 +39,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        List<UIForm> UIForms = new ArrayList(mValues.values());
-        holder.mItem = UIForms.get(position);
+        List<UIView> views = new ArrayList(mValues.values());
+        holder.mItem = views.get(position);
         holder.mIdView.setText(holder.mItem.getId());
         holder.mContentView.setText(holder.mItem.getLabel());
 
@@ -65,7 +65,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public UIForm mItem;
+        public UIView mItem;
 
         public ViewHolder(View view) {
             super(view);

@@ -7,8 +7,9 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.frmdrd.repo.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 
 /*
@@ -75,10 +76,14 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setId("form1");
         form1.setLabel("Formulario 1");
         form1.setChildren(lst);
+        List<UIComponent> f = new ArrayList<>();
+        f.add(form1);
+        UIView view1 = new UIView("view1");
+        view1.setChildren(f);
 
-        loadConfig(form1);
+        loadConfig(view1);
 
-        return form1.getId();
+        return view1.getId();
     }
 
 //

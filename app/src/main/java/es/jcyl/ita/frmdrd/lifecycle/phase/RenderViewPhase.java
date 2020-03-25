@@ -7,15 +7,10 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.render.FormRenderer;
-import es.jcyl.ita.frmdrd.render.Renderer;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
-import es.jcyl.ita.frmdrd.view.ViewConfigException;
+import es.jcyl.ita.frmdrd.ui.components.form.FormRenderer;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 public class RenderViewPhase extends Phase {
 
@@ -60,8 +55,8 @@ public class RenderViewPhase extends Phase {
 
         } else {
 
-            String formId = lifecycle.getFormId();
-            UIForm form = FormConfigHandler.getForm(formId);
+//            String formId = lifecycle.getFormId();
+//            UIForm form = FormConfigHandler.getForm(formId);
 //            renderer.render(parentActivity, form);
         }
 

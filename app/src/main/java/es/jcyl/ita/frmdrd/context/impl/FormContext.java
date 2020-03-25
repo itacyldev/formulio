@@ -11,10 +11,11 @@ import android.widget.TextView;
 import java.text.ParseException;
 import java.util.Date;
 
+import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.context.AbstractContext;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
-import es.jcyl.ita.frmdrd.ui.components.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*
@@ -39,11 +40,13 @@ import es.jcyl.ita.frmdrd.util.DataUtils;
 
 public class FormContext extends AbstractContext {
 
-    public FormContext(String prefix) {
-        super(prefix);
-    }
+    private final UIForm root;
+    private Entity entity;
 
-    private UIForm root;
+    public FormContext(String prefix, UIForm form) {
+        super(prefix);
+        this.root = form;
+    }
 
     @Override
     public Object get(Object key) {
@@ -52,7 +55,7 @@ public class FormContext extends AbstractContext {
         UIField field = (UIField) super.get(key);
 
         if (field != null) {
-            LinearLayout layout = (LinearLayout)DataBindings.getView(key.toString());
+            LinearLayout layout = (LinearLayout) DataBindings.getView(key.toString());
 
             String fieldType = field.getType();
             switch (fieldType) {
@@ -187,7 +190,11 @@ public class FormContext extends AbstractContext {
         return root;
     }
 
-    public void setRoot(UIForm root) {
-        this.root = root;
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
     }
 }

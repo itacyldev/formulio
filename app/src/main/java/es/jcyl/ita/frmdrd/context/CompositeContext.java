@@ -22,6 +22,8 @@ public interface CompositeContext extends Context {
 
 	public void removeContext(Context context);
 
+	public void removeContext(String contextId);
+
 	public void removeAllContexts();
 
 	public boolean hasContext(String key);
