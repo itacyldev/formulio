@@ -55,9 +55,19 @@ public class DAGGeneratorTest {
         Assert.assertNull(dag7);
 
 
-        Assert.assertEquals(4,dag1.vertexSet().size());
-        Assert.assertEquals(2,dag5.vertexSet().size());
+        Assert.assertEquals(4, dag1.vertexSet().size());
+        Assert.assertEquals(2, dag5.vertexSet().size());
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createDagWithCycle() {
+        UIForm form = createFormWithCycle();
+
+        DAGGenerator dagGenerator = new DAGGenerator();
+
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
+                dagGenerator.createDags(form);
     }
 
     private UIForm createForm() {
@@ -98,6 +108,31 @@ public class DAGGeneratorTest {
                 fieldBuilder.withId("field7").withFieldType(UIField.TYPE.TEXT).withLabel(
                         "field 7").build();
         fields.add(field7);
+
+        FormBuilder formBuilder = new FormBuilder();
+        formBuilder.withId("form").withChildren(fields).withLabel("Form 1");
+
+        return formBuilder.build();
+    }
+
+    private UIForm createFormWithCycle() {
+        FieldBuilder fieldBuilder = new FieldBuilder();
+
+        List<UIComponent> fields = new ArrayList<>();
+        UIField field1 =
+                fieldBuilder.withId("field1").withFieldType(UIField.TYPE.TEXT).withLabel(
+                        "field 1").withRerender("field2").build();
+        fields.add(field1);
+
+        UIField field2 =
+                fieldBuilder.withId("field2").withFieldType(UIField.TYPE.TEXT).withLabel(
+                        "field 2").withRerender("field3").build();
+        fields.add(field2);
+
+        UIField field3 =
+                fieldBuilder.withId("field3").withFieldType(UIField.TYPE.TEXT).withLabel(
+                        "field 3").withRerender("field1").build();
+        fields.add(field3);
 
         FormBuilder formBuilder = new FormBuilder();
         formBuilder.withId("form").withChildren(fields).withLabel("Form 1");
