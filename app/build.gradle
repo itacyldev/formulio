@@ -107,9 +107,6 @@ dependencies {
     testImplementation "org.mini2Dx:android-beans:1.0.0"
 
     testImplementation 'junit:junit:4.12'
-    implementation 'junit:junit:4.12'
-
-
 }
 
 
