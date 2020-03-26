@@ -4,11 +4,13 @@ import org.apache.commons.lang.StringUtils;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 
 
@@ -34,13 +36,10 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 public class DAGGenerator {
 
     // Stores all the components of the form mapped by its ID
-    private Map<String, UIComponent> components;
+    private Map<String, UIComponent> components = new HashMap<>();
 
     // Stores a DAGNode per component of the form mapped by its ID
-    private Map<String, DAGNode> nodes;
-
-    // Stores the DAG that contains each component
-    private Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
+    private Map<String, DAGNode> nodes = new HashMap<>();
 
     /**
      * Creates a DAG per component of the form
@@ -48,13 +47,19 @@ public class DAGGenerator {
      * @param formConfig
      * @return
      */
-    public void createDags(UIForm formConfig) {
+    public Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> createDags(UIForm formConfig) {
 
         processComponent(formConfig);
 
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = new HashMap<>();
+
         for (UIComponent component : components.values()) {
-            buildComponentDag(component);
+            if (!dags.containsKey(component.getId())) {
+                buildComponentDag(component, dags);
+            }
         }
+
+        return dags;
     }
 
     /**
@@ -87,12 +92,12 @@ public class DAGGenerator {
      *
      * @param component
      */
-    private void buildComponentDag(UIComponent component) {
+    private void buildComponentDag(UIComponent component, Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
         String[] split;
 
         String rerenderStr = component.getReRender();
         if (StringUtils.isNotEmpty(rerenderStr)) {
-            DirectedAcyclicGraph dag = getDagComponent(component);
+            DirectedAcyclicGraph dag = getDagComponent(component, dags);
             DAGNode componetNode = nodes.get(component.getId());
 
             if (rerenderStr.contains(";")) {
@@ -108,8 +113,12 @@ public class DAGGenerator {
                 dags.put(rerenderComponentId, dag);
 
                 UIComponent rerenderComponent = components.get(rerenderComponentId);
-                buildComponentDag(rerenderComponent);
+                buildComponentDag(rerenderComponent, dags);
             }
+        }
+
+        if(component instanceof UIField){
+            UIField field = (UIField) component;
         }
 
 
@@ -122,12 +131,14 @@ public class DAGGenerator {
      * @param component
      * @return
      */
-    private DirectedAcyclicGraph getDagComponent(UIComponent component) {
+    private DirectedAcyclicGraph getDagComponent(UIComponent component,
+                                                 Map<String,
+                                                         DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
         DirectedAcyclicGraph<DAGNode, DefaultEdge> dag = null;
         if (dags.containsKey(component.getId())) {
             dag = dags.get(component.getId());
         } else {
-            dag = new DirectedAcyclicGraph(null);
+            dag = new DirectedAcyclicGraph(DefaultEdge.class);
             dag.addVertex(nodes.get(component.getId()));
             dags.put(component.getId(), dag);
         }

@@ -6,11 +6,7 @@ buildscript {
         }
         google()
         jcenter()
-        mavenLocal()
-        maven {
-            name "ITACyL - thirdparty"
-            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
-        }
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.1'
@@ -22,7 +18,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        mavenLocal()
+
         def androidHome = System.getenv("ANDROID_HOME")
         maven {
             name "sdk android extras"
@@ -36,16 +32,16 @@ allprojects {
             url 'https://maven.google.com'
         }
         maven {
+            name "ITACyL - snapshots"
+            url "http://repo.itacyl.es/archiva/repository/snapshots/"
+        }
+        maven {
             name "ITACyL - internal"
             url "http://repo.itacyl.es/archiva/repository/internal/"
         }
         maven {
             name "ITACyL - thirdparty"
             url "http://repo.itacyl.es/archiva/repository/thirdparty/"
-        }
-        maven {
-            name "ITACyL - snapshots"
-            url "http://repo.itacyl.es/archiva/repository/snapshots/"
         }
     }
 
@@ -77,21 +73,4 @@ ext {
     minSdkVersion = 21
     buildToolsVersion = '29.0.1'
     encoding = "UTF-8"
-
-    commonDependencies = [
-
-            appCompat        : 'androidx.appcompat:appcompat:1.0.2',
-            cardView         : 'androidx.cardview:cardview:1.0.0',
-            design           : 'com.google.android.material:material:1.0.0-rc01',
-            constraint_layout: 'androidx.constraintlayout:constraintlayout:1.1.3',
-            coordinatorlayout: 'androidx.coordinatorlayout:coordinatorlayout:1.0.0-alpha1',
-            jexl: 'org.apache.commons:commons-jexl3:3.1',
-            commonsLang  : 'commons-lang:commons-lang:2.6',
-            commonsLogging  : 'commons-logging:commons-logging:1.2',
-            dagger: 'com.google.dagger:dagger:2.15',
-            commonsBeanutils: 'commons-beanutils:commons-beanutils:1.9.3',
-
-
-
-    ] 
 }

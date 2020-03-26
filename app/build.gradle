@@ -49,6 +49,12 @@ android {
     dataBinding {
         enabled = true
     }
+
+    useLibrary 'android.test.runner'
+
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
 }
 
 dependencies {
@@ -102,6 +108,7 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.0.2"
     testImplementation "org.mini2Dx:android-beans:1.0.0"
 //    testImplementation('es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT:tests')
+
 }
 
 
