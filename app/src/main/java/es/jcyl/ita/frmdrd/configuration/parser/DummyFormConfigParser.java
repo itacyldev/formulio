@@ -7,10 +7,10 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.frmdrd.repo.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -38,22 +38,24 @@ public class DummyFormConfigParser extends FormConfigParser {
         List<UIComponent> lst = new ArrayList<UIComponent>();
         UIField field1 = new UIField();
         field1.setType(UIField.TYPE.TEXT);
-        field1.setLabel("campo 1");
+        field1.setLabel("firstName");
         field1.setId("campo1");
+        field1.setValue("entity.first_name");
         lst.add(field1);
 
         UIField field2 = new UIField();
         field2.setType(UIField.TYPE.BOOLEAN);
-        field2.setLabel("campo 2");
+        field2.setLabel("LastName");
         field2.setId("campo2");
         field2.setUpdate("campo3");
+        field2.setValue("entity.last_name");
         lst.add(field2);
 
         UIField field3 = new UIField();
         field3.setType(UIField.TYPE.TEXT);
         field3.setLabel("campo 3");
         field3.setId("campo3");
-        field3.setRenderCondition("ctx[\"form.campo2\"] == true");
+        field3.setRenderCondition("entity.salary");
         lst.add(field3);
 
         UIDatatable table = new UIDatatable();
@@ -71,11 +73,13 @@ public class DummyFormConfigParser extends FormConfigParser {
         field4.setLabel("campo 4");
         field4.setId("campo4");
         field4.setSource("");
+        lst.add(field4);
 
         UIForm form1 = new UIForm();
         form1.setId("form1");
         form1.setLabel("Formulario 1");
         form1.setChildren(lst);
+        form1.setRepo(contactsRepo);
         List<UIComponent> f = new ArrayList<>();
         f.add(form1);
         UIView view1 = new UIView("view1");

@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
                 form.getId());
         asListDialog.show();
         }else{*/
-
-        MainController.getInstance().navigate(this, "view1");
+        Integer entityId = 3505;
+        MainController.getInstance().navigate(this, "view1", entityId);
 //
 //        navigationManager.navigate(this, "form1");
 

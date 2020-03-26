@@ -11,14 +11,14 @@ import org.apache.commons.logging.LogFactory;
 
 import androidx.fragment.app.FragmentActivity;
 import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.render.Renderer;
 import es.jcyl.ita.frmdrd.render.RendererFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
 public class FormViewHandlerActivity extends FragmentActivity {
@@ -53,27 +53,23 @@ public class FormViewHandlerActivity extends FragmentActivity {
                 android.R.style.Theme_Holo_Dialog);
 
         UIComponent root = MainController.getInstance().getViewRoot();
-        es.jcyl.ita.frmdrd.context.Context context = buildContext();
-        ExecEnvironment env = new ExecEnvironment(context);
+
+        ExecEnvironment env = new ExecEnvironment(MainController.getInstance().getGlobalContext());
         View rootView = doRender(this, env, root);
         setContentView(rootView);
-    }
-
-    private es.jcyl.ita.frmdrd.context.Context buildContext() {
-        // parameter context
-        // form context
-        // local context
-        BasicContext lifecycleContext = new BasicContext("lifecycle");
-        return lifecycleContext;
     }
 
 
     private View doRender(Context viewContext, ExecEnvironment env, UIComponent root) {
         String rendererType = root.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
-
+        // set current form context
+        if (root.getParentForm() != null) {
+            env.setFormContext(((UIForm) root.getParentForm()).getContext());
+        }
         View rootView = renderer.render(viewContext, env, root);
 
+        // render children if needed
         if (renderer instanceof GroupRenderer) {
             GroupRenderer gRenderer = (GroupRenderer) renderer;
             if (root.isRenderChildren()) {

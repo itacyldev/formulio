@@ -61,11 +61,11 @@ public class MainController {
         navigate(context, viewId, new HashMap<>());
     }
 
-//    public void navigate(Context context, String viewId, Serializable entityId) {
-//        Map<String, Serializable> params = new HashMap<>();
-//        params.put("entityId", entityId);
-//        navigate(context, viewId, params);
-//    }
+    public void navigate(android.content.Context context, String viewId, Object entityId) {
+        Map<String, Serializable> params = new HashMap<>();
+        params.put("entityId", (Serializable) entityId);
+        navigate(context, viewId, params);
+    }
 
     /**
      * Implements navigation to a new view
@@ -85,7 +85,8 @@ public class MainController {
         viewRoot = retrieveView(viewId);
         // for each form in the view, load the related entity
         for (UIForm form : viewRoot.getForms()) {
-            form.loadEntity();
+            form.initContext();
+            form.loadEntity(globalContext);
             // get form context and attach them to view context
             Context fCtx = form.getContext();
             viewCtx.addContext(fCtx);
@@ -158,5 +159,9 @@ public class MainController {
 
     public UIComponent getViewRoot() {
         return viewRoot;
+    }
+
+    public CompositeContext getGlobalContext() {
+        return globalContext;
     }
 }

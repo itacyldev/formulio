@@ -14,7 +14,7 @@ import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
 public class UIForm extends UIComponent {
 
     private EditableRepository repo;
-    private Object entityId;
+    private String entityIdProperty = "params.entityId";
     private FormContext context;
 
     private Map<String, UITab> tabs = new LinkedHashMap<>();
@@ -44,12 +44,8 @@ public class UIForm extends UIComponent {
     }
 
 
-    public Object getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(Object entityId) {
-        this.entityId = entityId;
+    public Object getEntityId(Context ctx) {
+        return ctx.get(this.entityIdProperty);
     }
 
     @Override
@@ -64,24 +60,31 @@ public class UIForm extends UIComponent {
     /**
      * Loads related entity and sets it in the form context
      */
-    public void loadEntity() {
-        if (this.repo == null || this.entityId == null) {
+    public void loadEntity(Context globalCtx) {
+        if (this.repo == null ) {
             return;
         }
-        Entity entity = this.repo.findById(this.entityId);
+        Object entityId = this.getEntityId(globalCtx);
+        if(entityId == null){
+            return;
+        }
+        Entity entity = this.repo.findById(entityId);
         // what if its null? throw an Exception?
         this.context.setEntity(entity);
     }
 
-    public void save() {
-        this.repo.save(this.context.getEntity());
+    public void initContext() {
+        if (this.context == null) {
+            this.context = new FormContext(this.getId(), this);
+        }
     }
 
     public FormContext getContext() {
         return context;
     }
 
-    public void setContext(FormContext context) {
-        this.context = context;
+    public void save() {
+        this.repo.save(this.context.getEntity());
     }
+
 }

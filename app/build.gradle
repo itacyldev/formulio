@@ -98,9 +98,10 @@ dependencies {
         exclude group: 'androidx.test', module: 'runner'
     }
 
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.robolectric:robolectric:4.0.2"
     testImplementation "org.mini2Dx:android-beans:1.0.0"
-
-
+//    testImplementation('es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT:tests')
 }
 
 

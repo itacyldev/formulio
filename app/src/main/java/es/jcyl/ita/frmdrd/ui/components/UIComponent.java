@@ -1,13 +1,10 @@
 package es.jcyl.ita.frmdrd.ui.components;
 
-import android.content.Context;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.render.Renderer;
-import es.jcyl.ita.frmdrd.view.ViewConfigException;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 public abstract class UIComponent implements Serializable {
     protected UIComponent root;
@@ -24,8 +21,13 @@ public abstract class UIComponent implements Serializable {
     protected String update;
     private String rendererType;
 
-    /** if the children of this component have to be rendered individually */
+    private ValueBindingExpression valueExpression;
+
+    /**
+     * if the children of this component have to be rendered individually
+     */
     private boolean renderChildren;
+    private String value;
 
     // behaviour
     // save/restore state from context
@@ -49,20 +51,21 @@ public abstract class UIComponent implements Serializable {
     public List<UIComponent> getChildren() {
         return children;
     }
-    public boolean hasChildren(){
-        return this.children != null  && this.children.size() == 0;
+
+    public boolean hasChildren() {
+        return this.children != null && this.children.size() > 0;
     }
 
-    public UIComponent findChild(String id){
-        if(this.getId().equalsIgnoreCase(id)){
+    public UIComponent findChild(String id) {
+        if (this.getId().equalsIgnoreCase(id)) {
             return this;
         } else {
-            if(!this.hasChildren()){
+            if (!this.hasChildren()) {
                 return null;
             } else {
-                for (UIComponent kid: this.getChildren()){
+                for (UIComponent kid : this.getChildren()) {
                     UIComponent found = kid.findChild(id);
-                    if(found != null){
+                    if (found != null) {
                         return found;
                     }
                 }
@@ -150,6 +153,10 @@ public abstract class UIComponent implements Serializable {
 
     public void setChildren(List<UIComponent> children) {
         this.children = children;
+        // re-link children parent
+        for (UIComponent c : this.children) {
+            c.setParent(this);
+        }
     }
 
     public boolean isRenderChildren() {
@@ -161,7 +168,12 @@ public abstract class UIComponent implements Serializable {
     }
 
     public UIComponent getParentForm() {
-        return parentForm;
+        UIComponent node = this.getParent();
+        // climb up the tree until you find a form
+        while ((node != null) && !(node instanceof UIForm)) {
+            node = node.getParent();
+        }
+        return node;
     }
 
     public void setParentForm(UIComponent parentForm) {
@@ -170,4 +182,19 @@ public abstract class UIComponent implements Serializable {
 
     public abstract void validate(es.jcyl.ita.frmdrd.context.Context context);
 
+    public void setValue(String val) {
+        this.value = val;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public ValueBindingExpression getValueExpression() {
+        return valueExpression;
+    }
+
+    public void setValueExpression(ValueBindingExpression valueExpression) {
+        this.valueExpression = valueExpression;
+    }
 }

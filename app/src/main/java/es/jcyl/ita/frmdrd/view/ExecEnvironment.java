@@ -20,6 +20,7 @@ package es.jcyl.ita.frmdrd.view;
  */
 
 import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 
 /**
@@ -28,20 +29,29 @@ import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
  */
 public class ExecEnvironment {
 
-    Context context;
+    Context globalContext;
+    FormContext formContext;
     private OnChangeFieldInterceptor changeInterceptor;
     private OnChangeFieldInterceptor submitInterceptor;
 
-    public ExecEnvironment(Context context) {
-        this.context = context;
+    public ExecEnvironment(Context globalContext) {
+        this.globalContext = globalContext;
     }
 
-    public Context getContext() {
-        return context;
+    public Context getGlobalContext() {
+        return globalContext;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setGlobalContext(Context globalContext) {
+        this.globalContext = globalContext;
+    }
+
+    public FormContext getFormContext() {
+        return formContext;
+    }
+
+    public void setFormContext(FormContext formContext) {
+        this.formContext = formContext;
     }
 
     public OnChangeFieldInterceptor getChangeInterceptor() {
