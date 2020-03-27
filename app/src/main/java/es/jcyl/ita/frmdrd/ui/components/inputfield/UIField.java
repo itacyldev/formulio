@@ -8,7 +8,7 @@ import static es.jcyl.ita.frmdrd.ui.components.inputfield.UIField.TYPE.TEXT;
 public class UIField extends UIComponent {
 
     public enum TYPE {
-        TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN
+        TEXT, DATE, BOOLEAN, // COMBO, SEPARATOR, INFO, DROPDOWN, SIGN
     }
 
     private String hint;

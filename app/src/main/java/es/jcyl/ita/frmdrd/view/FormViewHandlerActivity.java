@@ -45,6 +45,8 @@ public class FormViewHandlerActivity extends FragmentActivity {
 
     protected ContextThemeWrapper themeWrapper;
 
+    private ViewRenderHelper renderHelper = new ViewRenderHelper();
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -55,47 +57,11 @@ public class FormViewHandlerActivity extends FragmentActivity {
         UIComponent root = MainController.getInstance().getViewRoot();
 
         ExecEnvironment env = new ExecEnvironment(MainController.getInstance().getGlobalContext());
-        View rootView = doRender(this, env, root);
+        View rootView = renderHelper.render(this, env, root);
         setContentView(rootView);
     }
 
 
-    private View doRender(Context viewContext, ExecEnvironment env, UIComponent root) {
-        String rendererType = root.getRendererType();
-        Renderer renderer = this.getRenderer(rendererType);
-        // set current form context
-        if (root.getParentForm() != null) {
-            env.setFormContext(((UIForm) root.getParentForm()).getContext());
-        }
-        View rootView = renderer.render(viewContext, env, root);
-        if(root instanceof UIForm){
-            // configure viewContext
-            ((UIForm)root).getContext().setView(rootView);
-        }
-
-        // render children if needed
-        if (renderer instanceof GroupRenderer) {
-            GroupRenderer gRenderer = (GroupRenderer) renderer;
-            if (root.isRenderChildren()) {
-                // recursively render children components
-                gRenderer.initGroup(viewContext, env, root, rootView);
-                int numKids = root.getChildren().size();
-                View[] views = new View[numKids];
-                for (int i = 0; i < numKids; i++) {
-                    views[i] = doRender(viewContext, env, root.getChildren().get(i));
-                }
-                gRenderer.addViews(viewContext, env, root, rootView, views);
-                gRenderer.endGroup(viewContext, env, root, rootView);
-            }
-        }
-        return rootView;
-    }
-
-
-    protected Renderer getRenderer(String rendererType) {
-        Renderer renderer = RendererFactory.getInstance().getRenderer(rendererType);
-        return renderer;
-    }
 
     protected void close() {
         finish();

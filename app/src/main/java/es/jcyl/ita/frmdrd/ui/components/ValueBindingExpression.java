@@ -31,6 +31,7 @@ public class ValueBindingExpression {
 
     private List<String> vars;
     private final JxltEngine.Expression expression;
+    private Class expectedType;
 
     public ValueBindingExpression(JxltEngine.Expression expression) {
         this.expression = expression;
@@ -72,5 +73,13 @@ public class ValueBindingExpression {
 
     public JxltEngine.Expression getExpression() {
         return expression;
+    }
+
+    public Class getExpectedType() {
+        return (this.expectedType == null) ? Object.class : this.expectedType;
+    }
+
+    public void setExpectedType(Class expectedType) {
+        this.expectedType = expectedType;
     }
 }

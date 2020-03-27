@@ -1,4 +1,17 @@
 package es.jcyl.ita.frmdrd.context.impl;
+
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
+import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,25 +28,12 @@ package es.jcyl.ita.frmdrd.context.impl;
  * limitations under the License.
  */
 
-import android.view.View;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- */
-
-/**
+ * <p>
  * Gives access to view component values using a context interface.
  */
+
 class FormViewContext extends AbstractBaseContext {
     View view;
     UIForm form;
@@ -46,6 +46,7 @@ class FormViewContext extends AbstractBaseContext {
 
     /**
      * Locates a form element by its id
+     *
      * @param componentId
      * @return
      */

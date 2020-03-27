@@ -49,7 +49,11 @@ android {
     dataBinding {
         enabled = true
     }
-
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
     useLibrary 'android.test.runner'
 
     useLibrary 'android.test.base'

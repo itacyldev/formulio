@@ -32,18 +32,18 @@ allprojects {
 //            url "$androidHome/extras/google/m2repository/"
 //        }
 
-        maven {
-            name "ITACyL - snapshots"
-            url "http://repo.itacyl.es/archiva/repository/snapshots/"
-        }
-        maven {
-            name "ITACyL - internal"
-            url "http://repo.itacyl.es/archiva/repository/internal/"
-        }
-        maven {
-            name "ITACyL - thirdparty"
-            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
-        }
+//        maven {
+//            name "ITACyL - snapshots"
+//            url "http://repo.itacyl.es/archiva/repository/snapshots/"
+//        }
+//        maven {
+//            name "ITACyL - internal"
+//            url "http://repo.itacyl.es/archiva/repository/internal/"
+//        }
+//        maven {
+//            name "ITACyL - thirdparty"
+//            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
+//        }
     }
 
     configurations.all {

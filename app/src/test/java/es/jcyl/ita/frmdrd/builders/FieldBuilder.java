@@ -28,13 +28,12 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
         return this;
     }
 
-    public FieldBuilder withRerender(String rerenderStr) {
-
+    public FieldBuilder withRenderer(String rerenderStr) {
         this.baseModel.setReRender(rerenderStr);
         return this;
     }
 
-    public FieldBuilder withRerender(UIComponent component) {
+    public FieldBuilder withRenderer(UIComponent component) {
         String rerenderStr = this.baseModel.getReRender();
         if (StringUtils.isNotEmpty(rerenderStr)) {
             rerenderStr += "," + component.getId();

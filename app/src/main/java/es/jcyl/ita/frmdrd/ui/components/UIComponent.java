@@ -157,8 +157,10 @@ public abstract class UIComponent implements Serializable {
     public void setChildren(List<UIComponent> children) {
         this.children = children;
         // re-link children parent
-        for (UIComponent c : this.children) {
-            c.setParent(this);
+        if(this.children !=null){
+            for (UIComponent c : this.children) {
+                c.setParent(this);
+            }
         }
     }
 
