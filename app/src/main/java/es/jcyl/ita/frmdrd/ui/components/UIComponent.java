@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.frmdrd.context.CompositeContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.util.JexlUtils;
 
 public abstract class UIComponent implements Serializable {
     protected UIComponent root;
@@ -186,15 +188,28 @@ public abstract class UIComponent implements Serializable {
         this.value = val;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     public ValueBindingExpression getValueExpression() {
         return valueExpression;
     }
 
     public void setValueExpression(ValueBindingExpression valueExpression) {
         this.valueExpression = valueExpression;
+    }
+
+    public String getViewId() {
+        String viewId = "";
+        if (this.getParentForm() != null) {
+            viewId = this.getParentForm().getId() + ":";
+        }
+        return viewId + this.id;
+    }
+
+    public Object getValue(CompositeContext combinedContext) {
+        if (this.valueExpression == null) {
+            return null;
+        } else {
+            // evaluate expression against context
+            return JexlUtils.eval(combinedContext, this.valueExpression);
+        }
     }
 }

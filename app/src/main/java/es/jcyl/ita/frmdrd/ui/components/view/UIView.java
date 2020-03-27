@@ -45,6 +45,40 @@ public class UIView extends UIComponent {
 
     }
 
+    public UIForm getForm(String formId) {
+        for (UIForm f : this.forms) {
+            if (f.getId().equalsIgnoreCase(formId)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Give and identifier with the expression formId.elementId, returns the component.
+     *
+     * @param id
+     * @return
+     */
+    public UIComponent findFormElement(String id) {
+        String[] splits = id.split("\\.");
+        if (splits.length != 2) {
+            throw new IllegalArgumentException(String.format("Unexpected id expression. The id must " +
+                    "follow the rule: formId.elementId: [%s].", id));
+        }
+        UIForm f = this.getForm(splits[0]);
+        if (f == null) {
+            throw new IllegalArgumentException(String.format("Illegal form element expression. " +
+                    "No form found with the id [%s].", splits[0]));
+        }
+        UIComponent c = f.getElement(splits[1]);
+        if (c == null) {
+            throw new IllegalArgumentException(String.format("Illegal form element expression. " +
+                    "No element found with the id [%s] in the form[%s].", splits[1], splits[0]));
+        }
+        return c;
+    }
+
     public List<UIForm> getForms() {
         if (this.forms == null) {
             this.forms = new ArrayList<UIForm>();

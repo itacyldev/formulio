@@ -34,53 +34,6 @@ import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 public class CheckBoxFieldRenderer extends BaseRenderer {
 
-    public CheckBoxFieldRenderer() {
-    }
-
-//    public CheckBoxFieldRenderer(Context context, Lifecycle lifecycle) {
-//        super(context, lifecycle);
-//    }
-//
-//    @Override
-//    public View render(final UIField field) {
-//        String renderCondition = field.getRenderCondition();
-//
-//        boolean render = true;
-//        if (StringUtils.isNotEmpty(renderCondition)) {
-//            render = this.validateCondition(renderCondition, field.getId());
-//        }
-//
-//
-//        LinearLayout linearLayout = null;
-//
-//        linearLayout = (LinearLayout) View.inflate(context,
-//                R.layout.tool_alphaedit_boolean, null);
-//
-//        final TextView fieldLabel = linearLayout
-//                .findViewById(R.id.field_layout_name);
-//        fieldLabel.setTag("label");
-//        final Switch input = linearLayout
-//                .findViewById(R.id.field_layout_value);
-//        input.setTag("input");
-//
-//
-//        fieldLabel.setText(field.getLabel());
-//
-//        input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton,
-//                                         boolean value) {
-//                onChangeInterceptor.onChange(field.getId());
-//            }
-//        });
-//
-//        linearLayout.setVisibility(render ? View.VISIBLE : View.INVISIBLE);
-//
-//        bindField(field, input);
-//
-//        return linearLayout;
-//    }
-
 
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
@@ -95,8 +48,9 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
         fieldLabel.setTag("label");
         final Switch input = baseView
                 .findViewById(R.id.field_layout_value);
-        input.setTag("input");
-
+        input.setTag(component.getViewId());
+        Boolean convValue = convert(getValue(component, env));
+        input.setChecked(convValue);
         fieldLabel.setText(component.getLabel());
 
         input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -107,5 +61,10 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
                 interceptor.onChange(component);
             }
         });
+    }
+
+    protected boolean convert(Object value) {
+        // TODO: use converters with java generics (toddfast vs spring vs apache commons)
+        return (value == null) ? false : "true".equalsIgnoreCase(value.toString());
     }
 }

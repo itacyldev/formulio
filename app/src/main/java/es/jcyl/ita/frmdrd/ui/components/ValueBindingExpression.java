@@ -19,6 +19,8 @@ package es.jcyl.ita.frmdrd.ui.components;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import org.apache.commons.jexl3.JxltEngine;
+
 import java.util.List;
 
 /**
@@ -28,6 +30,11 @@ import java.util.List;
 public class ValueBindingExpression {
 
     private List<String> vars;
+    private final JxltEngine.Expression expression;
+
+    public ValueBindingExpression(JxltEngine.Expression expression) {
+        this.expression = expression;
+    }
 
     /**
      * Returns true if the expression doesn't depend on any variable
@@ -63,5 +70,7 @@ public class ValueBindingExpression {
         return vars;
     }
 
-
+    public JxltEngine.Expression getExpression() {
+        return expression;
+    }
 }

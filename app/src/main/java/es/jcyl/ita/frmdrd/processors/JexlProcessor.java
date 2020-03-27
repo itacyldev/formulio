@@ -4,7 +4,7 @@ import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlScript;
 
-import es.jcyl.ita.frmdrd.context.AbstractContext;
+import es.jcyl.ita.frmdrd.context.AbstractMapContext;
 import es.jcyl.ita.frmdrd.context.Context;
 
 /*
@@ -33,7 +33,7 @@ public class JexlProcessor implements Processor {
 
         JexlScript e = jexl.createScript(scriptText);
 
-        Object result = e.execute((AbstractContext) context);
+        Object result = e.execute((AbstractMapContext) context);
 
         return result;
     }

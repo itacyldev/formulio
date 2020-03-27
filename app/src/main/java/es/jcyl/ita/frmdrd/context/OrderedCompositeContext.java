@@ -33,7 +33,7 @@ import java.util.TreeMap;
  * The returning values are retrieved using reverse insertion order, so last added contexts will
  * have higher priority when looking for a key.
  */
-public class OrderedCompositeContext extends AbstractContext
+public class OrderedCompositeContext extends AbstractMapContext
         implements CompositeContext {
 
     private static final long serialVersionUID = 3866386326635253930L;

@@ -13,9 +13,9 @@ import java.util.Date;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
-import es.jcyl.ita.frmdrd.context.AbstractContext;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.context.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*
@@ -38,15 +38,16 @@ import es.jcyl.ita.frmdrd.util.DataUtils;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class FormContext extends AbstractContext {
+public class FormContext extends OrderedCompositeContext {
 
-    private final UIForm root;
+    private final UIForm form;
+    private View rootView;
     private Entity entity;
 
-    public FormContext(String prefix, UIForm form) {
-        super(prefix);
-        this.root = form;
+    public FormContext(UIForm form) {
+        this.form = form;
     }
+
 
     @Override
     public Object get(Object key) {
@@ -186,15 +187,20 @@ public class FormContext extends AbstractContext {
         return inputView;
     }
 
-    public UIForm getRoot() {
-        return root;
+    public UIForm getForm() {
+        return form;
+    }
+
+    public void setEntity(Entity entity) {
+        this.addContext(new EntityContext(entity));
+    }
+
+    public void setView(View rootView) {
+        this.rootView = rootView;
+        this.addContext(new FormViewContext(this.form, this.rootView));
     }
 
     public Entity getEntity() {
         return entity;
-    }
-
-    public void setEntity(Entity entity) {
-        this.entity = entity;
     }
 }

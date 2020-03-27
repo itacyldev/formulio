@@ -68,6 +68,10 @@ public class FormViewHandlerActivity extends FragmentActivity {
             env.setFormContext(((UIForm) root.getParentForm()).getContext());
         }
         View rootView = renderer.render(viewContext, env, root);
+        if(root instanceof UIForm){
+            // configure viewContext
+            ((UIForm)root).getContext().setView(rootView);
+        }
 
         // render children if needed
         if (renderer instanceof GroupRenderer) {

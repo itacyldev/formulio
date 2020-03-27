@@ -19,7 +19,9 @@ package es.jcyl.ita.frmdrd.view;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import es.jcyl.ita.frmdrd.context.CompositeContext;
 import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.frmdrd.context.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 
@@ -31,6 +33,7 @@ public class ExecEnvironment {
 
     Context globalContext;
     FormContext formContext;
+    CompositeContext combinedContext;
     private OnChangeFieldInterceptor changeInterceptor;
     private OnChangeFieldInterceptor submitInterceptor;
 
@@ -69,4 +72,14 @@ public class ExecEnvironment {
     public void setSubmitInterceptor(OnChangeFieldInterceptor submitInterceptor) {
         this.submitInterceptor = submitInterceptor;
     }
+
+    public CompositeContext getCombinedContext() {
+        if (this.combinedContext == null) {
+            combinedContext = new OrderedCompositeContext();
+            combinedContext.addContext(globalContext);
+            combinedContext.addContext(formContext);
+        }
+        return combinedContext;
+    }
+
 }

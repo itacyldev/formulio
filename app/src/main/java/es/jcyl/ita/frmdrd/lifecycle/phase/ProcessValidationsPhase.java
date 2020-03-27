@@ -23,7 +23,7 @@ public class ProcessValidationsPhase extends Phase {
                 }
             }
         } else {
-            UIForm form = formContext.getRoot();
+            UIForm form = formContext.getForm();
             form.validate(lifecycle.getMainContext());
         }
     }

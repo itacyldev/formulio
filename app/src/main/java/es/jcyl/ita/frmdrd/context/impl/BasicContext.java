@@ -2,13 +2,13 @@ package es.jcyl.ita.frmdrd.context.impl;
 
 import org.apache.commons.jexl3.JexlExpression;
 
-import es.jcyl.ita.frmdrd.context.AbstractContext;
+import es.jcyl.ita.frmdrd.context.AbstractMapContext;
 
 /**
  * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
-public class BasicContext extends AbstractContext {
+public class BasicContext extends AbstractMapContext {
 
     private static final long serialVersionUID = 4993728250907939173L;
 

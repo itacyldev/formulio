@@ -29,21 +29,21 @@ public class BuildFormContextPhase extends Phase {
 //        lifecycle.addContext(formContext);
     }
 
-    /**
-     * @param form
-     * @return
-     */
-    private Context buildContext(UIForm form) {
-        FormContext formContext = new FormContext("form", form);
-
-        List<UIField> fields = new ArrayList<>();
-        getFields(form, fields);
-        for (UIField field : fields) {
-            formContext.put(field.getId(), field);
-        }
-
-        return formContext;
-    }
+//    /**
+//     * @param form
+//     * @return
+//     */
+//    private Context buildContext(UIForm form) {
+//        FormContext formContext = new FormContext("form", form);
+//
+//        List<UIField> fields = new ArrayList<>();
+//        getFields(form, fields);
+//        for (UIField field : fields) {
+//            formContext.put(field.getId(), field);
+//        }
+//
+//        return formContext;
+//    }
 
     /**
      * @param component

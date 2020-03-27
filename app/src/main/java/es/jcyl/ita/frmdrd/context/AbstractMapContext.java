@@ -1,6 +1,8 @@
 package es.jcyl.ita.frmdrd.context;
 
 
+import android.view.View;
+
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
@@ -9,7 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 
-public abstract class AbstractContext extends HashMap<String, Object>
+public abstract class AbstractMapContext extends HashMap<String, Object>
         implements Context, JexlContext {
     private static final long serialVersionUID = -5770693858652716339L;
 
@@ -19,11 +21,11 @@ public abstract class AbstractContext extends HashMap<String, Object>
     private Date creationDate;
     private String prefix;
 
-    public AbstractContext() {
+    public AbstractMapContext() {
         this.creationDate = new Date();
     }
 
-    public AbstractContext(String prefix) {
+    public AbstractMapContext(String prefix) {
         this.creationDate = new Date();
         setPrefix(prefix);
     }
@@ -74,21 +76,6 @@ public abstract class AbstractContext extends HashMap<String, Object>
     }
 
     @Override
-    public Object get(String name) {
-        return get((Object) name);
-    }
-
-    @Override
-    public boolean has(String name) {
-        return containsKey(name);
-    }
-
-    @Override
-    public void set(String name, Object value) {
-        this.put(name, value);
-    }
-
-    @Override
     public String getString(String key) {
         Object o = this.get(key);
         if (o == null) {
@@ -102,5 +89,22 @@ public abstract class AbstractContext extends HashMap<String, Object>
     public Object getValue(String key) {
         Object o = this.get(key);
         return o;
+    }
+
+    /***** JEXL CONTEXT IMPL **/
+
+    @Override
+    public Object get(String name) {
+        return this.get(name);
+    }
+
+    @Override
+    public void set(String name, Object value) {
+        this.put(name, value);
+    }
+
+    @Override
+    public boolean has(String name) {
+        return containsKey(name);
     }
 }

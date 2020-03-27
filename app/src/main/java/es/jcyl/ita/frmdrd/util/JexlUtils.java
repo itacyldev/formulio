@@ -19,21 +19,27 @@ import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlExpression;
+import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.jexl3.MapContext;
+import org.apache.commons.jexl3.internal.Engine;
+import org.apache.commons.jexl3.internal.TemplateEngine;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.wrappers.JexlContextWrapper;
 import es.jcyl.ita.frmdrd.context.wrappers.JexlEntityWrapper;
+import es.jcyl.ita.frmdrd.ui.components.ValueBindingExpression;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class JexlUtils {
-    protected static final JexlEngine jexl = new JexlBuilder().cache(512)
+    protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(true).silent(false).create();
+
+    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, true, 256, '$', '#');
 
     public static Object eval(Context ctx, String expression) {
         JexlExpression exl = jexl.createExpression(expression);
@@ -71,4 +77,11 @@ public class JexlUtils {
         return eval(ctx, expression);
     }
 
+    public static Object eval(Context ctx, ValueBindingExpression valueExpression) {
+        return valueExpression.getExpression().evaluate(new JexlContextWrapper(ctx));
+    }
+
+    public static JxltEngine.Expression createExpression(String expression) {
+        return jxltEngine.createExpression(expression);
+    }
 }

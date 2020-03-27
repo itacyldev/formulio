@@ -52,7 +52,6 @@ public class DateFieldRenderer extends BaseRenderer {
 
     @Override
     protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
-
         final TextView fieldLabel = baseView
                 .findViewById(R.id.field_layout_name);
         final Button input = baseView
@@ -74,7 +73,9 @@ public class DateFieldRenderer extends BaseRenderer {
                         c.set(year, monthOfYear, dayOfMonth);
 
                         final Date dateValue = c.getTime();
-                        input.setText(DataUtils.DATE_FORMAT.format(dateValue));
+                        input.setTag(component.getViewId());
+                        String strValue = convert(getValue(component, env));
+                        input.setText(strValue);
 
                         OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
                         interceptor.onChange(component);
@@ -101,5 +102,9 @@ public class DateFieldRenderer extends BaseRenderer {
             }
         });
 
+    }
+
+    private String convert(Object value) {
+        return (value == null) ? "" : DataUtils.DATE_FORMAT.format(value);
     }
 }

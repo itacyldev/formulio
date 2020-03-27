@@ -85,7 +85,6 @@ public class MainController {
         viewRoot = retrieveView(viewId);
         // for each form in the view, load the related entity
         for (UIForm form : viewRoot.getForms()) {
-            form.initContext();
             form.loadEntity(globalContext);
             // get form context and attach them to view context
             Context fCtx = form.getContext();

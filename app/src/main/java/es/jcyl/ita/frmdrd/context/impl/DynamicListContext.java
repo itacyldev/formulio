@@ -20,14 +20,14 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
-import es.jcyl.ita.frmdrd.context.AbstractContext;
+import es.jcyl.ita.frmdrd.context.AbstractMapContext;
 import es.jcyl.ita.frmdrd.context.Context;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class DynamicListContext extends AbstractContext implements Context {
+public class DynamicListContext extends AbstractMapContext implements Context {
 
     private final Repository repo;
     private SQLQueryFilter filter;

@@ -10,12 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import es.jcyl.ita.crtrepo.context.VarSubstitutor;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.util.JexlUtils;
 import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
@@ -58,8 +56,9 @@ public class TextFieldRenderer extends BaseRenderer {
         fieldLabel.setTag("label");
         final EditText input = (EditText) baseView
                 .findViewById(R.id.field_layout_value);
-        input.setTag("input");
-        input.setText(getValue(component, env));
+        input.setTag(component.getViewId());
+        String strValue = convert(getValue(component, env));
+        input.setText(strValue);
 
         final ImageView resetButton = (ImageView) baseView
                 .findViewById(R.id.field_layout_x);
@@ -83,35 +82,9 @@ public class TextFieldRenderer extends BaseRenderer {
         });
     }
 
-    /**
-     * Tries to retrieve the component value first accessing the form context and then using
-     * global context
-     *
-     * @param component
-     * @param env
-     * @return
-     */
-    private String getValue(UIComponent component, ExecEnvironment env) {
-        String key = component.getValue();
-//        try{
-//            key = VarSubstitutor.replace(key, env.getGlobalContext());
-//        }catch (Exception e){
-//
-//        }
-//        try{
-//            key = VarSubstitutor.replace(key, env.getFormContext().getEntity().getProperties());
-//        }catch (Exception e){
-//
-//        }
-
-        Object value = JexlUtils.eval(env.getFormContext(), key);
-
-        if (value == null) {
-            value = JexlUtils.eval(env.getGlobalContext(), key);
-        }
-        // if no value could be found using the key, use it as a literal
-        //TODO: safe and robust conversion needed here depending on value class (date, int, ...) and
-        // formatter defined in component
-        return (value == null) ? key : value.toString();
+    private String convert(Object value) {
+        // TODO: default converters to savely convert from entity/context value to uicomponent.setText(str)
+        return (value == null) ? "" : value.toString();
     }
+
 }

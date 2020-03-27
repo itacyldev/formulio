@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.context.AbstractContext;
+import es.jcyl.ita.frmdrd.context.AbstractMapContext;
 import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.context.ContextException;
 
@@ -19,7 +19,7 @@ import es.jcyl.ita.frmdrd.context.ContextException;
  * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
-public class DateTimeContext extends AbstractContext implements Context {
+public class DateTimeContext extends AbstractMapContext implements Context {
 
     private static final long serialVersionUID = -9146740176167308983L;
 

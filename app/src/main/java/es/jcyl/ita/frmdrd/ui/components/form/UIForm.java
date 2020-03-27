@@ -23,6 +23,7 @@ public class UIForm extends UIComponent {
     public UIForm() {
         this.setRendererType("form");
         this.setRenderChildren(true);
+        this.context = new FormContext(this);
     }
 
     public Map<String, UITab> getTabs() {
@@ -33,6 +34,36 @@ public class UIForm extends UIComponent {
         tab.setParent(this);
         this.addChild(tab);
         tabs.put(tab.getId(), tab);
+    }
+
+    /**
+     * finds form child by its id
+     *
+     * @param id
+     */
+    public UIComponent getElement(String id) {
+        return findChild(this.root, id);
+    }
+
+    /**
+     * Recursively go over the component tree storing forms in the given array
+     *
+     * @param root
+     */
+    private UIComponent findChild(UIComponent root, String id) {
+        if (root.getId().equalsIgnoreCase(id)) {
+            return root;
+        } else {
+            if (root.hasChildren()) {
+                for (UIComponent c : root.getChildren()) {
+                    UIComponent found = findChild(c, id);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public EditableRepository getRepo() {
@@ -61,22 +92,16 @@ public class UIForm extends UIComponent {
      * Loads related entity and sets it in the form context
      */
     public void loadEntity(Context globalCtx) {
-        if (this.repo == null ) {
+        if (this.repo == null) {
             return;
         }
         Object entityId = this.getEntityId(globalCtx);
-        if(entityId == null){
+        if (entityId == null) {
             return;
         }
         Entity entity = this.repo.findById(entityId);
         // what if its null? throw an Exception?
         this.context.setEntity(entity);
-    }
-
-    public void initContext() {
-        if (this.context == null) {
-            this.context = new FormContext(this.getId(), this);
-        }
     }
 
     public FormContext getContext() {
