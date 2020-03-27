@@ -27,12 +27,10 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        loadFormConfig();
-
         setContentView(R.layout.activity_main);
         initializeDagger();
         checkPermissions();
+        loadFormConfig();
     }
 
     private void loadFormConfig() {
@@ -67,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     private void initialize() {
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
