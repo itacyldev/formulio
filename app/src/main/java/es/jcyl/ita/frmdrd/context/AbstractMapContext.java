@@ -95,7 +95,7 @@ public abstract class AbstractMapContext extends HashMap<String, Object>
 
     @Override
     public Object get(String name) {
-        return this.get(name);
+        return this.getValue(name);
     }
 
     @Override
