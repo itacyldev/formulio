@@ -39,11 +39,6 @@
         </activity>
 
         <activity
-            android:name=".UserFormAlphaEditActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo">
-        </activity>
-        <activity
             android:name=".view.FormViewHandlerActivity"
             android:label="FormView"
             android:theme="@android:style/Theme.Holo">
