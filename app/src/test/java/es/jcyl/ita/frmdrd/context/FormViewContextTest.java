@@ -25,10 +25,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
-import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 
 /**
@@ -41,20 +44,38 @@ public class FormViewContextTest {
     FormBuilder formBuilder = new FormBuilder();
 
     @Test
-    public void testOnSelectContextProps() {
+    public void testAccessViewValuesFromContext() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
         ViewRenderHelper renderHelper = new ViewRenderHelper();
 
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
+        CompositeContext gCtx = ContextUtils.createGlobalContext();
+        ExecEnvironment env = new ExecEnvironment(gCtx);
 
-        ExecEnvironment env = new ExecEnvironment(ContextUtils.createGlobalContext());
-
+        // render view to create android view components
         View formView = renderHelper.render(ctx, env, form);
         Assert.assertNotNull(formView);
 
+        // create view context to access view elements
+        FormViewContext fvContext = new FormViewContext(form, formView);
+
+        // check the context contains all the form elements
+        for (UIComponent c : form.getChildren()) {
+            // get value accessing to the View element value
+            Object expected = c.getValue(gCtx);
+            // get value directly from the component's expression
+            Object actual = fvContext.get(c.getId());
+            Assert.assertNotNull(actual);
+            // do they match?
+            Assert.assertEquals(expected, actual);
+        }
     }
 
+    @Test
+    public void setSetViewValuesThroughContext() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+    }
 
 }

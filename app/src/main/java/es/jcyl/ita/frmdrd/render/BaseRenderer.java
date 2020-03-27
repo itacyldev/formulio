@@ -20,7 +20,6 @@ import android.view.View;
 
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

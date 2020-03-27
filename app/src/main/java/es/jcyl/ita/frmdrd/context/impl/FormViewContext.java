@@ -10,7 +10,10 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -34,9 +37,11 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
  * Gives access to view component values using a context interface.
  */
 
-class FormViewContext extends AbstractBaseContext {
+public class FormViewContext extends AbstractBaseContext {
     View view;
     UIForm form;
+
+    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     public FormViewContext(UIForm form, View formView) {
         this.setPrefix("view");
@@ -61,8 +66,16 @@ class FormViewContext extends AbstractBaseContext {
     }
 
     @Override
-    public Object getValue(String key) {
-        return null;
+    public Object getValue(String elementId) {
+        View view = findComponentView(elementId);
+        UIComponent component = form.getElement(elementId);
+        ViewValueConverter converter = this.convFactory.get(component);
+        Class expType = component.getValueExpression().getExpectedType();
+        if (expType == null) {
+            return converter.getValueFromView(view, component);
+        } else {
+            return converter.getValueFromView(view, component, expType);
+        }
     }
 
     @Override
@@ -77,57 +90,61 @@ class FormViewContext extends AbstractBaseContext {
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        return false;
+        return findComponentView(o.toString()) != null;
     }
 
     @Override
     public boolean containsValue(@Nullable Object o) {
-        return false;
+        return form.getElement(o.toString()) != null;
     }
 
     @Nullable
     @Override
     public Object get(@Nullable Object o) {
-        return null;
+        return getValue(o.toString());
     }
 
     @Nullable
     @Override
-    public Object put(String s, Object o) {
-        return null;
+    public Object put(String elementId, Object value) {
+        View view = findComponentView(elementId);
+        UIComponent component = form.getElement(elementId);
+        ViewValueConverter converter = this.convFactory.get(component);
+        converter.setViewValue(view, component, value);
+        return null; // don't return previous value
     }
 
     @Nullable
     @Override
     public Object remove(@Nullable Object o) {
-        return null;
+        throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
     @Override
     public void putAll(@NonNull Map<? extends String, ?> map) {
-
+        throw new UnsupportedOperationException("Not supported yet!.");
     }
 
     @Override
     public void clear() {
-
+        throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
     @NonNull
     @Override
     public Set<String> keySet() {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet!.");
     }
 
     @NonNull
     @Override
     public Collection<Object> values() {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet!.");
     }
 
     @NonNull
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet!.");
     }
 }

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.view.converters;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,22 +15,21 @@ package es.jcyl.ita.frmdrd.render;
  * limitations under the License.
  */
 
-import android.content.Context;
 import android.view.View;
-
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Funcionality to get and set value to view components
  */
+public interface ViewValueConverter<C extends UIComponent> {
 
-public interface GroupRenderer {
+    Object getValueFromView(View view, C component);
 
-    void initGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
+    <T> T getValueFromView(View view, C component, Class<T> expectedType);
 
-    void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views);
-
-    void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
+    void setViewValue(View view, C component, Object value);
 
 }

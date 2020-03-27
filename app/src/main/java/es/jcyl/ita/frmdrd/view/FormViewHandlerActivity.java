@@ -1,6 +1,5 @@
 package es.jcyl.ita.frmdrd.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
@@ -11,11 +10,8 @@ import org.apache.commons.logging.LogFactory;
 
 import androidx.fragment.app.FragmentActivity;
 import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.render.GroupRenderer;
-import es.jcyl.ita.frmdrd.render.Renderer;
-import es.jcyl.ita.frmdrd.render.RendererFactory;
+import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).

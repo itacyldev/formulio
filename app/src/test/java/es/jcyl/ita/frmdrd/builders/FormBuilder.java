@@ -115,7 +115,7 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
             fields.add(field);
         }
 
-        this.baseModel.setId(RandomStringUtils.randomAlphanumeric(8));
+        this.baseModel.setId("form"+RandomStringUtils.randomAlphanumeric(4));
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setChildren(fields);
         return this;

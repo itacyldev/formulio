@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.view;
 import android.content.Context;
 import android.view.View;
 
+import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.render.Renderer;
 import es.jcyl.ita.frmdrd.render.RendererFactory;
@@ -27,7 +28,7 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
- * Intermediate class to encapsualte rendering to facilitate testing on renderers
+ * Intermediate class to encapsulate rendering to facilitate testing
  */
 public class ViewRenderHelper {
 

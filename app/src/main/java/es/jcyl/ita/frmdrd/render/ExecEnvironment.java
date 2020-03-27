@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view;
+package es.jcyl.ita.frmdrd.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

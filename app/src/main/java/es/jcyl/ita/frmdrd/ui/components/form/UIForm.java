@@ -42,7 +42,7 @@ public class UIForm extends UIComponent {
      * @param id
      */
     public UIComponent getElement(String id) {
-        return findChild(this.root, id);
+        return findChild(this, id);
     }
 
     /**

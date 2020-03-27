@@ -20,6 +20,8 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
 
     public FieldBuilder withFieldType(UIField.TYPE type) {
         this.baseModel.setType(type);
+        String id = this.baseModel.getType().toLowerCase() + RandomStringUtils.randomAlphanumeric(5);
+        this.baseModel.setId(id);
         return this;
     }
 
@@ -67,9 +69,10 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
 
     @Override
     public FieldBuilder withRandomData() {
-        this.baseModel.setId(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setType(UIField.TYPE.TEXT);
+        String id = this.baseModel.getType().toLowerCase() + RandomStringUtils.randomAlphanumeric(5);
+        this.baseModel.setId(id);
         return this;
     }
 }
