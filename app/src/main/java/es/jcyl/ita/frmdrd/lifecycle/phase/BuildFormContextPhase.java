@@ -1,15 +1,12 @@
 package es.jcyl.ita.frmdrd.lifecycle.phase;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
-import es.jcyl.ita.frmdrd.context.Context;
-import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class BuildFormContextPhase extends Phase {

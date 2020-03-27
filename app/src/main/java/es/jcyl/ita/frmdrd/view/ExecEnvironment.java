@@ -19,9 +19,9 @@ package es.jcyl.ita.frmdrd.view;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-import es.jcyl.ita.frmdrd.context.CompositeContext;
-import es.jcyl.ita.frmdrd.context.Context;
-import es.jcyl.ita.frmdrd.context.OrderedCompositeContext;
+import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 

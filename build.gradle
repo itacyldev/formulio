@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        flatDir{
+        flatDir {
             dirs 'libs'
         }
         google()
@@ -14,23 +14,24 @@ buildscript {
     }
 }
 
+
 allprojects {
     repositories {
+        mavenLocal()
+        mavenCentral()
         google()
         jcenter()
 
-        def androidHome = System.getenv("ANDROID_HOME")
-        maven {
-            name "sdk android extras"
-            url "$androidHome/extras/android/m2repository/"
-        }
-        maven {
-            name "sdk google extras"
-            url "$androidHome/extras/google/m2repository/"
-        }
-        maven {
-            url 'https://maven.google.com'
-        }
+//        def androidHome = System.getenv("ANDROID_HOME")
+//        maven {
+//            name "sdk android extras"
+//            url "$androidHome/extras/android/m2repository/"
+//        }
+//        maven {
+//            name "sdk google extras"
+//            url "$androidHome/extras/google/m2repository/"
+//        }
+
         maven {
             name "ITACyL - snapshots"
             url "http://repo.itacyl.es/archiva/repository/snapshots/"

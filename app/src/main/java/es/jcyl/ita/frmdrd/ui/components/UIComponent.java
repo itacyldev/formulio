@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.context.CompositeContext;
+import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.util.JexlUtils;
 
@@ -182,7 +183,7 @@ public abstract class UIComponent implements Serializable {
         this.parentForm = parentForm;
     }
 
-    public abstract void validate(es.jcyl.ita.frmdrd.context.Context context);
+    public abstract void validate(Context context);
 
     public void setValue(String val) {
         this.value = val;

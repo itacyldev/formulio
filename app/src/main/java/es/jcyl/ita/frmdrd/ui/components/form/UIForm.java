@@ -5,7 +5,7 @@ import java.util.Map;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITab;

@@ -1,9 +1,9 @@
 package es.jcyl.ita.frmdrd.lifecycle;
 
 
-import es.jcyl.ita.frmdrd.context.CompositeContext;
-import es.jcyl.ita.frmdrd.context.Context;
-import es.jcyl.ita.frmdrd.context.OrderedCompositeContext;
+import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.lifecycle.phase.BuildFormContextPhase;
 import es.jcyl.ita.frmdrd.lifecycle.phase.BuildParamContextPhase;
 import es.jcyl.ita.frmdrd.lifecycle.phase.LoadLocalContextsPhase;

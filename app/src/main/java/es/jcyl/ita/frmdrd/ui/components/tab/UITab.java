@@ -3,7 +3,7 @@ package es.jcyl.ita.frmdrd.ui.components.tab;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public class UITab extends UIComponent {

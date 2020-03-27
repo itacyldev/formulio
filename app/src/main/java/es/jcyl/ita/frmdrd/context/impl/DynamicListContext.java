@@ -19,9 +19,9 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.context.AbstractMapContext;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
-import es.jcyl.ita.frmdrd.context.AbstractMapContext;
-import es.jcyl.ita.frmdrd.context.Context;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

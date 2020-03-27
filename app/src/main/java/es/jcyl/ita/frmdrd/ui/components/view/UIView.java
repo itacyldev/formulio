@@ -18,7 +18,7 @@ package es.jcyl.ita.frmdrd.ui.components.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 

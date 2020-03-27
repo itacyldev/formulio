@@ -7,18 +7,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
-import es.jcyl.ita.frmdrd.context.JexlTest;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
 
         setContentView(R.layout.activity_main);
         initializeDagger();
-        Integer result = JexlTest.test();
         checkPermissions();
     }
 

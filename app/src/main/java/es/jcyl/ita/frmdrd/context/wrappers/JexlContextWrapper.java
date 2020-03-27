@@ -17,7 +17,7 @@ package es.jcyl.ita.frmdrd.context.wrappers;
 
 import org.apache.commons.jexl3.JexlContext;
 
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

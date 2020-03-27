@@ -73,7 +73,7 @@ dependencies {
 
     //implementation 'es.jcyl.ita.groovy:groovy-android:2.4.16'
     implementation 'com.google.android.tools:dx:1.7'
-    implementation 'es.jcyl.ita.crtcyl:crtcyl-core:2.37.0'
+    //implementation 'es.jcyl.ita.crtcyl:crtcyl-core:2.37.0'
     //repo
     implementation('es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT') {
         exclude group: 'com.google.android', module: 'android'
