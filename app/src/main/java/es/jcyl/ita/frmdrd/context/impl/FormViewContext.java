@@ -38,6 +38,7 @@ class FormViewContext extends AbstractBaseContext {
     UIForm form;
 
     public FormViewContext(UIForm form, View formView) {
+        this.setPrefix("view");
         this.form = form;
         this.view = formView;
     }

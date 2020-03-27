@@ -1,8 +1,6 @@
 package es.jcyl.ita.frmdrd.context;
 
 
-import android.view.View;
-
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
@@ -87,15 +85,14 @@ public abstract class AbstractMapContext extends HashMap<String, Object>
 
     @Override
     public Object getValue(String key) {
-        Object o = this.get(key);
-        return o;
+        return super.get(key);
     }
 
     /***** JEXL CONTEXT IMPL **/
 
     @Override
     public Object get(String name) {
-        return this.getValue(name);
+        return super.get(name);
     }
 
     @Override
