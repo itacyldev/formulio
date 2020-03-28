@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -54,8 +56,16 @@ public class DateFieldRenderer extends BaseRenderer {
     protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
         final TextView fieldLabel = baseView
                 .findViewById(R.id.field_layout_name);
+
         final Button input = baseView
                 .findViewById(R.id.field_layout_value);
+        input.setTag(component.getViewId());
+        // TODO: pull up
+        Object fieldValue = getValue(component, env);
+        String strValue = (String) ConvertUtils.convert(fieldValue, String.class);
+        // todo<< pull-up
+        input.setText(strValue);
+
         final Button today = baseView
                 .findViewById(R.id.field_layout_today);
         final ImageView resetButton = baseView
@@ -72,13 +82,13 @@ public class DateFieldRenderer extends BaseRenderer {
                         final Calendar c = new GregorianCalendar();
                         c.set(year, monthOfYear, dayOfMonth);
 
-                        final Date dateValue = c.getTime();
-                        input.setTag(component.getViewId());
-                        String strValue = convert(getValue(component, env));
+                        String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
                         input.setText(strValue);
 
                         OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                        interceptor.onChange(component);
+                        if(interceptor != null){
+                            interceptor.onChange(component);
+                        }
                     }
                 };
 
@@ -97,14 +107,11 @@ public class DateFieldRenderer extends BaseRenderer {
         today.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                final Date dateToday = new Date();
-                input.setText("" + DataUtils.DATE_FORMAT.format(dateToday));
+                // set now
+                String strValue = (String) ConvertUtils.convert(new Date(), String.class);
+                input.setText(strValue);
             }
         });
 
-    }
-
-    private String convert(Object value) {
-        return (value == null) ? "" : DataUtils.DATE_FORMAT.format(value);
     }
 }

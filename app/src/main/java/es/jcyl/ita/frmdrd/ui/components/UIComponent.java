@@ -49,6 +49,9 @@ public abstract class UIComponent implements Serializable {
 
     public void setParent(UIComponent parent) {
         this.parent = parent;
+        if (parent instanceof UIForm) {
+            this.parentForm = (UIForm) parent;
+        }
     }
 
     public List<UIComponent> getChildren() {
@@ -157,7 +160,7 @@ public abstract class UIComponent implements Serializable {
     public void setChildren(List<UIComponent> children) {
         this.children = children;
         // re-link children parent
-        if(this.children !=null){
+        if (this.children != null) {
             for (UIComponent c : this.children) {
                 c.setParent(this);
             }
@@ -172,16 +175,16 @@ public abstract class UIComponent implements Serializable {
         this.renderChildren = renderChildren;
     }
 
-    public UIComponent getParentForm() {
+    public UIForm getParentForm() {
         UIComponent node = this.getParent();
         // climb up the tree until you find a form
         while ((node != null) && !(node instanceof UIForm)) {
             node = node.getParent();
         }
-        return node;
+        return (node instanceof UIForm) ? (UIForm) node : null;
     }
 
-    public void setParentForm(UIComponent parentForm) {
+    public void setParentForm(UIForm parentForm) {
         this.parentForm = parentForm;
     }
 

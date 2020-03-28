@@ -6,11 +6,13 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -49,8 +51,11 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
         final Switch input = baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(component.getViewId());
-        Boolean convValue = convert(getValue(component, env));
-        input.setChecked(convValue);
+        // TODO: pull up
+        Object fieldValue = getValue(component, env);
+        Boolean boolValue = (Boolean) ConvertUtils.convert(fieldValue, Boolean.class);
+        // todo<< pull-up
+        input.setChecked(boolValue);
         fieldLabel.setText(component.getLabel());
 
         input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -58,13 +63,11 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component);
+                if (interceptor != null) {
+                    interceptor.onChange(component);
+                }
             }
         });
     }
 
-    protected boolean convert(Object value) {
-        // TODO: use converters with java generics (toddfast vs spring vs apache commons)
-        return (value == null) ? false : "true".equalsIgnoreCase(value.toString());
-    }
 }

@@ -12,6 +12,7 @@ import java.util.Set;
 import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
@@ -68,8 +69,19 @@ public class FormViewContext extends AbstractBaseContext {
     @Override
     public Object getValue(String elementId) {
         View view = findComponentView(elementId);
+        if (view == null) {
+            throw new IllegalArgumentException(String.format("No view element id [%s] " +
+                    "doesn't exists in the form [%s].", elementId, form.getId()));
+        }
         UIComponent component = form.getElement(elementId);
+        if (component == null) {
+            throw new IllegalArgumentException(String.format("The component id provided [%s] " +
+                    "doesn't exists in the form [%s].", elementId, form.getId()));
+        }
         ViewValueConverter converter = this.convFactory.get(component);
+        if (converter == null) {
+            throw new ViewConfigException("No converter found for the component " + component.getClass());
+        }
         Class expType = component.getValueExpression().getExpectedType();
         if (expType == null) {
             return converter.getValueFromView(view, component);

@@ -17,10 +17,10 @@ public class ProcessValidationsPhase extends Phase {
                 "form");
         if (updateContext != null) {
             for (Object idField : updateContext.values()) {
-                UIField fieldConfig = formContext.getFieldConfig(idField);
-                if (fieldConfig != null) {
-//                    fieldConfig.processValidators(lifecycle.getMainContext());
-                }
+//                UIField fieldConfig = formContext.getFieldConfig(idField);
+//                if (fieldConfig != null) {
+////                    fieldConfig.processValidators(lifecycle.getMainContext());
+//                }
             }
         } else {
             UIForm form = formContext.getForm();

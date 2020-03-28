@@ -10,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -57,7 +59,10 @@ public class TextFieldRenderer extends BaseRenderer {
         final EditText input = (EditText) baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(component.getViewId());
-        String strValue = convert(getValue(component, env));
+        // TODO: pull up
+        Object fieldValue = getValue(component, env);
+        String strValue = (String) ConvertUtils.convert(fieldValue, String.class);
+        // todo<< pull-up
         input.setText(strValue);
 
         final ImageView resetButton = (ImageView) baseView
@@ -82,11 +87,6 @@ public class TextFieldRenderer extends BaseRenderer {
                 }
             }
         });
-    }
-
-    private String convert(Object value) {
-        // TODO: default converters to savely convert from entity/context value to uicomponent.setText(str)
-        return (value == null) ? "" : value.toString();
     }
 
 }

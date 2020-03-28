@@ -16,7 +16,7 @@ package es.jcyl.ita.frmdrd.view.converters;
  */
 
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Switch;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
@@ -25,29 +25,26 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class TextFieldViewConverter implements ViewValueConverter {
+class SwitcherFieldViewConverter implements ViewValueConverter {
     @Override
     public Object getValueFromView(View view, UIComponent component) {
-        EditText inputField = (EditText) view;
-        String viewValue = inputField.getText().toString();
-        return ConvertUtils.convert(viewValue, String.class);
+        Switch inputField = (Switch) view;
+        Boolean viewValue = inputField.isChecked();
+        return ConvertUtils.convert(viewValue, Boolean.class);
     }
 
     @Override
     public <T> T getValueFromView(View view, UIComponent component, Class<T> expectedType) {
-        EditText inputField = (EditText) view;
-        String viewValue = "";
-        if (inputField.getText() != null) {
-            viewValue = inputField.getText().toString();
-        }
+        Switch inputField = (Switch) view;
+        Boolean viewValue = inputField.isChecked();
         Object o = ConvertUtils.convert(viewValue, expectedType);
         return (T) o;
     }
 
     @Override
     public void setViewValue(View view, UIComponent component, Object value) {
-        EditText inputField = (EditText) view;
-        String textValue = (String) ConvertUtils.convert(value, String.class);
-        inputField.setText(textValue);
+        Switch inputField = (Switch) view;
+        Boolean boolValue = (Boolean) ConvertUtils.convert(value, Boolean.class);
+        inputField.setChecked(boolValue);
     }
 }

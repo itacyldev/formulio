@@ -33,7 +33,8 @@ public class ViewValueConverterFactory {
 
     private ViewValueConverterFactory() {
         map.put(UIField.TYPE.TEXT.name(), new TextFieldViewConverter());
-
+        map.put(UIField.TYPE.DATE.name(), new DateFieldViewConverter());
+        map.put(UIField.TYPE.BOOLEAN.name(), new SwitcherFieldViewConverter());
     }
 
     public static ViewValueConverterFactory getInstance() {

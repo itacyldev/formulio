@@ -76,7 +76,13 @@ public class ExecEnvironment {
     public CompositeContext getCombinedContext() {
         if (this.combinedContext == null) {
             combinedContext = new OrderedCompositeContext();
+            if(globalContext== null){
+                throw new IllegalStateException("Global context is not property set ExecEnvironment!.");
+            }
             combinedContext.addContext(globalContext);
+            if(formContext== null){
+                throw new IllegalStateException("FormContext is not property set in ExecEnvironment!.");
+            }
             combinedContext.addContext(formContext);
         }
         return combinedContext;

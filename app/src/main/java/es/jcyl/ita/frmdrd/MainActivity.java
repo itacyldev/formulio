@@ -17,12 +17,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.frmdrd.configuration.ConfigFacade;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
     private static final int PERMISSION_REQUEST = 1234;
+    ConfigFacade config = new ConfigFacade();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +32,9 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         setContentView(R.layout.activity_main);
         initializeDagger();
         checkPermissions();
-        loadFormConfig();
+        config.init();
     }
 
-    private void loadFormConfig() {
-        FormConfigParser parser = new DummyFormConfigParser();
-        parser.parseFormConfig("");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

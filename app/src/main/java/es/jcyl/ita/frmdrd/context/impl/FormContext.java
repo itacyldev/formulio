@@ -1,22 +1,10 @@
 package es.jcyl.ita.frmdrd.context.impl;
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.TextView;
-
-import java.text.ParseException;
-import java.util.Date;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
-import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -48,150 +36,12 @@ public class FormContext extends OrderedCompositeContext {
         this.form = form;
     }
 
-
-    @Override
-    public Object get(Object key) {
-        Object value = null;
-
-        UIField field = (UIField) super.get(key);
-
-        if (field != null) {
-            LinearLayout layout = (LinearLayout) DataBindings.getView(key.toString());
-
-            String fieldType = field.getType();
-            switch (fieldType) {
-                case "TEXT":
-                    value = getTextValue(layout);
-                    break;
-                case "DATE":
-                    value = getDateValue(layout);
-                    break;
-                case "BOOLEAN":
-                    value = getBooleanValue(layout);
-                    break;
-            }
-        }
-
-        return value;
-    }
-
-    @Override
-    public Object put(String key, Object value) {
-        UIField field = null;
-        if (value instanceof UIField) {
-            field = (UIField) value;
-            super.put(key, value);
-
-        } else {
-
-            field = this.getFieldConfig(key);
-            if (field != null) {
-                LinearLayout layout =
-                        (LinearLayout) DataBindings.getView(key.toString());
-
-                String fieldType = field.getType();
-                switch (fieldType) {
-                    case "TEXT":
-                        setTextValue(layout, value);
-                        break;
-                    case "DATE":
-                        setDateValue(layout, value);
-                        break;
-                    case "BOOLEAN":
-                        setBooleanValue(layout, value);
-                        break;
-                }
-            }
-        }
-
-        return field;
-    }
-
-    public UIField getFieldConfig(Object key) {
-        UIField field = (UIField) super.get(key);
-        return field;
-    }
-
-    private String getTextValue(ViewGroup viewGroup) {
-        String value = null;
-        View view = this.getInputView(viewGroup);
-        if (view instanceof EditText) {
-            value = ((EditText) view).getText().toString();
-        }
-        return value;
-    }
-
-    private void setTextValue(ViewGroup viewGroup, Object value) {
-        View view = this.getInputView(viewGroup);
-        if (view instanceof EditText) {
-            ((EditText) view).setText(value.toString());
-        }
-    }
-
-    private Boolean getBooleanValue(ViewGroup viewGroup) {
-        Boolean value = null;
-        View view = this.getInputView(viewGroup);
-        if (view instanceof Switch) {
-            if (((Switch) view).isChecked()) {
-                value = Boolean.TRUE;
-            } else {
-                value = Boolean.FALSE;
-            }
-        }
-
-        return value;
-    }
-
-    private void setBooleanValue(ViewGroup viewGroup, Object value) {
-        Boolean booleanValue = Boolean.parseBoolean(value.toString());
-        View view = this.getInputView(viewGroup);
-        if (view instanceof Switch) {
-
-            ((Switch) view).setChecked(booleanValue);
-        }
-    }
-
-
-    private Date getDateValue(ViewGroup viewGroup) {
-        Date value = null;
-        View view = this.getInputView(viewGroup);
-        if (view instanceof TextView) {
-            try {
-                value = DataUtils.DATE_FORMAT.parse(
-                        ((Button) view).getText()
-                                .toString());
-            } catch (ParseException e) {
-
-            }
-        }
-
-        return value;
-    }
-
-    private void setDateValue(ViewGroup viewGroup, Object value) {
-        View view = this.getInputView(viewGroup);
-        if (view instanceof TextView) {
-
-        }
-    }
-
-    private View getInputView(ViewGroup viewGroup) {
-        View inputView = null;
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View view = viewGroup.getChildAt(i);
-            if (view.getTag().equals("input")) {
-                inputView = view;
-            }
-        }
-
-        return inputView;
-    }
-
     public UIForm getForm() {
         return form;
     }
 
     public void setEntity(Entity entity) {
+        this.entity = entity;
         this.addContext(new EntityContext(entity));
     }
 

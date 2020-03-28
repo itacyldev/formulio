@@ -7,6 +7,9 @@ import org.apache.commons.lang3.RandomUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.frmdrd.EntityToComponentMapper;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -22,6 +25,9 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
     private String[] expressions;
     private Class[] expectedTypes;
     private boolean randomValues = true;
+
+    private EntityToComponentMapper componentMapper = new EntityToComponentMapper();
+    private EntityMeta meta;
 
 
     public FormBuilder() {
@@ -71,6 +77,13 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
         return this;
     }
 
+    public FormBuilder withMeta(EntityMeta meta) {
+        this.numFields = meta.getProperties().length;
+        this.meta = meta;
+        return this;
+
+    }
+
     public FormBuilder withChildren(List<UIComponent> children) {
         this.baseModel.setChildren(children);
         return this;
@@ -93,11 +106,25 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
         List<UIComponent> fields = new ArrayList<UIComponent>();
         // create some random fields
         for (int i = 0; i < this.numFields; i++) {
-            UIField.TYPE fType = values[RandomUtils.nextInt(0, values.length - 1)];
+            UIField.TYPE fType;
+            if (this.meta == null) {
+                // get input type as randomly
+                fType = values[RandomUtils.nextInt(0, values.length - 1)];
+            } else {
+                // get type from given meta
+                PropertyType property = this.meta.getProperties()[i];
+                fType = this.componentMapper.getComponent(property.type);
+            }
             // field type
-            UIField field = fieldBuilder.withRandomData().withFieldType(fType).build();
-            JxltEngine.Expression jexlExpr = null;
+            fieldBuilder.withRandomData().withFieldType(fType);
+            if (meta != null) {
+                PropertyType property = this.meta.getProperties()[i];
+                fieldBuilder.withId(property.getName());
+            }
+            UIField field = fieldBuilder.build();
+            JxltEngine.Expression jexlExpr;
             ValueBindingExpression ve = null;
+
             if (this.expressions != null) {
                 // set binding expression
                 jexlExpr = JexlUtils.createExpression(expressions[i]);
@@ -105,6 +132,12 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
                 if (this.expectedTypes != null) {
                     ve.setExpectedType(this.expectedTypes[i]);
                 }
+            } else if (this.meta != null) {
+                // create expression to refer to entity values
+                PropertyType property = this.meta.getProperties()[i];
+                jexlExpr = JexlUtils.createExpression("${entity." + property.name + "}");
+                ve = new ValueBindingExpression(jexlExpr);
+                ve.setExpectedType(property.getType());
             } else if (this.randomValues) {
                 // create literal expression using random value
                 jexlExpr = JexlUtils.createExpression(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
@@ -115,7 +148,7 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
             fields.add(field);
         }
 
-        this.baseModel.setId("form"+RandomStringUtils.randomAlphanumeric(4));
+        this.baseModel.setId("form" + RandomStringUtils.randomAlphanumeric(4));
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setChildren(fields);
         return this;

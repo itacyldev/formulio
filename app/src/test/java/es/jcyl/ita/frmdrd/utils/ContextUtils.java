@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.utils;
  */
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 
 /**
@@ -25,6 +26,20 @@ public class ContextUtils {
 
     public static CompositeContext createGlobalContext() {
         CompositeContext ctx = new OrderedCompositeContext();
+        return ctx;
+    }
+
+    public static CompositeContext createGlobalContextWithParam(String param, Object value) {
+        return createGlobalContextWithParam(new String[]{param}, new Object[]{value});
+    }
+
+    public static CompositeContext createGlobalContextWithParam(String[] params, Object[] values) {
+        CompositeContext ctx = new OrderedCompositeContext();
+        BasicContext bc = new BasicContext("params");
+        for (int i = 0; i < params.length; i++) {
+            bc.put(params[i], values[i]);
+        }
+        ctx.addContext(bc);
         return ctx;
     }
 }
