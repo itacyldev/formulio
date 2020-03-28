@@ -24,12 +24,12 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  * <p>
  * Funcionality to get and set value to view components
  */
-public interface ViewValueConverter<C extends UIComponent> {
+public interface ViewValueConverter {
 
-    Object getValueFromView(View view, C component);
+    Object getValueFromView(View view, UIComponent component);
 
-    <T> T getValueFromView(View view, C component, Class<T> expectedType);
+    <T> T getValueFromView(View view, UIComponent component, Class<T> expectedType);
 
-    void setViewValue(View view, C component, Object value);
+    void setViewValue(View view, UIComponent component, Object value);
 
 }

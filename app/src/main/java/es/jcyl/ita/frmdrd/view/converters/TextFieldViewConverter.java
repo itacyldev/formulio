@@ -18,14 +18,14 @@ package es.jcyl.ita.frmdrd.view.converters;
 import android.view.View;
 import android.widget.EditText;
 
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class TextFieldViewConverter implements ViewValueConverter<UIField> {
+class TextFieldViewConverter implements ViewValueConverter {
     @Override
-    public Object getValueFromView(View view, UIField component) {
+    public Object getValueFromView(View view, UIComponent component) {
         EditText inputField = (EditText) view;
         String viewValue = inputField.getText().toString();
         // TODO: converter needed here
@@ -33,7 +33,7 @@ class TextFieldViewConverter implements ViewValueConverter<UIField> {
     }
 
     @Override
-    public <T> T getValueFromView(View view, UIField component, Class<T> expectedType) {
+    public <T> T getValueFromView(View view, UIComponent component, Class<T> expectedType) {
         EditText inputField = (EditText) view;
         String viewValue = inputField.getText().toString();
         // TODO: converter needed here
@@ -41,7 +41,7 @@ class TextFieldViewConverter implements ViewValueConverter<UIField> {
     }
 
     @Override
-    public void setViewValue(View view, UIField component, Object value) {
+    public void setViewValue(View view, UIComponent component, Object value) {
         EditText inputField = (EditText) view;
         // TODO: converter needed here
         inputField.setText(value.toString());

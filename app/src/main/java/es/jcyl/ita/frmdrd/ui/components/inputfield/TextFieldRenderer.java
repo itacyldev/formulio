@@ -77,7 +77,9 @@ public class TextFieldRenderer extends BaseRenderer {
             @Override
             public void afterTextChanged(Editable editable) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component);
+                if(interceptor !=null){
+                    interceptor.onChange(component);
+                }
             }
         });
     }

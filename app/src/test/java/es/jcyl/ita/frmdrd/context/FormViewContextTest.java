@@ -20,6 +20,7 @@ import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,8 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -42,13 +45,13 @@ public class FormViewContextTest {
 
 
     FormBuilder formBuilder = new FormBuilder();
+    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     @Test
     public void testAccessViewValuesFromContext() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
         ViewRenderHelper renderHelper = new ViewRenderHelper();
-
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextUtils.createGlobalContext();
@@ -56,7 +59,6 @@ public class FormViewContextTest {
 
         // render view to create android view components
         View formView = renderHelper.render(ctx, env, form);
-        Assert.assertNotNull(formView);
 
         // create view context to access view elements
         FormViewContext fvContext = new FormViewContext(form, formView);
@@ -73,9 +75,42 @@ public class FormViewContextTest {
         }
     }
 
+    /**
+     * Modify an ui view value using the context
+     */
     @Test
     public void setSetViewValuesThroughContext() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+
+        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        UIForm form = formBuilder.withNumFields(10).withRandomData().build();
+
+        CompositeContext gCtx = ContextUtils.createGlobalContext();
+        ExecEnvironment env = new ExecEnvironment(gCtx);
+
+        // render view to create android view components
+        View formView = renderHelper.render(ctx, env, form);
+
+        // create view context to access view elements
+        FormViewContext fvContext = new FormViewContext(form, formView);
+
+        // check the context contains all the form elements
+        for (UIComponent c : form.getChildren()) {
+            // modify view value using the context
+            String expected = RandomStringUtils.randomAlphanumeric(10);
+            fvContext.put(c.getId(), expected);
+
+            // access the value from the view element
+            View v = formView.findViewWithTag(c.getViewId());
+            // use a viewConverter to get the view value
+            ViewValueConverter converter = this.convFactory.get(c);
+
+            String actual = converter.getValueFromView(v, c, String.class);
+
+            // do they match?
+            Assert.assertEquals(expected, actual);
+        }
+
     }
 
 }
