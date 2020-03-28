@@ -39,14 +39,19 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Test access (get/set) to Android view elements through FormViewContext to get user input and to
+ * modify the view value.
  */
 @RunWith(RobolectricTestRunner.class)
 public class FormViewContextTest {
 
-
     FormBuilder formBuilder = new FormBuilder();
     ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
+    /**
+     * Get ui android element value using FormViewContext
+     */
     @Test
     public void testAccessViewValuesFromContext() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
@@ -76,7 +81,7 @@ public class FormViewContextTest {
     }
 
     /**
-     * Modify an ui view value using the context
+     * Modify an ui view value using the FormViewContext
      */
     @Test
     public void setSetViewValuesThroughContext() {
@@ -102,15 +107,14 @@ public class FormViewContextTest {
 
             // access the value from the view element
             View v = formView.findViewWithTag(c.getViewId());
-            // use a viewConverter to get the view value
-            ViewValueConverter converter = this.convFactory.get(c);
 
+            // use a viewConverter to get the value from android view element
+            ViewValueConverter converter = this.convFactory.get(c);
             String actual = converter.getValueFromView(v, c, String.class);
 
             // do they match?
             Assert.assertEquals(expected, actual);
         }
-
     }
 
 }
