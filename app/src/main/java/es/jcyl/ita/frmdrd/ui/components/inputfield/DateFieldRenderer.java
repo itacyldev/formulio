@@ -18,10 +18,9 @@ import java.util.GregorianCalendar;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.util.DataUtils;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -43,7 +42,7 @@ import es.jcyl.ita.frmdrd.render.ExecEnvironment;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DateFieldRenderer extends BaseRenderer {
+public class DateFieldRenderer extends FieldRenderer {
 
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
@@ -60,10 +59,8 @@ public class DateFieldRenderer extends BaseRenderer {
         final Button input = baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(component.getViewId());
-        // TODO: pull up
-        Object fieldValue = getValue(component, env);
-        String strValue = (String) ConvertUtils.convert(fieldValue, String.class);
-        // todo<< pull-up
+        // get component value and set in view
+        String strValue = getValue(component, env, String.class);
         input.setText(strValue);
 
         final Button today = baseView
@@ -86,7 +83,7 @@ public class DateFieldRenderer extends BaseRenderer {
                         input.setText(strValue);
 
                         OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                        if(interceptor != null){
+                        if (interceptor != null) {
                             interceptor.onChange(component);
                         }
                     }
@@ -113,5 +110,10 @@ public class DateFieldRenderer extends BaseRenderer {
             }
         });
 
+    }
+
+    @Override
+    protected <T> T handleNullValue(Object value) {
+        return (T) EMPTY_STRING;
     }
 }

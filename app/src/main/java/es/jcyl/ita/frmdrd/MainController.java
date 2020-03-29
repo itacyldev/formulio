@@ -17,6 +17,7 @@ package es.jcyl.ita.frmdrd;
 
 
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -30,11 +31,12 @@ import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.ui.validation.ValidationException;
-import es.jcyl.ita.frmdrd.view.FormViewHandlerActivity;
+import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -44,6 +46,7 @@ public class MainController {
 
     private static MainController _instance;
     private static UIView viewRoot;
+    private static FormController formController;
     private static CompositeContext globalContext;
 
     public static MainController getInstance() {
@@ -72,28 +75,30 @@ public class MainController {
      * Implements navigation to a new view
      *
      * @param andContext
-     * @param viewId
+     * @param formId: form configuration to load
      * @param params
      */
-    public void navigate(android.content.Context andContext, String viewId,
+    public void navigate(android.content.Context andContext, String formId,
                          @Nullable Map<String, Serializable> params) {
+
         // remove last view context and create a new one for the starting view
         globalContext.removeContext("view");
         CompositeContext viewCtx = prepareViewContext(params);
         globalContext.addContext(viewCtx);
 
-        // read view config and configure it if needed
-        viewRoot = retrieveView(viewId);
-        // for each form in the view, load the related entity
-        for (UIForm form : viewRoot.getForms()) {
-            form.loadEntity(globalContext);
-            // get form context and attach them to view context
-            Context fCtx = form.getContext();
-            viewCtx.addContext(fCtx);
-        }
+        // get form configuration for given formId and load data
+        formController = retrieveForm(formId);
+        formController.load(globalContext);
+
+        // set form view as current
+        viewRoot = formController.getEditView();
         // Start activity
-        final Intent intent = new Intent(andContext, FormViewHandlerActivity.class);
+        final Intent intent = new Intent(andContext, FormEditViewHandlerActivity.class);
         andContext.startActivity(intent);
+    }
+
+    private FormController retrieveForm(String formId) {
+        return FormConfigHandler.getForm(formId);
     }
 
     private CompositeContext prepareViewContext(@Nullable Map<String, Serializable> params) {
@@ -105,13 +110,9 @@ public class MainController {
         return viewCtx;
     }
 
-    private UIView retrieveView(String viewId) {
-        // find view in repository and inflate it from xml configuration if it already doesn't exits
-        return FormConfigHandler.getView(viewId);
-    }
-
 
     public void doUserAction(UIComponent component) {
+
         // retrieve current form's context
         UIForm form = (UIForm) component.getParentForm();
 
@@ -127,15 +128,6 @@ public class MainController {
         form.applyChanges();
     }
 
-    /**
-     * Finds the proper context for the given form
-     *
-     * @param formId
-     * @return
-     */
-    private Context retrieveFormContext(UIForm formId) {
-        return null;
-    }
 
     /**
      * Method called from the reactor engine to notify the view which components have to be updated
@@ -144,18 +136,8 @@ public class MainController {
 
     }
 
-    private void applyChanges(Context formContext) {
-
-    }
-
     public void doSave() {
-        // get form's related entity
-        // get entity's related repository
-        // persist entity
-    }
-
-    private void updateContext(String componentId) {
-        // do we have to update the context from the user input or let the components validate just using form.elementId.value
+        formController.save();
     }
 
     public UIComponent getViewRoot() {
@@ -165,4 +147,9 @@ public class MainController {
     public CompositeContext getGlobalContext() {
         return globalContext;
     }
+
+    public static FormController getFormController() {
+        return formController;
+    }
+
 }

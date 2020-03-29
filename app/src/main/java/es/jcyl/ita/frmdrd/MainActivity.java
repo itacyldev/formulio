@@ -20,6 +20,7 @@ import java.util.List;
 import es.jcyl.ita.frmdrd.configuration.ConfigFacade;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
@@ -88,22 +89,10 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     @Override
-    public void onListFragmentInteraction(UIView form) {
+    public void onListFragmentInteraction(FormController form) {
         NavigationManager navigationManager = new NavigationManager();
-
-        /*Map savedData = SavedData.getForm(form.getId());
-        //if(savedData!= null){
-        Map<String, Object> params = new HashMap<>();
-        params.put("savedForms", savedData);
-        final ListEntityDialog asListDialog = new ListEntityDialog(this,
-                form.getId());
-        asListDialog.show();
-        }else{*/
         Integer entityId = 3505;
-        MainController.getInstance().navigate(this, "view1", entityId);
-//
-//        navigationManager.navigate(this, "form1");
-
+        MainController.getInstance().navigate(this, form.getId(), entityId);
     }
 
 

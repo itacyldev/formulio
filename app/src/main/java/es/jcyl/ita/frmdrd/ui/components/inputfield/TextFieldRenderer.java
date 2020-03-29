@@ -16,6 +16,7 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.render.FieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
@@ -38,7 +39,8 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class TextFieldRenderer extends BaseRenderer {
+public class TextFieldRenderer extends FieldRenderer {
+
 
     public TextFieldRenderer() {
     }
@@ -59,10 +61,9 @@ public class TextFieldRenderer extends BaseRenderer {
         final EditText input = (EditText) baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(component.getViewId());
-        // TODO: pull up
-        Object fieldValue = getValue(component, env);
-        String strValue = (String) ConvertUtils.convert(fieldValue, String.class);
-        // todo<< pull-up
+
+        // get component value and set in view
+        String strValue = getValue(component, env, String.class);
         input.setText(strValue);
 
         final ImageView resetButton = (ImageView) baseView
@@ -88,5 +89,8 @@ public class TextFieldRenderer extends BaseRenderer {
             }
         });
     }
-
+    @Override
+    protected <T> T handleNullValue(Object value) {
+        return (T) EMPTY_STRING;
+    }
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.repo.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
@@ -35,27 +37,32 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 public class DummyFormConfigParser extends FormConfigParser {
     @Override
     public String parseFormConfig(String formConfigStr) {
+        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+
+
         List<UIComponent> lst = new ArrayList<UIComponent>();
+        UIField field0 = new UIField();
+        field0.setType(UIField.TYPE.TEXT);
+        field0.setLabel("Contact id");
+        field0.setValueExpression(exprFactory.create("${entity.contact_id}"));
+        lst.add(field0);
+
         UIField field1 = new UIField();
         field1.setType(UIField.TYPE.TEXT);
         field1.setLabel("firstName");
-        field1.setId("campo1");
-        field1.setValue("entity.first_name");
+        field1.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
         lst.add(field1);
 
         UIField field2 = new UIField();
         field2.setType(UIField.TYPE.BOOLEAN);
-        field2.setLabel("LastName");
-        field2.setId("campo2");
-        field2.setUpdate("campo3");
-        field2.setValue("entity.last_name");
+        field2.setLabel("IT profile");
+        field2.setValueExpression(exprFactory.create("${entity.it_profile}"));
         lst.add(field2);
 
         UIField field3 = new UIField();
         field3.setType(UIField.TYPE.TEXT);
-        field3.setLabel("campo 3");
-        field3.setId("campo3");
-        field3.setRenderCondition("entity.salary");
+        field3.setLabel("Salary");
+        field3.setValueExpression(exprFactory.create("${entity.salary}"));
         lst.add(field3);
 
         UIDatatable table = new UIDatatable();
@@ -85,7 +92,11 @@ public class DummyFormConfigParser extends FormConfigParser {
         UIView view1 = new UIView("view1");
         view1.setChildren(f);
 
-        loadConfig(view1);
+        FormController c1 = new FormController("MyForm1", "Form number 1.");
+        c1.setEditView(view1);
+
+        loadConfig(c1);
+
         return view1.getId();
 
 //        List<UIComponent> lst2 = new ArrayList<UIComponent>();

@@ -1,39 +1,28 @@
 package es.jcyl.ita.frmdrd.ui.components.form;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 
 public class UIForm extends UIComponent {
 
-    private EditableRepository repo;
-    private String entityIdProperty = "params.entityId";
     private FormContext context;
 
-    private Map<String, UITab> tabs = new LinkedHashMap<>();
+    private EditableRepository repo;
+    private String entityId = "params.entityId";
+    private List<UIField> fields;
 
 
     public UIForm() {
         this.setRendererType("form");
         this.setRenderChildren(true);
         this.context = new FormContext(this);
-    }
-
-    public Map<String, UITab> getTabs() {
-        return tabs;
-    }
-
-    public void addTab(final UITab tab) {
-        tab.setParent(this);
-        this.addChild(tab);
-        tabs.put(tab.getId(), tab);
     }
 
     /**
@@ -66,17 +55,30 @@ public class UIForm extends UIComponent {
         return null;
     }
 
-    public EditableRepository getRepo() {
-        return repo;
+    public List<UIField> getFields() {
+        if (this.fields == null) {
+            this.fields = new ArrayList<UIField>();
+            findFields(this, this.fields);
+        }
+        return this.fields;
     }
 
-    public void setRepo(EditableRepository repo) {
-        this.repo = repo;
-    }
-
-
-    public Object getEntityId(Context ctx) {
-        return ctx.get(this.entityIdProperty);
+    /**
+     * Recursively go over the component tree storing fields in the given array
+     *
+     * @param root
+     * @param fields
+     */
+    private void findFields(UIComponent root, List<UIField> fields) {
+        if (root instanceof UIForm) {
+            fields.add((UIField) root);
+        } else {
+            if (root.hasChildren()) {
+                for (UIComponent c : root.getChildren()) {
+                    findFields(c, fields);
+                }
+            }
+        }
     }
 
     @Override
@@ -88,28 +90,24 @@ public class UIForm extends UIComponent {
         // copy data from input fields to the entity
     }
 
-    /**
-     * Loads related entity and sets it in the form context
-     */
-    public void loadEntity(Context globalCtx) {
-        if (this.repo == null) {
-            return;
-        }
-        Object entityId = this.getEntityId(globalCtx);
-        if (entityId == null) {
-            return;
-        }
-        Entity entity = this.repo.findById(entityId);
-        // what if its null? throw an Exception?
-        this.context.setEntity(entity);
-    }
 
     public FormContext getContext() {
         return context;
     }
 
-    public void save() {
-        this.repo.save(this.context.getEntity());
+    public EditableRepository getRepo() {
+        return repo;
     }
 
+    public void setRepo(EditableRepository repo) {
+        this.repo = repo;
+    }
+
+    public String getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(String entityId) {
+        this.entityId = entityId;
+    }
 }

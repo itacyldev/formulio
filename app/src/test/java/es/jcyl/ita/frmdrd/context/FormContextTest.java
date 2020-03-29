@@ -41,8 +41,10 @@ import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
@@ -93,7 +95,7 @@ public class FormContextTest {
         form.setRepo(mockRepo);
 
         // load entity and check the entity context is fulfill
-        form.loadEntity(gCtx);
+        loadForm(form, gCtx);
         FormContext fCtx = form.getContext();
         Assert.assertNotNull(fCtx.getEntity());
 
@@ -136,12 +138,13 @@ public class FormContextTest {
         EditableRepository mockRepo = mock(EditableRepository.class);
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
         form.setRepo(mockRepo);
-        form.loadEntity(gCtx);
+        // use FormController to load form
+        loadForm(form, gCtx);
         FormContext fCtx = form.getContext();
 
-        // render view to create android view components
+        // render view to create android view components and viewContext
         ViewRenderHelper renderHelper = new ViewRenderHelper();
-        View formView = renderHelper.render(ctx, env, form);
+        renderHelper.render(ctx, env, form);
 
         // check each entity property is correctly set in the form fields
         for (Map.Entry<String, Object> prop : entity.getProperties().entrySet()) {
@@ -155,5 +158,14 @@ public class FormContextTest {
             AssertUtils.assertEquals(String.format("Error trying to check property [%s] of type [%s].", propId, expected.getClass()),
                     expected, actual);
         }
+    }
+
+
+    private void loadForm(UIForm form, es.jcyl.ita.crtrepo.context.Context context){
+        UIView view = new UIView("v1");
+        view.addChild(form);
+        FormController fc = new FormController("c","");
+        fc.setEditView(view);
+        fc.load(context);
     }
 }

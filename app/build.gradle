@@ -77,7 +77,9 @@ dependencies {
     implementation "org.mini2Dx:android-beans:1.0.0"
 
     //implementation 'es.jcyl.ita.groovy:groovy-android:2.4.16'
-    implementation 'com.google.android.tools:dx:1.7'
+    implementation ('com.google.android.tools:dx:1.7'){
+        exclude group: 'jetified', module: ''
+    }
     //repo
     implementation('es.jcyl.ita.crtrepo:core:0.1.0-SNAPSHOT') {
         exclude group: 'com.google.android', module: 'android'
@@ -107,16 +109,15 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
         exclude group: 'androidx.test', module: 'runner'
     }
-    implementation("es.jcyl.ita.crtrepo:test:0.1.0-SNAPSHOT") {
-        exclude group: 'com.google.android', module: 'android'
-    }
-
+    
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:4.0.2"
     testImplementation "org.mini2Dx:android-beans:1.0.0"
     testImplementation "es.jcyl.ita.crtrepo:test:0.1.0-SNAPSHOT"
     testImplementation 'org.mockito:mockito-core:2.7.22'
-//    'org.mockito:mockito-core:2.7.22'
+    testImplementation("es.jcyl.ita.crtrepo:test:0.1.0-SNAPSHOT") {
+        exclude group: 'com.google.android', module: 'android'
+    }
 }
 
 

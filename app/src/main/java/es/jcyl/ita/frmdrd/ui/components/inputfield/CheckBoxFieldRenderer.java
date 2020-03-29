@@ -12,6 +12,7 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.render.FieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
@@ -34,7 +35,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class CheckBoxFieldRenderer extends BaseRenderer {
+public class CheckBoxFieldRenderer extends FieldRenderer {
 
 
     @Override
@@ -51,12 +52,10 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
         final Switch input = baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(component.getViewId());
-        // TODO: pull up
-        Object fieldValue = getValue(component, env);
-        Boolean boolValue = (Boolean) ConvertUtils.convert(fieldValue, Boolean.class);
-        // todo<< pull-up
+
+        // get component value and set in view
+        Boolean boolValue = getValue(component, env, Boolean.class);
         input.setChecked(boolValue);
-        fieldLabel.setText(component.getLabel());
 
         input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -68,6 +67,11 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
                 }
             }
         });
+    }
+
+    @Override
+    protected <T> T handleNullValue(Object value) {
+        return (T) Boolean.FALSE;
     }
 
 }

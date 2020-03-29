@@ -30,7 +30,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.Date;
 
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.frmdrd.util.JexlUtils;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.util;
+package es.jcyl.ita.frmdrd.el;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -29,7 +29,6 @@ import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.wrappers.JexlContextWrapper;
 import es.jcyl.ita.frmdrd.context.wrappers.JexlEntityWrapper;
-import es.jcyl.ita.frmdrd.ui.components.ValueBindingExpression;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

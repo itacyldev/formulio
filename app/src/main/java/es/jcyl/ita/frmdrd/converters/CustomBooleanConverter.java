@@ -169,9 +169,10 @@ public class CustomBooleanConverter extends AbstractConverter {
      */
     @Override
     protected <T> T convertToType(Class<T> type, Object value) throws Throwable {
-
         if (Boolean.class.equals(type) || Boolean.TYPE.equals(type)) {
-            if (isNumeric(value)) {
+            if (value == null) {
+                return (T) Boolean.FALSE;
+            } else if (isNumeric(value)) {
                 Float fValue = (Float) ConvertUtils.convert(value, Float.class);
                 return (T) Boolean.valueOf(fValue > 0);
             } else {
@@ -179,7 +180,7 @@ public class CustomBooleanConverter extends AbstractConverter {
                 // guaranteed to be lower-case. By converting the input value
                 // to lowercase too, we can use the efficient String.equals method
                 // instead of the less-efficient String.equalsIgnoreCase method.
-                String stringValue = value.toString().toLowerCase();
+                String stringValue = value.toString().trim().toLowerCase();
                 return (T) toBoolean(type, stringValue);
             }
         }

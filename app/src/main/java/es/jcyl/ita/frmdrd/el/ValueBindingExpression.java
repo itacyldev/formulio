@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.el;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -47,19 +47,29 @@ public class ValueBindingExpression {
     }
 
     /**
-     * Returns true if the expression refers just to one entity field, so the binding between ui
-     * component and entity value can be bidirectional.
+     * Returns true if the expression cannot be used to update and entity property.
+     * Just if the expression refers to one entity property it can be used to update
+     * the entity's value.
      *
      * @return
      */
-    public boolean isEntityFieldBinding() {
+    public boolean isReadOnly() {
         if (getDependingVariables() == null || getDependingVariables().size() != 1) {
-            return false;
+            return true;
         } else {
             // there's just one variable in the expression and it depends on one of the
             // entity's properties
-            return getDependingVariables().get(0).contains("entity.");
+            return !getDependingVariables().get(0).contains("entity.");
         }
+    }
+
+    public String getBindingProperty() {
+        if (isReadOnly()) {
+            throw new IllegalStateException(String.format("The expression defined in field is readonly and " +
+                    "cannot be used as binding with an entity property." +
+                    " The expression [%s] must contain exactly one entity property.", this.expression));
+        }
+        return this.getDependingVariables().get(0);
     }
 
     /**

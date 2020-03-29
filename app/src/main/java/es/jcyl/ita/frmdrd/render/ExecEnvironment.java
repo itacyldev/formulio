@@ -24,6 +24,7 @@ import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
+import es.jcyl.ita.frmdrd.interceptors.OnSaveFormInterceptor;
 
 /**
  * Provides a common access to objects that have to be bound to view components during the
@@ -34,8 +35,8 @@ public class ExecEnvironment {
     Context globalContext;
     FormContext formContext;
     CompositeContext combinedContext;
-    private OnChangeFieldInterceptor changeInterceptor;
-    private OnChangeFieldInterceptor submitInterceptor;
+    private OnChangeFieldInterceptor changeInterceptor = new OnChangeFieldInterceptor();
+    private OnSaveFormInterceptor saveFormInterceptor = new OnSaveFormInterceptor();
 
     public ExecEnvironment(Context globalContext) {
         this.globalContext = globalContext;
@@ -65,22 +66,22 @@ public class ExecEnvironment {
         this.changeInterceptor = changeInterceptor;
     }
 
-    public OnChangeFieldInterceptor getSubmitInterceptor() {
-        return submitInterceptor;
+    public OnSaveFormInterceptor getSaveFormInterceptor() {
+        return saveFormInterceptor;
     }
 
-    public void setSubmitInterceptor(OnChangeFieldInterceptor submitInterceptor) {
-        this.submitInterceptor = submitInterceptor;
+    public void setSaveFormInterceptor(OnSaveFormInterceptor saveFormInterceptor) {
+        this.saveFormInterceptor = saveFormInterceptor;
     }
 
     public CompositeContext getCombinedContext() {
         if (this.combinedContext == null) {
             combinedContext = new OrderedCompositeContext();
-            if(globalContext== null){
+            if (globalContext == null) {
                 throw new IllegalStateException("Global context is not property set ExecEnvironment!.");
             }
             combinedContext.addContext(globalContext);
-            if(formContext== null){
+            if (formContext == null) {
                 throw new IllegalStateException("FormContext is not property set in ExecEnvironment!.");
             }
             combinedContext.addContext(formContext);

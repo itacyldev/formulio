@@ -33,9 +33,9 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class FormViewHandlerActivity extends FragmentActivity {
+public class FormEditViewHandlerActivity extends FragmentActivity {
     protected static final Log LOGGER = LogFactory
-            .getLog(FormViewHandlerActivity.class);
+            .getLog(FormEditViewHandlerActivity.class);
 
     public static ActionMode actionMode;
 
@@ -55,6 +55,9 @@ public class FormViewHandlerActivity extends FragmentActivity {
         ExecEnvironment env = new ExecEnvironment(MainController.getInstance().getGlobalContext());
         View rootView = renderHelper.render(this, env, root);
         setContentView(rootView);
+
+        // set android context to current formController
+        MainController.getInstance().getFormController().setViewContext(this);
     }
 
 

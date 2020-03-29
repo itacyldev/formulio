@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,8 +119,9 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         int index = 0;
         for (PropertyType p : entity.getMetadata().getProperties()) {
             value = entity.get(p.getName());
+            String stringValue = (String) ConvertUtils.convert(value, String.class);
             TextView textView = (TextView) holder.viewList.get(index);
-            textView.setText(DataUtils.nullFormat(value.toString()));
+            textView.setText(DataUtils.nullFormat(stringValue));
             index++;
         }
 //
@@ -165,9 +168,9 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     }
 
     @Override
-    public void notifyDataSetChanged(){
+    public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
-        for(View item:cacheViews){
+        for (View item : cacheViews) {
             ViewHolder holder = (ViewHolder) item.getTag();
             holder.charged = false;
         }

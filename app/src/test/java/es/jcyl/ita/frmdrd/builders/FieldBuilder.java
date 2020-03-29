@@ -5,9 +5,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.util.JexlUtils;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 
 public class FieldBuilder extends AbstractDataBuilder<UIField> {

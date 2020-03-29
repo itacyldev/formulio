@@ -11,10 +11,10 @@ import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.EntityToComponentMapper;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.util.JexlUtils;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 public class FormBuilder extends AbstractDataBuilder<UIForm> {
 

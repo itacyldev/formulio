@@ -46,7 +46,7 @@ public class UIView extends UIComponent {
     }
 
     public UIForm getForm(String formId) {
-        for (UIForm f : this.forms) {
+        for (UIForm f : this.getForms()) {
             if (f.getId().equalsIgnoreCase(formId)) {
                 return f;
             }
