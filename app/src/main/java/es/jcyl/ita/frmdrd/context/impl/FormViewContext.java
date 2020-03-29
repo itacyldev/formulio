@@ -1,11 +1,16 @@
 package es.jcyl.ita.frmdrd.context.impl;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,6 +18,7 @@ import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
@@ -43,6 +49,7 @@ public class FormViewContext extends AbstractBaseContext {
     UIForm form;
 
     ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
+    private Set<String> keyset;
 
     public FormViewContext(UIForm form, View formView) {
         this.setPrefix("view");
@@ -57,8 +64,11 @@ public class FormViewContext extends AbstractBaseContext {
      * @return
      */
     public View findComponentView(String componentId) {
-        String tag = String.format("%s:%s", this.form.getId(), componentId);
-        return this.view.findViewWithTag(tag);
+        String formId = this.form.getId();
+        if(!componentId.startsWith(formId)){
+            componentId = formId + ":" + componentId;
+        }
+        return this.view.findViewWithTag(componentId);
     }
 
     @Override
@@ -73,6 +83,8 @@ public class FormViewContext extends AbstractBaseContext {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
+
+        // get related component to get expected Class type
         UIComponent component = form.getElement(elementId);
         if (component == null) {
             throw new IllegalArgumentException(String.format("The component id provided [%s] " +
@@ -145,18 +157,34 @@ public class FormViewContext extends AbstractBaseContext {
     @NonNull
     @Override
     public Set<String> keySet() {
-        throw new UnsupportedOperationException("Not supported yet!.");
+        if (this.keyset == null) {
+            this.keyset = ViewHelper.getViewsWithTag((ViewGroup) this.view);
+        }
+        return keyset;
     }
 
     @NonNull
     @Override
     public Collection<Object> values() {
-        throw new UnsupportedOperationException("Not supported yet!.");
+        List<Object> values = new ArrayList<>();
+        for(String key: keySet()){
+            values.add(this.getValue(key));
+        }
+        return values;
     }
 
     @NonNull
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        throw new UnsupportedOperationException("Not supported yet!.");
+        Set<Entry<String, Object>> entries = new HashSet<>();
+        for(String key: keySet()){
+            if(key.contains(":")){
+                // keep the field id
+                key = key.substring(key.indexOf(":")+1);
+            }
+            entries.add(new AbstractMap.SimpleEntry<String, Object>(key,this.getValue(key)));
+        }
+        return entries;
     }
 }
+

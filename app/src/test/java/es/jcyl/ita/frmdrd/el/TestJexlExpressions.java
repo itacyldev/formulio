@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd;
+package es.jcyl.ita.frmdrd.el;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -30,7 +30,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.Date;
 
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.frmdrd.el.JexlUtils;
+import es.jcyl.ita.frmdrd.DummyEntity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -61,7 +61,8 @@ public class TestJexlExpressions {
 
     @Test
     public void testJexlTemplate() {
-        String[] expressions = new String[]{"${value1}", "  ${value1}  ", "${value1.getDate()} + 34", "${value3} + 34",
+        String[] expressions = new String[]{"${value1}", "  ${value1}  ", "${value1.value2.method()}",
+                "${value1.getDate()} + 34", "${value3} + 34","${value3[0].value5.method()} + 34",
                 "${value2} + 'value3' + ${value1.toString().substring(0,2)} + 34"};
 
         JxltEngine engine = new TemplateEngine((Engine) jexl, true, 256, '$', '#');
@@ -76,6 +77,7 @@ public class TestJexlExpressions {
             JxltEngine.Expression e = engine.createExpression(expression);
 
             System.out.println(e.getVariables());
+            System.out.println(e.getClass());
 //			System.out.println(e.evaluate(context));
 
         }

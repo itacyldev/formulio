@@ -67,9 +67,9 @@ public class FormController {
 
         Entity entity;
         if (entityId == null) {
-            // create empty entity;
+            // create empty entity
             Object id = repo.nextId();
-            entity = new Entity(repo.getSource(), repo.getMeta(), null);
+            entity = new Entity(repo.getSource(), repo.getMeta(), id);
         } else {
             // what if its null? throw an Exception?
             entity = repo.findById(entityId);
@@ -114,14 +114,17 @@ public class FormController {
     private void applyChanges(UIForm form) {
         FormViewContext viewContext = (FormViewContext) form.getContext().getContext("view");
         EntityContext entityContext = (EntityContext) form.getContext().getContext("entity");
-        
+
+        System.out.println(viewContext.entrySet());
+
         // go over all the form elements looking for bindings that are not readonly
         for (UIField field : form.getFields()) {
             if (!field.getValueExpression().isReadOnly()) {
                 // apply change from view context to entity context
-                Object value = viewContext.get(field.getViewId());
+                Object value = viewContext.get(field.getId());
                 String entityProp = field.getValueExpression().getBindingProperty();
-                entityContext.put(entityProp, value);
+                // remove the "entity" prefix
+                entityContext.put(entityProp.substring(entityProp.indexOf(".")+1), value);
             }
         }
     }

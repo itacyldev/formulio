@@ -16,7 +16,6 @@ package es.jcyl.ita.frmdrd.context;
  */
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -44,8 +43,8 @@ import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
@@ -95,7 +94,9 @@ public class FormContextTest {
         form.setRepo(mockRepo);
 
         // load entity and check the entity context is fulfill
-        loadForm(form, gCtx);
+        FormController fc = DevFormBuilder.createFormController(form, ctx);
+        fc.load(gCtx);
+
         FormContext fCtx = form.getContext();
         Assert.assertNotNull(fCtx.getEntity());
 
@@ -139,7 +140,8 @@ public class FormContextTest {
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
         form.setRepo(mockRepo);
         // use FormController to load form
-        loadForm(form, gCtx);
+        FormController fc = DevFormBuilder.createFormController(form, ctx);
+        fc.load(gCtx);
         FormContext fCtx = form.getContext();
 
         // render view to create android view components and viewContext
@@ -161,11 +163,4 @@ public class FormContextTest {
     }
 
 
-    private void loadForm(UIForm form, es.jcyl.ita.crtrepo.context.Context context){
-        UIView view = new UIView("v1");
-        view.addChild(form);
-        FormController fc = new FormController("c","");
-        fc.setEditView(view);
-        fc.load(context);
-    }
 }

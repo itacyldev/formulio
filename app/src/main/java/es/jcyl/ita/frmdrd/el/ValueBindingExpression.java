@@ -21,6 +21,7 @@ package es.jcyl.ita.frmdrd.el;
 
 import org.apache.commons.jexl3.JxltEngine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ import java.util.List;
  */
 public class ValueBindingExpression {
 
+    private static final String IMMEDIATE_EXPRESSION = "org.apache.commons.jexl3.internal.TemplateEngine$ImmediateExpression";
     private List<String> vars;
     private final JxltEngine.Expression expression;
     private Class expectedType;
@@ -54,13 +56,16 @@ public class ValueBindingExpression {
      * @return
      */
     public boolean isReadOnly() {
-        if (getDependingVariables() == null || getDependingVariables().size() != 1) {
-            return true;
-        } else {
-            // there's just one variable in the expression and it depends on one of the
-            // entity's properties
-            return !getDependingVariables().get(0).contains("entity.");
-        }
+        // immediate expressions define a direct reference to a bean method
+        return !(this.expression.getClass().getName().equals(IMMEDIATE_EXPRESSION));
+//
+//        if (getDependingVariables() == null || getDependingVariables().size() != 1) {
+//            return true;
+//        } else {
+//            // there's just one variable in the expression and it depends on one of the
+//            // entity's properties
+//            return !getDependingVariables().get(0).contains("entity.");
+//        }
     }
 
     public String getBindingProperty() {
@@ -78,6 +83,16 @@ public class ValueBindingExpression {
      * @return
      */
     public List<String> getDependingVariables() {
+        if (this.vars == null) {
+            this.vars = new ArrayList<>();
+            for (List<String> lstVars : this.expression.getVariables()) {
+                StringBuffer stb = new StringBuffer();
+                for (String part : lstVars) {
+                    stb.append(part + ".");
+                }
+                vars.add(stb.toString().substring(0, stb.length() - 1));
+            }
+        }
         return vars;
     }
 

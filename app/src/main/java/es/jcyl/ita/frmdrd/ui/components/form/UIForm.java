@@ -70,7 +70,7 @@ public class UIForm extends UIComponent {
      * @param fields
      */
     private void findFields(UIComponent root, List<UIField> fields) {
-        if (root instanceof UIForm) {
+        if (root instanceof UIField) {
             fields.add((UIField) root);
         } else {
             if (root.hasChildren()) {

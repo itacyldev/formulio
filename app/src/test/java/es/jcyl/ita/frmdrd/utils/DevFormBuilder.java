@@ -15,11 +15,27 @@ package es.jcyl.ita.frmdrd.utils;
  * limitations under the License.
  */
 
+import android.content.Context;
+
+import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Facade class with helper methods to automatically create data and fixtures for tests
  */
 public class DevFormBuilder {
+
+
+    public static FormController createFormController(UIForm form, Context viewContext) {
+        UIView view = new UIView("v1");
+        view.addChild(form);
+        FormController fc = new FormController("c", "");
+        fc.setEditView(view);
+        fc.setViewContext(viewContext);
+        return fc;
+    }
 
 }
