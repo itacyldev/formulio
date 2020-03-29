@@ -2,46 +2,77 @@
     <form>
         <permissions />
         <data>
-            <repo/>
-            <repo/>
-            <repo/>
+            <repo type="csv" />
+            <repo type="properties" />
+            <repo type="db" />
+            <repo type="photo" />
         </data>
         <list>
-            <view>
-                <datatable />
-            </view>
+            <datatable />
         </list>
-        <edit>
-            <view>
-                <tabs>
-                    <tab>
-                        <field />
-                    </tab>
-                    <tab>
-                        <field />
-                    </tab>
-                </tabs>
-            </view>
-            <script></script>
+        <edit onsave="method2">
+            <tabs>
+                <tab>
+                    <field onchange="method2" value="${entity.field}" />
+                </tab>
+                <tab>
+                    <field />
+                </tab>
+            </tabs>
+            <buttonbar>
+                <button type="save" />
+                <button type="cancel" />
+                <button to="form2" type="navigation">
+                    <param name="1" value="${entity.f1}" />
+                </button>
+            </buttonbar>
+            <script engine="jexl">
+                function method1(param) {
+                }
+                function method2(param) {
+                }
+
+            </script>
         </edit>
     </form>
 
+    <!-- formulario minimo -->
+    <form>
+        <data>
+            <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" tableName="tableName" />
+        </data>
+    </form>
+    <!-- si el repositorio se ha registrado ya -->
+    <form repo="repoId"/>
+
+    <listExamples>
+        <list fields="field1,field2,field3">
+            <!-- crear componente data table a partir de la información -->
+        </list>
+        <list expression="${entity.f1} - ${entity.f2.substring(0,10)}" />
+        <list>
+            <datatable />
+        </list>
+    </listExamples>
+
     <form id="miform" repoId="myrepo">
-        <list fields="field1,field2, field3">
+        <list fields="field1,field2,field3">
             <!-- crear componente data table a partir de la información -->
         </list>
         <edit fields="*">
             <inputText value="${entity.field1}">
-                <conveter format="dd/MM/yyyy" type="date" />
+                <converter format="dd/MM/yyyy" type="date" />
             </inputText>
             <inputText value="${entity.field2}">
-                <conveter format="##0,##" type="numeric" />
-                <validation type="number" />
+                <converter format="##0,##" type="numeric" />
+                <validator type="number" />
             </inputText>
             <inputText mandatory="true" value="${entity.field3}">
-                <validation maxLength="20" minLength="5" type="string" />
-                <validation type="email" />
+                <validator maxLength="20" minLength="5" type="string" />
+                <validator type="email" />
             </inputText>
+            <!-- campo calculado -->
+            <inputText readonly="true" value="${entity.field5}/${entity.field4}" />
         </edit>
     </form>
 
@@ -64,12 +95,14 @@
     </form>
 
     <form repo="repo1">
-        <!-- si hay más de uno, uno debe ser el principal y referenciado en el formulario-->
-        <repo id="repo1" />
-        <repo fields="f1,f2" id="repo2" />
-        <repo dbFile="file.sqlite" id="repo3">
-            <sql>select * from table_of_codes</sql>
-        </repo>
+        <data>
+            <!-- si hay más de uno, uno debe ser el principal y referenciado en el formulario-->
+            <repo id="repo1" />
+            <repo fields="f1,f2" id="repo2" />
+            <repo dbFile="file.sqlite" id="repo3">
+                <sql>select * from table_of_codes</sql>
+            </repo>
+        </data>
         <edit fields="*">
             <!-- sobre cargamos la definición de uno de los campos para utilizar un lookup en uno y un compo en otro-->
             <select repo="repo3" value="${entity.field1}" />
