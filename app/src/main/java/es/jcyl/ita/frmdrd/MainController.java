@@ -75,8 +75,8 @@ public class MainController {
      * @param viewId
      * @param params
      */
-    public void navigate(android.content.Context andContext,
-                         String viewId, @Nullable Map<String, Serializable> params) {
+    public void navigate(android.content.Context andContext, String viewId,
+                         @Nullable Map<String, Serializable> params) {
         // remove last view context and create a new one for the starting view
         globalContext.removeContext("view");
         CompositeContext viewCtx = prepareViewContext(params);
@@ -98,6 +98,7 @@ public class MainController {
 
     private CompositeContext prepareViewContext(@Nullable Map<String, Serializable> params) {
         CompositeContext viewCtx = new OrderedCompositeContext();
+        viewCtx.setPrefix("view");
         BasicContext pContext = new BasicContext("params");
         pContext.putAll(params);
         viewCtx.addContext(pContext);

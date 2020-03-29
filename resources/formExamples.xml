@@ -1,0 +1,94 @@
+<examples>
+    <form>
+        <permissions />
+        <data>
+            <repo/>
+            <repo/>
+            <repo/>
+        </data>
+        <list>
+            <view>
+                <datatable />
+            </view>
+        </list>
+        <edit>
+            <view>
+                <tabs>
+                    <tab>
+                        <field />
+                    </tab>
+                    <tab>
+                        <field />
+                    </tab>
+                </tabs>
+            </view>
+            <script></script>
+        </edit>
+    </form>
+
+    <form id="miform" repoId="myrepo">
+        <list fields="field1,field2, field3">
+            <!-- crear componente data table a partir de la información -->
+        </list>
+        <edit fields="*">
+            <inputText value="${entity.field1}">
+                <conveter format="dd/MM/yyyy" type="date" />
+            </inputText>
+            <inputText value="${entity.field2}">
+                <conveter format="##0,##" type="numeric" />
+                <validation type="number" />
+            </inputText>
+            <inputText mandatory="true" value="${entity.field3}">
+                <validation maxLength="20" minLength="5" type="string" />
+                <validation type="email" />
+            </inputText>
+        </edit>
+    </form>
+
+    <form>
+        <list expression="${entity.f1} - ${entity.f2.substring(0,10)}" />
+        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" id="repo1"
+            tableName="tableName" />
+    </form>
+    <form>
+        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" id="repo1" tableName="tableName">
+            <property name="booleanField" type="Boolean" />
+            <property name="geometry" type="Geometry" />
+        </repo>
+        <list>
+            <datable>
+                <col value="${entity.f1}" />
+                <col value="${entity.f2} + ${entity.f3}" />
+            </datable>
+        </list>
+    </form>
+
+    <form repo="repo1">
+        <!-- si hay más de uno, uno debe ser el principal y referenciado en el formulario-->
+        <repo id="repo1" />
+        <repo fields="f1,f2" id="repo2" />
+        <repo dbFile="file.sqlite" id="repo3">
+            <sql>select * from table_of_codes</sql>
+        </repo>
+        <edit fields="*">
+            <!-- sobre cargamos la definición de uno de los campos para utilizar un lookup en uno y un compo en otro-->
+            <select repo="repo3" value="${entity.field1}" />
+            <inputText lookup="repo3" readonly="true" value="${entity.field2}"></inputText>
+            <autocomplete repo="repo3" value="${entity.field3}" />
+
+            <lookup id="lookup1" repo="repo3">
+                <datable>
+                    <col value="${entity.f1}" />
+                    <col value="${entity.f2} + ${entity.f3}" />
+                </datable>
+            </lookup>
+        </edit>
+    </form>
+
+    <form repoId="myrepo">
+
+        <script>
+
+        </script>
+    </form>
+</examples>
