@@ -38,7 +38,10 @@ public class ValueBindingExpression {
     public ValueBindingExpression(JxltEngine.Expression expression) {
         this.expression = expression;
     }
-
+    public ValueBindingExpression(JxltEngine.Expression expression, Class expectedType) {
+        this.expression = expression;
+        this.expectedType = expectedType;
+    }
     /**
      * Returns true if the expression doesn't depend on any variable
      *

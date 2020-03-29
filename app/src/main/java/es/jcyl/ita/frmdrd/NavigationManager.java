@@ -12,8 +12,8 @@ import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
 
 public class NavigationManager {
 
-    public void navigate(Context context, String viewId) {
-        navigate(context, viewId, new HashMap<>());
+    public void navigate(Context context, String formId) {
+        navigate(context, formId, new HashMap<>());
     }
 
 //    public void navigate(Context context, String viewId, Serializable entityId) {
@@ -24,13 +24,13 @@ public class NavigationManager {
 
     /**
      * @param context
-     * @param viewId
+     * @param formId
      * @param params
      */
-    public void navigate(Context context, String viewId, @Nullable Map<String, Serializable> params) {
+    public void navigate(Context context, String formId, @Nullable Map<String, Serializable> params) {
         // TODO: the activity to use to render the view might depend on the viewId
         final Intent intent = new Intent(context, FormEditViewHandlerActivity.class);
-        intent.putExtra("viewId", viewId);
+        intent.putExtra("formId", formId);
         if (params != null) {
             for (String paramName : params.keySet()) {
                 intent.putExtra(paramName, params.get(paramName));

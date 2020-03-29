@@ -42,28 +42,39 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         List<UIComponent> lst = new ArrayList<UIComponent>();
         UIField field0 = new UIField();
+        field0.setId("f0");
         field0.setType(UIField.TYPE.TEXT);
         field0.setLabel("Contact id");
-        field0.setValueExpression(exprFactory.create("${entity.contact_id}"));
+        field0.setValueExpression(exprFactory.create("${entity.contact_id}",Long.class));
         lst.add(field0);
 
         UIField field1 = new UIField();
         field1.setType(UIField.TYPE.TEXT);
         field1.setLabel("firstName");
+        field1.setId("f1");
         field1.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
         lst.add(field1);
 
         UIField field2 = new UIField();
+        field2.setId("f2");
         field2.setType(UIField.TYPE.BOOLEAN);
         field2.setLabel("IT profile");
-        field2.setValueExpression(exprFactory.create("${entity.it_profile}"));
+        field2.setValueExpression(exprFactory.create("${entity.it_profile}", Long.class));
         lst.add(field2);
 
         UIField field3 = new UIField();
+        field3.setId("f3");
         field3.setType(UIField.TYPE.TEXT);
         field3.setLabel("Salary");
-        field3.setValueExpression(exprFactory.create("${entity.salary}"));
+        field3.setValueExpression(exprFactory.create("${entity.salary}", Double.class));
         lst.add(field3);
+
+        UIField field4 = new UIField();
+        field4.setId("f4");
+        field4.setType(UIField.TYPE.TEXT);
+        field4.setLabel("campo 4");
+        field4.setValueExpression(exprFactory.create("${entity.last_name}"));
+        lst.add(field4);
 
         UIDatatable table = new UIDatatable();
         table.setId("table1");
@@ -74,13 +85,6 @@ public class DummyFormConfigParser extends FormConfigParser {
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
         table.setRepo(contactsRepo);
         lst.add(table);
-
-        UIField field4 = new UIField();
-        field4.setType(UIField.TYPE.TEXT);
-        field4.setLabel("campo 4");
-        field4.setId("campo4");
-        field4.setSource("");
-        lst.add(field4);
 
         UIForm form1 = new UIForm();
         form1.setId("form1");

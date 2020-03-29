@@ -27,4 +27,8 @@ public class ValueExpressionFactory {
         JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
         return new ValueBindingExpression(jexlExpr);
     }
+    public ValueBindingExpression create(String expression, Class type) {
+        JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
+        return new ValueBindingExpression(jexlExpr,type);
+    }
 }

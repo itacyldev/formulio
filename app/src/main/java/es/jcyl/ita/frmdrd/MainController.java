@@ -61,8 +61,8 @@ public class MainController {
         globalContext.addContext(new DateTimeContext("date"));
     }
 
-    public void navigate(android.content.Context context, String viewId) {
-        navigate(context, viewId, new HashMap<>());
+    public void navigate(android.content.Context context, String formId) {
+        navigate(context, formId, new HashMap<>());
     }
 
     public void navigate(android.content.Context context, String viewId, Object entityId) {

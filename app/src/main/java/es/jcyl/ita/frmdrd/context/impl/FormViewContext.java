@@ -65,7 +65,7 @@ public class FormViewContext extends AbstractBaseContext {
      */
     public View findComponentView(String componentId) {
         String formId = this.form.getId();
-        if(!componentId.startsWith(formId)){
+        if (!componentId.startsWith(formId)) {
             componentId = formId + ":" + componentId;
         }
         return this.view.findViewWithTag(componentId);
@@ -93,6 +93,9 @@ public class FormViewContext extends AbstractBaseContext {
         ViewValueConverter converter = this.convFactory.get(component);
         if (converter == null) {
             throw new ViewConfigException("No converter found for the component " + component.getClass());
+        }
+        if (component.getValueExpression() == null) {
+            throw new ViewConfigException(String.format("The component [%s] doesn't have a ValueBindingExpression defined.", component.getId()));
         }
         Class expType = component.getValueExpression().getExpectedType();
         if (expType == null) {
@@ -167,7 +170,7 @@ public class FormViewContext extends AbstractBaseContext {
     @Override
     public Collection<Object> values() {
         List<Object> values = new ArrayList<>();
-        for(String key: keySet()){
+        for (String key : keySet()) {
             values.add(this.getValue(key));
         }
         return values;
@@ -177,12 +180,12 @@ public class FormViewContext extends AbstractBaseContext {
     @Override
     public Set<Entry<String, Object>> entrySet() {
         Set<Entry<String, Object>> entries = new HashSet<>();
-        for(String key: keySet()){
-            if(key.contains(":")){
+        for (String key : keySet()) {
+            if (key.contains(":")) {
                 // keep the field id
-                key = key.substring(key.indexOf(":")+1);
+                key = key.substring(key.indexOf(":") + 1);
             }
-            entries.add(new AbstractMap.SimpleEntry<String, Object>(key,this.getValue(key)));
+            entries.add(new AbstractMap.SimpleEntry<String, Object>(key, this.getValue(key)));
         }
         return entries;
     }
