@@ -4,8 +4,8 @@ import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlScript;
 
-import es.jcyl.ita.frmdrd.context.AbstractMapContext;
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.AbstractMapContext;
+import es.jcyl.ita.crtrepo.context.Context;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).

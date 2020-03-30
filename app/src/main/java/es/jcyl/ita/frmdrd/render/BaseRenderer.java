@@ -18,9 +18,10 @@ package es.jcyl.ita.frmdrd.render;
 import android.content.Context;
 import android.view.View;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -68,20 +69,6 @@ public abstract class BaseRenderer implements Renderer {
 
     protected abstract void setupView(View baseView, ExecEnvironment env, UIComponent component);
 
-    /**
-     * Tries to retrieve the component value first accessing the form context and then using
-     * global context
-     *
-     * @param component
-     * @param env
-     * @return
-     */
-    protected Object getValue(UIComponent component, ExecEnvironment env) {
-        Object value = component.getValue(env.getCombinedContext());
-        // if no value could be found using the key, use it as a literal
-        //TODO: safe and robust conversion needed here depending on value class (date, int, ...) and
-        // formatter defined in component
-        return (value == null) ? "" : value;
-    }
+
 
 }

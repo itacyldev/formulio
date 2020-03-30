@@ -10,16 +10,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.render.FieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.util.DataUtils;
-import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -41,7 +42,7 @@ import es.jcyl.ita.frmdrd.view.ExecEnvironment;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DateFieldRenderer extends BaseRenderer {
+public class DateFieldRenderer extends FieldRenderer {
 
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
@@ -54,8 +55,14 @@ public class DateFieldRenderer extends BaseRenderer {
     protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
         final TextView fieldLabel = baseView
                 .findViewById(R.id.field_layout_name);
+
         final Button input = baseView
                 .findViewById(R.id.field_layout_value);
+        input.setTag(component.getViewId());
+        // get component value and set in view
+        String strValue = getValue(component, env, String.class);
+        input.setText(strValue);
+
         final Button today = baseView
                 .findViewById(R.id.field_layout_today);
         final ImageView resetButton = baseView
@@ -72,13 +79,13 @@ public class DateFieldRenderer extends BaseRenderer {
                         final Calendar c = new GregorianCalendar();
                         c.set(year, monthOfYear, dayOfMonth);
 
-                        final Date dateValue = c.getTime();
-                        input.setTag(component.getViewId());
-                        String strValue = convert(getValue(component, env));
+                        String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
                         input.setText(strValue);
 
                         OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                        interceptor.onChange(component);
+                        if (interceptor != null) {
+                            interceptor.onChange(component);
+                        }
                     }
                 };
 
@@ -97,14 +104,16 @@ public class DateFieldRenderer extends BaseRenderer {
         today.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                final Date dateToday = new Date();
-                input.setText("" + DataUtils.DATE_FORMAT.format(dateToday));
+                // set now
+                String strValue = (String) ConvertUtils.convert(new Date(), String.class);
+                input.setText(strValue);
             }
         });
 
     }
 
-    private String convert(Object value) {
-        return (value == null) ? "" : DataUtils.DATE_FORMAT.format(value);
+    @Override
+    protected <T> T handleNullValue(Object value) {
+        return (T) EMPTY_STRING;
     }
 }

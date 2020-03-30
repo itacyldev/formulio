@@ -10,11 +10,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.render.FieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -36,7 +39,8 @@ import es.jcyl.ita.frmdrd.view.ExecEnvironment;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class TextFieldRenderer extends BaseRenderer {
+public class TextFieldRenderer extends FieldRenderer {
+
 
     public TextFieldRenderer() {
     }
@@ -57,8 +61,11 @@ public class TextFieldRenderer extends BaseRenderer {
         final EditText input = (EditText) baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(component.getViewId());
-        String strValue = convert(getValue(component, env));
+
+        // get component value and set in view
+        String strValue = getValue(component, env, String.class);
         input.setText(strValue);
+        input.setError("This is and example of error.");
 
         final ImageView resetButton = (ImageView) baseView
                 .findViewById(R.id.field_layout_x);
@@ -77,14 +84,14 @@ public class TextFieldRenderer extends BaseRenderer {
             @Override
             public void afterTextChanged(Editable editable) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component);
+                if(interceptor !=null){
+                    interceptor.onChange(component);
+                }
             }
         });
     }
-
-    private String convert(Object value) {
-        // TODO: default converters to savely convert from entity/context value to uicomponent.setText(str)
-        return (value == null) ? "" : value.toString();
+    @Override
+    protected <T> T handleNullValue(Object value) {
+        return (T) EMPTY_STRING;
     }
-
 }

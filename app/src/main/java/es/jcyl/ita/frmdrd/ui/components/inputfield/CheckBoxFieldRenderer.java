@@ -6,11 +6,14 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.render.FieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.ExecEnvironment;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -32,7 +35,7 @@ import es.jcyl.ita.frmdrd.view.ExecEnvironment;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class CheckBoxFieldRenderer extends BaseRenderer {
+public class CheckBoxFieldRenderer extends FieldRenderer {
 
 
     @Override
@@ -49,22 +52,26 @@ public class CheckBoxFieldRenderer extends BaseRenderer {
         final Switch input = baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(component.getViewId());
-        Boolean convValue = convert(getValue(component, env));
-        input.setChecked(convValue);
-        fieldLabel.setText(component.getLabel());
+
+        // get component value and set in view
+        Boolean boolValue = getValue(component, env, Boolean.class);
+        input.setChecked(boolValue);
 
         input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component);
+                if (interceptor != null) {
+                    interceptor.onChange(component);
+                }
             }
         });
     }
 
-    protected boolean convert(Object value) {
-        // TODO: use converters with java generics (toddfast vs spring vs apache commons)
-        return (value == null) ? false : "true".equalsIgnoreCase(value.toString());
+    @Override
+    protected <T> T handleNullValue(Object value) {
+        return (T) Boolean.FALSE;
     }
+
 }

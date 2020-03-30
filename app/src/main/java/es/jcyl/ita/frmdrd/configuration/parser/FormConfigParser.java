@@ -1,6 +1,8 @@
 package es.jcyl.ita.frmdrd.configuration.parser;
 
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
+import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 /*
@@ -32,7 +34,7 @@ public abstract class FormConfigParser {
      */
     public abstract String parseFormConfig(String formConfigStr);
 
-    protected void loadConfig(UIView view) {
-        FormConfigHandler.addForm(view);
+    protected void loadConfig(FormController form) {
+        FormConfigHandler.addForm(form);
     }
 }

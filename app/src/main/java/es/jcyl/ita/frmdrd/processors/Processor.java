@@ -1,7 +1,5 @@
 package es.jcyl.ita.frmdrd.processors;
 
-import es.jcyl.ita.frmdrd.context.Context;
-
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,6 +15,8 @@ import es.jcyl.ita.frmdrd.context.Context;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import es.jcyl.ita.crtrepo.context.Context;
 
 public interface Processor {
 

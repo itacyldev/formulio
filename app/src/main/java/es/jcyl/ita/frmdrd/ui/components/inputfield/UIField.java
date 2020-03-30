@@ -1,14 +1,14 @@
 package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
-import es.jcyl.ita.frmdrd.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.validation.Validator;
 
 import static es.jcyl.ita.frmdrd.ui.components.inputfield.UIField.TYPE.TEXT;
 
 public class UIField extends UIComponent {
 
     public enum TYPE {
-        TEXT, COMBO, DATE, BOOLEAN, SEPARATOR, INFO, DROPDOWN, SIGN
+        TEXT, DATE, BOOLEAN, // COMBO, SEPARATOR, INFO, DROPDOWN, SIGN
     }
 
     private String hint;
@@ -21,6 +21,8 @@ public class UIField extends UIComponent {
     private boolean editable = true;
     private boolean deletable = true;
     private boolean required = false;
+
+    private Validator[] validators;
 
     @Override
     public String getRendererType() {
@@ -128,10 +130,26 @@ public class UIField extends UIComponent {
     }
 
 
-    @Override
-    public void validate(Context context) {
-
+    public void addValidator(Validator validator) {
+        if (validator == null) {
+            throw new NullPointerException();
+        }
+        int size = (validators == null) ? 1 : validators.length + 1;
+        Validator[] newArray = new Validator[size];
+        System.arraycopy(validators, 0, newArray, 0, validators.length);
+        newArray[newArray.length - 1] = validator;
+        validators = newArray;
     }
+
+    /**
+     * <p>Return the set of registered {@link Validator}s for this
+     * {@link UIField} instance.  If there are no registered validators,
+     * a zero-length array is returned.</p>
+     */
+    public Validator[] getValidators() {
+        return this.validators;
+    }
+
 
     @Override
     public String toString() {

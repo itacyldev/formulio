@@ -49,7 +49,11 @@ android {
     dataBinding {
         enabled = true
     }
-
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
     useLibrary 'android.test.runner'
 
     useLibrary 'android.test.base'
@@ -70,12 +74,14 @@ dependencies {
     implementation 'commons-collections:commons-collections:20040616'
     implementation 'org.apache.commons:commons-jexl3:3.1'
     implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation "org.mini2Dx:android-beans:1.0.0"
 
     //implementation 'es.jcyl.ita.groovy:groovy-android:2.4.16'
-    implementation 'com.google.android.tools:dx:1.7'
-    implementation 'es.jcyl.ita.crtcyl:crtcyl-core:2.37.0'
+    implementation ('com.google.android.tools:dx:1.7'){
+        exclude group: 'jetified', module: ''
+    }
     //repo
-    implementation('es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT') {
+    implementation('es.jcyl.ita.crtrepo:core:0.1.0-SNAPSHOT') {
         exclude group: 'com.google.android', module: 'android'
     }
     implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
@@ -103,14 +109,15 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
         exclude group: 'androidx.test', module: 'runner'
     }
-
+    
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:4.0.2"
     testImplementation "org.mini2Dx:android-beans:1.0.0"
-//    testImplementation('es.jcyl.ita.crtrepo:repo:0.1.0-SNAPSHOT:tests')
-
+    testImplementation "es.jcyl.ita.crtrepo:test:0.1.0-SNAPSHOT"
+    testImplementation 'org.mockito:mockito-core:2.7.22'
+    testImplementation("es.jcyl.ita.crtrepo:test:0.1.0-SNAPSHOT") {
+        exclude group: 'com.google.android', module: 'android'
+    }
 }
-
-
 
 

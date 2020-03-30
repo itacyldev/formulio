@@ -8,11 +8,11 @@ import android.widget.LinearLayout;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
+import es.jcyl.ita.frmdrd.interceptors.OnSaveFormInterceptor;
 import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.ExecEnvironment;
+import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -35,7 +35,6 @@ import es.jcyl.ita.frmdrd.view.ExecEnvironment;
  */
 
 public class FormRenderer extends BaseRenderer implements GroupRenderer {
-
 
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
         // TODO: provide different layout implementors
@@ -180,8 +179,10 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                interceptor.onChange(component);
+                OnSaveFormInterceptor interceptor = env.getSaveFormInterceptor();
+                if(interceptor != null){
+                    interceptor.onChange(component);
+                }
             }
         });
         saveButton.setText("Save");

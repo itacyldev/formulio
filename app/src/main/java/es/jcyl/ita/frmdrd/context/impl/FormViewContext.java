@@ -1,4 +1,27 @@
 package es.jcyl.ita.frmdrd.context.impl;
+
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
+
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,27 +38,18 @@ package es.jcyl.ita.frmdrd.context.impl;
  * limitations under the License.
  */
 
-import android.view.View;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import es.jcyl.ita.frmdrd.context.AbstractBaseContext;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- */
-
-/**
+ * <p>
  * Gives access to view component values using a context interface.
  */
-class FormViewContext extends AbstractBaseContext {
+
+public class FormViewContext extends AbstractBaseContext {
     View view;
     UIForm form;
+
+    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
+    private Set<String> keyset;
 
     public FormViewContext(UIForm form, View formView) {
         this.setPrefix("view");
@@ -45,12 +59,16 @@ class FormViewContext extends AbstractBaseContext {
 
     /**
      * Locates a form element by its id
+     *
      * @param componentId
      * @return
      */
     public View findComponentView(String componentId) {
-        String tag = String.format("%s:%s", this.form.getId(), componentId);
-        return this.view.findViewWithTag(tag);
+        String formId = this.form.getId();
+        if (!componentId.startsWith(formId)) {
+            componentId = formId + ":" + componentId;
+        }
+        return this.view.findViewWithTag(componentId);
     }
 
     @Override
@@ -59,8 +77,32 @@ class FormViewContext extends AbstractBaseContext {
     }
 
     @Override
-    public Object getValue(String key) {
-        return null;
+    public Object getValue(String elementId) {
+        View view = findComponentView(elementId);
+        if (view == null) {
+            throw new IllegalArgumentException(String.format("No view element id [%s] " +
+                    "doesn't exists in the form [%s].", elementId, form.getId()));
+        }
+
+        // get related component to get expected Class type
+        UIComponent component = form.getElement(elementId);
+        if (component == null) {
+            throw new IllegalArgumentException(String.format("The component id provided [%s] " +
+                    "doesn't exists in the form [%s].", elementId, form.getId()));
+        }
+        ViewValueConverter converter = this.convFactory.get(component);
+        if (converter == null) {
+            throw new ViewConfigException("No converter found for the component " + component.getClass());
+        }
+        if (component.getValueExpression() == null) {
+            throw new ViewConfigException(String.format("The component [%s] doesn't have a ValueBindingExpression defined.", component.getId()));
+        }
+        Class expType = component.getValueExpression().getExpectedType();
+        if (expType == null) {
+            return converter.getValueFromView(view, component);
+        } else {
+            return converter.getValueFromView(view, component, expType);
+        }
     }
 
     @Override
@@ -75,57 +117,77 @@ class FormViewContext extends AbstractBaseContext {
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        return false;
+        return findComponentView(o.toString()) != null;
     }
 
     @Override
     public boolean containsValue(@Nullable Object o) {
-        return false;
+        return form.getElement(o.toString()) != null;
     }
 
     @Nullable
     @Override
     public Object get(@Nullable Object o) {
-        return null;
+        return getValue(o.toString());
     }
 
     @Nullable
     @Override
-    public Object put(String s, Object o) {
-        return null;
+    public Object put(String elementId, Object value) {
+        View view = findComponentView(elementId);
+        UIComponent component = form.getElement(elementId);
+        ViewValueConverter converter = this.convFactory.get(component);
+        converter.setViewValue(view, component, value);
+        return null; // don't return previous value
     }
 
     @Nullable
     @Override
     public Object remove(@Nullable Object o) {
-        return null;
+        throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
     @Override
     public void putAll(@NonNull Map<? extends String, ?> map) {
-
+        throw new UnsupportedOperationException("Not supported yet!.");
     }
 
     @Override
     public void clear() {
-
+        throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
     @NonNull
     @Override
     public Set<String> keySet() {
-        return null;
+        if (this.keyset == null) {
+            this.keyset = ViewHelper.getViewsWithTag((ViewGroup) this.view);
+        }
+        return keyset;
     }
 
     @NonNull
     @Override
     public Collection<Object> values() {
-        return null;
+        List<Object> values = new ArrayList<>();
+        for (String key : keySet()) {
+            values.add(this.getValue(key));
+        }
+        return values;
     }
 
     @NonNull
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        return null;
+        Set<Entry<String, Object>> entries = new HashSet<>();
+        for (String key : keySet()) {
+            if (key.contains(":")) {
+                // keep the field id
+                key = key.substring(key.indexOf(":") + 1);
+            }
+            entries.add(new AbstractMap.SimpleEntry<String, Object>(key, this.getValue(key)));
+        }
+        return entries;
     }
 }
+

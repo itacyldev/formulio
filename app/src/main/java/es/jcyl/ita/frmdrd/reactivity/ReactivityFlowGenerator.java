@@ -69,6 +69,8 @@ public class ReactivityFlowGenerator {
                 });
         Set<DefaultEdge> edges = dag.outgoingEdgesOf(node);
 
+        Integer nChildren = dag.outDegreeOf(node);
+
         for (DefaultEdge edge : edges) {
             List<Flowable<String>> flowableList = new ArrayList<>();
             DAGNode child = dag.getEdgeTarget(edge);

@@ -1,6 +1,6 @@
 package es.jcyl.ita.frmdrd.lifecycle.phase;
 
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 
 public class LoadLocalContextsPhase extends Phase {
 

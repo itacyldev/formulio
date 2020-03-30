@@ -12,6 +12,7 @@ import java.util.Map;
 import androidx.recyclerview.widget.RecyclerView;
 import es.jcyl.ita.frmdrd.FormListFragment.OnListFragmentInteractionListener;
 import es.jcyl.ita.frmdrd.dummy.DummyContent.FormListItem;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 /**
@@ -21,10 +22,10 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final Map<String, UIView> mValues;
+    private final Map<String, FormController> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(Map<String, UIView> items,
+    public MyItemRecyclerViewAdapter(Map<String, FormController> items,
                                      OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -39,10 +40,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        List<UIView> views = new ArrayList(mValues.values());
+        List<FormController> views = new ArrayList(mValues.values());
         holder.mItem = views.get(position);
         holder.mIdView.setText(holder.mItem.getId());
-        holder.mContentView.setText(holder.mItem.getLabel());
+        holder.mContentView.setText(holder.mItem.getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +66,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public UIView mItem;
+        public FormController mItem;
 
         public ViewHolder(View view) {
             super(view);

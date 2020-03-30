@@ -18,7 +18,7 @@ package es.jcyl.ita.frmdrd.ui.components.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
@@ -40,13 +40,9 @@ public class UIView extends UIComponent {
         return true;
     }
 
-    @Override
-    public void validate(Context context) {
-
-    }
 
     public UIForm getForm(String formId) {
-        for (UIForm f : this.forms) {
+        for (UIForm f : this.getForms()) {
             if (f.getId().equalsIgnoreCase(formId)) {
                 return f;
             }

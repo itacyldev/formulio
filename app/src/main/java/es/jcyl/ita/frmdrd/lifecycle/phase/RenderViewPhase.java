@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.form.FormRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
@@ -42,13 +42,13 @@ public class RenderViewPhase extends Phase {
                     "form");
             List<UIField> updateFields = new ArrayList<>();
             for (Object idField : phaseContext.values()) {
-                UIField field = formContext.getFieldConfig(idField);
-                updateFields.add(field);
-
-                String updateStr = field.getUpdate();
-                if (StringUtils.isNotEmpty(updateStr)) {
-                    updateFields.addAll(getFields(updateStr, formContext));
-                }
+//                UIField field = formContext.getFieldConfig(idField);
+//                updateFields.add(field);
+//
+//                String updateStr = field.getUpdate();
+//                if (StringUtils.isNotEmpty(updateStr)) {
+//                    updateFields.addAll(getFields(updateStr, formContext));
+//                }
             }
 
 //            renderer.render(parentActivity, updateFields);
@@ -68,9 +68,9 @@ public class RenderViewPhase extends Phase {
      * @return
      */
     private List<UIField> getFields(String fieldsStr, FormContext formContext) {
-        UIField field = formContext.getFieldConfig(fieldsStr);
         List<UIField> fields = new ArrayList<>();
-        fields.add(field);
+//        UIField field = formContext.getFieldConfig(fieldsStr);
+//        fields.add(field);
         return fields;
     }
 

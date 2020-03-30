@@ -16,7 +16,7 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
  */
 
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.frmdrd.context.Context;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
@@ -48,8 +48,4 @@ public class UIDatatable extends UIComponent {
         this.repo = repo;
     }
 
-    @Override
-    public void validate(Context context) {
-
-    }
 }

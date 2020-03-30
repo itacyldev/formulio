@@ -25,7 +25,7 @@ public class DAGGeneratorTest {
         DAGGenerator dagGenerator = new DAGGenerator();
 
         Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.generateDags(form);
+                dagGenerator.createDags(form);
 
 
         // Get each field's dag
@@ -67,7 +67,7 @@ public class DAGGeneratorTest {
         DAGGenerator dagGenerator = new DAGGenerator();
 
         Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.generateDags(form);
+                dagGenerator.createDags(form);
     }
 
     private UIForm createForm() {
@@ -76,7 +76,7 @@ public class DAGGeneratorTest {
         List<UIComponent> fields = new ArrayList<>();
         UIField field1 =
                 fieldBuilder.withId("field1").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 1").withRerender("field2").build();
+                        "field 1").withRenderer("field2").build();
         fields.add(field1);
 
         UIField field3 =
@@ -91,12 +91,12 @@ public class DAGGeneratorTest {
 
         UIField field2 =
                 fieldBuilder.withId("field2").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 2").withRerender(field3).withRerender(field4).build();
+                        "field 2").withRenderer(field3).withRenderer(field4).build();
         fields.add(field2);
 
         UIField field5 =
                 fieldBuilder.withId("field5").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 5").withRerender("field6").build();
+                        "field 5").withRenderer("field6").build();
         fields.add(field5);
 
         UIField field6 =
@@ -121,17 +121,17 @@ public class DAGGeneratorTest {
         List<UIComponent> fields = new ArrayList<>();
         UIField field1 =
                 fieldBuilder.withId("field1").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 1").withRerender("field2").build();
+                        "field 1").withRenderer("field2").build();
         fields.add(field1);
 
         UIField field2 =
                 fieldBuilder.withId("field2").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 2").withRerender("field3").build();
+                        "field 2").withRenderer("field3").build();
         fields.add(field2);
 
         UIField field3 =
                 fieldBuilder.withId("field3").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 3").withRerender("field1").build();
+                        "field 3").withRenderer("field1").build();
         fields.add(field3);
 
         FormBuilder formBuilder = new FormBuilder();

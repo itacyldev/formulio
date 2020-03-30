@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.context.AbstractMapContext;
-import es.jcyl.ita.frmdrd.context.Context;
-import es.jcyl.ita.frmdrd.context.ContextException;
+import es.jcyl.ita.crtrepo.context.AbstractMapContext;
+import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.context.ContextException;
 
 /**
  * Context Wrapper to give access to date and time basic funcions using context notation (date.now,

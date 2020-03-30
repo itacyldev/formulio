@@ -7,39 +7,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import es.jcyl.ita.frmdrd.configuration.ConfigFacade;
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
-import es.jcyl.ita.frmdrd.context.JexlTest;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
     private static final int PERMISSION_REQUEST = 1234;
+    ConfigFacade config = new ConfigFacade();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        loadFormConfig();
-
         setContentView(R.layout.activity_main);
         initializeDagger();
-        Integer result = JexlTest.test();
         checkPermissions();
+        config.init();
     }
 
-    private void loadFormConfig() {
-        FormConfigParser parser = new DummyFormConfigParser();
-        parser.parseFormConfig("");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     private void initialize() {
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -92,22 +89,10 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     @Override
-    public void onListFragmentInteraction(UIView form) {
+    public void onListFragmentInteraction(FormController form) {
         NavigationManager navigationManager = new NavigationManager();
-
-        /*Map savedData = SavedData.getForm(form.getId());
-        //if(savedData!= null){
-        Map<String, Object> params = new HashMap<>();
-        params.put("savedForms", savedData);
-        final ListEntityDialog asListDialog = new ListEntityDialog(this,
-                form.getId());
-        asListDialog.show();
-        }else{*/
-        Integer entityId = 3505;
-        MainController.getInstance().navigate(this, "view1", entityId);
-//
-//        navigationManager.navigate(this, "form1");
-
+        Integer entityId = 1157;
+        MainController.getInstance().navigate(this, form.getId(), entityId);
     }
 
 
