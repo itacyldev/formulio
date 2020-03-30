@@ -136,7 +136,9 @@ public class UIField extends UIComponent {
         }
         int size = (validators == null) ? 1 : validators.length + 1;
         Validator[] newArray = new Validator[size];
-        System.arraycopy(validators, 0, newArray, 0, validators.length);
+        if(validators !=null){
+            System.arraycopy(validators, 0, newArray, 0, validators.length);
+        }
         newArray[newArray.length - 1] = validator;
         validators = newArray;
     }

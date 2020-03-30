@@ -53,18 +53,17 @@ public class FormController {
     /****************************/
     /**  >>> EditView methods **/
     /****************************/
-
     /**
      * Loads related entity and sets it in the form contexts
      */
     public void load(Context globalCtx) {
         // load all forms included in the view
         for (UIForm form : this.editView.getForms()) {
-            doLoadForm(form, globalCtx);
+            load(globalCtx, form);
         }
     }
 
-    protected void doLoadForm(UIForm uiform, Context globalCtx) {
+    public void load(Context globalCtx, UIForm uiform) {
         EditableRepository repo = uiform.getRepo();
         Object entityId = getEntityIdFromContext(uiform, globalCtx);
 
@@ -101,13 +100,17 @@ public class FormController {
         // load all forms included in the view
         for (UIForm form : this.editView.getForms()) {
             // validate form date
-            validate(form);
+            if (!validate(form)) {
+                throw new ValidatorException(String.format("A error ocurred during form validation on form [%s].",
+                        form.getId()));
+            }
             // set changes from view fields to entity properties
             updateEntity(form);
             // persist changes
             Entity entity = form.getContext().getEntity();
             form.getRepo().save(entity);
         }
+
         Toast.makeText(this.viewContext, "Entity successfully saved.", Toast.LENGTH_SHORT).show();
     }
 
@@ -138,27 +141,31 @@ public class FormController {
         }
     }
 
-
-    private void validate(UIForm form) {
+    private boolean validate(UIForm form) {
+        boolean valid = true;
         for (UIField field : form.getFields()) {
             // validate
-            validate(field, form.getContext());
+            valid &= validate(field, form.getContext());
         }
+        return valid;
     }
 
-    private void validate(UIField field, FormContext fcontext) {
+    private boolean validate(UIField field, FormContext fcontext) {
         FormViewContext viewContext = fcontext.getViewContext();
 
         // get user input using view context and check all validators
         Object value = viewContext.get(field.getId());
+        boolean valid = true;
         for (Validator validator : field.getValidators()) {
             try {
                 validator.validate(fcontext, field, value);
             } catch (ValidatorException e) {
                 // get the error and put it in form context
-
+                fcontext.getContext("messages").put(field.getId(), e.getMessage());
+                valid = false;
             }
         }
+        return valid;
     }
 
 

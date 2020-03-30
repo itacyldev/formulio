@@ -48,10 +48,14 @@ import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 public class MainController {
 
     private static MainController _instance;
-    private UIView viewRoot;
+    // configuration componentes and android components
+    private UIView uiView;
+    private View viewRoot;
+    // android context and formContext
     private android.content.Context viewContext;
-    private FormController formController;
     private CompositeContext globalContext;
+    // current form controller
+    private FormController formController;
     private ViewRenderHelper renderHelper = new ViewRenderHelper();
     private ExecEnvironment execEnvironment;
 
@@ -100,7 +104,7 @@ public class MainController {
         formController.load(globalContext);
 
         // set form view as current
-        viewRoot = formController.getEditView();
+        uiView = formController.getEditView();
         // Start activity
         final Intent intent = new Intent(andContext, FormEditViewHandlerActivity.class);
         andContext.startActivity(intent);
@@ -148,11 +152,17 @@ public class MainController {
     }
 
     public void doSave() {
-        formController.save();
+        try{
+            formController.save();
+        }catch (ValidatorException e){
+            // re-render all the screen
+            View newView = renderHelper.render(this.viewContext, this.execEnvironment, formController.getEditView());
+            renderHelper.replaceView(viewRoot, newView);
+        }
     }
 
-    public UIComponent getViewRoot() {
-        return viewRoot;
+    public UIView getViewRoot() {
+        return uiView;
     }
 
     public CompositeContext getGlobalContext() {
@@ -169,5 +179,9 @@ public class MainController {
 
     public void setViewContext(android.content.Context viewContext) {
         this.viewContext = viewContext;
+    }
+
+    public void setViewRoot(View viewRoot) {
+        this.viewRoot = viewRoot;
     }
 }

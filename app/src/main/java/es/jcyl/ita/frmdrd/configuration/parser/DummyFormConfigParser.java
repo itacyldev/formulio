@@ -40,7 +40,6 @@ public class DummyFormConfigParser extends FormConfigParser {
     public String parseFormConfig(String formConfigStr) {
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
 
-
         List<UIComponent> lst = new ArrayList<UIComponent>();
         UIField field0 = new UIField();
         field0.setId("f0");
@@ -54,6 +53,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         field1.setLabel("firstName");
         field1.setId("f1");
         field1.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
+
         field1.addValidator(new RequiredValidator());
         lst.add(field1);
 

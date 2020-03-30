@@ -9,6 +9,7 @@
         </data>
         <list>
             <datatable />
+            <datalist />
         </list>
         <edit onsave="method2">
             <tabs>
@@ -28,6 +29,9 @@
             </buttonbar>
             <script engine="jexl">
                 function method1(param) {
+
+                    ctx[entity.f3] = entity.f1 + entity.f2
+
                 }
                 function method2(param) {
                 }
@@ -43,7 +47,10 @@
         </data>
     </form>
     <!-- si el repositorio se ha registrado ya -->
-    <form repo="repoId"/>
+
+    repo="mibd"
+    <form dbfile="mibd.sqlite" dbTable="mitabla"/>
+    <form repo="mibd"/>
 
     <listExamples>
         <list fields="field1,field2,field3">
@@ -81,7 +88,7 @@
 
     <form>
         <list expression="${entity.f1} - ${entity.f2.substring(0,10)}" />
-        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" id="repo1"
+        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite"
             tableName="tableName" />
     </form>
     <form>
@@ -90,7 +97,7 @@
             <property name="geometry" type="Geometry" />
         </repo>
         <list>
-            <datable>
+            <datable >
                 <col value="${entity.f1}" />
                 <col value="${entity.f2} + ${entity.f3}" />
             </datable>
@@ -103,12 +110,12 @@
             <repo id="repo1" />
             <repo fields="f1,f2" id="repo2" />
             <repo dbFile="file.sqlite" id="repo3">
-                <sql>select * from table_of_codes</sql>
+                <sql>select * from table_of_codes where code = ${form1.view.field1}</sql>
             </repo>
         </data>
         <edit fields="*">
             <!-- sobre cargamos la definición de uno de los campos para utilizar un lookup en uno y un compo en otro-->
-            <select repo="repo3" value="${entity.field1}" />
+            <select repo="repo3"  value="${entity.field1}" />
             <inputText lookup="repo3" readonly="true" value="${entity.field2}"></inputText>
             <autocomplete repo="repo3" value="${entity.field3}" />
 
