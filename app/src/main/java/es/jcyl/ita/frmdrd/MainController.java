@@ -38,7 +38,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.ui.validation.ValidatorException;
+import es.jcyl.ita.frmdrd.validation.ValidatorException;
 import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 
@@ -131,7 +131,7 @@ public class MainController {
      */
     public void doUserAction(UIComponent component) {
         try {
-            formController.updateEntity((UIField) component);
+            formController.updateField((UIField) component);
         } catch (ValidatorException e) {
             updateView(component);
         }
@@ -146,7 +146,6 @@ public class MainController {
         // find view using viewContext
         FormViewContext viewContext = form.getContext().getViewContext();
         View view = viewContext.findComponentView(component.getId());
-        // re-render view
         View newView = renderHelper.render(this.viewContext, this.execEnvironment, component);
         renderHelper.replaceView(view, newView);
     }

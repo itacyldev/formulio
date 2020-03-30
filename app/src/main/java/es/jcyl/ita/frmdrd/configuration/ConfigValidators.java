@@ -1,12 +1,6 @@
 package es.jcyl.ita.frmdrd.configuration;
-
-import android.view.View;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,31 +16,7 @@ import java.util.Map;
  */
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-
-public class DataBindings {
-
-    private static Map<String, View> bindings = new HashMap<>();
-
-    /**
-     *
-     * @param id
-     * @param input
-     */
-    public static void registerView(String id, View input) {
-
-        bindings.put(id, input);
-    }
-
-    /**
-     *
-     * @param id
-     * @return
-     */
-    public static View getView(String id) {
-        return bindings.get(id);
-    }
-
-
+public class ConfigValidators {
 }

@@ -1,7 +1,7 @@
 package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.validation.Validator;
+import es.jcyl.ita.frmdrd.validation.Validator;
 
 import static es.jcyl.ita.frmdrd.ui.components.inputfield.UIField.TYPE.TEXT;
 

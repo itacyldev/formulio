@@ -29,8 +29,7 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
-import es.jcyl.ita.frmdrd.ui.validation.CommonsValidatorWrapper;
-import es.jcyl.ita.frmdrd.ui.validation.RequiredValidator;
+import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 
 /**

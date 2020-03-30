@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.validation;
+package es.jcyl.ita.frmdrd.validation;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,13 +15,13 @@ package es.jcyl.ita.frmdrd.ui.validation;
  * limitations under the License.
  */
 
+import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public interface Validator {
 
-public class ValidatorException extends RuntimeException {
-
-    public ValidatorException(String msg){
-        super(msg);
-    }
+    void validate(Context ctx, UIComponent component, String value);
 }

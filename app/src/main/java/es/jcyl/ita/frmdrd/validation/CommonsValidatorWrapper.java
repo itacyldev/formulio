@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.validation;
+package es.jcyl.ita.frmdrd.validation;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -25,7 +25,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.ui.validation.Validator {
+public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.validation.Validator {
 
 
     private AbstractFormatValidator abstractDelegate;
@@ -51,17 +51,19 @@ public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.ui.validation
     @Override
     public void validate(Context ctx, UIComponent component, String value) {
         Boolean valid;
+        String msg;
         if (abstractDelegate != null) {
             valid = abstractDelegate.isValid(value);
+            msg = "Error during validation: "  +abstractDelegate.getClass().getName();
         } else {
             try {
                 valid = (Boolean) method.invoke(delegate, value);
+                msg = "Error during validation: "  +delegate.getClass().getName();
             } catch (Exception e) {
                 throw new RuntimeException(String.format("An error occurred trying to validate the " +
                         "field [%s] with value [%s].", component.getId(), value));
             }
         }
-        String msg = "Error during validation";
         if (!valid) {
             throw new ValidatorException(msg);
         }

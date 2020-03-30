@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.configuration.parser;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,8 @@ import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.ui.validation.RequiredValidator;
+import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
+import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -75,7 +78,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         field4.setId("f4");
         field4.setType(UIField.TYPE.TEXT);
         field4.setLabel("campo 4");
-        field4.setValueExpression(exprFactory.create("${entity.last_name}"));
+        field4.setValueExpression(exprFactory.create("${entity.email}"));
+        field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
         lst.add(field4);
 
         UIDatatable table = new UIDatatable();

@@ -18,9 +18,6 @@ package es.jcyl.ita.frmdrd.render;
 import android.content.Context;
 import android.view.View;
 
-import org.mini2Dx.beanutils.ConvertUtils;
-
-import es.jcyl.ita.frmdrd.configuration.DataBindings;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
@@ -38,8 +35,6 @@ public abstract class BaseRenderer implements Renderer {
             return baseView;
         }
         setupView(baseView, env, component);
-
-        bindField(baseView, component);
         return baseView;
     }
 
@@ -51,10 +46,6 @@ public abstract class BaseRenderer implements Renderer {
 //            render = this.validateCondition(renderCondition, field.getId());
 //        }
         return !("false".equalsIgnoreCase(renderCondition));
-    }
-
-    protected void bindField(View baseView, UIComponent component) {
-        DataBindings.registerView(component.getId(), baseView);
     }
 
     /**

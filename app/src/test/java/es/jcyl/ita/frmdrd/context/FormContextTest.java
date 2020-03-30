@@ -62,7 +62,6 @@ public class FormContextTest {
     FormBuilder formBuilder = new FormBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     @BeforeClass
     public static void setUp() {

@@ -27,8 +27,8 @@ import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.ui.validation.Validator;
-import es.jcyl.ita.frmdrd.ui.validation.ValidatorException;
+import es.jcyl.ita.frmdrd.validation.Validator;
+import es.jcyl.ita.frmdrd.validation.ValidatorException;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -114,18 +114,27 @@ public class FormController {
 
         Toast.makeText(this.viewContext, "Entity successfully saved.", Toast.LENGTH_SHORT).show();
     }
+    public void updateField(UIField field){
+//        UIForm form = field.getParentForm();
+//        if (!validate(form)) {
+//            throw new ValidatorException(String.format("A error occurred during form validation on form [%s].",
+//                    form.getId()));
+//        }
+//        // set changes from view fields to entity properties
+//        updateEntity(form);
+    }
 
     /**
      * Access form fields looking for value bindings that can be setable
      */
-    public void updateEntity(UIForm form) {
+    private void updateEntity(UIForm form) {
         // go over all the form elements looking for bindings that are not readonly
         for (UIField field : form.getFields()) {
             updateEntity(form.getContext().getViewContext(), form.getContext().getEntityContext(), field);
         }
     }
 
-    public void updateEntity(UIField field) {
+    private void updateEntity(UIField field) {
         UIForm form = field.getParentForm();
         FormViewContext viewContext = form.getContext().getViewContext();
         EntityContext entityContext = form.getContext().getEntityContext();
