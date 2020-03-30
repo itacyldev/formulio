@@ -20,6 +20,7 @@ import android.widget.Toast;
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.EntityContext;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
@@ -87,7 +88,7 @@ public class FormController {
         } catch (Exception e) {
             throw new FormException(String.format("An error occurred while trying to obtain the " +
                     "entity id from params context for form [%s]." +
-                    " It seems the property entityId is not properly set: [%s].", uiform.getId(), entityIdProp));
+                    " It seems the property 'entityId' is not properly set: [%s].", uiform.getId(), entityIdProp));
         }
         return entityId;
     }
@@ -101,7 +102,7 @@ public class FormController {
         for (UIForm form : this.editView.getForms()) {
             // validate form date
             if (!validate(form)) {
-                throw new ValidatorException(String.format("A error ocurred during form validation on form [%s].",
+                throw new ValidatorException(String.format("A error occurred during form validation on form [%s].",
                         form.getId()));
             }
             // set changes from view fields to entity properties
@@ -141,27 +142,28 @@ public class FormController {
         }
     }
 
-    private boolean validate(UIForm form) {
+    public boolean validate(UIForm form) {
         boolean valid = true;
+        form.getContext().clearMessages();
         for (UIField field : form.getFields()) {
             // validate
-            valid &= validate(field, form.getContext());
+            valid &= validate(form.getContext(), field);
         }
         return valid;
     }
 
-    private boolean validate(UIField field, FormContext fcontext) {
-        FormViewContext viewContext = fcontext.getViewContext();
+    public boolean validate(FormContext fContext, UIField field) {
+        FormViewContext viewContext = fContext.getViewContext();
 
-        // get user input using view context and check all validators
-        Object value = viewContext.get(field.getId());
+        // get user input using view context and check all validators.
+        String value = viewContext.getString(field.getId());
         boolean valid = true;
         for (Validator validator : field.getValidators()) {
             try {
-                validator.validate(fcontext, field, value);
+                validator.validate(fContext, field, value);
             } catch (ValidatorException e) {
                 // get the error and put it in form context
-                fcontext.getContext("messages").put(field.getId(), e.getMessage());
+                FormContextHelper.setMessage(fContext, field.getId(), e.getMessage());
                 valid = false;
             }
         }

@@ -41,6 +41,7 @@ public class ViewRenderHelper {
             env.setFormContext(((UIForm) root.getParentForm()).getContext());
         }
         View rootView = renderer.render(viewContext, env, root);
+//        System.out.println("Rendering:: " + root.toString());
         if (root instanceof UIForm) {
             // configure viewContext
             ((UIForm) root).getContext().setView(rootView);

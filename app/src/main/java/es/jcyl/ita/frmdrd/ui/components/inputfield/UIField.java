@@ -22,7 +22,8 @@ public class UIField extends UIComponent {
     private boolean deletable = true;
     private boolean required = false;
 
-    private Validator[] validators;
+    private static final Validator[] EMTPY_VALIDATOR = new Validator[0];
+    private Validator[] validators = EMTPY_VALIDATOR;
 
     @Override
     public String getRendererType() {
@@ -136,7 +137,7 @@ public class UIField extends UIComponent {
         }
         int size = (validators == null) ? 1 : validators.length + 1;
         Validator[] newArray = new Validator[size];
-        if(validators !=null){
+        if (validators != null) {
             System.arraycopy(validators, 0, newArray, 0, validators.length);
         }
         newArray[newArray.length - 1] = validator;

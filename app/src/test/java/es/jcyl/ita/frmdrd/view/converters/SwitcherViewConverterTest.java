@@ -42,6 +42,7 @@ import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 
 /**
@@ -66,10 +67,15 @@ public class SwitcherViewConverterTest {
      */
     @Test
     public void testSupportedStrings() {
-        PrepareContext prepareContext = new PrepareContext().invoke();
-
-        UIField field = prepareContext.getField();
-        View view = prepareContext.getView();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+                .withValueBindingExpression("true", Boolean.class) // literal expression
+                .build();
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx,true)
+                .withField(field)
+                .render();
 
         // Test all different kinds of types
         Object[] values = {"1", "0", "true", "false", "Y", "y", "N", "n", "S", "s", "T",
@@ -79,7 +85,7 @@ public class SwitcherViewConverterTest {
 
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
         for (int i = 0; i < values.length; i++) {
-            View inputView = view.findViewWithTag(field.getViewId());
+            View inputView = recipe.view.findViewWithTag(field.getViewId());
             conv.setViewValue(inputView, field, values[i]);
 
             Object actual = conv.getValueFromView(inputView, field, expected.getClass());
@@ -89,10 +95,15 @@ public class SwitcherViewConverterTest {
 
     @Test
     public void testSupportedNumeric() {
-        PrepareContext prepareContext = new PrepareContext().invoke();
-
-        UIField field = prepareContext.getField();
-        View view = prepareContext.getView();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+                .withValueBindingExpression("true", Boolean.class) // literal expression
+                .build();
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx,true)
+                .withField(field)
+                .render();
 
         // Test all different kinds of types
         Object[] values = {1, 1.1, 2, -1.1, 0, 0.5, -0.5};
@@ -100,7 +111,7 @@ public class SwitcherViewConverterTest {
 
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
         for (int i = 0; i < values.length; i++) {
-            View inputView = view.findViewWithTag(field.getViewId());
+            View inputView = recipe.view.findViewWithTag(field.getViewId());
             conv.setViewValue(inputView, field, values[i]);
 
             Object actual = conv.getValueFromView(inputView, field, expected.getClass());
@@ -110,16 +121,21 @@ public class SwitcherViewConverterTest {
 
     @Test
     public void testUnSupportedStrings() {
-        PrepareContext prepareContext = new PrepareContext().invoke();
-
-        UIField field = prepareContext.getField();
-        View view = prepareContext.getView();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+                .withValueBindingExpression("true", Boolean.class) // literal expression
+                .build();
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx,true)
+                .withField(field)
+                .render();
 
         String value = RandomStringUtils.randomAlphanumeric(10);
 
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
 
-        View inputView = view.findViewWithTag(field.getViewId());
+        View inputView = recipe.view.findViewWithTag(field.getViewId());
 
         boolean hasFailed = false;
         try {
@@ -132,10 +148,17 @@ public class SwitcherViewConverterTest {
 
     @Test
     public void testUnsupportedTypes() {
-        PrepareContext prepareContext = new PrepareContext().invoke();
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+                .withValueBindingExpression("true", Boolean.class) // literal expression
+                .build();
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx,true)
+                .withField(field)
+                .render();
 
-        UIField field = prepareContext.getField();
-        View view = prepareContext.getView();
+        View view = recipe.view;
 
         // Test all different kinds of types
         Class[] clazzez = new Class[]{ByteArray.class, Date.class, Geometry.class};
@@ -174,6 +197,7 @@ public class SwitcherViewConverterTest {
                     .withValueBindingExpression("true", Boolean.class) // literal expression
                     .build();
             field.setParent(form);
+
 
             // configure the context as the MainController would do
             CompositeContext gCtx = ContextUtils.createGlobalContext();

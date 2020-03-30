@@ -71,9 +71,28 @@ public class FormViewContext extends AbstractBaseContext {
         return this.view.findViewWithTag(componentId);
     }
 
+    /**
+     * Access the component value as string, without applying the conversion using the
+     * component binding expression
+     *
+     * @param elementId
+     * @return
+     */
     @Override
-    public String getString(String key) {
-        return null;
+    public String getString(String elementId) {
+        View view = findComponentView(elementId);
+        if (view == null) {
+            throw new IllegalArgumentException(String.format("No view element id [%s] " +
+                    "doesn't exists in the form [%s].", elementId, form.getId()));
+        }
+        // get related component to get expected Class type
+        UIComponent component = form.getElement(elementId);
+        if (component == null) {
+            throw new IllegalArgumentException(String.format("The component id provided [%s] " +
+                    "doesn't exists in the form [%s].", elementId, form.getId()));
+        }
+        ViewValueConverter converter = this.convFactory.get(component);
+        return converter.getValueFromViewAsString(view, component);
     }
 
     @Override
@@ -83,7 +102,6 @@ public class FormViewContext extends AbstractBaseContext {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
-
         // get related component to get expected Class type
         UIComponent component = form.getElement(elementId);
         if (component == null) {
@@ -97,9 +115,10 @@ public class FormViewContext extends AbstractBaseContext {
         if (component.getValueExpression() == null) {
             throw new ViewConfigException(String.format("The component [%s] doesn't have a ValueBindingExpression defined.", component.getId()));
         }
+        // get the expected type from the EntityMeta through the binding expression
         Class expType = component.getValueExpression().getExpectedType();
         if (expType == null) {
-            return converter.getValueFromView(view, component);
+            return converter.getValueFromViewAsString(view, component);
         } else {
             return converter.getValueFromView(view, component, expType);
         }

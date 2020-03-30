@@ -38,7 +38,9 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 
 /**
@@ -64,17 +66,10 @@ public class TextFieldViewConverterTest {
     @Test
     public void testRenderString() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        UIForm form = formBuilder.withNumFields(0).withRandomData().build();
-        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.TEXT).build();
-        field.setParent(form);
 
-        // configure the context as the MainController would do
-        CompositeContext gCtx = ContextUtils.createGlobalContext();
-        ExecEnvironment env = new ExecEnvironment(gCtx);
-
-        // get testField renderer
-        ViewRenderHelper renderer = new ViewRenderHelper();
-        View view = renderer.render(ctx, env, field);
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx, true).render();
+        View view = recipe.view;
 
         // Test all different kinds of types
         Class[] clazzez = new Class[]{ByteArray.class, Date.class, String.class, Long.class, Integer.class,
@@ -84,11 +79,11 @@ public class TextFieldViewConverterTest {
         TextFieldViewConverter conv = new TextFieldViewConverter();
         for (Class clazz : clazzez) {
             Object expected = RandomUtils.randomObject(clazz);
-            View inputView = view.findViewWithTag(field.getViewId());
-            conv.setViewValue(inputView, field, expected);
+            View inputView = view.findViewWithTag(recipe.field.getViewId());
+            conv.setViewValue(inputView, recipe.field, expected);
 
             // get the view and check de value is set
-            Object actual = conv.getValueFromView(inputView, field, expected.getClass());
+            Object actual = conv.getValueFromView(inputView, recipe.field, expected.getClass());
             AssertUtils.assertEquals(expected, actual);
         }
     }

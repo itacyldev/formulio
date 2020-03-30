@@ -25,12 +25,15 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class TextFieldViewConverter implements ViewValueConverter {
+public class TextFieldViewConverter implements ViewValueConverter {
     @Override
-    public Object getValueFromView(View view, UIComponent component) {
+    public String getValueFromViewAsString(View view, UIComponent component) {
         EditText inputField = (EditText) view;
-        String viewValue = inputField.getText().toString();
-        return ConvertUtils.convert(viewValue, String.class);
+        String viewValue = "";
+        if (inputField.getText() != null) {
+            viewValue = inputField.getText().toString();
+        }
+        return viewValue;
     }
 
     @Override
@@ -49,5 +52,10 @@ class TextFieldViewConverter implements ViewValueConverter {
         EditText inputField = (EditText) view;
         String textValue = (String) ConvertUtils.convert(value, String.class);
         inputField.setText(textValue);
+    }
+
+    @Override
+    public void setViewValueAsString(View view, UIComponent component, String value) {
+        setViewValue(view, component, value);
     }
 }

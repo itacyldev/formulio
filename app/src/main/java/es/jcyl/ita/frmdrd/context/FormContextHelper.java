@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.validation;
+package es.jcyl.ita.frmdrd.context;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,23 +15,22 @@ package es.jcyl.ita.frmdrd.ui.validation;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
-
 import es.jcyl.ita.crtrepo.context.Context;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-
+import es.jcyl.ita.frmdrd.context.impl.FormContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class RequiredValidator implements Validator {
+public class FormContextHelper {
+    public static void setMessage(FormContext context, String elementId, String message) {
+        // TODO: more than one message
+        Context msgCtx = context.getContext("messages");
+        msgCtx.put("elementId", message);
+    }
 
-    @Override
-    public void validate(Context ctx, UIComponent component, String value) {
-        //TODO: use localize messages
-        String msg = "You have to fill the value.";
-        if (StringUtils.isBlank(value.toString())) {
-            throw new ValidatorException(msg);
-        }
+    public static String getMessage(FormContext context, String elementId) {
+        // TODO: more than one message
+        Context msgCtx = context.getContext("messages");
+        return (String) msgCtx.get("elementId");
     }
 }

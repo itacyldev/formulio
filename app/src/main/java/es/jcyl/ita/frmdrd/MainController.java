@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -69,7 +70,6 @@ public class MainController {
     private MainController() {
         globalContext = new OrderedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
-
         execEnvironment = new ExecEnvironment(globalContext);
     }
 
@@ -152,12 +152,13 @@ public class MainController {
     }
 
     public void doSave() {
-        try{
+        try {
             formController.save();
-        }catch (ValidatorException e){
+        } catch (ValidatorException e) {
             // re-render all the screen
             View newView = renderHelper.render(this.viewContext, this.execEnvironment, formController.getEditView());
-            renderHelper.replaceView(viewRoot, newView);
+            // replace hole view
+            ((FragmentActivity) viewContext).setContentView(newView);
         }
     }
 
@@ -179,9 +180,18 @@ public class MainController {
 
     public void setViewContext(android.content.Context viewContext) {
         this.viewContext = viewContext;
+        this.formController.setViewContext(viewContext);
     }
 
     public void setViewRoot(View viewRoot) {
         this.viewRoot = viewRoot;
+    }
+
+    /**
+     * Test purposes only
+     * @param fc
+     */
+    public void setFormController(FormController fc){
+        this.formController = fc;
     }
 }

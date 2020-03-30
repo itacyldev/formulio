@@ -59,7 +59,7 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
         // set android context and view root to current formController
         mainController.setViewRoot(viewRoot);
         mainController.setViewContext(this);
-        mainController.getFormController().setViewContext(this);
+
     }
 
 

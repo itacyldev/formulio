@@ -27,11 +27,12 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 class SwitcherFieldViewConverter implements ViewValueConverter {
     @Override
-    public Object getValueFromView(View view, UIComponent component) {
+    public String getValueFromViewAsString(View view, UIComponent component) {
         Switch inputField = (Switch) view;
         Boolean viewValue = inputField.isChecked();
-        return ConvertUtils.convert(viewValue, Boolean.class);
+        return viewValue.toString();
     }
+
 
     @Override
     public <T> T getValueFromView(View view, UIComponent component, Class<T> expectedType) {
@@ -47,4 +48,10 @@ class SwitcherFieldViewConverter implements ViewValueConverter {
         Boolean boolValue = (Boolean) ConvertUtils.convert(value, Boolean.class);
         inputField.setChecked(boolValue);
     }
+
+    @Override
+    public void setViewValueAsString(View view, UIComponent component, String value) {
+        setViewValue(view,component, value);
+    }
+
 }

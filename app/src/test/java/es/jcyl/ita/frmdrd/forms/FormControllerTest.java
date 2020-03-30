@@ -83,25 +83,20 @@ public class FormControllerTest {
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
 
-        // configure the context as the MainController would do during navigation
-        CompositeContext gCtx = ContextUtils.createGlobalContextWithParam("entityId", entity.getId());
-        ExecEnvironment env = new ExecEnvironment(gCtx);
-
         // create form using entity meta to define UIFields
         UIForm form = formBuilder.withMeta(meta).withRandomData().build();
-
         // create a mock repository, set to form and load the entity
         EditableRepository mockRepo = mock(EditableRepository.class);
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
-        form.setRepo(mockRepo);
 
-        // load entity using form controller
-        FormController fc = DevFormBuilder.createFormController(form, ctx);
-        fc.load(gCtx);
-
-        // render view to create android view components and viewContext
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
-        renderHelper.render(ctx, env, form);
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx)
+                .withForm(form)
+                .withParam("entityId", entity.getId())
+                .withRepo(mockRepo)
+                .load()
+                .render();
 
         // save expected values to check later
         Map<String, Object> expectedValues = new HashMap<>();
@@ -116,7 +111,8 @@ public class FormControllerTest {
             viewContext.put(propId, expected);
         }
         // execute save and check the repo has been hit with the new values
-        fc.save();
+        recipe.fc.save();
+
         ArgumentCaptor<Entity> argument = ArgumentCaptor.forClass(Entity.class);
         verify(mockRepo).save(argument.capture());
 

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
@@ -39,10 +40,6 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public class TextFieldRenderer extends FieldRenderer {
 
-
-    public TextFieldRenderer() {
-    }
-
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
         LinearLayout linearLayout = (LinearLayout) View.inflate(viewContext,
@@ -63,7 +60,7 @@ public class TextFieldRenderer extends FieldRenderer {
         // get component value and set in view
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
-        setMessages(component, input, env.getFormContext());
+        setMessages(env.getFormContext(), component, input);
 
         final ImageView resetButton = (ImageView) baseView
                 .findViewById(R.id.field_layout_x);
@@ -89,9 +86,9 @@ public class TextFieldRenderer extends FieldRenderer {
         });
     }
 
-    private void setMessages(UIComponent component, EditText input, FormContext formContext) {
-        String message = (String) formContext.getContext("messages").getValue(component.getId());
-        if (message != null){
+    private void setMessages(FormContext formContext, UIComponent component, EditText input) {
+        String message = FormContextHelper.getMessage(formContext, component.getId());
+        if (message != null) {
             input.setError(message);
         }
     }

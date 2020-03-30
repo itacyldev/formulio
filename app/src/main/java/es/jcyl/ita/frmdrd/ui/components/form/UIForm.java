@@ -100,4 +100,9 @@ public class UIForm extends UIComponent {
     public void setEntityId(String entityId) {
         this.entityId = entityId;
     }
+
+    @Override
+    public String toString() {
+        return "Form:" +this.getId();
+    }
 }

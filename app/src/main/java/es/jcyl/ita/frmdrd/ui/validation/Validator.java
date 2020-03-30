@@ -23,5 +23,5 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 public interface Validator {
 
-    void validate(Context ctx, UIComponent component, Object value);
+    void validate(Context ctx, UIComponent component, String value);
 }

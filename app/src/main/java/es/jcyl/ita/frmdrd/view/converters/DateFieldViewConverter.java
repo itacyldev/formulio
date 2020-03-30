@@ -31,10 +31,13 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 class DateFieldViewConverter implements ViewValueConverter {
     @Override
-    public Object getValueFromView(View view, UIComponent component) {
+    public String getValueFromViewAsString(View view, UIComponent component) {
         Button input = (Button) view;
-        String viewValue = input.getText().toString();
-        return ConvertUtils.convert(viewValue, Date.class);
+        String viewValue = "";
+        if (input.getText() != null) {
+            viewValue = input.getText().toString();
+        }
+        return viewValue;
     }
 
     @Override
@@ -53,5 +56,11 @@ class DateFieldViewConverter implements ViewValueConverter {
         Button inputField = (Button) view;
         String textValue = (String) ConvertUtils.convert(value, String.class);
         inputField.setText(textValue);
+    }
+
+    @Override
+    public void setViewValueAsString(View view, UIComponent component, String value) {
+        Button inputField = (Button) view;
+        inputField.setText(value);
     }
 }

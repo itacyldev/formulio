@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 public abstract class UIComponent implements Serializable {
     protected UIComponent root;
@@ -156,6 +155,13 @@ public abstract class UIComponent implements Serializable {
 
     public void setRoot(UIComponent root) {
         this.root = root;
+    }
+
+    public void setChildren(UIComponent[] children) {
+        this.children = new ArrayList<UIComponent>();
+        for (UIComponent c : children) {
+            this.children.add(c);
+        }
     }
 
     public void setChildren(List<UIComponent> children) {

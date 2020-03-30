@@ -26,10 +26,45 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 public interface ViewValueConverter {
 
-    Object getValueFromView(View view, UIComponent component);
+    /**
+     * Used to get value as string to use commons-validation validators and to
+     * save current view state
+     *
+     * @param view
+     * @param component
+     * @return
+     */
+    String getValueFromViewAsString(View view, UIComponent component);
 
+    /**
+     * Retrieves the view value conveted as the given expectecType. This method is used during
+     * the applyData phase to set the entity values from the view.
+     *
+     * @param view
+     * @param component
+     * @param expectedType
+     * @param <T>
+     * @return
+     */
     <T> T getValueFromView(View view, UIComponent component, Class<T> expectedType);
 
+    /**
+     * Sets value in the view using directly the entity property value, letting the component
+     * to convert the value as it needs.
+     *
+     * @param view
+     * @param component
+     * @param value
+     */
     void setViewValue(View view, UIComponent component, Object value);
+
+    /**
+     * Method used to restore view from previous state
+     *
+     * @param view
+     * @param component
+     * @param value
+     */
+    void setViewValueAsString(View view, UIComponent component, String value);
 
 }
