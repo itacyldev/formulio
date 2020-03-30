@@ -28,7 +28,7 @@ public class RequiredValidator implements Validator {
 
     @Override
     public void validate(Context ctx, UIComponent component, Object value) {
-        String msg = "You have to fill the value";
+        String msg = "You have to fill the value.";
         if (value == null) {
             throw new ValidatorException(msg);
         }

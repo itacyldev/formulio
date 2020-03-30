@@ -10,11 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.mini2Dx.beanutils.ConvertUtils;
-
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.render.FieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
@@ -65,7 +63,7 @@ public class TextFieldRenderer extends FieldRenderer {
         // get component value and set in view
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
-        input.setError("This is and example of error.");
+        setMessages(component, input, env.getFormContext());
 
         final ImageView resetButton = (ImageView) baseView
                 .findViewById(R.id.field_layout_x);
@@ -84,12 +82,20 @@ public class TextFieldRenderer extends FieldRenderer {
             @Override
             public void afterTextChanged(Editable editable) {
                 OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
-                if(interceptor !=null){
+                if (interceptor != null) {
                     interceptor.onChange(component);
                 }
             }
         });
     }
+
+    private void setMessages(UIComponent component, EditText input, FormContext formContext) {
+        String message = (String) formContext.getContext("messages").getValue(component.getId());
+        if (message != null){
+            input.setError(message);
+        }
+    }
+
     @Override
     protected <T> T handleNullValue(Object value) {
         return (T) EMPTY_STRING;

@@ -133,7 +133,6 @@ public class MainController {
         }
     }
 
-
     /**
      * Method called from the reactor engine to notify the view which components have to be updated
      */
@@ -146,8 +145,6 @@ public class MainController {
         // re-render view
         View newView = renderHelper.render(this.viewContext, this.execEnvironment, component);
         renderHelper.replaceView(view, newView);
-
-
     }
 
     public void doSave() {
@@ -172,7 +169,5 @@ public class MainController {
 
     public void setViewContext(android.content.Context viewContext) {
         this.viewContext = viewContext;
-
-
     }
 }
