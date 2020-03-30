@@ -1,9 +1,9 @@
 package es.jcyl.ita.frmdrd.builders;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 
@@ -28,21 +28,9 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
         return this;
     }
 
-    public FieldBuilder withRerender(String rerenderStr) {
+    public FieldBuilder withValueExpression(ValueBindingExpression valueExpression) {
 
-        this.baseModel.setReRender(rerenderStr);
-        return this;
-    }
-
-    public FieldBuilder withRerender(UIComponent component) {
-        String rerenderStr = this.baseModel.getReRender();
-        if (StringUtils.isNotEmpty(rerenderStr)) {
-            rerenderStr += "," + component.getId();
-        } else {
-            rerenderStr = component.getId();
-        }
-
-        this.baseModel.setReRender(rerenderStr);
+        this.baseModel.setValueExpression(valueExpression);
         return this;
     }
 

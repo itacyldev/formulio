@@ -25,7 +25,7 @@ public class DAGGeneratorTest {
         DAGGenerator dagGenerator = new DAGGenerator();
 
         Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.createDags(form);
+                dagGenerator.generateDags(form);
 
 
         // Get each field's dag
@@ -67,7 +67,7 @@ public class DAGGeneratorTest {
         DAGGenerator dagGenerator = new DAGGenerator();
 
         Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.createDags(form);
+                dagGenerator.generateDags(form);
     }
 
     private UIForm createForm() {
