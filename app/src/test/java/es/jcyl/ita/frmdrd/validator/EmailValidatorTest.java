@@ -1,4 +1,4 @@
-package validator;
+package es.jcyl.ita.frmdrd.validator;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
