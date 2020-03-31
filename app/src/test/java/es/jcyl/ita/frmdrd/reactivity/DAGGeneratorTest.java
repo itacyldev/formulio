@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.reactivity;
 
+import android.provider.Contacts;
+
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.junit.Assert;
@@ -11,31 +13,36 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 
 public class DAGGeneratorTest {
 
     @Test
     public void createDags() {
-        UIForm form = createForm();
+
+        UIView view = createView();
+
 
         DAGGenerator dagGenerator = new DAGGenerator();
 
         Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.createDags(form);
+                dagGenerator.generateDags(view);
 
 
         // Get each field's dag
-        DirectedAcyclicGraph dag1 = dags.get("field1");
-        DirectedAcyclicGraph dag2 = dags.get("field2");
-        DirectedAcyclicGraph dag3 = dags.get("field3");
-        DirectedAcyclicGraph dag4 = dags.get("field4");
-        DirectedAcyclicGraph dag5 = dags.get("field5");
-        DirectedAcyclicGraph dag6 = dags.get("field6");
-        DirectedAcyclicGraph dag7 = dags.get("field7");
+        DirectedAcyclicGraph dag1 = dags.get("form.field1");
+        DirectedAcyclicGraph dag2 = dags.get("form.field2");
+        DirectedAcyclicGraph dag3 = dags.get("form.field3");
+        DirectedAcyclicGraph dag4 = dags.get("form.field4");
+        DirectedAcyclicGraph dag5 = dags.get("form.field5");
+        DirectedAcyclicGraph dag6 = dags.get("form.field6");
+        DirectedAcyclicGraph dag7 = dags.get("form.field7");
 
 
         Assert.assertEquals(6, dags.size());
@@ -60,82 +67,103 @@ public class DAGGeneratorTest {
 
     }
 
+
     @Test(expected = IllegalArgumentException.class)
     public void createDagWithCycle() {
-        UIForm form = createFormWithCycle();
+        UIView view = createViewWithCycle();
 
         DAGGenerator dagGenerator = new DAGGenerator();
 
         Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.createDags(form);
+                dagGenerator.generateDags(view);
     }
 
-    private UIForm createForm() {
+    private UIView createView() {
+        UIView view = new UIView("view");
+        UIForm form = createForm("form");
+        view.addChild(form);
+
+        return view;
+    }
+
+    private UIView createViewWithCycle() {
+        UIView view = new UIView("view");
+        UIForm form = createFormWithCycle("form");
+        view.addChild(form);
+
+        return view;
+    }
+
+    private UIForm createForm(String formId) {
         FieldBuilder fieldBuilder = new FieldBuilder();
 
         List<UIComponent> fields = new ArrayList<>();
         UIField field1 =
-                fieldBuilder.withId("field1").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 1").withRenderer("field2").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field1").withLabel(
+                        "field 1").build();
         fields.add(field1);
 
+        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+        exprFactory.create("${entity.it_profile}", Long.class);
+        UIField field2 =
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
+                        "field 2").withValueBindingExpression("${form.field1}", String.class).build();
+
         UIField field3 =
-                fieldBuilder.withId("field3").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 3").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field3").withLabel(
+                        "field 3").withValueBindingExpression("${form.field2}", String.class).build();
         fields.add(field3);
 
         UIField field4 =
-                fieldBuilder.withId("field4").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 4").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field4").withLabel(
+                        "field 4").withValueBindingExpression("${form.field2}", String.class).build();
         fields.add(field4);
 
-        UIField field2 =
-                fieldBuilder.withId("field2").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 2").withRenderer(field3).withRenderer(field4).build();
+
         fields.add(field2);
 
         UIField field5 =
-                fieldBuilder.withId("field5").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 5").withRenderer("field6").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field5").withLabel(
+                        "field 5").build();
         fields.add(field5);
 
         UIField field6 =
-                fieldBuilder.withId("field6").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 6").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field6").withLabel(
+                        "field 6").withValueBindingExpression("${form.field5}", String.class).build();
         fields.add(field6);
 
         UIField field7 =
-                fieldBuilder.withId("field7").withFieldType(UIField.TYPE.TEXT).withLabel(
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field7").withLabel(
                         "field 7").build();
         fields.add(field7);
 
         FormBuilder formBuilder = new FormBuilder();
-        formBuilder.withId("form").withChildren(fields).withLabel("Form 1");
+        formBuilder.withId(formId).withChildren(fields);
 
         return formBuilder.build();
     }
 
-    private UIForm createFormWithCycle() {
+    private UIForm createFormWithCycle(String formId) {
         FieldBuilder fieldBuilder = new FieldBuilder();
 
         List<UIComponent> fields = new ArrayList<>();
         UIField field1 =
-                fieldBuilder.withId("field1").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 1").withRenderer("field2").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field1").withLabel(
+                        "field 1").withValueBindingExpression("${form.field3}", String.class).build();
         fields.add(field1);
 
         UIField field2 =
-                fieldBuilder.withId("field2").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 2").withRenderer("field3").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
+                        "field 2").withValueBindingExpression("${form.field1}", String.class).build();
         fields.add(field2);
 
         UIField field3 =
-                fieldBuilder.withId("field3").withFieldType(UIField.TYPE.TEXT).withLabel(
-                        "field 3").withRenderer("field1").build();
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field3").withLabel(
+                        "field 3").withValueBindingExpression("${form.field2}", String.class).build();
         fields.add(field3);
 
         FormBuilder formBuilder = new FormBuilder();
-        formBuilder.withId("form").withChildren(fields).withLabel("Form 1");
+        formBuilder.withId(formId).withChildren(fields);
 
         return formBuilder.build();
     }
