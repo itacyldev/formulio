@@ -34,6 +34,7 @@ import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
@@ -69,6 +70,8 @@ public class MainController {
     private ExecEnvironment execEnvironment;
     private ActionController actionController;
     private FormController formController;
+    // navigation control
+    private Router router;
 
     public static MainController getInstance() {
         if (_instance == null) {
@@ -82,17 +85,9 @@ public class MainController {
         globalContext.addContext(new DateTimeContext("date"));
         actionController = new ActionController();
         execEnvironment = new ExecEnvironment(globalContext, actionController);
+        router = new Router(this);
     }
 
-    public void navigate(android.content.Context context, String formId) {
-        navigate(context, formId, new HashMap<>());
-    }
-
-    public void navigate(android.content.Context context, String viewId, Object entityId) {
-        Map<String, Serializable> params = new HashMap<>();
-        params.put("entityId", (Serializable) entityId);
-        navigate(context, viewId, params);
-    }
 
     /**
      * Implements navigation to a new view
@@ -101,7 +96,7 @@ public class MainController {
      * @param formId:    form configuration to load
      * @param params
      */
-    public void navigate(android.content.Context andContext, String formId,
+    public void navigate(android.content.Context andContext, String formId, String mode,
                          @Nullable Map<String, Serializable> params) {
 
         // remove last view context and create a new one for the starting view
@@ -114,7 +109,11 @@ public class MainController {
         formController.load(globalContext);
 
         // set form view as current
-        uiView = formController.getEditView();
+        if (mode.equalsIgnoreCase("list")) {
+            uiView = formController.getListView();
+        } else {
+            uiView = formController.getEditView();
+        }
 
         // Start activity to get Android context
         final Intent intent = new Intent(andContext, FormEditViewHandlerActivity.class);
@@ -122,14 +121,22 @@ public class MainController {
     }
 
     private FormController retrieveForm(String formId) {
-        return FormConfigHandler.getForm(formId);
+        FormController controller = FormConfigHandler.getForm(formId);
+        if (controller == null) {
+            throw new IllegalStateException(String.format("Invalid formId reference, no Form " +
+                            "configuration found for id [%s]. Available forms in the project: %s.",
+                    formId, FormConfigHandler.getAvailableFormIds()));
+        }
+        return controller;
     }
 
     private CompositeContext prepareViewContext(@Nullable Map<String, Serializable> params) {
         CompositeContext viewCtx = new OrderedCompositeContext();
         viewCtx.setPrefix("view");
         BasicContext pContext = new BasicContext("params");
-        pContext.putAll(params);
+        if(params != null){
+            pContext.putAll(params);
+        }
         viewCtx.addContext(pContext);
         return viewCtx;
     }
@@ -198,6 +205,14 @@ public class MainController {
 
     public ExecEnvironment getExecEnvironment() {
         return execEnvironment;
+    }
+
+    public ActionController getActionController() {
+        return actionController;
+    }
+
+    public Router getRouter() {
+        return router;
     }
 
     /*** TODO: Just For Testing purposes until we setup dagger to Dep. inyection**/

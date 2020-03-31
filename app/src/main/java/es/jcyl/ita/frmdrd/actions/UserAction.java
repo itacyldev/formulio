@@ -15,9 +15,8 @@ package es.jcyl.ita.frmdrd.actions;
  * limitations under the License.
  */
 
-import java.util.Map;
+import android.content.Context;
 
-import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
@@ -25,10 +24,17 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 public class UserAction {
 
+    private android.content.Context viewContext;
     private UIComponent component;
     private ActionType type;
 
     public UserAction(UIComponent component, ActionType actionType) {
+        this.component = component;
+        this.type = actionType;
+    }
+
+    public UserAction(android.content.Context context, UIComponent component, ActionType actionType) {
+        this.viewContext = context;
         this.component = component;
         this.type = actionType;
     }
@@ -39,5 +45,9 @@ public class UserAction {
 
     public ActionType getType() {
         return type;
+    }
+
+    public Context getViewContext() {
+        return this.viewContext;
     }
 }

@@ -166,13 +166,14 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
     public void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views) {
         LinearLayout layout = root.findViewById(R.id.fields_linear_layout);
         for (View view : views) {
-            ((ViewGroup) layout).addView(view);
+            layout.addView(view);
         }
     }
 
     @Override
     public void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root) {
         renderSaveButton(viewContext, env, component, ((ViewGroup) root));
+        renderCancelButton(viewContext, env, component, ((ViewGroup) root));
     }
 
     private void renderSaveButton(Context context, ExecEnvironment env, UIComponent component, ViewGroup parent) {
@@ -181,12 +182,27 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
             @Override
             public void onClick(View view) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                if(interceptor != null){
-                    interceptor.doAction(new UserAction(component, ActionType.SAVE));
+                if (interceptor != null) {
+                    interceptor.doAction(new UserAction(context, component, ActionType.SAVE));
                 }
             }
         });
         saveButton.setText("Save");
+        parent.addView(saveButton);
+    }
+
+    private void renderCancelButton(Context context, ExecEnvironment env, UIComponent component, ViewGroup parent) {
+        Button saveButton = new Button(context);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                if (interceptor != null) {
+                    interceptor.doAction(new UserAction(context, component, ActionType.CANCEL));
+                }
+            }
+        });
+        saveButton.setText("Cancel");
         parent.addView(saveButton);
     }
 }

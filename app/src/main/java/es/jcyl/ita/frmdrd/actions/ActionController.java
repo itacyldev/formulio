@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.actions;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.frmdrd.actions.handlers.BackPressedActionHandler;
 import es.jcyl.ita.frmdrd.actions.handlers.InputChangeActionHandler;
 import es.jcyl.ita.frmdrd.actions.handlers.SaveActionHandler;
 
@@ -32,6 +33,7 @@ public class ActionController {
         // action to handler mapping
         actionMap.put(ActionType.SAVE, new SaveActionHandler());
         actionMap.put(ActionType.INPUT_CHANGE, new InputChangeActionHandler());
+        actionMap.put(ActionType.BACK, new BackPressedActionHandler());
     }
 
     public void doUserAction(UserAction action) {

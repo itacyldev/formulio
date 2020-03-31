@@ -1,7 +1,6 @@
 package es.jcyl.ita.frmdrd.view;
 
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 
@@ -11,6 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.actions.UserAction;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -36,11 +37,7 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
     protected static final Log LOGGER = LogFactory
             .getLog(FormEditViewHandlerActivity.class);
 
-    public static ActionMode actionMode;
-
     protected ContextThemeWrapper themeWrapper;
-
-    private ViewRenderHelper renderHelper = new ViewRenderHelper();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -53,9 +50,14 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
         setContentView(viewRoot);
     }
 
-
     protected void close() {
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MainController mc = MainController.getInstance();
+        mc.getActionController().doUserAction(new UserAction(this,null, ActionType.BACK));
+    }
 }

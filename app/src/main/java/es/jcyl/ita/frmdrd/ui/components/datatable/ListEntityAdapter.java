@@ -10,15 +10,12 @@ import android.widget.TextView;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.frmdrd.NavigationManager;
+import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
@@ -104,11 +101,8 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                NavigationManager navigationManager = new NavigationManager();
-                Map<String, Serializable> params = new HashMap<>();
-                params.put("entityId", "xxxx"); // id of the selected record
-//                params.put("entity", currentEntity);
-                navigationManager.navigate(context, "form2", params);
+                MainController mc = MainController.getInstance();
+                mc.getRouter().navigateEdit(context, "MyForm1", currentEntity.getId());
             }
         });
     }
@@ -124,16 +118,6 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             textView.setText(DataUtils.nullFormat(stringValue));
             index++;
         }
-//
-//        for (int index = 0; index < numberOfColumns; index++) {
-//
-//            String fieldName = columnNames[index].toLowerCase();
-//
-//            TextView textView = (TextView) holder.viewList.get(index);
-//
-//            Object value = entity.getProperties().get(fieldName);
-//            textView.setText(DataUtils.nullFormat(value.toString()));
-//        }
     }
 
     private void createViewsLayout(final ViewHolder holder,

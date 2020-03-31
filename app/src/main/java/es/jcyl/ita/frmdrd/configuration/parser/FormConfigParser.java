@@ -32,7 +32,7 @@ public abstract class FormConfigParser {
      * @param formConfigStr
      * @return the form's ID
      */
-    public abstract String parseFormConfig(String formConfigStr);
+    public abstract void parseFormConfig(String formConfigStr);
 
     protected void loadConfig(FormController form) {
         FormConfigHandler.addForm(form);

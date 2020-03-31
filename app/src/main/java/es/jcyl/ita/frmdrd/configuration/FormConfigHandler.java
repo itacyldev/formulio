@@ -2,9 +2,9 @@ package es.jcyl.ita.frmdrd.configuration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 public class FormConfigHandler {
 
@@ -20,6 +20,10 @@ public class FormConfigHandler {
 
     public static void addForm(FormController form) {
         forms.put(form.getId(), form);
+    }
+
+    public static Set<String> getAvailableFormIds() {
+        return forms.keySet();
     }
 
 }
