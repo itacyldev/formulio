@@ -28,7 +28,6 @@ import es.jcyl.ita.frmdrd.view.InputFieldView;
 public class ViewStateHolder {
 
     private Map<String, String> state = new HashMap<String, String>();
-    private String focusElementId;
 
     public void clear() {
         this.state.clear();
@@ -38,7 +37,7 @@ public class ViewStateHolder {
      * Gets all the inputFields and stores their state in the context "state"
      */
     public void saveState(FormViewContext viewContext) {
-        state.clear();
+        clear();
         for (InputFieldView fieldView : viewContext.getInputFields()) {
             state.put(fieldView.getFieldId(), fieldView.getValueString());
         }
@@ -52,5 +51,6 @@ public class ViewStateHolder {
             String fieldId = fieldView.getFieldId();
             fieldView.setValueString(state.get(fieldId));
         }
+
     }
 }
