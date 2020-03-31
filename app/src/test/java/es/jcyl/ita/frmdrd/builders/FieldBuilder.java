@@ -4,6 +4,7 @@ import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
@@ -48,10 +49,8 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
     }
 
     public FieldBuilder withValueBindingExpression(String expression, Class expectedType) {
-        JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
-        ValueBindingExpression ve  = new ValueBindingExpression(jexlExpr);
-        ve.setExpectedType(expectedType);
-        this.baseModel.setValueExpression(ve);
+        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+        this.baseModel.setValueExpression(exprFactory.create(expression, expectedType));
         return this;
     }
 
@@ -77,10 +76,6 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
         return this;
     }
 
-    public UIField create() {
-        UIField field = new UIField();
-        return field;
-    }
 
     @Override
     protected UIField getModelInstance() {
