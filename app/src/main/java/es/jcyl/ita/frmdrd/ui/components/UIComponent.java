@@ -203,14 +203,6 @@ public abstract class UIComponent implements Serializable {
         this.valueExpression = valueExpression;
     }
 
-    public String getViewId() {
-        String viewId = "";
-        if (this.getParentForm() != null) {
-            viewId = this.getParentForm().getId() + ":";
-        }
-        return viewId + this.id;
-    }
-
     public Object getValue(CompositeContext combinedContext) {
         if (this.valueExpression == null) {
             return null;

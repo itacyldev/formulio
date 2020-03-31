@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -55,5 +57,43 @@ public class ViewHelper {
             }
         }
         return views;
+    }
+
+    public static View findComponentView(View rootView, String formId, String componentId) {
+        // same name rule followed by FileRenderer to tag the BaseView of
+        // the InputFileView: formId:elementId
+        return rootView.findViewWithTag(formId + ":" + componentId);
+    }
+
+    public static List<InputFieldView> findInputFieldViews(ViewGroup root) {
+        List<InputFieldView> views = new ArrayList<>();
+        final int childCount = root.getChildCount();
+
+        for (int i = 0; i < childCount; i++) {
+            final View child = root.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                views.addAll(findInputFieldViews((ViewGroup) child));
+            }
+            if (child instanceof InputFieldView) {
+                views.add((InputFieldView) child);
+            }
+        }
+        return views;
+    }
+
+    public static InputFieldView findInputFieldViewById(View rootView, UIField field) {
+        return findInputFieldViewById(rootView, field.getParentForm().getId(), field.getId());
+    }
+
+    public static InputFieldView findInputFieldViewById(View rootView, String formId, String fieldId) {
+        View view = ViewHelper.findComponentView(rootView, formId, fieldId);
+        if (view == null) {
+            return null;
+        }
+        if (!(view instanceof InputFieldView)) {
+            throw new IllegalArgumentException(String.format("The view element referenced by [%s]" +
+                    " in the form [%s] is not and InputFieldView", formId, fieldId));
+        }
+        return (InputFieldView) view;
     }
 }

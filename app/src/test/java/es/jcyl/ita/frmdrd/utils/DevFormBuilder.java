@@ -25,12 +25,12 @@ import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -62,10 +62,8 @@ public class DevFormBuilder {
         public UIForm form;
         public UIField field;
         public ExecEnvironment env;
-        public FormController fc;
-        public View view;
-        public CompositeContext gCtx;
         public EditableRepository repo;
+        public MainController mc;
 
         public CreateOneFieldForm invoke(android.content.Context ctx) {
             // disable triggers by default
@@ -74,16 +72,12 @@ public class DevFormBuilder {
 
         public CreateOneFieldForm invoke(android.content.Context ctx, boolean disableTriggers) {
             this.ctx = ctx;
-            MainController mainController = MainController.getInstance();
+            mc = MainController.getInstance();
 
             // configure the context as the MainController would do
-            gCtx = mainController.getGlobalContext();
-            env = mainController.getExecEnvironment();
-            if (disableTriggers) {
-                // disable user action handlers during the tests
-                env.setChangeInterceptor(null);
-                env.setSaveFormInterceptor(null);
-            }
+            env = mc.getExecEnvironment();
+            // disable user action handlers during the tests
+            env.disableInterceptors();
 
             // create a one-field form
             form = formBuilder.withNumFields(0).withRandomData().build();
@@ -91,9 +85,9 @@ public class DevFormBuilder {
             // setup field-form relation
             field.setParent(form);
             form.setChildren(new UIComponent[]{field});
-            fc = DevFormBuilder.createFormController(form, ctx);
+            FormController fc = DevFormBuilder.createFormController(form, ctx);
 
-            mainController.setFormController(fc);
+            mc.setFormController(fc, fc.getEditView());
 
             return this;
         }
@@ -103,10 +97,10 @@ public class DevFormBuilder {
             this.form = uiForm;
             this.field = form.getFields().get(0); // link the first field
             this.field.setParentForm(this.form); // make sure field and form are linked
-            fc = DevFormBuilder.createFormController(form, ctx);
+            FormController fc = DevFormBuilder.createFormController(form, ctx);
 
             MainController mainController = MainController.getInstance();
-            mainController.setFormController(fc);
+            mc.setFormController(fc, fc.getEditView());
             return this;
         }
 
@@ -127,10 +121,10 @@ public class DevFormBuilder {
          * @return
          */
         public CreateOneFieldForm withParam(String param, Object value) {
-            gCtx.removeContext("params");
+            mc.getGlobalContext().removeContext("params");
             BasicContext bc = new BasicContext("params");
             bc.put(param, value);
-            gCtx.addContext(bc);
+            mc.getGlobalContext().addContext(bc);
             return this;
         }
 
@@ -147,15 +141,14 @@ public class DevFormBuilder {
                 throw new IllegalStateException("Call withRepo(repo) before you call the load method.");
             }
             // load entity using form controller
-            fc.load(gCtx);
+            mc.getFormController().load(mc.getGlobalContext());
             return this;
         }
 
         public CreateOneFieldForm render() {
             checkInvokeHasBeenCalled();
             // render the form to setup the viewContext
-            ViewRenderHelper renderer = new ViewRenderHelper();
-            view = renderer.render(ctx, env, form);
+            mc.renderView(ctx);
             return this;
         }
 

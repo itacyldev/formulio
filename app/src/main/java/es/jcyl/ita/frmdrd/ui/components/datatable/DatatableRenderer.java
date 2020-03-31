@@ -6,14 +6,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).

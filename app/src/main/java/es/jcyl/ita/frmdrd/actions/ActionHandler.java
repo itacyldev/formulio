@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context;
+package es.jcyl.ita.frmdrd.actions;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,23 +15,12 @@ package es.jcyl.ita.frmdrd.context;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.context.Context;
-import es.jcyl.ita.frmdrd.context.impl.FormContext;
+import es.jcyl.ita.frmdrd.actions.UserAction;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormContextHelper {
+public interface ActionHandler {
 
-    public static void setMessage(FormContext context, String elementId, String message) {
-        // TODO: more than one message
-        Context msgCtx = context.getContext("messages");
-        msgCtx.put(elementId, message);
-    }
-
-    public static String getMessage(FormContext context, String elementId) {
-        // TODO: more than one message
-        Context msgCtx = context.getContext("messages");
-        return (String) msgCtx.get(elementId);
-    }
+    void handle(UserAction action);
 }

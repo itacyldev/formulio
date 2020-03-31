@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.actions;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,22 +15,10 @@ package es.jcyl.ita.frmdrd.render;
  * limitations under the License.
  */
 
-import android.content.Context;
-import android.view.View;
-
-
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public enum ActionType {
 
-public interface GroupRenderer {
-
-    void initGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
-
-    void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views);
-
-    void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
-
+    SAVE, CANCEL, INPUT_CHANGE, NAVIGATE, BACK
 }

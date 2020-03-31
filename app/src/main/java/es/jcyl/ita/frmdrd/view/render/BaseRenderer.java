@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -19,12 +19,15 @@ import android.content.Context;
 import android.view.View;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public abstract class BaseRenderer implements Renderer {
+
+    protected ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     public final View render(Context viewContext, ExecEnvironment env, UIComponent component) {
         View baseView = createBaseView(viewContext, env, component);
@@ -60,6 +63,13 @@ public abstract class BaseRenderer implements Renderer {
 
     protected abstract void setupView(View baseView, ExecEnvironment env, UIComponent component);
 
+    /**
+     * Default method to set focus on the base view of the element
+     * @param viewContext
+     * @param component
+     */
+//    @Override
+    public void setFocus(Context viewContext, UIComponent component) {
 
-
+    }
 }

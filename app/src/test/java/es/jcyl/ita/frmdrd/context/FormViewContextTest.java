@@ -17,6 +17,7 @@ package es.jcyl.ita.frmdrd.context;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -29,7 +30,8 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
@@ -60,7 +62,7 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextUtils.createGlobalContext();
-        ExecEnvironment env = new ExecEnvironment(gCtx);
+        ExecEnvironment env = new ExecEnvironment(gCtx, null);
 
         // render view to create android view components
         View formView = renderHelper.render(ctx, env, form);
@@ -91,7 +93,7 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextUtils.createGlobalContext();
-        ExecEnvironment env = new ExecEnvironment(gCtx);
+        ExecEnvironment env = new ExecEnvironment(gCtx, null);
 
         // render view to create android view components
         View formView = renderHelper.render(ctx, env, form);
@@ -106,11 +108,12 @@ public class FormViewContextTest {
             fvContext.put(c.getId(), expected);
 
             // access the value from the view element
-            View v = formView.findViewWithTag(c.getViewId());
+            InputFieldView baseView = fvContext.findInputFieldViewById(c.getId());
 
             // use a viewConverter to get the value from android view element
-            ViewValueConverter converter = this.convFactory.get(c);
-            String actual = converter.getValueFromView(v, c, String.class);
+            View v = baseView.getInputView();
+            ViewValueConverter<TextView> converter = this.convFactory.get(c);
+            String actual = converter.getValueFromView((TextView) v, String.class);
 
             // do they match?
             Assert.assertEquals(expected, actual);

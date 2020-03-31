@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     @Override
     public void onListFragmentInteraction(FormController form) {
         NavigationManager navigationManager = new NavigationManager();
-        Integer entityId = 1157;
+        Integer entityId = null;//1157;
         MainController.getInstance().navigate(this, form.getId(), entityId);
     }
 

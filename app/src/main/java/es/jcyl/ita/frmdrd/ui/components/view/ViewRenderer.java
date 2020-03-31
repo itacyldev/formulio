@@ -5,10 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.render.GroupRenderer;
+import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).

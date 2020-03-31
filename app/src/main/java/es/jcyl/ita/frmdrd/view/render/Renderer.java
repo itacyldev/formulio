@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,33 +15,18 @@ package es.jcyl.ita.frmdrd.render;
  * limitations under the License.
  */
 
-import org.mini2Dx.beanutils.ConvertUtils;
+import android.content.Context;
+import android.view.View;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class FieldRenderer extends BaseRenderer {
 
-    protected static final Object EMPTY_STRING = "";
+public interface Renderer {
 
-    /**
-     * Tries to retrieve the component value first accessing the form context and then using
-     * global context
-     *
-     * @param component
-     * @param env
-     * @return
-     */
-    protected <T> T getValue(UIComponent component, ExecEnvironment env, Class<T> clazz) {
-        Object value = component.getValue(env.getCombinedContext());
-        if (value == null) {
-            return handleNullValue(value);
-        }
-        return (T) ConvertUtils.convert(value, clazz);
-    }
+    View render (Context viewContext, ExecEnvironment env, UIComponent component);
 
-    protected abstract <T> T handleNullValue(Object value);
-
+//    void setFocus(Context viewContext, UIComponent component);
 }

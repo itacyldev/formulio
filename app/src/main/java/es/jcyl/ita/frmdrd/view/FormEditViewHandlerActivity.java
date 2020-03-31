@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -43,23 +42,15 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
 
     private ViewRenderHelper renderHelper = new ViewRenderHelper();
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.themeWrapper = new ContextThemeWrapper(this,
                 android.R.style.Theme_Holo_Dialog);
 
-        MainController mainController = MainController.getInstance();
-        UIComponent root = mainController.getViewRoot();
-        // render the view and set it to current Activity
-        View viewRoot = renderHelper.render(this, mainController.getExecEnvironment(), root);
+        MainController mc = MainController.getInstance();
+        View viewRoot = mc.renderView(this);
         setContentView(viewRoot);
-
-        // set android context and view root to current formController
-        mainController.setViewRoot(viewRoot);
-        mainController.setViewContext(this);
-
     }
 
 

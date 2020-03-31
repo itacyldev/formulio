@@ -19,10 +19,10 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
-import es.jcyl.ita.frmdrd.render.GroupRenderer;
-import es.jcyl.ita.frmdrd.render.Renderer;
-import es.jcyl.ita.frmdrd.render.RendererFactory;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
+import es.jcyl.ita.frmdrd.view.render.Renderer;
+import es.jcyl.ita.frmdrd.view.render.RendererFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
@@ -76,5 +76,10 @@ public class ViewRenderHelper {
         int index = parent.indexOfChild(view1);
         parent.removeView(view1);
         parent.addView(view2, index);
+    }
+
+    public void setFocus(UIComponent component, View newView) {
+        String rendererType = component.getRendererType();
+        Renderer renderer = this.getRenderer(rendererType);
     }
 }

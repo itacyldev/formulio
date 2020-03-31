@@ -3,9 +3,11 @@ package es.jcyl.ita.frmdrd.context.impl;
 import android.view.View;
 
 import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -38,7 +40,10 @@ public class FormContext extends OrderedCompositeContext {
 
     public FormContext(UIForm form) {
         this.form = form;
+        // component messages
         this.addContext(new BasicContext("messages"));
+        // view state
+        this.addContext(new BasicContext("state"));
     }
 
     public UIForm getForm() {
@@ -61,6 +66,10 @@ public class FormContext extends OrderedCompositeContext {
         this.getContext("messages").clear();
     }
 
+    public void clearMessages(String elementId) {
+        this.getContext("messages").remove(elementId);
+    }
+
     public Entity getEntity() {
         return entity;
     }
@@ -76,4 +85,5 @@ public class FormContext extends OrderedCompositeContext {
     public EntityContext getEntityContext() {
         return entityContext;
     }
+
 }

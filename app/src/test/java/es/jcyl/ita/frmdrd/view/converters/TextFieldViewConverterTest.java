@@ -17,6 +17,8 @@ package es.jcyl.ita.frmdrd.view.converters;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -35,6 +37,8 @@ import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -62,22 +66,25 @@ public class TextFieldViewConverterTest {
 
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
-        View view = recipe.view;
+        View view = recipe.mc.getViewRoot();
 
         // Test all different kinds of types
         Class[] clazzez = new Class[]{ByteArray.class, Date.class, String.class, Long.class, Integer.class,
                 Float.class, Double.class, Boolean.class,
                 Geometry.class};
 
-        TextFieldViewConverter conv = new TextFieldViewConverter();
+        TextViewConverter conv = new TextViewConverter();
         for (Class clazz : clazzez) {
             Object expected = RandomUtils.randomObject(clazz);
-            View inputView = view.findViewWithTag(recipe.field.getViewId());
-            conv.setViewValue(inputView, recipe.field, expected);
+            // retrieve the android view element and set value using the converter
+            InputFieldView baseView = ViewHelper.findInputFieldViewById(view, recipe.field);
+            TextView inputView = (TextView) baseView.getInputView();
+            conv.setViewValue(inputView, expected);
 
             // get the view and check de value is set
-            Object actual = conv.getValueFromView(inputView, recipe.field, expected.getClass());
+            Object actual = conv.getValueFromView(inputView, expected.getClass());
             AssertUtils.assertEquals(expected, actual);
         }
+
     }
 }

@@ -6,14 +6,14 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import org.mini2Dx.beanutils.ConvertUtils;
-
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
-import es.jcyl.ita.frmdrd.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -37,11 +37,18 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public class CheckBoxFieldRenderer extends FieldRenderer {
 
-
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
-        return View.inflate(viewContext,
+//        InputFieldView fieldView = new InputFieldView(viewContext);
+//        fieldView.setConverter(convFactory.get(component));
+//        fieldView.setTag(getBaseViewTag(component));
+
+        View baseView = View.inflate(viewContext,
                 R.layout.tool_alphaedit_boolean, null);
+//        fieldView.addView(view);
+//        return fieldView;
+
+        return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
@@ -51,19 +58,20 @@ public class CheckBoxFieldRenderer extends FieldRenderer {
         fieldLabel.setTag("label");
         final Switch input = baseView
                 .findViewById(R.id.field_layout_value);
-        input.setTag(component.getViewId());
+        input.setTag(getInputTag(component));
 
         // get component value and set in view
         Boolean boolValue = getValue(component, env, Boolean.class);
         input.setChecked(boolValue);
+        ((InputFieldView) baseView).setInputView(input);
 
         input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
-                OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.onChange(component);
+                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE));
                 }
             }
         });

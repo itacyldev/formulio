@@ -17,10 +17,8 @@ import java.util.Set;
 import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.ViewConfigException;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -45,11 +43,8 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
  */
 
 public class FormViewContext extends AbstractBaseContext {
-    View view;
-    UIForm form;
-
-    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
-    private Set<String> keyset;
+    private final View view; // Form's Android view root
+    private final UIForm form;
 
     public FormViewContext(UIForm form, View formView) {
         this.setPrefix("view");
@@ -60,16 +55,14 @@ public class FormViewContext extends AbstractBaseContext {
     /**
      * Locates a form element by its id
      *
-     * @param componentId
+     * @param fieldId
      * @return
      */
-    public View findComponentView(String componentId) {
-        String formId = this.form.getId();
-        if (!componentId.startsWith(formId)) {
-            componentId = formId + ":" + componentId;
-        }
-        return this.view.findViewWithTag(componentId);
+    public InputFieldView findInputFieldViewById(String fieldId) {
+        return ViewHelper.findInputFieldViewById(this.view, this.form.getId(), fieldId);
     }
+
+
 
     /**
      * Access the component value as string, without applying the conversion using the
@@ -80,53 +73,38 @@ public class FormViewContext extends AbstractBaseContext {
      */
     @Override
     public String getString(String elementId) {
-        View view = findComponentView(elementId);
+        InputFieldView fieldView = findInputFieldViewById(elementId);
         if (view == null) {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
-        // get related component to get expected Class type
-        UIComponent component = form.getElement(elementId);
-        if (component == null) {
-            throw new IllegalArgumentException(String.format("The component id provided [%s] " +
-                    "doesn't exists in the form [%s].", elementId, form.getId()));
-        }
-        ViewValueConverter converter = this.convFactory.get(component);
-        return converter.getValueFromViewAsString(view, component);
+        return fieldView.getValueString();
     }
 
     @Override
     public Object getValue(String elementId) {
-        View view = findComponentView(elementId);
+        InputFieldView fieldView = findInputFieldViewById(elementId);
         if (view == null) {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
-        // get related component to get expected Class type
         UIComponent component = form.getElement(elementId);
         if (component == null) {
             throw new IllegalArgumentException(String.format("The component id provided [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
-        ViewValueConverter converter = this.convFactory.get(component);
-        if (converter == null) {
-            throw new ViewConfigException("No converter found for the component " + component.getClass());
-        }
-        if (component.getValueExpression() == null) {
-            throw new ViewConfigException(String.format("The component [%s] doesn't have a ValueBindingExpression defined.", component.getId()));
-        }
         // get the expected type from the EntityMeta through the binding expression
         Class expType = component.getValueExpression().getExpectedType();
         if (expType == null) {
-            return converter.getValueFromViewAsString(view, component);
+            return fieldView.getValueString();
         } else {
-            return converter.getValueFromView(view, component, expType);
+            return fieldView.getValue(expType);
         }
     }
 
     @Override
     public int size() {
-        return 0;
+        return keySet().size();
     }
 
     @Override
@@ -136,7 +114,7 @@ public class FormViewContext extends AbstractBaseContext {
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        return findComponentView(o.toString()) != null;
+        return ViewHelper.findComponentView(this.view, this.form.getId(), o.toString()) != null;
     }
 
     @Override
@@ -153,10 +131,8 @@ public class FormViewContext extends AbstractBaseContext {
     @Nullable
     @Override
     public Object put(String elementId, Object value) {
-        View view = findComponentView(elementId);
-        UIComponent component = form.getElement(elementId);
-        ViewValueConverter converter = this.convFactory.get(component);
-        converter.setViewValue(view, component, value);
+        InputFieldView viewField = findInputFieldViewById(elementId);
+        viewField.setValue(value);
         return null; // don't return previous value
     }
 
@@ -176,13 +152,22 @@ public class FormViewContext extends AbstractBaseContext {
         throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
+    public List<InputFieldView> getInputFields(){
+//        if(this.inputFields == null){
+//            this.inputFields = ViewHelper.findInputFieldViews((ViewGroup) this.view);
+//        } // do not store the view elements, the view can change during re-rendering
+        return ViewHelper.findInputFieldViews((ViewGroup) this.view);
+    }
+
     @NonNull
     @Override
     public Set<String> keySet() {
-        if (this.keyset == null) {
-            this.keyset = ViewHelper.getViewsWithTag((ViewGroup) this.view);
+        // get input ids
+        Set<String> keys = new HashSet<>();
+        for(InputFieldView input: this.getInputFields()){
+            keys.add(input.getFieldId());
         }
-        return keyset;
+        return keys;
     }
 
     @NonNull
@@ -200,10 +185,6 @@ public class FormViewContext extends AbstractBaseContext {
     public Set<Entry<String, Object>> entrySet() {
         Set<Entry<String, Object>> entries = new HashSet<>();
         for (String key : keySet()) {
-            if (key.contains(":")) {
-                // keep the field id
-                key = key.substring(key.indexOf(":") + 1);
-            }
             entries.add(new AbstractMap.SimpleEntry<String, Object>(key, this.getValue(key)));
         }
         return entries;

@@ -41,12 +41,11 @@ import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -83,7 +82,7 @@ public class FormContextTest {
 
         // configure the context as the MainController would do during navigation
         CompositeContext gCtx = ContextUtils.createGlobalContextWithParam("entityId", entity.getId());
-        ExecEnvironment env = new ExecEnvironment(gCtx);
+        ExecEnvironment env = new ExecEnvironment(gCtx, null);
 
         // create form using entity meta to define UIFields
         UIForm form = formBuilder.withMeta(meta).withRandomData().build();
@@ -132,7 +131,7 @@ public class FormContextTest {
 
         // configure the context as the MainController would do
         CompositeContext gCtx = ContextUtils.createGlobalContextWithParam("entityId", entity.getId());
-        ExecEnvironment env = new ExecEnvironment(gCtx);
+        ExecEnvironment env = new ExecEnvironment(gCtx, null);
 
         // create a mock repository, set to form and load the entity
         EditableRepository mockRepo = mock(EditableRepository.class);

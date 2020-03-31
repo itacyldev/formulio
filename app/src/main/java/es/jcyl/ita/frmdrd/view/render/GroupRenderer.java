@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context;
+package es.jcyl.ita.frmdrd.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,23 +15,22 @@ package es.jcyl.ita.frmdrd.context;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.context.Context;
-import es.jcyl.ita.frmdrd.context.impl.FormContext;
+import android.content.Context;
+import android.view.View;
+
+
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormContextHelper {
 
-    public static void setMessage(FormContext context, String elementId, String message) {
-        // TODO: more than one message
-        Context msgCtx = context.getContext("messages");
-        msgCtx.put(elementId, message);
-    }
+public interface GroupRenderer {
 
-    public static String getMessage(FormContext context, String elementId) {
-        // TODO: more than one message
-        Context msgCtx = context.getContext("messages");
-        return (String) msgCtx.get(elementId);
-    }
+    void initGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
+
+    void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views);
+
+    void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
+
 }

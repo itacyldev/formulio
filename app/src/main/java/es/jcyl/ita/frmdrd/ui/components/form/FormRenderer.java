@@ -7,12 +7,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.interceptors.OnSaveFormInterceptor;
-import es.jcyl.ita.frmdrd.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.render.GroupRenderer;
+import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -179,9 +180,9 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnSaveFormInterceptor interceptor = env.getSaveFormInterceptor();
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if(interceptor != null){
-                    interceptor.onChange(component);
+                    interceptor.doAction(new UserAction(component, ActionType.SAVE));
                 }
             }
         });

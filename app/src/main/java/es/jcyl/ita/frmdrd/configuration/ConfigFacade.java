@@ -15,14 +15,8 @@ package es.jcyl.ita.frmdrd.configuration;
  * limitations under the License.
  */
 
-import org.mini2Dx.beanutils.ConvertUtils;
-
-import java.util.Date;
-
 import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
-import es.jcyl.ita.frmdrd.converters.CustomDateConverter;
-import es.jcyl.ita.frmdrd.repo.RepositoryProjectConfReader;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

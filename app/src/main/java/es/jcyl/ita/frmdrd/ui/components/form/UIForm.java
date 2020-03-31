@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
+import es.jcyl.ita.frmdrd.context.impl.ViewStateHolder;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
@@ -13,7 +13,7 @@ import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 public class UIForm extends UIComponent {
 
     private FormContext context;
-
+    private final ViewStateHolder memento;
     private EditableRepository repo;
     private String entityId = "params.entityId";
     private List<UIField> fields;
@@ -23,6 +23,7 @@ public class UIForm extends UIComponent {
         this.setRendererType("form");
         this.setRenderChildren(true);
         this.context = new FormContext(this);
+        this.memento = new ViewStateHolder();
     }
 
     /**
@@ -103,6 +104,14 @@ public class UIForm extends UIComponent {
 
     @Override
     public String toString() {
-        return "Form:" +this.getId();
+        return "Form:" + this.getId();
+    }
+
+    public void saveViewState() {
+        memento.saveState(this.getContext().getViewContext());
+    }
+
+    public void restoreViewState() {
+        memento.restoreState(this.getContext().getViewContext());
     }
 }

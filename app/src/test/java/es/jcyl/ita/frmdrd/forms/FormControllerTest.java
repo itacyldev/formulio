@@ -33,7 +33,6 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
-import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
@@ -41,11 +40,8 @@ import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
-import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 import static org.mockito.Mockito.mock;
@@ -111,7 +107,7 @@ public class FormControllerTest {
             viewContext.put(propId, expected);
         }
         // execute save and check the repo has been hit with the new values
-        recipe.fc.save();
+        recipe.mc.getFormController().save();
 
         ArgumentCaptor<Entity> argument = ArgumentCaptor.forClass(Entity.class);
         verify(mockRepo).save(argument.capture());

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/field_layout_layout"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingBottom="10dp"
-              android:paddingLeft="20dp"
-              android:paddingRight="20dp"
-              android:paddingTop="10dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/field_layout_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/field_layout_name"
@@ -17,7 +17,7 @@
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"
         android:textColor="#fff"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <Switch
         android:id="@+id/field_layout_value"
@@ -26,6 +26,6 @@
         android:clickable="true"
         android:textColor="#fff"
         android:textOff="No"
-        android:textOn="Si"/>
+        android:textOn="Si" />
 
 </LinearLayout>

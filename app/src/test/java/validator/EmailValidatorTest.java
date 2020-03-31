@@ -64,7 +64,7 @@ public class EmailValidatorTest {
         formViewContext.put(recipe.field.getId(), "");
 
         // execute validation
-        recipe.fc.validate(recipe.form.getContext(), recipe.field);
+        recipe.mc.getFormController().validate(recipe.field);
 
         // assert there's a message in the context for this field
         Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
@@ -84,7 +84,7 @@ public class EmailValidatorTest {
         formViewContext.put(recipe.field.getId(), "myemil@subdomain.domain.org");
 
         // execute validation
-        recipe.fc.validate(recipe.form.getContext(), recipe.field);
+        recipe.mc.getFormController().validate(recipe.field);
 
         // assert there's a message in the context for this field
         Assert.assertNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
@@ -105,7 +105,7 @@ public class EmailValidatorTest {
         formViewContext.put(recipe.field.getId(), "myemil-subdomain.domain.org");
 
         // execute validation
-        recipe.fc.validate(recipe.form.getContext(), recipe.field);
+        recipe.mc.getFormController().validate(recipe.field);
 
         // assert there's a message in the context for this field
         Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));

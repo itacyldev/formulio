@@ -15,7 +15,6 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
-import android.view.View;
 import android.widget.Switch;
 
 import org.mini2Dx.beanutils.ConvertUtils;
@@ -25,33 +24,32 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class SwitcherFieldViewConverter implements ViewValueConverter {
+class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
+
     @Override
-    public String getValueFromViewAsString(View view, UIComponent component) {
+    public String getValueFromViewAsString(Switch view) {
         Switch inputField = (Switch) view;
         Boolean viewValue = inputField.isChecked();
         return viewValue.toString();
     }
 
-
     @Override
-    public <T> T getValueFromView(View view, UIComponent component, Class<T> expectedType) {
+    public <C> C getValueFromView(Switch view,  Class<C> expectedType) {
         Switch inputField = (Switch) view;
         Boolean viewValue = inputField.isChecked();
         Object o = ConvertUtils.convert(viewValue, expectedType);
-        return (T) o;
+        return (C) o;
     }
 
     @Override
-    public void setViewValue(View view, UIComponent component, Object value) {
+    public void setViewValue(Switch view, Object value) {
         Switch inputField = (Switch) view;
         Boolean boolValue = (Boolean) ConvertUtils.convert(value, Boolean.class);
         inputField.setChecked(boolValue);
     }
 
     @Override
-    public void setViewValueAsString(View view, UIComponent component, String value) {
-        setViewValue(view,component, value);
+    public void setViewValueAsString(Switch view, String value) {
+        setViewValue(view, value);
     }
-
 }

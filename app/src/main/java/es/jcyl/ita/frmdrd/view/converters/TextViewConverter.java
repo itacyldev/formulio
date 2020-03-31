@@ -15,52 +15,46 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.util.Date;
-
-import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Class to
  */
-class DateFieldViewConverter implements ViewValueConverter {
+public class TextViewConverter implements ViewValueConverter<TextView> {
     @Override
-    public String getValueFromViewAsString(View view, UIComponent component) {
-        Button input = (Button) view;
+    public String getValueFromViewAsString(TextView view) {
         String viewValue = "";
-        if (input.getText() != null) {
-            viewValue = input.getText().toString();
+        if (view.getText() != null) {
+            viewValue = view.getText().toString();
         }
         return viewValue;
     }
 
     @Override
-    public <T> T getValueFromView(View view, UIComponent component, Class<T> expectedType) {
-        Button input = (Button) view;
+    public <C> C getValueFromView(TextView view, Class<C> expectedType) {
         String viewValue = "";
-        if (input.getText() != null) {
-            viewValue = input.getText().toString();
+        if (view.getText() != null) {
+            viewValue = view.getText().toString();
         }
         Object o = ConvertUtils.convert(viewValue, expectedType);
-        return (T) o;
+        return (C) o;
     }
 
+
     @Override
-    public void setViewValue(View view, UIComponent component, Object value) {
-        Button inputField = (Button) view;
+    public void setViewValue(TextView view, Object value) {
         String textValue = (String) ConvertUtils.convert(value, String.class);
-        inputField.setText(textValue);
+        view.setText(textValue);
     }
 
     @Override
-    public void setViewValueAsString(View view, UIComponent component, String value) {
-        Button inputField = (Button) view;
-        inputField.setText(value);
+    public void setViewValueAsString(TextView view, String value) {
+        setViewValue(view, value);
     }
 }

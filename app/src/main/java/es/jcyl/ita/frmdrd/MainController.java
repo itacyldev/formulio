@@ -16,11 +16,11 @@ package es.jcyl.ita.frmdrd;
  */
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -29,36 +29,46 @@ import java.util.Map;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.validation.ValidatorException;
 import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Controls navigation between forms and the main loading and rendering flow.
+ * <p>
+ * Shares the context, AndroidContext and current components and view data with action handlers
+ * to implement user actions.
  */
 
 public class MainController {
 
     private static MainController _instance;
-    // configuration componentes and android components
-    private UIView uiView;
-    private View viewRoot;
-    // android context and formContext
+    // Android context and view
     private android.content.Context viewContext;
+    private View viewRoot;
+
+    // Global context and root component
     private CompositeContext globalContext;
-    // current form controller
-    private FormController formController;
+    private UIView uiView;
+
+    // helper to render the uiView in an Android Context
     private ViewRenderHelper renderHelper = new ViewRenderHelper();
+
+    // user action management
     private ExecEnvironment execEnvironment;
+    private ActionController actionController;
+    private FormController formController;
 
     public static MainController getInstance() {
         if (_instance == null) {
@@ -70,7 +80,8 @@ public class MainController {
     private MainController() {
         globalContext = new OrderedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
-        execEnvironment = new ExecEnvironment(globalContext);
+        actionController = new ActionController();
+        execEnvironment = new ExecEnvironment(globalContext, actionController);
     }
 
     public void navigate(android.content.Context context, String formId) {
@@ -81,7 +92,6 @@ public class MainController {
         Map<String, Serializable> params = new HashMap<>();
         params.put("entityId", (Serializable) entityId);
         navigate(context, viewId, params);
-        // new Execution environmnent
     }
 
     /**
@@ -105,7 +115,8 @@ public class MainController {
 
         // set form view as current
         uiView = formController.getEditView();
-        // Start activity
+
+        // Start activity to get Android context
         final Intent intent = new Intent(andContext, FormEditViewHandlerActivity.class);
         andContext.startActivity(intent);
     }
@@ -124,17 +135,15 @@ public class MainController {
     }
 
     /**
-     * Updates the entity property linked with the component.
-     * If a validation error occurs the component view is re-rendered
+     * Renders current view in the given Android context and returns the generated View
      *
-     * @param component
+     * @param viewContext: Android context
+     * @return
      */
-    public void doUserAction(UIComponent component) {
-        try {
-            formController.updateField((UIField) component);
-        } catch (ValidatorException e) {
-            updateView(component);
-        }
+    public View renderView(Context viewContext) {
+        setViewContext(viewContext);
+        this.viewRoot = renderHelper.render(viewContext, execEnvironment, this.uiView);
+        return this.viewRoot;
     }
 
     /**
@@ -145,52 +154,56 @@ public class MainController {
         UIForm form = component.getParentForm();
         // find view using viewContext
         FormViewContext viewContext = form.getContext().getViewContext();
-        View view = viewContext.findComponentView(component.getId());
+
+        InputFieldView fieldView = viewContext.findInputFieldViewById(component.getId());
+        // render the new Android view for the component and replace it
         View newView = renderHelper.render(this.viewContext, this.execEnvironment, component);
-        renderHelper.replaceView(view, newView);
+        renderHelper.replaceView(fieldView, newView);
     }
 
-    public void doSave() {
-        try {
-            formController.save();
-        } catch (ValidatorException e) {
-            // re-render all the screen
-            View newView = renderHelper.render(this.viewContext, this.execEnvironment, formController.getEditView());
-            // replace hole view
-            ((FragmentActivity) viewContext).setContentView(newView);
-        }
+
+    private void setViewContext(android.content.Context viewContext) {
+        this.viewContext = viewContext;
+        this.formController.setViewContext(viewContext);
     }
 
-    public UIView getViewRoot() {
-        return uiView;
+    /*********************************************/
+    /***  GETTERS TO ACCESS SHARED INFORMATION */
+    /*********************************************/
+
+
+    public Context getViewContext() {
+        return viewContext;
+    }
+
+    public View getViewRoot() {
+        return viewRoot;
     }
 
     public CompositeContext getGlobalContext() {
         return globalContext;
     }
 
+    public UIView getUiView() {
+        return uiView;
+    }
+
     public FormController getFormController() {
         return formController;
+    }
+
+    public ViewRenderHelper getRenderHelper() {
+        return renderHelper;
     }
 
     public ExecEnvironment getExecEnvironment() {
         return execEnvironment;
     }
 
-    public void setViewContext(android.content.Context viewContext) {
-        this.viewContext = viewContext;
-        this.formController.setViewContext(viewContext);
-    }
-
-    public void setViewRoot(View viewRoot) {
-        this.viewRoot = viewRoot;
-    }
-
-    /**
-     * Test purposes only
-     * @param fc
-     */
-    public void setFormController(FormController fc){
+    /*** TODO: Just For Testing purposes until we setup dagger to Dep. inyection**/
+    public void setFormController(FormController fc, UIView view) {
         this.formController = fc;
+        this.uiView = view;
     }
+
 }

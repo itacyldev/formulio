@@ -11,11 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.render.ExecEnvironment;
-import es.jcyl.ita.frmdrd.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
@@ -40,11 +43,12 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public class TextFieldRenderer extends FieldRenderer {
 
+
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
-        LinearLayout linearLayout = (LinearLayout) View.inflate(viewContext,
+       LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
                 R.layout.tool_alphaedit_text, null);
-        return linearLayout;
+        return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
@@ -55,12 +59,13 @@ public class TextFieldRenderer extends FieldRenderer {
         fieldLabel.setTag("label");
         final EditText input = (EditText) baseView
                 .findViewById(R.id.field_layout_value);
-        input.setTag(component.getViewId());
+        input.setTag(getInputTag(component));
 
         // get component value and set in view
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
         setMessages(env.getFormContext(), component, input);
+        ((InputFieldView) baseView).setInputView(input);
 
         final ImageView resetButton = (ImageView) baseView
                 .findViewById(R.id.field_layout_x);
@@ -78,9 +83,9 @@ public class TextFieldRenderer extends FieldRenderer {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                OnChangeFieldInterceptor interceptor = env.getChangeInterceptor();
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.onChange(component);
+                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE));
                 }
             }
         });

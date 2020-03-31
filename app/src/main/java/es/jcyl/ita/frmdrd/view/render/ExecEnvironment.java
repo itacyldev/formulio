@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -22,9 +22,9 @@ package es.jcyl.ita.frmdrd.render;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.frmdrd.actions.ActionController;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.interceptors.OnChangeFieldInterceptor;
-import es.jcyl.ita.frmdrd.interceptors.OnSaveFormInterceptor;
 
 /**
  * Provides a common access to objects that have to be bound to view components during the
@@ -34,12 +34,34 @@ public class ExecEnvironment {
 
     Context globalContext;
     FormContext formContext;
-    private OnChangeFieldInterceptor changeInterceptor = new OnChangeFieldInterceptor();
-    private OnSaveFormInterceptor saveFormInterceptor = new OnSaveFormInterceptor();
+    private ViewUserActionInterceptor userActionInterceptor;
 
-    public ExecEnvironment(Context globalContext) {
+
+    public ExecEnvironment(Context globalContext, ActionController actionController) {
         this.globalContext = globalContext;
+        userActionInterceptor = new ViewUserActionInterceptor(actionController);
     }
+
+    public CompositeContext getCombinedContext() {
+        CompositeContext combinedContext = new OrderedCompositeContext();
+        if (globalContext == null) {
+            throw new IllegalStateException("Global context is not property set ExecEnvironment!.");
+        }
+        combinedContext.addContext(globalContext);
+        if (formContext == null) {
+            throw new IllegalStateException("FormContext is not property set in ExecEnvironment!.");
+        }
+        combinedContext.addContext(formContext);
+        return combinedContext;
+    }
+
+    public void disableInterceptors(){
+        this.userActionInterceptor.setDisabled(true);
+    }
+    public void enableInterceptors(){
+        this.userActionInterceptor.setDisabled(false);
+    }
+
 
     public Context getGlobalContext() {
         return globalContext;
@@ -57,34 +79,11 @@ public class ExecEnvironment {
         this.formContext = formContext;
     }
 
-    public OnChangeFieldInterceptor getChangeInterceptor() {
-        return changeInterceptor;
+    public ViewUserActionInterceptor getUserActionInterceptor() {
+        return userActionInterceptor;
     }
 
-    public void setChangeInterceptor(OnChangeFieldInterceptor changeInterceptor) {
-        this.changeInterceptor = changeInterceptor;
+    public void setUserActionInterceptor(ViewUserActionInterceptor userActionInterceptor) {
+        this.userActionInterceptor = userActionInterceptor;
     }
-
-    public OnSaveFormInterceptor getSaveFormInterceptor() {
-        return saveFormInterceptor;
-    }
-
-    public void setSaveFormInterceptor(OnSaveFormInterceptor saveFormInterceptor) {
-        this.saveFormInterceptor = saveFormInterceptor;
-    }
-
-    public CompositeContext getCombinedContext() {
-        CompositeContext combinedContext = new OrderedCompositeContext();
-        if (globalContext == null) {
-            throw new IllegalStateException("Global context is not property set ExecEnvironment!.");
-        }
-        combinedContext.addContext(globalContext);
-        if (formContext == null) {
-            throw new IllegalStateException("FormContext is not property set in ExecEnvironment!.");
-        }
-        combinedContext.addContext(formContext);
-
-        return combinedContext;
-    }
-
 }

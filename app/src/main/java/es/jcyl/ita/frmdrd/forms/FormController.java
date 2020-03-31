@@ -71,7 +71,6 @@ public class FormController {
         Entity entity;
         if (entityId == null) {
             // create empty entity
-            Object id = repo.nextId();
             entity = new Entity(repo.getSource(), repo.getMeta(), id);
         } else {
             // what if its null? throw an Exception?
@@ -114,15 +113,6 @@ public class FormController {
 
         Toast.makeText(this.viewContext, "Entity successfully saved.", Toast.LENGTH_SHORT).show();
     }
-    public void updateField(UIField field){
-//        UIForm form = field.getParentForm();
-//        if (!validate(form)) {
-//            throw new ValidatorException(String.format("A error occurred during form validation on form [%s].",
-//                    form.getId()));
-//        }
-//        // set changes from view fields to entity properties
-//        updateEntity(form);
-    }
 
     /**
      * Access form fields looking for value bindings that can be setable
@@ -151,6 +141,12 @@ public class FormController {
         }
     }
 
+    /**
+     * Runs validation on all the elements of the given form.
+     *
+     * @param form
+     * @return
+     */
     public boolean validate(UIForm form) {
         boolean valid = true;
         form.getContext().clearMessages();
@@ -161,7 +157,19 @@ public class FormController {
         return valid;
     }
 
-    public boolean validate(FormContext fContext, UIField field) {
+    /**
+     * Runs validation on the given element
+     *
+     * @param field
+     * @return
+     */
+    public boolean validate(UIField field) {
+        FormContext fContext = field.getParentForm().getContext();
+        fContext.clearMessages(field.getId());
+        return validate(fContext, field);
+    }
+
+    private boolean validate(FormContext fContext, UIField field) {
         FormViewContext viewContext = fContext.getViewContext();
 
         // get user input using view context and check all validators.
@@ -199,6 +207,22 @@ public class FormController {
         String entityIdProp = uiform.getEntityId();
         Object entityId = globalCtx.get(entityIdProp);
         repo.deleteById(entityId);
+    }
+
+    /****************************/
+    /** Save/Restore state **/
+    /****************************/
+
+    public void saveViewState() {
+        for (UIForm form : this.editView.getForms()) {
+            form.saveViewState();
+        }
+    }
+
+    public void restoreViewState() {
+        for (UIForm form : this.editView.getForms()) {
+            form.restoreViewState();
+        }
     }
 
     /****************************/
@@ -243,4 +267,5 @@ public class FormController {
     public void setViewContext(android.content.Context viewContext) {
         this.viewContext = viewContext;
     }
+
 }

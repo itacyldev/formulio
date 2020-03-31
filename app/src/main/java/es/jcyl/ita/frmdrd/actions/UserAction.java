@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.actions;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,17 +15,29 @@ package es.jcyl.ita.frmdrd.render;
  * limitations under the License.
  */
 
-import android.content.Context;
-import android.view.View;
+import java.util.Map;
 
+import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public class UserAction {
 
-public interface Renderer {
+    private UIComponent component;
+    private ActionType type;
 
-    View render (Context viewContext, ExecEnvironment env, UIComponent component);
+    public UserAction(UIComponent component, ActionType actionType) {
+        this.component = component;
+        this.type = actionType;
+    }
 
+    public UIComponent getComponent() {
+        return component;
+    }
+
+    public ActionType getType() {
+        return type;
+    }
 }

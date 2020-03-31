@@ -32,8 +32,8 @@ public class ViewValueConverterFactory {
     private static Map<String, ViewValueConverter> map = new HashMap<String, ViewValueConverter>();
 
     private ViewValueConverterFactory() {
-        map.put(UIField.TYPE.TEXT.name(), new TextFieldViewConverter());
-        map.put(UIField.TYPE.DATE.name(), new DateFieldViewConverter());
+        map.put(UIField.TYPE.TEXT.name(), new TextViewConverter());
+        map.put(UIField.TYPE.DATE.name(), new TextViewConverter());
         map.put(UIField.TYPE.BOOLEAN.name(), new SwitcherFieldViewConverter());
     }
 

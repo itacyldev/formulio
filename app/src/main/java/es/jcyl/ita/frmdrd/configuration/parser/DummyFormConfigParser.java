@@ -9,7 +9,7 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.repo.RepositoryProjectConfReader;
+import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -55,10 +55,18 @@ public class DummyFormConfigParser extends FormConfigParser {
         field1.setType(UIField.TYPE.TEXT);
         field1.setLabel("firstName");
         field1.setId("f1");
-        field1.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
-
+        field1.setValueExpression(exprFactory.create("${entity.first_name}"));
         field1.addValidator(new RequiredValidator());
         lst.add(field1);
+
+        UIField field4 = new UIField();
+        field4.setId("f4");
+        field4.setType(UIField.TYPE.TEXT);
+        field4.setLabel("campo 4");
+        field4.setValueExpression(exprFactory.create("${entity.email}"));
+        field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
+        lst.add(field4);
+
 
         UIField field2 = new UIField();
         field2.setId("f2");
@@ -71,16 +79,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         field3.setId("f3");
         field3.setType(UIField.TYPE.TEXT);
         field3.setLabel("Salary");
-        field3.setValueExpression(exprFactory.create("${entity.salary}", Double.class));
+        field3.setValueExpression(exprFactory.create("${entity.last_name}", Double.class));
         lst.add(field3);
-
-        UIField field4 = new UIField();
-        field4.setId("f4");
-        field4.setType(UIField.TYPE.TEXT);
-        field4.setLabel("campo 4");
-        field4.setValueExpression(exprFactory.create("${entity.email}"));
-        field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
-        lst.add(field4);
 
         UIDatatable table = new UIDatatable();
         table.setId("table1");
