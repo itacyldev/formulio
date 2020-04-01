@@ -17,6 +17,10 @@ package es.jcyl.ita.frmdrd.actions;
 
 import android.content.Context;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
@@ -27,6 +31,7 @@ public class UserAction {
     private android.content.Context viewContext;
     private UIComponent component;
     private ActionType type;
+    private Map<String, Serializable> params;
 
     public UserAction(UIComponent component, ActionType actionType) {
         this.component = component;
@@ -37,6 +42,13 @@ public class UserAction {
         this.viewContext = context;
         this.component = component;
         this.type = actionType;
+    }
+
+    public void addParam(String param, Serializable value) {
+        if (this.params == null) {
+            this.params = new HashMap<>();
+        }
+        this.params.put(param, value);
     }
 
     public UIComponent getComponent() {
@@ -50,4 +62,19 @@ public class UserAction {
     public Context getViewContext() {
         return this.viewContext;
     }
+
+    public void setParams(Map<String, Serializable> params) {
+        this.params = params;
+    }
+
+    public Map<String, Serializable> getParams() {
+        return params;
+    }
+
+    public static UserAction NavitateAction(Context context, UIComponent component, String formId) {
+        UserAction action = new UserAction(context, component, ActionType.NAVIGATE);
+        action.addParam("route", formId);
+        return action;
+    }
+
 }

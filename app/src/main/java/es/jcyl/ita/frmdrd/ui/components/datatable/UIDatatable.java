@@ -36,6 +36,7 @@ public class UIDatatable extends UIComponent {
     // filters
     // sorting
     // behaviour (event handlers)
+    private String navigateTo;
     // paginator / flow configuration
     // row selection
 
@@ -48,4 +49,11 @@ public class UIDatatable extends UIComponent {
         this.repo = repo;
     }
 
+    public String getNavigateTo() {
+        return navigateTo;
+    }
+
+    public void setNavigateTo(String navigateTo) {
+        this.navigateTo = navigateTo;
+    }
 }

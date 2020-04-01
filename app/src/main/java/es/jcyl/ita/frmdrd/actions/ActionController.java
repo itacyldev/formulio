@@ -20,6 +20,7 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.actions.handlers.BackPressedActionHandler;
 import es.jcyl.ita.frmdrd.actions.handlers.InputChangeActionHandler;
+import es.jcyl.ita.frmdrd.actions.handlers.NavigateActionHandler;
 import es.jcyl.ita.frmdrd.actions.handlers.SaveActionHandler;
 
 /**
@@ -34,6 +35,8 @@ public class ActionController {
         actionMap.put(ActionType.SAVE, new SaveActionHandler());
         actionMap.put(ActionType.INPUT_CHANGE, new InputChangeActionHandler());
         actionMap.put(ActionType.BACK, new BackPressedActionHandler());
+        actionMap.put(ActionType.CANCEL, new BackPressedActionHandler()); // are they the same?
+        actionMap.put(ActionType.NAVIGATE, new NavigateActionHandler()); // are they the same?
     }
 
     public void doUserAction(UserAction action) {

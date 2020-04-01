@@ -106,12 +106,13 @@ public class MainController {
 
         // get form configuration for given formId and load data
         formController = retrieveForm(formId);
-        formController.load(globalContext);
 
         // set form view as current
+        // TODO: arggghhh
         if (mode.equalsIgnoreCase("list")) {
             uiView = formController.getListView();
         } else {
+            formController.load(globalContext);
             uiView = formController.getEditView();
         }
 

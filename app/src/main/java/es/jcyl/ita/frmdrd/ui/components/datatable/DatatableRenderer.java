@@ -38,13 +38,16 @@ public class DatatableRenderer extends BaseRenderer {
         UIDatatable dtComponent = (UIDatatable) component;
         DatatableLayout datatableView = (DatatableLayout) View.inflate(viewContext,
                 R.layout.datatable_layout, null);
-        datatableView.setRepo(dtComponent.getRepo());
+        datatableView.setDatatable(dtComponent);
+        datatableView.setUserActionInterceptor(env.getUserActionInterceptor());
         return datatableView;
     }
 
     @Override
     protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+        UIDatatable dtComponent = (UIDatatable) component;
         DatatableLayout datatableView = (DatatableLayout) baseView;
+
         TextView fieldLabel = datatableView.findViewById(R.id.field_layout_name);
         fieldLabel.setText(component.getLabel());
         fieldLabel.setTag("label");

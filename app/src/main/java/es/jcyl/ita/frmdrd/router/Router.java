@@ -41,15 +41,13 @@ public class Router {
         this.memento = new ArrayList<>();
     }
 
-    public void navigateList(android.content.Context context, String formId) {
+    public void navigateList(android.content.Context context, String formId, Map<String, Serializable> params) {
         recordHistory(formId, "list", null);
-        mc.navigate(context, formId, "list", new HashMap<>());
+        mc.navigate(context, formId, "list", params);
     }
 
-    public void navigateEdit(android.content.Context context, String formId, Object entityId) {
-        Map<String, Serializable> params = new HashMap<>();
-        params.put("entityId", (Serializable) entityId);
-        recordHistory(formId, "edit", params);
+    public void navigateEdit(android.content.Context context, String formId, Map<String, Serializable> params) {
+        recordHistory(formId, "edit", null);
         mc.navigate(context, formId, "edit", params);
     }
 

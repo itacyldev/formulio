@@ -1,6 +1,7 @@
 package es.jcyl.ita.frmdrd.ui.components.datatable;
 
 import android.content.Context;
+import android.provider.Contacts;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,9 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*
@@ -48,11 +53,18 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     private final int FIELD_LIMIT;
     private static final int RECORDS_CACHE = 20;
 
-    public ListEntityAdapter(final Context context,
+    /**
+     * Behaviour attributes
+     */
+    private UIDatatable dataTable;
+    private ViewUserActionInterceptor userActionInterceptor;
+
+    public ListEntityAdapter(final Context context, UIDatatable dataTable,
                              final int textViewResourceId,
                              final List<Entity> entities, int field_limit) {
         super(context, textViewResourceId, entities);
         this.context = context;
+        this.dataTable = dataTable;
         this.FIELD_LIMIT = field_limit;
         this.cacheViews = new View[RECORDS_CACHE];
         this.inflater = LayoutInflater.from(getContext());
@@ -101,8 +113,12 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                MainController mc = MainController.getInstance();
-                mc.getRouter().navigateEdit(context, "MyForm1", currentEntity.getId());
+                if (userActionInterceptor != null) {
+                    UserAction action = new UserAction(context, dataTable, ActionType.NAVIGATE);
+                    action.addParam("route", dataTable.getNavigateTo());
+                    action.addParam("entityId", (Serializable) currentEntity.getId());
+                    userActionInterceptor.doAction(action);
+                }
             }
         });
     }
@@ -160,10 +176,16 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         }
     }
 
+
+    public void setUserActionInterceptor(ViewUserActionInterceptor userActionInterceptor) {
+        this.userActionInterceptor = userActionInterceptor;
+    }
+
     static class ViewHolder {
         int position;
         boolean charged;
         LinearLayout layout;
         List<View> viewList;
     }
+
 }

@@ -34,6 +34,7 @@ import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
@@ -44,14 +45,18 @@ import es.jcyl.ita.frmdrd.util.DataUtils;
 public class DatatableLayout extends LinearLayout implements DynamicComponent {
     private int offset = 0;
     private int pageSize = 20;
+    private UIDatatable dataTable;
     private EntityMeta meta;
     private Repository repo;
+
     private List<Entity> entities = new ArrayList<>();
 
     // inner view elements
     private LinearLayout headerView;
     private ListView bodyView;
     private int fieldLimit = 20;
+
+    private ViewUserActionInterceptor userActionInterceptor;
 
     public DatatableLayout(Context context) {
         super(context);
@@ -64,12 +69,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     public DatatableLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-
-    public void setRepo(Repository repo) {
-        this.repo = repo;
-        this.meta = repo.getMeta();
-    }
-
 
     private void loadNextPage() {
         SQLQueryFilter f = new SQLQueryFilter();
@@ -114,10 +113,11 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         fillHeader(this.getContext(), this.headerView);
         // read first page to render data
         loadNextPage();
-        ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(),
+        ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this.dataTable,
                 R.layout.list_item, entities, this.fieldLimit);
-        bodyView.setAdapter(dataAdapter);
+        dataAdapter.setUserActionInterceptor(userActionInterceptor);
 
+        bodyView.setAdapter(dataAdapter);
 
         bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -151,5 +151,19 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
             headersLayout.addView(dataHeader);
         }
         headersLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void setUserActionInterceptor(ViewUserActionInterceptor userActionInterceptor) {
+        this.userActionInterceptor = userActionInterceptor;
+    }
+
+    public UIDatatable getDatatable() {
+        return dataTable;
+    }
+
+    public void setDatatable(UIDatatable dataTable) {
+        this.dataTable = dataTable;
+        this.repo = dataTable.getRepo();
+        this.meta = this.repo.getMeta();
     }
 }

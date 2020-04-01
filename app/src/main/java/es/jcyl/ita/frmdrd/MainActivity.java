@@ -19,7 +19,6 @@ import java.util.List;
 
 import es.jcyl.ita.frmdrd.configuration.ConfigFacade;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.router.Router;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
     private static final int PERMISSION_REQUEST = 1234;
@@ -88,9 +87,8 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
 
     @Override
     public void onListFragmentInteraction(FormController form) {
-        MainController.getInstance().getRouter().navigateList(this, form.getId());
+        MainController.getInstance().getRouter().navigateList(this, form.getId(), null);
     }
-
 
     protected void checkPermissions() {
         List permsList = new ArrayList();

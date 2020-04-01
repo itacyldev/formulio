@@ -41,7 +41,7 @@ public abstract class FieldRenderer extends BaseRenderer {
      * @return
      */
     protected <T> T getValue(UIComponent component, ExecEnvironment env, Class<T> clazz) {
-        Object value = component.getValue(env.getCombinedContext());
+        Object value = component.getValue(env.getContext());
         if (value == null) {
             return handleNullValue(value);
         }
