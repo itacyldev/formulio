@@ -16,10 +16,8 @@ package es.jcyl.ita.frmdrd.utils;
  */
 
 import android.content.Context;
-import android.view.View;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.builders.FieldBuilder;
@@ -29,7 +27,6 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 
 /**
@@ -43,13 +40,23 @@ public class DevFormBuilder {
     static FieldBuilder fBuilder = new FieldBuilder();
     static FormBuilder formBuilder = new FormBuilder();
 
-    public static FormController createFormController(UIForm form, Context viewContext) {
+    public static FormController createFormController(Context viewContext, UIForm... forms) {
         UIView view = new UIView("v1");
-        view.addChild(form);
+        for (UIForm form : forms) {
+            view.addChild(form);
+        }
         FormController fc = new FormController("c", "");
         fc.setEditView(view);
         fc.setViewContext(viewContext);
         return fc;
+    }
+    public static UIForm createOneFieldForm(){
+        UIForm form = formBuilder.withNumFields(0).withRandomData().build();
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.TEXT).build();
+        // setup field-form relation
+        field.setParent(form);
+        form.setChildren(new UIComponent[]{field});
+        return form;
     }
 
     /***************
@@ -80,27 +87,10 @@ public class DevFormBuilder {
             env.disableInterceptors();
 
             // create a one-field form
-            form = formBuilder.withNumFields(0).withRandomData().build();
-            field = fBuilder.withRandomData().withFieldType(UIField.TYPE.TEXT).build();
-            // setup field-form relation
-            field.setParent(form);
-            form.setChildren(new UIComponent[]{field});
-            FormController fc = DevFormBuilder.createFormController(form, ctx);
+            form = createOneFieldForm();
 
-            mc.setFormController(fc, fc.getEditView());
+            withForm(form);
 
-            return this;
-        }
-
-        public CreateOneFieldForm withForm(UIForm uiForm) {
-            checkInvokeHasBeenCalled();
-            this.form = uiForm;
-            this.field = form.getFields().get(0); // link the first field
-            this.field.setParentForm(this.form); // make sure field and form are linked
-            FormController fc = DevFormBuilder.createFormController(form, ctx);
-
-            MainController mainController = MainController.getInstance();
-            mc.setFormController(fc, fc.getEditView());
             return this;
         }
 
@@ -110,6 +100,22 @@ public class DevFormBuilder {
             field.setParent(form);
             form.setChildren(new UIComponent[]{field});
             this.field = field;
+            return this;
+        }
+        public CreateOneFieldForm withForm(UIForm uiForm) {
+            checkInvokeHasBeenCalled();
+            this.form = uiForm;
+            this.field = form.getFields().get(0); // link the first field
+            this.field.setParentForm(this.form); // make sure field and form are linked
+
+            FormController fc = DevFormBuilder.createFormController(ctx, form);
+            withFormController(fc);
+            return this;
+        }
+
+        public CreateOneFieldForm withFormController(FormController formController) {
+            checkInvokeHasBeenCalled();
+            mc.setFormController(formController, formController.getEditView());
             return this;
         }
 

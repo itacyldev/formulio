@@ -4,6 +4,7 @@ import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
+import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
@@ -12,11 +13,11 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 
 public class FieldBuilder extends AbstractDataBuilder<UIField> {
+    ValueExpressionFactory exprFactory = new ValueExpressionFactory();
 
     public FieldBuilder() {
         this.baseModel = createEmptyModel();
     }
-
 
     @Override
     protected UIField doBuild(UIField templateModel) {
@@ -86,6 +87,8 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
     public FieldBuilder withRandomData() {
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setType(UIField.TYPE.TEXT);
+        // set a random value literal expression
+        this.baseModel.setValueExpression(exprFactory.create(RandomUtils.randomString(5)));
         String id = this.baseModel.getType().toLowerCase() + RandomStringUtils.randomAlphanumeric(5);
         this.baseModel.setId(id);
         return this;

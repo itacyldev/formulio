@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
+import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.context.impl.ViewStateHolder;
+import es.jcyl.ita.frmdrd.forms.FormException;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.validation.Validator;
+import es.jcyl.ita.frmdrd.validation.ValidatorException;
 
 
 public class UIForm extends UIComponent {
@@ -118,5 +125,56 @@ public class UIForm extends UIComponent {
     @Override
     public String getCompleteId() {
         return id;
+    }
+
+    /**
+     * Load current context
+     * @param globalCtx
+     */
+    public void load(Context globalCtx) {
+        EditableRepository repo = this.getRepo();
+        Object entityId = getEntityIdFromContext(globalCtx);
+
+        Entity entity;
+        if (entityId == null) {
+            // create empty entity
+            entity = new Entity(repo.getSource(), repo.getMeta(), id);
+        } else {
+            // what if its null? throw an Exception?
+            entity = repo.findById(entityId);
+        }
+        this.getContext().setEntity(entity);
+    }
+
+
+    private Object getEntityIdFromContext(Context globalCtx) {
+        String entityIdProp = this.getEntityId();
+        Object entityId;
+        try {
+            entityId = globalCtx.get(entityIdProp);
+        } catch (Exception e) {
+            throw new FormException(String.format("An error occurred while trying to obtain the " +
+                    "entity id from params context for form [%s]." +
+                    " It seems the property 'entityId' is not properly set: [%s].", this.getId(), entityIdProp));
+        }
+        return entityId;
+    }
+
+    public boolean validate(UIField field) {
+        FormViewContext viewContext = context.getViewContext();
+
+        // get user input using view context and check all validators.
+        String value = viewContext.getString(field.getId());
+        boolean valid = true;
+        for (Validator validator : field.getValidators()) {
+            try {
+                validator.validate(context, field, value);
+            } catch (ValidatorException e) {
+                // get the error and put it in form context
+                FormContextHelper.setMessage(context, field.getId(), e.getMessage());
+                valid = false;
+            }
+        }
+        return valid;
     }
 }

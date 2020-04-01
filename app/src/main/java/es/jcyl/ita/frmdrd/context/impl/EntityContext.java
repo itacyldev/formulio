@@ -15,12 +15,14 @@ package es.jcyl.ita.frmdrd.context.impl;
  * limitations under the License.
  */
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
 
@@ -103,7 +105,7 @@ public class EntityContext extends AbstractBaseContext {
     @NonNull
     @Override
     public Set<String> keySet() {
-        return this.entity.getProperties().keySet();
+        return (this.entity == null) ? new HashSet<String>() : this.entity.getProperties().keySet();
     }
 
     @NonNull
@@ -115,6 +117,6 @@ public class EntityContext extends AbstractBaseContext {
     @NonNull
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        return this.entity.getProperties().entrySet();
+        return (this.entity == null) ? new HashSet<Entry<String, Object>>() : this.entity.getProperties().entrySet();
     }
 }

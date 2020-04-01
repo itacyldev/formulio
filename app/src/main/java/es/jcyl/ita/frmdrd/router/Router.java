@@ -42,12 +42,12 @@ public class Router {
     }
 
     public void navigateList(android.content.Context context, String formId, Map<String, Serializable> params) {
-        recordHistory(formId, "list", null);
+        recordHistory(formId, "list", params);
         mc.navigate(context, formId, "list", params);
     }
 
     public void navigateEdit(android.content.Context context, String formId, Map<String, Serializable> params) {
-        recordHistory(formId, "edit", null);
+        recordHistory(formId, "edit", params);
         mc.navigate(context, formId, "edit", params);
     }
 

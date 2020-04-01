@@ -63,7 +63,6 @@ public class FormViewContext extends AbstractBaseContext {
     }
 
 
-
     /**
      * Access the component value as string, without applying the conversion using the
      * component binding expression
@@ -152,7 +151,7 @@ public class FormViewContext extends AbstractBaseContext {
         throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
-    public List<InputFieldView> getInputFields(){
+    public List<InputFieldView> getInputFields() {
 //        if(this.inputFields == null){
 //            this.inputFields = ViewHelper.findInputFieldViews((ViewGroup) this.view);
 //        } // do not store the view elements, the view can change during re-rendering
@@ -164,8 +163,11 @@ public class FormViewContext extends AbstractBaseContext {
     public Set<String> keySet() {
         // get input ids
         Set<String> keys = new HashSet<>();
-        for(InputFieldView input: this.getInputFields()){
-            keys.add(input.getFieldId());
+        List<InputFieldView> fields = this.getInputFields();
+        if (fields != null) {
+            for (InputFieldView input : fields) {
+                keys.add(input.getFieldId());
+            }
         }
         return keys;
     }

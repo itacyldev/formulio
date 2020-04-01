@@ -32,14 +32,22 @@ import es.jcyl.ita.frmdrd.context.impl.FormContext;
  */
 public class ExecEnvironment {
 
-    Context globalContext;
+    CompositeContext globalContext;
     FormContext formContext;
     private ViewUserActionInterceptor userActionInterceptor;
     private CompositeContext combinedContext;
 
-    public ExecEnvironment(Context globalContext, ActionController actionController) {
+    public ExecEnvironment(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
         userActionInterceptor = new ViewUserActionInterceptor(actionController);
+    }
+
+    /**
+     * Clears composite context before starting the rendering process
+     */
+    public void initialize(){
+        this.combinedContext.clear();
+        this.combinedContext = null;
     }
 
     public CompositeContext getContext() {
@@ -59,8 +67,19 @@ public class ExecEnvironment {
     }
 
     public void setFormContext(FormContext formContext) {
+
+        if(this.combinedContext == null){
+            this.combinedContext = createCombinedContext(globalContext, formContext);
+        }
+        // add current form context
+        combinedContext.addContext(globalContext);
+        if (formContext == null) {
+            throw new IllegalStateException("FormContext is not property set in ExecEnvironment!.");
+        }
         this.formContext = formContext;
-        this.combinedContext = createCombinedContext(globalContext, formContext);
+        combinedContext.addContext(formContext);
+        // add the context with the prefix
+
     }
 
     public ViewUserActionInterceptor getUserActionInterceptor() {
@@ -72,12 +91,6 @@ public class ExecEnvironment {
         if (globalContext == null) {
             throw new IllegalStateException("Global context is not property set ExecEnvironment!.");
         }
-        combinedContext.addContext(globalContext);
-        if (fContext == null) {
-            throw new IllegalStateException("FormContext is not property set in ExecEnvironment!.");
-        }
-        combinedContext.addContext(fContext);
         return combinedContext;
-
     }
 }

@@ -36,7 +36,7 @@ public class ViewRenderHelper {
     public View render(Context viewContext, ExecEnvironment env, UIComponent root) {
         String rendererType = root.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
-        // set current form context
+        // enrich the execution environment with current form's context
         if (root.getParentForm() != null) {
             env.setFormContext(((UIForm) root.getParentForm()).getContext());
         }
