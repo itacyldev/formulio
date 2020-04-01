@@ -24,11 +24,11 @@ public class DAGManagerTest {
     public void createDags() {
         UIView view = createView();
 
-        DAGManager.getInstance().getDags().clear();
-        DAGManager dagManager = new DAGManager();
+        DAGManager dagManager = DAGManager.getInstance();
+        dagManager.getDags().clear();
         dagManager.generateDags(view);
 
-        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = DAGManager.getInstance().getDags();
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = dagManager.getDags();
 
         // Get each field's dag
         DirectedAcyclicGraph dag1 = dags.get("form.field1");
@@ -67,8 +67,8 @@ public class DAGManagerTest {
     public void createDagWithCycle() {
         UIView view = createViewWithCycle();
 
-        DAGManager.getInstance().getDags().clear();
-        DAGManager dagManager = new DAGManager();
+        DAGManager dagManager = DAGManager.getInstance();
+        dagManager.getDags().clear();
         dagManager.generateDags(view);
     }
 
