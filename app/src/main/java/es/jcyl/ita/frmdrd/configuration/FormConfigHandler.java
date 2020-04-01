@@ -15,11 +15,11 @@ public class FormConfigHandler {
     }
 
     public static FormController getForm(String formId) {
-        return forms.get(formId);
+        return forms.get(formId.toLowerCase());
     }
 
     public static void addForm(FormController form) {
-        forms.put(form.getId(), form);
+        forms.put(form.getId().toLowerCase(), form);
     }
 
     public static Set<String> getAvailableFormIds() {

@@ -115,7 +115,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             public void onClick(final View v) {
                 if (userActionInterceptor != null) {
                     UserAction action = new UserAction(context, dataTable, ActionType.NAVIGATE);
-                    action.addParam("route", dataTable.getNavigateTo());
+                    action.addParam("route", dataTable.getRoute());
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
                 }

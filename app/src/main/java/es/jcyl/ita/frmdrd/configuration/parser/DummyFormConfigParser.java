@@ -96,6 +96,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
         table.setRepo(contactsRepo);
+        table.setRoute("MyForm1#edit");
         lst.add(table);
 
         UIForm form1 = new UIForm();
@@ -122,6 +123,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
         table.setRepo(contactsRepo);
+        table.setRoute("MyForm1#edit");
         lst.add(table);
 
         UIForm form1 = new UIForm();

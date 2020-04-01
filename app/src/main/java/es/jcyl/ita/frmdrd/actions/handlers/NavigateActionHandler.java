@@ -35,13 +35,13 @@ public class NavigateActionHandler implements ActionHandler {
         // save view state??
 
         String route = (String) action.getParams().get("route");
-        route = route.toLowerCase();
         if (StringUtils.isBlank(route)) {
             throw new UserActionException(String.format("A navigation action was called from the " +
                             "component [%s] in form [%s], but the parameter 'route' was empty, make sure " +
-                            "the attribute of the component is property set.", action.getComponent().getId(),
+                            "the attribute of the component is properly set.", action.getComponent().getId(),
                     action.getComponent().getParentForm()));
         }
+        route = route.toLowerCase();
         // check the format of the route
         String parts[] = route.split("#");
         if (parts.length != 2) {
@@ -51,7 +51,7 @@ public class NavigateActionHandler implements ActionHandler {
         }
         String navType = parts[1];
         String formId = parts[0];
-        if (!navType.equals("#list") && !route.equals("#edit")) {
+        if (!navType.equals("list") && !navType.equals("edit")) {
             throw new UserActionException(String.format("Invalid route format, the route has to " +
                             "follow the expression 'formId#edit' or 'formId#list', but this was found:[%s]."
                     , route));
