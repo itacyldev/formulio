@@ -1,7 +1,5 @@
 package es.jcyl.ita.frmdrd.reactivity;
 
-import android.provider.Contacts;
-
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.junit.Assert;
@@ -13,7 +11,6 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
-import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -21,19 +18,17 @@ import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 
-public class DAGGeneratorTest {
+public class DAGManagerTest {
 
     @Test
     public void createDags() {
-
         UIView view = createView();
 
+        DAGManager.getInstance().getDags().clear();
+        DAGManager dagManager = new DAGManager();
+        dagManager.generateDags(view);
 
-        DAGGenerator dagGenerator = new DAGGenerator();
-
-        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.generateDags(view);
-
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = DAGManager.getInstance().getDags();
 
         // Get each field's dag
         DirectedAcyclicGraph dag1 = dags.get("form.field1");
@@ -72,10 +67,9 @@ public class DAGGeneratorTest {
     public void createDagWithCycle() {
         UIView view = createViewWithCycle();
 
-        DAGGenerator dagGenerator = new DAGGenerator();
-
-        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags =
-                dagGenerator.generateDags(view);
+        DAGManager.getInstance().getDags().clear();
+        DAGManager dagManager = new DAGManager();
+        dagManager.generateDags(view);
     }
 
     private UIView createView() {

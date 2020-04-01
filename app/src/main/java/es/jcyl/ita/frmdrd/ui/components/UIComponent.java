@@ -39,6 +39,19 @@ public abstract class UIComponent implements Serializable {
         return id;
     }
 
+    /**
+     * gets the id by concatenating the id of all your ancestors
+     *
+     * @return
+     */
+    public String getCompleteId() {
+        String completeId = id;
+        if (parent != null) {
+            completeId = parent.getCompleteId() + "." + id;
+        }
+        return completeId;
+    }
+
     public void setId(final String id) {
         this.id = id;
     }
