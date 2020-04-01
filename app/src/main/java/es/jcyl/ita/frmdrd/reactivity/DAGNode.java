@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.reactivity;
 
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+
 public class DAGNode {
 
     public enum TYPE {SOURCE, FIELD}
@@ -7,11 +9,16 @@ public class DAGNode {
     private String id;
     private TYPE type;
 
+    public UIComponent getComponent() {
+        return component;
+    }
+
     public DAGNode() {
     }
 
-    public DAGNode(String id, TYPE type) {
+    public DAGNode(String id, UIComponent component, TYPE type) {
         this.id = id;
+        this.component = component;
         this.type = type;
     }
 
@@ -30,4 +37,11 @@ public class DAGNode {
     public void setType(TYPE type) {
         this.type = type;
     }
+
+    public void setComponent(UIComponent component) {
+        this.component = component;
+    }
+
+    private UIComponent component;
+
 }

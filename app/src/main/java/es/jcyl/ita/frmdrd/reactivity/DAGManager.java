@@ -31,7 +31,12 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class DAGGenerator {
+public class DAGManager {
+
+    private static DAGManager _instance = null;
+
+    // Stores all the DAGs of the view
+    private final Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = new HashMap<>();
 
     // Stores all the components of the form mapped by its ID
     private Map<String, UIComponent> components = new HashMap<>();
@@ -40,28 +45,33 @@ public class DAGGenerator {
     private Map<String, DAGNode> nodes = new HashMap<>();
     private UIView viewRoot;
 
+    public static DAGManager getInstance() {
+        if (_instance == null) {
+            _instance = new DAGManager();
+        }
+        return _instance;
+    }
+
     /**
      * Creates a DAG per component of the view if it has dependencies
      *
      * @param viewRoot
      * @return
      */
-    public Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> generateDags(UIView viewRoot) {
-        this.viewRoot = viewRoot;
-        // Stores all the DAGs of the view
-        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = new HashMap<>();
+    public void generateDags(UIView viewRoot) {
+        if (viewRoot != null) {
+            this.viewRoot = viewRoot;
 
-        // Gets all the components in the view
-        storeComponents(viewRoot);
+            // Gets all the components in the view
+            storeComponents(viewRoot);
 
-        // Builds the dag for each component
-        for (String componentId : components.keySet()) {
-            if (!dags.containsKey(componentId)) {
-                buildComponentDag(componentId, dags);
+            // Builds the dag for each component
+            for (String componentId : components.keySet()) {
+                if (!dags.containsKey(componentId)) {
+                    buildComponentDag(componentId, dags);
+                }
             }
         }
-
-        return dags;
     }
 
     /**
@@ -70,15 +80,7 @@ public class DAGGenerator {
      * @param component
      */
     private void storeComponents(UIComponent component) {
-        UIComponent parent = component.getParent();
-        String componentId = null;
-        if (parent != null) {
-            componentId = parent.getId() + "." + component.getId();
-        } else {
-            componentId = component.getId();
-        }
-
-        components.put(componentId, component);
+        components.put(component.getCompleteId(), component);
 
         List<UIComponent> children = component.getChildren();
         if (children != null) {
@@ -87,6 +89,7 @@ public class DAGGenerator {
             }
         }
     }
+
 
     /**
      * If the component depends on other components, a DAG for
@@ -108,25 +111,28 @@ public class DAGGenerator {
         }
 
         if (dependingVariables != null && dependingVariables.size() > 0) {
-            DAGNode componentNode = getComponentNode(componentId);
+            DAGNode componentNode = getComponentNode(component);
 
             for (String dependingComponentId : dependingVariables) {
-                DAGNode dependingNode = getComponentNode(dependingComponentId);
+                UIComponent dependingComponent = components.get(dependingComponentId);
+                if (dependingComponent != null) {
+                    DAGNode dependingNode = getComponentNode(dependingComponent);
 
-                DirectedAcyclicGraph dag = null;
-                if (dags.containsKey(componentId)) {
-                    dag = dags.get(componentId);
-                    dag.addVertex(dependingNode);
-                    dag.addEdge(dependingNode, componentNode);
-                    dags.put(dependingComponentId, dag);
-                } else {
-                    dag = getDagComponent(dependingComponentId, dags);
-                    dag.addVertex(componentNode);
-                    dag.addEdge(dependingNode, componentNode);
-                    dags.put(componentId, dag);
+                    DirectedAcyclicGraph dag = null;
+                    if (dags.containsKey(componentId)) {
+                        dag = dags.get(componentId);
+                        dag.addVertex(dependingNode);
+                        dag.addEdge(dependingNode, componentNode);
+                        dags.put(dependingComponentId, dag);
+                    } else {
+                        dag = getDagComponent(dependingComponentId, dags);
+                        dag.addVertex(componentNode);
+                        dag.addEdge(dependingNode, componentNode);
+                        dags.put(componentId, dag);
+                    }
+
+                    buildComponentDag(dependingComponentId, dags);
                 }
-
-                buildComponentDag(dependingComponentId, dags);
             }
 
         }
@@ -137,17 +143,18 @@ public class DAGGenerator {
      * Returns the DAGNode of the component if exists. If not, the node
      * is created
      *
-     * @param componentId
+     * @param component
      * @return
      */
-    private DAGNode getComponentNode(String componentId) {
+    private DAGNode getComponentNode(UIComponent component) {
+        String nodeId = component.getCompleteId();
         DAGNode node = null;
-        if (nodes.containsKey(componentId)) {
-            node = nodes.get(componentId);
+        if (nodes.containsKey(nodeId)) {
+            node = nodes.get(nodeId);
         } else {
-            node = new DAGNode();
-            node.setId(componentId);
-            nodes.put(componentId, node);
+            node = new DAGNode(nodeId, component, null);
+            node.setId(nodeId);
+            nodes.put(nodeId, node);
         }
 
         return node;
@@ -173,6 +180,10 @@ public class DAGGenerator {
         }
 
         return dag;
+    }
+
+    public Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> getDags() {
+        return dags;
     }
 }
 

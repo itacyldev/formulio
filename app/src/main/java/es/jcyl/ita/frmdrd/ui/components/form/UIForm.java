@@ -114,4 +114,9 @@ public class UIForm extends UIComponent {
     public void restoreViewState() {
         memento.restoreState(this.getContext().getViewContext());
     }
+
+    @Override
+    public String getCompleteId() {
+        return id;
+    }
 }

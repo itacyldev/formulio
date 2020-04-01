@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ReactivityFlowGeneratorTest {
+public class ReactivityFlowManagerTest {
 
     @Before
     public void setUp() throws Exception {

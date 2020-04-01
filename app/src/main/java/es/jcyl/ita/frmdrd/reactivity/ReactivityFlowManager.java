@@ -1,5 +1,10 @@
 package es.jcyl.ita.frmdrd.reactivity;
 
+import android.util.Log;
+import android.view.View;
+
+import com.android.dx.command.Main;
+
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
@@ -10,6 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import io.reactivex.rxjava3.core.Flowable;
 
 /*
@@ -31,52 +40,66 @@ import io.reactivex.rxjava3.core.Flowable;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class ReactivityFlowGenerator {
+public class ReactivityFlowManager {
 
-    private Map<String, Flowable<String>> flows = new HashMap<>();
+    private static ReactivityFlowManager _instance = null;
 
-    public Flowable<String> generateReactivityFlow(DirectedAcyclicGraph<DAGNode, DefaultEdge> dag,
-                                                   String componentId) {
-        Flowable<String> flow = null;
-        if (flows.containsKey(componentId)) {
-            flow = flows.get(componentId);
-        } else {
-            flow = createFlow(dag, componentId);
+    private final Map<String, Flowable<String>> flows = new HashMap<>();
+
+    private boolean generated = false;
+
+    public static ReactivityFlowManager getInstance() {
+        if (_instance == null) {
+            _instance = new ReactivityFlowManager();
         }
-        return flow;
+        return _instance;
     }
 
-    private Flowable<String> createFlow(DirectedAcyclicGraph dag, String componentId) {
+    public Flowable<String> getFlow(String componentId) {
+        if (!generated) {
+            DirectedAcyclicGraph dag = DAGManager.getInstance().getDags().get(componentId);
+            generateReactivityFlow(dag);
+        }
+
+        return flows.get(componentId);
+    }
+
+    /**
+     * @param dag
+     */
+    private void generateReactivityFlow(DirectedAcyclicGraph dag) {
         Flowable<String> flow = null;
         for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
             DAGNode node = it.next();
-            if (node.getId().equals(componentId)) {
-                if (dag.inDegreeOf(node) == 0) {
-                    flow = createObservableNode(node, dag);
-
-                }
+            if (dag.inDegreeOf(node) == 0) {
+                flow = createObservableNode(node, dag);
+                flows.put(node.getId(), flow);
             }
         }
-        return flow;
     }
 
+    /**
+     * @param node
+     * @param dag
+     * @return
+     */
     private Flowable<String> createObservableNode(DAGNode node,
                                                   DirectedAcyclicGraph<DAGNode, DefaultEdge> dag) {
         Flowable<String> flowable =
                 Flowable.fromCallable(() -> {
-                    Thread.sleep(500);
-                    return "node " + node.getId() + " completed";
+                    UIComponent component = node.getComponent();
+                    MainController.getInstance().updateView(component, true);
+                    //Thread.sleep(500);
+                    return "node " + node.getId() + " updated";
                 });
         Set<DefaultEdge> edges = dag.outgoingEdgesOf(node);
 
         for (DefaultEdge edge : edges) {
             List<Flowable<String>> flowableList = new ArrayList<>();
             DAGNode child = dag.getEdgeTarget(edge);
-
             dag.getDescendants(child);
-
             Flowable<String> flowableChild = null;
-            if (flows.containsKey(child.getId())) {
+            if (flows.keySet().contains(child.getId())) {
                 flowableChild = flows.get(child.getId());
             } else {
                 flowableChild = createObservableNode(child, dag);
@@ -90,4 +113,10 @@ public class ReactivityFlowGenerator {
 
         return flowable;
     }
+
+    public static void flowableExectuted(String msg) {
+        Log.i("ReactivityFlowGenerator", msg);
+    }
+
+
 }

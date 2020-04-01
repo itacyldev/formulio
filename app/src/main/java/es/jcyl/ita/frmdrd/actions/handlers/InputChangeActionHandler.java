@@ -46,7 +46,7 @@ public class InputChangeActionHandler implements ActionHandler {
         boolean valid = mc.getFormController().validate((UIField) component);
         if (!valid) {
             // update the view to show messages
-            mc.updateView(component);
+            mc.updateView(component,false);
             // find the new View and restore state
             fieldView = viewContext.findInputFieldViewById(component.getId());
             mc.getExecEnvironment().disableInterceptors();

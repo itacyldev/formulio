@@ -23,7 +23,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
@@ -34,6 +33,8 @@ import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.reactivity.DAGManager;
+import es.jcyl.ita.frmdrd.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -42,6 +43,7 @@ import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import io.reactivex.rxjava3.core.Flowable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -114,6 +116,8 @@ public class MainController {
         } else {
             formController.load(globalContext);
             uiView = formController.getEditView();
+            DAGManager dagManager = new DAGManager();
+            dagManager.generateDags(uiView);
         }
 
         // Start activity to get Android context
@@ -135,7 +139,7 @@ public class MainController {
         CompositeContext viewCtx = new OrderedCompositeContext();
         viewCtx.setPrefix("view");
         BasicContext pContext = new BasicContext("params");
-        if(params != null){
+        if (params != null) {
             pContext.putAll(params);
         }
         viewCtx.addContext(pContext);
@@ -157,7 +161,7 @@ public class MainController {
     /**
      * Method called from the reactor engine to notify the view which components have to be updated
      */
-    public void updateView(UIComponent component) {
+    public void updateView(UIComponent component, boolean reactiveCall) {
         // find related view element
         UIForm form = component.getParentForm();
         // find view using viewContext
@@ -167,6 +171,12 @@ public class MainController {
         // render the new Android view for the component and replace it
         View newView = renderHelper.render(this.viewContext, this.execEnvironment, component);
         renderHelper.replaceView(fieldView, newView);
+
+        if (!reactiveCall) {
+            ReactivityFlowManager flowManager = ReactivityFlowManager.getInstance();
+            Flowable<String> flow = flowManager.getFlow(component.getCompleteId());
+            flow.subscribe(ReactivityFlowManager::flowableExectuted);
+        }
     }
 
 
