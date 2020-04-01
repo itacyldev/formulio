@@ -84,6 +84,7 @@ public class FormControllerTest {
         // create a mock repository, set to form and load the entity
         EditableRepository mockRepo = mock(EditableRepository.class);
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
+        when(mockRepo.getMeta()).thenReturn(meta);
 
         // prepare data/state
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()

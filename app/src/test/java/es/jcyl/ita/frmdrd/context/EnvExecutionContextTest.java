@@ -26,20 +26,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.context.impl.BasicContext;
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
-import es.jcyl.ita.frmdrd.context.impl.EntityContext;
-import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
+import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
@@ -53,7 +54,7 @@ import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 public class EnvExecutionContextTest {
 
     FormBuilder formBuilder = new FormBuilder();
-    EntityDataBuilder entityBuilder;
+
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
 
     @BeforeClass
@@ -70,29 +71,49 @@ public class EnvExecutionContextTest {
     public void testResultingCompositeContext() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
-        // create a one-field form
-        UIForm f1  = DevFormBuilder.createOneFieldForm();
-        UIForm f2  = DevFormBuilder.createOneFieldForm();
-        // add the forms to the formController view
+
+        // create random entity meta and use databuilder to populate entity data
+        UIForm f1 = createForm();
+        UIForm f2 = createForm();
+
         FormController fc = DevFormBuilder.createFormController(ctx, f1, f2);
 
         // render the view and check de resulting context
-        CompositeContext globalContext = ContextUtils.createGlobalContext();
+        CompositeContext globalContext = new MapCompositeContext();
         ExecEnvironment env = new ExecEnvironment(globalContext, new ActionController());
+
 
         // render the view
         ViewRenderHelper viewRenderer = new ViewRenderHelper();
 
         View view = viewRenderer.render(ctx, env, fc.getEditView());
 
-        FormViewContext viewContext = env.getFormContext().getViewContext();
-        viewContext.entrySet();
+        Assert.assertNotNull(env.getFormContext().getViewContext());
+        Assert.assertNotNull(env.getFormContext().getEntityContext());
 
-        Assert.assertNotNull(view);
+        String id1 = f1.getId() + ".entity." + f1.getChildren().get(0).getId();
+        String id2 = f2.getId() + ".entity." + f2.getChildren().get(0).getId();
+
+        // check the values can be accessed using JEXL expressions
+        Assert.assertNotNull(JexlUtils.eval(env.getContextMap(), id1));
+        Assert.assertNotNull(JexlUtils.eval(env.getContextMap(), id2));
 
         // lets check global context contains a "form1","form2" context
+        globalContext.addAllContext(env.getContextMap().getContexts());
+        Assert.assertNotNull(JexlUtils.eval(globalContext, id1));
+        Assert.assertNotNull(JexlUtils.eval(globalContext, id2));
 
+    }
 
+    private UIForm createForm() {
+        EntityMeta meta1 = DevDbBuilder.createRandomMeta();
+        EntityDataBuilder entityBuilder1 = new EntityDataBuilder(meta1);
+        Entity entity1 = entityBuilder1.withRandomData().build();
+        UIForm f1 = formBuilder.withMeta(meta1).withRandomData().build();
+
+        // set an entity to simulate the loading before rendering
+        f1.getContext().setEntity(entity1);
+        return f1;
     }
 
 

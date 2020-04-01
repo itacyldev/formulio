@@ -46,7 +46,7 @@ public class JexlUtils {
             return exl.evaluate(new JexlContextWrapper(ctx));
         } catch (Exception e) {
             throw new RuntimeException(String.format(
-                    "An error ocurred while trying to evaluate the jexl expression [%s].",
+                    "An error occurred while trying to evaluate the jexl expression [%s].",
                     expression
             ), e);
         }
@@ -60,7 +60,7 @@ public class JexlUtils {
             return exl.evaluate(jc);
         } catch (Exception e) {
             throw new RuntimeException(String.format(
-                    "An error ocurred while trying to evaluate the jexl expression [%s] on entity[%s].",
+                    "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
                     expression, entity.toString()
             ), e);
         }

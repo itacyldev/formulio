@@ -217,12 +217,12 @@ public abstract class UIComponent implements Serializable {
         this.valueExpression = valueExpression;
     }
 
-    public Object getValue(CompositeContext combinedContext) {
+    public Object getValue(Context context) {
         if (this.valueExpression == null) {
             return null;
         } else {
             // evaluate expression against context
-            return JexlUtils.eval(combinedContext, this.valueExpression);
+            return JexlUtils.eval(context, this.valueExpression);
         }
     }
 

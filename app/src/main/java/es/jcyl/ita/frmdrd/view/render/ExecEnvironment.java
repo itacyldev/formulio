@@ -20,15 +20,20 @@ package es.jcyl.ita.frmdrd.view.render;
  */
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
+import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
+import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 
 /**
- * Provides a common access to objects that have to be bound to view components during the
- * rendering process, but will used during the view execution: context and event interceptor.
+ * Helper object using during the rendering process to give the renderers access to commons objects
+ * needed during the view construction, like entity and view contexts and access to userAction
+ * interceptors.
+ * During the rendering, the ExecEnvironment gathers the form contexts to be bound later to the
+ * GlobalContext, so access to all form context can be made with expressions like formId.entity.property
+ * or formId.view.field.
  */
 public class ExecEnvironment {
 
@@ -36,18 +41,23 @@ public class ExecEnvironment {
     FormContext formContext;
     private ViewUserActionInterceptor userActionInterceptor;
     private CompositeContext combinedContext;
+    private CompositeContext contextMap;
 
     public ExecEnvironment(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
         userActionInterceptor = new ViewUserActionInterceptor(actionController);
+        contextMap = new MapCompositeContext();
+        if (globalContext == null) {
+            throw new IllegalStateException("Global context is not properly set ExecEnvironment!.");
+        }
     }
 
     /**
      * Clears composite context before starting the rendering process
      */
-    public void initialize(){
-        this.combinedContext.clear();
+    public void initialize() {
         this.combinedContext = null;
+        this.contextMap.clear();
     }
 
     public CompositeContext getContext() {
@@ -67,30 +77,29 @@ public class ExecEnvironment {
     }
 
     public void setFormContext(FormContext formContext) {
-
-        if(this.combinedContext == null){
-            this.combinedContext = createCombinedContext(globalContext, formContext);
-        }
         // add current form context
-        combinedContext.addContext(globalContext);
         if (formContext == null) {
-            throw new IllegalStateException("FormContext is not property set in ExecEnvironment!.");
+            throw new IllegalStateException("FormContext is not properly set in ExecEnvironment!.");
         }
         this.formContext = formContext;
-        combinedContext.addContext(formContext);
-        // add the context with the prefix
-
+        // combine form context with global context
+        this.combinedContext = createCombinedContext(globalContext, formContext);
+        // register form context
+        contextMap.addContext(formContext);
     }
 
     public ViewUserActionInterceptor getUserActionInterceptor() {
         return userActionInterceptor;
     }
 
-    private CompositeContext createCombinedContext(Context globalContext, FormContext fContext) {
+    private CompositeContext createCombinedContext(CompositeContext globalContext, FormContext fContext) {
         CompositeContext combinedContext = new OrderedCompositeContext();
-        if (globalContext == null) {
-            throw new IllegalStateException("Global context is not property set ExecEnvironment!.");
-        }
+        combinedContext.addContext(globalContext);
+        combinedContext.addContext(fContext);
         return combinedContext;
+    }
+
+    public CompositeContext getContextMap() {
+        return contextMap;
     }
 }

@@ -32,6 +32,8 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
+import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.reactivity.DAGManager;
 import es.jcyl.ita.frmdrd.reactivity.ReactivityFlowManager;
@@ -101,10 +103,7 @@ public class MainController {
     public void navigate(android.content.Context andContext, String formId, String mode,
                          @Nullable Map<String, Serializable> params) {
 
-        // remove last view context and create a new one for the starting view
-        globalContext.removeContext("view");
-        CompositeContext viewCtx = prepareViewContext(params);
-        globalContext.addContext(viewCtx);
+        setupParamsContext(params);
 
         // get form configuration for given formId and load data
         formController = retrieveForm(formId);
@@ -135,15 +134,12 @@ public class MainController {
         return controller;
     }
 
-    private CompositeContext prepareViewContext(@Nullable Map<String, Serializable> params) {
-        CompositeContext viewCtx = new OrderedCompositeContext();
-        viewCtx.setPrefix("view");
+    private void setupParamsContext(@Nullable Map<String, Serializable> params) {
         BasicContext pContext = new BasicContext("params");
         if (params != null) {
             pContext.putAll(params);
         }
-        viewCtx.addContext(pContext);
-        return viewCtx;
+        globalContext.addContext(pContext);
     }
 
     /**
@@ -154,7 +150,10 @@ public class MainController {
      */
     public View renderView(Context viewContext) {
         setViewContext(viewContext);
+        execEnvironment.initialize();
         this.viewRoot = renderHelper.render(viewContext, execEnvironment, this.uiView);
+        // add references to form context directly from global context
+        globalContext.addAllContext(execEnvironment.getContextMap().getContexts());
         return this.viewRoot;
     }
 

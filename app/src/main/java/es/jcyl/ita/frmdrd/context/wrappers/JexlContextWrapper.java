@@ -38,7 +38,6 @@ public class JexlContextWrapper implements JexlContext {
     @Override
     public void set(String name, Object value) {
         context.put(name, value);
-
     }
 
     @Override

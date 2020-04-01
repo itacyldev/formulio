@@ -46,6 +46,11 @@ public class FormContext extends OrderedCompositeContext {
         this.addContext(new BasicContext("state"));
     }
 
+    @Override
+    public String getPrefix() {
+        return this.form.getId();
+    }
+
     public UIForm getForm() {
         return form;
     }
@@ -85,5 +90,7 @@ public class FormContext extends OrderedCompositeContext {
     public EntityContext getEntityContext() {
         return entityContext;
     }
+
+    public String toString(){return this.getForm().getId();}
 
 }
