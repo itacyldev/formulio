@@ -109,12 +109,12 @@ public class DataTableBuilderTest {
 
         // Get two fields and create expresion f1,f2
         PropertyType[] properties = meta.getProperties();
-        Set<String> fieldFilter = new HashSet<>(Arrays.asList(properties[0].getName(), properties[1].getName()));
+        String[] fieldFilter = new String[] {properties[0].getName(), properties[1].getName()};
         UIDatatable datatable = dtBuilder.createDataTableFromRepo(mockRepo, fieldFilter);
 
         // check all entity properties are included as columns
         Assert.assertEquals(datatable.getRepo(), mockRepo);
-        Assert.assertEquals(fieldFilter.size(), datatable.getColumns().length);
+        Assert.assertEquals(fieldFilter.length, datatable.getColumns().length);
 
         for (String pName: fieldFilter) {
             // find columns
