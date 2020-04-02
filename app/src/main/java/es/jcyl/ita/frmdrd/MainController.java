@@ -173,8 +173,7 @@ public class MainController {
 
         if (!reactiveCall) {
             ReactivityFlowManager flowManager = ReactivityFlowManager.getInstance();
-            Flowable<String> flow = flowManager.getFlow(component.getCompleteId());
-            flow.subscribe(ReactivityFlowManager::flowableExectuted);
+            flowManager.execute(component.getCompleteId());
         }
     }
 

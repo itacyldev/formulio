@@ -55,10 +55,29 @@ public class ReactivityFlowManager {
         return _instance;
     }
 
+    /**
+     *
+     * @param componentId
+     */
+    public void execute(String componentId) {
+        if (flows.containsKey(componentId)) {
+            Flowable<String> flow = getFlow(componentId);
+            flow.subscribe(ReactivityFlowManager::flowableExectuted);
+        }
+    }
+
+
+    /**
+     *
+     * @param componentId
+     * @return
+     */
     public Flowable<String> getFlow(String componentId) {
         if (!generated) {
             DirectedAcyclicGraph dag = DAGManager.getInstance().getDags().get(componentId);
-            generateReactivityFlow(dag);
+            if (dag != null) {
+                generateReactivityFlow(dag);
+            }
         }
 
         return flows.get(componentId);
