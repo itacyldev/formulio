@@ -1,7 +1,6 @@
 package es.jcyl.ita.frmdrd.ui.components.datatable;
 
 import android.content.Context;
-import android.provider.Contacts;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 
 /*
@@ -50,22 +49,22 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     private LayoutInflater inflater;
     private View[] cacheViews;
 
-    private final int FIELD_LIMIT;
+    private final int fieldLimit;
     private static final int RECORDS_CACHE = 20;
 
     /**
      * Behaviour attributes
      */
-    private UIDatatable dataTable;
-    private ViewUserActionInterceptor userActionInterceptor;
+    private DatatableLayout dtLayout;
 
-    public ListEntityAdapter(final Context context, UIDatatable dataTable,
+
+    public ListEntityAdapter(final Context context, DatatableLayout datatableLayout,
                              final int textViewResourceId,
-                             final List<Entity> entities, int field_limit) {
+                             final List<Entity> entities) {
         super(context, textViewResourceId, entities);
         this.context = context;
-        this.dataTable = dataTable;
-        this.FIELD_LIMIT = field_limit;
+        this.dtLayout = datatableLayout;
+        this.fieldLimit = datatableLayout.getDatatable().getNumFieldsToShow();
         this.cacheViews = new View[RECORDS_CACHE];
         this.inflater = LayoutInflater.from(getContext());
     }
@@ -75,7 +74,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                         final ViewGroup parent) {
 
         View item = this.cacheViews[position % cacheViews.length];
-        ViewHolder holder;
+        ViewColumnHolder holder;
 
         final Entity currentEntity = getItem(position);
 
@@ -83,18 +82,18 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
             item = inflater.inflate(R.layout.list_item, parent, false);
 
-            holder = new ViewHolder();
+            holder = new ViewColumnHolder();
             holder.position = position;
             holder.charged = false;
             holder.layout =
                     (LinearLayout) item.findViewById(R.id.list_item_layout);
             holder.viewList = new ArrayList<>();
 
-            createViewsLayout(holder, parent, currentEntity);
+            createRowLayout(holder, parent);
 
             item.setTag(holder);
         } else {
-            holder = (ViewHolder) item.getTag();
+            holder = (ViewColumnHolder) item.getTag();
         }
 
         if (!holder.charged || holder.position != position) {
@@ -113,9 +112,10 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                ViewUserActionInterceptor userActionInterceptor = dtLayout.getExecEnvironment().getUserActionInterceptor();
                 if (userActionInterceptor != null) {
-                    UserAction action = new UserAction(context, dataTable, ActionType.NAVIGATE);
-                    action.addParam("route", dataTable.getRoute());
+                    UserAction action = new UserAction(context, dtLayout.getDatatable(), ActionType.NAVIGATE);
+                    action.addParam("route", dtLayout.getDatatable().getRoute());
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
                 }
@@ -123,41 +123,42 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         });
     }
 
+    private void setViewsLayout(final ViewColumnHolder holder, Entity entity) {
+        UIColumn[] columns = dtLayout.getDatatable().getColumns();
+        Object[] values = JexlUtils.bulkEval(entity, columns);
 
-    private void setViewsLayout(final ViewHolder holder, Entity entity) {
-        Object value;
-        int index = 0;
-        for (PropertyType p : entity.getMetadata().getProperties()) {
-            value = entity.get(p.getName());
-            String stringValue = (String) ConvertUtils.convert(value, String.class);
-            TextView textView = (TextView) holder.viewList.get(index);
+        for (int i=0; i<columns.length;i++){
+            String stringValue = (String) ConvertUtils.convert(values[i], String.class);
+            TextView textView = (TextView) holder.viewList.get(i);
             textView.setText(DataUtils.nullFormat(stringValue));
-            index++;
         }
     }
 
-    private void createViewsLayout(final ViewHolder holder,
-                                   final ViewGroup parent, Entity entity) {
+    /**
+     * Creates the TextViews needed to
+     * @param holder
+     * @param parent
+     */
+    private void createRowLayout(final ViewColumnHolder holder,
+                                 final ViewGroup parent) {
 
         LinearLayout layout = holder.layout;
 
-        Object value;
         int index = 0;
-        for (PropertyType p : entity.getMetadata().getProperties()) {
-            value = entity.get(p.getName());
-            View view = createTextView(parent);
+        UIColumn[] columns = dtLayout.getDatatable().getColumns();
+        for (UIColumn column : columns) {
+            // create context for this entity to evaluate expression
+            TextView view = createTextView(parent);
             layout.addView(view);
             holder.viewList.add(view);
-
             index++;
-            if (index >= FIELD_LIMIT) {
+            if (index >= fieldLimit) {
                 final TextView overflowTextView = createTextView(parent);
                 layout.addView(overflowTextView);
                 holder.viewList.add(view);
                 break;
             }
         }
-
     }
 
     private TextView createTextView(final ViewGroup parent) {
@@ -171,17 +172,13 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
         for (View item : cacheViews) {
-            ViewHolder holder = (ViewHolder) item.getTag();
+            ViewColumnHolder holder = (ViewColumnHolder) item.getTag();
             holder.charged = false;
         }
     }
 
 
-    public void setUserActionInterceptor(ViewUserActionInterceptor userActionInterceptor) {
-        this.userActionInterceptor = userActionInterceptor;
-    }
-
-    static class ViewHolder {
+    static class ViewColumnHolder {
         int position;
         boolean charged;
         LinearLayout layout;

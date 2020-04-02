@@ -3,14 +3,19 @@ package es.jcyl.ita.frmdrd.configuration.parser;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
@@ -40,6 +45,7 @@ import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 
 public class DummyFormConfigParser extends FormConfigParser {
     ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+    DataTableBuilder formGenerator = new DataTableBuilder();
 
     @Override
     public void parseFormConfig(String formConfigStr) {
@@ -52,24 +58,32 @@ public class DummyFormConfigParser extends FormConfigParser {
     private void createEditView1(FormController formController) {
         List<UIComponent> lst = new ArrayList<UIComponent>();
         UIField field0 = new UIField();
-        field0.setId("f0");
+        field0.setId("contactId");
         field0.setType(UIField.TYPE.TEXT);
-        field0.setLabel("Contact id");
+        field0.setLabel("Id");
         field0.setValueExpression(exprFactory.create("${entity.contact_id}", Long.class));
         lst.add(field0);
 
         UIField field1 = new UIField();
         field1.setType(UIField.TYPE.TEXT);
-        field1.setLabel("firstName");
-        field1.setId("f1");
+        field1.setLabel("FirstName");
+        field1.setId("firstName");
         field1.setValueExpression(exprFactory.create("${entity.first_name}"));
         field1.addValidator(new RequiredValidator());
         lst.add(field1);
 
+        UIField field6 = new UIField();
+        field6.setType(UIField.TYPE.TEXT);
+        field6.setLabel("Last Name");
+        field6.setId("lastName");
+        field6.setValueExpression(exprFactory.create("${entity.last_name}"));
+        field6.addValidator(new RequiredValidator());
+        lst.add(field6);
+
         UIField field4 = new UIField();
-        field4.setId("f4");
+        field4.setId("email");
         field4.setType(UIField.TYPE.TEXT);
-        field4.setLabel("campo 4");
+        field4.setLabel("Email");
         field4.setValueExpression(exprFactory.create("${entity.email}"));
         field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
         lst.add(field4);
@@ -82,19 +96,21 @@ public class DummyFormConfigParser extends FormConfigParser {
         lst.add(field2);
 
         UIField field3 = new UIField();
-        field3.setId("f3");
+        field3.setId("salary");
         field3.setType(UIField.TYPE.TEXT);
         field3.setLabel("Salary");
-        field3.setValueExpression(exprFactory.create("${entity.last_name}", Double.class));
+        field3.setValueExpression(exprFactory.create("${entity.salary}", Double.class));
         lst.add(field3);
 
-        UIDatatable table = new UIDatatable();
-        table.setId("table1");
+        // datatable
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+        String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
+        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
+        table.setId("table1");
         table.setRepo(contactsRepo);
         table.setRoute("MyForm1#edit");
         lst.add(table);
@@ -113,15 +129,22 @@ public class DummyFormConfigParser extends FormConfigParser {
     }
 
     private void createListView1(FormController formController) {
-
         List<UIComponent> lst = new ArrayList<UIComponent>();
-        UIDatatable table = new UIDatatable();
-        table.setId("table1");
-        RepositoryProjectConfReader config = new RepositoryProjectConfReader();
-        config.read();
+
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+        String[] fieldFilter = new String[]{"first_name", "email", "it_profile"};
+        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
+        // add new column with two fields calc
+        UIColumn newCol = new UIColumn();
+        newCol.setId("calc");
+        newCol.setHeaderText("Name");
+        newCol.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
+        table.getColumns()[0] = newCol;
+        table.setId("table1");
+        RepositoryProjectConfReader config = new RepositoryProjectConfReader();
+        config.read();
         table.setRepo(contactsRepo);
         table.setRoute("MyForm1#edit");
         lst.add(table);

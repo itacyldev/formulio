@@ -10,7 +10,7 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * without warranties or conditions of any kind, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -32,11 +32,12 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
+import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -48,13 +49,12 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     private UIDatatable dataTable;
     private EntityMeta meta;
     private Repository repo;
-
+    private ExecEnvironment execEnvironment;
     private List<Entity> entities = new ArrayList<>();
 
     // inner view elements
     private LinearLayout headerView;
     private ListView bodyView;
-    private int fieldLimit = 20;
 
     private ViewUserActionInterceptor userActionInterceptor;
 
@@ -109,16 +109,17 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     }
 
 
-    public void load() {
+    public void load(ExecEnvironment environment) {
+        this.execEnvironment = environment;
         fillHeader(this.getContext(), this.headerView);
+
         // read first page to render data
         loadNextPage();
-        ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this.dataTable,
-                R.layout.list_item, entities, this.fieldLimit);
-        dataAdapter.setUserActionInterceptor(userActionInterceptor);
+        ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this,
+                R.layout.list_item, entities);
+
 
         bodyView.setAdapter(dataAdapter);
-
         bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(final AbsListView view,
@@ -144,17 +145,12 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
 
     private void fillHeader(Context viewContext, LinearLayout headersLayout) {
         headersLayout.removeAllViews();
-
-        for (PropertyType p : this.meta.getProperties()) {
+        for (UIColumn c : this.getDatatable().getColumns()) {
             final View dataHeader = createHeaderView(viewContext,
-                    headersLayout, p.getName());
+                    headersLayout, c.getHeaderText());
             headersLayout.addView(dataHeader);
         }
         headersLayout.setVisibility(View.VISIBLE);
-    }
-
-    public void setUserActionInterceptor(ViewUserActionInterceptor userActionInterceptor) {
-        this.userActionInterceptor = userActionInterceptor;
     }
 
     public UIDatatable getDatatable() {
@@ -165,5 +161,9 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         this.dataTable = dataTable;
         this.repo = dataTable.getRepo();
         this.meta = this.repo.getMeta();
+    }
+
+    public ExecEnvironment getExecEnvironment() {
+        return execEnvironment;
     }
 }

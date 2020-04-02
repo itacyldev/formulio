@@ -16,13 +16,10 @@ public abstract class UIComponent implements Serializable {
     protected UIComponent parent;
     protected UIComponent parentForm;
     protected List<UIComponent> children;
-
-
     protected String label;
 
     protected String reRender;
     protected String renderCondition;
-    protected String update;
     private String rendererType;
 
     private ValueBindingExpression valueExpression;
@@ -31,10 +28,6 @@ public abstract class UIComponent implements Serializable {
      * if the children of this component have to be rendered individually
      */
     private boolean renderChildren;
-    private String value;
-
-    // behaviour
-    // save/restore state from context
 
     public String getId() {
         return id;
@@ -64,7 +57,7 @@ public abstract class UIComponent implements Serializable {
     public void setParent(UIComponent parent) {
         this.parent = parent;
         if (parent instanceof UIForm) {
-            this.parentForm = (UIForm) parent;
+            this.parentForm = parent;
         }
     }
 
@@ -125,14 +118,6 @@ public abstract class UIComponent implements Serializable {
         this.renderCondition = renderCondition;
     }
 
-    public String getUpdate() {
-        return update;
-    }
-
-    public void setUpdate(String update) {
-        this.update = update;
-    }
-
     public String getRendererType() {
         return rendererType;
     }
@@ -140,28 +125,6 @@ public abstract class UIComponent implements Serializable {
     public void setRendererType(String rendererType) {
         this.rendererType = rendererType;
     }
-
-    @Override
-    public String toString() {
-        String output = "";
-
-        if (id != null) {
-            output += id;
-        }
-        if (id != null && label != null) {
-            output += " / ";
-        }
-        if (label != null) {
-            output += label;
-        }
-
-        if (output.length() > 0) {
-            return output;
-        } else {
-            return super.toString();
-        }
-    }
-
 
     public UIComponent getRoot() {
         return root;
@@ -223,6 +186,27 @@ public abstract class UIComponent implements Serializable {
         } else {
             // evaluate expression against context
             return JexlUtils.eval(context, this.valueExpression);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String output = "";
+
+        if (id != null) {
+            output += id;
+        }
+        if (id != null && label != null) {
+            output += " / ";
+        }
+        if (label != null) {
+            output += label;
+        }
+
+        if (output.length() > 0) {
+            return output;
+        } else {
+            return super.toString();
         }
     }
 

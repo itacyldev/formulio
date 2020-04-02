@@ -34,21 +34,29 @@ public class ValueBindingExpression {
     private List<String> vars;
     private final JxltEngine.Expression expression;
     private Class expectedType;
+    private boolean isLiteral;
+    private boolean isReadOnly;
+    private Object calculatedValue;
 
     public ValueBindingExpression(JxltEngine.Expression expression) {
-        this.expression = expression;
+        this(expression, null);
     }
+
     public ValueBindingExpression(JxltEngine.Expression expression, Class expectedType) {
         this.expression = expression;
         this.expectedType = expectedType;
+        setIsLiteral();
+        setIsReadonly();
     }
+
+
     /**
      * Returns true if the expression doesn't depend on any variable
      *
      * @return
      */
     public boolean isLiteral() {
-        return (getDependingVariables() == null || getDependingVariables().size() == 0);
+        return isLiteral;
     }
 
     /**
@@ -59,16 +67,8 @@ public class ValueBindingExpression {
      * @return
      */
     public boolean isReadOnly() {
-        // immediate expressions define a direct reference to a bean method
-        return !(this.expression.getClass().getName().equals(IMMEDIATE_EXPRESSION));
-//
-//        if (getDependingVariables() == null || getDependingVariables().size() != 1) {
-//            return true;
-//        } else {
-//            // there's just one variable in the expression and it depends on one of the
-//            // entity's properties
-//            return !getDependingVariables().get(0).contains("entity.");
-//        }
+        return isReadOnly;
+
     }
 
     public String getBindingProperty() {
@@ -109,5 +109,23 @@ public class ValueBindingExpression {
 
     public void setExpectedType(Class expectedType) {
         this.expectedType = expectedType;
+    }
+
+
+    private void setIsReadonly() {
+        // immediate expressions define a direct reference to a bean method
+        this.isReadOnly = !(this.expression.getClass().getName().equals(IMMEDIATE_EXPRESSION));
+//
+//        if (getDependingVariables() == null || getDependingVariables().size() != 1) {
+//            return true;
+//        } else {
+//            // there's just one variable in the expression and it depends on one of the
+//            // entity's properties
+//            return !getDependingVariables().get(0).contains("entity.");
+//        }
+    }
+
+    private void setIsLiteral() {
+        this.isLiteral = (getDependingVariables() == null || getDependingVariables().size() == 0);
     }
 }

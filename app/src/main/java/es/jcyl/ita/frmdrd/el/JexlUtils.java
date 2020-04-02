@@ -29,6 +29,7 @@ import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.wrappers.JexlContextWrapper;
 import es.jcyl.ita.frmdrd.context.wrappers.JexlEntityWrapper;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -52,7 +53,20 @@ public class JexlUtils {
         }
     }
 
+    public static Object eval(JexlContext ctx, String expression) {
+        JexlExpression exl = jexl.createExpression(expression);
+        try {
+            return exl.evaluate(ctx);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format(
+                    "An error occurred while trying to evaluate the jexl expression [%s].",
+                    expression
+            ), e);
+        }
+    }
+
     public static Object eval(Entity entity, String expression) {
+        // TODO: cache contexts using entitySource#entityId as unique identifier?
         JexlExpression exl = jexl.createExpression(expression);
         try {
             JexlContext jc = new MapContext();
@@ -80,7 +94,26 @@ public class JexlUtils {
         return valueExpression.getExpression().evaluate(new JexlContextWrapper(ctx));
     }
 
+    public static Object[] bulkEval(Entity entity, UIComponent[] components) {
+        JexlContext jc = new MapContext();
+        jc.set("entity", new JexlEntityWrapper(entity));
+
+        Object[] values = new Object[components.length];
+        for (int i = 0; i < components.length; i++) {
+            try {
+                values[i] = components[i].getValueExpression().getExpression().evaluate(jc);
+            } catch (Exception e) {
+                throw new RuntimeException(String.format(
+                        "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
+                        components[i].getValueExpression().getExpression(), entity.toString()
+                ), e);
+            }
+        }
+        return values;
+    }
+
     public static JxltEngine.Expression createExpression(String expression) {
         return jxltEngine.createExpression(expression);
     }
+
 }

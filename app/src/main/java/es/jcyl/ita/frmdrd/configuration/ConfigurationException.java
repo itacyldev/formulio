@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.configuration;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,12 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Interface for componentes that need data loading during the rendering process.
  */
+public class ConfigurationException extends RuntimeException{
 
-public interface DynamicComponent {
-
-    void load(ExecEnvironment env);
-
+    public ConfigurationException(String msg){
+        super(msg);
+    }
 }

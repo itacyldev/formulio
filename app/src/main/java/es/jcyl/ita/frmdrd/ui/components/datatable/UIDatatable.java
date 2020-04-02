@@ -16,8 +16,8 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
  */
 
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -27,11 +27,8 @@ public class UIDatatable extends UIComponent {
 
     Repository repo;
 
-    public UIDatatable() {
-        setRendererType("datatable");
-    }
-
     // columns
+    private UIColumn[] columns;
     // header/footer templates
     // filters
     // sorting
@@ -39,7 +36,11 @@ public class UIDatatable extends UIComponent {
     private String route;
     // paginator / flow configuration
     // row selection
+    private int numFieldsToShow = 20;
 
+    public UIDatatable() {
+        setRendererType("datatable");
+    }
 
     public Repository getRepo() {
         return repo;
@@ -55,5 +56,58 @@ public class UIDatatable extends UIComponent {
 
     public void setRoute(String route) {
         this.route = route;
+    }
+
+    public UIColumn[] getColumns() {
+        return columns;
+    }
+
+    public void setColumns(UIColumn[] columns) {
+        this.columns = columns;
+    }
+
+    public void addColumn(UIColumn column) {
+        int size = (this.columns == null) ? 1 : this.columns.length + 1;
+        UIColumn[] newCols = new UIColumn[size];
+        if (this.columns != null) {
+            // copy previous values
+            System.arraycopy(this.columns, 0, newCols, 0, this.columns.length);
+        }
+        newCols[size - 1] = column;
+        this.columns = newCols;
+    }
+
+    public UIColumn getColumn(int index) {
+        if (this.columns == null) {
+            return null;
+        } else {
+            if (index < 0 || index > columns.length) {
+                throw new IllegalArgumentException(String.format("Error trying to access columns " +
+                                "from table [%s]. Invalid index [%s] the table has [%s] columns.",
+                        this.getId(), index, columns.length));
+            }
+            return this.columns[index];
+        }
+    }
+
+    public UIColumn getColumn(String name) {
+        if (this.columns == null) {
+            return null;
+        } else {
+            for (UIColumn c : columns) {
+                if (c.getId().equals(name)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    public int getNumFieldsToShow() {
+        return this.numFieldsToShow;
+    }
+
+    public void setNumFieldsToShow(int numFieldsToShow) {
+        this.numFieldsToShow = numFieldsToShow;
     }
 }

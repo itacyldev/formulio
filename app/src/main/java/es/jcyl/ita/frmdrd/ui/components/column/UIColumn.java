@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.ui.components.column;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,22 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Interface for componentes that need data loading during the rendering process.
  */
+public class UIColumn extends UIComponent {
 
-public interface DynamicComponent {
+    // sort by, filter by, filter mathing, header expression
 
-    void load(ExecEnvironment env);
+    private String headerText;
 
+    public String getHeaderText() {
+        return headerText;
+    }
+
+    public void setHeaderText(String headerText) {
+        this.headerText = headerText;
+    }
 }
