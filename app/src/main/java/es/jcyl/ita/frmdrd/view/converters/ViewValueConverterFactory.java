@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

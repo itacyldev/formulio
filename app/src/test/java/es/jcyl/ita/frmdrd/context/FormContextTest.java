@@ -119,8 +119,8 @@ public class FormContextTest {
 
         // create random entity
         EntityMeta meta = DevDbBuilder.createRandomMeta();
-        meta = metaBuilder.addProperties(new Class[]{Date.class, ByteArray.class, Boolean.class,
-                String.class, Double.class, Float.class, Integer.class, Long.class})
+        meta = metaBuilder.addProperties(new Class[]{Double.class, Date.class, ByteArray.class, Boolean.class,
+                String.class, Float.class, Integer.class, Long.class})
                 .build();
 
         UIForm form = formBuilder.withMeta(meta).withRandomData().build();

@@ -16,19 +16,32 @@ package es.jcyl.ita.frmdrd.el;
  */
 
 import org.apache.commons.jexl3.JxltEngine;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ValueExpressionFactory {
 
-
     public ValueBindingExpression create(String expression) {
         JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
-        return new ValueBindingExpression(jexlExpr);
+        if (isLiteralExpression(jexlExpr)) {
+            return new LiteralBindingExpression(expression);
+        } else {
+            return new JexlBindingExpression(jexlExpr);
+        }
     }
+
     public ValueBindingExpression create(String expression, Class type) {
         JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
-        return new ValueBindingExpression(jexlExpr,type);
+        if (isLiteralExpression(jexlExpr)) {
+            return new LiteralBindingExpression(ConvertUtils.convert(expression, type));
+        } else {
+            return new JexlBindingExpression(jexlExpr, type);
+        }
+    }
+
+    public static boolean isLiteralExpression(JxltEngine.Expression expression) {
+        return (expression.getVariables() == null || expression.getVariables().size() == 0);
     }
 }

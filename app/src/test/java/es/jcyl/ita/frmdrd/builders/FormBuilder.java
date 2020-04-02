@@ -10,10 +10,11 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.EntityToComponentMapper;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 public class FormBuilder extends AbstractDataBuilder<UIForm> {
@@ -25,6 +26,7 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
     private String[] expressions;
     private Class[] expectedTypes;
     private boolean randomValues = true;
+    private ValueExpressionFactory exprFactory = new ValueExpressionFactory();
 
     private EntityToComponentMapper componentMapper = new EntityToComponentMapper();
     private EntityMeta meta;
@@ -127,21 +129,17 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
 
             if (this.expressions != null) {
                 // set binding expression
-                jexlExpr = JexlUtils.createExpression(expressions[i]);
-                ve = new ValueBindingExpression(jexlExpr);
+                ve = exprFactory.create(expressions[i]);
                 if (this.expectedTypes != null) {
                     ve.setExpectedType(this.expectedTypes[i]);
                 }
             } else if (this.meta != null) {
                 // create expression to refer to entity values
                 PropertyType property = this.meta.getProperties()[i];
-                jexlExpr = JexlUtils.createExpression("${entity." + property.name + "}");
-                ve = new ValueBindingExpression(jexlExpr);
-                ve.setExpectedType(property.getType());
+                ve = exprFactory.create("${entity." + property.name + "}", property.getType());
             } else if (this.randomValues) {
                 // create literal expression using random value
-                jexlExpr = JexlUtils.createExpression(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
-                ve = new ValueBindingExpression(jexlExpr);
+                ve = exprFactory.create(RandomStringUtils.randomAlphanumeric(10).toUpperCase());
             }
 
             field.setValueExpression(ve);

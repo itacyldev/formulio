@@ -23,7 +23,7 @@ import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.EntityContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
 

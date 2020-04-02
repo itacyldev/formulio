@@ -29,7 +29,7 @@ import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;

@@ -18,19 +18,15 @@ package es.jcyl.ita.frmdrd.utils;
 import android.content.Context;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
-import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 

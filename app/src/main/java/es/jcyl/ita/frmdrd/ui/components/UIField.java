@@ -1,9 +1,8 @@
-package es.jcyl.ita.frmdrd.ui.components.inputfield;
+package es.jcyl.ita.frmdrd.ui.components;
 
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.validation.Validator;
 
-import static es.jcyl.ita.frmdrd.ui.components.inputfield.UIField.TYPE.TEXT;
+import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
 
 public class UIField extends UIComponent {
 

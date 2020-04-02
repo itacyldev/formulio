@@ -21,33 +21,13 @@ package es.jcyl.ita.frmdrd.el;
 
 import org.apache.commons.jexl3.JxltEngine;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Component expression used to calculate the value of the expression or the binding relation
  * between this component and an entity property.
  */
-public class ValueBindingExpression {
-
-    private static final String IMMEDIATE_EXPRESSION = "org.apache.commons.jexl3.internal.TemplateEngine$ImmediateExpression";
-    private List<String> vars;
-    private final JxltEngine.Expression expression;
-    private Class expectedType;
-    private boolean isLiteral;
-    private boolean isReadOnly;
-    private Object calculatedValue;
-
-    public ValueBindingExpression(JxltEngine.Expression expression) {
-        this(expression, null);
-    }
-
-    public ValueBindingExpression(JxltEngine.Expression expression, Class expectedType) {
-        this.expression = expression;
-        this.expectedType = expectedType;
-        setIsLiteral();
-        setIsReadonly();
-    }
+public interface ValueBindingExpression {
 
 
     /**
@@ -55,9 +35,7 @@ public class ValueBindingExpression {
      *
      * @return
      */
-    public boolean isLiteral() {
-        return isLiteral;
-    }
+     boolean isLiteral();
 
     /**
      * Returns true if the expression cannot be used to update and entity property.
@@ -66,66 +44,21 @@ public class ValueBindingExpression {
      *
      * @return
      */
-    public boolean isReadOnly() {
-        return isReadOnly;
+     boolean isReadOnly();
 
-    }
-
-    public String getBindingProperty() {
-        if (isReadOnly()) {
-            throw new IllegalStateException(String.format("The expression defined in field is readonly and " +
-                    "cannot be used as binding with an entity property." +
-                    " The expression [%s] must contain exactly one entity property.", this.expression));
-        }
-        return this.getDependingVariables().get(0);
-    }
+     String getBindingProperty();
 
     /**
      * Returns the list of variables
      *
      * @return
      */
-    public List<String> getDependingVariables() {
-        if (this.vars == null) {
-            this.vars = new ArrayList<>();
-            for (List<String> lstVars : this.expression.getVariables()) {
-                StringBuffer stb = new StringBuffer();
-                for (String part : lstVars) {
-                    stb.append(part + ".");
-                }
-                vars.add(stb.toString().substring(0, stb.length() - 1));
-            }
-        }
-        return vars;
-    }
+     List<String> getDependingVariables();
 
-    public JxltEngine.Expression getExpression() {
-        return expression;
-    }
+     JxltEngine.Expression getExpression();
 
-    public Class getExpectedType() {
-        return (this.expectedType == null) ? Object.class : this.expectedType;
-    }
+     Class getExpectedType() ;
 
-    public void setExpectedType(Class expectedType) {
-        this.expectedType = expectedType;
-    }
+     void setExpectedType(Class expectedType);
 
-
-    private void setIsReadonly() {
-        // immediate expressions define a direct reference to a bean method
-        this.isReadOnly = !(this.expression.getClass().getName().equals(IMMEDIATE_EXPRESSION));
-//
-//        if (getDependingVariables() == null || getDependingVariables().size() != 1) {
-//            return true;
-//        } else {
-//            // there's just one variable in the expression and it depends on one of the
-//            // entity's properties
-//            return !getDependingVariables().get(0).contains("entity.");
-//        }
-    }
-
-    private void setIsLiteral() {
-        this.isLiteral = (getDependingVariables() == null || getDependingVariables().size() == 0);
-    }
 }

@@ -23,14 +23,21 @@ import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
 import org.apache.commons.jexl3.internal.TemplateEngine;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
 
 import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.context.impl.BasicContext;
+import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
+import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
+import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.frmdrd.DummyEntity;
+import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -39,6 +46,13 @@ import es.jcyl.ita.frmdrd.DummyEntity;
 public class TestJexlExpressions {
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(true).silent(false).create();
+
+    @BeforeClass
+    public static void setUp() {
+        ConfigConverters confConverter = new ConfigConverters();
+        confConverter.init();
+    }
+
 
     @Test
     public void testOnSelectContextProps() {
@@ -80,6 +94,23 @@ public class TestJexlExpressions {
             System.out.println(e.getClass());
 //			System.out.println(e.evaluate(context));
 
+        }
+    }
+
+    @Test
+    public void testLiteralExpressions(){
+        ValueExpressionFactory factory = new ValueExpressionFactory();
+
+        Class[] clazzez = new Class[]{Double.class, Date.class, ByteArray.class, Boolean.class,
+                String.class, Float.class, Integer.class, Long.class};
+
+        for(Class c: clazzez){
+            Object value = RandomUtils.randomObject(c);
+            String strValue = (String) ConvertUtils.convert(value, String.class);
+            ValueBindingExpression ve = factory.create(strValue,c);
+            Assert.assertNotNull(ve);
+            Assert.assertEquals(ve.getClass(), LiteralBindingExpression.class);
+            AssertUtils.assertEquals(value, JexlUtils.eval(new BasicContext("t"), ve));
         }
 
     }
