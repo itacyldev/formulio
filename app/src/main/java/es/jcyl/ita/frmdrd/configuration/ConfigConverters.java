@@ -16,6 +16,8 @@ package es.jcyl.ita.frmdrd.configuration;
  */
 
 import org.mini2Dx.beanutils.ConvertUtils;
+import org.mini2Dx.beanutils.converters.DoubleConverter;
+import org.mini2Dx.beanutils.converters.LongConverter;
 
 import java.util.Date;
 
@@ -40,5 +42,12 @@ public class ConfigConverters {
         String[] falseStrings = {"", "false", "no", "n", "off", "0", "f"};
         CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings);
         ConvertUtils.register(boolConverter, Boolean.class);
+        // set null as default value for number converters
+        ConvertUtils.register(new LongConverter(null), Long.TYPE);
+        ConvertUtils.register(new LongConverter(null), Long.class);
+        ConvertUtils.register(new DoubleConverter(null), Double.TYPE);
+        ConvertUtils.register(new DoubleConverter(null), Double.class);
+
+//        ConvertUtils.lookup()
     }
 }

@@ -138,7 +138,7 @@ public class UIForm extends UIComponent {
         Entity entity;
         if (entityId == null) {
             // create empty entity
-            entity = new Entity(repo.getSource(), repo.getMeta(), id);
+            entity = new Entity(repo.getSource(), repo.getMeta());
         } else {
             // what if its null? throw an Exception?
             entity = repo.findById(entityId);
