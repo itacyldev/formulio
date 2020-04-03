@@ -42,8 +42,8 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.themeWrapper = new ContextThemeWrapper(this,
-                android.R.style.Theme_Holo_Dialog);
+//        this.themeWrapper = new ContextThemeWrapper(this,
+//                android.R.style.Theme_Holo_Dialog);
 
         MainController mc = MainController.getInstance();
         mc.getRouter().registerActivity(this);

@@ -50,7 +50,7 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
 
     private View renderLinearLayout(Context context, UIForm form) {
         LinearLayout formLayout = (LinearLayout) View.inflate(context,
-                R.layout.tool_alphaedit_finisher_fromxml, null);
+                R.layout.activity_form_edit_view_handler, null);
         return formLayout;
     }
 

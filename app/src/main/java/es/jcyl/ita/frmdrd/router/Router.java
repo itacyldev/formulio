@@ -43,6 +43,10 @@ public class Router {
         this.memento = new ArrayList<>();
     }
 
+    public String getCurrentFormId(){
+        return (current==null)?null:this.current.formId;
+    }
+
     public void navigateList(android.content.Context context, String formId, Map<String, Serializable> params) {
         recordHistory(formId, "list", params);
         mc.navigate(context, formId, "list", params);

@@ -15,9 +15,12 @@ package es.jcyl.ita.frmdrd.view;
  * limitations under the License.
  */
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 
 /**
@@ -95,5 +99,22 @@ public class ViewHelper {
                     " in the form [%s] is not and InputFieldView", formId, fieldId));
         }
         return (InputFieldView) view;
+    }
+
+    public static <T> T inflate(Context context, int id, Class<T> clazz) {
+        return inflate(context, id, null, clazz);
+    }
+    public static <T> T inflate(Context context, int id, ViewGroup viewGroup, Class<T> clazz) {
+        // ramdomize id
+        View view = View.inflate(context, id, viewGroup);
+        view.setId(RandomUtils.nextInt());
+        return (T) view;
+    }
+
+    public static <T> T findViewAndSetId(View baseView, int id, Class<T> clazz) {
+        // ramdomize id
+        View view = baseView.findViewById(id);
+        view.setId(RandomUtils.nextInt());
+        return (T) view;
     }
 }

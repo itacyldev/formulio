@@ -146,16 +146,17 @@ public class DummyFormConfigParser extends FormConfigParser {
         table.setRoute("MyForm1#edit");
         lst.add(table);
 
-        UIForm form1 = new UIForm();
-        form1.setId("form1");
-        form1.setLabel("Formulario 1");
-        form1.setChildren(lst);
-        form1.setRepo(contactsRepo);
-        List<UIComponent> f = new ArrayList<>();
-        f.add(form1);
+//        UIForm form1 = new UIForm();
+//        form1.setId("form1");
+//        form1.setLabel("Formulario 1");
+//        form1.setChildren(lst);
+//        form1.setRepo(contactsRepo);
+//        List<UIComponent> f = new ArrayList<>();
+//        f.add(form1);
 
         UIView view1 = new UIView("view1");
-        view1.setChildren(f);
+//        view1.setChildren(f);
+        view1.setChildren(new UIComponent[]{table});
 
         formController.setListView(view1);
 

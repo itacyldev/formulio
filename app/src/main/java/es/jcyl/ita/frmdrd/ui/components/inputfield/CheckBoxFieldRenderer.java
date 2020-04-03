@@ -12,6 +12,7 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 
@@ -39,25 +40,16 @@ public class CheckBoxFieldRenderer extends FieldRenderer {
 
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
-//        InputFieldView fieldView = new InputFieldView(viewContext);
-//        fieldView.setConverter(convFactory.get(component));
-//        fieldView.setTag(getBaseViewTag(component));
-
-        View baseView = View.inflate(viewContext,
-                R.layout.tool_alphaedit_boolean, null);
-//        fieldView.addView(view);
-//        return fieldView;
-
+        View baseView = ViewHelper.inflate(viewContext,
+                R.layout.tool_alphaedit_boolean, View.class);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
     protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
-        final TextView fieldLabel = baseView
-                .findViewById(R.id.field_layout_name);
+        TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name, TextView.class);
         fieldLabel.setTag("label");
-        final Switch input = baseView
-                .findViewById(R.id.field_layout_value);
+        Switch input = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_value, Switch.class);
         input.setTag(getInputTag(component));
 
         // get component value and set in view

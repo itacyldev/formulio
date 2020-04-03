@@ -42,6 +42,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
+import es.jcyl.ita.frmdrd.view.FormListViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
@@ -109,18 +110,20 @@ public class MainController {
         formController = retrieveForm(formId);
 
         // set form view as current
+        final Intent intent;
         // TODO: arggghhh
         if (mode.equalsIgnoreCase("list")) {
             uiView = formController.getListView();
+            intent = new Intent(andContext, FormListViewHandlerActivity.class);
         } else {
             formController.load(globalContext);
             uiView = formController.getEditView();
             DAGManager dagManager = new DAGManager();
             dagManager.generateDags(uiView);
+            intent = new Intent(andContext, FormEditViewHandlerActivity.class);
         }
 
         // Start activity to get Android context
-        final Intent intent = new Intent(andContext, FormEditViewHandlerActivity.class);
         andContext.startActivity(intent);
     }
 

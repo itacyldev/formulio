@@ -5,7 +5,6 @@
     android:keepScreenOn="true"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:id="@+id/fields_linear_layout"
         android:layout_width="fill_parent"
@@ -29,7 +28,6 @@
 
             <androidx.viewpager.widget.PagerTitleStrip
                 android:id="@+id/pager_title_strip"
-                style="@style/UserFormPagerTitleStrip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
@@ -39,7 +37,6 @@
 
         <LinearLayout
             android:id="@+id/tool_alphaeditxml_buttons"
-            style="?android:attr/buttonBarStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -56,12 +53,10 @@
                 android:paddingTop="20dip"
                 android:paddingBottom="20dip"
                 android:text="@string/cancel"
-                android:textColor="#fff"
                 android:textSize="16sp"></Button>
 
             <Button
                 android:id="@+id/tool_alphaeditxml_accept"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
@@ -70,7 +65,6 @@
                 android:paddingTop="20dip"
                 android:paddingBottom="20dip"
                 android:text="@string/accept"
-                android:textColor="#fff"
                 android:textSize="16sp"></Button>
         </LinearLayout>
     </LinearLayout>

@@ -13,13 +13,14 @@ import android.widget.TextView;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -46,29 +47,29 @@ public class TextFieldRenderer extends FieldRenderer {
 
     @Override
     protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
-       LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
-                R.layout.tool_alphaedit_text, null);
+        LinearLayout baseView = ViewHelper.inflate(viewContext,
+                R.layout.tool_alphaedit_text, LinearLayout.class);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
     protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
-        final TextView fieldLabel = (TextView) baseView
-                .findViewById(R.id.field_layout_name);
+        TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
+                TextView.class);
         fieldLabel.setText(component.getLabel());
         fieldLabel.setTag("label");
-        final EditText input = (EditText) baseView
-                .findViewById(R.id.field_layout_value);
-        input.setTag(getInputTag(component));
 
+        EditText input = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_value,
+                EditText.class);
+        input.setTag(getInputTag(component));
         // get component value and set in view
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
         setMessages(env.getFormContext(), component, input);
         ((InputFieldView) baseView).setInputView(input);
 
-        final ImageView resetButton = (ImageView) baseView
-                .findViewById(R.id.field_layout_x);
+        ImageView resetButton = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_x,
+                ImageView.class);
         resetButton.setTag("reset");
 
         input.setInputType(InputType.TYPE_CLASS_TEXT);

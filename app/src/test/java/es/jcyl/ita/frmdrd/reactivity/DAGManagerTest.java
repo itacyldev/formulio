@@ -98,7 +98,7 @@ public class DAGManagerTest {
         fields.add(field1);
 
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
-        exprFactory.create("${entity.it_profile}", Long.class);
+//        exprFactory.create("${entity.it_profile}", Long.class);
         UIField field2 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
                         "field 2").withValueBindingExpression("${form.field1}", String.class).build();
