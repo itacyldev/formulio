@@ -15,11 +15,11 @@ package es.jcyl.ita.frmdrd.router;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +35,8 @@ public class Router {
 
     MainController mc;
     private List<State> memento;
+    private State current;
+    private Activity currentActivity;
 
     public Router(MainController mainController) {
         this.mc = mainController;
@@ -68,18 +70,39 @@ public class Router {
      * @return
      */
     private State popHistory() {
-        if (this.memento == null && this.memento.size() < 2) {
-            return null;
+        this.current = null;
+        this.currentActivity = null;
+        if (hasHistory()) {
+            // get last state from history
+            int lastPos = this.memento.size() - 1;
+            this.current = this.memento.remove(lastPos);
         }
-        // remove last element and get the previous one
-        int pos = this.memento.size() - 1;
-        this.memento.remove(pos);
-        return this.memento.get(pos - 1);
+        return current;
+    }
+
+    /**
+     * If there're still navigation records in the history.
+     *
+     * @return
+     */
+    private boolean hasHistory() {
+        return (this.memento != null && this.memento.size() > 0);
     }
 
 
     private void recordHistory(String formId, String navType, Map<String, Serializable> params) {
-        this.memento.add(new State(formId, navType, params));
+        if (current != null) {
+            this.memento.add(current);
+        }
+        this.current = new State(formId, navType, params);
+    }
+
+    public void registerActivity(Activity activity) {
+        if (currentActivity != null) {
+            // destroy last activity
+            this.currentActivity.finish();
+        }
+        this.currentActivity = activity;
     }
 
     public class State {

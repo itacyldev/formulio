@@ -52,6 +52,9 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     private ExecEnvironment execEnvironment;
     private List<Entity> entities = new ArrayList<>();
 
+
+
+
     // inner view elements
     private LinearLayout headerView;
     private ListView bodyView;
