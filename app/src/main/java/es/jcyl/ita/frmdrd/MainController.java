@@ -32,8 +32,6 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
-import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
-import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.reactivity.DAGManager;
 import es.jcyl.ita.frmdrd.reactivity.ReactivityFlowManager;
@@ -46,7 +44,6 @@ import es.jcyl.ita.frmdrd.view.FormListViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
-import io.reactivex.rxjava3.core.Flowable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -176,7 +173,7 @@ public class MainController {
 
         if (!reactiveCall) {
             ReactivityFlowManager flowManager = ReactivityFlowManager.getInstance();
-            flowManager.execute(component.getCompleteId());
+            flowManager.execute(component.getAbsoluteId());
         }
     }
 

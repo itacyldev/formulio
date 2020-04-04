@@ -41,10 +41,14 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
         return this;
     }
 
-
     public FieldBuilder withValueBindingExpression(String expression, Class expectedType) {
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
         this.baseModel.setValueExpression(exprFactory.create(expression, expectedType));
+        return this;
+    }
+    public FieldBuilder withValueBindingExpression(String expression) {
+        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+        this.baseModel.setValueExpression(exprFactory.create(expression, String.class));
         return this;
     }
     public FieldBuilder withLabel(String label) {

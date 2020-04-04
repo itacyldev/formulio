@@ -19,6 +19,8 @@ package es.jcyl.ita.frmdrd.el;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import androidx.annotation.NonNull;
+
 import org.apache.commons.jexl3.JxltEngine;
 
 import java.util.ArrayList;
@@ -125,5 +127,11 @@ public class JexlBindingExpression implements ValueBindingExpression {
 
     private void setIsLiteral() {
         this.isLiteral = (getDependingVariables() == null || getDependingVariables().size() == 0);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return expression.getSource().toString();
     }
 }

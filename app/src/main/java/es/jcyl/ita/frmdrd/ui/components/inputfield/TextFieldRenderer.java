@@ -58,7 +58,6 @@ public class TextFieldRenderer extends FieldRenderer {
                 TextView.class);
         fieldLabel.setText(component.getLabel());
         fieldLabel.setTag("label");
-
         EditText input = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_value,
                 EditText.class);
         input.setTag(getInputTag(component));

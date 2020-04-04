@@ -123,7 +123,7 @@ public class UIForm extends UIComponent {
     }
 
     @Override
-    public String getCompleteId() {
+    public String getAbsoluteId() {
         return id;
     }
 

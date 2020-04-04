@@ -10,7 +10,7 @@ import java.util.Map;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -43,7 +43,7 @@ public class DAGManager {
 
     // Stores a DAGNode per component of the form mapped by its ID
     private Map<String, DAGNode> nodes = new HashMap<>();
-    private UIView viewRoot;
+    private UIComponent viewRoot;
 
     public static DAGManager getInstance() {
         if (_instance == null) {
@@ -55,12 +55,12 @@ public class DAGManager {
     /**
      * Creates a DAG per component of the view if it has dependencies
      *
-     * @param viewRoot
+     * @param component
      * @return
      */
-    public void generateDags(UIView viewRoot) {
-        if (viewRoot != null) {
-            this.viewRoot = viewRoot;
+    public void generateDags(UIComponent component) {
+        if (component != null) {
+            this.viewRoot = component;
 
             // Gets all the components in the view
             storeComponents(viewRoot);
@@ -80,7 +80,7 @@ public class DAGManager {
      * @param component
      */
     private void storeComponents(UIComponent component) {
-        components.put(component.getCompleteId(), component);
+        components.put(component.getAbsoluteId(), component);
 
         List<UIComponent> children = component.getChildren();
         if (children != null) {
@@ -105,15 +105,17 @@ public class DAGManager {
         ValueBindingExpression valueExpression = component.getValueExpression();
 
         // The DAG is created only if the component depends on other components
-        List<String> dependingVariables = null;
-        if (valueExpression != null) {
-            dependingVariables = component.getValueExpression().getDependingVariables();
-        }
 
-        if (dependingVariables != null && dependingVariables.size() > 0) {
+
+        ValueBindingExpression ve = component.getValueExpression();
+        if (ve != null && !ve.isLiteral()) {
             DAGNode componentNode = getComponentNode(component);
+            List<String> dependingVariables = ve.getDependingVariables();
 
-            for (String dependingComponentId : dependingVariables) {
+            String dependingComponentId;
+            for (String depString : dependingVariables) {
+                dependingComponentId = createAbsoluteReference(component, depString);
+
                 UIComponent dependingComponent = components.get(dependingComponentId);
                 if (dependingComponent != null) {
                     DAGNode dependingNode = getComponentNode(dependingComponent);
@@ -140,6 +142,34 @@ public class DAGManager {
     }
 
     /**
+     * Given an variable reference given in an expressión like view.f1, entity.f1, form1.view.f2, etc.
+     * returns the absolute id of the referenced element: "form1.f1" if it's nested inside a form or
+     * "f1" if it is not.
+     *
+     * @param component
+     * @param varReference
+     * @return
+     */
+    private String createAbsoluteReference(UIComponent component, String varReference) {
+        // if it starts with entity of view, is a relative reference, complete with form id
+        if (!varReference.startsWith("entity") && !varReference.startsWith("view")) {
+            // absolute reference to context or form nested entity or view, remove "view" or "entity"
+            // context reference
+            // TODO: improve this
+            return varReference.replace("entity.", "").replace("view.", "");
+        } else {
+            UIForm form = component.getParentForm();
+            if (form == null) {
+                throw new ViewConfigException(String.format("Invalid variable reference. " +
+                        "Relative references can be used just inside a form. " +
+                        "Wrap element [%s] inside a form.", component.getId()));
+            }
+            varReference = varReference.replace("entity.", "").replace("view.", "");
+            return form.getId() + "." + varReference;
+        }
+    }
+
+    /**
      * Returns the DAGNode of the component if exists. If not, the node
      * is created
      *
@@ -147,7 +177,7 @@ public class DAGManager {
      * @return
      */
     private DAGNode getComponentNode(UIComponent component) {
-        String nodeId = component.getCompleteId();
+        String nodeId = component.getAbsoluteId();
         DAGNode node = null;
         if (nodes.containsKey(nodeId)) {
             node = nodes.get(nodeId);

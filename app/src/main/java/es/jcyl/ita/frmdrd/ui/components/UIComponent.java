@@ -39,10 +39,10 @@ public abstract class UIComponent implements Serializable {
      *
      * @return
      */
-    public String getCompleteId() {
+    public String getAbsoluteId() {
         String completeId = id;
         if (parent != null) {
-            completeId = parent.getCompleteId() + "." + id;
+            completeId = parent.getAbsoluteId() + "." + id;
         }
         return completeId;
     }
@@ -87,11 +87,21 @@ public abstract class UIComponent implements Serializable {
             }
         }
     }
+    public void addChild(UIComponent ... lstChildren) {
+        if (children == null) {
+            children = new ArrayList<>();
+        }
+        for(UIComponent kid: lstChildren){
+            kid.setParent(this);
+            children.add(kid);
+        }
+    }
 
     public void addChild(UIComponent child) {
         if (children == null) {
             children = new ArrayList<>();
         }
+        child.setParent(this);
         children.add(child);
     }
 
@@ -122,6 +132,7 @@ public abstract class UIComponent implements Serializable {
     public void setChildren(UIComponent[] children) {
         this.children = new ArrayList<UIComponent>();
         for (UIComponent c : children) {
+            c.setParent(this);
             this.children.add(c);
         }
     }

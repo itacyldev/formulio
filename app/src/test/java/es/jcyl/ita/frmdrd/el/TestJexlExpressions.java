@@ -30,6 +30,8 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
@@ -61,7 +63,7 @@ public class TestJexlExpressions {
         // create database with random table with 1 entity
 //        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
-        Entity entity = new DummyEntity(null, new EntityMeta("xxx",new PropertyType[]{},null), null);
+        Entity entity = new DummyEntity(null, new EntityMeta("xxx", new PropertyType[]{}, null), null);
         String expected = "xvasdfasdfvv";
         entity.set("value1", expected);
         Date expectedDate = new Date();
@@ -77,8 +79,8 @@ public class TestJexlExpressions {
 
     @Test
     public void testJexlTemplate() {
-        String[] expressions = new String[]{"${value1}", "  ${value1}  ", "${value1.value2.method()}",
-                "${value1.getDate()} + 34", "${value3} + 34","${value3[0].value5.method()} + 34",
+        String[] expressions = new String[]{"${form1.view.field}", "${form1.view.field.substring(0)}", "${value1}", "  ${value1}  ", "${value1.value2.method()}",
+                "${value1.getDate()} + 34", "${value3} + 34", "${value3[0].value5.method()} + 34",
                 "${value2} + 'value3' + ${value1.toString().substring(0,2)} + 34"};
 
         JxltEngine engine = new TemplateEngine((Engine) jexl, true, 256, '$', '#');
@@ -100,21 +102,51 @@ public class TestJexlExpressions {
     }
 
     @Test
-    public void testLiteralExpressions(){
+    public void testLiteralExpressions() {
         ValueExpressionFactory factory = new ValueExpressionFactory();
 
         Class[] clazzez = new Class[]{Double.class, Date.class, ByteArray.class, Boolean.class,
                 String.class, Float.class, Integer.class, Long.class};
 
-        for(Class c: clazzez){
+        for (Class c : clazzez) {
             Object value = RandomUtils.randomObject(c);
             String strValue = (String) ConvertUtils.convert(value, String.class);
-            ValueBindingExpression ve = factory.create(strValue,c);
+            ValueBindingExpression ve = factory.create(strValue, c);
             Assert.assertNotNull(ve);
             Assert.assertEquals(ve.getClass(), LiteralBindingExpression.class);
             AssertUtils.assertEquals(value, JexlUtils.eval(new BasicContext("t"), ve));
         }
 
+    }
+
+    @Test
+    public void testFunctions() {
+
+        String[] funcExpression = new String[]{
+                "var t = 20; var s = function(x, y) {x + y + t}; t = 54; s(#{form1.view.%s}, 7) "
+        };
+        JxltEngine engine = new TemplateEngine((Engine) jexl, true, 256, '$', '#');
+
+        JexlContext context = new MapContext();
+        Map<String, Object> form = new HashMap<>();
+        context.set("form1", form);
+        Map<String, Object> view = new HashMap<>();
+        form.put("view", view);
+        view.put("string", RandomUtils.randomString(4));
+        view.put("date", RandomUtils.randomDate());
+        view.put("long", RandomUtils.randomLong(0, 10000));
+        String[] properties= new String[]{ "string", "date", "long"};
+
+
+        for (String expr : funcExpression) {
+            for(String property: properties){
+                String effectiveExpression = String.format(expr,property);
+                JxltEngine.Expression e = engine.createExpression(effectiveExpression);
+                Object value = e.evaluate(context);
+                System.out.println(">>>> using: "  +property);
+                System.out.println(value);
+            }
+        }
     }
 
 }

@@ -19,13 +19,20 @@ package es.jcyl.ita.frmdrd.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedAcyclicGraph;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
-import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.frmdrd.reactivity.DAGNode;
 
 /**
  * Helper object using during the rendering process to give the renderers access to commons objects
@@ -42,6 +49,8 @@ public class ExecEnvironment {
     private ViewUserActionInterceptor userActionInterceptor;
     private CompositeContext combinedContext;
     private CompositeContext contextMap;
+    private Map<String, DeferredView> deferredViews;
+    private List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
 
     public ExecEnvironment(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
@@ -102,4 +111,24 @@ public class ExecEnvironment {
     public CompositeContext getContextMap() {
         return contextMap;
     }
+
+    public void addDeferred(String componentId, DeferredView view) {
+        if (this.deferredViews == null) {
+            this.deferredViews = new HashMap<>();
+        }
+        this.deferredViews.put(componentId, view);
+    }
+
+    public Map<String, DeferredView> getDeferredViews() {
+        return deferredViews;
+    }
+
+    public List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> getDags() {
+        return dags;
+    }
+
+    public void setDags(List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
+        this.dags = dags;
+    }
 }
+
