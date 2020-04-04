@@ -19,12 +19,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.Renderer;
 import es.jcyl.ita.frmdrd.view.render.RendererFactory;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -37,14 +37,17 @@ public class ViewRenderHelper {
         String rendererType = root.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
         // enrich the execution environment with current form's context
-        if (root.getParentForm() != null) {
-            env.setFormContext(((UIForm) root.getParentForm()).getContext());
+        if (root instanceof UIForm) {
+            env.setFormContext(((UIForm) root).getContext());
         }
         View rootView = renderer.render(viewContext, env, root);
-//        System.out.println("Rendering:: " + root.toString());
         if (root instanceof UIForm) {
             // configure viewContext
             ((UIForm) root).getContext().setView(rootView);
+        }
+        // if current view is not visible, don't render children
+        if (!ViewHelper.isVisible(rootView)) {
+            return rootView;
         }
 
         // render children if needed
@@ -71,15 +74,11 @@ public class ViewRenderHelper {
         return renderer;
     }
 
-    public void replaceView(View view1, View view2){
+    public void replaceView(View view1, View view2) {
         ViewGroup parent = (ViewGroup) view1.getParent();
         int index = parent.indexOfChild(view1);
         parent.removeView(view1);
         parent.addView(view2, index);
     }
 
-    public void setFocus(UIComponent component, View newView) {
-        String rendererType = component.getRendererType();
-        Renderer renderer = this.getRenderer(rendererType);
-    }
 }

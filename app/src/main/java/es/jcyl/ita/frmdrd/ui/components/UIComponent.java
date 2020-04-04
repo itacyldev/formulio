@@ -1,14 +1,16 @@
 package es.jcyl.ita.frmdrd.ui.components;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 public abstract class UIComponent implements Serializable {
     protected UIComponent root;
@@ -18,11 +20,10 @@ public abstract class UIComponent implements Serializable {
     protected List<UIComponent> children;
     protected String label;
 
-    protected String reRender;
-    protected String renderCondition;
     private String rendererType;
 
     private ValueBindingExpression valueExpression;
+    private ValueBindingExpression renderExpression;
 
     /**
      * if the children of this component have to be rendered individually
@@ -102,22 +103,6 @@ public abstract class UIComponent implements Serializable {
         this.label = label;
     }
 
-    public String getReRender() {
-        return reRender;
-    }
-
-    public void setReRender(String reRender) {
-        this.reRender = reRender;
-    }
-
-    public String getRenderCondition() {
-        return renderCondition;
-    }
-
-    public void setRenderCondition(String renderCondition) {
-        this.renderCondition = renderCondition;
-    }
-
     public String getRendererType() {
         return rendererType;
     }
@@ -180,12 +165,36 @@ public abstract class UIComponent implements Serializable {
         this.valueExpression = valueExpression;
     }
 
+    public ValueBindingExpression getRenderExpression() {
+        return renderExpression;
+    }
+
+    public void setRenderExpression(ValueBindingExpression renderExpression) {
+        this.renderExpression = renderExpression;
+    }
+
     public Object getValue(Context context) {
         if (this.valueExpression == null) {
             return null;
         } else {
             // evaluate expression against context
             return JexlUtils.eval(context, this.valueExpression);
+        }
+    }
+
+    public boolean isRendered(Context context) {
+        if (this.renderExpression == null) {
+            return true;
+        } else {
+            // evaluate expression against context
+            Object value = JexlUtils.eval(context, this.renderExpression);
+            try {
+                return (Boolean) ConvertUtils.convert(value, Boolean.class);
+            } catch (Exception e) {
+                throw new ViewConfigException(String.format("Invalid rendering expression in " +
+                                "component [%s] the resulting value couldn't be cast to Boolean.",
+                        this.getId(), this.renderExpression, e));
+            }
         }
     }
 

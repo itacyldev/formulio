@@ -27,13 +27,16 @@ import es.jcyl.ita.frmdrd.router.Router;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class NavigateActionHandler implements ActionHandler {
+
+    /**
+     * Handles user navigations request accessing the router.
+     * The method has the synchronized modifier to avoid simultaneous requests.
+     * @param action
+     */
     @Override
-    public void handle(UserAction action) {
+    public synchronized void handle(UserAction action) {
         MainController mc = MainController.getInstance();
         // create route from action params
-
-        // save view state??
-
         String route = (String) action.getParams().get("route");
         if (StringUtils.isBlank(route)) {
             throw new UserActionException(String.format("A navigation action was called from the " +

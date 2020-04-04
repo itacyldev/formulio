@@ -33,6 +33,8 @@ import java.util.Date;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
@@ -59,7 +61,7 @@ public class TestJexlExpressions {
         // create database with random table with 1 entity
 //        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
-        Entity entity = new DummyEntity(null, null, null);
+        Entity entity = new DummyEntity(null, new EntityMeta("xxx",new PropertyType[]{},null), null);
         String expected = "xvasdfasdfvv";
         entity.set("value1", expected);
         Date expectedDate = new Date();

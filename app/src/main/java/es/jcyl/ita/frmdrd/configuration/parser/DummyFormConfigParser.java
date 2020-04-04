@@ -75,6 +75,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         field6.setId("lastName");
         field6.setValueExpression(exprFactory.create("${entity.last_name}"));
         field6.addValidator(new RequiredValidator());
+        field6.setRenderExpression(exprFactory.create("false"));
         lst.add(field6);
 
         UIField field4 = new UIField();
@@ -117,6 +118,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setLabel("Formulario 1");
         form1.setChildren(lst);
         form1.setRepo(contactsRepo);
+        form1.setRenderExpression(exprFactory.create("true"));
         List<UIComponent> f = new ArrayList<>();
         f.add(form1);
         UIView view1 = new UIView("view1");

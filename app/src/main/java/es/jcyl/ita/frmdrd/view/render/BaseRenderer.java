@@ -32,23 +32,13 @@ public abstract class BaseRenderer implements Renderer {
     public final View render(Context viewContext, ExecEnvironment env, UIComponent component) {
         View baseView = createBaseView(viewContext, env, component);
         // check render condition
-        boolean isRenderable = checkRenderConditions(component);
-        baseView.setVisibility(isRenderable ? View.VISIBLE : View.INVISIBLE);
-        if (!isRenderable) {
+        boolean isRendered = component.isRendered(env.getContext());
+        baseView.setVisibility(isRendered ? View.VISIBLE : View.GONE);
+        if (!isRendered) {
             return baseView;
         }
         setupView(baseView, env, component);
         return baseView;
-    }
-
-    protected boolean checkRenderConditions(UIComponent component) {
-        String renderCondition = component.getRenderCondition();
-
-//        boolean render = true;
-//        if (StringUtils.isNotEmpty(renderCondition)) {
-//            render = this.validateCondition(renderCondition, field.getId());
-//        }
-        return !("false".equalsIgnoreCase(renderCondition));
     }
 
     /**
@@ -65,6 +55,7 @@ public abstract class BaseRenderer implements Renderer {
 
     /**
      * Default method to set focus on the base view of the element
+     *
      * @param viewContext
      * @param component
      */
@@ -72,4 +63,6 @@ public abstract class BaseRenderer implements Renderer {
     public void setFocus(Context viewContext, UIComponent component) {
 
     }
+
+
 }

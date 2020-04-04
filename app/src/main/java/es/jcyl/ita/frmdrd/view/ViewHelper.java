@@ -117,4 +117,8 @@ public class ViewHelper {
         view.setId(RandomUtils.nextInt());
         return (T) view;
     }
+
+    public static boolean isVisible(View rootView) {
+        return rootView.getVisibility() == View.VISIBLE;
+    }
 }
