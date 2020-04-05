@@ -40,7 +40,7 @@ public class ConfigConverters {
         ConvertUtils.register(new GeometryConverter(), Geometry.class);
         String[] trueStrings = {"true", "t", "yes", "y", "on", "1", "s", "si", "sí"};
         String[] falseStrings = {"", "false", "no", "n", "off", "0", "f"};
-        CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings);
+        CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings, false);
         ConvertUtils.register(boolConverter, Boolean.class);
         // set null as default value for number converters
         ConvertUtils.register(new LongConverter(null), Long.TYPE);

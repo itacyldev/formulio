@@ -2,6 +2,7 @@ package es.jcyl.ita.frmdrd.ui.components.form;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
@@ -11,6 +12,7 @@ import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.context.impl.ViewStateHolder;
 import es.jcyl.ita.frmdrd.forms.FormException;
+import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
@@ -25,6 +27,8 @@ public class UIForm extends UIComponent {
     private EditableRepository repo;
     private String entityId = "params.entityId";
     private List<UIField> fields;
+
+    private String onValidate; // js function to call on validation
 
 
     public UIForm() {
@@ -128,8 +132,17 @@ public class UIForm extends UIComponent {
         return id;
     }
 
+    public String getOnValidate() {
+        return onValidate;
+    }
+
+    public void setOnValidate(String onValidate) {
+        this.onValidate = onValidate;
+    }
+
     /**
      * Load current context
+     *
      * @param globalCtx
      */
     public void load(Context globalCtx) {
@@ -161,7 +174,7 @@ public class UIForm extends UIComponent {
         return entityId;
     }
 
-    public boolean isVisible(UIField field){
+    public boolean isVisible(UIField field) {
         FormViewContext viewContext = context.getViewContext();
 
         InputFieldView fieldView = viewContext.findInputFieldViewById(field.getId());
@@ -176,13 +189,22 @@ public class UIForm extends UIComponent {
         boolean valid = true;
         for (Validator validator : field.getValidators()) {
             try {
-                if(isVisible(field)){
+                if (isVisible(field)) {
                     validator.validate(context, field, value);
                 }
             } catch (ValidatorException e) {
                 // get the error and put it in form context
                 FormContextHelper.setMessage(context, field.getId(), e.getMessage());
                 valid = false;
+            }
+        }
+        // call validation function
+        if (this.onValidate != null) {
+            ScriptEngine srcEngine = ScriptEngine.getInstance();
+            // TODO: we have to pass a combination of globalContext + formContext
+            Map result = srcEngine.execute(this.id, getContext(), this.onValidate, null);
+            if (result.containsKey("error")) {
+                throw new ValidatorException((String) result.get("message"));
             }
         }
         return valid;

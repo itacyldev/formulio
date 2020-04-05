@@ -46,7 +46,7 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-@RunWith(RobolectricTestRunner.class)
+
 public class TestJexlExpressions {
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(true).silent(false).create();

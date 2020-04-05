@@ -55,56 +55,6 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
     }
 
 //
-//    private void renderTestButtons(final Context context, ViewGroup parent) {
-//        Button groovyButton = new Button(context);
-//        groovyButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                GroovyProcessor processor =
-//                        new GroovyProcessor(context.getDir(
-//                                "dynclasses", 0), context.getClassLoader());
-//
-//                BufferedReader reader = null;
-//                StringBuffer sb = new StringBuffer();
-//                try {
-//                    reader = new BufferedReader(
-//                            new InputStreamReader(context.getAssets().open(
-//                                    "fibonacci.groovy")));
-//
-//                    // do reading, usually loop until end of file reading
-//                    String line;
-//                    while ((line = reader.readLine()) != null) {
-//                        sb.append(line);
-//                        sb.append("\n");
-//                    }
-//                } catch (IOException e) {
-//                    //log the exception
-//                } finally {
-//                    if (reader != null) {
-//                        try {
-//                            reader.close();
-//                        } catch (IOException e) {
-//                            //log the exception
-//                        }
-//                    }
-//                }
-//
-//
-//                GroovyProcessor.EvalResult result =
-//                        (GroovyProcessor.EvalResult) processor.evaluate(sb.toString(), "fibonacci_groovy",
-//                                lifecycle.getMainContext());
-//
-//                long init = System.nanoTime();
-//                fib(100);
-//                String execTime = (System.nanoTime() - init) / 1000000 + " ms";
-//
-//
-//                Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
-//        groovyButton.setText("test groovy");
-//        parent.addView(groovyButton);
 //
 //        Button jexlButton = new Button(context);
 //        jexlButton.setOnClickListener(new View.OnClickListener() {
