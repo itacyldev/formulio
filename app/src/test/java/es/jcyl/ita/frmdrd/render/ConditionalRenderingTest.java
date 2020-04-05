@@ -41,7 +41,7 @@ import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -91,7 +91,7 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
 
-        ExecEnvironment env = new ExecEnvironment(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
@@ -132,7 +132,7 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
 
-        ExecEnvironment env = new ExecEnvironment(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
@@ -175,7 +175,7 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
 
-        ExecEnvironment env = new ExecEnvironment(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
@@ -222,7 +222,7 @@ public class ConditionalRenderingTest {
         // set field render expression
         form.setRenderExpression(exprFactory.create(renderExpression));
 
-        ExecEnvironment env = new ExecEnvironment(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;

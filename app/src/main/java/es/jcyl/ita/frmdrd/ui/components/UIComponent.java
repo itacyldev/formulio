@@ -87,11 +87,12 @@ public abstract class UIComponent implements Serializable {
             }
         }
     }
-    public void addChild(UIComponent ... lstChildren) {
+
+    public void addChild(UIComponent... lstChildren) {
         if (children == null) {
             children = new ArrayList<>();
         }
-        for(UIComponent kid: lstChildren){
+        for (UIComponent kid : lstChildren) {
             kid.setParent(this);
             children.add(kid);
         }
@@ -228,6 +229,17 @@ public abstract class UIComponent implements Serializable {
         } else {
             return super.toString();
         }
+    }
+
+    public ValueBindingExpression[] getValueBindingExpressions() {
+        List<ValueBindingExpression> express = new ArrayList<ValueBindingExpression>();
+        if (this.valueExpression != null) {
+            express.add(valueExpression);
+        }
+        if (this.renderExpression != null) {
+            express.add(renderExpression);
+        }
+        return express.toArray(new ValueBindingExpression[express.size()]);
     }
 
 }

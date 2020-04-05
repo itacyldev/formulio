@@ -69,9 +69,9 @@ public class TestJexlExpressions {
         Date expectedDate = new Date();
         entity.set("value2", expectedDate);
 
-        Object value = JexlUtils.eval(entity, "entity.value1");
+        Object value = JexlUtils.eval(entity, "${entity.value1}");
         Assert.assertEquals(expected, value);
-        value = JexlUtils.eval(entity, "entity.value2");
+        value = JexlUtils.eval(entity, "${entity.value2}");
         Assert.assertEquals(expectedDate, value);
 
 

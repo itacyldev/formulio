@@ -8,7 +8,7 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -32,29 +32,29 @@ import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 public class ViewRenderer extends BaseRenderer implements GroupRenderer {
 
 
-    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
         // TODO: provide different layout implementors
         return View.inflate(viewContext, R.layout.view_layout, null);
     }
 
     @Override
-    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
 
     }
 
     @Override
-    public void initGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root) {
+    public void initGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
     }
 
     @Override
-    public void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views) {
+    public void addViews(Context viewContext, RenderingEnv env, UIComponent component, View root, View[] views) {
         for (View view : views) {
             ((ViewGroup) root).addView(view);
         }
     }
 
     @Override
-    public void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root) {
+    public void endGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
     }
 
 }

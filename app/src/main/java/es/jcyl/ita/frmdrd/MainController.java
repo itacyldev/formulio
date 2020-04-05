@@ -32,6 +32,7 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.reactivity.DAGManager;
 import es.jcyl.ita.frmdrd.reactivity.ReactivityFlowManager;
@@ -43,7 +44,7 @@ import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.FormListViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -69,9 +70,10 @@ public class MainController {
     private ViewRenderHelper renderHelper = new ViewRenderHelper();
 
     // user action management
-    private ExecEnvironment execEnvironment;
+    private RenderingEnv renderingEnv;
     private ActionController actionController;
     private FormController formController;
+    private ReactivityFlowManager flowManager;
     // navigation control
     private Router router;
 
@@ -83,10 +85,11 @@ public class MainController {
     }
 
     private MainController() {
-        globalContext = new OrderedCompositeContext();
+        globalContext = new UnPrefixedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
         actionController = new ActionController();
-        execEnvironment = new ExecEnvironment(globalContext, actionController);
+        renderingEnv = new RenderingEnv(globalContext, actionController);
+        flowManager = ReactivityFlowManager.getInstance();
         router = new Router(this);
     }
 
@@ -150,10 +153,10 @@ public class MainController {
      */
     public View renderView(Context viewContext) {
         setViewContext(viewContext);
-        execEnvironment.initialize();
-        this.viewRoot = renderHelper.render(viewContext, execEnvironment, this.uiView);
+        renderingEnv.initialize();
+        this.viewRoot = renderHelper.render(viewContext, renderingEnv, this.uiView);
         // add references to form context directly from global context
-        globalContext.addAllContext(execEnvironment.getContextMap().getContexts());
+//        globalContext.addAllContext(execEnvironment.getContextMap().getContexts());
         return this.viewRoot;
     }
 
@@ -168,11 +171,10 @@ public class MainController {
 
         InputFieldView fieldView = viewContext.findInputFieldViewById(component.getId());
         // render the new Android view for the component and replace it
-        View newView = renderHelper.render(this.viewContext, this.execEnvironment, component);
+        View newView = renderHelper.render(this.viewContext, this.renderingEnv, component);
         renderHelper.replaceView(fieldView, newView);
 
         if (!reactiveCall) {
-            ReactivityFlowManager flowManager = ReactivityFlowManager.getInstance();
             flowManager.execute(component.getAbsoluteId());
         }
     }
@@ -208,12 +210,10 @@ public class MainController {
         return formController;
     }
 
-    public ViewRenderHelper getRenderHelper() {
-        return renderHelper;
-    }
+    public ViewRenderHelper getRenderHelper() {return renderHelper; }
 
-    public ExecEnvironment getExecEnvironment() {
-        return execEnvironment;
+    public RenderingEnv getRenderingEnv() {
+        return renderingEnv;
     }
 
     public ActionController getActionController() {
@@ -224,7 +224,7 @@ public class MainController {
         return router;
     }
 
-    /*** TODO: Just For Testing purposes until we setup dagger to Dep. inyection**/
+    /*** TODO: Just For Testing purposes until we setup dagger to Dep. injection**/
     public void setFormController(FormController fc, UIView view) {
         this.formController = fc;
         this.uiView = view;

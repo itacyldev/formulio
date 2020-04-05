@@ -9,7 +9,7 @@ import android.widget.TextView;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -34,7 +34,7 @@ import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 public class DatatableRenderer extends BaseRenderer {
 
     @Override
-    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
         UIDatatable dtComponent = (UIDatatable) component;
         DatatableLayout datatableView = (DatatableLayout) View.inflate(viewContext,
                 R.layout.datatable_layout, null);
@@ -43,7 +43,7 @@ public class DatatableRenderer extends BaseRenderer {
     }
 
     @Override
-    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
         UIDatatable dtComponent = (UIDatatable) component;
         dtComponent.getRepo().setContext(env.getContext());
         DatatableLayout datatableView = (DatatableLayout) baseView;

@@ -36,7 +36,7 @@ public class FormListViewHandlerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // FAB new entity button, navigate to form view without entityId
-                ViewUserActionInterceptor userActionInterceptor = mc.getExecEnvironment().getUserActionInterceptor();
+                ViewUserActionInterceptor userActionInterceptor = mc.getRenderingEnv().getUserActionInterceptor();
                 if (userActionInterceptor != null) {
                     UserAction action = UserAction.NavitateAction(context, null,
                             mc.getRouter().getCurrentFormId() + "#edit");

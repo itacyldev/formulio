@@ -12,7 +12,7 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 
 /*
@@ -37,14 +37,14 @@ import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 
 public class FormRenderer extends BaseRenderer implements GroupRenderer {
 
-    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
         // TODO: provide different layout implementors
         View view = renderLinearLayout(viewContext, (UIForm) component);
         return view;
     }
 
     @Override
-    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
 
     }
 
@@ -159,11 +159,11 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
 //    }
 
     @Override
-    public void initGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root) {
+    public void initGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
     }
 
     @Override
-    public void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views) {
+    public void addViews(Context viewContext, RenderingEnv env, UIComponent component, View root, View[] views) {
         LinearLayout layout = root.findViewById(R.id.fields_linear_layout);
         for (View view : views) {
             layout.addView(view);
@@ -171,12 +171,12 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
     }
 
     @Override
-    public void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root) {
+    public void endGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
         renderSaveButton(viewContext, env, component, ((ViewGroup) root));
         renderCancelButton(viewContext, env, component, ((ViewGroup) root));
     }
 
-    private void renderSaveButton(Context context, ExecEnvironment env, UIComponent component, ViewGroup parent) {
+    private void renderSaveButton(Context context, RenderingEnv env, UIComponent component, ViewGroup parent) {
         Button saveButton = new Button(context);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +191,7 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
         parent.addView(saveButton);
     }
 
-    private void renderCancelButton(Context context, ExecEnvironment env, UIComponent component, ViewGroup parent) {
+    private void renderCancelButton(Context context, RenderingEnv env, UIComponent component, ViewGroup parent) {
         Button saveButton = new Button(context);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override

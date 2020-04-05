@@ -30,7 +30,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -77,7 +77,7 @@ public class DevFormBuilder {
         public Context ctx;
         public UIForm form;
         public UIField field;
-        public ExecEnvironment env;
+        public RenderingEnv env;
         public EditableRepository repo;
         public MainController mc;
 
@@ -91,7 +91,7 @@ public class DevFormBuilder {
             mc = MainController.getInstance();
 
             // configure the context as the MainController would do
-            env = mc.getExecEnvironment();
+            env = mc.getRenderingEnv();
             // disable user action handlers during the tests
             env.disableInterceptors();
 

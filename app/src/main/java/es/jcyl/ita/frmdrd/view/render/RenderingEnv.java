@@ -35,14 +35,14 @@ import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
 import es.jcyl.ita.frmdrd.reactivity.DAGNode;
 
 /**
- * Helper object using during the rendering process to give the renderers access to commons objects
- * needed during the view construction, like entity and view contexts and access to userAction
- * interceptors.
+ * Context storing object used during the rendering process to give the renderers access to commons objects
+ * needed during the view construction, like entity and view contexts, access to userAction
+ * interceptors and a temporary store like deffered view elements.
  * During the rendering, the ExecEnvironment gathers the form contexts to be bound later to the
  * GlobalContext, so access to all form context can be made with expressions like formId.entity.property
  * or formId.view.field.
  */
-public class ExecEnvironment {
+public class RenderingEnv {
 
     CompositeContext globalContext;
     FormContext formContext;
@@ -52,12 +52,12 @@ public class ExecEnvironment {
     private Map<String, DeferredView> deferredViews;
     private List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
 
-    public ExecEnvironment(CompositeContext globalContext, ActionController actionController) {
+    public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
         userActionInterceptor = new ViewUserActionInterceptor(actionController);
         contextMap = new MapCompositeContext();
         if (globalContext == null) {
-            throw new IllegalStateException("Global context is not properly set ExecEnvironment!.");
+            throw new IllegalStateException("Global context mustn't be null!.");
         }
     }
 
@@ -85,10 +85,17 @@ public class ExecEnvironment {
         return formContext;
     }
 
+    /**
+     * Every time a form starts the rendering, the RenderEnv stores the context and links it with
+     * the formId to the global context. So relative access can be done inside the form elements,
+     * but also absolute access inter-form can be achieve throught the global context references.
+     *
+     * @param formContext
+     */
     public void setFormContext(FormContext formContext) {
         // add current form context
         if (formContext == null) {
-            throw new IllegalStateException("FormContext is not properly set in ExecEnvironment!.");
+            throw new IllegalStateException("FormContext mustn't be null!.");
         }
         this.formContext = formContext;
         // combine form context with global context

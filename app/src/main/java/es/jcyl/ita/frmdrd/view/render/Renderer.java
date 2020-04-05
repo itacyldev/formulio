@@ -26,7 +26,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public interface Renderer {
 
-    View render (Context viewContext, ExecEnvironment env, UIComponent component);
+    View render (Context viewContext, RenderingEnv env, UIComponent component);
 
 //    void setFocus(Context viewContext, UIComponent component);
 }

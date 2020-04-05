@@ -31,7 +31,7 @@ import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
@@ -62,7 +62,7 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextUtils.createGlobalContext();
-        ExecEnvironment env = new ExecEnvironment(gCtx, null);
+        RenderingEnv env = new RenderingEnv(gCtx, null);
 
         // render view to create android view components
         View formView = renderHelper.render(ctx, env, form);
@@ -93,7 +93,7 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextUtils.createGlobalContext();
-        ExecEnvironment env = new ExecEnvironment(gCtx, null);
+        RenderingEnv env = new RenderingEnv(gCtx, null);
 
         // render view to create android view components
         View formView = renderHelper.render(ctx, env, form);

@@ -18,7 +18,7 @@ import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 
 /*
@@ -45,14 +45,14 @@ public class SelectRenderer extends FieldRenderer {
 
 
     @Override
-    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
        LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
                 R.layout.tool_alphaedit_text, null);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
         final TextView fieldLabel = (TextView) baseView
                 .findViewById(R.id.field_layout_name);
         fieldLabel.setText(component.getLabel());

@@ -112,7 +112,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ViewUserActionInterceptor userActionInterceptor = dtLayout.getExecEnvironment().getUserActionInterceptor();
+                ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 if (userActionInterceptor != null) {
                     UserAction action = new UserAction(context, dtLayout.getDatatable(), ActionType.NAVIGATE);
                     action.addParam("route", dtLayout.getDatatable().getRoute());

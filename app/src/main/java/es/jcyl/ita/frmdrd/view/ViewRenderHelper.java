@@ -29,7 +29,7 @@ import es.jcyl.ita.frmdrd.reactivity.DAGNode;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.render.DeferredView;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.Renderer;
 import es.jcyl.ita.frmdrd.view.render.RendererFactory;
@@ -41,11 +41,11 @@ import es.jcyl.ita.frmdrd.view.render.RendererFactory;
  */
 public class ViewRenderHelper {
 
-    public View render(Context viewContext, ExecEnvironment env, UIComponent root) {
+    public View render(Context viewContext, RenderingEnv env, UIComponent root) {
         return render(viewContext, env, root, true);
     }
 
-    private View render(Context viewContext, ExecEnvironment env, UIComponent root, boolean checkDeferred) {
+    private View render(Context viewContext, RenderingEnv env, UIComponent root, boolean checkDeferred) {
         String rendererType = root.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
         // enrich the execution environment with current form's context
@@ -83,14 +83,13 @@ public class ViewRenderHelper {
             }
         }
         if (checkDeferred && root.getParent() == null) {
-            System.out.println("Star processing deferred elements");
             // last step in the tree walk, process delegates when we're back in the view root
             processDeferredViews(viewContext, env);
         }
         return rootView;
     }
 
-    private void setupFormContext(UIComponent root, ExecEnvironment env) {
+    private void setupFormContext(UIComponent root, RenderingEnv env) {
         if (root instanceof UIForm) {
             env.setFormContext(((UIForm) root).getContext());
         } else {
@@ -100,7 +99,7 @@ public class ViewRenderHelper {
         }
     }
 
-    private View createDeferredView(Context viewContext, UIComponent root, ExecEnvironment env) {
+    private View createDeferredView(Context viewContext, UIComponent root, RenderingEnv env) {
         DeferredView view = new DeferredView(viewContext, root);
         env.addDeferred(root.getAbsoluteId(), view);
         return view;
@@ -119,7 +118,7 @@ public class ViewRenderHelper {
     }
 
 
-    private boolean hasDeferredExpression(UIComponent root, ExecEnvironment env) {
+    private boolean hasDeferredExpression(UIComponent root, RenderingEnv env) {
         // TODO improve this
         return ((root.getValueExpression() != null && root.getValueExpression().toString().contains("view")) ||
                 (root.getRenderExpression() != null && root.getRenderExpression().toString().contains("view")));
@@ -133,7 +132,7 @@ public class ViewRenderHelper {
      * @param viewContext
      * @param env
      */
-    private void processDeferredViews(Context viewContext, ExecEnvironment env) {
+    private void processDeferredViews(Context viewContext, RenderingEnv env) {
         // use dag to walk the tree just one time per node
 //        DummyTreeNode root = env.getViewDeferredRoot();
 

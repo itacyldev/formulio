@@ -27,10 +27,10 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public interface GroupRenderer {
 
-    void initGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
+    void initGroup(Context viewContext, RenderingEnv env, UIComponent component, View root);
 
-    void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views);
+    void addViews(Context viewContext, RenderingEnv env, UIComponent component, View root, View[] views);
 
-    void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root);
+    void endGroup(Context viewContext, RenderingEnv env, UIComponent component, View root);
 
 }

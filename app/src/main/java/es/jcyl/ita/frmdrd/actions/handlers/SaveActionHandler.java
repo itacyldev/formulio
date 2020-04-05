@@ -45,13 +45,13 @@ public class SaveActionHandler implements ActionHandler {
         } catch (ValidatorException e) {
             // re-render all the screen
             ViewRenderHelper renderHelper = mc.getRenderHelper();
-            View newView = renderHelper.render(mc.getViewContext(), mc.getExecEnvironment(),
+            View newView = renderHelper.render(mc.getViewContext(), mc.getRenderingEnv(),
                     formController.getEditView());
             // replace hole view
             ((FragmentActivity) mc.getViewContext()).setContentView(newView);
-            mc.getExecEnvironment().disableInterceptors();
+            mc.getRenderingEnv().disableInterceptors();
             formController.restoreViewState();
-            mc.getExecEnvironment().enableInterceptors();
+            mc.getRenderingEnv().enableInterceptors();
         }
     }
 }

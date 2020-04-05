@@ -13,7 +13,7 @@ import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 
 /*
@@ -39,14 +39,14 @@ import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 public class CheckBoxFieldRenderer extends FieldRenderer {
 
     @Override
-    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
         View baseView = ViewHelper.inflate(viewContext,
                 R.layout.tool_alphaedit_boolean, View.class);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
         TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name, TextView.class);
         fieldLabel.setTag("label");
         Switch input = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_value, Switch.class);

@@ -50,7 +50,7 @@ import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -94,7 +94,7 @@ public class DelegatedExpressionTest {
 
         // set entity in forms context
         form.getContext().setEntity(entity);
-        ExecEnvironment env = new ExecEnvironment(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
         env.setDags(dags);
         // walk the tree executing expressions
         View baseFormView = renderHelper.render(ctx, env, form.getParent());
@@ -107,7 +107,6 @@ public class DelegatedExpressionTest {
             Assert.assertEquals(expectedValue.toString(), field.getValue(env.getContext()).toString());
         }
     }
-
 
     private Object[] createDepsTree(Context ctx) {
         // create one field form

@@ -37,7 +37,7 @@ import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -49,7 +49,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     private UIDatatable dataTable;
     private EntityMeta meta;
     private Repository repo;
-    private ExecEnvironment execEnvironment;
+    private RenderingEnv renderingEnv;
     private List<Entity> entities = new ArrayList<>();
 
 
@@ -112,8 +112,8 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     }
 
 
-    public void load(ExecEnvironment environment) {
-        this.execEnvironment = environment;
+    public void load(RenderingEnv environment) {
+        this.renderingEnv = environment;
         fillHeader(this.getContext(), this.headerView);
 
         // read first page to render data
@@ -166,7 +166,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         this.meta = this.repo.getMeta();
     }
 
-    public ExecEnvironment getExecEnvironment() {
-        return execEnvironment;
+    public RenderingEnv getRenderingEnv() {
+        return renderingEnv;
     }
 }

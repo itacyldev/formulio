@@ -29,7 +29,7 @@ public abstract class BaseRenderer implements Renderer {
 
     protected ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
-    public final View render(Context viewContext, ExecEnvironment env, UIComponent component) {
+    public final View render(Context viewContext, RenderingEnv env, UIComponent component) {
         View baseView = createBaseView(viewContext, env, component);
         // check render condition
         boolean isRendered = component.isRendered(env.getContext());
@@ -49,9 +49,9 @@ public abstract class BaseRenderer implements Renderer {
      * @param component
      * @return
      */
-    protected abstract View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component);
+    protected abstract View createBaseView(Context viewContext, RenderingEnv env, UIComponent component);
 
-    protected abstract void setupView(View baseView, ExecEnvironment env, UIComponent component);
+    protected abstract void setupView(View baseView, RenderingEnv env, UIComponent component);
 
     /**
      * Default method to set focus on the base view of the element

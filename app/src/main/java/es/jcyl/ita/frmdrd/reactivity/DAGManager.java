@@ -102,43 +102,42 @@ public class DAGManager {
                                    Map<String,
                                            DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
         UIComponent component = components.get(componentId);
-        ValueBindingExpression valueExpression = component.getValueExpression();
 
         // The DAG is created only if the component depends on other components
-
-
-        ValueBindingExpression ve = component.getValueExpression();
-        if (ve != null && !ve.isLiteral()) {
-            DAGNode componentNode = getComponentNode(component);
-            List<String> dependingVariables = ve.getDependingVariables();
-
-            String dependingComponentId;
-            for (String depString : dependingVariables) {
-                dependingComponentId = createAbsoluteReference(component, depString);
-
-                UIComponent dependingComponent = components.get(dependingComponentId);
-                if (dependingComponent != null) {
-                    DAGNode dependingNode = getComponentNode(dependingComponent);
-
-                    DirectedAcyclicGraph dag = null;
-                    if (dags.containsKey(componentId)) {
-                        dag = dags.get(componentId);
-                        dag.addVertex(dependingNode);
-                        dag.addEdge(dependingNode, componentNode);
-                        dags.put(dependingComponentId, dag);
-                    } else {
-                        dag = getDagComponent(dependingComponentId, dags);
-                        dag.addVertex(componentNode);
-                        dag.addEdge(dependingNode, componentNode);
-                        dags.put(componentId, dag);
-                    }
-
-                    buildComponentDag(dependingComponentId, dags);
-                }
-            }
-
+        if(component.getValueBindingExpressions() == null){
+            return;
         }
+        for (ValueBindingExpression ve : component.getValueBindingExpressions()) {
+            if (ve != null && !ve.isLiteral()) {
+                DAGNode componentNode = getComponentNode(component);
+                List<String> dependingVariables = ve.getDependingVariables();
 
+                String dependingComponentId;
+                for (String depString : dependingVariables) {
+                    dependingComponentId = createAbsoluteReference(component, depString);
+
+                    UIComponent dependingComponent = components.get(dependingComponentId);
+                    if (dependingComponent != null) {
+                        DAGNode dependingNode = getComponentNode(dependingComponent);
+
+                        DirectedAcyclicGraph dag = null;
+                        if (dags.containsKey(componentId)) {
+                            dag = dags.get(componentId);
+                            dag.addVertex(dependingNode);
+                            dag.addEdge(dependingNode, componentNode);
+                            dags.put(dependingComponentId, dag);
+                        } else {
+                            dag = getDagComponent(dependingComponentId, dags);
+                            dag.addVertex(componentNode);
+                            dag.addEdge(dependingNode, componentNode);
+                            dags.put(componentId, dag);
+                        }
+                        buildComponentDag(dependingComponentId, dags);
+                    }
+                }
+
+            }
+        }
     }
 
     /**
