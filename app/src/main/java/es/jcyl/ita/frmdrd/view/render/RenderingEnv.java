@@ -22,9 +22,12 @@ package es.jcyl.ita.frmdrd.view.render;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
@@ -48,14 +51,15 @@ public class RenderingEnv {
     FormContext formContext;
     private ViewUserActionInterceptor userActionInterceptor;
     private CompositeContext combinedContext;
-    private CompositeContext contextMap;
+    private List<FormContext> currentFormContexts;
+//    private CompositeContext contextMap;
     private Map<String, DeferredView> deferredViews;
     private List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
 
     public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
         userActionInterceptor = new ViewUserActionInterceptor(actionController);
-        contextMap = new MapCompositeContext();
+        currentFormContexts = new ArrayList<>();
         if (globalContext == null) {
             throw new IllegalStateException("Global context mustn't be null!.");
         }
@@ -66,7 +70,13 @@ public class RenderingEnv {
      */
     public void initialize() {
         this.combinedContext = null;
-        this.contextMap.clear();
+        // remove last context from global context
+        if (!currentFormContexts.isEmpty()) {
+            for(FormContext formContext: currentFormContexts){
+                this.globalContext.removeContext(formContext);
+            }
+        }
+        currentFormContexts.clear();
     }
 
     public CompositeContext getContext() {
@@ -93,15 +103,16 @@ public class RenderingEnv {
      * @param formContext
      */
     public void setFormContext(FormContext formContext) {
-        // add current form context
         if (formContext == null) {
             throw new IllegalStateException("FormContext mustn't be null!.");
         }
         this.formContext = formContext;
-        // combine form context with global context
+        // add form to context with full id
+        this.globalContext.addContext(formContext);
+        // register
         this.combinedContext = createCombinedContext(globalContext, formContext);
-        // register form context
-        contextMap.addContext(formContext);
+        // register this FormContext
+        currentFormContexts.add(formContext);
     }
 
     public ViewUserActionInterceptor getUserActionInterceptor() {
@@ -113,10 +124,6 @@ public class RenderingEnv {
         combinedContext.addContext(globalContext);
         combinedContext.addContext(fContext);
         return combinedContext;
-    }
-
-    public CompositeContext getContextMap() {
-        return contextMap;
     }
 
     public void addDeferred(String componentId, DeferredView view) {

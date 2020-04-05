@@ -75,7 +75,6 @@ public class DummyFormConfigParser extends FormConfigParser {
         field6.setId("lastName");
         field6.setValueExpression(exprFactory.create("${entity.last_name}"));
         field6.addValidator(new RequiredValidator());
-        field6.setRenderExpression(exprFactory.create("false"));
         lst.add(field6);
 
         UIField field4 = new UIField();
@@ -84,6 +83,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         field4.setLabel("Email");
         field4.setValueExpression(exprFactory.create("${entity.email}"));
         field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
+        field4.setRenderExpression(exprFactory.create("${entity.it_profile}"));
         lst.add(field4);
 
         UIField field2 = new UIField();

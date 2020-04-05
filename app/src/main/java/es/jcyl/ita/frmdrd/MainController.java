@@ -118,8 +118,8 @@ public class MainController {
         } else {
             formController.load(globalContext);
             uiView = formController.getEditView();
-            DAGManager dagManager = new DAGManager();
-            dagManager.generateDags(uiView);
+//            DAGManager dagManager = new DAGManager();
+//            dagManager.generateDags(uiView);
             intent = new Intent(andContext, FormEditViewHandlerActivity.class);
         }
 
@@ -174,9 +174,9 @@ public class MainController {
         View newView = renderHelper.render(this.viewContext, this.renderingEnv, component);
         renderHelper.replaceView(fieldView, newView);
 
-        if (!reactiveCall) {
-            flowManager.execute(component.getAbsoluteId());
-        }
+//        if (!reactiveCall) {
+//            flowManager.execute(component.getAbsoluteId());
+//        }
     }
 
 

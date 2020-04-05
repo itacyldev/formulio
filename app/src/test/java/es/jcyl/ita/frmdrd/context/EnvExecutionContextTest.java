@@ -36,6 +36,7 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
+import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -76,7 +77,7 @@ public class EnvExecutionContextTest {
         FormController fc = DevFormBuilder.createFormController(ctx, f1, f2);
 
         // render the view and check de resulting context
-        CompositeContext globalContext = new MapCompositeContext();
+        CompositeContext globalContext = new UnPrefixedCompositeContext();
         RenderingEnv env = new RenderingEnv(globalContext, new ActionController());
 
 
@@ -101,24 +102,17 @@ public class EnvExecutionContextTest {
          id1 = f1.getId() + ".entity." + f1.getChildren().get(0).getId();
          id2 = f2.getId() + ".view." + f2.getChildren().get(0).getId();
 
-//        // check the values can be accessed using JEXL expressions
-//        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
-//        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
-//
-//        // lets check global context contains a "form1","form2" context
-//        globalContext.addAllContext(env.getContextMap().getContexts());
-//        Assert.assertNotNull(JexlUtils.eval(globalContext, id1));
-//        Assert.assertNotNull(JexlUtils.eval(globalContext, id2));
+        // check the values can be accessed using JEXL expressions
+        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
+        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
+
+        // lets check global context contains a "form1","form2" context
+        Assert.assertNotNull(JexlUtils.eval(globalContext, id1));
+        Assert.assertNotNull(JexlUtils.eval(globalContext, id2));
 
     }
 
 
-    /**
-     * Test access to entity and view contxt using absolute ids like formId.view.field and formId.entity.field
-     */
-    public void testContextAbsoluteAccess(){
-
-    }
 
     private UIForm createForm() {
         EntityMeta meta1 = DevDbBuilder.createRandomMeta();

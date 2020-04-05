@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  */
 
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -52,6 +53,8 @@ public class SaveActionHandler implements ActionHandler {
             mc.getRenderingEnv().disableInterceptors();
             formController.restoreViewState();
             mc.getRenderingEnv().enableInterceptors();
+
+            Toast.makeText(action.getViewContext(), "The form is invalid, check your input.", Toast.LENGTH_SHORT).show();
         }
     }
 }

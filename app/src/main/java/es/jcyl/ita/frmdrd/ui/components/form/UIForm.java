@@ -15,6 +15,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
 
 
 public class UIForm extends UIComponent {
@@ -160,6 +161,13 @@ public class UIForm extends UIComponent {
         return entityId;
     }
 
+    public boolean isVisible(UIField field){
+        FormViewContext viewContext = context.getViewContext();
+
+        InputFieldView fieldView = viewContext.findInputFieldViewById(field.getId());
+        return fieldView.isVisible();
+    }
+
     public boolean validate(UIField field) {
         FormViewContext viewContext = context.getViewContext();
 
@@ -168,7 +176,9 @@ public class UIForm extends UIComponent {
         boolean valid = true;
         for (Validator validator : field.getValidators()) {
             try {
-                validator.validate(context, field, value);
+                if(isVisible(field)){
+                    validator.validate(context, field, value);
+                }
             } catch (ValidatorException e) {
                 // get the error and put it in form context
                 FormContextHelper.setMessage(context, field.getId(), e.getMessage());
