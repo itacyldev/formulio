@@ -78,14 +78,10 @@ public class DAGManager {
                 viewDAG.addDAG(dag);
             }
 
-            components.clear();
-
-            nodes.clear();
-            nodes = null;
-
-            dags.clear();
+            flush();
         }
     }
+
 
     /**
      * Gets all the components of
@@ -251,6 +247,12 @@ public class DAGManager {
      */
     public Map<String, ViewDAG> getAllDAGs() {
         return viewDags;
+    }
+
+
+    private void flush() {
+        nodes.clear();
+        nodes = null;
     }
 }
 
