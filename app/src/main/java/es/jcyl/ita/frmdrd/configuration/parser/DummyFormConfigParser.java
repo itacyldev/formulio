@@ -11,6 +11,7 @@ import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
@@ -55,13 +56,13 @@ public class DummyFormConfigParser extends FormConfigParser {
     public void parseFormConfig(String formConfigStr) {
         FormController fc1 = new FormController("MyForm1", "Form number 1.");
         createListView1(fc1);
-        createEditView1(fc1);
+        createEditView2(fc1);
         loadConfig(fc1);
-
-        FormController fc2 = new FormController("MyForm2", "Form number 2.");
-        createListView1(fc2);
-        createEditView2(fc2);
-        loadConfig(fc2);
+//
+//        FormController fc2 = new FormController("MyForm2", "Form number 2.");
+//        createListView1(fc2);
+//        createEditView2(fc2);
+//        loadConfig(fc2);
     }
 
 
@@ -94,7 +95,9 @@ public class DummyFormConfigParser extends FormConfigParser {
         Criteria criteria = Criteria.or(ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${entity.first_name}")),
                 ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${entity.last_name}")));
         f.setCriteria(criteria);
+        table.setFilter(f);
         lst.add(table);
+
 
         UIForm form1 = new UIForm();
         form1.setId("form1");
@@ -172,10 +175,16 @@ public class DummyFormConfigParser extends FormConfigParser {
         List<String> deps = new ArrayList<>();
         deps.add("view.f0");
         ContextToRepoBinding.getInstance().setRepoContextDeps(contactsRepo.getId(), deps);
-
         table.setId("table1");
         table.setRepo(contactsRepo);
         table.setRoute("MyForm1#edit");
+        // order the table by a fixed criteria
+        Filter f = new SQLQueryFilter();
+        Criteria criteria = Criteria.or(Condition.contains("first_name", "%a%"),
+                Condition.contains("last_name", "%a%"));
+        f.setCriteria(criteria);
+        f.setSorting(new Sort[]{Sort.asc("email")});
+        table.setFilter(f);
         lst.add(table);
 
         UIForm form1 = new UIForm();
@@ -184,10 +193,10 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setChildren(lst);
         form1.setRenderExpression(exprFactory.create("true"));
         form1.setRepo(contactsRepo);
-        List<UIComponent> f = new ArrayList<>();
-        f.add(form1);
+        List<UIComponent> lstView = new ArrayList<>();
+        lstView.add(form1);
         UIView view1 = new UIView("view2");
-        view1.setChildren(f);
+        view1.setChildren(lstView);
 
         formController.setEditView(view1);
     }

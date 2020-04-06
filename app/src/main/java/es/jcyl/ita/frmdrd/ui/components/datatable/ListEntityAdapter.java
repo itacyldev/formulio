@@ -178,7 +178,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     }
 
 
-    static class ViewColumnHolder {
+     class ViewColumnHolder {
         int position;
         boolean charged;
         LinearLayout layout;

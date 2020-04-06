@@ -154,7 +154,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
 
         // get datatable filter definiton
         Filter filterDefinition = dataTable.getFilter();
-        if(filterDefinition != null){
+        if (filterDefinition != null) {
             // evaluate filter conditions
             Criteria effectiveCriteria = criteriaVisitor.visit(filterDefinition.getCriteria(), context);
             this.offset = 0;
@@ -163,7 +163,8 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
             f.setSorting(filterDefinition.getSorting());
         }
         f.setOffset(this.offset);
-        f.setPageSize(this.pageSize);       return f;
+        f.setPageSize(this.pageSize);
+        return f;
     }
 
     private Filter createFilterInstance() {

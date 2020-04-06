@@ -31,6 +31,7 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
 public class CriteriaVisitor {
     private static final CriteriaElement CRITERIA_ELEMENT = new CriteriaElement();
     private static final ConditionElement CONDITION_ELEMENT = new ConditionElement();
+    private static final ConditionBindingElement CONDITION_BINDING_ELEMENT = new ConditionBindingElement();
 
     public Criteria visit(Criteria criteriaDef, Context context) {
         return (Criteria) element(criteriaDef).accept(criteriaDef, context);
@@ -40,7 +41,7 @@ public class CriteriaVisitor {
         Expression accept(T e, Context context);
     }
 
-    public static class ConditionElement implements Element<ConditionBinding> {
+    public static class ConditionBindingElement implements Element<ConditionBinding> {
 
         @Override
         public Expression accept(ConditionBinding expre, Context context) {
@@ -63,6 +64,15 @@ public class CriteriaVisitor {
                 }
                 return c;
             }
+        }
+    }
+
+    public static class ConditionElement implements Element<Condition> {
+
+        @Override
+        public Expression accept(Condition expr, Context context) {
+            // condition with fixed value, return original Condition object
+            return expr;
         }
     }
 
@@ -91,10 +101,12 @@ public class CriteriaVisitor {
     }
 
     private static Element element(Expression e) {
-        if (e instanceof Condition) {
-            return CONDITION_ELEMENT;
-        } else {
+        if (e instanceof ConditionBinding) {
+            return CONDITION_BINDING_ELEMENT;
+        } else if (e instanceof Criteria) {
             return CRITERIA_ELEMENT;
+        } else {
+            return CONDITION_ELEMENT;
         }
     }
 
