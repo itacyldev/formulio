@@ -19,22 +19,22 @@ package es.jcyl.ita.frmdrd.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import android.view.View;
+
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
 import es.jcyl.ita.frmdrd.reactivity.DAGNode;
 
 /**
@@ -49,10 +49,11 @@ public class RenderingEnv {
 
     CompositeContext globalContext;
     FormContext formContext;
+
     private ViewUserActionInterceptor userActionInterceptor;
     private CompositeContext combinedContext;
     private List<FormContext> currentFormContexts;
-//    private CompositeContext contextMap;
+    //    private CompositeContext contextMap;
     private Map<String, DeferredView> deferredViews;
     private List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
 
@@ -72,7 +73,7 @@ public class RenderingEnv {
         this.combinedContext = null;
         // remove last context from global context
         if (!currentFormContexts.isEmpty()) {
-            for(FormContext formContext: currentFormContexts){
+            for (FormContext formContext : currentFormContexts) {
                 this.globalContext.removeContext(formContext);
             }
         }
@@ -143,6 +144,11 @@ public class RenderingEnv {
 
     public void setDags(List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
         this.dags = dags;
+    }
+
+    public View getViewRoot() {
+        MainController mc = MainController.getInstance();
+        return mc.getViewRoot();
     }
 }
 

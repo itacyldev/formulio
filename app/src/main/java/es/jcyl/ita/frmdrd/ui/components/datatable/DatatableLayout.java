@@ -30,13 +30,16 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
+import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.query.Criteria;
+import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.repo.query.CriteriaVisitor;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
@@ -51,15 +54,15 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     private Repository repo;
     private RenderingEnv renderingEnv;
     private List<Entity> entities = new ArrayList<>();
+    // view sorting and filtering criteria
+    private Filter filter;
 
-
-
+    private static CriteriaVisitor criteriaVisitor = new CriteriaVisitor();
 
     // inner view elements
     private LinearLayout headerView;
     private ListView bodyView;
 
-    private ViewUserActionInterceptor userActionInterceptor;
 
     public DatatableLayout(Context context) {
         super(context);
@@ -74,11 +77,10 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     }
 
     private void loadNextPage() {
-        SQLQueryFilter f = new SQLQueryFilter();
-        f.setPageSize(this.pageSize);
-        f.setOffset(this.offset);
+        this.filter.setPageSize(this.pageSize);
+        this.filter.setOffset(this.offset);
         //this.entities.clear();
-        this.entities.addAll(this.repo.find(f));
+        this.entities.addAll(this.repo.find(this.filter));
 
         //notify that the model changed
         ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
@@ -116,6 +118,8 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         this.renderingEnv = environment;
         fillHeader(this.getContext(), this.headerView);
 
+        // set filter to repo using current view data
+        this.filter = setupFilter(environment.getContext());
         // read first page to render data
         loadNextPage();
         ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this,
@@ -145,6 +149,34 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         });
     }
 
+    private Filter setupFilter(CompositeContext context) {
+        Filter f = createFilterInstance();
+
+        // get datatable filter definiton
+        Filter filterDefinition = dataTable.getFilter();
+        if(filterDefinition != null){
+            // evaluate filter conditions
+            Criteria effectiveCriteria = criteriaVisitor.visit(filterDefinition.getCriteria(), context);
+            this.offset = 0;
+            this.pageSize = 20;
+            f.setCriteria(effectiveCriteria);
+            f.setSorting(filterDefinition.getSorting());
+        }
+        f.setOffset(this.offset);
+        f.setPageSize(this.pageSize);       return f;
+    }
+
+    private Filter createFilterInstance() {
+        Filter f;
+        try {
+            f = (Filter) repo.getFilterClass().newInstance();
+        } catch (Exception e) {
+            throw new ViewConfigException("An error ocurred while trying to instantiate the filter " +
+                    "class: " + repo.getFilterClass().getName());
+        }
+        return f;
+    }
+
 
     private void fillHeader(Context viewContext, LinearLayout headersLayout) {
         headersLayout.removeAllViews();
@@ -169,4 +201,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     public RenderingEnv getRenderingEnv() {
         return renderingEnv;
     }
+
+
 }

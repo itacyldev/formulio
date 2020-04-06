@@ -6,19 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
-import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
+import es.jcyl.ita.crtrepo.query.Condition;
+import es.jcyl.ita.crtrepo.query.Criteria;
+import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.reactivity.DAGManager;
+import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
@@ -49,13 +53,66 @@ public class DummyFormConfigParser extends FormConfigParser {
 
     @Override
     public void parseFormConfig(String formConfigStr) {
-        FormController c1 = new FormController("MyForm1", "Form number 1.");
-        createEditView1(c1);
-        createListView1(c1);
-        loadConfig(c1);
+        FormController fc1 = new FormController("MyForm1", "Form number 1.");
+        createListView1(fc1);
+        createEditView1(fc1);
+        loadConfig(fc1);
+
+        FormController fc2 = new FormController("MyForm2", "Form number 2.");
+        createListView1(fc2);
+        createEditView2(fc2);
+        loadConfig(fc2);
     }
 
+
     private void createEditView1(FormController formController) {
+        List<UIComponent> lst = new ArrayList<UIComponent>();
+        UIField field0 = new UIField();
+        field0.setId("filter");
+        field0.setType(UIField.TYPE.TEXT);
+        field0.setLabel("Filter");
+        lst.add(field0);
+
+        // datatable
+        RepositoryProjectConfReader config = new RepositoryProjectConfReader();
+        config.read();
+        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+
+        String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
+        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
+        List<String> deps = new ArrayList<>();
+        deps.add("view.f0");
+        ContextToRepoBinding.getInstance().setRepoContextDeps(contactsRepo.getId(), deps);
+
+        table.setId("table1");
+        table.setRepo(contactsRepo);
+        table.setRoute("MyForm1#edit");
+
+        // table repository filter
+        Filter f = new SQLQueryFilter();
+        Criteria criteria = Criteria.or(ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${entity.first_name}")),
+                ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${entity.last_name}")));
+        f.setCriteria(criteria);
+        lst.add(table);
+
+        UIForm form1 = new UIForm();
+        form1.setId("form1");
+        form1.setLabel("Formulario 1");
+        form1.setChildren(lst);
+        form1.setRenderExpression(exprFactory.create("true"));
+        form1.setRepo(contactsRepo);
+        List<UIComponent> viewKids = new ArrayList<>();
+        viewKids.add(form1);
+        UIView view1 = new UIView("view1");
+        view1.setChildren(viewKids);
+
+        DAGManager.getInstance().generateDags(view1);
+
+        formController.setEditView(view1);
+    }
+
+    private void createEditView2(FormController formController) {
         List<UIComponent> lst = new ArrayList<UIComponent>();
         UIField field0 = new UIField();
         field0.setId("contactId");
@@ -129,7 +186,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setRepo(contactsRepo);
         List<UIComponent> f = new ArrayList<>();
         f.add(form1);
-        UIView view1 = new UIView("view1");
+        UIView view1 = new UIView("view2");
         view1.setChildren(f);
 
         formController.setEditView(view1);

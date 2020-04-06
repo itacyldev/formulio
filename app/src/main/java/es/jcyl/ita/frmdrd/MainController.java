@@ -27,14 +27,12 @@ import java.util.Map;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
-import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.reactivity.DAGManager;
 import es.jcyl.ita.frmdrd.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
@@ -58,19 +56,19 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 public class MainController {
 
     private static MainController _instance;
+
     // Android context and view
     private android.content.Context viewContext;
     private View viewRoot;
-
     // Global context and root component
     private CompositeContext globalContext;
     private UIView uiView;
 
     // helper to render the uiView in an Android Context
     private ViewRenderHelper renderHelper = new ViewRenderHelper();
+    private RenderingEnv renderingEnv;
 
     // user action management
-    private RenderingEnv renderingEnv;
     private ActionController actionController;
     private FormController formController;
     private ReactivityFlowManager flowManager;
@@ -93,7 +91,9 @@ public class MainController {
         router = new Router(this);
     }
 
-
+    /*********************************************/
+    /***  Navigation control methods */
+    /*********************************************/
     /**
      * Implements navigation to a new view
      *
@@ -145,6 +145,9 @@ public class MainController {
         globalContext.addContext(pContext);
     }
 
+    /*********************************************/
+    /***  View rendering methods */
+    /*********************************************/
     /**
      * Renders current view in the given Android context and returns the generated View
      *
@@ -179,11 +182,20 @@ public class MainController {
         }
     }
 
+    /**
+     * Renders all the views with expressions that depend on given element
+     *
+     * @param component: ui component that fires the changes in the View
+     */
+    public void updateDependants(UIComponent component) {
+        renderHelper.renderDeps(this.viewContext, this.renderingEnv, component);
+    }
 
     private void setViewContext(android.content.Context viewContext) {
         this.viewContext = viewContext;
         this.formController.setViewContext(viewContext);
     }
+
 
     /*********************************************/
     /***  GETTERS TO ACCESS SHARED INFORMATION */
@@ -210,7 +222,9 @@ public class MainController {
         return formController;
     }
 
-    public ViewRenderHelper getRenderHelper() {return renderHelper; }
+    public ViewRenderHelper getRenderHelper() {
+        return renderHelper;
+    }
 
     public RenderingEnv getRenderingEnv() {
         return renderingEnv;

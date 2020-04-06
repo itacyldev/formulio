@@ -39,6 +39,7 @@ public class DatatableRenderer extends BaseRenderer {
         DatatableLayout datatableView = (DatatableLayout) View.inflate(viewContext,
                 R.layout.datatable_layout, null);
         datatableView.setDatatable(dtComponent);
+        datatableView.setTag(getBaseViewTag(component));
         return datatableView;
     }
 

@@ -19,6 +19,7 @@ import android.content.Context;
 import android.view.View;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /**
@@ -54,14 +55,16 @@ public abstract class BaseRenderer implements Renderer {
     protected abstract void setupView(View baseView, RenderingEnv env, UIComponent component);
 
     /**
-     * Default method to set focus on the base view of the element
+     * Calculates the tag for the GroupView component that contains all the input, so when a partial
+     * re-render is applied, the hole component can be easily found in the view.
+     * The base view will be tagged as form:id and the input view below this as form:id>input
      *
-     * @param viewContext
-     * @param component
+     * @return
      */
-//    @Override
-    public void setFocus(Context viewContext, UIComponent component) {
-
+    protected String getBaseViewTag(UIComponent c) {
+        UIForm form = c.getParentForm();
+        String formId = (form == null) ? "root" : form.getId();
+        return formId + ":" + c.getId();
     }
 
 

@@ -26,13 +26,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.reactivity.DAGNode;
+import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.render.DeferredView;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.Renderer;
 import es.jcyl.ita.frmdrd.view.render.RendererFactory;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -158,4 +159,46 @@ public class ViewRenderHelper {
         }
     }
 
+    /**
+     * Given an element in current view, renders all the dependant elements
+     */
+    public void renderDeps(Context viewContext, RenderingEnv env, UIComponent component) {
+
+        // get element dags
+        if (env.getDags() == null) {
+            return;
+        }
+        // get current Android view
+        View rootView = env.getViewRoot();
+
+        // get the dags in which current element is referred
+        // TODO: hay que buscar una forma de obtener los dags en los que aparece el elemento actual
+
+        // walk the tree in topological order to follow the dependencies from the current element
+        for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : env.getDags()) {
+            // sets the rendering starting point, when given element is found in the DAG
+            boolean found = false;
+
+            for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
+                DAGNode node = it.next();
+                if (!found) {
+                    if (node.getComponent().getId().equals(component.getId())) {
+                        found = true; // start rendering in next element
+                    }
+                    break;
+                } else {
+                    // find view element to update
+                    UIComponent cNode = node.getComponent();
+                    View view = ViewHelper.findComponentView(rootView, cNode);
+                    if (view instanceof DynamicComponent) {
+                        ((DynamicComponent) view).load(env);
+                    } else {
+                        // re-render and replace view
+                        View newView = this.render(viewContext, env, node.getComponent(), false);
+                        replaceView(view, newView);
+                    }
+                }
+            }
+        }
+    }
 }
