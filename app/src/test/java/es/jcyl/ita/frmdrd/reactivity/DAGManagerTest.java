@@ -25,40 +25,21 @@ public class DAGManagerTest {
         UIView view = createView();
 
         DAGManager dagManager = DAGManager.getInstance();
-        dagManager.getDags().clear();
+        //dagManager.getDags().clear();
         dagManager.generateDags(view);
 
-        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = dagManager.getDags();
+        ViewDAG viewDags = dagManager.getViewDAG(view.getId());
+
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = viewDags.getDags();
+
+        Assert.assertEquals(2, dags.size());
 
         // Get each field's dag
         DirectedAcyclicGraph dag1 = dags.get("form.field1");
-        DirectedAcyclicGraph dag2 = dags.get("form.field2");
-        DirectedAcyclicGraph dag3 = dags.get("form.field3");
-        DirectedAcyclicGraph dag4 = dags.get("form.field4");
-        DirectedAcyclicGraph dag5 = dags.get("form.field5");
-        DirectedAcyclicGraph dag6 = dags.get("form.field6");
-        DirectedAcyclicGraph dag7 = dags.get("form.field7");
-
-
-        Assert.assertEquals(6, dags.size());
-
-        // Fields 1,2,3 and 4 are nodes in the same DAG
-        Assert.assertEquals(dag1, dag2);
-        Assert.assertEquals(dag1, dag3);
-        Assert.assertEquals(dag1, dag4);
-
-        // Fields 5 and 6 are nodes in the same DAG
-        Assert.assertEquals(dag5, dag6);
-
-        // Fields 1 and 5 are nodes in different DAGs
-        Assert.assertNotEquals(dag1, dag5);
-
-        // Field 7 has no dependencies therefore it has no DAG
-        Assert.assertNull(dag7);
-
+        DirectedAcyclicGraph dag2 = dags.get("form.field5");
 
         Assert.assertEquals(4, dag1.vertexSet().size());
-        Assert.assertEquals(2, dag5.vertexSet().size());
+        Assert.assertEquals(2, dag2.vertexSet().size());
 
     }
 
@@ -68,12 +49,11 @@ public class DAGManagerTest {
         UIView view = createViewWithCycle();
 
         DAGManager dagManager = DAGManager.getInstance();
-        dagManager.getDags().clear();
         dagManager.generateDags(view);
     }
 
     private UIView createView() {
-        UIView view = new UIView("view");
+        UIView view = new UIView("view1");
         UIForm form = createForm("form");
         view.addChild(form);
 
@@ -81,7 +61,7 @@ public class DAGManagerTest {
     }
 
     private UIView createViewWithCycle() {
-        UIView view = new UIView("view");
+        UIView view = new UIView("view2");
         UIForm form = createFormWithCycle("form");
         view.addChild(form);
 
@@ -98,7 +78,7 @@ public class DAGManagerTest {
         fields.add(field1);
 
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
-        exprFactory.create("${entity.it_profile}", Long.class);
+//        exprFactory.create("${entity.it_profile}", Long.class);
         UIField field2 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
                         "field 2").withValueBindingExpression("${form.field1}", String.class).build();
