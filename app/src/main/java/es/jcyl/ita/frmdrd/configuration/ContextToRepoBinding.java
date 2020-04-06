@@ -27,6 +27,15 @@ public class ContextToRepoBinding {
 
     private final Map<String, List<String>> deps = new HashMap<>();
 
+    private static ContextToRepoBinding _instance = null;
+
+    public static ContextToRepoBinding getInstance() {
+        if (_instance == null) {
+            _instance = new ContextToRepoBinding();
+        }
+        return _instance;
+    }
+
     /**
      * Returns the list of context variables in which the given repository depends on
      *

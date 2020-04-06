@@ -19,36 +19,49 @@ package es.jcyl.ita.frmdrd.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedAcyclicGraph;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
-import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.frmdrd.reactivity.DAGNode;
 
 /**
- * Helper object using during the rendering process to give the renderers access to commons objects
- * needed during the view construction, like entity and view contexts and access to userAction
- * interceptors.
+ * Context storing object used during the rendering process to give the renderers access to commons objects
+ * needed during the view construction, like entity and view contexts, access to userAction
+ * interceptors and a temporary store like deffered view elements.
  * During the rendering, the ExecEnvironment gathers the form contexts to be bound later to the
  * GlobalContext, so access to all form context can be made with expressions like formId.entity.property
  * or formId.view.field.
  */
-public class ExecEnvironment {
+public class RenderingEnv {
 
     CompositeContext globalContext;
     FormContext formContext;
     private ViewUserActionInterceptor userActionInterceptor;
     private CompositeContext combinedContext;
-    private CompositeContext contextMap;
+    private List<FormContext> currentFormContexts;
+//    private CompositeContext contextMap;
+    private Map<String, DeferredView> deferredViews;
+    private List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
 
-    public ExecEnvironment(CompositeContext globalContext, ActionController actionController) {
+    public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
         userActionInterceptor = new ViewUserActionInterceptor(actionController);
-        contextMap = new MapCompositeContext();
+        currentFormContexts = new ArrayList<>();
         if (globalContext == null) {
-            throw new IllegalStateException("Global context is not properly set ExecEnvironment!.");
+            throw new IllegalStateException("Global context mustn't be null!.");
         }
     }
 
@@ -57,7 +70,13 @@ public class ExecEnvironment {
      */
     public void initialize() {
         this.combinedContext = null;
-        this.contextMap.clear();
+        // remove last context from global context
+        if (!currentFormContexts.isEmpty()) {
+            for(FormContext formContext: currentFormContexts){
+                this.globalContext.removeContext(formContext);
+            }
+        }
+        currentFormContexts.clear();
     }
 
     public CompositeContext getContext() {
@@ -76,16 +95,24 @@ public class ExecEnvironment {
         return formContext;
     }
 
+    /**
+     * Every time a form starts the rendering, the RenderEnv stores the context and links it with
+     * the formId to the global context. So relative access can be done inside the form elements,
+     * but also absolute access inter-form can be achieve throught the global context references.
+     *
+     * @param formContext
+     */
     public void setFormContext(FormContext formContext) {
-        // add current form context
         if (formContext == null) {
-            throw new IllegalStateException("FormContext is not properly set in ExecEnvironment!.");
+            throw new IllegalStateException("FormContext mustn't be null!.");
         }
         this.formContext = formContext;
-        // combine form context with global context
+        // add form to context with full id
+        this.globalContext.addContext(formContext);
+        // register
         this.combinedContext = createCombinedContext(globalContext, formContext);
-        // register form context
-        contextMap.addContext(formContext);
+        // register this FormContext
+        currentFormContexts.add(formContext);
     }
 
     public ViewUserActionInterceptor getUserActionInterceptor() {
@@ -99,7 +126,23 @@ public class ExecEnvironment {
         return combinedContext;
     }
 
-    public CompositeContext getContextMap() {
-        return contextMap;
+    public void addDeferred(String componentId, DeferredView view) {
+        if (this.deferredViews == null) {
+            this.deferredViews = new HashMap<>();
+        }
+        this.deferredViews.put(componentId, view);
+    }
+
+    public Map<String, DeferredView> getDeferredViews() {
+        return deferredViews;
+    }
+
+    public List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> getDags() {
+        return dags;
+    }
+
+    public void setDags(List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
+        this.dags = dags;
     }
 }
+

@@ -22,7 +22,8 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 
 /*
@@ -48,17 +49,17 @@ import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 public class DateFieldRenderer extends FieldRenderer {
 
     @Override
-    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
         LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
                 R.layout.tool_alphaedit_date, null);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
-        final TextView fieldLabel = baseView
-                .findViewById(R.id.field_layout_name);
+    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
 
+        TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
+                TextView.class);
         final Button input = baseView
                 .findViewById(R.id.field_layout_value);
         input.setTag(getInputTag(component));
@@ -67,11 +68,10 @@ public class DateFieldRenderer extends FieldRenderer {
         input.setText(strValue);
         ((InputFieldView) baseView).setInputView(input);
 
-        final Button today = baseView
-                .findViewById(R.id.field_layout_today);
-        final ImageView resetButton = baseView
-                .findViewById(R.id.field_layout_x);
-
+        Button today = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_today,
+                Button.class);
+        ImageView resetButton = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_x,
+                ImageView.class);
         fieldLabel.setText(component.getLabel());
 
         final DatePickerDialog.OnDateSetListener listener =

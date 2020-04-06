@@ -1,14 +1,16 @@
 package es.jcyl.ita.frmdrd.ui.components;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 public abstract class UIComponent implements Serializable {
     protected UIComponent root;
@@ -18,11 +20,10 @@ public abstract class UIComponent implements Serializable {
     protected List<UIComponent> children;
     protected String label;
 
-    protected String reRender;
-    protected String renderCondition;
     private String rendererType;
 
     private ValueBindingExpression valueExpression;
+    private ValueBindingExpression renderExpression;
 
     /**
      * if the children of this component have to be rendered individually
@@ -38,10 +39,10 @@ public abstract class UIComponent implements Serializable {
      *
      * @return
      */
-    public String getCompleteId() {
+    public String getAbsoluteId() {
         String completeId = id;
         if (parent != null) {
-            completeId = parent.getCompleteId() + "." + id;
+            completeId = parent.getAbsoluteId() + "." + id;
         }
         return completeId;
     }
@@ -87,10 +88,21 @@ public abstract class UIComponent implements Serializable {
         }
     }
 
+    public void addChild(UIComponent... lstChildren) {
+        if (children == null) {
+            children = new ArrayList<>();
+        }
+        for (UIComponent kid : lstChildren) {
+            kid.setParent(this);
+            children.add(kid);
+        }
+    }
+
     public void addChild(UIComponent child) {
         if (children == null) {
             children = new ArrayList<>();
         }
+        child.setParent(this);
         children.add(child);
     }
 
@@ -100,22 +112,6 @@ public abstract class UIComponent implements Serializable {
 
     public void setLabel(final String label) {
         this.label = label;
-    }
-
-    public String getReRender() {
-        return reRender;
-    }
-
-    public void setReRender(String reRender) {
-        this.reRender = reRender;
-    }
-
-    public String getRenderCondition() {
-        return renderCondition;
-    }
-
-    public void setRenderCondition(String renderCondition) {
-        this.renderCondition = renderCondition;
     }
 
     public String getRendererType() {
@@ -137,6 +133,7 @@ public abstract class UIComponent implements Serializable {
     public void setChildren(UIComponent[] children) {
         this.children = new ArrayList<UIComponent>();
         for (UIComponent c : children) {
+            c.setParent(this);
             this.children.add(c);
         }
     }
@@ -180,12 +177,36 @@ public abstract class UIComponent implements Serializable {
         this.valueExpression = valueExpression;
     }
 
+    public ValueBindingExpression getRenderExpression() {
+        return renderExpression;
+    }
+
+    public void setRenderExpression(ValueBindingExpression renderExpression) {
+        this.renderExpression = renderExpression;
+    }
+
     public Object getValue(Context context) {
         if (this.valueExpression == null) {
             return null;
         } else {
             // evaluate expression against context
             return JexlUtils.eval(context, this.valueExpression);
+        }
+    }
+
+    public boolean isRendered(Context context) {
+        if (this.renderExpression == null) {
+            return true;
+        } else {
+            // evaluate expression against context
+            Object value = JexlUtils.eval(context, this.renderExpression);
+            try {
+                return (Boolean) ConvertUtils.convert(value, Boolean.class);
+            } catch (Exception e) {
+                throw new ViewConfigException(String.format("Invalid rendering expression in " +
+                                "component [%s] the resulting value couldn't be cast to Boolean.",
+                        this.getId(), this.renderExpression, e));
+            }
         }
     }
 
@@ -208,6 +229,17 @@ public abstract class UIComponent implements Serializable {
         } else {
             return super.toString();
         }
+    }
+
+    public ValueBindingExpression[] getValueBindingExpressions() {
+        List<ValueBindingExpression> express = new ArrayList<ValueBindingExpression>();
+        if (this.valueExpression != null) {
+            express.add(valueExpression);
+        }
+        if (this.renderExpression != null) {
+            express.add(renderExpression);
+        }
+        return express.toArray(new ValueBindingExpression[express.size()]);
     }
 
 }

@@ -12,6 +12,11 @@
 
     <!-- tool button descriptions -->
     <string name="tool_buttons_x">Cancel</string>
+    <string name="title_activity_form_list_view_handler">FormListViewHandlerActivity</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 
 
 </resources>

@@ -63,6 +63,8 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         builder = repoFactory.getBuilder(eSource);
         builder.build();
 
+
+
         // create repository against spatialite database
 //        eSource = sourceFactory.getEntitySource("inspecciones");
 //        metaModeler = new SpatiaLiteMetaModeler();
@@ -92,7 +94,7 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE_CURSOR);
         builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
         builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.ENTITY_TYPE_ID, "filteredContacts");
-        String query = "select * from contacts where first_name like '%SA%'";
+        String query = "select * from contacts where first_name like '%${view.f0}%'";
         builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.QUERY, query);
         builder.build();
 

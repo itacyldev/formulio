@@ -31,7 +31,6 @@ import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
@@ -43,7 +42,7 @@ import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -71,7 +70,6 @@ public class EnvExecutionContextTest {
     public void testResultingCompositeContext() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
-
         // create random entity meta and use databuilder to populate entity data
         UIForm f1 = createForm();
         UIForm f2 = createForm();
@@ -79,31 +77,42 @@ public class EnvExecutionContextTest {
         FormController fc = DevFormBuilder.createFormController(ctx, f1, f2);
 
         // render the view and check de resulting context
-        CompositeContext globalContext = new MapCompositeContext();
-        ExecEnvironment env = new ExecEnvironment(globalContext, new ActionController());
+        CompositeContext globalContext = new UnPrefixedCompositeContext();
+        RenderingEnv env = new RenderingEnv(globalContext, new ActionController());
 
 
         // render the view
         ViewRenderHelper viewRenderer = new ViewRenderHelper();
 
         View view = viewRenderer.render(ctx, env, fc.getEditView());
-
         Assert.assertNotNull(env.getFormContext().getViewContext());
         Assert.assertNotNull(env.getFormContext().getEntityContext());
 
-        String id1 = f1.getId() + ".entity." + f1.getChildren().get(0).getId();
-        String id2 = f2.getId() + ".entity." + f2.getChildren().get(0).getId();
+        UIForm lastForm = env.getFormContext().getForm();
+
+        // access the context of the last evaluated form using relative paths like view.field or entity.field
+        String id1 = "entity." + lastForm.getChildren().get(0).getId();
+        String id2 =  "view." + lastForm.getChildren().get(0).getId();
 
         // check the values can be accessed using JEXL expressions
-        Assert.assertNotNull(JexlUtils.eval(env.getContextMap(), id1));
-        Assert.assertNotNull(JexlUtils.eval(env.getContextMap(), id2));
+        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
+        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
+
+        // Access each form context using absolute paths
+         id1 = f1.getId() + ".entity." + f1.getChildren().get(0).getId();
+         id2 = f2.getId() + ".view." + f2.getChildren().get(0).getId();
+
+        // check the values can be accessed using JEXL expressions
+        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
+        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
 
         // lets check global context contains a "form1","form2" context
-        globalContext.addAllContext(env.getContextMap().getContexts());
         Assert.assertNotNull(JexlUtils.eval(globalContext, id1));
         Assert.assertNotNull(JexlUtils.eval(globalContext, id2));
 
     }
+
+
 
     private UIForm createForm() {
         EntityMeta meta1 = DevDbBuilder.createRandomMeta();
@@ -113,6 +122,8 @@ public class EnvExecutionContextTest {
 
         // set an entity to simulate the loading before rendering
         f1.getContext().setEntity(entity1);
+
+
         return f1;
     }
 

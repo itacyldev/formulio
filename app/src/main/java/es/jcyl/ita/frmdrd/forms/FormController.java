@@ -22,8 +22,8 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.EntityContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
 
@@ -60,7 +60,6 @@ public class FormController {
             form.load(globalCtx);
         }
     }
-
 
     private Object getEntityIdFromContext(UIForm uiform, Context globalCtx) {
         String entityIdProp = uiform.getEntityId();

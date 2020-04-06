@@ -39,11 +39,12 @@ public class JexlUtils {
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(true).silent(false).create();
 
-    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, true, 256, '$', '#');
+    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, true,
+            256, '$', '#');
 
     public static Object eval(Context ctx, String expression) {
-        JexlExpression exl = jexl.createExpression(expression);
         try {
+            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
             return exl.evaluate(new JexlContextWrapper(ctx));
         } catch (Exception e) {
             throw new RuntimeException(String.format(
@@ -54,8 +55,8 @@ public class JexlUtils {
     }
 
     public static Object eval(JexlContext ctx, String expression) {
-        JexlExpression exl = jexl.createExpression(expression);
         try {
+            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
             return exl.evaluate(ctx);
         } catch (Exception e) {
             throw new RuntimeException(String.format(
@@ -66,9 +67,8 @@ public class JexlUtils {
     }
 
     public static Object eval(Entity entity, String expression) {
-        // TODO: cache contexts using entitySource#entityId as unique identifier?
-        JexlExpression exl = jexl.createExpression(expression);
         try {
+            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
             JexlContext jc = new MapContext();
             jc.set("entity", new JexlEntityWrapper(entity));
             return exl.evaluate(jc);

@@ -76,6 +76,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.5'
     implementation "org.mini2Dx:android-beans:1.0.0"
     implementation "commons-validator:commons-validator:1.6"
+    implementation 'org.mozilla:rhino:1.7.12'
 
     //implementation 'es.jcyl.ita.groovy:groovy-android:2.4.16'
     implementation('com.google.android.tools:dx:1.7') {
@@ -94,6 +95,8 @@ dependencies {
 
 
     // Core library
+    implementation 'androidx.navigation:navigation-fragment:2.0.0'
+    implementation 'androidx.navigation:navigation-ui:2.0.0'
     androidTestImplementation 'androidx.test:core:1.0.0'
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation('androidx.test:runner:1.2.0') {
@@ -120,5 +123,3 @@ dependencies {
         exclude group: 'com.google.android', module: 'android'
     }
 }
-
-

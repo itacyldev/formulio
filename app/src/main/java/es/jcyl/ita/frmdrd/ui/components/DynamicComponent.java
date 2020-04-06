@@ -15,7 +15,7 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -25,6 +25,6 @@ import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
 
 public interface DynamicComponent {
 
-    void load(ExecEnvironment env);
+    void load(RenderingEnv env);
 
 }

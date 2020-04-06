@@ -30,7 +30,7 @@ public class RequiredValidator implements Validator {
     public void validate(Context ctx, UIComponent component, String value) {
         //TODO: use localize messages
         String msg = "You have to fill the value.";
-        if (StringUtils.isBlank(value.toString())) {
+        if (StringUtils.isBlank(value)) {
             throw new ValidatorException(msg);
         }
     }

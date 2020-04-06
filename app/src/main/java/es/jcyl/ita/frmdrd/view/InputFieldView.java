@@ -56,24 +56,27 @@ public class InputFieldView extends LinearLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+
     /**********************************************/
     /**** Methods to access and modify the view ***/
     /**********************************************/
 
     public void setValue(Object value) {
+        if (inputView == null) return; // view hasn't been rendered
         converter.setViewValue(inputView, value);
     }
 
     public void setValueString(String value) {
+        if (inputView == null) return;// view hasn't been rendered
         converter.setViewValueAsString(inputView, value);
     }
 
     public <T> T getValue(Class<T> expectedType) {
-        return (T) converter.getValueFromView(inputView, expectedType);
+        return (inputView == null) ? null : (T) converter.getValueFromView(inputView, expectedType);
     }
 
     public String getValueString() {
-        return converter.getValueFromViewAsString(inputView);
+        return (inputView == null) ? null : converter.getValueFromViewAsString(inputView);
     }
 
     public void setFocus(boolean focusable) {
@@ -83,6 +86,10 @@ public class InputFieldView extends LinearLayout {
     /*************************************/
     /**** GETTERS/SETTERS ***/
     /*************************************/
+
+    public boolean isVisible() {
+        return this.inputView != null;
+    }
 
     public View getInputView() {
         return inputView;

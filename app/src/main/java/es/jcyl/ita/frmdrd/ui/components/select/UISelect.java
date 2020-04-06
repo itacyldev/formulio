@@ -15,10 +15,21 @@ package es.jcyl.ita.frmdrd.ui.components.select;
  * limitations under the License.
  */
 
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UISelect extends UIComponent {
+
+    private Repository repo;
+
+    public Repository getRepo() {
+        return repo;
+    }
+
+    public void setRepo(Repository repo) {
+        this.repo = repo;
+    }
 }

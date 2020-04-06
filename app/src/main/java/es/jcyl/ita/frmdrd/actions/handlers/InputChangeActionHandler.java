@@ -49,11 +49,11 @@ public class InputChangeActionHandler implements ActionHandler {
             mc.updateView(component,false);
             // find the new View and restore state
             fieldView = viewContext.findInputFieldViewById(component.getId());
-            mc.getExecEnvironment().disableInterceptors();
+            mc.getRenderingEnv().disableInterceptors();
             fieldView.setValueString(state);
             // restore focus on the current view element
             fieldView.setFocus(true);
-            mc.getExecEnvironment().enableInterceptors();
+            mc.getRenderingEnv().enableInterceptors();
         }
     }
 

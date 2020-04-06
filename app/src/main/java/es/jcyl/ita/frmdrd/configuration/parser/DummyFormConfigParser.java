@@ -86,6 +86,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         field4.setLabel("Email");
         field4.setValueExpression(exprFactory.create("${entity.email}"));
         field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
+        field4.setRenderExpression(exprFactory.create("${entity.it_profile}"));
         lst.add(field4);
 
         UIField field2 = new UIField();
@@ -124,6 +125,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setId("form1");
         form1.setLabel("Formulario 1");
         form1.setChildren(lst);
+        form1.setRenderExpression(exprFactory.create("true"));
         //form1.setRepo(contactsRepo);
         List<UIComponent> f = new ArrayList<>();
         f.add(form1);
@@ -154,16 +156,17 @@ public class DummyFormConfigParser extends FormConfigParser {
         table.setRoute("MyForm1#edit");
         lst.add(table);
 
-        UIForm form1 = new UIForm();
-        form1.setId("form1");
-        form1.setLabel("Formulario 1");
-        form1.setChildren(lst);
-        form1.setRepo(contactsRepo);
-        List<UIComponent> f = new ArrayList<>();
-        f.add(form1);
+//        UIForm form1 = new UIForm();
+//        form1.setId("form1");
+//        form1.setLabel("Formulario 1");
+//        form1.setChildren(lst);
+//        form1.setRepo(contactsRepo);
+//        List<UIComponent> f = new ArrayList<>();
+//        f.add(form1);
 
         UIView view1 = new UIView("view1");
-        view1.setChildren(f);
+//        view1.setChildren(f);
+        view1.setChildren(new UIComponent[]{table});
 
         formController.setListView(view1);
 

@@ -18,17 +18,19 @@ package es.jcyl.ita.frmdrd.utils;
 import android.content.Context;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.builders.FieldBuilder;
 import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -60,17 +62,22 @@ public class DevFormBuilder {
         return form;
     }
 
+    public static FormContext createFormContextForEntity(UIForm form, Entity entity){
+        return null;
+    }
+
 
     /***************
      * Data preparation recipes as Object methods
      **********************/
 
 
+
     public static class CreateOneFieldForm {
         public Context ctx;
         public UIForm form;
         public UIField field;
-        public ExecEnvironment env;
+        public RenderingEnv env;
         public EditableRepository repo;
         public MainController mc;
 
@@ -84,7 +91,7 @@ public class DevFormBuilder {
             mc = MainController.getInstance();
 
             // configure the context as the MainController would do
-            env = mc.getExecEnvironment();
+            env = mc.getRenderingEnv();
             // disable user action handlers during the tests
             env.disableInterceptors();
 

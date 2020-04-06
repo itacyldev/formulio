@@ -40,7 +40,7 @@ public abstract class FieldRenderer extends BaseRenderer {
      * @param env
      * @return
      */
-    protected <T> T getValue(UIComponent component, ExecEnvironment env, Class<T> clazz) {
+    protected <T> T getValue(UIComponent component, RenderingEnv env, Class<T> clazz) {
         Object value = component.getValue(env.getContext());
         if (value == null) {
             return handleNullValue(value);
@@ -76,6 +76,9 @@ public abstract class FieldRenderer extends BaseRenderer {
     protected InputFieldView createInputFieldView(Context viewContext, View view, UIComponent component) {
         InputFieldView fieldView = (InputFieldView) View.inflate(viewContext,
                 R.layout.input_field_view, null);
+        if(view == null){
+
+        }
 
         fieldView.setConverter(convFactory.get(component));
         fieldView.setTag(getBaseViewTag(component));

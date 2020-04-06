@@ -12,7 +12,7 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.view.render.ExecEnvironment;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 
 /*
@@ -37,74 +37,24 @@ import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 
 public class FormRenderer extends BaseRenderer implements GroupRenderer {
 
-    protected View createBaseView(Context viewContext, ExecEnvironment env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
         // TODO: provide different layout implementors
         View view = renderLinearLayout(viewContext, (UIForm) component);
         return view;
     }
 
     @Override
-    protected void setupView(View baseView, ExecEnvironment env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
 
     }
 
     private View renderLinearLayout(Context context, UIForm form) {
         LinearLayout formLayout = (LinearLayout) View.inflate(context,
-                R.layout.tool_alphaedit_finisher_fromxml, null);
+                R.layout.activity_form_edit_view_handler, null);
         return formLayout;
     }
 
 //
-//    private void renderTestButtons(final Context context, ViewGroup parent) {
-//        Button groovyButton = new Button(context);
-//        groovyButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                GroovyProcessor processor =
-//                        new GroovyProcessor(context.getDir(
-//                                "dynclasses", 0), context.getClassLoader());
-//
-//                BufferedReader reader = null;
-//                StringBuffer sb = new StringBuffer();
-//                try {
-//                    reader = new BufferedReader(
-//                            new InputStreamReader(context.getAssets().open(
-//                                    "fibonacci.groovy")));
-//
-//                    // do reading, usually loop until end of file reading
-//                    String line;
-//                    while ((line = reader.readLine()) != null) {
-//                        sb.append(line);
-//                        sb.append("\n");
-//                    }
-//                } catch (IOException e) {
-//                    //log the exception
-//                } finally {
-//                    if (reader != null) {
-//                        try {
-//                            reader.close();
-//                        } catch (IOException e) {
-//                            //log the exception
-//                        }
-//                    }
-//                }
-//
-//
-//                GroovyProcessor.EvalResult result =
-//                        (GroovyProcessor.EvalResult) processor.evaluate(sb.toString(), "fibonacci_groovy",
-//                                lifecycle.getMainContext());
-//
-//                long init = System.nanoTime();
-//                fib(100);
-//                String execTime = (System.nanoTime() - init) / 1000000 + " ms";
-//
-//
-//                Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
-//        groovyButton.setText("test groovy");
-//        parent.addView(groovyButton);
 //
 //        Button jexlButton = new Button(context);
 //        jexlButton.setOnClickListener(new View.OnClickListener() {
@@ -159,11 +109,11 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
 //    }
 
     @Override
-    public void initGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root) {
+    public void initGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
     }
 
     @Override
-    public void addViews(Context viewContext, ExecEnvironment env, UIComponent component, View root, View[] views) {
+    public void addViews(Context viewContext, RenderingEnv env, UIComponent component, View root, View[] views) {
         LinearLayout layout = root.findViewById(R.id.fields_linear_layout);
         for (View view : views) {
             layout.addView(view);
@@ -171,12 +121,12 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
     }
 
     @Override
-    public void endGroup(Context viewContext, ExecEnvironment env, UIComponent component, View root) {
+    public void endGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
         renderSaveButton(viewContext, env, component, ((ViewGroup) root));
         renderCancelButton(viewContext, env, component, ((ViewGroup) root));
     }
 
-    private void renderSaveButton(Context context, ExecEnvironment env, UIComponent component, ViewGroup parent) {
+    private void renderSaveButton(Context context, RenderingEnv env, UIComponent component, ViewGroup parent) {
         Button saveButton = new Button(context);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +141,7 @@ public class FormRenderer extends BaseRenderer implements GroupRenderer {
         parent.addView(saveButton);
     }
 
-    private void renderCancelButton(Context context, ExecEnvironment env, UIComponent component, ViewGroup parent) {
+    private void renderCancelButton(Context context, RenderingEnv env, UIComponent component, ViewGroup parent) {
         Button saveButton = new Button(context);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override

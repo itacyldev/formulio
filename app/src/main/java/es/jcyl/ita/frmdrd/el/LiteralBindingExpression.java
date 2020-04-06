@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.el;
  * limitations under the License.
  */
 
+import androidx.annotation.NonNull;
+
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JxltEngine;
 import org.mini2Dx.beanutils.ConvertUtils;
@@ -107,5 +109,11 @@ public class LiteralBindingExpression implements ValueBindingExpression, JxltEng
     @Override
     public JxltEngine.Expression prepare(JexlContext context) {
         return this;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return stringValue;
     }
 }

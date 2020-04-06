@@ -41,36 +41,23 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
         return this;
     }
 
-    public FieldBuilder withRenderer(String rerenderStr) {
-        this.baseModel.setReRender(rerenderStr);
-        return this;
-    }
-
     public FieldBuilder withValueBindingExpression(String expression, Class expectedType) {
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
         this.baseModel.setValueExpression(exprFactory.create(expression, expectedType));
         return this;
     }
-
-    public FieldBuilder withRenderer(UIComponent component) {
-        String rerenderStr = this.baseModel.getReRender();
-        if (StringUtils.isNotEmpty(rerenderStr)) {
-            rerenderStr += "," + component.getId();
-        } else {
-            rerenderStr = component.getId();
-        }
-
-        this.baseModel.setReRender(rerenderStr);
+    public FieldBuilder withValueBindingExpression(String expression) {
+        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+        this.baseModel.setValueExpression(exprFactory.create(expression, String.class));
         return this;
     }
-
     public FieldBuilder withLabel(String label) {
         this.baseModel.setLabel(label);
         return this;
     }
 
-    public FieldBuilder withRenderCondition(String renderCondition) {
-        this.baseModel.setRenderCondition(renderCondition);
+    public FieldBuilder withRenderExpression(String renderExpression) {
+        this.baseModel.setRenderExpression(exprFactory.create(renderExpression));
         return this;
     }
 
