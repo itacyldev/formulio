@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
+import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -103,10 +106,15 @@ public class DummyFormConfigParser extends FormConfigParser {
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
-//        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+//        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+        contactsRepo.setContext(MainController.getInstance().getGlobalContext());
         String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
         UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
+        List<String> deps = new ArrayList<>();
+        deps.add("view.f0");
+        ContextToRepoBinding.getInstance().setRepoContextDeps(contactsRepo.getId(), deps);
+
         table.setId("table1");
         table.setRepo(contactsRepo);
         table.setRoute("MyForm1#edit");
@@ -116,7 +124,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setId("form1");
         form1.setLabel("Formulario 1");
         form1.setChildren(lst);
-        form1.setRepo(contactsRepo);
+        //form1.setRepo(contactsRepo);
         List<UIComponent> f = new ArrayList<>();
         f.add(form1);
         UIView view1 = new UIView("view1");
