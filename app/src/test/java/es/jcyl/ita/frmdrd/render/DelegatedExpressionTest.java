@@ -16,8 +16,6 @@ package es.jcyl.ita.frmdrd.render;
  */
 
 import android.content.Context;
-import android.os.strictmode.UnbufferedIoViolation;
-import android.provider.Contacts;
 import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -45,6 +43,7 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.reactivity.DAGManager;
 import es.jcyl.ita.frmdrd.reactivity.DAGNode;
+import es.jcyl.ita.frmdrd.reactivity.ViewDAG;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -114,9 +113,7 @@ public class DelegatedExpressionTest {
     private Object[] createDepsTree(Context ctx) {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
-        UIView view = new UIView("view");
         UIForm form = recipe.form;
-        view.addChild(form);
         UIField f1 = recipe.field;
         f1.setId("f1");
 //        form.setId("form");
@@ -130,15 +127,17 @@ public class DelegatedExpressionTest {
 
         // add fields to form
         form.addChild(f2, f3, f4);
+        UIView view = new UIView("view1");
+        view.addChild(form);
+
 
         // create dependency tree
         DAGManager dagManager = DAGManager.getInstance();
         dagManager.generateDags(view);
-        Collection<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = dagManager.getViewDAG(view.getId()).getDags().values();
 
-        // return dag
-        DirectedAcyclicGraph<DAGNode, DefaultEdge>[] arrDags = dags.toArray(new DirectedAcyclicGraph[dags.size()]);
+        ViewDAG viewDAG = dagManager.getViewDAG(view.getId());
 
+        Collection<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = viewDAG.getDags().values();
         List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> lstDags = new ArrayList<>();
         lstDags.addAll(dags);
         // The dags are repeated, keep just the first one until we fix this problem
