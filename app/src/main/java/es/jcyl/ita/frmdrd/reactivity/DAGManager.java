@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.reactivity;
 
+import androidx.databinding.ViewDataBinding;
+
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
@@ -7,12 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -38,14 +39,11 @@ public class DAGManager {
     private static DAGManager _instance = null;
 
     // Stores all the DAGs of the view
-    private final Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = new HashMap<>();
+    private final Map<String, ViewDAG> viewDags = new HashMap<>();
 
-    // Stores all the components of the form mapped by its ID
-    private Map<String, UIComponent> components = new HashMap<>();
 
     // Stores a DAGNode per component of the form mapped by its ID
     private Map<String, DAGNode> nodes = new HashMap<>();
-    private UIView viewRoot;
 
     public static DAGManager getInstance() {
         if (_instance == null) {
@@ -62,32 +60,58 @@ public class DAGManager {
      */
     public void generateDags(UIView viewRoot) {
         if (viewRoot != null) {
-            this.viewRoot = viewRoot;
 
             // Gets all the components in the view
-            storeComponents(viewRoot);
+            Map<String, UIComponent> components = getViewComponents(viewRoot);
+
+            Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = new HashMap<>();
 
             // Builds the dag for each component
             for (String componentId : components.keySet()) {
                 if (!dags.containsKey(componentId)) {
-                    buildComponentDag(componentId, dags);
+                    buildComponentDag(componentId, dags, components);
                 }
             }
+
+            ViewDAG viewDAG = new ViewDAG();
+            for (DirectedAcyclicGraph dag : dags.values()) {
+                viewDAG.addDAG(dag);
+            }
+
+            components.clear();
+
+            nodes.clear();
+            nodes = null;
+
+            dags.clear();
         }
     }
+
+    /**
+     * Gets all the components of
+     *
+     * @param view
+     * @return
+     */
+    private Map<String, UIComponent> getViewComponents(UIView view) {
+        Map<String, UIComponent> components = new HashMap<>();
+        storeComponents(view, components);
+        return components;
+    }
+
 
     /**
      * Stores the component and all its descendants on a Map
      *
      * @param component
      */
-    private void storeComponents(UIComponent component) {
-        components.put(component.getCompleteId(), component);
+    private void storeComponents(UIComponent component, Map<String, UIComponent> components) {
+        components.put(component.getAbsoluteId(), component);
 
         List<UIComponent> children = component.getChildren();
         if (children != null) {
             for (UIComponent child : component.getChildren()) {
-                storeComponents(child);
+                storeComponents(child, components);
             }
         }
     }
@@ -100,51 +124,71 @@ public class DAGManager {
      *
      * @param componentId
      */
-    private void buildComponentDag(String componentId,
-                                   Map<String,
-                                           DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
+    private void buildComponentDag(String componentId, Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags, Map<String, UIComponent> components) {
         UIComponent component = components.get(componentId);
-        List<String> dependingVariables = null;
 
-        if (component instanceof UIDatatable) {
-            ContextToRepoBinding repoBinding = ContextToRepoBinding.getInstance();
-            String repoId = ((UIDatatable) component).getRepo().getId();
-            dependingVariables = repoBinding.getRepoContextDeps(repoId);
-        } else {
-            ValueBindingExpression valueExpression = component.getValueExpression();
-            // The DAG is created only if the component depends on other components
-            if (valueExpression != null) {
-                dependingVariables = component.getValueExpression().getDependingVariables();
-            }
+        // The DAG is created only if the component depends on other components
+        if (component.getValueBindingExpressions() == null) {
+            return;
         }
+        for (ValueBindingExpression ve : component.getValueBindingExpressions()) {
+            if (ve != null && !ve.isLiteral()) {
+                DAGNode componentNode = getComponentNode(component);
+                List<String> dependingVariables = ve.getDependingVariables();
 
-        if (dependingVariables != null && dependingVariables.size() > 0) {
-            DAGNode componentNode = getComponentNode(component);
+                String dependingComponentId;
+                for (String depString : dependingVariables) {
+                    dependingComponentId = createAbsoluteReference(component, depString);
 
-            for (String dependingComponentId : dependingVariables) {
-                UIComponent dependingComponent = components.get(dependingComponentId);
-                if (dependingComponent != null) {
-                    DAGNode dependingNode = getComponentNode(dependingComponent);
+                    UIComponent dependingComponent = components.get(dependingComponentId);
+                    if (dependingComponent != null) {
+                        DAGNode dependingNode = getComponentNode(dependingComponent);
 
-                    DirectedAcyclicGraph dag = null;
-                    if (dags.containsKey(componentId)) {
-                        dag = dags.get(componentId);
-                        dag.addVertex(dependingNode);
-                        dag.addEdge(dependingNode, componentNode);
-                        dags.put(dependingComponentId, dag);
-                    } else {
-                        dag = getDagComponent(dependingComponentId, dags);
-                        dag.addVertex(componentNode);
-                        dag.addEdge(dependingNode, componentNode);
-                        dags.put(componentId, dag);
+                        DirectedAcyclicGraph dag = null;
+                        if (dags.containsKey(componentId)) {
+                            dag = dags.get(componentId);
+                            dag.addVertex(dependingNode);
+                            dag.addEdge(dependingNode, componentNode);
+                            dags.put(dependingComponentId, dag);
+                        } else {
+                            dag = getDagComponent(dependingComponentId, dags);
+                            dag.addVertex(componentNode);
+                            dag.addEdge(dependingNode, componentNode);
+                            dags.put(componentId, dag);
+                        }
+                        buildComponentDag(dependingComponentId, dags, components);
                     }
-
-                    buildComponentDag(dependingComponentId, dags);
                 }
             }
-
         }
+    }
 
+    /**
+     * Given an variable reference given in an expressión like view.f1, entity.f1, form1.view.f2, etc.
+     * returns the absolute id of the referenced element: "form1.f1" if it's nested inside a form or
+     * "f1" if it is not.
+     *
+     * @param component
+     * @param varReference
+     * @return
+     */
+    private String createAbsoluteReference(UIComponent component, String varReference) {
+        // if it starts with entity of view, is a relative reference, complete with form id
+        if (!varReference.startsWith("entity") && !varReference.startsWith("view")) {
+            // absolute reference to context or form nested entity or view, remove "view" or "entity"
+            // context reference
+            // TODO: improve this
+            return varReference.replace("entity.", "").replace("view.", "");
+        } else {
+            UIForm form = component.getParentForm();
+            if (form == null) {
+                throw new ViewConfigException(String.format("Invalid variable reference. " +
+                        "Relative references can be used just inside a form. " +
+                        "Wrap element [%s] inside a form.", component.getId()));
+            }
+            varReference = varReference.replace("entity.", "").replace("view.", "");
+            return form.getId() + "." + varReference;
+        }
     }
 
     /**
@@ -155,7 +199,11 @@ public class DAGManager {
      * @return
      */
     private DAGNode getComponentNode(UIComponent component) {
-        String nodeId = component.getCompleteId();
+        if (nodes == null) {
+            nodes = new HashMap<>();
+        }
+
+        String nodeId = component.getAbsoluteId();
         DAGNode node = null;
         if (nodes.containsKey(nodeId)) {
             node = nodes.get(nodeId);
@@ -190,8 +238,19 @@ public class DAGManager {
         return dag;
     }
 
-    public Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> getDags() {
-        return dags;
+    /**
+     * @param viewId
+     * @return
+     */
+    public ViewDAG getViewDAG(String viewId) {
+        return viewDags.get(viewId);
+    }
+
+    /**
+     * @return
+     */
+    public Map<String, ViewDAG> getAllDAGs() {
+        return viewDags;
     }
 }
 
