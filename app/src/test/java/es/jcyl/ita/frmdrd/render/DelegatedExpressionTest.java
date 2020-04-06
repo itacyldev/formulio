@@ -16,6 +16,8 @@ package es.jcyl.ita.frmdrd.render;
  */
 
 import android.content.Context;
+import android.os.strictmode.UnbufferedIoViolation;
+import android.provider.Contacts;
 import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -46,6 +48,7 @@ import es.jcyl.ita.frmdrd.reactivity.DAGNode;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
@@ -111,7 +114,9 @@ public class DelegatedExpressionTest {
     private Object[] createDepsTree(Context ctx) {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
+        UIView view = new UIView("view");
         UIForm form = recipe.form;
+        view.addChild(form);
         UIField f1 = recipe.field;
         f1.setId("f1");
 //        form.setId("form");
@@ -128,8 +133,8 @@ public class DelegatedExpressionTest {
 
         // create dependency tree
         DAGManager dagManager = DAGManager.getInstance();
-        dagManager.generateDags(form);
-        Collection<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = dagManager.getDags().values();
+        dagManager.generateDags(view);
+        Collection<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = dagManager.getViewDAG(view.getId()).getDags().values();
 
         // return dag
         DirectedAcyclicGraph<DAGNode, DefaultEdge>[] arrDags = dags.toArray(new DirectedAcyclicGraph[dags.size()]);

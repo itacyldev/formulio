@@ -78,6 +78,8 @@ public class DAGManager {
                 viewDAG.addDAG(dag);
             }
 
+            viewDags.put(viewRoot.getId(), viewDAG);
+
             flush();
         }
     }
