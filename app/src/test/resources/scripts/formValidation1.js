@@ -3,7 +3,6 @@
 */
 function validateForm(){
 
-
     // get value
     var value = "" + ctx.getViewContext().get("f1")
     var result = {};
@@ -13,5 +12,6 @@ function validateForm(){
         result["error"] = true;
         result["message"] = "The value of field f1 has to be at least 10";
     }
+
     return result;
 }

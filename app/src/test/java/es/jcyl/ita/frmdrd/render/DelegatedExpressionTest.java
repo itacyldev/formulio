@@ -43,9 +43,11 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.reactivity.DAGManager;
 import es.jcyl.ita.frmdrd.reactivity.DAGNode;
+import es.jcyl.ita.frmdrd.reactivity.ViewDAG;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
@@ -125,15 +127,17 @@ public class DelegatedExpressionTest {
 
         // add fields to form
         form.addChild(f2, f3, f4);
+        UIView view = new UIView("view1");
+        view.addChild(form);
+
 
         // create dependency tree
         DAGManager dagManager = DAGManager.getInstance();
-        dagManager.generateDags(form);
-        Collection<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = dagManager.getDags().values();
+        dagManager.generateDags(view);
 
-        // return dag
-        DirectedAcyclicGraph<DAGNode, DefaultEdge>[] arrDags = dags.toArray(new DirectedAcyclicGraph[dags.size()]);
+        ViewDAG viewDAG = dagManager.getViewDAG(view.getId());
 
+        Collection<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = viewDAG.getDags().values();
         List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> lstDags = new ArrayList<>();
         lstDags.addAll(dags);
         // The dags are repeated, keep just the first one until we fix this problem

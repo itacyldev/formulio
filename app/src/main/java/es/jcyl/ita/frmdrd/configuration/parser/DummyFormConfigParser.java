@@ -107,9 +107,9 @@ public class DummyFormConfigParser extends FormConfigParser {
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-//        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
-        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
-        contactsRepo.setContext(MainController.getInstance().getGlobalContext());
+        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+//        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+//        contactsRepo.setContext(MainController.getInstance().getGlobalContext());
         String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
         UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
         List<String> deps = new ArrayList<>();
@@ -126,7 +126,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setLabel("Formulario 1");
         form1.setChildren(lst);
         form1.setRenderExpression(exprFactory.create("true"));
-        //form1.setRepo(contactsRepo);
+        form1.setRepo(contactsRepo);
         List<UIComponent> f = new ArrayList<>();
         f.add(form1);
         UIView view1 = new UIView("view1");
