@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
@@ -102,12 +104,18 @@ public class DAGManager {
                                    Map<String,
                                            DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
         UIComponent component = components.get(componentId);
-        ValueBindingExpression valueExpression = component.getValueExpression();
-
-        // The DAG is created only if the component depends on other components
         List<String> dependingVariables = null;
-        if (valueExpression != null) {
-            dependingVariables = component.getValueExpression().getDependingVariables();
+
+        if (component instanceof UIDatatable) {
+            ContextToRepoBinding repoBinding = ContextToRepoBinding.getInstance();
+            String repoId = ((UIDatatable) component).getRepo().getId();
+            dependingVariables = repoBinding.getRepoContextDeps(repoId);
+        } else {
+            ValueBindingExpression valueExpression = component.getValueExpression();
+            // The DAG is created only if the component depends on other components
+            if (valueExpression != null) {
+                dependingVariables = component.getValueExpression().getDependingVariables();
+            }
         }
 
         if (dependingVariables != null && dependingVariables.size() > 0) {
