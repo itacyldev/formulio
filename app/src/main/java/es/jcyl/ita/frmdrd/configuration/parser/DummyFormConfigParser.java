@@ -18,7 +18,7 @@ import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.reactivity.DAGManager;
+import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
@@ -98,7 +98,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         table.setId("table1");
         table.setRepo(contactsRepo);
-        table.setRoute("MyForm1#edit");
+        table.setRoute(formController.getId()+"#edit");
 
         // table repository filter
         Filter f = new SQLQueryFilter();

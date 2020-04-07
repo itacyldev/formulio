@@ -1,9 +1,6 @@
 package es.jcyl.ita.frmdrd.reactivity;
 
 import android.util.Log;
-import android.view.View;
-
-import com.android.dx.command.Main;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
@@ -16,9 +13,8 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import io.reactivex.rxjava3.core.Flowable;
 
 /*

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.reactivity;
+package es.jcyl.ita.frmdrd.view.dag;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
@@ -37,7 +37,7 @@ public class DAGManager {
     private static DAGManager _instance = null;
 
     // Stores all the DAGs of the view
-    private final Map<String, ViewDAG> viewDags = new HashMap<>();
+    private Map<String, ViewDAG> viewDags = new HashMap<>();
 
 
     // Stores a DAGNode per component of the form mapped by its ID
@@ -76,9 +76,12 @@ public class DAGManager {
                 viewDAG.addDAG(dag);
             }
 
+            if (viewDags == null) {
+                viewDags = new HashMap<>();
+            }
+
             viewDags.put(viewRoot.getId(), viewDAG);
 
-            flush();
         }
     }
 
@@ -251,9 +254,17 @@ public class DAGManager {
     }
 
 
-    private void flush() {
+    public void flush() {
         nodes.clear();
         nodes = null;
+
+        for (ViewDAG viewDag : viewDags.values()) {
+            viewDag.reset();
+        }
+
+        viewDags.clear();
+        viewDags = null;
+
     }
 }
 

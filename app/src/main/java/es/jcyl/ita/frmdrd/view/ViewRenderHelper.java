@@ -26,7 +26,7 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.util.Iterator;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.reactivity.DAGNode;
+import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;

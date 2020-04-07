@@ -35,7 +35,7 @@ import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.reactivity.DAGNode;
+import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 
 /**
  * Context storing object used during the rendering process to give the renderers access to commons objects
