@@ -5,12 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -39,7 +39,7 @@ public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<
 
     protected View createBaseView(Context viewContext, RenderingEnv env, UIForm component) {
         // TODO: provide different layout implementors
-        View view = renderLinearLayout(viewContext, (UIForm) component);
+        View view = renderLinearLayout(viewContext, component);
         return view;
     }
 
@@ -49,9 +49,8 @@ public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<
     }
 
     private View renderLinearLayout(Context context, UIForm form) {
-        LinearLayout formLayout = (LinearLayout) View.inflate(context,
+        return View.inflate(context,
                 R.layout.activity_form_edit_view_handler, null);
-        return formLayout;
     }
 
     @Override
@@ -68,13 +67,17 @@ public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<
 
     @Override
     public void endGroup(Context viewContext, RenderingEnv env, UIForm component, View root) {
-        renderSaveButton(viewContext, env, component, ((ViewGroup) root));
-        renderCancelButton(viewContext, env, component, ((ViewGroup) root));
+        Button saveBtn = renderSaveButton(viewContext, env, component, ((ViewGroup) root));
+        Button resetBtn = renderCancelButton(viewContext, env, component, ((ViewGroup) root));
+        // add buttons to the toolbar
+        LinearLayout layout = root.findViewById(R.id.form_edit_footer);
+        layout.addView(resetBtn);
+        layout.addView(saveBtn);
     }
 
-    private void renderSaveButton(Context context, RenderingEnv env, UIForm component, ViewGroup parent) {
-        Button saveButton = new Button(context);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+    private Button renderSaveButton(Context context, RenderingEnv env, UIForm component, ViewGroup parent) {
+        Button button = new Button(context);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
@@ -83,13 +86,13 @@ public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<
                 }
             }
         });
-        saveButton.setText("Save");
-        parent.addView(saveButton);
+        button.setText("Save");
+        return button;
     }
 
-    private void renderCancelButton(Context context, RenderingEnv env, UIForm component, ViewGroup parent) {
-        Button saveButton = new Button(context);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+    private Button renderCancelButton(Context context, RenderingEnv env, UIForm component, ViewGroup parent) {
+        Button button = new Button(context);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
@@ -98,7 +101,7 @@ public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<
                 }
             }
         });
-        saveButton.setText("Cancel");
-        parent.addView(saveButton);
+        button.setText("Cancel");
+        return button;
     }
 }

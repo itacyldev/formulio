@@ -55,7 +55,7 @@ public class ViewRenderHelper {
 
         View rootView;
         if (checkDeferred && hasDeferredExpression(root, env)) {
-            // insert a delegated view component to render later
+            // insert a delegated view component as placeholder to render later
             rootView = createDeferredView(viewContext, root, env);
         } else {
             rootView = renderer.render(viewContext, env, root);
