@@ -41,6 +41,11 @@ public class GeometryConverter extends AbstractConverter {
         return toGeometry(targetType, stringValue);
     }
 
+    @Override
+    protected <T> T handleMissing(Class<T> type) {
+        return null;
+    }
+
     private <T> T toGeometry(Class<T> targetType, String value) {
         // TODO: this has to be improved to check srid and geo-type
         return (T) new Geometry(value, GeometryType.MULTIPOLYGON, 25830);

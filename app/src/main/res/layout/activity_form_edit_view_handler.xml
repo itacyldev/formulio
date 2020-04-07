@@ -27,7 +27,6 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
         android:background="#689F38"
-        android:elevation="@dimen/cardview_compat_inset_shadow"
         android:gravity="bottom" />
 
 </RelativeLayout>

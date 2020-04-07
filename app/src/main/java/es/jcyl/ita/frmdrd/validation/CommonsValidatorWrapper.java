@@ -15,6 +15,7 @@ package es.jcyl.ita.frmdrd.validation;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.AbstractFormatValidator;
 
 import java.lang.reflect.Method;
@@ -31,8 +32,14 @@ public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.validation.Va
     private AbstractFormatValidator abstractDelegate;
     private Object delegate;
     private Method method;
+    private boolean allowNull = true;
 
     public CommonsValidatorWrapper(Object validator) {
+        this(validator, true);
+    }
+
+    public CommonsValidatorWrapper(Object validator, boolean allowNull) {
+        this.allowNull = allowNull;
         if (validator instanceof AbstractFormatValidator) {
             this.abstractDelegate = (AbstractFormatValidator) validator;
         } else {
@@ -52,13 +59,17 @@ public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.validation.Va
     public void validate(Context ctx, UIComponent component, String value) {
         Boolean valid;
         String msg;
+        if(allowNull && StringUtils.isBlank(value)){
+            // do not validate empty values
+            return;
+        }
         if (abstractDelegate != null) {
             valid = abstractDelegate.isValid(value);
-            msg = "Error during validation: "  +abstractDelegate.getClass().getName();
+            msg = "Error during validation: " + abstractDelegate.getClass().getName();
         } else {
             try {
                 valid = (Boolean) method.invoke(delegate, value);
-                msg = "Error during validation: "  +delegate.getClass().getName();
+                msg = "Error during validation: " + delegate.getClass().getName();
             } catch (Exception e) {
                 throw new RuntimeException(String.format("An error occurred trying to validate the " +
                         "field [%s] with value [%s].", component.getId(), value));
