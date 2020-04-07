@@ -74,10 +74,10 @@ public class ReactivityFlowManager {
      */
     public Flowable<String> getFlow(String componentId) {
         if (!generated) {
-            DirectedAcyclicGraph dag = DAGManager.getInstance().getViewDAGs();
-            if (dag != null) {
-                generateReactivityFlow(dag);
-            }
+//            DirectedAcyclicGraph dag = DAGManager.getInstance().getViewDAGs();
+//            if (dag != null) {
+//                generateReactivityFlow(dag);
+//            }
         }
 
         return flows.get(componentId);
