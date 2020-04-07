@@ -24,7 +24,6 @@ import es.jcyl.ita.crtrepo.query.Expression;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
-import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 
@@ -151,11 +150,13 @@ public class UIDatatable extends UIComponent {
         if (expr instanceof ConditionBinding) {
             lstExpressions.add(((ConditionBinding) expr).getBindingExpression());
         } else {
-            // do deeper
-            Criteria criteria = (Criteria) expr;
-            if (criteria.getChildren() != null) {
-                for (Expression kid : criteria.getChildren()) {
-                    findExpressions(kid, lstExpressions);
+            if (expr instanceof Criteria) {
+                // do deeper
+                Criteria criteria = (Criteria) expr;
+                if (criteria.getChildren() != null) {
+                    for (Expression kid : criteria.getChildren()) {
+                        findExpressions(kid, lstExpressions);
+                    }
                 }
             }
         }
