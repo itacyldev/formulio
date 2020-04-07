@@ -82,7 +82,7 @@ public class FieldBuilder {
     private void addValidators(UIField baseModel, PropertyType property) {
         Class type = property.getType();
 
-        if(property.isMandatory()){
+        if (property.isMandatory() != null && property.isMandatory()) {
             baseModel.addValidator(validatorFactory.getValidator("required"));
         }
 
@@ -103,7 +103,6 @@ public class FieldBuilder {
             baseModel.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         }
         if (label.toLowerCase().contains("phone") || label.toLowerCase().contains("telefono")) {
-            baseModel.addValidator(validatorFactory.getValidator("email"));
             baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
         }
     }
