@@ -18,7 +18,6 @@ import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
@@ -28,6 +27,7 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
+import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -71,9 +71,9 @@ public class DummyFormConfigParser extends FormConfigParser {
         FormController fc3 = fcBuilder.withRepo(contactsRepo).build();
         loadConfig(fc3);
 
-//        EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
-//        FormController fc4 = fcBuilder.withRepo(inspecRepo).build();
-//        loadConfig(fc4);
+        EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
+        FormController fc4 = fcBuilder.withRepo(inspecRepo).build();
+        loadConfig(fc4);
     }
 
 
@@ -98,7 +98,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         table.setId("table1");
         table.setRepo(contactsRepo);
-        table.setRoute(formController.getId()+"#edit");
+        table.setRoute(formController.getId() + "#edit");
 
         // table repository filter
         Filter f = new SQLQueryFilter();
@@ -230,7 +230,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
         table.setRepo(contactsRepo);
-        table.setRoute(formController.getId()+"#edit");
+        table.setRoute(formController.getId() + "#edit");
         lst.add(table);
 
 //        UIForm form1 = new UIForm();
