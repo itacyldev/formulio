@@ -3,6 +3,7 @@ package es.jcyl.ita.frmdrd.builders;
 import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.mini2Dx.beanutils.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,6 +149,19 @@ public class FormDataBuilder extends AbstractDataBuilder<UIForm> {
         this.baseModel.setId("form" + RandomStringUtils.randomAlphanumeric(4));
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setChildren(fields);
+        this.baseModel.setReadOnly(false);
         return this;
+    }
+
+    protected UIForm doBuild(UIForm templateModel) {
+        UIForm model = createEmptyModel();
+        try {
+            BeanUtils.copyProperties(model, templateModel);
+        } catch (Exception e) {
+            throw new DataBuilderException("An error occurred while trying to copy data from the model: "
+                    + model.toString(), e);
+        }
+        model.setReadOnly(false);
+        return model;
     }
 }

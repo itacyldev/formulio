@@ -11,8 +11,14 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
     ValueExpressionFactory exprFactory = new ValueExpressionFactory();
 
+
     public FieldDataBuilder() {
         this.baseModel = createEmptyModel();
+    }
+
+    @Override
+    protected UIField getModelInstance() {
+        return new UIField();
     }
 
     @Override
@@ -45,11 +51,13 @@ public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
         this.baseModel.setValueExpression(exprFactory.create(expression, expectedType));
         return this;
     }
+
     public FieldDataBuilder withValueBindingExpression(String expression) {
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
         this.baseModel.setValueExpression(exprFactory.create(expression, String.class));
         return this;
     }
+
     public FieldDataBuilder withLabel(String label) {
         this.baseModel.setLabel(label);
         return this;
@@ -62,11 +70,6 @@ public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
 
 
     @Override
-    protected UIField getModelInstance() {
-        return new UIField();
-    }
-
-    @Override
     public FieldDataBuilder withRandomData() {
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setType(UIField.TYPE.TEXT);
@@ -76,4 +79,5 @@ public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
         this.baseModel.setId(id);
         return this;
     }
+
 }

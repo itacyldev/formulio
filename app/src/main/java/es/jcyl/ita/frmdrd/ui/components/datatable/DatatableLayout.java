@@ -151,7 +151,9 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
 
     private Filter setupFilter(CompositeContext context) {
         Filter f = FilterHelper.createInstance(repo);
-        FilterHelper.evaluateFilter(context, this.filter, f);
+        if(this.filter != null){
+            FilterHelper.evaluateFilter(context, this.filter, f);
+        }
         f.setOffset(this.offset);
         f.setPageSize(this.pageSize);
         return f;

@@ -26,6 +26,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -80,6 +81,10 @@ public class FormController {
     public void save() {
         // load all forms included in the view
         for (UIForm form : this.editView.getForms()) {
+            if (form.isReadOnly()) {
+                throw new ViewConfigException(String.format("The form [%s] is readonly or has a " +
+                        "readonly repository [%s].", form.getId(), form.getRepo().getId()));
+            }
             // validate form date
             if (!validate(form)) {
                 throw new ValidatorException(String.format("A error occurred during form validation on form [%s].",
@@ -89,7 +94,7 @@ public class FormController {
             updateEntity(form);
             // persist changes
             Entity entity = form.getContext().getEntity();
-            form.getRepo().save(entity);
+            ((EditableRepository) form.getRepo()).save(entity);
         }
 
         Toast.makeText(this.viewContext, "Entity successfully saved.", Toast.LENGTH_SHORT).show();
@@ -164,9 +169,13 @@ public class FormController {
         }
     }
 
-    protected void doDelete(UIForm uiform, Context globalCtx) {
-        EditableRepository repo = uiform.getRepo();
-        String entityIdProp = uiform.getEntityId();
+    protected void doDelete(UIForm form, Context globalCtx) {
+        if (form.isReadOnly()) {
+            throw new ViewConfigException(String.format("The form [%s] is readonly or has a " +
+                    "readonly repository [%s].", form.getId(), form.getRepo().getId()));
+        }
+        EditableRepository repo = (EditableRepository) form.getRepo();
+        String entityIdProp = form.getEntityId();
         Object entityId = globalCtx.get(entityIdProp);
         repo.deleteById(entityId);
     }

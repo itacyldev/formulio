@@ -19,7 +19,7 @@ public abstract class UIComponent implements Serializable {
     protected UIComponent parentForm;
     protected List<UIComponent> children;
     protected String label;
-    private boolean readOnly;
+    private boolean readOnly = false;
     private String rendererType;
 
     private ValueBindingExpression valueExpression;

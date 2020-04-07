@@ -22,6 +22,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.BeanUtils;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 

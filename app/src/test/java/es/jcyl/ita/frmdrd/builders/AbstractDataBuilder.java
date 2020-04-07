@@ -43,7 +43,7 @@ public abstract class AbstractDataBuilder<M> implements DataBuilder<M> {
         try {
             BeanUtils.copyProperties(model, templateModel);
         } catch (Exception e) {
-            throw new DataBuilderException("An error ocurred while trying to copy datos from the model: "
+            throw new DataBuilderException("An error occurred while trying to copy datos from the model: "
                     + model.toString(), e);
         }
         return model;
