@@ -67,7 +67,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 //        createEditView2(fc2);
 //        loadConfig(fc2);
 
-        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+        EditableRepository contactsRepo = repoFactory.getEditableRepo("inspecciones");
         FormController fc3 = fcBuilder.withRepo(contactsRepo).build();
         loadConfig(fc3);
     }

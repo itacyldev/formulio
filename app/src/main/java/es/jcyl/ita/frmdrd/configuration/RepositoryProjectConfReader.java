@@ -30,6 +30,10 @@ import es.jcyl.ita.crtrepo.builders.SQLiteGreenDAORepoBuilder;
 import es.jcyl.ita.crtrepo.config.AbstractRepoConfigurationReader;
 import es.jcyl.ita.crtrepo.db.DBTableEntitySource;
 import es.jcyl.ita.crtrepo.db.NativeSQLEntitySource;
+import es.jcyl.ita.crtrepo.db.spatialite.SpatialitePropertyBinder;
+import es.jcyl.ita.crtrepo.db.spatialite.greendao.SpatialTableStatementsProvider;
+import es.jcyl.ita.crtrepo.db.spatialite.greendao.SpatialiteDataBase;
+import es.jcyl.ita.crtrepo.db.spatialite.meta.SpatiaLiteMetaModeler;
 import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDaoConfig;
 import es.jcyl.ita.crtrepo.db.sqlite.meta.SQLiteMetaModeler;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
@@ -63,27 +67,25 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         builder = repoFactory.getBuilder(eSource);
         builder.build();
 
-
-
-        // create repository against spatialite database
-//        eSource = sourceFactory.getEntitySource("inspecciones");
-//        metaModeler = new SpatiaLiteMetaModeler();
-//        meta = metaModeler.readFromSource(eSource);
-//        builder = repoFactory.getBuilder(eSource);
-//        conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
-//        conf.setPropertyBinder(new SpatialitePropertyBinder());
-//        conf.setTableStatementsProvider(new SpatialTableStatementsProvider());
-//        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
-//        builder.build();
+//         create repository against spatialite database
+        eSource = sourceFactory.getEntitySource("inspecciones");
+        metaModeler = new SpatiaLiteMetaModeler();
+        meta = metaModeler.readFromSource(eSource);
+        builder = repoFactory.getBuilder(eSource);
+        conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
+        conf.setPropertyBinder(new SpatialitePropertyBinder());
+        conf.setTableStatementsProvider(new SpatialTableStatementsProvider());
+        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
+        builder.build();
     }
 
     private void createEntitySources() {
         EntitySourceBuilder builder;
-//        builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-//        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("ribera"));
-//        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "inspecciones");
-//        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "inspecciones");
-//        builder.build();
+        builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("ribera"));
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "inspecciones");
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "inspecciones");
+        builder.build();
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
@@ -102,12 +104,13 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
     }
 
     private void createDBSource() {
-//        File dbFile = new File("/sdcard/test/ribera.sqlite");
-//        SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new Database());
-//        this.sourceFactory.registerSource(new Source<>("ribera", dbFile.getAbsolutePath(), db));
-
-        File dbFile = new File("/sdcard/test/dbTest.sqlite");
+        File dbFile = new File("/sdcard/test/ribera.sqlite");
         SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+        SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new jsqlite.Database());
+        this.sourceFactory.registerSource(new Source<>("ribera", dbFile.getAbsolutePath(), db));
+
+        dbFile = new File("/sdcard/test/dbTest.sqlite");
+        sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         this.sourceFactory.registerSource(new Source<>("dbTest", dbFile.getAbsolutePath(), new StandardDatabase(sqDb)));
     }
 }
