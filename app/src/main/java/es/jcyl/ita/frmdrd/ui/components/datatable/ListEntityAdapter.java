@@ -129,7 +129,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         UIColumn[] columns = dtLayout.getDatatable().getColumns();
         Object[] values = JexlUtils.bulkEval(entity, columns);
 
-        for (int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length && i < holder.viewList.size(); i++) {
             String stringValue = (String) ConvertUtils.convert(values[i], String.class);
             TextView textView = (TextView) holder.viewList.get(i);
             textView.setText(DataUtils.nullFormat(stringValue));

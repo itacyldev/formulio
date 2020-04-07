@@ -57,10 +57,10 @@ public class DummyFormConfigParser extends FormConfigParser {
 
     @Override
     public void parseFormConfig(String formConfigStr) {
-        FormController fc1 = new FormController("MyForm1", "Form number 1.");
-        createListView1(fc1);
-        createEditView1(fc1);
-        loadConfig(fc1);
+//        FormController fc1 = new FormController("MyForm1", "Form number 1.");
+//        createListView1(fc1);
+//        createEditView1(fc1);
+//        loadConfig(fc1);
 //
 //        FormController fc2 = new FormController("MyForm2", "Form number 2.");
 //        createListView1(fc2);
