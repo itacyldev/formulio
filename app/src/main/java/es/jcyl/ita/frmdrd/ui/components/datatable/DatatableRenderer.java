@@ -31,10 +31,10 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class DatatableRenderer extends BaseRenderer {
+public class DatatableRenderer extends BaseRenderer<UIDatatable> {
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIDatatable component) {
         UIDatatable dtComponent = (UIDatatable) component;
         DatatableLayout datatableView = (DatatableLayout) View.inflate(viewContext,
                 R.layout.datatable_layout, null);
@@ -44,7 +44,7 @@ public class DatatableRenderer extends BaseRenderer {
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIDatatable component) {
         UIDatatable dtComponent = (UIDatatable) component;
         dtComponent.getRepo().setContext(env.getContext());
         DatatableLayout datatableView = (DatatableLayout) baseView;

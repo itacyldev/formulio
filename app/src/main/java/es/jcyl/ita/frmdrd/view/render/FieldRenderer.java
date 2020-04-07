@@ -22,13 +22,13 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class FieldRenderer extends BaseRenderer {
+public abstract class FieldRenderer extends BaseRenderer<UIField> {
 
     protected static final Object EMPTY_STRING = "";
 
@@ -55,19 +55,18 @@ public abstract class FieldRenderer extends BaseRenderer {
      *
      * @return
      */
-    protected String getInputTag(UIComponent c) {
+    protected String getInputTag(UIField c) {
         return getBaseViewTag(c) + ">input";
     }
 
 
-
-    protected InputFieldView createInputFieldView(Context viewContext, View view, UIComponent component) {
+    protected InputFieldView createInputFieldView(Context viewContext, View view, UIField component) {
         InputFieldView fieldView = (InputFieldView) View.inflate(viewContext,
                 R.layout.input_field_view, null);
         fieldView.setConverter(convFactory.get(component));
         fieldView.setTag(getBaseViewTag(component));
         fieldView.addView(view);
-        if(component.getParentForm() != null){
+        if (component.getParentForm() != null) {
             fieldView.setFormId(component.getParentForm().getId());
         }
         fieldView.setFieldId(component.getId());

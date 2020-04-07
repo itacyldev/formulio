@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.ui.components;
 
+import android.text.InputType;
+
 import es.jcyl.ita.frmdrd.validation.Validator;
 
 import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
@@ -11,7 +13,7 @@ public class UIField extends UIComponent {
     }
 
     private TYPE type = TEXT;
-    private int inputType = 1;
+    private int inputType = InputType.TYPE_CLASS_TEXT;
     private String defaultValue;
 
     private static final Validator[] EMTPY_VALIDATOR = new Validator[0];

@@ -18,19 +18,18 @@ package es.jcyl.ita.frmdrd.view.render;
 import android.content.Context;
 import android.view.View;
 
-
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public interface GroupRenderer {
+public interface GroupRenderer<C extends UIComponent> {
 
-    void initGroup(Context viewContext, RenderingEnv env, UIComponent component, View root);
+    void initGroup(Context viewContext, RenderingEnv env, C component, View root);
 
-    void addViews(Context viewContext, RenderingEnv env, UIComponent component, View root, View[] views);
+    void addViews(Context viewContext, RenderingEnv env, C component, View root, View[] views);
 
-    void endGroup(Context viewContext, RenderingEnv env, UIComponent component, View root);
+    void endGroup(Context viewContext, RenderingEnv env, C component, View root);
 
 }

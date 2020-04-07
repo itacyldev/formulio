@@ -17,6 +17,7 @@ import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
@@ -45,14 +46,14 @@ public class SelectRenderer extends FieldRenderer {
 
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIField component) {
        LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
                 R.layout.tool_alphaedit_text, null);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIField component) {
         final TextView fieldLabel = (TextView) baseView
                 .findViewById(R.id.field_layout_name);
         fieldLabel.setText(component.getLabel());
@@ -91,7 +92,7 @@ public class SelectRenderer extends FieldRenderer {
         });
     }
 
-    private void setMessages(FormContext formContext, UIComponent component, EditText input) {
+    private void setMessages(FormContext formContext, UIField component, EditText input) {
         String message = FormContextHelper.getMessage(formContext, component.getId());
         if (message != null) {
             input.setError(message);

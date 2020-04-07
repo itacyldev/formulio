@@ -24,9 +24,8 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public interface Renderer {
+public interface Renderer<C extends UIComponent>{
 
-    View render (Context viewContext, RenderingEnv env, UIComponent component);
+    View render (Context viewContext, RenderingEnv env, C component);
 
-//    void setFocus(Context viewContext, UIComponent component);
 }

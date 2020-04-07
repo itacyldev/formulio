@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.builders;
  * limitations under the License.
  */
 
+import android.text.InputType;
+
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
@@ -82,9 +84,11 @@ public class FieldBuilder {
 
         if (type == Integer.class || type == Short.class || type == Long.class) {
             baseModel.addValidator(validatorFactory.getValidator("integer"));
+            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER);
         }
         if (type == Float.class || type == Double.class) {
             baseModel.addValidator(validatorFactory.getValidator("decimal"));
+            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         }
         // TODO: set intput type (numeric, text, ...)
 
@@ -92,6 +96,11 @@ public class FieldBuilder {
         String label = baseModel.getLabel();
         if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
             baseModel.addValidator(validatorFactory.getValidator("email"));
+            baseModel.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        }
+        if (label.toLowerCase().contains("phome") || label.toLowerCase().contains("telefono")) {
+            baseModel.addValidator(validatorFactory.getValidator("email"));
+            baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
         }
     }
 

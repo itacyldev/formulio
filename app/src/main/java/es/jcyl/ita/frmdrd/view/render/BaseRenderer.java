@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.view.render;
 import android.content.Context;
 import android.view.View;
 
+import dagger.Component;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
@@ -26,11 +27,11 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public abstract class BaseRenderer implements Renderer {
+public abstract class BaseRenderer<C extends UIComponent> implements Renderer<C> {
 
     protected ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
-    public final View render(Context viewContext, RenderingEnv env, UIComponent component) {
+    public final View render(Context viewContext, RenderingEnv env, C component) {
         View baseView = createBaseView(viewContext, env, component);
         // check render condition
         boolean isRendered = component.isRendered(env.getContext());
@@ -50,9 +51,9 @@ public abstract class BaseRenderer implements Renderer {
      * @param component
      * @return
      */
-    protected abstract View createBaseView(Context viewContext, RenderingEnv env, UIComponent component);
+    protected abstract View createBaseView(Context viewContext, RenderingEnv env, C component);
 
-    protected abstract void setupView(View baseView, RenderingEnv env, UIComponent component);
+    protected abstract void setupView(View baseView, RenderingEnv env, C component);
 
     /**
      * Calculates the tag for the GroupView component that contains all the input, so when a partial
@@ -61,7 +62,7 @@ public abstract class BaseRenderer implements Renderer {
      *
      * @return
      */
-    protected String getBaseViewTag(UIComponent c) {
+    protected String getBaseViewTag(C c) {
         UIForm form = c.getParentForm();
         String formId = (form == null) ? "root" : form.getId();
         return formId + ":" + c.getId();

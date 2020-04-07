@@ -17,6 +17,7 @@ import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -46,14 +47,14 @@ public class TextFieldRenderer extends FieldRenderer {
 
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIField component) {
         LinearLayout baseView = ViewHelper.inflate(viewContext,
                 R.layout.tool_alphaedit_text, LinearLayout.class);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIField component) {
         TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
                 TextView.class);
         fieldLabel.setText(component.getLabel());
@@ -64,6 +65,7 @@ public class TextFieldRenderer extends FieldRenderer {
         // get component value and set in view
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
+        input.setInputType(component.getInputType());
         setMessages(env.getFormContext(), component, input);
         ((InputFieldView) baseView).setInputView(input);
 
@@ -71,7 +73,6 @@ public class TextFieldRenderer extends FieldRenderer {
                 ImageView.class);
         resetButton.setTag("reset");
 
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -91,7 +92,7 @@ public class TextFieldRenderer extends FieldRenderer {
         });
     }
 
-    private void setMessages(FormContext formContext, UIComponent component, EditText input) {
+    private void setMessages(FormContext formContext, UIField component, EditText input) {
         String message = FormContextHelper.getMessage(formContext, component.getId());
         if (message != null) {
             input.setError(message);

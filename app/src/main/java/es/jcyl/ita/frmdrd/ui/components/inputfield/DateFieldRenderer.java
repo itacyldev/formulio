@@ -21,6 +21,7 @@ import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -49,14 +50,14 @@ import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 public class DateFieldRenderer extends FieldRenderer {
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIComponent component) {
+    protected View createBaseView(Context viewContext, RenderingEnv env, UIField component) {
         LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
                 R.layout.tool_alphaedit_date, null);
         return createInputFieldView(viewContext, baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIComponent component) {
+    protected void setupView(View baseView, RenderingEnv env, UIField component) {
 
         TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
                 TextView.class);
