@@ -1,7 +1,5 @@
 package es.jcyl.ita.frmdrd.reactivity;
 
-import androidx.databinding.ViewDataBinding;
-
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 

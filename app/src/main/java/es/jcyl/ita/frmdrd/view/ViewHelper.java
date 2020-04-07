@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 
 /**
@@ -69,6 +70,13 @@ public class ViewHelper {
         return rootView.findViewWithTag(formId + ":" + componentId);
     }
 
+    public static View findComponentView(View rootView, UIComponent component) {
+        // same name rule followed by FileRenderer to tag the BaseView of
+        // the InputFileView: formId:elementId
+        String formId = (component.getParentForm() != null) ? component.getParentForm().getId() : "root";
+        return rootView.findViewWithTag(formId + ":" + component.getId());
+    }
+
     public static List<InputFieldView> findInputFieldViews(ViewGroup root) {
         List<InputFieldView> views = new ArrayList<>();
         final int childCount = root.getChildCount();
@@ -104,6 +112,7 @@ public class ViewHelper {
     public static <T> T inflate(Context context, int id, Class<T> clazz) {
         return inflate(context, id, null, clazz);
     }
+
     public static <T> T inflate(Context context, int id, ViewGroup viewGroup, Class<T> clazz) {
         // ramdomize id
         View view = View.inflate(context, id, viewGroup);

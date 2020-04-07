@@ -21,6 +21,7 @@ public class UIField extends UIComponent {
     private boolean deletable = true;
     private boolean required = false;
 
+
     private static final Validator[] EMTPY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMTPY_VALIDATOR;
 
