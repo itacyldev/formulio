@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.reactivity;
+package es.jcyl.ita.frmdrd.view.dag;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
@@ -16,6 +16,9 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
+import es.jcyl.ita.frmdrd.view.dag.DAGManager;
+import es.jcyl.ita.frmdrd.view.dag.DAGNode;
+import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 
 public class DAGManagerTest {

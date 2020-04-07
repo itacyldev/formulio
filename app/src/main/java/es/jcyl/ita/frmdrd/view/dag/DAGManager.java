@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.reactivity;
+package es.jcyl.ita.frmdrd.view.dag;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;

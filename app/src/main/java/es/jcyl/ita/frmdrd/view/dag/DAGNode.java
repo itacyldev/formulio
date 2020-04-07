@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.reactivity;
+package es.jcyl.ita.frmdrd.view.dag;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
