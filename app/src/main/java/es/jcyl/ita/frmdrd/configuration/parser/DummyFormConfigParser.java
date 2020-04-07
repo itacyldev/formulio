@@ -57,19 +57,23 @@ public class DummyFormConfigParser extends FormConfigParser {
 
     @Override
     public void parseFormConfig(String formConfigStr) {
-//        FormController fc1 = new FormController("MyForm1", "Form number 1.");
-//        createListView1(fc1);
-//        createEditView1(fc1);
-//        loadConfig(fc1);
-//
-//        FormController fc2 = new FormController("MyForm2", "Form number 2.");
-//        createListView1(fc2);
-//        createEditView2(fc2);
-//        loadConfig(fc2);
+        FormController fc1 = new FormController("MyForm1", "Form number 1.");
+        createListView1(fc1);
+        createEditView1(fc1);
+        loadConfig(fc1);
 
-        EditableRepository contactsRepo = repoFactory.getEditableRepo("inspecciones");
+        FormController fc2 = new FormController("MyForm2", "Form number 2.");
+        createListView1(fc2);
+        createEditView2(fc2);
+        loadConfig(fc2);
+
+        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
         FormController fc3 = fcBuilder.withRepo(contactsRepo).build();
         loadConfig(fc3);
+
+//        EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
+//        FormController fc4 = fcBuilder.withRepo(inspecRepo).build();
+//        loadConfig(fc4);
     }
 
 
@@ -226,7 +230,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
         table.setRepo(contactsRepo);
-        table.setRoute("MyForm1#edit");
+        table.setRoute(formController.getId()+"#edit");
         lst.add(table);
 
 //        UIForm form1 = new UIForm();
