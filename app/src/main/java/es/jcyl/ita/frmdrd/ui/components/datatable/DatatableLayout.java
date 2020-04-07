@@ -32,10 +32,10 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.repo.query.CriteriaVisitor;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
@@ -150,34 +150,12 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     }
 
     private Filter setupFilter(CompositeContext context) {
-        Filter f = createFilterInstance();
-
-        // get datatable filter definiton
-        Filter filterDefinition = dataTable.getFilter();
-        if (filterDefinition != null) {
-            // evaluate filter conditions
-            Criteria effectiveCriteria = criteriaVisitor.visit(filterDefinition.getCriteria(), context);
-            this.offset = 0;
-            this.pageSize = 20;
-            f.setCriteria(effectiveCriteria);
-            f.setSorting(filterDefinition.getSorting());
-        }
+        Filter f = FilterHelper.createInstance(repo);
+        FilterHelper.evaluateFilter(context, this.filter, f);
         f.setOffset(this.offset);
         f.setPageSize(this.pageSize);
         return f;
     }
-
-    private Filter createFilterInstance() {
-        Filter f;
-        try {
-            f = (Filter) repo.getFilterClass().newInstance();
-        } catch (Exception e) {
-            throw new ViewConfigException("An error ocurred while trying to instantiate the filter " +
-                    "class: " + repo.getFilterClass().getName());
-        }
-        return f;
-    }
-
 
     private void fillHeader(Context viewContext, LinearLayout headersLayout) {
         headersLayout.removeAllViews();

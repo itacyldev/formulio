@@ -1,7 +1,6 @@
 package es.jcyl.ita.frmdrd.builders;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
@@ -9,10 +8,10 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 
 
-public class FieldBuilder extends AbstractDataBuilder<UIField> {
+public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
     ValueExpressionFactory exprFactory = new ValueExpressionFactory();
 
-    public FieldBuilder() {
+    public FieldDataBuilder() {
         this.baseModel = createEmptyModel();
     }
 
@@ -24,39 +23,39 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
         return model;
     }
 
-    public FieldBuilder withId(String id) {
+    public FieldDataBuilder withId(String id) {
         this.baseModel.setId(id);
         return this;
     }
 
-    public FieldBuilder withFieldType(UIField.TYPE type) {
+    public FieldDataBuilder withFieldType(UIField.TYPE type) {
         this.baseModel.setType(type);
         String id = this.baseModel.getType().toLowerCase() + RandomStringUtils.randomAlphanumeric(5);
         this.baseModel.setId(id);
         return this;
     }
 
-    public FieldBuilder withParent(UIComponent parent) {
+    public FieldDataBuilder withParent(UIComponent parent) {
         this.baseModel.setParent(parent);
         return this;
     }
 
-    public FieldBuilder withValueBindingExpression(String expression, Class expectedType) {
+    public FieldDataBuilder withValueBindingExpression(String expression, Class expectedType) {
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
         this.baseModel.setValueExpression(exprFactory.create(expression, expectedType));
         return this;
     }
-    public FieldBuilder withValueBindingExpression(String expression) {
+    public FieldDataBuilder withValueBindingExpression(String expression) {
         ValueExpressionFactory exprFactory = new ValueExpressionFactory();
         this.baseModel.setValueExpression(exprFactory.create(expression, String.class));
         return this;
     }
-    public FieldBuilder withLabel(String label) {
+    public FieldDataBuilder withLabel(String label) {
         this.baseModel.setLabel(label);
         return this;
     }
 
-    public FieldBuilder withRenderExpression(String renderExpression) {
+    public FieldDataBuilder withRenderExpression(String renderExpression) {
         this.baseModel.setRenderExpression(exprFactory.create(renderExpression));
         return this;
     }
@@ -68,7 +67,7 @@ public class FieldBuilder extends AbstractDataBuilder<UIField> {
     }
 
     @Override
-    public FieldBuilder withRandomData() {
+    public FieldDataBuilder withRandomData() {
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setType(UIField.TYPE.TEXT);
         // set a random value literal expression

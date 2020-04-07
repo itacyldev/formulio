@@ -37,8 +37,8 @@ import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.builders.FieldBuilder;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.reactivity.DAGManager;
@@ -61,7 +61,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 @RunWith(RobolectricTestRunner.class)
 public class DelegatedExpressionTest {
 
-    FormBuilder formBuilder = new FormBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
@@ -117,7 +117,7 @@ public class DelegatedExpressionTest {
         UIField f1 = recipe.field;
         f1.setId("f1");
 //        form.setId("form");
-        FieldBuilder fBuilder = new FieldBuilder();
+        FieldDataBuilder fBuilder = new FieldDataBuilder();
 //        UIField f2 = fBuilder.withRandomData().withId("f2").withValueBindingExpression("${" + form.getId() + ".view.f1}").build();
 //        UIField f3 = fBuilder.withRandomData().withId("f3").withValueBindingExpression("${" + form.getId() + ".view.f2}").build();
 //        UIField f4 = fBuilder.withRandomData().withId("f4").withValueBindingExpression("${" + form.getId() + ".view.f2}").build();

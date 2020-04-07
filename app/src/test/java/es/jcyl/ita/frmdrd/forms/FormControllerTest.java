@@ -37,7 +37,7 @@ import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -55,7 +55,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class FormControllerTest {
 
-    FormBuilder formBuilder = new FormBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();

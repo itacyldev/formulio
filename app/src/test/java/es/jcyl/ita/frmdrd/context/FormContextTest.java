@@ -37,7 +37,7 @@ import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -58,7 +58,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class FormContextTest {
 
-    FormBuilder formBuilder = new FormBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
 

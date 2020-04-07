@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.builders.FieldBuilder;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -69,7 +69,7 @@ public class DAGManagerTest {
     }
 
     private UIForm createForm(String formId) {
-        FieldBuilder fieldBuilder = new FieldBuilder();
+        FieldDataBuilder fieldBuilder = new FieldDataBuilder();
 
         List<UIComponent> fields = new ArrayList<>();
         UIField field1 =
@@ -111,14 +111,14 @@ public class DAGManagerTest {
                         "field 7").build();
         fields.add(field7);
 
-        FormBuilder formBuilder = new FormBuilder();
+        FormDataBuilder formBuilder = new FormDataBuilder();
         formBuilder.withId(formId).withChildren(fields);
 
         return formBuilder.build();
     }
 
     private UIForm createFormWithCycle(String formId) {
-        FieldBuilder fieldBuilder = new FieldBuilder();
+        FieldDataBuilder fieldBuilder = new FieldDataBuilder();
 
         List<UIComponent> fields = new ArrayList<>();
         UIField field1 =
@@ -136,7 +136,7 @@ public class DAGManagerTest {
                         "field 3").withValueBindingExpression("${form.field2}", String.class).build();
         fields.add(field3);
 
-        FormBuilder formBuilder = new FormBuilder();
+        FormDataBuilder formBuilder = new FormDataBuilder();
         formBuilder.withId(formId).withChildren(fields);
 
         return formBuilder.build();

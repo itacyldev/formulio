@@ -22,8 +22,8 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.builders.FieldBuilder;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
@@ -40,8 +40,8 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 public class DevFormBuilder {
 
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    static FieldBuilder fBuilder = new FieldBuilder();
-    static FormBuilder formBuilder = new FormBuilder();
+    static FieldDataBuilder fBuilder = new FieldDataBuilder();
+    static FormDataBuilder formBuilder = new FormDataBuilder();
 
     public static FormController createFormController(Context viewContext, UIForm... forms) {
         UIView view = new UIView("v1");

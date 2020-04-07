@@ -15,14 +15,13 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
-import es.jcyl.ita.frmdrd.el.JexlUtils;
 
-public class FormBuilder extends AbstractDataBuilder<UIForm> {
+public class FormDataBuilder extends AbstractDataBuilder<UIForm> {
 
     private String renderCondition;
     private List<UIField> children;
     private int numFields = 5;
-    FieldBuilder fieldBuilder = new FieldBuilder();
+    FieldDataBuilder fieldBuilder = new FieldDataBuilder();
     private String[] expressions;
     private Class[] expectedTypes;
     private boolean randomValues = true;
@@ -32,21 +31,21 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
     private EntityMeta meta;
 
 
-    public FormBuilder() {
+    public FormDataBuilder() {
         this.baseModel = createEmptyModel();
     }
 
-    public FormBuilder withId(String id) {
+    public FormDataBuilder withId(String id) {
         this.baseModel.setId(id);
         return this;
     }
 
-    public FormBuilder withLabel(String label) {
+    public FormDataBuilder withLabel(String label) {
         this.baseModel.setLabel(label);
         return this;
     }
 
-    public FormBuilder withNumFields(int num) {
+    public FormDataBuilder withNumFields(int num) {
         this.numFields = num;
         return this;
     }
@@ -57,18 +56,18 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
      * @param doRandomValues: if true, each field will have a random value
      * @return
      */
-    public FormBuilder withRandomValues(boolean doRandomValues) {
+    public FormDataBuilder withRandomValues(boolean doRandomValues) {
         this.randomValues = doRandomValues;
         return this;
     }
 
-    public FormBuilder withBindingExpressions(String[] expressions) {
+    public FormDataBuilder withBindingExpressions(String[] expressions) {
         this.expressions = expressions;
         this.numFields = expressions.length;
         return this;
     }
 
-    public FormBuilder withBindingExpressions(String[] expressions, Class[] expectedTypes) {
+    public FormDataBuilder withBindingExpressions(String[] expressions, Class[] expectedTypes) {
         if (expressions.length != expectedTypes.length) {
             throw new IllegalArgumentException("Incompatible array lengths, 'expressions' and " +
                     "'expectedTypes' arrays must have the same length");
@@ -79,19 +78,19 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
         return this;
     }
 
-    public FormBuilder withMeta(EntityMeta meta) {
+    public FormDataBuilder withMeta(EntityMeta meta) {
         this.numFields = meta.getProperties().length;
         this.meta = meta;
         return this;
 
     }
 
-    public FormBuilder withChildren(List<UIComponent> children) {
+    public FormDataBuilder withChildren(List<UIComponent> children) {
         this.baseModel.setChildren(children);
         return this;
     }
 
-    public FormBuilder withRenderCondition(String renderCondition) {
+    public FormDataBuilder withRenderCondition(String renderCondition) {
         return this;
     }
 
@@ -102,7 +101,7 @@ public class FormBuilder extends AbstractDataBuilder<UIForm> {
     }
 
     @Override
-    public FormBuilder withRandomData() {
+    public FormDataBuilder withRandomData() {
         UIField.TYPE[] values = UIField.TYPE.values();
 
         List<UIComponent> fields = new ArrayList<UIComponent>();

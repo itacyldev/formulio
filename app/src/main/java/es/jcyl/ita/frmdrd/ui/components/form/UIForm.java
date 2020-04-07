@@ -6,28 +6,32 @@ import java.util.Map;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.context.impl.ViewStateHolder;
 import es.jcyl.ita.frmdrd.forms.FormException;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 
 public class UIForm extends UIComponent {
 
     private FormContext context;
     private final ViewStateHolder memento;
-    private EditableRepository repo;
+    private Repository repo;
     private String entityId = "params.entityId";
     private List<UIField> fields;
-
+    private Filter filter;
     private String onValidate; // js function to call on validation
 
 
@@ -98,11 +102,11 @@ public class UIForm extends UIComponent {
         return context;
     }
 
-    public EditableRepository getRepo() {
+    public Repository getRepo() {
         return repo;
     }
 
-    public void setRepo(EditableRepository repo) {
+    public void setRepo(Repository repo) {
         this.repo = repo;
     }
 
@@ -146,26 +150,64 @@ public class UIForm extends UIComponent {
      * @param globalCtx
      */
     public void load(Context globalCtx) {
-        EditableRepository repo = this.getRepo();
+        Repository repo = this.getRepo();
         Object entityId = getEntityIdFromContext(globalCtx);
 
         Entity entity;
         if (entityId == null) {
             // create empty entity
+            if (isReadOnly()) {
+                throw new ViewConfigException(String.format("The form [%s] is readOnly, no new " +
+                        "entities can be created. Use an EditableRepository or set the readOnly " +
+                        "attribute to false.", this.getId()));
+            }
             entity = new Entity(repo.getSource(), repo.getMeta());
         } else {
             // what if its null? throw an Exception?
-            entity = repo.findById(entityId);
+            entity = findEntity(globalCtx, entityId);
         }
         this.getContext().setEntity(entity);
     }
 
+    /**
+     * Loads current entity depending on the repository type.
+     *
+     * @param entityId
+     * @return
+     */
+    private Entity findEntity(Context globalContext, Object entityId) {
+        if (this.repo instanceof EditableRepository) {
+            return ((EditableRepository) repo).findById(entityId);
+        } else {
+            // if there's a filter defined in the form, use the filter to find the entity
+            if (this.filter == null) {
+                throw new ViewConfigException(String.format("You are using a readOnly repository in " +
+                        "form [%s] but no repofilter has been configured to define the query to " +
+                        "find the entity from its id. Add a repofilter tag with an eq condition" +
+                        " with the expression ${params.entityId}.", this.getId()));
+            }
+            Filter f = setupFilter(globalContext);
+            List<Entity> list = this.repo.find(f);
+            if (list.size() == 0) {
+                throw new ViewConfigException(String.format("No entity found with the filter [%s], " +
+                        "check the repofilter defined in the form [%s].", f.toString(), this.id));
+            }
+            return list.get(0);
+        }
+    }
 
-    private Object getEntityIdFromContext(Context globalCtx) {
+
+    private Filter setupFilter(Context context) {
+        Filter f = FilterHelper.createInstance(repo);
+        FilterHelper.evaluateFilter(context, this.filter, f);
+        return f;
+    }
+
+    private Object getEntityIdFromContext(Context context) {
         String entityIdProp = this.getEntityId();
         Object entityId;
         try {
-            entityId = globalCtx.get(entityIdProp);
+            entityId = context.get(entityIdProp);
         } catch (Exception e) {
             throw new FormException(String.format("An error occurred while trying to obtain the " +
                     "entity id from params context for form [%s]." +
@@ -173,6 +215,11 @@ public class UIForm extends UIComponent {
         }
         return entityId;
     }
+
+    public boolean isReadOnly() {
+        return super.isReadOnly() || !(this.repo instanceof EditableRepository);
+    }
+
 
     public boolean isVisible(UIField field) {
         FormViewContext viewContext = context.getViewContext();

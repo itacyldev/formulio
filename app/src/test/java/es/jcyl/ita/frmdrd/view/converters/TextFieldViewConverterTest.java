@@ -17,7 +17,6 @@ package es.jcyl.ita.frmdrd.view.converters;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -33,8 +32,8 @@ import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
-import es.jcyl.ita.frmdrd.builders.FieldBuilder;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
@@ -47,8 +46,8 @@ import es.jcyl.ita.frmdrd.view.ViewHelper;
 @RunWith(RobolectricTestRunner.class)
 public class TextFieldViewConverterTest {
 
-    FieldBuilder fBuilder = new FieldBuilder();
-    FormBuilder formBuilder = new FormBuilder();
+    FieldDataBuilder fBuilder = new FieldDataBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
 
     @BeforeClass
     public static void setUp() {

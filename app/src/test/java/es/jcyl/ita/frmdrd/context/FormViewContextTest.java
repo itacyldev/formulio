@@ -28,7 +28,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -48,7 +48,7 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 @RunWith(RobolectricTestRunner.class)
 public class FormViewContextTest {
 
-    FormBuilder formBuilder = new FormBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
     ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     /**

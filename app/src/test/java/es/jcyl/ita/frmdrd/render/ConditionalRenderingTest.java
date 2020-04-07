@@ -31,7 +31,7 @@ import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
@@ -50,7 +50,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 @RunWith(RobolectricTestRunner.class)
 public class ConditionalRenderingTest {
 
-    FormBuilder formBuilder = new FormBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();

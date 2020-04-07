@@ -33,9 +33,8 @@ import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
-import es.jcyl.ita.frmdrd.context.impl.MapCompositeContext;
 import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -52,7 +51,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 @RunWith(RobolectricTestRunner.class)
 public class EnvExecutionContextTest {
 
-    FormBuilder formBuilder = new FormBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
 
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
 

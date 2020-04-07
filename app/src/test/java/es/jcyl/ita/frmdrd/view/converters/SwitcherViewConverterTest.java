@@ -26,8 +26,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
-import es.jcyl.ita.frmdrd.builders.FieldBuilder;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
@@ -41,8 +41,8 @@ import es.jcyl.ita.frmdrd.view.ViewHelper;
 @RunWith(RobolectricTestRunner.class)
 public class SwitcherViewConverterTest {
 
-    FieldBuilder fBuilder = new FieldBuilder();
-    FormBuilder formBuilder = new FormBuilder();
+    FieldDataBuilder fBuilder = new FieldDataBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
 
     @BeforeClass
     public static void setUp() {

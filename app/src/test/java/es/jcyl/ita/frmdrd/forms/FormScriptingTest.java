@@ -33,7 +33,7 @@ import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
-import es.jcyl.ita.frmdrd.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -51,7 +51,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class FormScriptingTest {
 
-    FormBuilder formBuilder = new FormBuilder();
+    FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
 
     @BeforeClass
