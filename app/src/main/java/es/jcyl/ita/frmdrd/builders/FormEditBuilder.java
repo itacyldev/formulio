@@ -15,10 +15,12 @@ package es.jcyl.ita.frmdrd.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.EditableRepository;
+import org.apache.commons.lang.RandomStringUtils;
+
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
@@ -28,36 +30,48 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
  * Builder class to create UIForm instances from an Entity metadata information. It maps each
  * metadata property to the most most suitable field component for each table column.
  */
-public class FormBuilder {
+public class FormEditBuilder {
 
     private UIForm baseModel;
     private EntityMeta meta;
     private FieldBuilder fieldBuilder = new FieldBuilder();
-    private Repository repo;
+
+    public FormEditBuilder(){
+        baseModel = new UIForm();
+    }
 
 
-    public FormBuilder withMeta(EntityMeta meta) {
+    public FormEditBuilder withMeta(EntityMeta meta) {
         this.meta = meta;
         return this;
     }
-    public FormBuilder witRepo(Repository repo) {
+
+    public FormEditBuilder witRepo(Repository repo) {
         this.meta = repo.getMeta();
-        this.repo = repo;
+        this.baseModel.setRepo(repo);
+        return this;
+    }
+
+    public FormEditBuilder withFilter(Filter filter) {
+        this.baseModel.setFilter(filter);
         return this;
     }
 
     public UIForm build() {
         UIForm model = baseModel;
-        this.baseModel = null;
+        this.baseModel = new UIForm();
+        if (meta == null) {
+            throw new IllegalStateException("No repo or meta provided, cannot create the form.");
+        }
+
         // create fields from properties
         PropertyType[] properties = this.meta.getProperties();
         UIField[] kids = new UIField[properties.length];
-        for (int i=0;i< properties.length;i++) {
+        for (int i = 0; i < properties.length; i++) {
             kids[i] = fieldBuilder.withProperty(properties[i]).build();
         }
-        model.setRepo(this.repo);
-
-
+        model.setChildren(kids);
+        model.setId("form" + RandomStringUtils.randomAlphabetic(4));
 
         return model;
     }

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.Serializable;
@@ -113,7 +114,8 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             @Override
             public void onClick(final View v) {
                 ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
-                if (userActionInterceptor != null) {
+                // create navigation route using current entity Id as parameter
+                if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getDatatable().getRoute())) {
                     UserAction action = new UserAction(context, dtLayout.getDatatable(), ActionType.NAVIGATE);
                     action.addParam("route", dtLayout.getDatatable().getRoute());
                     action.addParam("entityId", (Serializable) currentEntity.getId());
@@ -127,7 +129,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         UIColumn[] columns = dtLayout.getDatatable().getColumns();
         Object[] values = JexlUtils.bulkEval(entity, columns);
 
-        for (int i=0; i<columns.length;i++){
+        for (int i = 0; i < columns.length; i++) {
             String stringValue = (String) ConvertUtils.convert(values[i], String.class);
             TextView textView = (TextView) holder.viewList.get(i);
             textView.setText(DataUtils.nullFormat(stringValue));
@@ -136,6 +138,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
     /**
      * Creates the TextViews needed to
+     *
      * @param holder
      * @param parent
      */
@@ -178,7 +181,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     }
 
 
-     class ViewColumnHolder {
+    class ViewColumnHolder {
         int position;
         boolean charged;
         LinearLayout layout;

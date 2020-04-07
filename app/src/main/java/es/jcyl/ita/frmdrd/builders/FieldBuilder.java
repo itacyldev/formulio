@@ -15,13 +15,13 @@ package es.jcyl.ita.frmdrd.builders;
  * limitations under the License.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -31,6 +31,12 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 public class FieldBuilder {
 
     UIField baseModel;
+    ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+    ValidatorFactory validatorFactory = ValidatorFactory.getInstance();
+
+    public FieldBuilder() {
+        this.baseModel = new UIField();
+    }
 
     private UIField.TYPE getMappedField(PropertyType property) {
         Class type = property.getType();
@@ -47,6 +53,7 @@ public class FieldBuilder {
         throw new IllegalArgumentException("Unsupported property type: " + type.getName());
     }
 
+
     /**
      * Maps the property type to the most suitable Field type
      *
@@ -57,12 +64,40 @@ public class FieldBuilder {
         UIField.TYPE inputType = getMappedField(property);
         this.baseModel.setType(inputType);
         this.baseModel.setId(property.name);
+        this.baseModel.setLabel(property.name);
+        ValueBindingExpression ve = exprFactory.create("${entity." + property.name + "}", property.getType());
+        this.baseModel.setValueExpression(ve);
+        if (property.isPrimaryKey()) {
+            // if the property is pk, do not show if the value is empty
+            ve = exprFactory.create("${not empty(entity." + property.name + ")}", property.getType());
+            this.baseModel.setRenderExpression(ve);
+            this.baseModel.setReadOnly(true);
+        }
+        addValidators(this.baseModel, property);
         return this;
+    }
+
+    private void addValidators(UIField baseModel, PropertyType property) {
+        Class type = property.getType();
+
+        if (type == Integer.class || type == Short.class || type == Long.class) {
+            baseModel.addValidator(validatorFactory.getValidator("integer"));
+        }
+        if (type == Float.class || type == Double.class) {
+            baseModel.addValidator(validatorFactory.getValidator("decimal"));
+        }
+        // TODO: set intput type (numeric, text, ...)
+
+        // used the label to set a validator email, correo, mail, phone, telefono,...
+        String label = baseModel.getLabel();
+        if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
+            baseModel.addValidator(validatorFactory.getValidator("email"));
+        }
     }
 
     public UIField build() {
         UIField model = baseModel;
-        baseModel = null;
+        this.baseModel = new UIField();
         return model;
     }
 }

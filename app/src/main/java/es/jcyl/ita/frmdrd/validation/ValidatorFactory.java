@@ -15,14 +15,48 @@ package es.jcyl.ita.frmdrd.validation;
  * limitations under the License.
  */
 
+import org.apache.commons.validator.routines.DoubleValidator;
+import org.apache.commons.validator.routines.EmailValidator;
+import org.apache.commons.validator.routines.IntegerValidator;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ValidatorFactory {
+    private static final Map<String, Validator> staticValidators = new HashMap<>();
+    public static ValidatorFactory _instance;
+
+    public static ValidatorFactory getInstance() {
+        if (_instance == null) {
+            _instance = new ValidatorFactory();
+        }
+        return _instance;
+    }
 
 
-    public ValidatorFactory(){
+    /**
+     * Validatos with no parameters
+     */
+    private void registerStaticValidators() {
+        staticValidators.put("required", new RequiredValidator());
+        staticValidators.put("integer", new CommonsValidatorWrapper(IntegerValidator.getInstance()));
+        staticValidators.put("decimal", new CommonsValidatorWrapper(DoubleValidator.getInstance()));
+        staticValidators.put("email", new CommonsValidatorWrapper(EmailValidator.getInstance()));
+    }
+
+    public ValidatorFactory() {
         // register validators
+        registerStaticValidators();
+    }
 
+    public Validator getValidator(String type) {
+        return staticValidators.get(type.toLowerCase());
+    }
+
+    public Validator getValidator(String type, Map<String, String> params) {
+        throw new UnsupportedOperationException("not implemented yet!");
     }
 }

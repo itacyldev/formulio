@@ -256,4 +256,12 @@ public class UIForm extends UIComponent {
         }
         return valid;
     }
+
+    public Filter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+    }
 }

@@ -68,7 +68,6 @@ public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
         return this;
     }
 
-
     @Override
     public FieldDataBuilder withRandomData() {
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));

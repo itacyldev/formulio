@@ -13,6 +13,7 @@ import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
+import es.jcyl.ita.frmdrd.builders.FormControllerBuilder;
 import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
@@ -51,6 +52,8 @@ import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 public class DummyFormConfigParser extends FormConfigParser {
     ValueExpressionFactory exprFactory = new ValueExpressionFactory();
     DataTableBuilder formGenerator = new DataTableBuilder();
+    RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+    FormControllerBuilder fcBuilder = new FormControllerBuilder();
 
     @Override
     public void parseFormConfig(String formConfigStr) {
@@ -59,10 +62,14 @@ public class DummyFormConfigParser extends FormConfigParser {
         createEditView1(fc1);
         loadConfig(fc1);
 //
-        FormController fc2 = new FormController("MyForm2", "Form number 2.");
-        createListView1(fc2);
-        createEditView2(fc2);
-        loadConfig(fc2);
+//        FormController fc2 = new FormController("MyForm2", "Form number 2.");
+//        createListView1(fc2);
+//        createEditView2(fc2);
+//        loadConfig(fc2);
+
+        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+        FormController fc3 = fcBuilder.withRepo(contactsRepo).build();
+        loadConfig(fc3);
     }
 
 
@@ -77,7 +84,6 @@ public class DummyFormConfigParser extends FormConfigParser {
         // datatable
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
-        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 
         String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
@@ -166,7 +172,6 @@ public class DummyFormConfigParser extends FormConfigParser {
         // datatable
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
-        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
 //        contactsRepo.setContext(MainController.getInstance().getGlobalContext());
@@ -206,7 +211,7 @@ public class DummyFormConfigParser extends FormConfigParser {
     private void createListView1(FormController formController) {
         List<UIComponent> lst = new ArrayList<UIComponent>();
 
-        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
         String[] fieldFilter = new String[]{"first_name", "email", "it_profile"};
