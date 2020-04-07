@@ -56,13 +56,13 @@ public class DummyFormConfigParser extends FormConfigParser {
     public void parseFormConfig(String formConfigStr) {
         FormController fc1 = new FormController("MyForm1", "Form number 1.");
         createListView1(fc1);
-        createEditView2(fc1);
+        createEditView1(fc1);
         loadConfig(fc1);
 //
-//        FormController fc2 = new FormController("MyForm2", "Form number 2.");
-//        createListView1(fc2);
-//        createEditView2(fc2);
-//        loadConfig(fc2);
+        FormController fc2 = new FormController("MyForm2", "Form number 2.");
+        createListView1(fc2);
+        createEditView2(fc2);
+        loadConfig(fc2);
     }
 
 
@@ -197,6 +197,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         lstView.add(form1);
         UIView view1 = new UIView("view2");
         view1.setChildren(lstView);
+
+        DAGManager.getInstance().generateDags(view1);
 
         formController.setEditView(view1);
     }
