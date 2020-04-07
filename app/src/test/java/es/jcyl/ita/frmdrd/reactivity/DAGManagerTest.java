@@ -25,7 +25,6 @@ public class DAGManagerTest {
         UIView view = createView();
 
         DAGManager dagManager = DAGManager.getInstance();
-        //dagManager.getDags().clear();
         dagManager.generateDags(view);
 
         ViewDAG viewDags = dagManager.getViewDAG(view.getId());

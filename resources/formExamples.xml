@@ -1,5 +1,5 @@
 <examples>
-    <form onvalidate="validateForm">
+    <form>
         <permissions />
         <data>
             <repo type="csv" />
@@ -27,13 +27,10 @@
                     <param name="1" value="${entity.f1}" />
                 </button>
             </buttonbar>
-            <script engine="rhino">
-                function validateForm(param) {
-                var fieldVAlue = ctx.getViewContext().get("f1")
-                var uiview = ctx.findFieldByID("f1);
-                view.setBackGroudn(red)
-                ui
-                ctx[entity.f3] = entity.f1 + entity.f2
+            <script engine="jexl">
+                function method1(param) {
+
+                    ctx[entity.f3] = entity.f1 + entity.f2
 
                 }
                 function method2(param) {
@@ -52,8 +49,8 @@
     <!-- si el repositorio se ha registrado ya -->
 
     repo="mibd"
-    <form dbTable="mitabla" dbfile="mibd.sqlite" />
-    <form repo="mibd" />
+    <form dbfile="mibd.sqlite" dbTable="mitabla"/>
+    <form repo="mibd"/>
 
     <listExamples>
         <list fields="field1,field2,field3">
@@ -61,10 +58,10 @@
         </list>
         <list expression="${entity.f1} - ${entity.f2.substring(0,10)}" />
         <list>
-            <datatable filterFields="field2,field3" sortFields="field1,field2" />
+            <datatable sortFields="field1,field2" filterFields="field2,field3"/>
         </list>
         <list>
-            <datalist filterFields="field2,field3" sortFields="field1,field2" />
+            <datalist sortFields="field1,field2" filterFields="field2,field3"/>
         </list>
     </listExamples>
 
@@ -91,7 +88,8 @@
 
     <form>
         <list expression="${entity.f1} - ${entity.f2.substring(0,10)}" />
-        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" tableName="tableName" />
+        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite"
+            tableName="tableName" />
     </form>
     <form>
         <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" id="repo1" tableName="tableName">
@@ -99,13 +97,7 @@
             <property name="geometry" type="Geometry" />
         </repo>
         <list>
-            <datable repo="contactos">
-                <repofilter>
-                    <or>
-                        <contains property="${entity.first_name}" value="${view.fnombre}" />
-                        <contains property="${entity.last_name}" value="${view.fnombre}" />
-                    </or>
-                </repofilter>
+            <datable >
                 <col value="${entity.f1}" />
                 <col value="${entity.f2} + ${entity.f3}" />
             </datable>
@@ -123,7 +115,7 @@
         </data>
         <edit fields="*">
             <!-- sobre cargamos la definición de uno de los campos para utilizar un lookup en uno y un compo en otro-->
-            <select repo="repo3" value="${entity.field1}" />
+            <select repo="repo3"  value="${entity.field1}" />
             <inputText lookup="repo3" readonly="true" value="${entity.field2}"></inputText>
             <autocomplete repo="repo3" value="${entity.field3}" />
 
