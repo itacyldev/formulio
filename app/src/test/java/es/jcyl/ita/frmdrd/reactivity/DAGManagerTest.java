@@ -11,20 +11,21 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
-import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 
 
 public class DAGManagerTest {
 
     @Test
     public void createDags() {
-        UIView view = createView();
+        UIView view = createView("view");
 
         DAGManager dagManager = DAGManager.getInstance();
+        dagManager.flush();
         dagManager.generateDags(view);
 
         ViewDAG viewDags = dagManager.getViewDAG(view.getId());
@@ -51,8 +52,32 @@ public class DAGManagerTest {
         dagManager.generateDags(view);
     }
 
-    private UIView createView() {
-        UIView view = new UIView("view1");
+    @Test
+    public void createDAG2Views() {
+        UIView view1 = createView("view1");
+        UIView view2 = createView("view2");
+
+        DAGManager dagManager = DAGManager.getInstance();
+        dagManager.flush();
+
+        dagManager.generateDags(view1);
+        dagManager.generateDags(view2);
+
+        ViewDAG viewDag1 = dagManager.getViewDAG(view1.getId());
+        ViewDAG viewDag2 = dagManager.getViewDAG(view2.getId());
+
+        Assert.assertNotNull(viewDag1);
+        Assert.assertNotNull(viewDag2);
+
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags1 = viewDag1.getDags();
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags2 = viewDag2.getDags();
+
+        Assert.assertNotNull(dags1);
+        Assert.assertNotNull(dags2);
+    }
+
+    private UIView createView(String viewId) {
+        UIView view = new UIView(viewId);
         UIForm form = createForm("form");
         view.addChild(form);
 
@@ -68,52 +93,46 @@ public class DAGManagerTest {
     }
 
     private UIForm createForm(String formId) {
+
+        UIForm form = DevFormBuilder.createOneFieldForm();
+        form.setId(formId);
+
         FieldDataBuilder fieldBuilder = new FieldDataBuilder();
 
-        List<UIComponent> fields = new ArrayList<>();
-        UIField field1 =
-                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field1").withLabel(
-                        "field 1").build();
-        fields.add(field1);
-
-        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
-//        exprFactory.create("${entity.it_profile}", Long.class);
+        UIField field1 = form.getFields().get(0);
+        field1.setId("field1");
         UIField field2 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
-                        "field 2").withValueBindingExpression("${form.field1}", String.class).build();
+                        "field 2").withValueBindingExpression("${" + field1.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field2);
 
         UIField field3 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field3").withLabel(
-                        "field 3").withValueBindingExpression("${form.field2}", String.class).build();
-        fields.add(field3);
+                        "field 3").withValueBindingExpression("${" + field2.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field3);
 
         UIField field4 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field4").withLabel(
-                        "field 4").withValueBindingExpression("${form.field2}", String.class).build();
-        fields.add(field4);
+                        "field 4").withValueBindingExpression("${" + field2.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field4);
 
-
-        fields.add(field2);
 
         UIField field5 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field5").withLabel(
                         "field 5").build();
-        fields.add(field5);
+        form.addChild(field5);
 
         UIField field6 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field6").withLabel(
-                        "field 6").withValueBindingExpression("${form.field5}", String.class).build();
-        fields.add(field6);
+                        "field 6").withValueBindingExpression("${" + field5.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field6);
 
         UIField field7 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field7").withLabel(
                         "field 7").build();
-        fields.add(field7);
+        form.addChild(field7);
 
-        FormDataBuilder formBuilder = new FormDataBuilder();
-        formBuilder.withId(formId).withChildren(fields);
-
-        return formBuilder.build();
+        return form;
     }
 
     private UIForm createFormWithCycle(String formId) {
