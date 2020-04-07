@@ -135,24 +135,25 @@ public class DAGManager {
                 String dependingComponentId;
                 for (String depString : dependingVariables) {
                     dependingComponentId = createAbsoluteReference(component, depString);
+                    if (!dependingComponentId.equals(componentId)) {
+                        UIComponent dependingComponent = components.get(dependingComponentId);
+                        if (dependingComponent != null) {
+                            DAGNode dependingNode = getComponentNode(dependingComponent);
 
-                    UIComponent dependingComponent = components.get(dependingComponentId);
-                    if (dependingComponent != null) {
-                        DAGNode dependingNode = getComponentNode(dependingComponent);
-
-                        DirectedAcyclicGraph dag = null;
-                        if (dags.containsKey(componentId)) {
-                            dag = dags.get(componentId);
-                            dag.addVertex(dependingNode);
-                            dag.addEdge(dependingNode, componentNode);
-                            dags.put(dependingComponentId, dag);
-                        } else {
-                            dag = getDagComponent(dependingComponentId, dags);
-                            dag.addVertex(componentNode);
-                            dag.addEdge(dependingNode, componentNode);
-                            dags.put(componentId, dag);
+                            DirectedAcyclicGraph dag = null;
+                            if (dags.containsKey(componentId)) {
+                                dag = dags.get(componentId);
+                                dag.addVertex(dependingNode);
+                                dag.addEdge(dependingNode, componentNode);
+                                dags.put(dependingComponentId, dag);
+                            } else {
+                                dag = getDagComponent(dependingComponentId, dags);
+                                dag.addVertex(componentNode);
+                                dag.addEdge(dependingNode, componentNode);
+                                dags.put(componentId, dag);
+                            }
+                            buildComponentDag(dependingComponentId, dags, components);
                         }
-                        buildComponentDag(dependingComponentId, dags, components);
                     }
                 }
             }
