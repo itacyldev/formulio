@@ -175,8 +175,10 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
         for (View item : cacheViews) {
-            ViewColumnHolder holder = (ViewColumnHolder) item.getTag();
-            holder.charged = false;
+            if (item != null) {
+                ViewColumnHolder holder = (ViewColumnHolder) item.getTag();
+                holder.charged = false;
+            }
         }
     }
 

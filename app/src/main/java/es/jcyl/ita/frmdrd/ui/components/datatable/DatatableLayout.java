@@ -89,6 +89,8 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         fillHeader(this.getContext(), this.headerView);
 
         // set filter to repo using current view data
+        this.offset = 0;
+        this.entities.clear();
         this.filter = setupFilter(environment.getContext());
         // read first page to render data
         loadNextPage();
@@ -143,7 +145,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         //this.entities.clear();
         this.entities.addAll(this.repo.find(this.filter));
 
-        //notify that the model changed
+        //notify that the model changedA
         ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
