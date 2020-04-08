@@ -72,7 +72,9 @@ public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<
         // add buttons to the toolbar
         LinearLayout layout = root.findViewById(R.id.form_edit_footer);
         layout.addView(resetBtn);
-        layout.addView(saveBtn);
+        if(!component.isReadOnly()){
+            layout.addView(saveBtn);
+        }
     }
 
     private Button renderSaveButton(Context context, RenderingEnv env, UIForm component, ViewGroup parent) {

@@ -131,7 +131,6 @@ public class DummyFormConfigParser extends FormConfigParser {
         table.setFilter(f);
         lst.add(table);
 
-
         UIForm form1 = new UIForm();
         form1.setId("form1");
         form1.setLabel("Formulario 1");
