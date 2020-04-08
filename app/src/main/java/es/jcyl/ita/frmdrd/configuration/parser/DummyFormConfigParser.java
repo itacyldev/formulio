@@ -102,8 +102,8 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         // table repository filter
         Filter f = new SQLQueryFilter();
-        Criteria criteria = Criteria.or(ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${entity.first_name}")),
-                ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${entity.last_name}")));
+        Criteria criteria = Criteria.or(ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${view.filter}")),
+                ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${view.filter}")));
         f.setCriteria(criteria);
         table.setFilter(f);
         lst.add(table);

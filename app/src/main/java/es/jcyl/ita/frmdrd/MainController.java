@@ -42,6 +42,8 @@ import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.FormListViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
+import es.jcyl.ita.frmdrd.view.dag.DAGManager;
+import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
@@ -188,7 +190,8 @@ public class MainController {
      * @param component: ui component that fires the changes in the View
      */
     public void updateDependants(UIComponent component) {
-        renderHelper.renderDeps(this.viewContext, this.renderingEnv, component);
+        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
+        renderHelper.renderDeps(this.viewContext, this.renderingEnv, viewDAG, component);
     }
 
     private void setViewContext(android.content.Context viewContext) {

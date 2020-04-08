@@ -39,7 +39,6 @@ import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
-import es.jcyl.ita.frmdrd.view.ViewConfigException;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
@@ -151,9 +150,8 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
 
     private Filter setupFilter(CompositeContext context) {
         Filter f = FilterHelper.createInstance(repo);
-        if(this.filter != null){
-            FilterHelper.evaluateFilter(context, this.filter, f);
-        }
+
+        FilterHelper.evaluateFilter(context, this.filter, f);
         f.setOffset(this.offset);
         f.setPageSize(this.pageSize);
         return f;
