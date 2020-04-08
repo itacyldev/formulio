@@ -79,19 +79,36 @@ public class DummyFormConfigParser extends FormConfigParser {
 
     private void createEditView1(FormController formController) {
         List<UIComponent> lst = new ArrayList<UIComponent>();
+
+        UIField fieldn = new UIField();
+        fieldn.setId("initial");
+        fieldn.setType(UIField.TYPE.TEXT);
+        fieldn.setLabel("Inicial");
+        fieldn.setValueExpression(exprFactory.create("${entity.last_name}"));
+        lst.add(fieldn);
+
         UIField field0 = new UIField();
         field0.setId("filter");
         field0.setType(UIField.TYPE.TEXT);
         field0.setLabel("Filter");
+        field0.setValueExpression(exprFactory.create("${view.initial}"));
         lst.add(field0);
+
+
+        UIField fieldB = new UIField();
+        fieldB.setId("f2");
+        fieldB.setType(UIField.TYPE.TEXT);
+        fieldB.setLabel("data");
+        lst.add(fieldB);
 
         UIField field1 = new UIField();
         field1.setId("filtercopy");
         field1.setType(UIField.TYPE.TEXT);
         field1.setLabel("Filter copy");
-        field1.setValueExpression(exprFactory.create("${view.filter}"));
+        field1.setValueExpression(exprFactory.create("${view.filter} - ${view.f2}"));
         field1.setRenderExpression(exprFactory.create("${view.filter.length() < 5}"));
         lst.add(field1);
+
 
         // datatable
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
@@ -246,7 +263,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 //        List<UIComponent> f = new ArrayList<>();
 //        f.add(form1);
 
-        UIView view1 = new UIView("view1");
+        UIView view1 = new UIView("view1List");
 //        view1.setChildren(f);
         view1.setChildren(new UIComponent[]{table});
 

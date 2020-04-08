@@ -107,7 +107,6 @@ public class MainController {
                          @Nullable Map<String, Serializable> params) {
 
         setupParamsContext(params);
-
         // get form configuration for given formId and load data
         formController = retrieveForm(formId);
 
@@ -120,8 +119,6 @@ public class MainController {
         } else {
             formController.load(globalContext);
             uiView = formController.getEditView();
-//            DAGManager dagManager = new DAGManager();
-//            dagManager.generateDags(uiView);
             intent = new Intent(andContext, FormEditViewHandlerActivity.class);
         }
 
