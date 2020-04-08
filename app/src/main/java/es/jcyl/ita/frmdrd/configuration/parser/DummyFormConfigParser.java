@@ -90,6 +90,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         field1.setType(UIField.TYPE.TEXT);
         field1.setLabel("Filter copy");
         field1.setValueExpression(exprFactory.create("${view.filter}"));
+        field1.setRenderExpression(exprFactory.create("${view.filter.length() < 5}"));
         lst.add(field1);
 
         // datatable
