@@ -49,7 +49,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     private int offset = 0;
     private int pageSize = 20;
     private UIDatatable dataTable;
-    private EntityMeta meta;
     private Repository repo;
     private RenderingEnv renderingEnv;
     private List<Entity> entities = new ArrayList<>();
@@ -184,7 +183,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     public void setDatatable(UIDatatable dataTable) {
         this.dataTable = dataTable;
         this.repo = dataTable.getRepo();
-        this.meta = this.repo.getMeta();
     }
 
     public RenderingEnv getRenderingEnv() {
