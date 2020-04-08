@@ -75,34 +75,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         super(context, attrs, defStyle);
     }
 
-    private void loadNextPage() {
-        this.filter.setPageSize(this.pageSize);
-        this.filter.setOffset(this.offset);
-        //this.entities.clear();
-        this.entities.addAll(this.repo.find(this.filter));
-
-        //notify that the model changed
-        ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-
-        this.offset += this.pageSize;
-    }
-
-    private View createHeaderView(final Context viewContext, final ViewGroup parent,
-                                  final String columnName) {
-        View output = null;
-
-        LayoutInflater inflater = LayoutInflater.from(viewContext);
-        output = inflater.inflate(R.layout.list_item_header, parent,
-                false);
-        final TextView fieldName = output
-                .findViewById(R.id.list_header_textview);
-
-        fieldName.setText(DataUtils.nullFormat(columnName));
-        return output;
-    }
 
     public void setBodyView(ListView bodyView) {
         this.bodyView = bodyView;
@@ -148,13 +120,51 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         });
     }
 
+    /**
+     * Get the definition filter from the dataTable and construct an effective filter using the
+     * context information.
+     *
+     * @param context
+     * @return
+     */
     private Filter setupFilter(CompositeContext context) {
+        Filter defFilter = this.getDatatable().getFilter();
         Filter f = FilterHelper.createInstance(repo);
-
-        FilterHelper.evaluateFilter(context, this.filter, f);
+        if (defFilter != null) {
+            FilterHelper.evaluateFilter(context, defFilter, f);
+        }
         f.setOffset(this.offset);
         f.setPageSize(this.pageSize);
         return f;
+    }
+
+    private void loadNextPage() {
+        this.filter.setPageSize(this.pageSize);
+        this.filter.setOffset(this.offset);
+        //this.entities.clear();
+        this.entities.addAll(this.repo.find(this.filter));
+
+        //notify that the model changed
+        ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+
+        this.offset += this.pageSize;
+    }
+
+    private View createHeaderView(final Context viewContext, final ViewGroup parent,
+                                  final String columnName) {
+        View output = null;
+
+        LayoutInflater inflater = LayoutInflater.from(viewContext);
+        output = inflater.inflate(R.layout.list_item_header, parent,
+                false);
+        final TextView fieldName = output
+                .findViewById(R.id.list_header_textview);
+
+        fieldName.setText(DataUtils.nullFormat(columnName));
+        return output;
     }
 
     private void fillHeader(Context viewContext, LinearLayout headersLayout) {

@@ -92,12 +92,12 @@ public class FormViewContext extends AbstractBaseContext {
             throw new IllegalArgumentException(String.format("The component id provided [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
-        // get the expected type from the EntityMeta through the binding expression
-        Class expType = component.getValueExpression().getExpectedType();
-        if (expType == null) {
+        if (component.getValueExpression() == null) {
             return fieldView.getValueString();
         } else {
-            return fieldView.getValue(expType);
+            // get the expected type from the EntityMeta through the binding expression
+            Class expType = component.getValueExpression().getExpectedType();
+            return (expType == null) ? fieldView.getValueString() : fieldView.getValue(expType);
         }
     }
 

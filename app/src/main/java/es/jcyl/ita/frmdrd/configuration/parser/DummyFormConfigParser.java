@@ -62,10 +62,10 @@ public class DummyFormConfigParser extends FormConfigParser {
         createEditView1(fc1);
         loadConfig(fc1);
 
-        FormController fc2 = new FormController("MyForm2", "Form number 2.");
-        createListView1(fc2);
-        createEditView2(fc2);
-        loadConfig(fc2);
+//        FormController fc2 = new FormController("MyForm2", "Form number 2.");
+//        createListView1(fc2);
+//        createEditView2(fc2);
+//        loadConfig(fc2);
 
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
         FormController fc3 = fcBuilder.withRepo(contactsRepo).build();

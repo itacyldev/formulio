@@ -29,7 +29,7 @@ import es.jcyl.ita.frmdrd.view.InputFieldView;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class FormContext extends OrderedCompositeContext {
+public class FormContext extends UnPrefixedCompositeContext {
 
     private final UIForm form;
     private View rootView;

@@ -165,17 +165,12 @@ public class ViewRenderHelper {
      * Given an element in current view, renders all the dependant elements
      */
     public void renderDeps(Context viewContext, RenderingEnv env, ViewDAG viewDAG, UIComponent component) {
-
         // get element dags
         if (viewDAG == null || viewDAG.getDags().size() == 0) {
             return;
         }
         // get current Android view
         View rootView = env.getViewRoot();
-
-
-        // get the dags in which current element is referred
-        // TODO: hay que buscar una forma de obtener los dags en los que aparece el elemento actual
 
         // walk the tree in topological order to follow the dependencies from the current element
         for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
@@ -184,15 +179,19 @@ public class ViewRenderHelper {
 
             for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
                 DAGNode node = it.next();
-//                if (!found) {
-//                    if (node.getComponent().getId().equals(component.getId())) {
-//                        found = true; // start rendering in next element
-//                    }
-//                    break;
-//                } else {
+                if (!found) {
+                    if (node.getComponent().getId().equals(component.getId())) {
+                        found = true; // start rendering in next element
+                    }
+                } else {
                     // find view element to update
                     UIComponent cNode = node.getComponent();
                     View view = ViewHelper.findComponentView(rootView, cNode);
+                    if (component instanceof UIForm) {
+                        env.setFormContext(((UIForm) component).getContext());
+                    } else {
+                        env.setFormContext(component.getParentForm().getContext());
+                    }
                     if (view instanceof DynamicComponent) {
                         ((DynamicComponent) view).load(env);
                     } else {
@@ -200,7 +199,7 @@ public class ViewRenderHelper {
                         View newView = this.render(viewContext, env, node.getComponent(), false);
                         replaceView(view, newView);
                     }
-//                }
+                }
             }
         }
     }

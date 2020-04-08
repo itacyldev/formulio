@@ -67,7 +67,7 @@ public class EmailValidatorTest {
         recipe.mc.getFormController().validate(recipe.field);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
+        Assert.assertNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
     }
 
     @Test
