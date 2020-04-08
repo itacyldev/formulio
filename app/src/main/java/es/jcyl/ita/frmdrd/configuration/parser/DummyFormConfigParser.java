@@ -85,6 +85,13 @@ public class DummyFormConfigParser extends FormConfigParser {
         field0.setLabel("Filter");
         lst.add(field0);
 
+        UIField field1 = new UIField();
+        field1.setId("filtercopy");
+        field1.setType(UIField.TYPE.TEXT);
+        field1.setLabel("Filter copy");
+        field1.setValueExpression(exprFactory.create("${view.filter}"));
+        lst.add(field1);
+
         // datatable
         RepositoryProjectConfReader config = new RepositoryProjectConfReader();
         config.read();
@@ -92,9 +99,6 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
         UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
-        List<String> deps = new ArrayList<>();
-        deps.add("view.f0");
-        ContextToRepoBinding.getInstance().setRepoContextDeps(contactsRepo.getId(), deps);
 
         table.setId("table1");
         table.setRepo(contactsRepo);

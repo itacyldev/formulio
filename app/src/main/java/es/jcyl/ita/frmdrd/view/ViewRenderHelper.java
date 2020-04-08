@@ -137,14 +137,12 @@ public class ViewRenderHelper {
      */
     private void processDeferredViews(Context viewContext, RenderingEnv env) {
         // use dag to walk the tree just one time per node
-//        DummyTreeNode root = env.getViewDeferredRoot();
-
+        ViewDAG viewDAG = env.getViewDAG();
         Map<String, DeferredView> deferredViews = env.getDeferredViews();
-
-        if (env.getDags() == null || deferredViews == null) {
+        if (viewDAG == null || deferredViews == null) {
             return;
         }
-        for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : env.getDags()) {
+        for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
             // follow dag evaluating expressions and rendering views
             for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
                 DAGNode node = it.next();
@@ -164,8 +162,9 @@ public class ViewRenderHelper {
     /**
      * Given an element in current view, renders all the dependant elements
      */
-    public void renderDeps(Context viewContext, RenderingEnv env, ViewDAG viewDAG, UIComponent component) {
+    public void renderDeps(Context viewContext, RenderingEnv env, UIComponent component) {
         // get element dags
+        ViewDAG viewDAG = env.getViewDAG();
         if (viewDAG == null || viewDAG.getDags().size() == 0) {
             return;
         }

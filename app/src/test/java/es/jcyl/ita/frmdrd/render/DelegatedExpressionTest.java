@@ -84,7 +84,7 @@ public class DelegatedExpressionTest {
 
         Object[] values = createDepsTree(ctx);
         UIForm form = (UIForm) values[0];
-        List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = (List<DirectedAcyclicGraph<DAGNode, DefaultEdge>>) values[1];
+        ViewDAG viewDAG = (ViewDAG) values[1];
 
         Entity entity = createEntity();
 
@@ -97,7 +97,7 @@ public class DelegatedExpressionTest {
         // set entity in forms context
         form.getContext().setEntity(entity);
         RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
-        env.setDags(dags);
+        env.setViewDAG(viewDAG);
         // walk the tree executing expressions
         View baseFormView = renderHelper.render(ctx, env, form.getParent());
 
@@ -141,10 +141,8 @@ public class DelegatedExpressionTest {
         List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> lstDags = new ArrayList<>();
         lstDags.addAll(dags);
         // The dags are repeated, keep just the first one until we fix this problem
-        DirectedAcyclicGraph<DAGNode, DefaultEdge> d = lstDags.get(0);
-        lstDags.clear();
-        lstDags.add(d);
-        return new Object[]{form, lstDags};
+
+        return new Object[]{form, viewDAG};
     }
 
     private Entity createEntity() {

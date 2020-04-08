@@ -36,6 +36,7 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
+import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /**
  * Context storing object used during the rendering process to give the renderers access to commons objects
@@ -55,7 +56,7 @@ public class RenderingEnv {
     private List<FormContext> currentFormContexts;
     //    private CompositeContext contextMap;
     private Map<String, DeferredView> deferredViews;
-    private List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
+    private ViewDAG viewDAG;
 
     public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
@@ -138,12 +139,12 @@ public class RenderingEnv {
         return deferredViews;
     }
 
-    public List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> getDags() {
-        return dags;
+    public void setViewDAG(ViewDAG viewDAG) {
+        this.viewDAG = viewDAG;
     }
 
-    public void setDags(List<DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
-        this.dags = dags;
+    public ViewDAG getViewDAG() {
+        return viewDAG;
     }
 
     public View getViewRoot() {

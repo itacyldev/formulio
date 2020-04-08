@@ -159,6 +159,8 @@ public class MainController {
     public View renderView(Context viewContext) {
         setViewContext(viewContext);
         renderingEnv.initialize();
+        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
+        renderingEnv.setViewDAG(viewDAG);
         this.viewRoot = renderHelper.render(viewContext, renderingEnv, this.uiView);
         // add references to form context directly from global context
 //        globalContext.addAllContext(execEnvironment.getContextMap().getContexts());
@@ -185,13 +187,12 @@ public class MainController {
     }
 
     /**
-     * Renders all the views with expressions that depend on given element
+     * Renders all the views with expressions that depend on given element.
      *
-     * @param component: ui component that fires the changes in the View
+     * @param component: ui component that fires the changes in the View.
      */
     public void updateDependants(UIComponent component) {
-        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
-        renderHelper.renderDeps(this.viewContext, this.renderingEnv, viewDAG, component);
+        renderHelper.renderDeps(this.viewContext, this.renderingEnv, component);
     }
 
     private void setViewContext(android.content.Context viewContext) {
