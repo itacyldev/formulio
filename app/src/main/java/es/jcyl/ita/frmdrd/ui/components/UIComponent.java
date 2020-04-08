@@ -13,22 +13,23 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 public abstract class UIComponent implements Serializable {
-    protected UIComponent root;
+
     protected String id;
-    protected UIComponent parent;
-    protected UIComponent parentForm;
-    protected List<UIComponent> children;
     protected String label;
-    private boolean readOnly = false;
-    private String rendererType;
+    protected UIComponent root;
+    protected UIComponent parent;
+    protected UIForm parentForm;
+    protected List<UIComponent> children;
 
     private ValueBindingExpression valueExpression;
     private ValueBindingExpression renderExpression;
 
+    private String rendererType;
+    private boolean renderChildren;
+
     /**
      * if the children of this component have to be rendered individually
      */
-    private boolean renderChildren;
 
     public String getId() {
         return id;
@@ -57,9 +58,6 @@ public abstract class UIComponent implements Serializable {
 
     public void setParent(UIComponent parent) {
         this.parent = parent;
-        if (parent instanceof UIForm) {
-            this.parentForm = parent;
-        }
     }
 
     public List<UIComponent> getChildren() {
@@ -157,12 +155,16 @@ public abstract class UIComponent implements Serializable {
     }
 
     public UIForm getParentForm() {
-        UIComponent node = this.getParent();
-        // climb up the tree until you find a form
-        while ((node != null) && !(node instanceof UIForm)) {
-            node = node.getParent();
+        if (this.parentForm == null) {
+            // find
+            UIComponent node = this.getParent();
+            // climb up the tree until you find a form
+            while ((node != null) && !(node instanceof UIForm)) {
+                node = node.getParent();
+            }
+            this.parentForm = (node instanceof UIForm) ? (UIForm) node : null;
         }
-        return (node instanceof UIForm) ? (UIForm) node : null;
+        return this.parentForm;
     }
 
     public void setParentForm(UIForm parentForm) {
@@ -240,13 +242,5 @@ public abstract class UIComponent implements Serializable {
             express.add(renderExpression);
         }
         return express.toArray(new ValueBindingExpression[express.size()]);
-    }
-
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
     }
 }

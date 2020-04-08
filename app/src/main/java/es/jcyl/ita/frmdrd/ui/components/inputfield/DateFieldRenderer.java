@@ -67,6 +67,7 @@ public class DateFieldRenderer extends FieldRenderer {
         // get component value and set in view
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
+        input.setEnabled(!component.isReadOnly());
         ((InputFieldView) baseView).setInputView(input);
 
         Button today = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_today,

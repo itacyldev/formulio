@@ -66,6 +66,8 @@ public class TextFieldRenderer extends FieldRenderer {
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
         input.setInputType(component.getInputType());
+        input.setEnabled(!component.isReadOnly());
+
         setMessages(env.getFormContext(), component, input);
         ((InputFieldView) baseView).setInputView(input);
 

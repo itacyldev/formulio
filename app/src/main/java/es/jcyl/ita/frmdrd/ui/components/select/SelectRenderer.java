@@ -65,6 +65,7 @@ public class SelectRenderer extends FieldRenderer {
         // get component value and set in view
         String strValue = getValue(component, env, String.class);
         input.setText(strValue);
+        input.setEnabled(!component.isReadOnly());
         setMessages(env.getFormContext(), component, input);
         ((InputFieldView) baseView).setInputView(input);
 

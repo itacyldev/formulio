@@ -7,7 +7,6 @@ import es.jcyl.ita.frmdrd.validation.Validator;
 import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
 
 public class UIField extends UIComponent {
-
     public enum TYPE {
         TEXT, DATE, BOOLEAN, // SIGN
     }
@@ -15,6 +14,7 @@ public class UIField extends UIComponent {
     private TYPE type = TEXT;
     private int inputType = InputType.TYPE_CLASS_TEXT;
     private String defaultValue;
+    private boolean readOnly;
 
     private static final Validator[] EMTPY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMTPY_VALIDATOR;
@@ -80,9 +80,21 @@ public class UIField extends UIComponent {
         return this.validators;
     }
 
-
     @Override
     public String toString() {
         return String.format("[%s]: %s/%s", this.type, this.id, this.getLabel());
+    }
+
+    public boolean isReadOnly() {
+        if (this.parentForm == null) {
+            return readOnly;
+        } else {
+            // mon knows best
+            return this.parentForm.isReadOnly() || this.readOnly;
+        }
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 }

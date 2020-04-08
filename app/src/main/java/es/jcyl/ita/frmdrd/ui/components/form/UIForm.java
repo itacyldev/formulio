@@ -33,7 +33,7 @@ public class UIForm extends UIComponent {
     private List<UIField> fields;
     private Filter filter;
     private String onValidate; // js function to call on validation
-
+    private boolean readOnly;
 
     public UIForm() {
         this.setRendererType("form");
@@ -217,7 +217,7 @@ public class UIForm extends UIComponent {
     }
 
     public boolean isReadOnly() {
-        return super.isReadOnly() || !(this.repo instanceof EditableRepository);
+        return this.readOnly || !(this.repo instanceof EditableRepository);
     }
 
 
@@ -263,5 +263,9 @@ public class UIForm extends UIComponent {
 
     public void setFilter(Filter filter) {
         this.filter = filter;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 }

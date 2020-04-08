@@ -84,6 +84,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         fieldn.setId("initial");
         fieldn.setType(UIField.TYPE.TEXT);
         fieldn.setLabel("Inicial");
+        fieldn.setReadOnly(true);
         fieldn.setValueExpression(exprFactory.create("${entity.last_name}"));
         lst.add(fieldn);
 

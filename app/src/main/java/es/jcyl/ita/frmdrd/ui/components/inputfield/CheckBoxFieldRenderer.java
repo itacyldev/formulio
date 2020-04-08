@@ -55,6 +55,7 @@ public class CheckBoxFieldRenderer extends FieldRenderer {
         // get component value and set in view
         Boolean boolValue = getValue(component, env, Boolean.class);
         input.setChecked(boolValue);
+        input.setEnabled(!component.isReadOnly());
         ((InputFieldView) baseView).setInputView(input);
 
         input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
