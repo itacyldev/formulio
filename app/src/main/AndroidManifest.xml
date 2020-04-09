@@ -27,7 +27,7 @@
         <activity
             android:name=".view.activities.FormListViewHandlerActivity"
             android:label="@string/title_activity_form_list_view_handler"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

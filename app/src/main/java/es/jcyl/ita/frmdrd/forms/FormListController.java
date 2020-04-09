@@ -44,10 +44,8 @@ public class FormListController extends FormController {
      *
      * @return
      */
-    public int count() {
-
-        return 0;
-//       this.repo.count()
+    public long count() {
+        return this.repo.count(null);
     }
 
     /****************************/

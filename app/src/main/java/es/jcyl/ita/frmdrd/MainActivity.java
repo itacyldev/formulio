@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     }
 
     private void initialize() {
-
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

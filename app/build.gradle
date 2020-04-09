@@ -97,6 +97,7 @@ dependencies {
     // Core library
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     androidTestImplementation 'androidx.test:core:1.0.0'
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation('androidx.test:runner:1.2.0') {
