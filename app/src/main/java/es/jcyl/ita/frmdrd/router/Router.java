@@ -43,18 +43,9 @@ public class Router {
         this.memento = new ArrayList<>();
     }
 
-    public String getCurrentFormId(){
-        return (current==null)?null:this.current.formId;
-    }
-
-    public void navigateList(android.content.Context context, String formId, Map<String, Serializable> params) {
-        recordHistory(formId, "list", params);
-        mc.navigate(context, formId, "list", params);
-    }
-
-    public void navigateEdit(android.content.Context context, String formId, Map<String, Serializable> params) {
-        recordHistory(formId, "edit", params);
-        mc.navigate(context, formId, "edit", params);
+    public void navigate(android.content.Context context, String formId, Map<String, Serializable> params) {
+        recordHistory(formId, params);
+        mc.navigate(context, formId, params);
     }
 
     public void back(android.content.Context context) {
@@ -65,7 +56,7 @@ public class Router {
     }
 
     private void doNavigate(Context context, State state) {
-        mc.navigate(context, state.formId, state.navType, state.params);
+        mc.navigate(context, state.formId, state.params);
     }
 
     /**
@@ -94,11 +85,11 @@ public class Router {
     }
 
 
-    private void recordHistory(String formId, String navType, Map<String, Serializable> params) {
+    private void recordHistory(String formId, Map<String, Serializable> params) {
         if (current != null) {
             this.memento.add(current);
         }
-        this.current = new State(formId, navType, params);
+        this.current = new State(formId, params);
     }
 
     public void registerActivity(Activity activity) {
@@ -112,16 +103,14 @@ public class Router {
     public class State {
         String formId;
         Map<String, Serializable> params;
-        String navType;
 
-        public State(String formId, String navType, Map<String, Serializable> params) {
+        public State(String formId, Map<String, Serializable> params) {
             this.formId = formId;
-            this.navType = navType;
             this.params = params;
         }
 
         public String toString() {
-            return String.format("%s/%s - %s", formId, navType, params);
+            return String.format("%s - %s", formId, params);
         }
     }
 }

@@ -1,31 +1,30 @@
-package es.jcyl.ita.frmdrd;
+package es.jcyl.ita.frmdrd.view.activities;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import androidx.recyclerview.widget.RecyclerView;
-import es.jcyl.ita.frmdrd.FormListFragment.OnListFragmentInteractionListener;
-import es.jcyl.ita.frmdrd.dummy.DummyContent.FormListItem;
+
+import java.util.List;
+
+import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.view.activities.FormListFragment.OnListFragmentInteractionListener;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.forms.FormListController;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link FormListItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link +} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecyclerViewAdapter.ViewHolder> {
 
-    private final Map<String, FormController> mValues;
+    private final List<FormListController> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(Map<String, FormController> items,
+    public FCItemRecyclerViewAdapter(List<FormListController>  items,
                                      OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -40,8 +39,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        List<FormController> views = new ArrayList(mValues.values());
-        holder.mItem = views.get(position);
+        holder.mItem = mValues.get(position);
         holder.mIdView.setText(holder.mItem.getId());
         holder.mContentView.setText(holder.mItem.getName());
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view;
+package es.jcyl.ita.frmdrd.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -29,6 +29,7 @@ import java.util.Map;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 import es.jcyl.ita.frmdrd.view.render.DeferredView;

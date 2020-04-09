@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_main"
     tools:context=".MainActivity">
 
-    <fragment android:name="es.jcyl.ita.frmdrd.FormListFragment"
+    <fragment android:name="es.jcyl.ita.frmdrd.view.activities.FormListFragment"
         android:id="@+id/form_list_fragment"
         android:layout_weight="1"
         android:layout_width="match_parent"

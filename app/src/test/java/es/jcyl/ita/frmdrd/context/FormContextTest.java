@@ -40,12 +40,12 @@ import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
-import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -92,7 +92,7 @@ public class FormContextTest {
         form.setRepo(mockRepo);
 
         // load entity and check the entity context is fulfill
-        FormController fc = DevFormBuilder.createFormController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
         fc.load(gCtx);
 
         FormContext fCtx = form.getContext();
@@ -138,7 +138,7 @@ public class FormContextTest {
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
         form.setRepo(mockRepo);
         // use FormController to load form
-        FormController fc = DevFormBuilder.createFormController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
         fc.load(gCtx);
         FormContext fCtx = form.getContext();
 

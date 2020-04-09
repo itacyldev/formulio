@@ -25,6 +25,8 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Wrapper to use apache commons validators
  */
 public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.validation.Validator {
 
@@ -32,7 +34,7 @@ public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.validation.Va
     private AbstractFormatValidator abstractDelegate;
     private Object delegate;
     private Method method;
-    private boolean allowNull = true;
+    private boolean allowNull;
 
     public CommonsValidatorWrapper(Object validator) {
         this(validator, true);
@@ -59,7 +61,7 @@ public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.validation.Va
     public void validate(Context ctx, UIComponent component, String value) {
         Boolean valid;
         String msg;
-        if(allowNull && StringUtils.isBlank(value)){
+        if (allowNull && StringUtils.isBlank(value)) {
             // do not validate empty values
             return;
         }

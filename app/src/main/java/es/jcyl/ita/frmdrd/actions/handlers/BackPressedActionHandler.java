@@ -16,12 +16,13 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  */
 
 import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler implements es.jcyl.ita.frmdrd.actions.ActionHandler {
+public class BackPressedActionHandler implements ActionHandler {
 
     @Override
     public void handle(UserAction action) {

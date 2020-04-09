@@ -1,5 +1,5 @@
 <examples>
-    <form>
+    <form id="form1" repoId="contacts">
         <permissions />
         <data>
             <repo type="csv" />
@@ -7,11 +7,14 @@
             <repo type="db" />
             <repo type="photo" />
         </data>
-        <list>
+        <list id="form1#list">
             <datatable />
             <datalist />
+            <actions>
+                <add route="formId#edit" />
+            </actions>
         </list>
-        <edit onsave="method2">
+        <edit id="form1#edit" onsave="method2">
             <tabs>
                 <tab>
                     <field onchange="method2" value="${entity.field}" />
@@ -20,17 +23,23 @@
                     <field />
                 </tab>
             </tabs>
-            <buttonbar>
-                <button type="save" />
-                <button type="cancel" />
-                <button to="form2" type="navigation">
-                    <param name="1" value="${entity.f1}" />
-                </button>
-            </buttonbar>
-            <script engine="jexl">
+            <actions>
+                <save to="form1#list" value="save">
+                    <param name="1" value="${entity.contact_id}" />
+                </save>
+                <save value="saveAndStay" />
+                <delete to="form1#list" value="save">
+                    <param name="1" value="${entity.contact_id}" />
+                </delete>
+                <cancel value="save" />
+                <nav to="form2#edit" value="next">
+                    <param name="1" value="${entity.contact_id}" />
+                </nav>
+            </actions>
+            <script engine="rhino">
                 function method1(param) {
 
-                    ctx[entity.f3] = entity.f1 + entity.f2
+                ctx[entity.f3] = entity.f1 + entity.f2
 
                 }
                 function method2(param) {
@@ -49,8 +58,8 @@
     <!-- si el repositorio se ha registrado ya -->
 
     repo="mibd"
-    <form dbfile="mibd.sqlite" dbTable="mitabla"/>
-    <form repo="mibd"/>
+    <form dbTable="mitabla" dbfile="mibd.sqlite" />
+    <form repo="mibd" />
 
     <listExamples>
         <list fields="field1,field2,field3">
@@ -58,10 +67,10 @@
         </list>
         <list expression="${entity.f1} - ${entity.f2.substring(0,10)}" />
         <list>
-            <datatable sortFields="field1,field2" filterFields="field2,field3"/>
+            <datatable filterFields="field2,field3" sortFields="field1,field2" />
         </list>
         <list>
-            <datalist sortFields="field1,field2" filterFields="field2,field3"/>
+            <datalist filterFields="field2,field3" sortFields="field1,field2" />
         </list>
     </listExamples>
 
@@ -87,24 +96,28 @@
     </form>
 
     <form>
+        <data>
+            <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" tableName="tableName" />
+        </data>
         <list expression="${entity.f1} - ${entity.f2.substring(0,10)}" />
-        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite"
-            tableName="tableName" />
     </form>
     <form>
-        <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" id="repo1" tableName="tableName">
-            <property name="booleanField" type="Boolean" />
-            <property name="geometry" type="Geometry" />
-        </repo>
+        <data>
+            <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" id="repo1"
+                tableName="tableName">
+                <property name="booleanField" type="Boolean" />
+                <property name="geometry" type="Geometry" />
+            </repo>
+        </data>
         <list>
-            <datable >
+            <datable>
                 <col value="${entity.f1}" />
                 <col value="${entity.f2} + ${entity.f3}" />
             </datable>
         </list>
     </form>
 
-    <form repo="repo1">
+    <form repoId="repo1">
         <data>
             <!-- si hay más de uno, uno debe ser el principal y referenciado en el formulario-->
             <repo id="repo1" />
@@ -115,7 +128,7 @@
         </data>
         <edit fields="*">
             <!-- sobre cargamos la definición de uno de los campos para utilizar un lookup en uno y un compo en otro-->
-            <select repo="repo3"  value="${entity.field1}" />
+            <select repo="repo3" value="${entity.field1}" />
             <inputText lookup="repo3" readonly="true" value="${entity.field2}"></inputText>
             <autocomplete repo="repo3" value="${entity.field3}" />
 

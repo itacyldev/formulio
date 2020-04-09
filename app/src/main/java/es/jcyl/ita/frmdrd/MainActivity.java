@@ -19,6 +19,7 @@ import java.util.List;
 
 import es.jcyl.ita.frmdrd.configuration.ConfigFacade;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
 
 public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
     private static final int PERMISSION_REQUEST = 1234;
@@ -27,10 +28,10 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initializeDagger();
         checkPermissions();
-        config.init();
+        setContentView(R.layout.activity_main);
+        initialize();
+
     }
 
 
@@ -56,11 +57,8 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         return super.onOptionsItemSelected(item);
     }
 
-    private void initializeDagger() {
-
-    }
-
     private void initialize() {
+
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
 
     @Override
     public void onListFragmentInteraction(FormController form) {
-        MainController.getInstance().getRouter().navigateList(this, form.getId(), null);
+        MainController.getInstance().getRouter().navigate(this, form.getId(), null);
     }
 
     protected void checkPermissions() {
@@ -109,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
                             .toArray(new String[]{}),
                     PERMISSION_REQUEST);
         } else {
-            initialize();
+            config.init();
         }
     }
 }

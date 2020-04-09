@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view;
+package es.jcyl.ita.frmdrd.view.activities;
 
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -38,15 +39,15 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
             .getLog(FormEditViewHandlerActivity.class);
 
     protected ContextThemeWrapper themeWrapper;
+    private FormEditController formController;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        this.themeWrapper = new ContextThemeWrapper(this,
-//                android.R.style.Theme_Holo_Dialog);
 
         MainController mc = MainController.getInstance();
         mc.getRouter().registerActivity(this);
+        formController = (FormEditController) mc.getFormController();
         View viewRoot = mc.renderView(this);
         setContentView(viewRoot);
     }
@@ -58,10 +59,12 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        finish(); not working here
         MainController mc = MainController.getInstance();
-        mc.getActionController().doUserAction(new UserAction(this, null, ActionType.BACK));
+        UserAction action = new UserAction(this, null, ActionType.BACK);
+        action.setOrigin(formController.getId());
+        mc.getActionController().doUserAction(action);
         finish();
 
     }
+
 }

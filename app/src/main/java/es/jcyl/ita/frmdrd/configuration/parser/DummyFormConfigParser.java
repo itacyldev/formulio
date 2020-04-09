@@ -18,6 +18,7 @@ import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
@@ -57,10 +58,13 @@ public class DummyFormConfigParser extends FormConfigParser {
 
     @Override
     public void parseFormConfig(String formConfigStr) {
-        FormController fc1 = new FormController("MyForm1", "Form number 1.");
-        createListView1(fc1);
-        createEditView1(fc1);
-        loadConfig(fc1);
+//        FormController fc1List = new FormListController("MyForm1", "Form number 1.");
+//        createListView1(fc1List);
+//        loadConfig(fc1List);
+//
+//        FormController fc1Edit = new FormListController("MyForm1", "Form number 1.");
+//        createEditView1(fc1Edit);
+//        loadConfig(fc1Edit);
 
 //        FormController fc2 = new FormController("MyForm2", "Form number 2.");
 //        createListView1(fc2);
@@ -68,12 +72,14 @@ public class DummyFormConfigParser extends FormConfigParser {
 //        loadConfig(fc2);
 
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
-        FormController fc3 = fcBuilder.withRepo(contactsRepo).build();
-        loadConfig(fc3);
+        FormControllerBuilder.FormBuilderResult result = fcBuilder.withRepo(contactsRepo).build();
+        loadConfig(result.getEdit());
+        loadConfig(result.getList());
 
         EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
-        FormController fc4 = fcBuilder.withRepo(inspecRepo).build();
-        loadConfig(fc4);
+        result = fcBuilder.withRepo(inspecRepo).build();
+        loadConfig(result.getEdit());
+        loadConfig(result.getList());
     }
 
 
@@ -144,7 +150,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         DAGManager.getInstance().generateDags(view1);
 
-        formController.setEditView(view1);
+        formController.setView(view1);
     }
 
     private void createEditView2(FormController formController) {
@@ -231,7 +237,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         DAGManager.getInstance().generateDags(view1);
 
-        formController.setEditView(view1);
+        formController.setView(view1);
     }
 
     private void createListView1(FormController formController) {
@@ -267,7 +273,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 //        view1.setChildren(f);
         view1.setChildren(new UIComponent[]{table});
 
-        formController.setListView(view1);
+        formController.setView(view1);
 
     }
 

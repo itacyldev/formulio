@@ -23,25 +23,28 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.view.FormEditViewHandlerActivity;
-import es.jcyl.ita.frmdrd.view.FormListViewHandlerActivity;
+import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
+import es.jcyl.ita.frmdrd.view.activities.FormListViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.ViewRenderHelper;
+import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -73,9 +76,13 @@ public class MainController {
     // user action management
     private ActionController actionController;
     private FormController formController;
+    private FormControllerFactory formControllerFactory;
     private ReactivityFlowManager flowManager;
+
+
     // navigation control
     private Router router;
+    private static HashMap<Class, Class> staticMap;
 
     public static MainController getInstance() {
         if (_instance == null) {
@@ -88,10 +95,13 @@ public class MainController {
         globalContext = new UnPrefixedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
         actionController = new ActionController();
+        formControllerFactory = FormControllerFactory.getInstance();
         renderingEnv = new RenderingEnv(globalContext, actionController);
         flowManager = ReactivityFlowManager.getInstance();
         router = new Router(this);
+        registerFormTypeViews();
     }
+
 
     /*********************************************/
     /***  Navigation control methods */
@@ -103,39 +113,24 @@ public class MainController {
      * @param formId:    form configuration to load
      * @param params
      */
-    public void navigate(android.content.Context andContext, String formId, String mode,
+    public void navigate(android.content.Context andContext, String formId,
                          @Nullable Map<String, Serializable> params) {
 
         setupParamsContext(params);
         // get form configuration for given formId and load data
-        formController = retrieveForm(formId);
+        formController = formControllerFactory.getController(formId);
+        formController.load(globalContext);
 
         // set form view as current
-        final Intent intent;
-        // TODO: arggghhh
-        if (mode.equalsIgnoreCase("list")) {
-            uiView = formController.getListView();
-            intent = new Intent(andContext, FormListViewHandlerActivity.class);
-        } else {
-            formController.load(globalContext);
-            uiView = formController.getEditView();
-            intent = new Intent(andContext, FormEditViewHandlerActivity.class);
-        }
+        uiView = formController.getView();
 
+        // get the activity class
+        final Intent intent;
+        Class activityClazz = getViewImpl(formController);
+        intent = new Intent(andContext, activityClazz);
         // Start activity to get Android context
         andContext.startActivity(intent);
     }
-
-    private FormController retrieveForm(String formId) {
-        FormController controller = FormConfigHandler.getForm(formId);
-        if (controller == null) {
-            throw new IllegalStateException(String.format("Invalid formId reference, no Form " +
-                            "configuration found for id [%s]. Available forms in the project: %s.",
-                    formId, FormConfigHandler.getAvailableFormIds()));
-        }
-        return controller;
-    }
-
     private void setupParamsContext(@Nullable Map<String, Serializable> params) {
         BasicContext pContext = new BasicContext("params");
         if (params != null) {
@@ -147,6 +142,21 @@ public class MainController {
     /*********************************************/
     /***  View rendering methods */
     /*********************************************/
+
+    /**
+     * static mapping to relate each form type with the implenting view.
+     */
+    private void registerFormTypeViews() {
+        staticMap = new HashMap<>(2);
+        staticMap.put(FormEditController.class, FormEditViewHandlerActivity.class);
+        staticMap.put(FormListController.class, FormListViewHandlerActivity.class);
+        // TODO: dynamic mapping for extensions
+
+    }
+    private Class getViewImpl(FormController formController){
+        return staticMap.get(formController.getClass());
+    }
+
     /**
      * Renders current view in the given Android context and returns the generated View
      *

@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:theme,android:label">
         <activity
-            android:name=".view.FormListViewHandlerActivity"
+            android:name=".view.activities.FormListViewHandlerActivity"
             android:label="@string/title_activity_form_list_view_handler"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.FormEditViewHandlerActivity"
+            android:name=".view.activities.FormEditViewHandlerActivity"
             android:label="FormEditView"
             android:theme="@android:style/Theme.Holo" />
     </application>

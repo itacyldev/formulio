@@ -27,12 +27,26 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * Evaluates the criteria conditions using context information.
  */
 public class CriteriaVisitor {
     private static final CriteriaElement CRITERIA_ELEMENT = new CriteriaElement();
     private static final ConditionElement CONDITION_ELEMENT = new ConditionElement();
     private static final ConditionBindingElement CONDITION_BINDING_ELEMENT = new ConditionBindingElement();
 
+    /**
+     * Goes across a Criteria tree evaluating the terminal conditions, when a jexl expresion
+     * is defined in a ConditionBinding, it uses the context to extract the actual value to apply
+     * in the filter.
+     * If the variable bound to a ConditionBinding is empty in the context, the condition is
+     * turn down, so at the end of the walk, an effective Criteria is obtained just with the
+     * conditions with variables defined in the context.
+     *  to obta
+     * @param criteriaDef
+     * @param context
+     * @return
+     */
     public Criteria visit(Criteria criteriaDef, Context context) {
         return (Criteria) element(criteriaDef).accept(criteriaDef, context);
     }

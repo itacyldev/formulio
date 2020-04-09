@@ -1,9 +1,7 @@
 package es.jcyl.ita.frmdrd.actions.interceptors;
 
-import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public class ViewUserActionInterceptor {
 

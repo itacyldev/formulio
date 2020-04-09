@@ -21,9 +21,6 @@ package es.jcyl.ita.frmdrd.view.render;
 
 import android.view.View;
 
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedAcyclicGraph;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +32,6 @@ import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /**

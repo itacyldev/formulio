@@ -22,7 +22,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mini2Dx.beanutils.BeanUtils;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 
@@ -109,7 +108,7 @@ public class FormControllerTest {
             viewContext.put(propId, expected);
         }
         // execute save and check the repo has been hit with the new values
-        recipe.mc.getFormController().save();
+        ((FormEditController) recipe.mc.getFormController()).save();
 
         ArgumentCaptor<Entity> argument = ArgumentCaptor.forClass(Entity.class);
         verify(mockRepo).save(argument.capture());

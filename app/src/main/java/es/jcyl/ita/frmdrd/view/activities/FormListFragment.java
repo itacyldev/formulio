@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd;
+package es.jcyl.ita.frmdrd.view.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,9 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
+
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
 
 /**
  * A fragment representing a list of Items.
@@ -30,11 +31,14 @@ public class FormListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    FormControllerFactory formControllerFactory;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public FormListFragment() {
+        formControllerFactory = FormControllerFactory.getInstance();
     }
 
     // TODO: Customize parameter initialization
@@ -70,7 +74,7 @@ public class FormListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(FormConfigHandler.getForms(),
+            recyclerView.setAdapter(new FCItemRecyclerViewAdapter(formControllerFactory.getListControllers(),
                     mListener));
             recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                 @Override

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.actions;
+package es.jcyl.ita.frmdrd.ui.components;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,13 +15,15 @@ package es.jcyl.ita.frmdrd.actions;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ActionHandler {
+public interface EntityAccessor {
 
-    void handle(UserAction action);
+    Repository getRepo();
+
+    Filter getFilter();
 }

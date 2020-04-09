@@ -10,7 +10,6 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.frmdrd.EntityToComponentMapper;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;

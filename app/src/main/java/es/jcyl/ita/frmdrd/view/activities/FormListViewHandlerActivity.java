@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view;
+package es.jcyl.ita.frmdrd.view.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,15 +15,18 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.forms.FormListController;
 
 public class FormListViewHandlerActivity extends AppCompatActivity {
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+
+    private FormListController formController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainController mc = MainController.getInstance();
         mc.getRouter().registerActivity(this);
+        formController = (FormListController) mc.getFormController();
 
         setContentView(R.layout.activity_form_list_view_handler);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -38,8 +41,9 @@ public class FormListViewHandlerActivity extends AppCompatActivity {
                 // FAB new entity button, navigate to form view without entityId
                 ViewUserActionInterceptor userActionInterceptor = mc.getRenderingEnv().getUserActionInterceptor();
                 if (userActionInterceptor != null) {
-                    UserAction action = UserAction.NavitateAction(context, null,
-                            mc.getRouter().getCurrentFormId() + "#edit");
+                    UserAction action = UserAction.NavigateAction(context, null,
+                            formController.getEditRoute());
+                    action.setOrigin(formController.getId());
                     userActionInterceptor.doAction(action);
                 }
             }
@@ -62,4 +66,5 @@ public class FormListViewHandlerActivity extends AppCompatActivity {
         mc.getActionController().doUserAction(new UserAction(this, null, ActionType.BACK));
         finish();
     }
+
 }

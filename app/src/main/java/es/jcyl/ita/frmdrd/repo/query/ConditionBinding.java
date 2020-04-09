@@ -23,7 +23,7 @@ import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
- * Extends Condition class to add ValueBinding expression used to bind the condition value
+ * Extends Condition class to add ValueBinding expression used to link the condition value
  * to a context expression.
  */
 public class ConditionBinding extends Condition {

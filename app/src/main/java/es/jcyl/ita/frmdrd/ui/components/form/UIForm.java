@@ -30,6 +30,7 @@ public class UIForm extends UIComponent {
     private final ViewStateHolder memento;
     private Repository repo;
     private String entityId = "params.entityId";
+    private Entity currentEntity;
     private List<UIField> fields;
     private Filter filter;
     private String onValidate; // js function to call on validation
@@ -151,9 +152,11 @@ public class UIForm extends UIComponent {
      */
     public void load(Context globalCtx) {
         Repository repo = this.getRepo();
+        if (repo == null) {
+            return;
+        }
+        // load current form entity
         Object entityId = getEntityIdFromContext(globalCtx);
-
-        Entity entity;
         if (entityId == null) {
             // create empty entity
             if (isReadOnly()) {
@@ -161,12 +164,12 @@ public class UIForm extends UIComponent {
                         "entities can be created. Use an EditableRepository or set the readOnly " +
                         "attribute to false.", this.getId()));
             }
-            entity = new Entity(repo.getSource(), repo.getMeta());
+            currentEntity = new Entity(repo.getSource(), repo.getMeta());
         } else {
             // what if its null? throw an Exception?
-            entity = findEntity(globalCtx, entityId);
+            currentEntity = findEntity(globalCtx, entityId);
         }
-        this.getContext().setEntity(entity);
+        this.getContext().setEntity(currentEntity);
     }
 
     /**
@@ -267,5 +270,9 @@ public class UIForm extends UIComponent {
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    public Entity getCurrentEntity() {
+        return currentEntity;
     }
 }

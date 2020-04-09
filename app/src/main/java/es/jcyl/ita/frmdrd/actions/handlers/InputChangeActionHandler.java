@@ -19,10 +19,12 @@ import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -32,6 +34,12 @@ public class InputChangeActionHandler implements ActionHandler {
     @Override
     public void handle(UserAction action) {
         MainController mc = MainController.getInstance();
+
+        if (!(mc.getFormController() instanceof FormEditController)) {
+            throw new ViewConfigException("Save operations can be performed just in FormEditController forms.");
+        }
+
+        FormEditController formController = (FormEditController) mc.getFormController();
 
         UIComponent component = action.getComponent();
         if (!(component instanceof UIField)) {
@@ -45,7 +53,7 @@ public class InputChangeActionHandler implements ActionHandler {
 
         // save view state
         String state = fieldView.getValueString();
-        boolean valid = mc.getFormController().validate((UIField) component);
+        boolean valid = formController.validate((UIField) component);
         if (!valid) {
             // update the view to show messages
             mc.updateView(component,false);

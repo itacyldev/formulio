@@ -24,6 +24,7 @@ import es.jcyl.ita.crtrepo.query.Expression;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
+import es.jcyl.ita.frmdrd.ui.components.EntityAccessor;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 
@@ -31,7 +32,7 @@ import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIDatatable extends UIComponent {
+public class UIDatatable extends UIComponent implements EntityAccessor {
 
     Repository repo;
 

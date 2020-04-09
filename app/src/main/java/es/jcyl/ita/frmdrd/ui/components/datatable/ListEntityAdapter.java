@@ -116,8 +116,8 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
                 if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getDatatable().getRoute())) {
-                    UserAction action = new UserAction(context, dtLayout.getDatatable(), ActionType.NAVIGATE);
-                    action.addParam("route", dtLayout.getDatatable().getRoute());
+                    UserAction action = new UserAction(context, dtLayout.getDatatable(),
+                            ActionType.NAVIGATE, dtLayout.getDatatable().getRoute());
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
                 }

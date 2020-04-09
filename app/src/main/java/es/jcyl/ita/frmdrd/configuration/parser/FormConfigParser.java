@@ -1,9 +1,7 @@
 package es.jcyl.ita.frmdrd.configuration.parser;
 
-import es.jcyl.ita.frmdrd.configuration.FormConfigHandler;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -26,15 +24,15 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  */
 
 public abstract class FormConfigParser {
+    FormControllerFactory controllerFactory = FormControllerFactory.getInstance();
 
     /**
-     *
      * @param formConfigStr
      * @return the form's ID
      */
     public abstract void parseFormConfig(String formConfigStr);
 
     protected void loadConfig(FormController form) {
-        FormConfigHandler.addForm(form);
+        controllerFactory.register(form);
     }
 }

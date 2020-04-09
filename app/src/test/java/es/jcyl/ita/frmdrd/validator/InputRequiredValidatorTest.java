@@ -28,6 +28,7 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 
@@ -63,7 +64,7 @@ public class InputRequiredValidatorTest {
         formViewContext.put(recipe.field.getId(), "");
 
         // execute validation
-        recipe.mc.getFormController().validate(recipe.field);
+        ((FormEditController)recipe.mc.getFormController()).validate(recipe.field);
 
         // assert there's a message in the context for this field
         Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
@@ -83,7 +84,7 @@ public class InputRequiredValidatorTest {
         formViewContext.put(recipe.field.getId(), "xxxxxxxxx");
 
         // execute validation
-        recipe.mc.getFormController().validate(recipe.field);
+        ((FormEditController)recipe.mc.getFormController()).validate(recipe.field);
 
         // assert there's a message in the context for this field
         Assert.assertNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));

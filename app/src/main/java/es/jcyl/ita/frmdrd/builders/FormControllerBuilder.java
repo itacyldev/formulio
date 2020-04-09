@@ -17,6 +17,8 @@ package es.jcyl.ita.frmdrd.builders;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
@@ -36,27 +38,56 @@ public class FormControllerBuilder {
         return this;
     }
 
-    public FormController build() {
+    public FormBuilderResult build() {
+        FormBuilderResult result = new FormBuilderResult();
+        String fcId = "fc_" + this.repo.getId();
+        result.list = this.buildList(fcId);
+        result.edit = this.buildEdit(fcId);
+        return result;
+    }
+
+    public FormController buildList(String fcId) {
         if (repo == null) {
             throw new IllegalStateException("No repo provided, cannot create the form.");
         }
-        String fcId = "fc_" + this.repo.getId();
-        // make sure there are no # in the id
-        fcId = fcId.replace("#", "_");
-        FormController fc = new FormController(fcId, "Form " + this.repo.getId());
+        FormListController fc = new FormListController(fcId + "#list", "Form " + this.repo.getId());
+        fc.setMainRepo(repo);
+        fc.setEditRoute(fcId + "#edit");
         // create views
-        UIForm editForm = editBuilder.witRepo(this.repo).build();
-        UIView editView = new UIView("view" + editForm.getId());
-        editView.addChild(editForm);
-        fc.setEditView(editView);
-
-        String route = fc.getId() + "#edit";
-
-        UIForm listForm = listBuilder.witRepo(repo).withRoute(route).build();
-        UIView listView = new UIView("view" + listForm.getId());
+        UIForm listForm = listBuilder.witRepo(repo).withDataTableRoute(fcId + "#edit").build();
+        UIView listView = new UIView(fc.getId() + ">view");
         listView.addChild(listForm);
-        fc.setListView(listView);
+        fc.setView(listView);
 
         return fc;
+    }
+
+    public FormEditController buildEdit(String fcId) {
+        if (repo == null) {
+            throw new IllegalStateException("No repo provided, cannot create the form.");
+        }
+        FormEditController fc = new FormEditController(fcId + "#edit", "Form " + this.repo.getId());
+        fc.setMainRepo(repo);
+        // create views
+        UIForm editForm = editBuilder.witRepo(this.repo).build();
+        UIView editView = new UIView(fc.getId() + ">view");
+        editView.addChild(editForm);
+        fc.setView(editView);
+        fc.setRouteAfterSave(fcId + "#list");
+        fc.setMainForm(editForm);
+        return fc;
+    }
+
+    public class FormBuilderResult {
+        FormEditController edit;
+        FormController list;
+
+        public FormEditController getEdit() {
+            return edit;
+        }
+
+        public FormController getList() {
+            return list;
+        }
     }
 }

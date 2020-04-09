@@ -55,8 +55,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
     // view sorting and filtering criteria
     private Filter filter;
 
-    private static CriteriaVisitor criteriaVisitor = new CriteriaVisitor();
-
     // inner view elements
     private LinearLayout headerView;
     private ListView bodyView;

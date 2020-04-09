@@ -31,17 +31,25 @@ public class UserAction {
     private android.content.Context viewContext;
     private UIComponent component;
     private ActionType type;
+    private String route;
+    private String origin;
     private Map<String, Serializable> params;
 
     public UserAction(UIComponent component, ActionType actionType) {
         this.component = component;
         this.type = actionType;
     }
-
     public UserAction(android.content.Context context, UIComponent component, ActionType actionType) {
         this.viewContext = context;
         this.component = component;
         this.type = actionType;
+    }
+
+    public UserAction(android.content.Context context, UIComponent component, ActionType actionType, String route) {
+        this.viewContext = context;
+        this.component = component;
+        this.type = actionType;
+        this.route = route;
     }
 
     public void addParam(String param, Serializable value) {
@@ -71,9 +79,20 @@ public class UserAction {
         return params;
     }
 
-    public static UserAction NavitateAction(Context context, UIComponent component, String formId) {
-        UserAction action = new UserAction(context, component, ActionType.NAVIGATE);
-        action.addParam("route", formId);
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public static UserAction NavigateAction(Context context, UIComponent component, String formId) {
+        UserAction action = new UserAction(context, component, ActionType.NAVIGATE, formId);
         return action;
     }
 

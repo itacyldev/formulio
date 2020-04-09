@@ -51,7 +51,7 @@ public class FormListBuilder {
         this.baseModel.setFilter(filter);
         return this;
     }
-    public FormListBuilder withRoute(String route){
+    public FormListBuilder withDataTableRoute(String route){
         this.route = route;
         return this;
     }

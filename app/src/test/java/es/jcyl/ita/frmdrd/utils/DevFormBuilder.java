@@ -26,9 +26,10 @@ import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -43,17 +44,22 @@ public class DevFormBuilder {
     static FieldDataBuilder fBuilder = new FieldDataBuilder();
     static FormDataBuilder formBuilder = new FormDataBuilder();
 
-    public static FormController createFormController(Context viewContext, UIForm... forms) {
+    public static FormEditController createFormEditController(Context viewContext, UIForm mainForm, UIForm... forms) {
         UIView view = new UIView("v1");
-        for (UIForm form : forms) {
-            view.addChild(form);
+        view.addChild(mainForm);
+        if(forms != null){
+            for (UIForm form : forms) {
+                view.addChild(form);
+            }
         }
-        FormController fc = new FormController("c", "");
-        fc.setEditView(view);
+        FormEditController fc = new FormEditController("c", "");
+        fc.setView(view);
         fc.setViewContext(viewContext);
+        fc.setMainForm(mainForm);
         return fc;
     }
-    public static UIForm createOneFieldForm(){
+
+    public static UIForm createOneFieldForm() {
         UIForm form = formBuilder.withNumFields(0).withRandomData().build();
         UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.TEXT).build();
         // setup field-form relation
@@ -62,16 +68,13 @@ public class DevFormBuilder {
         return form;
     }
 
-    public static FormContext createFormContextForEntity(UIForm form, Entity entity){
+    public static FormContext createFormContextForEntity(UIForm form, Entity entity) {
         return null;
     }
-
 
     /***************
      * Data preparation recipes as Object methods
      **********************/
-
-
 
     public static class CreateOneFieldForm {
         public Context ctx;
@@ -94,12 +97,10 @@ public class DevFormBuilder {
             env = mc.getRenderingEnv();
             // disable user action handlers during the tests
             env.disableInterceptors();
-
             // create a one-field form
             form = createOneFieldForm();
 
             withForm(form);
-
             return this;
         }
 
@@ -111,20 +112,21 @@ public class DevFormBuilder {
             this.field = field;
             return this;
         }
+
         public CreateOneFieldForm withForm(UIForm uiForm) {
             checkInvokeHasBeenCalled();
             this.form = uiForm;
             this.field = form.getFields().get(0); // link the first field
             this.field.setParentForm(this.form); // make sure field and form are linked
 
-            FormController fc = DevFormBuilder.createFormController(ctx, form);
+            FormController fc = DevFormBuilder.createFormEditController(ctx, form);
             withFormController(fc);
             return this;
         }
 
         public CreateOneFieldForm withFormController(FormController formController) {
             checkInvokeHasBeenCalled();
-            mc.setFormController(formController, formController.getEditView());
+            mc.setFormController(formController, formController.getView());
             return this;
         }
 
@@ -146,6 +148,7 @@ public class DevFormBuilder {
         public CreateOneFieldForm withRepo(EditableRepository repository) {
             checkInvokeHasBeenCalled();
             this.repo = repository;
+            this.mc.getFormController().setMainRepo(repository);
             this.form.setRepo(repo);
             return this;
         }

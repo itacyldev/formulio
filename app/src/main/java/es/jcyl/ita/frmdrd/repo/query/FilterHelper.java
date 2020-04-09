@@ -27,6 +27,7 @@ import es.jcyl.ita.frmdrd.view.ViewConfigException;
  * Reusable functions to treat filters from dynamic components.
  */
 public class FilterHelper {
+
     private static final CriteriaVisitor criteriaVisitor = new CriteriaVisitor();
 
     public static Filter createInstance(Repository repo) {
@@ -45,9 +46,9 @@ public class FilterHelper {
      * with the values retrieved from the context using the filter ValueBindingExpressions.
      * It evaluates filters expressions from the context using a criteria visitor.
      *
-     * @param context: context used to evaluate filter expressions.
+     * @param context:    context used to evaluate filter expressions.
      * @param definition: filter that defines the where structure of the filter
-     * @param output: the object used to set the values extracted from the context
+     * @param output:     the object used to set the values extracted from the context
      */
     public static void evaluateFilter(Context context, Filter definition, Filter output) {
         // evaluate filter conditions

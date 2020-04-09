@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.actions;
+package es.jcyl.ita.frmdrd.view.activities;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,13 +15,13 @@ package es.jcyl.ita.frmdrd.actions;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ActionHandler {
+public interface BaseFormViewHandlerActivity<F extends FormController> {
 
-    void handle(UserAction action);
+
+    void setFormController(F formController);
 }
