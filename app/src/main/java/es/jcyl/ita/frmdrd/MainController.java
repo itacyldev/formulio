@@ -231,9 +231,10 @@ public class MainController {
      * Re-renders last view to show validation errors
      */
     public void renderBack() {
+        // render again the form to show validation error
         View newView = renderHelper.render(this.viewContext, renderingEnv, formController.getView());
 
-        // the View elements to replace hang the the content view of the formController
+        // the View elements to replace hang from the content view of the formController
         ViewGroup contentView = formController.getContentView();
         contentView.removeAllViews();
         contentView.addView(newView);
