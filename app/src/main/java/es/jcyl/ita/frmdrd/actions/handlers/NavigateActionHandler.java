@@ -21,12 +21,17 @@ import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.UserActionException;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.router.Router;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class NavigateActionHandler implements ActionHandler {
+public class NavigateActionHandler extends AbstractActionHandler implements ActionHandler {
+
+    public NavigateActionHandler(MainController mc, Router router) {
+        super(mc, router);
+    }
 
     /**
      * Handles user navigations request accessing the router.
@@ -35,8 +40,7 @@ public class NavigateActionHandler implements ActionHandler {
      * @param action
      */
     @Override
-    public synchronized void handle(UserAction action) {
-        MainController mc = MainController.getInstance();
+    public synchronized void handle(FormController formController, UserAction action) {
         // create route from action params
         String formId = action.getRoute();
         if (StringUtils.isBlank(formId)) {
@@ -45,8 +49,6 @@ public class NavigateActionHandler implements ActionHandler {
                     "the attribute of the component is properly set and references a valid " +
                     "formId.", action.getOrigin()));
         }
-
-        Router router = mc.getRouter();
         router.navigate(action.getViewContext(), formId, action.getParams());
     }
 }

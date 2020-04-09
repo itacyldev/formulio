@@ -31,12 +31,11 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.repo.query.CriteriaVisitor;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
+import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -45,7 +44,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class DatatableLayout extends LinearLayout implements DynamicComponent {
+public class DatatableLayout extends LinearLayout implements DynamicComponent, EntitySelector {
     private int offset = 0;
     private int pageSize = 20;
     private UIDatatable dataTable;
@@ -81,6 +80,9 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         this.headerView = headerView;
     }
 
+    /*************************************/
+    /** Dynamic component interface **/
+    /*************************************/
 
     public void load(RenderingEnv environment) {
         this.renderingEnv = environment;
@@ -189,5 +191,11 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent {
         return renderingEnv;
     }
 
-
+    /*************************************/
+    /** Entity Selector interface **/
+    /*************************************/
+    @Override
+    public List<Entity> getSelectedEntities() {
+        return null;
+    }
 }

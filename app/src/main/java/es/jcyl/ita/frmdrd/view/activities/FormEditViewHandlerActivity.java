@@ -1,18 +1,23 @@
 package es.jcyl.ita.frmdrd.view.activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.FragmentActivity;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.router.Router;
+import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -34,22 +39,43 @@ import es.jcyl.ita.frmdrd.forms.FormEditController;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class FormEditViewHandlerActivity extends FragmentActivity {
-    protected static final Log LOGGER = LogFactory
-            .getLog(FormEditViewHandlerActivity.class);
+public class FormEditViewHandlerActivity extends FragmentActivity implements FormActivity<FormEditController> {
 
-    protected ContextThemeWrapper themeWrapper;
+    private Router router;
+    private RenderingEnv env;
     private FormEditController formController;
+    /**
+     * View element used to render the forms defined for this controller
+     */
+    private ViewGroup contentView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_form_edit_view_handler);
+        contentView = this.findViewById(R.id.form_content);
 
         MainController mc = MainController.getInstance();
-        mc.getRouter().registerActivity(this);
-        formController = (FormEditController) mc.getFormController();
+        mc.registerActivity(this);
+
+        // render edit view content and link content view
         View viewRoot = mc.renderView(this);
-        setContentView(viewRoot);
+        contentView.addView(viewRoot);
+
+        // add action buttons
+        ViewGroup toolBar = findViewById(R.id.form_toolbar);
+        renderToolBar((ViewGroup) toolBar);
+
+        // check if there are messages to show
+        UserMessagesHelper.showGlobalMessages(this, mc.getRouter());
+    }
+
+    private void renderToolBar(ViewGroup parentView) {
+        if (this.formController.getActions() != null) {
+            for (FCAction action : this.formController.getActions()) {
+                renderActionButton(this, parentView, action);
+            }
+        }
     }
 
     protected void close() {
@@ -60,11 +86,51 @@ public class FormEditViewHandlerActivity extends FragmentActivity {
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = new UserAction(this, null, ActionType.BACK);
+        UserAction action = UserAction.back(this);
         action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
         finish();
-
     }
 
+    private Button renderActionButton(Context context, ViewGroup parent, FCAction formAction) {
+        Button button = new Button(context);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                if (interceptor != null) {
+                    interceptor.doAction(new UserAction(context, null, formAction.getType(),
+                            formAction.getRoute()));
+                }
+            }
+        });
+        button.setText(formAction.getLabel());
+        parent.addView(button);
+        return button;
+    }
+
+    @Override
+    public void setFormController(FormEditController formController) {
+        this.formController = formController;
+    }
+
+    @Override
+    public void setRouter(Router router) {
+        this.router = router;
+    }
+
+    @Override
+    public void setRenderingEnv(RenderingEnv env) {
+        this.env = env;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public ViewGroup getContentView() {
+        return contentView;
+    }
 }

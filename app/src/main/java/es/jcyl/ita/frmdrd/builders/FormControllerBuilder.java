@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.builders;
  */
 
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
@@ -52,14 +53,23 @@ public class FormControllerBuilder {
         }
         FormListController fc = new FormListController(fcId + "#list", "Form " + this.repo.getId());
         fc.setMainRepo(repo);
-        fc.setEditRoute(fcId + "#edit");
         // create views
         UIForm listForm = listBuilder.witRepo(repo).withDataTableRoute(fcId + "#edit").build();
         UIView listView = new UIView(fc.getId() + ">view");
         listView.addChild(listForm);
         fc.setView(listView);
+        fc.setActions(defaultListActions(fcId));
 
         return fc;
+    }
+
+    public FCAction[] defaultListActions(String fcId) {
+        FCAction[] actions = new FCAction[3];
+        // save and cancel
+        actions[0] = new FCAction("add", "New", fcId + "#edit");
+        actions[1] = new FCAction("edit", "Cancel", fcId + "#edit");
+        actions[2] = new FCAction("delete", "Delete", null);
+        return actions;
     }
 
     public FormEditController buildEdit(String fcId) {
@@ -73,9 +83,20 @@ public class FormControllerBuilder {
         UIView editView = new UIView(fc.getId() + ">view");
         editView.addChild(editForm);
         fc.setView(editView);
-        fc.setRouteAfterSave(fcId + "#list");
         fc.setMainForm(editForm);
+        fc.setActions(defaultEditActions(fcId));
         return fc;
+    }
+
+
+    public FCAction[] defaultEditActions(String fcId) {
+        FCAction[] actions = new FCAction[4];
+        // save and cancel
+        actions[0] = new FCAction("save", "Save", "back");
+        actions[1] = new FCAction("save", "Save&Stay", null);
+        actions[2] = new FCAction("delete", "Delete", "back");
+        actions[3] = new FCAction("cancel", "Cancel", fcId + "#list");
+        return actions;
     }
 
     public class FormBuilderResult {

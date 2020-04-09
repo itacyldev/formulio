@@ -15,24 +15,33 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  * limitations under the License.
  */
 
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.router.Router;
+import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler extends AbstractActionHandler
-        implements ActionHandler {
+public class DeleteFromListActionHandler extends AbstractActionHandler implements ActionHandler<FormListController> {
 
-    public BackPressedActionHandler(MainController mc, Router router) {
+    public DeleteFromListActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    public void handle(FormController formController, UserAction action) {
-        mc.getRouter().back(action.getViewContext());
+    public void handle(FormListController formController, UserAction action) {
+        List<Entity> selectedEntities = formController.getEntitySelector().getSelectedEntities();
+        if (selectedEntities != null) {
+            for (Entity entity : selectedEntities) {
+                formController.getEditableRepo().delete(entity);
+            }
+        }
+        UserMessagesHelper.toast(action.getViewContext(), "Entity successfully deleted.");
     }
 }

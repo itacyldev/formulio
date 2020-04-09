@@ -16,23 +16,19 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  */
 
 import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.actions.ActionHandler;
-import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.router.Router;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler extends AbstractActionHandler
-        implements ActionHandler {
+public abstract class AbstractActionHandler {
 
-    public BackPressedActionHandler(MainController mc, Router router) {
-        super(mc, router);
+    protected final Router router;
+    protected final MainController mc;
+
+    public AbstractActionHandler(MainController mc, Router router) {
+        this.router = router;
+        this.mc = mc;
     }
 
-    @Override
-    public void handle(FormController formController, UserAction action) {
-        mc.getRouter().back(action.getViewContext());
-    }
 }

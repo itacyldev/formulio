@@ -29,8 +29,8 @@ import es.jcyl.ita.frmdrd.validation.ValidatorException;
  * Implements entity edition actions using a edit-form.
  */
 public class FormEditController extends FormController {
-    private String routeAfterSave;
     private UIForm mainForm;
+
 
     public FormEditController(String id, String name) {
         super(id, name);
@@ -65,14 +65,6 @@ public class FormEditController extends FormController {
         return true;
     }
 
-    private EditableRepository getEditableRepo() {
-        try {
-            return (EditableRepository) mainRepo;
-        } catch (ClassCastException e) {
-            throw new FormException(String.format("You can't use a readonly repository to modify " +
-                    "entity data repoId:[%s].", mainForm.getId()));
-        }
-    }
 
     public void delete() {
         this.delete(this.mainForm);
@@ -143,14 +135,6 @@ public class FormEditController extends FormController {
     /****************************/
     /** GETTER/SETTERS **/
     /****************************/
-    public String getRouteAfterSave() {
-        return routeAfterSave;
-    }
-
-    public void setRouteAfterSave(String routeAfterSave) {
-        this.routeAfterSave = routeAfterSave;
-    }
-
 
     public UIForm getMainForm() {
         return mainForm;

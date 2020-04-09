@@ -20,26 +20,24 @@ import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class InputChangeActionHandler implements ActionHandler {
+public class InputChangeActionHandler extends AbstractActionHandler
+        implements ActionHandler<FormEditController> {
+
+    public InputChangeActionHandler(MainController mc, Router router) {
+        super(mc, router);
+    }
 
     @Override
-    public void handle(UserAction action) {
-        MainController mc = MainController.getInstance();
-
-        if (!(mc.getFormController() instanceof FormEditController)) {
-            throw new ViewConfigException("Save operations can be performed just in FormEditController forms.");
-        }
-
-        FormEditController formController = (FormEditController) mc.getFormController();
+    public void handle(FormEditController formController, UserAction action) {
 
         UIComponent component = action.getComponent();
         if (!(component instanceof UIField)) {
@@ -49,14 +47,15 @@ public class InputChangeActionHandler implements ActionHandler {
         FormViewContext viewContext = form.getContext().getViewContext();
         InputFieldView fieldView = viewContext.findInputFieldViewById(component.getId());
 
-        // id a method is defined in onchange attribute run the script
+        // if a method is defined in onchange attribute run the script
+        // TODO:
 
         // save view state
         String state = fieldView.getValueString();
         boolean valid = formController.validate((UIField) component);
         if (!valid) {
             // update the view to show messages
-            mc.updateView(component,false);
+            mc.updateView(component, false);
             // find the new View and restore state
             fieldView = viewContext.findInputFieldViewById(component.getId());
             mc.getRenderingEnv().disableInterceptors();

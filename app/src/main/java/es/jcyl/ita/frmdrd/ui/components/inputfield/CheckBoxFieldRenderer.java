@@ -64,7 +64,7 @@ public class CheckBoxFieldRenderer extends FieldRenderer {
                                          boolean value) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE));
+                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
                 }
             }
         });

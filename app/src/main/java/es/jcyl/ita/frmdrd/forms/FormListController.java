@@ -17,9 +17,7 @@ package es.jcyl.ita.frmdrd.forms;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.ui.components.EntityAccessor;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -30,9 +28,7 @@ public class FormListController extends FormController {
     // form used to refer to the repository used to count entities
     private Repository repo;
     private Filter filter;
-    private String mainForm;
-    private String mainEntityAccessor;
-    private String editRoute;
+    private EntitySelector entitySelector;
 
     public FormListController(String id, String name) {
         super(id, name);
@@ -49,41 +45,9 @@ public class FormListController extends FormController {
      * @return
      */
     public int count() {
-        Repository repo = findRepo();
+
         return 0;
 //       this.repo.count()
-    }
-
-    private Repository findRepo() {
-        // if it set, use this instance
-        if (this.repo != null) {
-            return this.repo;
-        }
-
-        // if not, get it from the mainForm, and the filter too
-        UIForm form = view.getForm(this.mainForm);
-        if (form != null && form.getRepo() != null) {
-            this.repo = form.getRepo();
-            this.filter = form.getFilter();
-        }
-        // still not found, try with the list accessor
-        UIComponent component = view.findChild(this.mainEntityAccessor);
-        if (component != null) {
-            if (component instanceof EntityAccessor) {
-                throw new FormException(String.format("Invalid configuration on form [%s] the parameter" +
-                                " 'mainEntityAccessor' must reference an UIComponent that implements " +
-                                "the EntityAccessor interfaces (Ej: Datatable, DataList, etc). But [%s] found.",
-                        this.getId(), this.mainEntityAccessor, component.getClass().getName()));
-            }
-            EntityAccessor entityAccessor = (EntityAccessor) component;
-            if (entityAccessor.getRepo() != null) {
-                this.repo = entityAccessor.getRepo();
-                this.filter = entityAccessor.getFilter();
-            }
-        }
-        throw new FormException(String.format("No repository found for the form [%s]. User the parameter" +
-                "'repoId' or configure the parameters 'mainForm' or 'mainEntityAccessor', and make" +
-                "sure the referenced UIComponent has a repository.", this.getId()));
     }
 
     /****************************/
@@ -106,27 +70,12 @@ public class FormListController extends FormController {
         this.filter = filter;
     }
 
-    public String getMainForm() {
-        return mainForm;
+    public EntitySelector getEntitySelector() {
+        return entitySelector;
     }
 
-    public void setMainForm(String mainForm) {
-        this.mainForm = mainForm;
+    public void setEntitySelector(EntitySelector entitySelector) {
+        this.entitySelector = entitySelector;
     }
 
-    public String getMainEntityAccessor() {
-        return mainEntityAccessor;
-    }
-
-    public void setMainEntityAccessor(String mainEntityAccessor) {
-        this.mainEntityAccessor = mainEntityAccessor;
-    }
-
-    public String getEditRoute() {
-        return editRoute;
-    }
-
-    public void setEditRoute(String editRoute) {
-        this.editRoute = editRoute;
-    }
 }

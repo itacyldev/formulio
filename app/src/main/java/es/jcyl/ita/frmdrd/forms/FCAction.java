@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.forms;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,15 +15,34 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.actions.UserAction;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * 
+ * User actions/buttons to be shown in the FormController interface
  */
-public interface EntityAccessor {
+public class FCAction {
 
-    Repository getRepo();
+    private final String route;
+    private final String label;
+    private final String type;
 
-    Filter getFilter();
+    public FCAction(String type, String label, String route){
+        this.type = type;
+        this.label = label;
+        this.route = route;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String getType() {
+        return type;
+    }
 }

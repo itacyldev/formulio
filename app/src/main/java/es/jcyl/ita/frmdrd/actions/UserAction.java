@@ -30,22 +30,23 @@ public class UserAction {
 
     private android.content.Context viewContext;
     private UIComponent component;
-    private ActionType type;
+    private String type;
+    private String name;
     private String route;
     private String origin;
     private Map<String, Serializable> params;
 
-    public UserAction(UIComponent component, ActionType actionType) {
-        this.component = component;
-        this.type = actionType;
-    }
-    public UserAction(android.content.Context context, UIComponent component, ActionType actionType) {
-        this.viewContext = context;
+    public UserAction(UIComponent component, String actionType) {
         this.component = component;
         this.type = actionType;
     }
 
-    public UserAction(android.content.Context context, UIComponent component, ActionType actionType, String route) {
+    public UserAction(android.content.Context context, String actionType) {
+        this.viewContext = context;
+        this.type = actionType;
+    }
+
+    public UserAction(android.content.Context context, UIComponent component, String actionType, String route) {
         this.viewContext = context;
         this.component = component;
         this.type = actionType;
@@ -63,7 +64,7 @@ public class UserAction {
         return component;
     }
 
-    public ActionType getType() {
+    public String getType() {
         return type;
     }
 
@@ -83,6 +84,14 @@ public class UserAction {
         return origin;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setOrigin(String origin) {
         this.origin = origin;
     }
@@ -91,8 +100,50 @@ public class UserAction {
         return route;
     }
 
-    public static UserAction NavigateAction(Context context, UIComponent component, String formId) {
-        UserAction action = new UserAction(context, component, ActionType.NAVIGATE, formId);
+    /*********************************/
+    /** Default action types **/
+    /*********************************/
+    public static UserAction navigate(Context context, UIComponent component, String formId) {
+        UserAction action = new UserAction(context, component, ActionType.NAVIGATE.name(), formId);
+        action.name = "Navigate";
+        return action;
+    }
+
+    public static UserAction back(Context context) {
+        UserAction action = new UserAction(context, null, ActionType.BACK.name(), null);
+        return action;
+    }
+
+    public static UserAction delete(Context context, UIComponent component, String formId) {
+        UserAction action = new UserAction(context, component, ActionType.DELETE.name(), formId);
+        action.name = "Delete";
+        return action;
+    }
+
+    public static UserAction delete(Context context, UIComponent component, String formId, String route) {
+        UserAction action = new UserAction(context, component, ActionType.DELETE.name(), formId);
+        action.name = "Delete";
+        action.route = route;
+        return action;
+    }
+
+    public static UserAction save(Context context, UIComponent component, String formId) {
+        UserAction action = new UserAction(context, component, ActionType.SAVE.name(), formId);
+        action.name = "Save";
+        return action;
+    }
+
+    public static UserAction save(Context context, UIComponent component, String formId, String route) {
+        UserAction action = new UserAction(context, component, ActionType.SAVE.name(), formId);
+        action.route = route;
+        action.name = "Save";
+        return action;
+    }
+
+    public static UserAction cancel(Context context, UIComponent component, String formId, String route) {
+        UserAction action = new UserAction(context, component, ActionType.SAVE.name(), formId);
+        action.route = route;
+        action.name = "Cancel";
         return action;
     }
 

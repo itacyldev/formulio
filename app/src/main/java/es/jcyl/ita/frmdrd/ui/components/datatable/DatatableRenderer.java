@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
@@ -37,7 +36,7 @@ public class DatatableRenderer extends BaseRenderer<UIDatatable> {
     protected View createBaseView(Context viewContext, RenderingEnv env, UIDatatable component) {
         UIDatatable dtComponent = (UIDatatable) component;
         DatatableLayout datatableView = (DatatableLayout) View.inflate(viewContext,
-                R.layout.datatable_layout, null);
+                R.layout.component_datatable_layout, null);
         datatableView.setDatatable(dtComponent);
         datatableView.setTag(getBaseViewTag(component));
         return datatableView;

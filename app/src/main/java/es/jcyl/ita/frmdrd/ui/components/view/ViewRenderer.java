@@ -43,18 +43,18 @@ public class ViewRenderer extends BaseRenderer implements GroupRenderer {
     }
 
     @Override
-    public void initGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
+    public void initGroup(Context viewContext, RenderingEnv env, UIComponent component, ViewGroup root) {
     }
 
     @Override
-    public void addViews(Context viewContext, RenderingEnv env, UIComponent component, View root, View[] views) {
+    public void addViews(Context viewContext, RenderingEnv env, UIComponent component, ViewGroup root, View[] views) {
         for (View view : views) {
             ((ViewGroup) root).addView(view);
         }
     }
 
     @Override
-    public void endGroup(Context viewContext, RenderingEnv env, UIComponent component, View root) {
+    public void endGroup(Context viewContext, RenderingEnv env, UIComponent component, ViewGroup root) {
     }
 
 }

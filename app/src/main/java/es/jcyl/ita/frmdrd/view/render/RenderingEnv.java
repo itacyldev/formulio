@@ -37,22 +37,21 @@ import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 /**
  * Context storing object used during the rendering process to give the renderers access to commons objects
  * needed during the view construction, like entity and view contexts, access to userAction
- * interceptors and a temporary store like deffered view elements.
- * During the rendering, the ExecEnvironment gathers the form contexts to be bound later to the
+ * interceptors and temporary store like deferred view elements.
+ * During the rendering, the ExecEnvironment gathers the form contexts to bound them later to the
  * GlobalContext, so access to all form context can be made with expressions like formId.entity.property
  * or formId.view.field.
  */
 public class RenderingEnv {
-
-    CompositeContext globalContext;
-    FormContext formContext;
-
-    private ViewUserActionInterceptor userActionInterceptor;
+    // context access
+    private CompositeContext globalContext;
+    private FormContext formContext;
     private CompositeContext combinedContext;
     private List<FormContext> currentFormContexts;
-    //    private CompositeContext contextMap;
-    private Map<String, DeferredView> deferredViews;
+    // view rendering
     private ViewDAG viewDAG;
+    private Map<String, DeferredView> deferredViews;
+    private ViewUserActionInterceptor userActionInterceptor;
 
     public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;

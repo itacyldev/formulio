@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.actions.handlers;
+package es.jcyl.ita.frmdrd.view.activities;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,24 +15,26 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.MainController;
-import es.jcyl.ita.frmdrd.actions.ActionHandler;
-import es.jcyl.ita.frmdrd.actions.UserAction;
+import android.app.Activity;
+import android.view.View;
+import android.view.ViewGroup;
+
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.router.Router;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler extends AbstractActionHandler
-        implements ActionHandler {
+public interface FormActivity<F extends FormController> {
 
-    public BackPressedActionHandler(MainController mc, Router router) {
-        super(mc, router);
-    }
+    void setFormController(F formController);
 
-    @Override
-    public void handle(FormController formController, UserAction action) {
-        mc.getRouter().back(action.getViewContext());
-    }
+    void setRouter(Router router);
+
+    void setRenderingEnv(RenderingEnv env);
+
+    Activity getActivity();
+
+    ViewGroup getContentView();
 }

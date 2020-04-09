@@ -17,7 +17,6 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
@@ -116,8 +115,8 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
                 if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getDatatable().getRoute())) {
-                    UserAction action = new UserAction(context, dtLayout.getDatatable(),
-                            ActionType.NAVIGATE, dtLayout.getDatatable().getRoute());
+                    UserAction action = UserAction.navigate(context, dtLayout.getDatatable(),
+                            dtLayout.getDatatable().getRoute());
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
                 }

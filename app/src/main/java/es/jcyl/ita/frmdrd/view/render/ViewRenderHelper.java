@@ -32,11 +32,6 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
-import es.jcyl.ita.frmdrd.view.render.DeferredView;
-import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
-import es.jcyl.ita.frmdrd.view.render.Renderer;
-import es.jcyl.ita.frmdrd.view.render.RendererFactory;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -76,14 +71,15 @@ public class ViewRenderHelper {
             GroupRenderer gRenderer = (GroupRenderer) renderer;
             if (root.isRenderChildren() && CollectionUtils.isNotEmpty(root.getChildren())) {
                 // recursively render children components
-                gRenderer.initGroup(viewContext, env, root, rootView);
+                ViewGroup groupView = (ViewGroup) rootView;
+                gRenderer.initGroup(viewContext, env, root, groupView);
                 int numKids = root.getChildren().size();
                 View[] views = new View[numKids];
                 for (int i = 0; i < numKids; i++) {
                     views[i] = render(viewContext, env, root.getChildren().get(i));
                 }
-                gRenderer.addViews(viewContext, env, root, rootView, views);
-                gRenderer.endGroup(viewContext, env, root, rootView);
+                gRenderer.addViews(viewContext, env, root, groupView, views);
+                gRenderer.endGroup(viewContext, env, root, groupView);
             }
         }
         if (checkDeferred && root.getParent() == null) {

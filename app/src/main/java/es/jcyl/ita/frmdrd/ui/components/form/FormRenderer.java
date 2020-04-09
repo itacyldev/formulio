@@ -3,15 +3,10 @@ package es.jcyl.ita.frmdrd.ui.components.form;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.actions.ActionType;
-import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -35,12 +30,11 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<UIForm> {
+public class FormRenderer extends BaseGroupRenderer<UIForm> implements GroupRenderer<UIForm> {
 
     protected View createBaseView(Context viewContext, RenderingEnv env, UIForm component) {
-        // TODO: provide different layout implementors
-        View view = renderLinearLayout(viewContext, component);
-        return view;
+        return View.inflate(viewContext,
+                R.layout.component_form, null);
     }
 
     @Override
@@ -48,62 +42,11 @@ public class FormRenderer extends BaseRenderer<UIForm> implements GroupRenderer<
 
     }
 
-    private View renderLinearLayout(Context context, UIForm form) {
-        return View.inflate(context,
-                R.layout.activity_form_edit_view_handler, null);
-    }
-
     @Override
-    public void initGroup(Context viewContext, RenderingEnv env, UIForm component, View root) {
-    }
-
-    @Override
-    public void addViews(Context viewContext, RenderingEnv env, UIForm component, View root, View[] views) {
-        LinearLayout layout = root.findViewById(R.id.fields_linear_layout);
+    public void addViews(Context viewContext, RenderingEnv env, UIForm component, ViewGroup root, View[] views) {
         for (View view : views) {
-            layout.addView(view);
+            root.addView(view);
         }
     }
 
-    @Override
-    public void endGroup(Context viewContext, RenderingEnv env, UIForm component, View root) {
-        Button saveBtn = renderSaveButton(viewContext, env, component, ((ViewGroup) root));
-        Button resetBtn = renderCancelButton(viewContext, env, component, ((ViewGroup) root));
-        // add buttons to the toolbar
-        LinearLayout layout = root.findViewById(R.id.form_edit_footer);
-        layout.addView(resetBtn);
-        if(!component.isReadOnly()){
-            layout.addView(saveBtn);
-        }
-    }
-
-    private Button renderSaveButton(Context context, RenderingEnv env, UIForm component, ViewGroup parent) {
-        Button button = new Button(context);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                if (interceptor != null) {
-                    interceptor.doAction(new UserAction(context, component, ActionType.SAVE));
-                }
-            }
-        });
-        button.setText("Save");
-        return button;
-    }
-
-    private Button renderCancelButton(Context context, RenderingEnv env, UIForm component, ViewGroup parent) {
-        Button button = new Button(context);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                if (interceptor != null) {
-                    interceptor.doAction(new UserAction(context, component, ActionType.CANCEL));
-                }
-            }
-        });
-        button.setText("Cancel");
-        return button;
-    }
 }

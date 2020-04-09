@@ -90,7 +90,7 @@ public class DateFieldRenderer extends FieldRenderer {
 
                         ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                         if (interceptor != null) {
-                            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE));
+                            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
                         }
                     }
                 };

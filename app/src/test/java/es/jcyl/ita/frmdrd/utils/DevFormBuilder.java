@@ -40,7 +40,6 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  */
 public class DevFormBuilder {
 
-    EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     static FieldDataBuilder fBuilder = new FieldDataBuilder();
     static FormDataBuilder formBuilder = new FormDataBuilder();
 

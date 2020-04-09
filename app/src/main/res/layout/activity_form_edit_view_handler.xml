@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/fields_linear_layout"
+            android:id="@+id/form_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -21,7 +21,7 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:id="@+id/form_edit_footer"
+        android:id="@+id/form_toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

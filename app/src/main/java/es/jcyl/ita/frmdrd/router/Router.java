@@ -37,16 +37,35 @@ public class Router {
     private List<State> memento;
     private State current;
     private Activity currentActivity;
+    private String[] currentViewMessages;
 
     public Router(MainController mainController) {
         this.mc = mainController;
         this.memento = new ArrayList<>();
     }
 
-    public void navigate(android.content.Context context, String formId, Map<String, Serializable> params) {
-        recordHistory(formId, params);
-        mc.navigate(context, formId, params);
+    public void navigate(android.content.Context context, String route, Map<String, Serializable> params) {
+        this.navigate(context, route, params, null);
     }
+
+    public void navigate(android.content.Context context, String route, Map<String, Serializable> params, String[] messages) {
+        this.currentViewMessages = messages;
+        if ("back".equalsIgnoreCase(route)) {
+            this.back(context);
+        } else {
+            recordHistory(route, params);
+            mc.navigate(context, route, params);
+        }
+    }
+
+    public void clearGlobalMessages() {
+        this.currentViewMessages = null;
+    }
+
+    public String[] getGlobalMessages() {
+        return currentViewMessages;
+    }
+
 
     public void back(android.content.Context context) {
         State lastState = popHistory();
@@ -66,6 +85,7 @@ public class Router {
      */
     private State popHistory() {
         this.current = null;
+        this.currentActivity.finish();
         this.currentActivity = null;
         if (hasHistory()) {
             // get last state from history

@@ -16,11 +16,14 @@ package es.jcyl.ita.frmdrd;
  */
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -41,13 +44,14 @@ import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.activities.FormActivity;
 import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.activities.FormListViewHandlerActivity;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -62,9 +66,11 @@ public class MainController {
 
     private static MainController _instance;
 
-    // Android context and view
+    // Android context, view and activity
     private android.content.Context viewContext;
     private View viewRoot;
+    private Activity activity;
+
     // Global context and root component
     private CompositeContext globalContext;
     private UIView uiView;
@@ -84,6 +90,7 @@ public class MainController {
     private Router router;
     private static HashMap<Class, Class> staticMap;
 
+
     public static MainController getInstance() {
         if (_instance == null) {
             _instance = new MainController();
@@ -94,11 +101,11 @@ public class MainController {
     private MainController() {
         globalContext = new UnPrefixedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
-        actionController = new ActionController();
         formControllerFactory = FormControllerFactory.getInstance();
+        router = new Router(this);
+        actionController = new ActionController(this, router);
         renderingEnv = new RenderingEnv(globalContext, actionController);
         flowManager = ReactivityFlowManager.getInstance();
-        router = new Router(this);
         registerFormTypeViews();
     }
 
@@ -131,12 +138,24 @@ public class MainController {
         // Start activity to get Android context
         andContext.startActivity(intent);
     }
+
     private void setupParamsContext(@Nullable Map<String, Serializable> params) {
         BasicContext pContext = new BasicContext("params");
         if (params != null) {
             pContext.putAll(params);
         }
         globalContext.addContext(pContext);
+    }
+
+    public void registerActivity(FormActivity formActivity) {
+        // setups the activity during initialization to get reference to rendering and actions objects
+        formActivity.setRenderingEnv(this.renderingEnv);
+        formActivity.setRouter(this.router);
+        formActivity.setFormController(this.formController);
+        // set the View elements to controllers
+        this.activity = formActivity.getActivity();
+        this.router.registerActivity(formActivity.getActivity());
+        this.formController.setContentView(formActivity.getContentView());
     }
 
     /*********************************************/
@@ -153,7 +172,8 @@ public class MainController {
         // TODO: dynamic mapping for extensions
 
     }
-    private Class getViewImpl(FormController formController){
+
+    private Class getViewImpl(FormController formController) {
         return staticMap.get(formController.getClass());
     }
 
@@ -204,9 +224,25 @@ public class MainController {
 
     private void setViewContext(android.content.Context viewContext) {
         this.viewContext = viewContext;
-        this.formController.setViewContext(viewContext);
     }
 
+
+    /**
+     * Re-renders last view to show validation errors
+     */
+    public void renderBack() {
+        View newView = renderHelper.render(this.viewContext, renderingEnv, formController.getView());
+
+        // the View elements to replace hang the the content view of the formController
+        ViewGroup contentView = formController.getContentView();
+        contentView.removeAllViews();
+        contentView.addView(newView);
+
+        // disable user events and restore values to the view
+        renderingEnv.disableInterceptors();
+        formController.restoreViewState();
+        renderingEnv.enableInterceptors();
+    }
 
     /*********************************************/
     /***  GETTERS TO ACCESS SHARED INFORMATION */

@@ -15,24 +15,34 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.router.Router;
+import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler extends AbstractActionHandler
-        implements ActionHandler {
+public class DeleteActionHandler extends AbstractActionHandler implements ActionHandler<FormEditController> {
 
-    public BackPressedActionHandler(MainController mc, Router router) {
+    public DeleteActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    public void handle(FormController formController, UserAction action) {
-        mc.getRouter().back(action.getViewContext());
+    public void handle(FormEditController formController, UserAction action) {
+        formController.delete();
+        String msg = "Entity successfully deleted.";
+        if (StringUtils.isBlank(action.getRoute())) {
+            UserMessagesHelper.toast(action.getViewContext(), msg);
+        } else {
+            Router router = mc.getRouter();
+            router.navigate(action.getViewContext(), action.getRoute(), action.getParams(),
+                    new String[]{msg});
+        }
     }
 }

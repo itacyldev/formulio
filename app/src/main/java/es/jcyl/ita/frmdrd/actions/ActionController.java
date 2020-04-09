@@ -18,31 +18,50 @@ package es.jcyl.ita.frmdrd.actions;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.handlers.BackPressedActionHandler;
+import es.jcyl.ita.frmdrd.actions.handlers.DeleteActionHandler;
+import es.jcyl.ita.frmdrd.actions.handlers.DeleteFromListActionHandler;
 import es.jcyl.ita.frmdrd.actions.handlers.InputChangeActionHandler;
 import es.jcyl.ita.frmdrd.actions.handlers.NavigateActionHandler;
 import es.jcyl.ita.frmdrd.actions.handlers.SaveActionHandler;
+import es.jcyl.ita.frmdrd.router.Router;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ActionController {
 
-    private static final Map<ActionType, ActionHandler> actionMap = new HashMap<>();
+    private static final Map<String, ActionHandler> actionMap = new HashMap<>();
+    private final MainController mc;
+    private final Router router;
 
-    public ActionController() {
-        // action to handler mapping
-        actionMap.put(ActionType.SAVE, new SaveActionHandler());
-        actionMap.put(ActionType.INPUT_CHANGE, new InputChangeActionHandler());
-        actionMap.put(ActionType.BACK, new BackPressedActionHandler());
-        actionMap.put(ActionType.CANCEL, new BackPressedActionHandler()); // are they the same?
-        actionMap.put(ActionType.NAVIGATE, new NavigateActionHandler()); // are they the same?
+    public ActionController(MainController mc, Router router) {
+        this.mc = mc;
+        this.router = router;
+        // default actions
+        register(ActionType.SAVE, new SaveActionHandler(mc, router));
+        register(ActionType.INPUT_CHANGE, new InputChangeActionHandler(mc, router));
+        BackPressedActionHandler bch = new BackPressedActionHandler(mc, router);
+        register(ActionType.BACK, bch);
+        register(ActionType.CANCEL, bch);
+        register(ActionType.NAVIGATE, new NavigateActionHandler(mc, router));
+        register(ActionType.DELETE, new DeleteActionHandler(mc, router));
+        register(ActionType.DELETE_LIST, new DeleteFromListActionHandler(mc, router));
+    }
+
+    public void register(ActionType type, ActionHandler handler) {
+        register(type.name(), handler);
+    }
+
+    public void register(String type, ActionHandler handler) {
+        actionMap.put(type.toLowerCase(), handler);
     }
 
     public void doUserAction(UserAction action) {
         // TODO: log user interactions
-        ActionHandler handler = actionMap.get(action.getType());
-        handler.handle(action);
+        ActionHandler handler = actionMap.get(action.getType().toLowerCase());
+        handler.handle(mc.getFormController(), action);
         // TODO: catch errors, log, toast for user with meaningful information
     }
 

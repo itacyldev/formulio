@@ -21,7 +21,8 @@ import es.jcyl.ita.frmdrd.forms.FormController;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ActionHandler {
+public interface ActionHandler<F extends FormController> {
 
-    void handle(UserAction action);
+    void handle(F formController, UserAction action);
+
 }

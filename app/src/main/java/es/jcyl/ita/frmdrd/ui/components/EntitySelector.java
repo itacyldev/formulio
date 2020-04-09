@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.activities;
+package es.jcyl.ita.frmdrd.ui.components;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,13 +15,17 @@ package es.jcyl.ita.frmdrd.view.activities;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.forms.FormController;
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface BaseFormViewHandlerActivity<F extends FormController> {
+public interface EntitySelector {
 
+    List<Entity> getSelectedEntities();
 
-    void setFormController(F formController);
 }

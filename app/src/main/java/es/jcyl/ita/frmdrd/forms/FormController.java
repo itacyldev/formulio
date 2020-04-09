@@ -15,6 +15,10 @@ package es.jcyl.ita.frmdrd.forms;
  * limitations under the License.
  */
 
+import android.view.View;
+import android.view.ViewGroup;
+
+import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -30,8 +34,8 @@ public abstract class FormController {
     protected String name;
     protected UIView view;
     protected Repository mainRepo;
-    protected android.content.Context viewContext; // current view context
-
+    protected ViewGroup contentView; // Android view element where the UIView is rendered
+    private FCAction[] actions; // form actions ids
 
     public FormController(String id, String name) {
         this.id = id;
@@ -50,6 +54,14 @@ public abstract class FormController {
     }
 
 
+    public EditableRepository getEditableRepo() {
+        try {
+            return (EditableRepository) mainRepo;
+        } catch (ClassCastException e) {
+            throw new FormException(String.format("You can't use a readonly repository to modify " +
+                    "entity data repoId:[%s].", mainRepo.getId()));
+        }
+    }
 
     /****************************/
     /** Save/Restore state **/
@@ -87,13 +99,6 @@ public abstract class FormController {
         this.name = name;
     }
 
-    public android.content.Context getViewContext() {
-        return viewContext;
-    }
-
-    public void setViewContext(android.content.Context viewContext) {
-        this.viewContext = viewContext;
-    }
 
     public UIView getView() {
         return view;
@@ -109,5 +114,41 @@ public abstract class FormController {
 
     public void setMainRepo(Repository mainRepo) {
         this.mainRepo = mainRepo;
+    }
+
+    public FCAction[] getActions() {
+        return actions;
+    }
+
+    public void setActions(FCAction[] actions) {
+        this.actions = actions;
+    }
+
+    public FCAction getAction(String name) {
+        if (this.actions == null) {
+            return null;
+        } else {
+            for (FCAction action : actions) {
+                if (name.equalsIgnoreCase(action.getType())) {
+                    return action;
+                }
+            }
+            return null;
+        }
+    }
+
+    public boolean hasAction(String name) {
+        return getAction(name) != null;
+    }
+
+    public ViewGroup getContentView() {
+        return contentView;
+    }
+
+    public void setContentView(ViewGroup contentView) {
+        if (contentView == null) {
+            throw new FormException("The content View cannot be null!. " + this.getId());
+        }
+        this.contentView = contentView;
     }
 }

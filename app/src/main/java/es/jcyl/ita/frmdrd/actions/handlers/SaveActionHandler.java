@@ -16,7 +16,6 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  */
 
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -25,52 +24,43 @@ import org.apache.commons.lang3.StringUtils;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.actions.UserActionException;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
+import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
 /**
+ * s
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class SaveActionHandler implements ActionHandler {
+public class SaveActionHandler extends AbstractActionHandler implements ActionHandler<FormEditController> {
+
+    public SaveActionHandler(MainController mc, Router router) {
+        super(mc, router);
+    }
 
     @Override
-    public void handle(UserAction action) {
-        MainController mc = MainController.getInstance();
+    public void handle(FormEditController formController, UserAction action) {
 
-        if (!(mc.getFormController() instanceof FormEditController)) {
-            throw new UserActionException(
-                    "Save operations can be performed just in FormEditController forms.");
-        }
-
-        FormEditController formController = (FormEditController) mc.getFormController();
         // save view state for each form
         formController.saveViewState();
 
         try {
             formController.save();
             // stay or navigate back to list?
+            String msg = "Entity successfully saved."; //TODO: Localization
             if (StringUtils.isBlank(action.getRoute())) {
-                Toast.makeText(action.getViewContext(),
-                        "Entity successfully saved.", Toast.LENGTH_SHORT).show();
+                UserMessagesHelper.toast(action.getViewContext(), msg);
             } else {
-                Router router = mc.getRouter();
-                router.navigate(action.getViewContext(), action.getRoute(), action.getParams());
+                router.navigate(action.getViewContext(), action.getRoute(), action.getParams(),
+                        new String[]{msg});
             }
         } catch (ValidatorException e) {
-            // re-render all the screen
-            ViewRenderHelper renderHelper = mc.getRenderHelper();
-            View newView = renderHelper.render(mc.getViewContext(), mc.getRenderingEnv(),
-                    formController.getView());
-            // replace hole view
-            ((FragmentActivity) mc.getViewContext()).setContentView(newView);
-            mc.getRenderingEnv().disableInterceptors();
-            formController.restoreViewState();
-            mc.getRenderingEnv().enableInterceptors();
-
-            Toast.makeText(action.getViewContext(), "The form is invalid, check your input.", Toast.LENGTH_SHORT).show();
+            // re-render the form content
+            mc.renderBack();
+            UserMessagesHelper.toast(action.getViewContext(), "The form is invalid, check your input.");
         }
 
     }
