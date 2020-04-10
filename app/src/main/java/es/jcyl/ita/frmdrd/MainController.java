@@ -64,7 +64,6 @@ public class MainController {
 
     private static MainController _instance;
 
-
     // Global context and root component
     private CompositeContext globalContext;
 
@@ -77,7 +76,6 @@ public class MainController {
     private FormController formController;
     private FormControllerFactory formControllerFactory;
     private ReactivityFlowManager flowManager;
-
 
     // navigation control
     private Router router;
@@ -102,7 +100,6 @@ public class MainController {
         registerFormTypeViews();
     }
 
-
     /*********************************************/
     /***  Navigation control methods */
     /*********************************************/
@@ -116,7 +113,6 @@ public class MainController {
      */
     public void navigate(android.content.Context andContext, String formId,
                          @Nullable Map<String, Serializable> params) {
-
         setupParamsContext(params);
         // get form configuration for given formId and load data
         formController = formControllerFactory.getController(formId);
@@ -181,6 +177,7 @@ public class MainController {
         renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         View view =  renderHelper.render(renderingEnv, uiView);
+        // set the root View element to renderingEnv for re-renders in the same view
         renderingEnv.setViewRoot(view);
         return view;
     }
@@ -234,11 +231,6 @@ public class MainController {
     /*********************************************/
     /***  GETTERS TO ACCESS SHARED INFORMATION */
     /*********************************************/
-
-
-//    public View getViewRoot() {
-//        return viewRoot;
-//    }
 
     public CompositeContext getGlobalContext() {
         return globalContext;
