@@ -33,6 +33,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -66,6 +67,8 @@ public class SwitcherViewConverterTest {
                 .withField(field)
                 .render();
 
+
+        RenderingEnv env = recipe.env;
         // Test all different kinds of types
         Object[] values = {"1", "0", "true", "false", "Y", "y", "N", "n", "S", "s", "T",
                 "F", "True", "FALSE", "SI", "No"};
@@ -74,7 +77,7 @@ public class SwitcherViewConverterTest {
 
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
         for (int i = 0; i < values.length; i++) {
-            InputFieldView baseView = ViewHelper.findInputFieldViewById(recipe.mc.getViewRoot(), field);
+            InputFieldView baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
             Switch inputView = (Switch) baseView.getInputView();
 
             // transform the value using the converter and check the result against the original value

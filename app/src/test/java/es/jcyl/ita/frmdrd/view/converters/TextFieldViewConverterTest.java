@@ -38,6 +38,7 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -65,7 +66,8 @@ public class TextFieldViewConverterTest {
 
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
-        View view = recipe.mc.getViewRoot();
+        RenderingEnv env = recipe.env;
+        View view = env.getViewRoot();
 
         // Test all different kinds of types
         Class[] clazzez = new Class[]{ByteArray.class, Date.class, String.class, Long.class, Integer.class,

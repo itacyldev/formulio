@@ -64,12 +64,9 @@ public class MainController {
 
     private static MainController _instance;
 
-    // Root view element
-    private View viewRoot;
 
     // Global context and root component
     private CompositeContext globalContext;
-    private UIView uiView;
 
     // helper to render the uiView in an Android Context
     private ViewRenderHelper renderHelper = new ViewRenderHelper();
@@ -109,16 +106,14 @@ public class MainController {
     /*********************************************/
     /***  Navigation control methods */
     /*********************************************/
+
     /**
      * Implements navigation to a new view
      *
-     * @param formId: form configuration to load
+     * @param andContext
+     * @param formId
      * @param params
      */
-//    public void navigate(String formId, @Nullable Map<String, Serializable> params) {
-//        navigate(this.viewContext, formId, params);
-//
-//    }
     public void navigate(android.content.Context andContext, String formId,
                          @Nullable Map<String, Serializable> params) {
 
@@ -127,14 +122,11 @@ public class MainController {
         formController = formControllerFactory.getController(formId);
         formController.load(globalContext);
 
-        // set form view as current
-        uiView = formController.getView();
-
-        // get the activity class
-        final Intent intent;
+        // get the activity class for current controller
         Class activityClazz = getViewImpl(formController);
-        intent = new Intent(andContext, activityClazz);
+
         // Start activity to get Android context
+        Intent intent = new Intent(andContext, activityClazz);
         andContext.startActivity(intent);
     }
 
@@ -182,13 +174,15 @@ public class MainController {
      * @return
      */
     public View renderView(Context viewContext) {
+        UIView uiView = this.formController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
         renderingEnv.initialize();
         renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
-        this.viewRoot = renderHelper.render(renderingEnv, this.uiView);
-        return this.viewRoot;
+        View view =  renderHelper.render(renderingEnv, uiView);
+        renderingEnv.setViewRoot(view);
+        return view;
     }
 
     /**
@@ -242,9 +236,9 @@ public class MainController {
     /*********************************************/
 
 
-    public View getViewRoot() {
-        return viewRoot;
-    }
+//    public View getViewRoot() {
+//        return viewRoot;
+//    }
 
     public CompositeContext getGlobalContext() {
         return globalContext;
@@ -269,7 +263,6 @@ public class MainController {
     /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
     public void setFormController(FormController fc, UIView view) {
         this.formController = fc;
-        this.uiView = view;
     }
 
 }

@@ -22,6 +22,7 @@ import es.jcyl.ita.frmdrd.ui.components.form.FormRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.TextFieldRenderer;
+import es.jcyl.ita.frmdrd.ui.components.link.LinkRenderer;
 import es.jcyl.ita.frmdrd.ui.components.view.ViewRenderer;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
@@ -41,6 +42,7 @@ public class RendererFactory {
         renderInstances.put("date", new DateFieldRenderer());
         renderInstances.put("checkbox", new CheckBoxFieldRenderer());
         renderInstances.put("datatable", new DatatableRenderer());
+        renderInstances.put("link", new LinkRenderer());
     }
 
     public static RendererFactory getInstance() {
@@ -52,7 +54,7 @@ public class RendererFactory {
 
     public Renderer getRenderer(String rendererType) {
         if (!renderInstances.containsKey(rendererType.toLowerCase())) {
-            throw new ViewConfigException("No renderer found for renderType: " + rendererType);
+            throw new ViewConfigException("No renderer found for renderType, register it in RenderFactory: " + rendererType);
         }
         return renderInstances.get(rendererType);
     }

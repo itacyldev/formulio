@@ -25,6 +25,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.link.UILink;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
@@ -74,6 +75,11 @@ public class DummyFormConfigParser extends FormConfigParser {
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
         FormControllerBuilder.FormBuilderResult result = fcBuilder.withRepo(contactsRepo).build();
         loadConfig(result.getEdit());
+        UILink link = new UILink();
+        link.setId("link1");
+        link.setRoute(result.getList().getId());
+//        result.getEdit().getView().addChild(link);
+
         loadConfig(result.getList());
 
         EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");

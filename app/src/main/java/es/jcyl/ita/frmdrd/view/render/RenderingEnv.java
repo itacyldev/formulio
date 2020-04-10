@@ -29,7 +29,6 @@ import java.util.Map;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
-import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
@@ -54,6 +53,7 @@ public class RenderingEnv {
     private Map<String, DeferredView> deferredViews;
     private ViewUserActionInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
+    private View viewRoot;
 
     public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
@@ -144,17 +144,20 @@ public class RenderingEnv {
         return viewDAG;
     }
 
-    public View getViewRoot() {
-        MainController mc = MainController.getInstance();
-        return mc.getViewRoot();
-    }
-
     public void setViewContext(Context viewContext) {
         this.viewContext = viewContext;
     }
 
     public Context getViewContext() {
         return viewContext;
+    }
+
+    public void setViewRoot(View view) {
+        this.viewRoot = view;
+    }
+
+    public View getViewRoot() {
+        return viewRoot;
     }
 }
 

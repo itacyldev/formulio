@@ -19,12 +19,18 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * User navigation component
  */
 public class UILink extends UIComponent {
 
+    private static final String LINK = "link";
     private String route;
+
+    @Override
+    public String getRendererType() {
+        return LINK;
+    }
 
     public String getRoute() {
         return route;

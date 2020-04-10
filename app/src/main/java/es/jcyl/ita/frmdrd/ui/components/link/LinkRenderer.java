@@ -19,9 +19,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import org.apache.commons.lang3.RandomUtils;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
@@ -32,12 +35,12 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * <p>
  * Renders link component using android views
  */
-public abstract class LinkRenderer extends BaseRenderer<UILink> {
+public class LinkRenderer extends BaseRenderer<UILink> {
 
     @Override
     protected View createBaseView(RenderingEnv env, UILink component) {
-        LinearLayout baseView = ViewHelper.inflate(env.getViewContext(),
-                R.layout.component_placeholders, LinearLayout.class);
+        ConstraintLayout baseView = ViewHelper.inflate(env.getViewContext(),
+                R.layout.component_placeholders, ConstraintLayout.class);
         TextView linkView = (TextView) baseView.findViewById(R.id.textViewLink);
         // set randomId
         linkView.setId(RandomUtils.nextInt());
@@ -54,12 +57,11 @@ public abstract class LinkRenderer extends BaseRenderer<UILink> {
             public void onClick(View v) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-//                    UserAction.navigate()
-//                    interceptor.doAction(new UserAction(env.getViewContext(), component, ActionType.NAVIGATE.name()));
+                    UserAction action = UserAction.navigate(env.getViewContext(), component, component.getRoute());
+                    interceptor.doAction(action);
                 }
             }
         });
-
     }
 
 
