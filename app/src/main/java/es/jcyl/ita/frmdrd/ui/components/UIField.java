@@ -8,7 +8,7 @@ import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
 
 public class UIField extends UIComponent {
     public enum TYPE {
-        TEXT, DATE, BOOLEAN, // SIGN
+        TEXT, DATE, BOOLEAN // SIGN
     }
 
     private TYPE type = TEXT;
@@ -16,8 +16,8 @@ public class UIField extends UIComponent {
     private String defaultValue;
     private boolean readOnly;
 
-    private static final Validator[] EMTPY_VALIDATOR = new Validator[0];
-    private Validator[] validators = EMTPY_VALIDATOR;
+    private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
+    private Validator[] validators = EMPTY_VALIDATOR;
 
     @Override
     public String getRendererType() {

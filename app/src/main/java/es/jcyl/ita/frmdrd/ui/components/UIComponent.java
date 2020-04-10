@@ -103,6 +103,10 @@ public abstract class UIComponent implements Serializable {
         child.setParent(this);
         children.add(child);
     }
+    public void removeAll(){
+        this.children.clear();
+        this.children = null;
+    }
 
     public String getLabel() {
         return label;

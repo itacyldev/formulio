@@ -18,7 +18,7 @@ import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.forms.FormListController;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
@@ -80,6 +80,12 @@ public class DummyFormConfigParser extends FormConfigParser {
         result = fcBuilder.withRepo(inspecRepo).build();
         loadConfig(result.getEdit());
         loadConfig(result.getList());
+
+//        result = fcBuilder.withRepo(contactsRepo).withId("tableTest").build();
+//        createListView1(result.getList());
+//        createEditView1(result.getEdit());
+//        loadConfig(result.getList());
+//        loadConfig(result.getEdit());
     }
 
 
@@ -117,17 +123,10 @@ public class DummyFormConfigParser extends FormConfigParser {
         lst.add(field1);
 
 
-        // datatable
-        RepositoryProjectConfReader config = new RepositoryProjectConfReader();
-        config.read();
-        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
-
         String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
-        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
-
+        UIDatatable table = formGenerator.createDataTableFromRepo(formController.getEditableRepo(), fieldFilter);
         table.setId("table1");
-        table.setRepo(contactsRepo);
-        table.setRoute(formController.getId() + "#edit");
+        table.setRoute(formController.getId());
 
         // table repository filter
         Filter f = new SQLQueryFilter();
@@ -142,7 +141,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         form1.setLabel("Formulario 1");
         form1.setChildren(lst);
         form1.setRenderExpression(exprFactory.create("true"));
-        form1.setRepo(contactsRepo);
+        form1.setRepo(formController.getEditableRepo());
         List<UIComponent> viewKids = new ArrayList<>();
         viewKids.add(form1);
         UIView view1 = new UIView("view1");

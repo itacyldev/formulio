@@ -20,13 +20,13 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * 
- * User actions/buttons to be shown in the FormController interface
+ * Allowed user actions/buttons to be shown in the FormController interface
  */
 public class FCAction {
 
-    private final String route;
     private final String label;
     private final String type;
+    private final String route;
 
     public FCAction(String type, String label, String route){
         this.type = type;

@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.builders;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -30,9 +32,16 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  */
 public class FormControllerBuilder {
 
-    private Repository repo;
     private FormEditBuilder editBuilder = new FormEditBuilder();
     private FormListBuilder listBuilder = new FormListBuilder();
+    // current instance construction temporal state
+    private String id;
+    private Repository repo;
+
+    public FormControllerBuilder withId(String id) {
+        this.id = id;
+        return this;
+    }
 
     public FormControllerBuilder withRepo(Repository repo) {
         this.repo = repo;
@@ -41,9 +50,12 @@ public class FormControllerBuilder {
 
     public FormBuilderResult build() {
         FormBuilderResult result = new FormBuilderResult();
-        String fcId = "fc_" + this.repo.getId();
-        result.list = this.buildList(fcId);
-        result.edit = this.buildEdit(fcId);
+        if (StringUtils.isBlank(this.id)) {
+            this.id = "fc_" + this.repo.getId();
+        }
+        result.list = this.buildList(this.id);
+        result.edit = this.buildEdit(this.id);
+        clear();
         return result;
     }
 
@@ -111,4 +123,11 @@ public class FormControllerBuilder {
             return list;
         }
     }
+
+    private void clear() {
+        id = null;
+        repo = null;
+    }
+
+
 }

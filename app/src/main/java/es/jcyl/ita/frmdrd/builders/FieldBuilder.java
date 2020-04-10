@@ -96,8 +96,6 @@ public class FieldBuilder {
             baseModel.addValidator(validatorFactory.getValidator("decimal"));
             baseModel.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         }
-        // TODO: set intput type (numeric, text, ...)
-
         // used the label to set a validator email, correo, mail, phone, telefono,...
         String label = baseModel.getLabel();
         if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
