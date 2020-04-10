@@ -15,7 +15,6 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,10 +26,10 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public interface GroupRenderer<C extends UIComponent> {
 
-    void initGroup(Context viewContext, RenderingEnv env, C component, ViewGroup root);
+    void initGroup(RenderingEnv env, C component, ViewGroup root);
 
-    void addViews(Context viewContext, RenderingEnv env, C component, ViewGroup root, View[] views);
+    void addViews(RenderingEnv env, C component, ViewGroup root, View[] views);
 
-    void endGroup(Context viewContext, RenderingEnv env, C component, ViewGroup root);
+    void endGroup(RenderingEnv env, C component, ViewGroup root);
 
 }

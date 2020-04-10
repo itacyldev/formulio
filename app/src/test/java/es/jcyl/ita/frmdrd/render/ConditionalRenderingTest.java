@@ -91,14 +91,15 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
 
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        env.setViewContext(ctx);
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
         for (String value : values) {
             entity.set(strPropName, value);
             // render view
-            View baseFormView = renderHelper.render(ctx, env, form);
+            View baseFormView = renderHelper.render(env, form);
             // find the field and check visibility
             View fieldView = ViewHelper.findInputFieldViewById(baseFormView, field);
             Assert.assertEquals("Unexpected visibility value for: " + value,
@@ -132,14 +133,16 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
 
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        env.setViewContext(ctx);
+
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
         for (Float value : values) {
             entity.set(longPropName, value);
             // render view
-            View baseFormView = renderHelper.render(ctx, env, form);
+            View baseFormView = renderHelper.render(env, form);
             // find the field and check visibility
             View fieldView = ViewHelper.findInputFieldViewById(baseFormView, field);
             Assert.assertEquals("Unexpected visibility value for: " + value,
@@ -175,7 +178,9 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
 
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        env.setViewContext(ctx);
+
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
@@ -183,7 +188,7 @@ public class ConditionalRenderingTest {
             entity.set(longPropName, value);
             entity.set(strPropName, strValues[i]);
             // render view
-            View baseFormView = renderHelper.render(ctx, env, form);
+            View baseFormView = renderHelper.render(env, form);
             // find the field and check visibility
             View fieldView = ViewHelper.findInputFieldViewById(baseFormView, field);
             Assert.assertEquals("Unexpected visibility value for: " + value,
@@ -222,14 +227,16 @@ public class ConditionalRenderingTest {
         // set field render expression
         form.setRenderExpression(exprFactory.create(renderExpression));
 
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        env.setViewContext(ctx);
+
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
         for (Float value : values) {
             entity.set(longPropName, value);
             // render view
-            View baseFormView = renderHelper.render(ctx, env, form);
+            View baseFormView = renderHelper.render(env, form);
             boolean isFormVisible = ViewHelper.isVisible(baseFormView);
             // check form render visibility
             Assert.assertEquals("Unexpected visibility value for Form in value: " + value,

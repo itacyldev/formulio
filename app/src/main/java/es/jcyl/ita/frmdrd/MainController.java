@@ -16,14 +16,12 @@ package es.jcyl.ita.frmdrd;
  */
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -66,10 +64,8 @@ public class MainController {
 
     private static MainController _instance;
 
-    // Android context, view and activity
-    private android.content.Context viewContext;
+    // Root view element
     private View viewRoot;
-    private Activity activity;
 
     // Global context and root component
     private CompositeContext globalContext;
@@ -116,10 +112,13 @@ public class MainController {
     /**
      * Implements navigation to a new view
      *
-     * @param andContext
-     * @param formId:    form configuration to load
+     * @param formId: form configuration to load
      * @param params
      */
+//    public void navigate(String formId, @Nullable Map<String, Serializable> params) {
+//        navigate(this.viewContext, formId, params);
+//
+//    }
     public void navigate(android.content.Context andContext, String formId,
                          @Nullable Map<String, Serializable> params) {
 
@@ -153,7 +152,6 @@ public class MainController {
         formActivity.setRouter(this.router);
         formActivity.setFormController(this.formController);
         // set the View elements to controllers
-        this.activity = formActivity.getActivity();
         this.router.registerActivity(formActivity.getActivity());
         this.formController.setContentView(formActivity.getContentView());
     }
@@ -184,13 +182,12 @@ public class MainController {
      * @return
      */
     public View renderView(Context viewContext) {
-        setViewContext(viewContext);
-        renderingEnv.initialize();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
+
+        renderingEnv.initialize();
+        renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
-        this.viewRoot = renderHelper.render(viewContext, renderingEnv, this.uiView);
-        // add references to form context directly from global context
-//        globalContext.addAllContext(execEnvironment.getContextMap().getContexts());
+        this.viewRoot = renderHelper.render(renderingEnv, this.uiView);
         return this.viewRoot;
     }
 
@@ -205,7 +202,7 @@ public class MainController {
 
         InputFieldView fieldView = viewContext.findInputFieldViewById(component.getId());
         // render the new Android view for the component and replace it
-        View newView = renderHelper.render(this.viewContext, this.renderingEnv, component);
+        View newView = renderHelper.render(this.renderingEnv, component);
         renderHelper.replaceView(fieldView, newView);
 
         if (!reactiveCall) {
@@ -219,20 +216,15 @@ public class MainController {
      * @param component: ui component that fires the changes in the View.
      */
     public void updateDependants(UIComponent component) {
-        renderHelper.renderDeps(this.viewContext, this.renderingEnv, component);
+        renderHelper.renderDeps(this.renderingEnv, component);
     }
-
-    private void setViewContext(android.content.Context viewContext) {
-        this.viewContext = viewContext;
-    }
-
 
     /**
      * Re-renders last view to show validation errors
      */
     public void renderBack() {
         // render again the form to show validation error
-        View newView = renderHelper.render(this.viewContext, renderingEnv, formController.getView());
+        View newView = renderHelper.render(renderingEnv, formController.getView());
 
         // the View elements to replace hang from the content view of the formController
         ViewGroup contentView = formController.getContentView();
@@ -250,10 +242,6 @@ public class MainController {
     /*********************************************/
 
 
-    public Context getViewContext() {
-        return viewContext;
-    }
-
     public View getViewRoot() {
         return viewRoot;
     }
@@ -262,16 +250,8 @@ public class MainController {
         return globalContext;
     }
 
-    public UIView getUiView() {
-        return uiView;
-    }
-
     public FormController getFormController() {
         return formController;
-    }
-
-    public ViewRenderHelper getRenderHelper() {
-        return renderHelper;
     }
 
     public RenderingEnv getRenderingEnv() {
@@ -286,7 +266,7 @@ public class MainController {
         return router;
     }
 
-    /*** TODO: Just For Testing purposes until we setup dagger to Dep. injection**/
+    /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
     public void setFormController(FormController fc, UIView view) {
         this.formController = fc;
         this.uiView = view;

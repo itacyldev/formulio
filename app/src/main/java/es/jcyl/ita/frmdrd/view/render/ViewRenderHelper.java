@@ -40,11 +40,11 @@ import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
  */
 public class ViewRenderHelper {
 
-    public View render(Context viewContext, RenderingEnv env, UIComponent root) {
-        return render(viewContext, env, root, true);
+    public View render(RenderingEnv env, UIComponent root) {
+        return render(env, root, true);
     }
 
-    private View render(Context viewContext, RenderingEnv env, UIComponent root, boolean checkDeferred) {
+    private View render(RenderingEnv env, UIComponent root, boolean checkDeferred) {
         String rendererType = root.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
         // enrich the execution environment with current form's context
@@ -53,9 +53,9 @@ public class ViewRenderHelper {
         View rootView;
         if (checkDeferred && hasDeferredExpression(root, env)) {
             // insert a delegated view component as placeholder to render later
-            rootView = createDeferredView(viewContext, root, env);
+            rootView = createDeferredView(env.getViewContext(), root, env);
         } else {
-            rootView = renderer.render(viewContext, env, root);
+            rootView = renderer.render(env, root);
             if (root instanceof UIForm) {
                 // configure viewContext
                 ((UIForm) root).getContext().setView(rootView);
@@ -72,19 +72,19 @@ public class ViewRenderHelper {
             if (root.isRenderChildren() && CollectionUtils.isNotEmpty(root.getChildren())) {
                 // recursively render children components
                 ViewGroup groupView = (ViewGroup) rootView;
-                gRenderer.initGroup(viewContext, env, root, groupView);
+                gRenderer.initGroup(env, root, groupView);
                 int numKids = root.getChildren().size();
                 View[] views = new View[numKids];
                 for (int i = 0; i < numKids; i++) {
-                    views[i] = render(viewContext, env, root.getChildren().get(i));
+                    views[i] = render(env, root.getChildren().get(i));
                 }
-                gRenderer.addViews(viewContext, env, root, groupView, views);
-                gRenderer.endGroup(viewContext, env, root, groupView);
+                gRenderer.addViews(env, root, groupView, views);
+                gRenderer.endGroup(env, root, groupView);
             }
         }
         if (checkDeferred && root.getParent() == null) {
             // last step in the tree walk, process delegates when we're back in the view root
-            processDeferredViews(viewContext, env);
+            processDeferredViews(env);
         }
         return rootView;
     }
@@ -129,10 +129,9 @@ public class ViewRenderHelper {
      * It uses a DAG tree to evaluate the expressions following their dependencies so the final
      * result is correct.
      *
-     * @param viewContext
-     * @param env
+     * @param env: rendering environment
      */
-    private void processDeferredViews(Context viewContext, RenderingEnv env) {
+    private void processDeferredViews(RenderingEnv env) {
         // use dag to walk the tree just one time per node
         ViewDAG viewDAG = env.getViewDAG();
         Map<String, DeferredView> deferredViews = env.getDeferredViews();
@@ -149,7 +148,7 @@ public class ViewRenderHelper {
                     // remove from deferred elements
                     deferredViews.remove(defView);
                     // render the view and replace deferred element
-                    View newView = this.render(viewContext, env, node.getComponent(), false);
+                    View newView = this.render(env, node.getComponent(), false);
                     replaceView(defView, newView);
                 }
             }
@@ -159,7 +158,7 @@ public class ViewRenderHelper {
     /**
      * Given an element in current view, renders all the dependant elements
      */
-    public void renderDeps(Context viewContext, RenderingEnv env, UIComponent component) {
+    public void renderDeps(RenderingEnv env, UIComponent component) {
         // get element dags
         ViewDAG viewDAG = env.getViewDAG();
         if (viewDAG == null || viewDAG.getDags().size() == 0) {
@@ -192,7 +191,7 @@ public class ViewRenderHelper {
                         ((DynamicComponent) view).load(env);
                     } else {
                         // re-render and replace view
-                        View newView = this.render(viewContext, env, node.getComponent(), false);
+                        View newView = this.render(env, node.getComponent(), false);
                         replaceView(view, newView);
                     }
                 }

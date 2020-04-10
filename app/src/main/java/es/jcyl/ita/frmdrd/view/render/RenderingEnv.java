@@ -19,6 +19,7 @@ package es.jcyl.ita.frmdrd.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import android.content.Context;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class RenderingEnv {
     private ViewDAG viewDAG;
     private Map<String, DeferredView> deferredViews;
     private ViewUserActionInterceptor userActionInterceptor;
+    private Context viewContext; // current view Android Context
 
     public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
@@ -145,6 +147,14 @@ public class RenderingEnv {
     public View getViewRoot() {
         MainController mc = MainController.getInstance();
         return mc.getViewRoot();
+    }
+
+    public void setViewContext(Context viewContext) {
+        this.viewContext = viewContext;
+    }
+
+    public Context getViewContext() {
+        return viewContext;
     }
 }
 

@@ -15,10 +15,10 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
-import android.content.Context;
 import android.view.View;
 
-import dagger.Component;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
@@ -31,29 +31,28 @@ public abstract class BaseRenderer<C extends UIComponent> implements Renderer<C>
 
     protected ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
-    public final View render(Context viewContext, RenderingEnv env, C component) {
-        View baseView = createBaseView(viewContext, env, component);
+    public final View render(RenderingEnv env, C component) {
+        View baseView = createBaseView(env, component);
         // check render condition
         boolean isRendered = component.isRendered(env.getContext());
         baseView.setVisibility(isRendered ? View.VISIBLE : View.GONE);
         if (!isRendered) {
             return baseView;
         }
-        setupView(baseView, env, component);
+        setupView(env, baseView, component);
         return baseView;
     }
 
     /**
      * Create a base view from context and component information to view used as placeholder in the form view
      *
-     * @param viewContext
      * @param env
      * @param component
      * @return
      */
-    protected abstract View createBaseView(Context viewContext, RenderingEnv env, C component);
+    protected abstract View createBaseView(RenderingEnv env, C component);
 
-    protected abstract void setupView(View baseView, RenderingEnv env, C component);
+    protected abstract void setupView(RenderingEnv env, View baseView, C component);
 
     /**
      * Calculates the tag for the GroupView component that contains all the input, so when a partial
@@ -68,5 +67,24 @@ public abstract class BaseRenderer<C extends UIComponent> implements Renderer<C>
         return formId + ":" + c.getId();
     }
 
+    /**
+     * Tries to retrieve the component value first accessing the form context and then using
+     * global context
+     *
+     * @param component
+     * @param env
+     * @return
+     */
+    protected <T> T getValue(C component, RenderingEnv env, Class<T> clazz) {
+        Object value = component.getValue(env.getContext());
+        if (value == null) {
+            return handleNullValue(component);
+        }
+        return (T) ConvertUtils.convert(value, clazz);
+    }
+
+    protected <T> T handleNullValue(C component) {
+        return null;
+    }
 
 }

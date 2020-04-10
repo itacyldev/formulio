@@ -15,13 +15,10 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
-import android.content.ComponentCallbacks;
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -29,15 +26,15 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 public abstract class BaseGroupRenderer<C extends UIComponent> extends BaseRenderer<C> {
 
     // default implementations to avoid boilerplate code
-    public void initGroup(Context viewContext, RenderingEnv env, C component, ViewGroup root) {
+    public void initGroup(RenderingEnv env, C component, ViewGroup root) {
     }
 
 
-    public void addViews(Context viewContext, RenderingEnv env, C component, ViewGroup root, View[] views) {
+    public void addViews(RenderingEnv env, C component, ViewGroup root, View[] views) {
     }
 
 
-    public void endGroup(Context viewContext, RenderingEnv env, C component, ViewGroup root) {
+    public void endGroup(RenderingEnv env, C component, ViewGroup root) {
 
     }
 }

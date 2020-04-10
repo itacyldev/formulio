@@ -1,6 +1,5 @@
 package es.jcyl.ita.frmdrd.ui.components.select;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -16,11 +15,10 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -46,14 +44,14 @@ public class SelectRenderer extends FieldRenderer {
 
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIField component) {
-       LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
+    protected View createBaseView(RenderingEnv env, UIField component) {
+        LinearLayout baseView = (LinearLayout) View.inflate(env.getViewContext(),
                 R.layout.tool_alphaedit_text, null);
-        return createInputFieldView(viewContext, baseView, component);
+        return createInputFieldView(env.getViewContext(), baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIField component) {
+    protected void setupView(RenderingEnv env, View baseView, UIField component) {
         final TextView fieldLabel = (TextView) baseView
                 .findViewById(R.id.field_layout_name);
         fieldLabel.setText(component.getLabel());
@@ -101,7 +99,8 @@ public class SelectRenderer extends FieldRenderer {
     }
 
     @Override
-    protected <T> T handleNullValue(Object value) {
+    protected <T> T handleNullValue(UIField component) {
         return (T) EMPTY_STRING;
     }
+
 }

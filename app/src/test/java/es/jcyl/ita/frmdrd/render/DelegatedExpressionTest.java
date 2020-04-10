@@ -36,6 +36,7 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
@@ -96,10 +97,11 @@ public class DelegatedExpressionTest {
 
         // set entity in forms context
         form.getContext().setEntity(entity);
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController());
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        env.setViewContext(ctx);
         env.setViewDAG(viewDAG);
         // walk the tree executing expressions
-        View baseFormView = renderHelper.render(ctx, env, form.getParent());
+        View baseFormView = renderHelper.render(env, form.getParent());
 
         System.out.println("-------------------");
         // check dependencies chain f1, f2, f3 and f4 must have the same value

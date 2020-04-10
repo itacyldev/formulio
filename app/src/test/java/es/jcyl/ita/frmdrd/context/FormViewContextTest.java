@@ -63,9 +63,10 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextUtils.createGlobalContext();
         RenderingEnv env = new RenderingEnv(gCtx, null);
+        env.setViewContext(ctx);
 
         // render view to create android view components
-        View formView = renderHelper.render(ctx, env, form);
+        View formView = renderHelper.render(env, form);
 
         // create view context to access view elements
         FormViewContext fvContext = new FormViewContext(form, formView);
@@ -94,9 +95,10 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextUtils.createGlobalContext();
         RenderingEnv env = new RenderingEnv(gCtx, null);
+        env.setViewContext(ctx);
 
         // render view to create android view components
-        View formView = renderHelper.render(ctx, env, form);
+        View formView = renderHelper.render(env, form);
 
         // create view context to access view elements
         FormViewContext fvContext = new FormViewContext(form, formView);

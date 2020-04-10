@@ -112,4 +112,5 @@ public class FormListViewHandlerActivity extends AppCompatActivity implements Fo
     public ViewGroup getContentView() {
         return contentView;
     }
+
 }

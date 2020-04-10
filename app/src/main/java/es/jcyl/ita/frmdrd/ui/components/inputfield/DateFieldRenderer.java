@@ -50,14 +50,14 @@ import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
 public class DateFieldRenderer extends FieldRenderer {
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIField component) {
-        LinearLayout baseView = (LinearLayout) View.inflate(viewContext,
+    protected View createBaseView(RenderingEnv env, UIField component) {
+        LinearLayout baseView = (LinearLayout) View.inflate(env.getViewContext(),
                 R.layout.tool_alphaedit_date, null);
-        return createInputFieldView(viewContext, baseView, component);
+        return createInputFieldView(env.getViewContext(), baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIField component) {
+    protected void setupView(RenderingEnv env, View baseView, UIField component) {
 
         TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
                 TextView.class);
@@ -119,7 +119,8 @@ public class DateFieldRenderer extends FieldRenderer {
     }
 
     @Override
-    protected <T> T handleNullValue(Object value) {
+    protected <T> T handleNullValue(UIField component) {
         return (T) EMPTY_STRING;
     }
+
 }

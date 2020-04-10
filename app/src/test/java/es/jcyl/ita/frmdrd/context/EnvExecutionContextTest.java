@@ -77,13 +77,13 @@ public class EnvExecutionContextTest {
 
         // render the view and check de resulting context
         CompositeContext globalContext = new UnPrefixedCompositeContext();
-        RenderingEnv env = new RenderingEnv(globalContext, new ActionController());
-
+        RenderingEnv env = new RenderingEnv(globalContext, new ActionController(null, null));
+        env.setViewContext(ctx);
 
         // render the view
         ViewRenderHelper viewRenderer = new ViewRenderHelper();
 
-        View view = viewRenderer.render(ctx, env, fc.getView());
+        View view = viewRenderer.render( env, fc.getView());
         Assert.assertNotNull(env.getFormContext().getViewContext());
         Assert.assertNotNull(env.getFormContext().getEntityContext());
 

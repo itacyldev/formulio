@@ -1,8 +1,6 @@
 package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
-import android.content.Context;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -16,12 +14,11 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -47,14 +44,14 @@ public class TextFieldRenderer extends FieldRenderer {
 
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIField component) {
-        LinearLayout baseView = ViewHelper.inflate(viewContext,
+    protected View createBaseView(RenderingEnv env, UIField component) {
+        LinearLayout baseView = ViewHelper.inflate(env.getViewContext(),
                 R.layout.tool_alphaedit_text, LinearLayout.class);
-        return createInputFieldView(viewContext, baseView, component);
+        return createInputFieldView(env.getViewContext(), baseView, component);
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIField component) {
+    protected void setupView(RenderingEnv env, View baseView, UIField component) {
         TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
                 TextView.class);
         fieldLabel.setText(component.getLabel());
@@ -102,7 +99,8 @@ public class TextFieldRenderer extends FieldRenderer {
     }
 
     @Override
-    protected <T> T handleNullValue(Object value) {
+    protected <T> T handleNullValue(UIField component) {
         return (T) EMPTY_STRING;
     }
+
 }

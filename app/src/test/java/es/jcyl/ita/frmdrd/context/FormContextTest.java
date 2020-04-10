@@ -132,6 +132,7 @@ public class FormContextTest {
         // configure the context as the MainController would do
         CompositeContext gCtx = ContextUtils.createGlobalContextWithParam("entityId", entity.getId());
         RenderingEnv env = new RenderingEnv(gCtx, null);
+        env.setViewContext(ctx);
 
         // create a mock repository, set to form and load the entity
         EditableRepository mockRepo = mock(EditableRepository.class);
@@ -144,7 +145,7 @@ public class FormContextTest {
 
         // render view to create android view components and viewContext
         ViewRenderHelper renderHelper = new ViewRenderHelper();
-        renderHelper.render(ctx, env, form);
+        renderHelper.render(env, form);
 
         // check each entity property is correctly set in the form fields
         for (Map.Entry<String, Object> prop : entity.getProperties().entrySet()) {

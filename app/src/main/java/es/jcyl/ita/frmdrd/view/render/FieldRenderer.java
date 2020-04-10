@@ -32,23 +32,6 @@ public abstract class FieldRenderer extends BaseRenderer<UIField> {
 
     protected static final Object EMPTY_STRING = "";
 
-    /**
-     * Tries to retrieve the component value first accessing the form context and then using
-     * global context
-     *
-     * @param component
-     * @param env
-     * @return
-     */
-    protected <T> T getValue(UIComponent component, RenderingEnv env, Class<T> clazz) {
-        Object value = component.getValue(env.getContext());
-        if (value == null) {
-            return handleNullValue(value);
-        }
-        return (T) ConvertUtils.convert(value, clazz);
-    }
-
-    protected abstract <T> T handleNullValue(Object value);
 
     /**
      * Calculates the String to tag the view component that stores the user input

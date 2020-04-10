@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.activities;
+package es.jcyl.ita.frmdrd.ui.components.link;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,26 +15,22 @@ package es.jcyl.ita.frmdrd.view.activities;
  * limitations under the License.
  */
 
-import android.app.Activity;
-import android.content.Context;
-import android.view.ViewGroup;
-
-import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.router.Router;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * User navigation component
  */
-public interface FormActivity<F extends FormController> {
+public class UILink extends UIComponent {
 
-    void setFormController(F formController);
+    private String route;
 
-    void setRouter(Router router);
+    public String getRoute() {
+        return route;
+    }
 
-    void setRenderingEnv(RenderingEnv env);
-
-    Activity getActivity();
-
-    ViewGroup getContentView();
+    public void setRoute(String route) {
+        this.route = route;
+    }
 }

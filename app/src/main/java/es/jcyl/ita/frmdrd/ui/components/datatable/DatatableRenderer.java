@@ -1,6 +1,5 @@
 package es.jcyl.ita.frmdrd.ui.components.datatable;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,9 +32,9 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 public class DatatableRenderer extends BaseRenderer<UIDatatable> {
 
     @Override
-    protected View createBaseView(Context viewContext, RenderingEnv env, UIDatatable component) {
+    protected View createBaseView(RenderingEnv env, UIDatatable component) {
         UIDatatable dtComponent = (UIDatatable) component;
-        DatatableLayout datatableView = (DatatableLayout) View.inflate(viewContext,
+        DatatableLayout datatableView = (DatatableLayout) View.inflate(env.getViewContext(),
                 R.layout.component_datatable_layout, null);
         datatableView.setDatatable(dtComponent);
         datatableView.setTag(getBaseViewTag(component));
@@ -43,7 +42,7 @@ public class DatatableRenderer extends BaseRenderer<UIDatatable> {
     }
 
     @Override
-    protected void setupView(View baseView, RenderingEnv env, UIDatatable component) {
+    protected void setupView(RenderingEnv env, View baseView, UIDatatable component) {
         UIDatatable dtComponent = (UIDatatable) component;
         dtComponent.getRepo().setContext(env.getContext());
         DatatableLayout datatableView = (DatatableLayout) baseView;

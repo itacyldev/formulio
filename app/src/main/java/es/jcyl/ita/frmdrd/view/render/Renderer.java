@@ -26,6 +26,6 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public interface Renderer<C extends UIComponent>{
 
-    View render (Context viewContext, RenderingEnv env, C component);
+    View render (RenderingEnv env, C component);
 
 }
