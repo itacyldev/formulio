@@ -26,6 +26,7 @@ public class UILink extends UIComponent {
 
     private static final String LINK = "link";
     private String route;
+    private UIParam[] params;
 
     @Override
     public String getRendererType() {
@@ -38,5 +39,18 @@ public class UILink extends UIComponent {
 
     public void setRoute(String route) {
         this.route = route;
+    }
+
+    public UIParam[] getParams() {
+        return params;
+    }
+
+    public void setParams(UIParam[] params) {
+        this.params = params;
+    }
+
+
+    public boolean hasParams() {
+        return this.params != null && this.params.length > 0;
     }
 }

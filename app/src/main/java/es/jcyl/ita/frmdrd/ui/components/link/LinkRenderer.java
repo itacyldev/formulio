@@ -15,17 +15,21 @@ package es.jcyl.ita.frmdrd.ui.components.link;
  * limitations under the License.
  */
 
+import android.text.Html;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.apache.commons.lang3.RandomUtils;
 
+import java.io.Serializable;
+
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -42,6 +46,8 @@ public class LinkRenderer extends BaseRenderer<UILink> {
         ConstraintLayout baseView = ViewHelper.inflate(env.getViewContext(),
                 R.layout.component_placeholders, ConstraintLayout.class);
         TextView linkView = (TextView) baseView.findViewById(R.id.textViewLink);
+        // remove view from parent
+        ((ViewGroup) linkView.getParent()).removeView(linkView);
         // set randomId
         linkView.setId(RandomUtils.nextInt());
         return linkView;
@@ -51,13 +57,19 @@ public class LinkRenderer extends BaseRenderer<UILink> {
     protected void setupView(RenderingEnv env, View baseView, UILink component) {
         TextView linkView = (TextView) baseView;
         String value = getValue(component, env, String.class);
-        linkView.setText(String.format("<a>%s</a>", value));
+        linkView.setText(Html.fromHtml(String.format("<u>%s</u>", value)));
         linkView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
                     UserAction action = UserAction.navigate(env.getViewContext(), component, component.getRoute());
+                    if (component.hasParams()) {
+                        for (UIParam param : component.getParams()) {
+                            Object value = JexlUtils.eval(env.getContext(), param.getValue());
+                            action.addParam(param.getName(), (Serializable) value);
+                        }
+                    }
                     interceptor.doAction(action);
                 }
             }

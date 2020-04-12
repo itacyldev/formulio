@@ -18,7 +18,6 @@ import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
@@ -26,6 +25,7 @@ import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
+import es.jcyl.ita.frmdrd.ui.components.link.UIParam;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
@@ -77,8 +77,11 @@ public class DummyFormConfigParser extends FormConfigParser {
         loadConfig(result.getEdit());
         UILink link = new UILink();
         link.setId("link1");
-        link.setRoute(result.getList().getId());
-//        result.getEdit().getView().addChild(link);
+        link.setValueExpression(exprFactory.create("Going to 3332"));
+        link.setRoute(result.getEdit().getId());
+        UIParam param = new UIParam("entityId", exprFactory.create("3332"));
+        link.setParams(new UIParam[]{param});
+        result.getEdit().getView().addChild(link);
 
         loadConfig(result.getList());
 

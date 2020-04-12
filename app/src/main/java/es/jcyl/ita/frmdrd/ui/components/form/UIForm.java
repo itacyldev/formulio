@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.ui.components.form;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
@@ -180,7 +183,9 @@ public class UIForm extends UIComponent {
      */
     private Entity findEntity(Context globalContext, Object entityId) {
         if (this.repo instanceof EditableRepository) {
-            return ((EditableRepository) repo).findById(entityId);
+            // convert the entity Id if needed
+            Object pk = convertIfNeeded(repo.getMeta(), entityId);
+            return ((EditableRepository) repo).findById(pk);
         } else {
             // if there's a filter defined in the form, use the filter to find the entity
             if (this.filter == null) {
@@ -196,6 +201,28 @@ public class UIForm extends UIComponent {
                         "check the repofilter defined in the form [%s].", f.toString(), this.id));
             }
             return list.get(0);
+        }
+    }
+
+    /**
+     * Checks the type of the value received as entity Id against he meta
+     *
+     * @param meta
+     * @param entityId
+     * @return
+     */
+    private Object convertIfNeeded(EntityMeta meta, Object entityId) {
+        //
+        if (!meta.hasIdProperties()) {
+            return entityId;
+        } else {
+            // TODO: multicolumn support
+            Class pkType = meta.getIdProperties()[0].getType();
+            if (entityId.getClass() == pkType) {
+                return entityId;
+            } else {
+                return ConvertUtils.convert(entityId, pkType);
+            }
         }
     }
 
