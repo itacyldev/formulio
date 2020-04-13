@@ -28,14 +28,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.actions.ActionController;
+import es.jcyl.ita.frmdrd.builders.SelectDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -46,6 +50,8 @@ public class SelectRendererTest {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
+    SelectDataBuilder selectBuilder = new SelectDataBuilder();
+    EntityMetaDataBuilder meta = new EntityMetaDataBuilder();
 
     @BeforeClass
     public static void setUp() {
@@ -60,8 +66,8 @@ public class SelectRendererTest {
     @Test
     public void testSimpleSelect() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
 
         UISelect select = new UISelect();
@@ -81,7 +87,7 @@ public class SelectRendererTest {
         // check elements in the view
         SpinnerAdapter adapter = view.getInputView().getAdapter();
         Assert.assertNotNull(adapter);
-        Assert.assertEquals(expectedOptions, adapter.getCount());
+        Assert.assertEquals(expectedOptions, adapter.getCount()-1);// empty option was added by renderer
     }
 
     @Test
@@ -99,4 +105,6 @@ public class SelectRendererTest {
         Assert.assertNotNull(view);
         Assert.assertTrue(view.getVisibility() == View.GONE);
     }
+
+
 }

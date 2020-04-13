@@ -21,7 +21,6 @@ import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
@@ -93,8 +92,8 @@ public class UIForm extends UIComponent {
      * @param fields
      */
     private void findFields(UIComponent root, List<UIInputComponent> fields) {
-        if (root instanceof UIField) {
-            fields.add((UIField) root);
+        if (root instanceof UIInputComponent) {
+            fields.add((UIInputComponent) root);
         } else {
             if (root.hasChildren()) {
                 for (UIComponent c : root.getChildren()) {

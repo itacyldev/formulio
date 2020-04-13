@@ -37,6 +37,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  */
 
 public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
+    private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
 
     @Override
     protected int getComponentLayout() {
@@ -49,6 +50,8 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
 
         // create items from options
         List<UIOption> spinnerItems = new ArrayList<UIOption>();
+        // empty value option
+        spinnerItems.add(EMPTY_OPTION);
         if (component.getOptions() != null) {
             for (UIOption option : component.getOptions()) {
                 spinnerItems.add(option);
@@ -80,22 +83,16 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
     protected void setMessages(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
 
     }
-//
-//    public class OptionItem {
-//        String label;
-//        String value;
-//
-//        public OptionItem(String label, String value) {
-//            this.label = label;
-//            this.value = value;
-//        }
-//
-//        public String getLabel() {
-//            return label;
-//        }
-//
-//        public String getValue() {
-//            return value;
-//        }
-//    }
+
+    public static class EmptyOption extends UIOption {
+        public EmptyOption(String label, String value) {
+            super(label, value);
+        }
+
+        @Override
+        public String toString() {
+            return " ";
+        }
+    }
+
 }

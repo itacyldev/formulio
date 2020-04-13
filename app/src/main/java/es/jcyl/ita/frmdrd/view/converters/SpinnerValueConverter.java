@@ -20,6 +20,7 @@ import android.widget.Spinner;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 
 /**
@@ -28,8 +29,12 @@ import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 class SpinnerValueConverter implements ViewValueConverter<Spinner> {
     @Override
     public String getValueFromViewAsString(Spinner view) {
-        UIOption selectedItem = (UIOption) view.getSelectedItem();
-        return selectedItem.getValue();
+        if (!isSelected(view)) {
+            return null;
+        } else {
+            UIOption selectedItem = (UIOption) view.getSelectedItem();
+            return (selectedItem == null) ? null : selectedItem.getValue();
+        }
     }
 
     @Override
@@ -46,15 +51,32 @@ class SpinnerValueConverter implements ViewValueConverter<Spinner> {
 
     @Override
     public void setViewValueAsString(Spinner view, String value) {
-        // find the selected option
-        Adapter adapter = view.getAdapter();
-        int nOptions = adapter.getCount();
-        for (int i = 0; i < nOptions; i++) {
-            UIOption uiOption = (UIOption) adapter.getItem(i);
-            if (uiOption.getValue().equalsIgnoreCase(value)) {
-                view.setSelection(i);
-                break;
+        if (value == null) {
+            view.setSelection(0); // empty option
+        } else {
+            // find the selected option
+            Adapter adapter = view.getAdapter();
+            int nOptions = adapter.getCount();
+            view.setSelected(false);
+            // Empty option is added at position 0
+            for (int i = 1; i < nOptions; i++) {
+                UIOption uiOption = (UIOption) adapter.getItem(i);
+                if (uiOption.getValue().equalsIgnoreCase(value)) {
+                    view.setSelection(i);
+                    break;
+                }
             }
         }
+    }
+
+    /**
+     * Android spinners don't have an empyt value, there's and additional option to give this
+     * possibility. This methods checks if selected option is the emtpy-value one.
+     *
+     * @param spinner
+     * @return
+     */
+    private boolean isSelected(Spinner spinner) {
+        return !(spinner.getSelectedItem() instanceof SelectRenderer.EmptyOption);
     }
 }

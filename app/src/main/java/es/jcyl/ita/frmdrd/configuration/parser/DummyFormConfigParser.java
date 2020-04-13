@@ -14,6 +14,7 @@ import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.builders.FormControllerBuilder;
+import es.jcyl.ita.frmdrd.builders.SelectBuilder;
 import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
@@ -26,6 +27,7 @@ import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
 import es.jcyl.ita.frmdrd.ui.components.link.UIParam;
+import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
@@ -56,7 +58,7 @@ public class DummyFormConfigParser extends FormConfigParser {
     DataTableBuilder formGenerator = new DataTableBuilder();
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     FormControllerBuilder fcBuilder = new FormControllerBuilder();
-
+    SelectBuilder selectBuilder = new SelectBuilder();
     @Override
     public void parseFormConfig(String formConfigStr) {
 //        FormController fc1List = new FormListController("MyForm1", "Form number 1.");
@@ -83,6 +85,13 @@ public class DummyFormConfigParser extends FormConfigParser {
         link.setParams(new UIParam[]{param});
         result.getEdit().getView().addChild(link);
 
+        // add select to form an
+        UIForm uiForm = result.getEdit().getView().getForms().get(0);
+        for(int i=0; i <30;i++){
+            selectBuilder.addOption(""+i,""+i);
+        }
+        UISelect select = selectBuilder.withValue("${entity.it_profile}", Integer.class).withId("profileselect").build();
+        uiForm.addChild(select);
 
 
         loadConfig(result.getList());

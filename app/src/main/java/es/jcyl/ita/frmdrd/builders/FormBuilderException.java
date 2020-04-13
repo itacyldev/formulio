@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.select;
+package es.jcyl.ita.frmdrd.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,40 +15,12 @@ package es.jcyl.ita.frmdrd.ui.components.select;
  * limitations under the License.
  */
 
-import androidx.annotation.NonNull;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIOption {
-
-    private String label;
-    private String value;
-
-    public UIOption(String label, String value) {
-        this.label = label;
-        this.value = value;
+public class FormBuilderException extends RuntimeException {
+    public FormBuilderException(String msg) {
+        super(msg);
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return this.label;
-    }
 }

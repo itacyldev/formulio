@@ -64,7 +64,7 @@ public class FormEditViewHandlerActivity extends FragmentActivity implements For
 
         // add action buttons
         ViewGroup toolBar = findViewById(R.id.form_toolbar);
-        renderToolBar((ViewGroup) toolBar);
+        renderToolBar(toolBar);
 
         // check if there are messages to show
         UserMessagesHelper.showGlobalMessages(this, mc.getRouter());

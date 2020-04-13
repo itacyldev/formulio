@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.builders;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,19 +33,27 @@ public class SelectBuilder extends BaseInputBuilder<UISelect> {
         this.options = new ArrayList<UIOption>();
     }
 
+
     @Override
     protected UISelect emptyModel() {
         return new UISelect();
     }
 
 
+    public SelectBuilder withId(String id) {
+        this.baseModel.setId(id);
+        return this;
+    }
     public SelectBuilder addOption(String label, String value) {
         options.add(new UIOption(label, value));
-        return null;
+        return this;
     }
 
     @Override
     protected UISelect doBuild(UISelect baseModel) {
+        if(StringUtils.isBlank(this.baseModel.getId())){
+            throw new FormBuilderException("The id cannot be null!.");
+        }
         baseModel.setOptions(options.toArray(new UIOption[options.size()]));
         return baseModel;
     }

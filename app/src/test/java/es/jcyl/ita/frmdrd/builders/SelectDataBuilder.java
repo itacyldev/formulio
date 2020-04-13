@@ -69,7 +69,7 @@ public class SelectDataBuilder extends AbstractDataBuilder<UISelect> {
 
     public SelectDataBuilder withNumOptions(int num) {
         for (int i = 0; i < num; i++) {
-            String txt = RandomStringUtils.random(5);
+            String txt = RandomUtils.randomString(5);
             addOption(txt, txt);
         }
         return this;

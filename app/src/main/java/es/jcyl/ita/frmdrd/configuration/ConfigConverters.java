@@ -17,6 +17,8 @@ package es.jcyl.ita.frmdrd.configuration;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 import org.mini2Dx.beanutils.converters.DoubleConverter;
+import org.mini2Dx.beanutils.converters.FloatConverter;
+import org.mini2Dx.beanutils.converters.IntegerConverter;
 import org.mini2Dx.beanutils.converters.LongConverter;
 
 import java.util.Date;
@@ -43,8 +45,12 @@ public class ConfigConverters {
         CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings, false);
         ConvertUtils.register(boolConverter, Boolean.class);
         // set null as default value for number converters
+        ConvertUtils.register(new IntegerConverter(null), Integer.TYPE);
+        ConvertUtils.register(new IntegerConverter(null), Integer.class);
         ConvertUtils.register(new LongConverter(null), Long.TYPE);
         ConvertUtils.register(new LongConverter(null), Long.class);
+        ConvertUtils.register(new FloatConverter(null), Double.TYPE);
+        ConvertUtils.register(new FloatConverter(null), Double.class);
         ConvertUtils.register(new DoubleConverter(null), Double.TYPE);
         ConvertUtils.register(new DoubleConverter(null), Double.class);
 

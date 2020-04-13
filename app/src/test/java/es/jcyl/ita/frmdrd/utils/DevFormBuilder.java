@@ -28,8 +28,8 @@ import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -46,7 +46,7 @@ public class DevFormBuilder {
     public static FormEditController createFormEditController(Context viewContext, UIForm mainForm, UIForm... forms) {
         UIView view = new UIView("v1");
         view.addChild(mainForm);
-        if(forms != null){
+        if (forms != null) {
             for (UIForm form : forms) {
                 view.addChild(form);
             }
@@ -159,6 +159,13 @@ public class DevFormBuilder {
             }
             // load entity using form controller
             mc.getFormController().load(mc.getGlobalContext());
+            return this;
+        }
+
+        public CreateOneFieldForm loadEntity(Entity entity) {
+            checkInvokeHasBeenCalled();
+            // load entity using form controller
+            this.form.getContext().setEntity(entity);
             return this;
         }
 

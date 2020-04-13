@@ -32,13 +32,18 @@ public abstract class BaseInputBuilder<C extends UIComponent> {
     }
 
 
-    public BaseInputBuilder<C> withValue(String valueExpression) {
-        this.baseModel.setValueExpression(exprFactory.create(valueExpression));
+    public BaseInputBuilder<C> withValue(String valueExpression, Class expectedType) {
+        this.baseModel.setValueExpression(exprFactory.create(valueExpression, expectedType));
         return this;
     }
 
     public BaseInputBuilder<C> withRender(String renderExpression) {
         this.baseModel.setRenderExpression(exprFactory.create(renderExpression));
+        return this;
+    }
+
+    public BaseInputBuilder<C> withId(String id) {
+        this.baseModel.setId(id);
         return this;
     }
 
