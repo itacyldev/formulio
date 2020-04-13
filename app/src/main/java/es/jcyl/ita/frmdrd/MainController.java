@@ -80,6 +80,7 @@ public class MainController {
     // navigation control
     private Router router;
     private static HashMap<Class, Class> staticMap;
+    private State state;
 
 
     public static MainController getInstance() {
@@ -113,10 +114,17 @@ public class MainController {
      */
     public void navigate(android.content.Context andContext, String formId,
                          @Nullable Map<String, Serializable> params) {
+        saveState();
+
         setupParamsContext(params);
-        // get form configuration for given formId and load data
-        formController = formControllerFactory.getController(formId);
-        formController.load(globalContext);
+        try {
+            // get form configuration for given formId and load data
+            this.formController = formControllerFactory.getController(formId);
+            this.formController.load(globalContext);
+        } catch (Exception e) {
+            restoreState();
+            throw e;
+        }
 
         // get the activity class for current controller
         Class activityClazz = getViewImpl(formController);
@@ -125,6 +133,17 @@ public class MainController {
         Intent intent = new Intent(andContext, activityClazz);
         andContext.startActivity(intent);
     }
+
+    private void saveState() {
+        this.state = new State(this.formController, globalContext.getContext("params"));
+    }
+
+    private void restoreState() {
+        this.formController = this.state.fc;
+        globalContext.addContext(this.state.params);
+        this.formController.load(globalContext);
+    }
+
 
     private void setupParamsContext(@Nullable Map<String, Serializable> params) {
         BasicContext pContext = new BasicContext("params");
@@ -177,7 +196,7 @@ public class MainController {
         renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.disableInterceptors();
-        View view =  renderHelper.render(renderingEnv, uiView);
+        View view = renderHelper.render(renderingEnv, uiView);
         renderingEnv.enableInterceptors();
         // set the root View element to renderingEnv for re-renders in the same view
         renderingEnv.setViewRoot(view);
@@ -234,6 +253,15 @@ public class MainController {
         renderingEnv.enableInterceptors();
     }
 
+    public class State {
+        FormController fc;
+        es.jcyl.ita.crtrepo.context.Context params;
+
+        public State(FormController fc, es.jcyl.ita.crtrepo.context.Context params) {
+            this.fc = fc;
+            this.params = params;
+        }
+    }
     /*********************************************/
     /***  GETTERS TO ACCESS SHARED INFORMATION */
     /*********************************************/
@@ -262,5 +290,6 @@ public class MainController {
     public void setFormController(FormController fc, UIView view) {
         this.formController = fc;
     }
+
 
 }

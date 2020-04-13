@@ -53,8 +53,8 @@ public class Router {
         if ("back".equalsIgnoreCase(route)) {
             this.back(context);
         } else {
-            recordHistory(route, params);
             mc.navigate(context, route, params);
+            recordHistory(route, params);
         }
     }
 
