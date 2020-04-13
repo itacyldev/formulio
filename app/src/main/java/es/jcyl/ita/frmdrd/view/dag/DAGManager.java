@@ -146,13 +146,21 @@ public class DAGManager {
                             DirectedAcyclicGraph dag = null;
                             if (dags.containsKey(componentId)) {
                                 dag = dags.get(componentId);
-                                dag.addVertex(dependingNode);
-                                dag.addEdge(dependingNode, componentNode);
+                                if (!dag.containsVertex(dependingNode)) {
+                                    dag.addVertex(dependingNode);
+                                }
+                                if (!dag.containsEdge(dependingNode, componentNode)) {
+                                    dag.addEdge(dependingNode, componentNode);
+                                }
                                 dags.put(dependingComponentId, dag);
                             } else {
                                 dag = getDagComponent(dependingComponentId, dags);
-                                dag.addVertex(componentNode);
-                                dag.addEdge(dependingNode, componentNode);
+                                if (!dag.containsVertex(componentNode)) {
+                                    dag.addVertex(componentNode);
+                                }
+                                if (!dag.containsEdge(dependingNode, componentNode)) {
+                                    dag.addEdge(dependingNode, componentNode);
+                                }
                                 dags.put(componentId, dag);
                             }
                             buildComponentDag(dependingComponentId, dags, components);
@@ -164,7 +172,7 @@ public class DAGManager {
     }
 
     /**
-     * Given an variable reference given in an expressión like view.f1, entity.f1, form1.view.f2, etc.
+     * Given an variable reference given in an expression like view.f1, entity.f1, form1.view.f2, etc.
      * returns the absolute id of the referenced element: "form1.f1" if it's nested inside a form or
      * "f1" if it is not.
      *
