@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.actions.handlers;
  * limitations under the License.
  */
 
+import android.widget.Toast;
+
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.frmdrd.MainController;
@@ -22,7 +24,9 @@ import es.jcyl.ita.frmdrd.actions.ActionHandler;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.UserActionException;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormException;
 import es.jcyl.ita.frmdrd.router.Router;
+import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -49,6 +53,10 @@ public class NavigateActionHandler extends AbstractActionHandler implements Acti
                     "the attribute of the component is properly set and references a valid " +
                     "formId.", action.getOrigin()));
         }
-        router.navigate(action.getViewContext(), formId, action.getParams());
+        try {
+            router.navigate(action.getViewContext(), formId, action.getParams());
+        }catch (FormException e){
+            UserMessagesHelper.toast(action.getViewContext(), e.getLocalizedMessage());
+        }
     }
 }

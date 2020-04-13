@@ -172,6 +172,9 @@ public class UIForm extends UIComponent {
         } else {
             // what if its null? throw an Exception?
             currentEntity = findEntity(globalCtx, entityId);
+            if(currentEntity == null){
+                throw new FormException("No entity found with the id: " + entityId);
+            }
         }
         this.getContext().setEntity(currentEntity);
     }
