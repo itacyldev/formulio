@@ -33,7 +33,7 @@ public class ViewRenderer extends BaseRenderer implements GroupRenderer {
 
     protected View createBaseView(RenderingEnv env, UIComponent component) {
         // TODO: provide different layout implementors
-        return View.inflate(env.getViewContext(), R.layout.view_layout, null);
+        return View.inflate(env.getViewContext(), R.layout.component_view, null);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ViewRenderer extends BaseRenderer implements GroupRenderer {
     @Override
     public void addViews(RenderingEnv env, UIComponent component, ViewGroup root, View[] views) {
         for (View view : views) {
-            ((ViewGroup) root).addView(view);
+            root.addView(view);
         }
     }
 
