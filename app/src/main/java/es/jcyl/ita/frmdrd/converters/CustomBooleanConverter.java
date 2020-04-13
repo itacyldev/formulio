@@ -15,6 +15,7 @@ package es.jcyl.ita.frmdrd.converters;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.ConversionException;
 import org.mini2Dx.beanutils.ConvertUtils;
 import org.mini2Dx.beanutils.converters.AbstractConverter;
 
@@ -175,13 +176,15 @@ public class CustomBooleanConverter extends AbstractConverter {
             } else if (isNumeric(value)) {
                 Float fValue = (Float) ConvertUtils.convert(value, Float.class);
                 return (T) Boolean.valueOf(fValue > 0);
-            } else {
+            } else if (value instanceof String) {
                 // All the values in the trueStrings and falseStrings arrays are
                 // guaranteed to be lower-case. By converting the input value
                 // to lowercase too, we can use the efficient String.equals method
                 // instead of the less-efficient String.equalsIgnoreCase method.
                 String stringValue = value.toString().trim().toLowerCase();
                 return (T) toBoolean(type, stringValue);
+            } else {
+                throw new IllegalArgumentException("Unsupported data type: " + value.getClass());
             }
         }
         throw conversionException(type, value);
@@ -220,5 +223,13 @@ public class CustomBooleanConverter extends AbstractConverter {
             dst[i] = src[i].toLowerCase();
         }
         return dst;
+    }
+
+    @Override
+    protected <T> T handleMissing(Class<T> type) {
+        if (!isNumeric(type) && type != String.class) {
+            throw new ConversionException("Unsupported class: " + type.getName());
+        }
+        return super.handleMissing(type);
     }
 }

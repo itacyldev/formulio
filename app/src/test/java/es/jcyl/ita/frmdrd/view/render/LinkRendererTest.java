@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -34,19 +34,20 @@ import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
-import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
-import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  */
 @RunWith(RobolectricTestRunner.class)
-public class SelectRendererTest {
+public class LinkRendererTest {
 
+    FormDataBuilder formBuilder = new FormDataBuilder();
+    EntityDataBuilder entityBuilder;
+    EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
@@ -61,32 +62,41 @@ public class SelectRendererTest {
      * the view is not visible
      */
     @Test
-    public void testSimpleSelect() {
+    public void testSimpleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
         RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
         env.setViewContext(ctx);
 
-        UISelect select = new UISelect();
-        select.setId(RandomUtils.randomString(4));
-        View view = renderHelper.render(env, select);
+        // link component
+        UILink link = new UILink();
+        link.setId(RandomUtils.randomString(4));
+        link.setRoute("form1");
 
-        Assert.assertNotNull(view);
+        View linkView = renderHelper.render(env, link);
+
+        // check there's a TextView element
+        Assert.assertNotNull(linkView);
 
     }
     @Test
-    public void testNotVisibleSelect() {
+    public void testNotVisibleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
         RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
         env.setViewContext(ctx);
 
-        UISelect select = new UISelect();
-        select.setId(RandomUtils.randomString(4));
-        select.setRenderExpression(exprFactory.create("false"));
-        View view = renderHelper.render(env, select);
+        // link component
+        UILink link = new UILink();
+        link.setId(RandomUtils.randomString(4));
+        link.setRenderExpression(exprFactory.create("false"));
+        link.setRoute("form1");
 
-        Assert.assertNotNull(view);
-        Assert.assertTrue(view.getVisibility() == View.GONE);
+        View linkView = renderHelper.render(env, link);
+
+        // check there's a TextView element
+        Assert.assertNotNull(linkView);
+        Assert.assertTrue(linkView.getVisibility() == View.GONE);
+
     }
 }

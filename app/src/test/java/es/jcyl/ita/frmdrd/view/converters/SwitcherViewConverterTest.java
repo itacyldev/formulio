@@ -16,16 +16,24 @@ package es.jcyl.ita.frmdrd.view.converters;
  */
 
 import android.content.Context;
+import android.view.View;
 import android.widget.Switch;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConversionException;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Date;
+
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
+import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
+import es.jcyl.ita.crtrepo.types.ByteArray;
+import es.jcyl.ita.crtrepo.types.Geometry;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
@@ -86,34 +94,35 @@ public class SwitcherViewConverterTest {
             AssertUtils.assertEquals(expected[i], actual);
         }
     }
-//
-//    @Test
-//    public void testSupportedNumeric() {
-//        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-//        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
-//                .withValueBindingExpression("true", Boolean.class) // literal expression
-//                .build();
-//        // prepare data/state
-//        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
-//                .invoke(ctx, true)
-//                .withField(field)
-//                .render();
-//
-//        // Test all different kinds of types
-//        Object[] values = {1, 1.1, 2, -1.1, 0, 0.5, -0.5};
-//        Object[] expected = {true, true, true, false, false, true, false};
-//
-//        SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
-//        for (int i = 0; i < values.length; i++) {
-//            InputFieldView baseView = ViewHelper.findInputFieldViewById(recipe.view, field);
-//            Switch inputView = (Switch) baseView.getInputView();
-//
-//            // transform the value using the converter and check the result against the original value
-//            conv.setViewValue(inputView, values[i]);
-//            Object actual = conv.getValueFromView(inputView, expected.getClass());
-//            AssertUtils.assertEquals(expected[i], actual);
-//        }
-//    }
+
+    @Test
+    public void testSupportedNumeric() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+                .withValueBindingExpression("true", Boolean.class) // literal expression
+                .build();
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx, true)
+                .withField(field)
+                .render();
+
+        // Test all different kinds of types
+        RenderingEnv env = recipe.env;
+        Object[] values = {1, 1.1, 2, -1.1, 0, 0.5, -0.5};
+        Object[] expected = {true, true, true, false, false, true, false};
+
+        SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
+        for (int i = 0; i < values.length; i++) {
+            InputFieldView baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+            Switch inputView = (Switch) baseView.getInputView();
+
+            // transform the value using the converter and check the result against the original value
+            conv.setViewValue(inputView, values[i]);
+            Object actual = conv.getValueFromView(inputView, expected.getClass());
+            AssertUtils.assertEquals(expected[i], actual);
+        }
+    }
 //
 //    @Test
 //    public void testUnSupportedStrings() {
@@ -142,35 +151,35 @@ public class SwitcherViewConverterTest {
 //        Assert.assertTrue("The converter should've faild during the conversion", hasFailed);
 //    }
 //
-//    @Test
-//    public void testUnsupportedTypes() {
-//        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-//        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
-//                .withValueBindingExpression("true", Boolean.class) // literal expression
-//                .build();
-//        // prepare data/state
-//        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
-//                .invoke(ctx, true)
-//                .withField(field)
-//                .render();
-//
-//        View view = recipe.view;
-//
-//        // Test all different kinds of types
-//        Class[] clazzez = new Class[]{ByteArray.class, Date.class, Geometry.class};
-//
-//        SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
-//        for (Class clazz : clazzez) {
-//            Object expected = RandomUtils.randomObject(clazz);
-//            Switch inputView = (Switch) view.findViewWithTag(field.getViewId());
-//            boolean hasFailed = false;
-//            try {
-//                conv.setViewValue(inputView, field, expected);
-//            } catch (ConversionException e) {
-//                hasFailed = true;
-//            }
-//            Assert.assertTrue("The converter should've faild during the conversion", hasFailed);
-//        }
-//    }
+    @Test
+    public void testUnsupportedTypes() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+                .withValueBindingExpression("true", Boolean.class) // literal expression
+                .build();
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx, true)
+                .withField(field)
+                .render();
+
+        // Test all different kinds of types
+        RenderingEnv env = recipe.env;
+        Class[] clazzez = new Class[]{ByteArray.class, Date.class, Geometry.class};
+        View view = env.getViewRoot();
+        SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
+        for (Class clazz : clazzez) {
+            Object expected = RandomUtils.randomObject(clazz);
+            InputFieldView baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+            Switch inputView = (Switch) baseView.getInputView();
+            boolean hasFailed = false;
+            try {
+                conv.setViewValue(inputView, expected);
+            } catch (ConversionException e) {
+                hasFailed = true;
+            }
+            Assert.assertTrue("The converter should've failed during the conversion of type "+clazz, hasFailed);
+        }
+    }
 
 }

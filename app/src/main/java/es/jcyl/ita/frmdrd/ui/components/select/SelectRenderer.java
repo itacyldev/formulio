@@ -48,15 +48,15 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
         Spinner input = baseView.getInputView();
 
         // create items from options
-        List<String> spinnerItems = new ArrayList<String>();
+        List<UIOption> spinnerItems = new ArrayList<UIOption>();
         if (component.getOptions() != null) {
             for (UIOption option : component.getOptions()) {
-                spinnerItems.add(option.getLabel());
+                spinnerItems.add(option);
             }
         }
 
         // setup adapter and event handler
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(env.getViewContext(),
+        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
                 android.R.layout.simple_spinner_item, spinnerItems);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         input.setAdapter(arrayAdapter);
@@ -80,4 +80,22 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
     protected void setMessages(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
 
     }
+//
+//    public class OptionItem {
+//        String label;
+//        String value;
+//
+//        public OptionItem(String label, String value) {
+//            this.label = label;
+//            this.value = value;
+//        }
+//
+//        public String getLabel() {
+//            return label;
+//        }
+//
+//        public String getValue() {
+//            return value;
+//        }
+//    }
 }

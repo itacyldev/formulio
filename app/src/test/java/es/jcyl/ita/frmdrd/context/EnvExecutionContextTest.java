@@ -43,6 +43,8 @@ import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
+import static org.mockito.Mockito.mock;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -52,8 +54,6 @@ import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 public class EnvExecutionContextTest {
 
     FormDataBuilder formBuilder = new FormDataBuilder();
-
-    EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
 
     @BeforeClass
     public static void setUp() {
@@ -77,17 +77,19 @@ public class EnvExecutionContextTest {
 
         // render the view and check de resulting context
         CompositeContext globalContext = new UnPrefixedCompositeContext();
-        RenderingEnv env = new RenderingEnv(globalContext, new ActionController(null, null));
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(globalContext, mcAC);
         env.setViewContext(ctx);
 
         // render the view
         ViewRenderHelper viewRenderer = new ViewRenderHelper();
 
-        View view = viewRenderer.render( env, fc.getView());
+        View view = viewRenderer.render(env, fc.getView());
         Assert.assertNotNull(env.getFormContext().getViewContext());
         Assert.assertNotNull(env.getFormContext().getEntityContext());
 
         UIForm lastForm = env.getFormContext().getForm();
+        lastForm.getContext().setView(view);
 
         // access the context of the last evaluated form using relative paths like view.field or entity.field
         String id1 = "entity." + lastForm.getChildren().get(0).getId();

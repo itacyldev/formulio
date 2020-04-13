@@ -176,14 +176,16 @@ public class MainController {
         renderingEnv.initialize();
         renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
+        renderingEnv.disableInterceptors();
         View view =  renderHelper.render(renderingEnv, uiView);
+        renderingEnv.enableInterceptors();
         // set the root View element to renderingEnv for re-renders in the same view
         renderingEnv.setViewRoot(view);
         return view;
     }
 
     /**
-     * Method called from the reactor engine to notify the view which components have to be updated
+     * Method called from the reactor engine to notify the vew which components have to be updated
      */
     public void updateView(UIComponent component, boolean reactiveCall) {
         // find related view element
@@ -193,7 +195,9 @@ public class MainController {
 
         InputFieldView fieldView = viewContext.findInputFieldViewById(component.getId());
         // render the new Android view for the component and replace it
+        renderingEnv.disableInterceptors();
         View newView = renderHelper.render(this.renderingEnv, component);
+        renderingEnv.enableInterceptors();
         renderHelper.replaceView(fieldView, newView);
 
         if (!reactiveCall) {
@@ -215,7 +219,9 @@ public class MainController {
      */
     public void renderBack() {
         // render again the form to show validation error
+        renderingEnv.disableInterceptors();
         View newView = renderHelper.render(renderingEnv, formController.getView());
+        renderingEnv.enableInterceptors();
 
         // the View elements to replace hang from the content view of the formController
         ViewGroup contentView = formController.getContentView();

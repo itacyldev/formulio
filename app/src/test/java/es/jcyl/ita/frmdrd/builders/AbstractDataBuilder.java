@@ -17,12 +17,15 @@ package es.jcyl.ita.frmdrd.builders;
 
 import org.mini2Dx.beanutils.BeanUtils;
 
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 
 public abstract class AbstractDataBuilder<M> implements DataBuilder<M> {
+    protected static ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     protected M baseModel;
 

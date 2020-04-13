@@ -22,6 +22,7 @@ import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
@@ -40,7 +41,7 @@ public class InputChangeActionHandler extends AbstractActionHandler
     public void handle(FormEditController formController, UserAction action) {
 
         UIComponent component = action.getComponent();
-        if (!(component instanceof UIField)) {
+        if (!(component instanceof UIInputComponent)) {
             return;// nothing to do, no input element
         }
         UIForm form = component.getParentForm();

@@ -15,7 +15,12 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
+import android.widget.Adapter;
 import android.widget.Spinner;
+
+import org.mini2Dx.beanutils.ConvertUtils;
+
+import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -23,22 +28,33 @@ import android.widget.Spinner;
 class SpinnerValueConverter implements ViewValueConverter<Spinner> {
     @Override
     public String getValueFromViewAsString(Spinner view) {
-        view.getSelectedItem();
-        return null;
+        UIOption selectedItem = (UIOption) view.getSelectedItem();
+        return selectedItem.getValue();
     }
 
     @Override
     public <C> C getValueFromView(Spinner view, Class<C> expectedType) {
-        return null;
+        String strValue = getValueFromViewAsString(view);
+        return (C) ConvertUtils.convert(strValue, expectedType);
     }
 
     @Override
     public void setViewValue(Spinner view, Object value) {
-
+        String strValue = (String) ConvertUtils.convert(value, String.class);
+        setViewValueAsString(view, strValue);
     }
 
     @Override
     public void setViewValueAsString(Spinner view, String value) {
-
+        // find the selected option
+        Adapter adapter = view.getAdapter();
+        int nOptions = adapter.getCount();
+        for (int i = 0; i < nOptions; i++) {
+            UIOption uiOption = (UIOption) adapter.getItem(i);
+            if (uiOption.getValue().equalsIgnoreCase(value)) {
+                view.setSelection(i);
+                break;
+            }
+        }
     }
 }

@@ -49,4 +49,10 @@ public class UISelect extends UIInputComponent {
     public String getRendererType() {
         return SELECT_TYPE;
     }
+
+    @Override
+    public String getValueConverter() {
+        return SELECT_TYPE;
+    }
+
 }

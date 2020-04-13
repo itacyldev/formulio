@@ -66,11 +66,16 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent> 
         // get input view and set Tag and Value
         I inputView = (I) ViewHelper.findViewAndSetId(baseView, getInputViewId());
         setupInputView(env, baseView, inputView, component);
-
-        // set error messages
-        setMessages(env, baseView, component);
-
         composeView(env, baseView, component);
+
+        // set value and error messages
+        setValue(env, baseView, component, inputView);
+        setMessages(env, baseView, component);
+    }
+
+    private void setValue(RenderingEnv env, InputFieldView baseView, C component, I inputView) {
+        String value = getValue(component, env, String.class);
+        baseView.getConverter().setViewValue(inputView, value);
     }
 
     protected int getLabelViewId() {
@@ -100,11 +105,8 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent> 
     protected void setupInputView(RenderingEnv env, InputFieldView<I> baseView, I inputView, C component) {
         // link inputView with baseView
         baseView.setInputView(inputView);
-
         inputView.setTag(getInputTag(component));
         // set component value using converter
-        String value = getValue(component, env, String.class);
-        baseView.getConverter().setViewValue(inputView, value);
         inputView.setEnabled(!component.isReadOnly());
     }
 

@@ -103,7 +103,7 @@ public class DevFormBuilder {
             return this;
         }
 
-        public CreateOneFieldForm withField(UIField field) {
+        public CreateOneFieldForm withField(UIInputComponent field) {
             checkInvokeHasBeenCalled();
             // setup field-form relation
             field.setParent(form);

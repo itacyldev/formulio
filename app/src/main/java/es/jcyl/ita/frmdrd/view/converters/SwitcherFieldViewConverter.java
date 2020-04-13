@@ -35,17 +35,15 @@ class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
 
     @Override
     public <C> C getValueFromView(Switch view,  Class<C> expectedType) {
-        Switch inputField = (Switch) view;
-        Boolean viewValue = inputField.isChecked();
+        Boolean viewValue = view.isChecked();
         Object o = ConvertUtils.convert(viewValue, expectedType);
         return (C) o;
     }
 
     @Override
     public void setViewValue(Switch view, Object value) {
-        Switch inputField = (Switch) view;
         Boolean boolValue = (Boolean) ConvertUtils.convert(value, Boolean.class);
-        inputField.setChecked(boolValue);
+        view.setChecked(boolValue);
     }
 
     @Override

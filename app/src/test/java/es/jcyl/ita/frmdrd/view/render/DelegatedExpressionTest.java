@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.render;
+package es.jcyl.ita.frmdrd.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -36,6 +36,7 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
@@ -52,8 +53,8 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
-import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -62,10 +63,8 @@ import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 @RunWith(RobolectricTestRunner.class)
 public class DelegatedExpressionTest {
 
-    FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
@@ -97,7 +96,8 @@ public class DelegatedExpressionTest {
 
         // set entity in forms context
         form.getContext().setEntity(entity);
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), mcAC);
         env.setViewContext(ctx);
         env.setViewDAG(viewDAG);
         // walk the tree executing expressions
@@ -106,8 +106,8 @@ public class DelegatedExpressionTest {
         System.out.println("-------------------");
         // check dependencies chain f1, f2, f3 and f4 must have the same value
         Object expectedValue = entity.get(propertyName);
-        for (UIComponent kid : form.getChildren()) {
-            UIField field = (UIField) kid;
+        for (UIInputComponent kid : form.getFields()) {
+            UIInputComponent field = (UIField) kid;
             Assert.assertEquals(expectedValue.toString(), field.getValue(env.getContext()).toString());
         }
     }
