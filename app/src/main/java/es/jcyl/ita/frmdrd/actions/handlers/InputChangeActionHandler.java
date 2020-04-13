@@ -23,7 +23,6 @@ import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 
@@ -53,7 +52,7 @@ public class InputChangeActionHandler extends AbstractActionHandler
 
         // save view state
         String state = fieldView.getValueString();
-        boolean valid = formController.validate((UIField) component);
+        boolean valid = formController.validate((UIInputComponent) component);
         if (!valid) {
             // update the view to show messages
             mc.updateView(component, false);

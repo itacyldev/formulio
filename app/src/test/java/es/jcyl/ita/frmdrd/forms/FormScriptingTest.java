@@ -108,9 +108,16 @@ public class FormScriptingTest {
         ((FormEditController)recipe.mc.getFormController()).save();
 
         // set a field shorter than 10, the validation has to throw an exception with message
-        form.getContext().getViewContext().put("f1", "12345");
         boolean hasFailed = false;
+        try{
+            form.getContext().getViewContext().put("f1", "12345");
+        }catch(ValidatorException e){
+            Assert.assertNotNull(e.getMessage());
+            hasFailed = true;
+        }
+        Assert.assertTrue(hasFailed);
 
+         hasFailed = false;
         try {
             ((FormEditController)recipe.mc.getFormController()).save();
         } catch (ValidatorException e) {
