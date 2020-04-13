@@ -166,7 +166,7 @@ public class SwitcherViewConverterTest {
         // Test all different kinds of types
         RenderingEnv env = recipe.env;
         Class[] clazzez = new Class[]{ByteArray.class, Date.class, Geometry.class};
-        View view = env.getViewRoot();
+
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
         for (Class clazz : clazzez) {
             Object expected = RandomUtils.randomObject(clazz);

@@ -19,8 +19,6 @@ import android.widget.Switch;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -34,7 +32,7 @@ class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
     }
 
     @Override
-    public <C> C getValueFromView(Switch view,  Class<C> expectedType) {
+    public <C> C getValueFromView(Switch view, Class<C> expectedType) {
         Boolean viewValue = view.isChecked();
         Object o = ConvertUtils.convert(viewValue, expectedType);
         return (C) o;
@@ -43,7 +41,11 @@ class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
     @Override
     public void setViewValue(Switch view, Object value) {
         Boolean boolValue = (Boolean) ConvertUtils.convert(value, Boolean.class);
-        view.setChecked(boolValue);
+        if (boolValue == null) {
+            view.setChecked(false);
+        } else {
+            view.setChecked(boolValue);
+        }
     }
 
     @Override

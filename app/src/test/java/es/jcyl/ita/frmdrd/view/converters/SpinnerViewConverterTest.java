@@ -26,6 +26,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
@@ -93,6 +96,83 @@ public class SpinnerViewConverterTest {
     }
 
     /**
+     * Create random form with a select with some options, try to set Integer values and check
+     * the conversion works as expected
+     */
+    @Test
+    public void testIntegerValues() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+
+        String[] options = new String[]{"0", "1", "2", "3", "4"};
+        UISelect field = selectBuilder.withRandomData().withOptionValues(options, options).build();
+        // create view, form and render
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx, true)
+                .withField(field)
+                .render();
+        RenderingEnv env = recipe.env;
+
+        Integer[] values = new Integer[]{null, 0, 1, 2, 4, 9};
+        Integer[] expected = new Integer[]{null, 0, 1, 2, 4, null};
+        SpinnerValueConverter conv = new SpinnerValueConverter();
+        for (int i = 0; i < values.length; i++) {
+            InputFieldView<Spinner> baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+            Spinner inputView = baseView.getInputView();
+
+            // transform the value using the converter and check the result against the original value
+            conv.setViewValue(inputView, values[i]);
+            Integer actual = conv.getValueFromView(inputView, Integer.class);
+
+            Assert.assertEquals(expected[i], actual);
+        }
+    }
+
+    /**
+     * Create different true/false option values and check the conversion from view is done properly
+     * when trying to set/get value from a Boolean object.
+     */
+    @Test
+    public void testBooleanValues() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+
+        List<String[]> stringPairs = new ArrayList<>();
+        stringPairs.add(new String[]{"true", "false"});
+        stringPairs.add(new String[]{"0", "1"});
+        stringPairs.add(new String[]{"si", "no"});
+        stringPairs.add(new String[]{"y", "n"});
+        stringPairs.add(new String[]{"T", "F"});
+
+
+//        String[] options = new String[]{"true", "false"};
+        for (String[] options : stringPairs) {
+
+            System.out.println(String.format("Checking with pair: %s-%s", options[0], options[1]));
+
+            UISelect field = selectBuilder.withRandomData().withOptionValues(options, options).build();
+            // create view, form and render
+            DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                    .invoke(ctx, true)
+                    .withField(field)
+                    .render();
+            RenderingEnv env = recipe.env;
+
+            Boolean[] values = new Boolean[]{null, true, false};
+            Boolean[] expected = new Boolean[]{null, true, false};
+            SpinnerValueConverter conv = new SpinnerValueConverter();
+            for (int i = 0; i < values.length; i++) {
+                InputFieldView<Spinner> baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+                Spinner inputView = baseView.getInputView();
+
+                // transform the value using the converter and check the result against the original value
+                conv.setViewValue(inputView, values[i]);
+                Boolean actual = conv.getValueFromView(inputView, Boolean.class);
+
+                Assert.assertEquals(expected[i], actual);
+            }
+        }
+    }
+
+    /**
      * Create a select with random options and use an entity property to bind the selected value
      */
     @Test
@@ -117,8 +197,8 @@ public class SpinnerViewConverterTest {
                 null,
                 "CCCCC" // not existing value in options, has to be return as null
         };
-        String expected[] = { select.getOptions()[2].getValue(),
-                select.getOptions()[4].getValue(),null,null};
+        String expected[] = {select.getOptions()[2].getValue(),
+                select.getOptions()[4].getValue(), null, null};
 
         for (int i = 0; i < values.length; i++) {
             entity.set(bindProperty, values[i]);

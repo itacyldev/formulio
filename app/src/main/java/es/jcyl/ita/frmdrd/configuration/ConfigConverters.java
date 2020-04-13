@@ -42,7 +42,7 @@ public class ConfigConverters {
         ConvertUtils.register(new GeometryConverter(), Geometry.class);
         String[] trueStrings = {"true", "t", "yes", "y", "on", "1", "s", "si", "sí"};
         String[] falseStrings = {"", "false", "no", "n", "off", "0", "f"};
-        CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings, false);
+        CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings);
         ConvertUtils.register(boolConverter, Boolean.class);
         // set null as default value for number converters
         ConvertUtils.register(new IntegerConverter(null), Integer.TYPE);
@@ -53,7 +53,5 @@ public class ConfigConverters {
         ConvertUtils.register(new FloatConverter(null), Double.class);
         ConvertUtils.register(new DoubleConverter(null), Float.TYPE);
         ConvertUtils.register(new DoubleConverter(null), Float.class);
-
-//        ConvertUtils.lookup()
     }
 }

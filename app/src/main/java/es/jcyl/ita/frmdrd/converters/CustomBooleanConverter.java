@@ -227,9 +227,9 @@ public class CustomBooleanConverter extends AbstractConverter {
 
     @Override
     protected <T> T handleMissing(Class<T> type) {
-        if (!isNumeric(type) && type != String.class) {
+        if (!isNumeric(type) && type != String.class && type != Boolean.class) {
             throw new ConversionException("Unsupported class: " + type.getName());
         }
-        return super.handleMissing(type);
+        return null;
     }
 }

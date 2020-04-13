@@ -63,9 +63,10 @@ class SpinnerValueConverter implements ViewValueConverter<Spinner> {
                 UIOption uiOption = (UIOption) adapter.getItem(i);
                 if (uiOption.getValue().equalsIgnoreCase(value)) {
                     view.setSelection(i);
-                    break;
+                    return;
                 }
             }
+            view.setSelection(0); // no value found, empty option
         }
     }
 
