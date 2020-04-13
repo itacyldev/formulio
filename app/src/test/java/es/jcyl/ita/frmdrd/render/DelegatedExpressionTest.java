@@ -36,14 +36,14 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
@@ -116,7 +116,7 @@ public class DelegatedExpressionTest {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
-        UIField f1 = recipe.field;
+        UIInputComponent f1 = recipe.field;
         f1.setId("f1");
 //        form.setId("form");
         FieldDataBuilder fBuilder = new FieldDataBuilder();

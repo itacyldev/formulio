@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.builders;
+package es.jcyl.ita.frmdrd.view.converters;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,36 +15,30 @@ package es.jcyl.ita.frmdrd.builders;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
-import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
+import android.widget.Spinner;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class SelectBuilder extends BaseInputBuilder<UISelect> {
-    private List<UIOption> options;
-
-    public SelectBuilder() {
-        this.options = new ArrayList<UIOption>();
-    }
-
+class SpinnerValueConverter implements ViewValueConverter<Spinner> {
     @Override
-    protected UISelect emptyModel() {
-        return new UISelect();
-    }
-
-
-    public SelectBuilder addOption(String label, String value) {
-        options.add(new UIOption(label, value));
+    public String getValueFromViewAsString(Spinner view) {
+        view.getSelectedItem();
         return null;
     }
 
     @Override
-    protected UISelect doBuild(UISelect baseModel) {
-        baseModel.setOptions(options.toArray(new UIOption[options.size()]));
-        return baseModel;
+    public <C> C getValueFromView(Spinner view, Class<C> expectedType) {
+        return null;
+    }
+
+    @Override
+    public void setViewValue(Spinner view, Object value) {
+
+    }
+
+    @Override
+    public void setViewValueAsString(Spinner view, String value) {
+
     }
 }

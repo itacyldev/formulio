@@ -34,8 +34,9 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
@@ -74,7 +75,7 @@ public class ConditionalRenderingTest {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
-        UIField field = recipe.field;
+        UIInputComponent field = recipe.field;
 
         // create meta with one field for pk and additional string to test different conditions
         EntityMeta meta = metaBuilder.withNumProps(1).addProperties(new Class[]{String.class}).build();
@@ -115,7 +116,7 @@ public class ConditionalRenderingTest {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
-        UIField field = recipe.field;
+        UIInputComponent field = recipe.field;
 
         // create meta with one field for pk and additional Floats to test different conditions
         EntityMeta meta = metaBuilder.withNumProps(1).addProperties(new Class[]{Float.class}).build();
@@ -158,7 +159,7 @@ public class ConditionalRenderingTest {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
-        UIField field = recipe.field;
+        UIInputComponent field = recipe.field;
 
         // create meta with one field for pk and additional Floats to test different conditions
         EntityMeta meta = metaBuilder.withNumProps(1).addProperties(new Class[]{Float.class, String.class}).build();
@@ -208,7 +209,7 @@ public class ConditionalRenderingTest {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
-        UIField field = recipe.field;
+        UIInputComponent field = recipe.field;
 
         // create meta with one field for pk and additional Floats to test different conditions
         EntityMeta meta = metaBuilder.withNumProps(1).addProperties(new Class[]{Float.class}).build();

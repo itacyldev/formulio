@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.crtrepo.types.ByteArray;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 
 /**

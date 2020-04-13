@@ -22,7 +22,7 @@ import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 
 /**

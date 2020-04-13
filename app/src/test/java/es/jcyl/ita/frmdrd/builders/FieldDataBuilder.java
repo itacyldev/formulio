@@ -5,7 +5,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 
 public class FieldDataBuilder extends AbstractDataBuilder<UIField> {

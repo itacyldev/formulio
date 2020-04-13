@@ -14,6 +14,7 @@ package es.jcyl.ita.frmdrd.view.render;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,11 +24,12 @@ import es.jcyl.ita.frmdrd.ui.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.link.LinkRenderer;
+import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.ui.components.view.ViewRenderer;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /**
- * @author   Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class RendererFactory {
 
@@ -38,11 +40,12 @@ public class RendererFactory {
     private RendererFactory() {
         renderInstances.put("view", new ViewRenderer());
         renderInstances.put("form", new FormRenderer());
-        renderInstances.put("textfield", new TextFieldRenderer());
+        renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("date", new DateFieldRenderer());
-        renderInstances.put("checkbox", new CheckBoxFieldRenderer());
+        renderInstances.put("boolean", new CheckBoxFieldRenderer());
         renderInstances.put("datatable", new DatatableRenderer());
         renderInstances.put("link", new LinkRenderer());
+        renderInstances.put("select", new SelectRenderer());
     }
 
     public static RendererFactory getInstance() {
@@ -53,6 +56,9 @@ public class RendererFactory {
     }
 
     public Renderer getRenderer(String rendererType) {
+        if (rendererType == null) {
+            throw new ViewConfigException("No rendererType given, check the method getRenderType in your component.");
+        }
         if (!renderInstances.containsKey(rendererType.toLowerCase())) {
             throw new ViewConfigException("No renderer found for renderType, register it in RenderFactory: " + rendererType);
         }

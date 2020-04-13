@@ -24,6 +24,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
  */
 public class UISelect extends UIInputComponent {
 
+    private static final String SELECT_TYPE = "select";
     private UIOption[] options;
     private Repository repo;
 
@@ -42,5 +43,10 @@ public class UISelect extends UIInputComponent {
 
     public void setOptions(UIOption[] options) {
         this.options = options;
+    }
+
+    @Override
+    public String getRendererType() {
+        return SELECT_TYPE;
     }
 }

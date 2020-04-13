@@ -21,7 +21,7 @@ import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 /**

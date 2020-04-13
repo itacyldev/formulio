@@ -20,7 +20,7 @@ import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -82,6 +82,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         UIParam param = new UIParam("entityId", exprFactory.create("3332"));
         link.setParams(new UIParam[]{param});
         result.getEdit().getView().addChild(link);
+
+
 
         loadConfig(result.getList());
 

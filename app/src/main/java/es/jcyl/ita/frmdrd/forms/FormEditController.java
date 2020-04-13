@@ -19,7 +19,8 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.context.impl.EntityContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
 
@@ -86,12 +87,12 @@ public class FormEditController extends FormController {
      */
     private void updateEntity(UIForm form) {
         // go over all the form elements looking for bindings that are not readonly
-        for (UIField field : form.getFields()) {
+        for (UIInputComponent field : form.getFields()) {
             updateEntity(form.getContext().getViewContext(), form.getContext().getEntityContext(), field);
         }
     }
 
-    private void updateEntity(FormViewContext viewContext, EntityContext entityContext, UIField field) {
+    private void updateEntity(FormViewContext viewContext, EntityContext entityContext, UIInputComponent field) {
         if (!field.getValueExpression().isReadOnly()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
@@ -110,7 +111,7 @@ public class FormEditController extends FormController {
     public boolean validate(UIForm form) {
         boolean valid = true;
         form.getContext().clearMessages();
-        for (UIField field : form.getFields()) {
+        for (UIInputComponent field : form.getFields()) {
             // validate
             valid &= form.validate(field);
         }
@@ -123,7 +124,7 @@ public class FormEditController extends FormController {
      * @param field
      * @return
      */
-    public boolean validate(UIField field) {
+    public boolean validate(UIInputComponent field) {
         UIForm form = field.getParentForm();
         return form.validate(field);
     }

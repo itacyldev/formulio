@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -91,7 +92,7 @@ public class ViewHelper {
         return views;
     }
 
-    public static InputFieldView findInputFieldViewById(View rootView, UIField field) {
+    public static InputFieldView findInputFieldViewById(View rootView, UIInputComponent field) {
         return findInputFieldViewById(rootView, field.getParentForm().getId(), field.getId());
     }
 

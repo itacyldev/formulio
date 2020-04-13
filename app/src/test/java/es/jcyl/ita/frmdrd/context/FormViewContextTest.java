@@ -31,6 +31,7 @@ import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
@@ -104,7 +105,7 @@ public class FormViewContextTest {
         FormViewContext fvContext = new FormViewContext(form, formView);
 
         // check the context contains all the form elements
-        for (UIComponent c : form.getChildren()) {
+        for (UIInputComponent c : form.getFields()) {
             // modify view value using the context
             String expected = RandomStringUtils.randomAlphanumeric(10);
             fvContext.put(c.getId(), expected);

@@ -19,7 +19,6 @@ import android.content.Context;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
@@ -28,7 +27,8 @@ import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -78,7 +78,7 @@ public class DevFormBuilder {
     public static class CreateOneFieldForm {
         public Context ctx;
         public UIForm form;
-        public UIField field;
+        public UIInputComponent field;
         public RenderingEnv env;
         public EditableRepository repo;
         public MainController mc;

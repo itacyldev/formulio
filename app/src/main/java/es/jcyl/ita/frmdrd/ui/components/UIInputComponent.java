@@ -15,6 +15,7 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
 
 /**
@@ -25,6 +26,7 @@ public class UIInputComponent extends UIComponent {
     protected String label;
     private boolean readOnly;
     private String defaultValue;
+    private String valueConverter;
 
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
@@ -86,5 +88,11 @@ public class UIInputComponent extends UIComponent {
         this.label = label;
     }
 
+    public String getValueConverter() {
+        return valueConverter;
+    }
 
+    public void setValueConverter(String valueConverter) {
+        this.valueConverter = valueConverter;
+    }
 }

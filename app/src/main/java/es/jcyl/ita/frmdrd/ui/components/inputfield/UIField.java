@@ -1,10 +1,10 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
 import android.text.InputType;
 
-import es.jcyl.ita.frmdrd.validation.Validator;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 
-import static es.jcyl.ita.frmdrd.ui.components.UIField.TYPE.TEXT;
+import static es.jcyl.ita.frmdrd.ui.components.inputfield.UIField.TYPE.TEXT;
 
 public class UIField extends UIInputComponent {
     public enum TYPE {
@@ -17,16 +17,12 @@ public class UIField extends UIInputComponent {
 
     @Override
     public String getRendererType() {
-        switch (type) {
-            case TEXT:
-                return "textfield";
-            case DATE:
-                return "date";
-            case BOOLEAN:
-                return "checkbox";
-            default:
-                throw new UnsupportedOperationException(type.toString());
-        }
+        return type.name().toLowerCase();
+    }
+
+    @Override
+    public String getValueConverter() {
+        return type.name().toLowerCase();
     }
 
     public String getType() {

@@ -15,11 +15,8 @@ package es.jcyl.ita.frmdrd.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -27,6 +24,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 public abstract class BaseInputBuilder<C extends UIComponent> {
 
     protected static ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+
     protected C baseModel;
 
     public BaseInputBuilder() {
@@ -34,12 +32,27 @@ public abstract class BaseInputBuilder<C extends UIComponent> {
     }
 
 
-    public BaseInputBuilder<C> withValue(String value) {
-        return null;
+    public BaseInputBuilder<C> withValue(String valueExpression) {
+        this.baseModel.setValueExpression(exprFactory.create(valueExpression));
+        return this;
     }
 
+    public BaseInputBuilder<C> withRender(String renderExpression) {
+        this.baseModel.setRenderExpression(exprFactory.create(renderExpression));
+        return this;
+    }
+
+    public C build() {
+        C model = doBuild(baseModel);
+        baseModel = emptyModel();
+        return model;
+    }
 
     protected abstract C emptyModel();
 
-    public abstract C build();
+    protected C doBuild(C baseModel) {
+        return baseModel;
+    }
+
+
 }

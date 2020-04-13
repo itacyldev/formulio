@@ -18,8 +18,8 @@ package es.jcyl.ita.frmdrd.view.converters;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -32,9 +32,10 @@ public class ViewValueConverterFactory {
     private static Map<String, ViewValueConverter> map = new HashMap<String, ViewValueConverter>();
 
     private ViewValueConverterFactory() {
-        map.put(UIField.TYPE.TEXT.name(), new TextViewConverter());
-        map.put(UIField.TYPE.DATE.name(), new TextViewConverter());
-        map.put(UIField.TYPE.BOOLEAN.name(), new SwitcherFieldViewConverter());
+        map.put("text", new TextViewConverter());
+        map.put("date", new TextViewConverter());
+        map.put("boolean", new SwitcherFieldViewConverter());
+        map.put("select", new SpinnerValueConverter());
     }
 
     public static ViewValueConverterFactory getInstance() {
@@ -44,8 +45,8 @@ public class ViewValueConverterFactory {
         return _instance;
     }
 
-    public ViewValueConverter get(UIComponent component) {
-        return map.get(((UIField) component).getType());
+    public ViewValueConverter get(UIInputComponent component) {
+        return map.get(component.getValueConverter());
     }
 
 

@@ -20,7 +20,8 @@ import es.jcyl.ita.frmdrd.forms.FormException;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
@@ -34,7 +35,7 @@ public class UIForm extends UIComponent {
     private Repository repo;
     private String entityId = "params.entityId";
     private Entity currentEntity;
-    private List<UIField> fields;
+    private List<UIInputComponent> fields;
     private Filter filter;
     private String onValidate; // js function to call on validation
     private String label;
@@ -77,9 +78,9 @@ public class UIForm extends UIComponent {
         return null;
     }
 
-    public List<UIField> getFields() {
+    public List<UIInputComponent> getFields() {
         if (this.fields == null) {
-            this.fields = new ArrayList<UIField>();
+            this.fields = new ArrayList<UIInputComponent>();
             findFields(this, this.fields);
         }
         return this.fields;
@@ -91,7 +92,7 @@ public class UIForm extends UIComponent {
      * @param root
      * @param fields
      */
-    private void findFields(UIComponent root, List<UIField> fields) {
+    private void findFields(UIComponent root, List<UIInputComponent> fields) {
         if (root instanceof UIField) {
             fields.add((UIField) root);
         } else {
@@ -252,14 +253,14 @@ public class UIForm extends UIComponent {
     }
 
 
-    public boolean isVisible(UIField field) {
+    public boolean isVisible(UIInputComponent field) {
         FormViewContext viewContext = context.getViewContext();
 
         InputFieldView fieldView = viewContext.findInputFieldViewById(field.getId());
         return fieldView.isVisible();
     }
 
-    public boolean validate(UIField field) {
+    public boolean validate(UIInputComponent field) {
         FormViewContext viewContext = context.getViewContext();
 
         // get user input using view context and check all validators.

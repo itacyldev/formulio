@@ -12,13 +12,11 @@ import java.util.Map;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
-import es.jcyl.ita.frmdrd.view.dag.DAGManager;
-import es.jcyl.ita.frmdrd.view.dag.DAGNode;
-import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 
 public class DAGManagerTest {
@@ -102,7 +100,7 @@ public class DAGManagerTest {
 
         FieldDataBuilder fieldBuilder = new FieldDataBuilder();
 
-        UIField field1 = form.getFields().get(0);
+        UIInputComponent field1 = form.getFields().get(0);
         field1.setId("field1");
         UIField field2 =
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
