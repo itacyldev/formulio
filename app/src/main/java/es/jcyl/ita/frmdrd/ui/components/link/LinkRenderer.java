@@ -39,10 +39,11 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * <p>
  * Renders link component using android views
  */
-public class LinkRenderer extends BaseRenderer<UILink> {
+public class LinkRenderer extends BaseRenderer<TextView, UILink> {
+
 
     @Override
-    protected View createBaseView(RenderingEnv env, UILink component) {
+    protected TextView createBaseView(RenderingEnv env, UILink component) {
         ConstraintLayout baseView = ViewHelper.inflate(env.getViewContext(),
                 R.layout.component_placeholders, ConstraintLayout.class);
         TextView linkView = (TextView) baseView.findViewById(R.id.textViewLink);
@@ -54,8 +55,7 @@ public class LinkRenderer extends BaseRenderer<UILink> {
     }
 
     @Override
-    protected void setupView(RenderingEnv env, View baseView, UILink component) {
-        TextView linkView = (TextView) baseView;
+    protected void setupView(RenderingEnv env, TextView linkView, UILink component) {
         String value = getValue(component, env, String.class);
         linkView.setText(Html.fromHtml(String.format("<u>%s</u>", value)));
         linkView.setOnClickListener(new View.OnClickListener() {

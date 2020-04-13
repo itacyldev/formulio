@@ -9,7 +9,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIField;
 
 
 public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
-    ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
 
     public FieldDataBuilder() {
@@ -47,13 +47,11 @@ public class FieldDataBuilder extends AbstractDataBuilder<UIField> {
     }
 
     public FieldDataBuilder withValueBindingExpression(String expression, Class expectedType) {
-        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
         this.baseModel.setValueExpression(exprFactory.create(expression, expectedType));
         return this;
     }
 
     public FieldDataBuilder withValueBindingExpression(String expression) {
-        ValueExpressionFactory exprFactory = new ValueExpressionFactory();
         this.baseModel.setValueExpression(exprFactory.create(expression, String.class));
         return this;
     }

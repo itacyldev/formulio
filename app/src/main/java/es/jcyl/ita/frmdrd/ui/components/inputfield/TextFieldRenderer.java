@@ -2,9 +2,7 @@ package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,15 +11,14 @@ import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
-import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,42 +34,37 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  */
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class TextFieldRenderer extends FieldRenderer {
-
+public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
 
     @Override
-    protected View createBaseView(RenderingEnv env, UIField component) {
+    protected InputFieldView createBaseView(RenderingEnv env, UIField component) {
         LinearLayout baseView = ViewHelper.inflate(env.getViewContext(),
-                R.layout.tool_alphaedit_text, LinearLayout.class);
+                R.layout.component_textfield, LinearLayout.class);
         return createInputFieldView(env.getViewContext(), baseView, component);
     }
 
     @Override
-    protected void setupView(RenderingEnv env, View baseView, UIField component) {
-        TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
-                TextView.class);
-        fieldLabel.setText(component.getLabel());
-        fieldLabel.setTag("label");
-        EditText input = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_value,
-                EditText.class);
-        input.setTag(getInputTag(component));
-        // get component value and set in view
-        String strValue = getValue(component, env, String.class);
-        input.setText(strValue);
-        input.setInputType(component.getInputType());
-        input.setEnabled(!component.isReadOnly());
+    protected int getComponentLayout() {
+        return R.layout.component_textfield;
+    }
 
-        setMessages(env.getFormContext(), component, input);
-        ((InputFieldView) baseView).setInputView(input);
+    @Override
+    protected void setMessages(RenderingEnv env, InputFieldView<EditText> baseView, UIField component) {
+        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        if (message != null) {
+            baseView.getInputView().setError(message);
+        }
+    }
 
-        ImageView resetButton = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_x,
-                ImageView.class);
-        resetButton.setTag("reset");
-
-        input.addTextChangedListener(new TextWatcher() {
+    @Override
+    protected void composeView(RenderingEnv env, InputFieldView<EditText> baseView, UIField component) {
+        // configure input view elements
+        baseView.getInputView().setInputType(component.getInputType());
+        // set event
+        baseView.getInputView().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -89,13 +81,6 @@ public class TextFieldRenderer extends FieldRenderer {
                 }
             }
         });
-    }
-
-    private void setMessages(FormContext formContext, UIField component, EditText input) {
-        String message = FormContextHelper.getMessage(formContext, component.getId());
-        if (message != null) {
-            input.setError(message);
-        }
     }
 
     @Override

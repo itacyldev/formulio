@@ -1,9 +1,7 @@
 package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
@@ -11,8 +9,7 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
@@ -35,29 +32,11 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class CheckBoxFieldRenderer extends FieldRenderer {
+public class CheckBoxFieldRenderer extends InputRenderer<Switch, UIField> {
 
     @Override
-    protected View createBaseView(RenderingEnv env, UIField component) {
-        View baseView = ViewHelper.inflate(env.getViewContext(),
-                R.layout.tool_alphaedit_boolean, View.class);
-        return createInputFieldView(env.getViewContext(), baseView, component);
-    }
-
-    @Override
-    protected void setupView(RenderingEnv env, View baseView, UIField component) {
-        TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name, TextView.class);
-        fieldLabel.setTag("label");
-        Switch input = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_value, Switch.class);
-        input.setTag(getInputTag(component));
-
-        // get component value and set in view
-        Boolean boolValue = getValue(component, env, Boolean.class);
-        input.setChecked(boolValue);
-        input.setEnabled(!component.isReadOnly());
-        ((InputFieldView) baseView).setInputView(input);
-
-        input.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    protected void composeView(RenderingEnv env, InputFieldView<Switch> baseView, UIField component) {
+        baseView.getInputView().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
@@ -69,6 +48,15 @@ public class CheckBoxFieldRenderer extends FieldRenderer {
         });
     }
 
+    @Override
+    protected int getComponentLayout() {
+        return R.layout.component_checkbox;
+    }
+
+    @Override
+    protected void setMessages(RenderingEnv env, InputFieldView<Switch> baseView, UIField component) {
+
+    }
 
     @Override
     protected <T> T handleNullValue(UIField component) {

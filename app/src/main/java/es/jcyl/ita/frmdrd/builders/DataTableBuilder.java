@@ -30,7 +30,7 @@ import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class DataTableBuilder {
-    private ValueExpressionFactory expressionFactory = new ValueExpressionFactory();
+    private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
 
 
     public UIDatatable createDataTableFromRepo(Repository repo) {

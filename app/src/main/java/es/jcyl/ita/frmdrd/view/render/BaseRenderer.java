@@ -27,12 +27,12 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public abstract class BaseRenderer<C extends UIComponent> implements Renderer<C> {
+public abstract class BaseRenderer<V extends View, C extends UIComponent> implements Renderer<C> {
 
-    protected ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
+    protected static ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     public final View render(RenderingEnv env, C component) {
-        View baseView = createBaseView(env, component);
+        V baseView = createBaseView(env, component);
         // check render condition
         boolean isRendered = component.isRendered(env.getContext());
         baseView.setVisibility(isRendered ? View.VISIBLE : View.GONE);
@@ -50,9 +50,9 @@ public abstract class BaseRenderer<C extends UIComponent> implements Renderer<C>
      * @param component
      * @return
      */
-    protected abstract View createBaseView(RenderingEnv env, C component);
+    protected abstract V createBaseView(RenderingEnv env, C component);
 
-    protected abstract void setupView(RenderingEnv env, View baseView, C component);
+    protected abstract void setupView(RenderingEnv env, V baseView, C component);
 
     /**
      * Calculates the tag for the GroupView component that contains all the input, so when a partial

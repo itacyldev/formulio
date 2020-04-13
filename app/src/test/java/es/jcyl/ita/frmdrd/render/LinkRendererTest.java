@@ -56,7 +56,7 @@ public class LinkRendererTest {
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
-    ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
     @BeforeClass

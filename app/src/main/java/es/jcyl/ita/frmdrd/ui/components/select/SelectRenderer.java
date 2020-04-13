@@ -1,27 +1,23 @@
 package es.jcyl.ita.frmdrd.ui.components.select;
 
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.context.FormContextHelper;
-import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,70 +33,51 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  */
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class SelectRenderer extends FieldRenderer {
-
+public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
 
     @Override
-    protected View createBaseView(RenderingEnv env, UIField component) {
-        LinearLayout baseView = (LinearLayout) View.inflate(env.getViewContext(),
-                R.layout.tool_alphaedit_text, null);
-        return createInputFieldView(env.getViewContext(), baseView, component);
+    protected int getComponentLayout() {
+        return R.layout.component_select;
     }
 
     @Override
-    protected void setupView(RenderingEnv env, View baseView, UIField component) {
-        final TextView fieldLabel = (TextView) baseView
-                .findViewById(R.id.field_layout_name);
-        fieldLabel.setText(component.getLabel());
-        fieldLabel.setTag("label");
-        final EditText input = (EditText) baseView
-                .findViewById(R.id.field_layout_value);
-        input.setTag(getInputTag(component));
+    protected void composeView(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
+        Spinner input = baseView.getInputView();
 
-        // get component value and set in view
-        String strValue = getValue(component, env, String.class);
-        input.setText(strValue);
-        input.setEnabled(!component.isReadOnly());
-        setMessages(env.getFormContext(), component, input);
-        ((InputFieldView) baseView).setInputView(input);
-
-        final ImageView resetButton = (ImageView) baseView
-                .findViewById(R.id.field_layout_x);
-        resetButton.setTag("reset");
-
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        // create items from options
+        List<String> spinnerItems = new ArrayList<String>();
+        if (component.getOptions() != null) {
+            for (UIOption option : component.getOptions()) {
+                spinnerItems.add(option.getLabel());
             }
+        }
 
+        // setup adapter and event handler
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(env.getViewContext(),
+                android.R.layout.simple_spinner_item, spinnerItems);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        input.setAdapter(arrayAdapter);
+        input.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // notify action
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
                     interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
                 }
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
-    private void setMessages(FormContext formContext, UIField component, EditText input) {
-        String message = FormContextHelper.getMessage(formContext, component.getId());
-        if (message != null) {
-            input.setError(message);
-        }
-    }
-
     @Override
-    protected <T> T handleNullValue(UIField component) {
-        return (T) EMPTY_STRING;
-    }
+    protected void setMessages(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
 
+    }
 }

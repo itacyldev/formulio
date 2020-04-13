@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.render;
+package es.jcyl.ita.frmdrd.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,26 +15,31 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
-import android.view.View;
-import android.view.ViewGroup;
-
+import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIField;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseGroupRenderer<C extends UIComponent> extends BaseRenderer<ViewGroup, C> {
+public abstract class BaseInputBuilder<C extends UIComponent> {
 
-    // default implementations to avoid boilerplate code
-    public void initGroup(RenderingEnv env, C component, ViewGroup root) {
+    protected static ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+    protected C baseModel;
+
+    public BaseInputBuilder() {
+        baseModel = emptyModel();
     }
 
 
-    public void addViews(RenderingEnv env, C component, ViewGroup root, View[] views) {
+    public BaseInputBuilder<C> withValue(String value) {
+        return null;
     }
 
 
-    public void endGroup(RenderingEnv env, C component, ViewGroup root) {
+    protected abstract C emptyModel();
 
-    }
+    public abstract C build();
 }

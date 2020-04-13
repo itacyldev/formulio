@@ -52,7 +52,7 @@ import es.jcyl.ita.frmdrd.view.dag.DAGManager;
  */
 
 public class DummyFormConfigParser extends FormConfigParser {
-    ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     DataTableBuilder formGenerator = new DataTableBuilder();
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     FormControllerBuilder fcBuilder = new FormControllerBuilder();

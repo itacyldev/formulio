@@ -20,7 +20,29 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIOption extends UIComponent {
+public class UIOption {
 
+    private String label;
+    private String value;
 
+    public UIOption(String label, String value){
+        this.label = label;
+        this.value = value;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

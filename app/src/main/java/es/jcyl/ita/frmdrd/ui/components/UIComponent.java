@@ -15,7 +15,6 @@ import es.jcyl.ita.frmdrd.view.ViewConfigException;
 public abstract class UIComponent implements Serializable {
 
     protected String id;
-    protected String label;
     protected UIComponent root;
     protected UIComponent parent;
     protected UIForm parentForm;
@@ -107,15 +106,6 @@ public abstract class UIComponent implements Serializable {
         this.children.clear();
         this.children = null;
     }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(final String label) {
-        this.label = label;
-    }
-
     public String getRendererType() {
         return rendererType;
     }
@@ -223,13 +213,6 @@ public abstract class UIComponent implements Serializable {
         if (id != null) {
             output += id;
         }
-        if (id != null && label != null) {
-            output += " / ";
-        }
-        if (label != null) {
-            output += label;
-        }
-
         if (output.length() > 0) {
             return output;
         } else {

@@ -2,7 +2,6 @@ package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,12 +19,11 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
-import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
+import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -47,34 +45,22 @@ import es.jcyl.ita.frmdrd.view.render.FieldRenderer;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DateFieldRenderer extends FieldRenderer {
+public class DateFieldRenderer extends InputRenderer<Button, UIField> {
 
     @Override
-    protected View createBaseView(RenderingEnv env, UIField component) {
-        LinearLayout baseView = (LinearLayout) View.inflate(env.getViewContext(),
-                R.layout.tool_alphaedit_date, null);
-        return createInputFieldView(env.getViewContext(), baseView, component);
+    protected int getComponentLayout() {
+        return R.layout.component_date;
     }
 
     @Override
-    protected void setupView(RenderingEnv env, View baseView, UIField component) {
-
-        TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_name,
-                TextView.class);
-        final Button input = baseView
-                .findViewById(R.id.field_layout_value);
-        input.setTag(getInputTag(component));
-        // get component value and set in view
-        String strValue = getValue(component, env, String.class);
-        input.setText(strValue);
-        input.setEnabled(!component.isReadOnly());
-        ((InputFieldView) baseView).setInputView(input);
-
+    protected void composeView(RenderingEnv env, InputFieldView<Button> baseView, UIField component) {
+        // configure input view elements
         Button today = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_today,
                 Button.class);
         ImageView resetButton = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_x,
                 ImageView.class);
-        fieldLabel.setText(component.getLabel());
+
+        Button input = baseView.getInputView();
 
         final DatePickerDialog.OnDateSetListener listener =
                 new DatePickerDialog.OnDateSetListener() {
@@ -115,7 +101,6 @@ public class DateFieldRenderer extends FieldRenderer {
                 input.setText(strValue);
             }
         });
-
     }
 
     @Override
@@ -123,4 +108,8 @@ public class DateFieldRenderer extends FieldRenderer {
         return (T) EMPTY_STRING;
     }
 
+    @Override
+    protected void setMessages(RenderingEnv env, InputFieldView<Button> baseView, UIField component) {
+
+    }
 }

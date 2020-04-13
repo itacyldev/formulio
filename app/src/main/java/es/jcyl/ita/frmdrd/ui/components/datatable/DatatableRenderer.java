@@ -3,7 +3,6 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
@@ -29,10 +28,10 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class DatatableRenderer extends BaseRenderer<UIDatatable> {
+public class DatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable> {
 
     @Override
-    protected View createBaseView(RenderingEnv env, UIDatatable component) {
+    protected DatatableLayout createBaseView(RenderingEnv env, UIDatatable component) {
         UIDatatable dtComponent = (UIDatatable) component;
         DatatableLayout datatableView = (DatatableLayout) View.inflate(env.getViewContext(),
                 R.layout.component_datatable_layout, null);
@@ -42,14 +41,8 @@ public class DatatableRenderer extends BaseRenderer<UIDatatable> {
     }
 
     @Override
-    protected void setupView(RenderingEnv env, View baseView, UIDatatable component) {
-        UIDatatable dtComponent = (UIDatatable) component;
-        dtComponent.getRepo().setContext(env.getContext());
-        DatatableLayout datatableView = (DatatableLayout) baseView;
-
-        TextView fieldLabel = datatableView.findViewById(R.id.field_layout_name);
-        fieldLabel.setText(component.getLabel());
-        fieldLabel.setTag("label");
+    protected void setupView(RenderingEnv env, DatatableLayout datatableView, UIDatatable component) {
+        component.getRepo().setContext(env.getContext());
 
         LinearLayout tableView = datatableView.findViewById(R.id.list_layout);
         ListView bodyView = tableView.findViewById(R.id.list_view);

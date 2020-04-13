@@ -33,12 +33,12 @@ import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 public class FieldBuilder {
 
     UIField baseModel;
-    ValueExpressionFactory exprFactory;
+    private ValueExpressionFactory exprFactory;
     ValidatorFactory validatorFactory;
 
     public FieldBuilder() {
         this.baseModel = new UIField();
-        exprFactory = new ValueExpressionFactory();
+        exprFactory = ValueExpressionFactory.getInstance();
         validatorFactory = ValidatorFactory.getInstance();
     }
 

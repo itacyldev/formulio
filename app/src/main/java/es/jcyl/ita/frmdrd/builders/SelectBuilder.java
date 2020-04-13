@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.render;
+package es.jcyl.ita.frmdrd.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,26 +15,34 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
-import android.view.View;
-import android.view.ViewGroup;
+import java.util.ArrayList;
+import java.util.List;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseGroupRenderer<C extends UIComponent> extends BaseRenderer<ViewGroup, C> {
+public class SelectBuilder extends BaseInputBuilder<UIComponent> {
+    private List<UIOption> options;
 
-    // default implementations to avoid boilerplate code
-    public void initGroup(RenderingEnv env, C component, ViewGroup root) {
+    public SelectBuilder() {
+        this.options = new ArrayList<UIOption>();
     }
 
-
-    public void addViews(RenderingEnv env, C component, ViewGroup root, View[] views) {
+    @Override
+    protected UIComponent emptyModel() {
+        return null;
     }
 
+    public SelectBuilder addOption(String label, String value) {
+        options.add(new UIOption(label, value));
+        return null;
+    }
 
-    public void endGroup(RenderingEnv env, C component, ViewGroup root) {
-
+    public UISelect build() {
+        return null;
     }
 }

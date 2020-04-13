@@ -25,7 +25,7 @@ public class FormDataBuilder extends AbstractDataBuilder<UIForm> {
     private String[] expressions;
     private Class[] expectedTypes;
     private boolean randomValues = true;
-    private ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+    private ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     private EntityToComponentMapper componentMapper = new EntityToComponentMapper();
     private EntityMeta meta;

@@ -38,7 +38,7 @@ import static org.junit.Assert.assertNull;
 public class CriteriaVisitorTest {
 
     CriteriaVisitor visitor = new CriteriaVisitor();
-    ValueExpressionFactory exprFactory = new ValueExpressionFactory();
+    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     @Test
     public void testCreateVisitor() {

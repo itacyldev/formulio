@@ -30,9 +30,9 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
  * Base class to wrapper Android views that represent input fields to provide feature to access and
  * modify the view component (values, styles, focus, etc).
  */
-public class InputFieldView extends LinearLayout {
+public class InputFieldView<V extends View> extends LinearLayout {
 
-    private View inputView;
+    private V inputView;
     private ViewValueConverter converter;
     /**
      * related UIComponents
@@ -91,11 +91,11 @@ public class InputFieldView extends LinearLayout {
         return this.inputView != null;
     }
 
-    public View getInputView() {
+    public V getInputView() {
         return inputView;
     }
 
-    public void setInputView(View inputView) {
+    public void setInputView(V inputView) {
         this.inputView = inputView;
     }
 

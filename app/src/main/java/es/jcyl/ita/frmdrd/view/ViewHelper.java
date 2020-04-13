@@ -18,7 +18,6 @@ package es.jcyl.ita.frmdrd.view;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIField;
 
@@ -125,6 +123,13 @@ public class ViewHelper {
         View view = baseView.findViewById(id);
         view.setId(RandomUtils.nextInt());
         return (T) view;
+    }
+
+    public static View findViewAndSetId(View baseView, int id) {
+        // ramdomize id
+        View view = baseView.findViewById(id);
+        view.setId(RandomUtils.nextInt());
+        return view;
     }
 
     public static boolean isVisible(View rootView) {

@@ -48,6 +48,8 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
  */
 
 public class TestJexlExpressions {
+    ValueExpressionFactory factory =  ValueExpressionFactory.getInstance();
+
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(true).silent(false).create();
 
@@ -103,7 +105,7 @@ public class TestJexlExpressions {
 
     @Test
     public void testLiteralExpressions() {
-        ValueExpressionFactory factory = new ValueExpressionFactory();
+
 
         Class[] clazzez = new Class[]{Double.class, Date.class, ByteArray.class, Boolean.class,
                 String.class, Float.class, Integer.class, Long.class};

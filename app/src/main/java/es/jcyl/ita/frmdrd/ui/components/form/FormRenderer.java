@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -30,12 +31,12 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 public class FormRenderer extends BaseGroupRenderer<UIForm> implements GroupRenderer<UIForm> {
 
-    protected View createBaseView(RenderingEnv env, UIForm component) {
-        return View.inflate(env.getViewContext(), R.layout.component_form, null);
+    protected ViewGroup createBaseView(RenderingEnv env, UIForm component) {
+        return ViewHelper.inflate(env.getViewContext(), R.layout.component_form,ViewGroup.class);
     }
 
     @Override
-    protected void setupView(RenderingEnv env, View baseView, UIForm component) {
+    protected void setupView(RenderingEnv env, ViewGroup baseView, UIForm component) {
 
     }
 

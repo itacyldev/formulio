@@ -89,6 +89,7 @@ public class FormContextTest {
         // create a mock repository, set to form and load the entity
         EditableRepository mockRepo = mock(EditableRepository.class);
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
+        when(mockRepo.getMeta()).thenReturn(meta);
         form.setRepo(mockRepo);
 
         // load entity and check the entity context is fulfill
@@ -137,6 +138,7 @@ public class FormContextTest {
         // create a mock repository, set to form and load the entity
         EditableRepository mockRepo = mock(EditableRepository.class);
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
+        when(mockRepo.getMeta()).thenReturn(meta);
         form.setRepo(mockRepo);
         // use FormController to load form
         FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);

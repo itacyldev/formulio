@@ -23,6 +23,19 @@ import org.mini2Dx.beanutils.ConvertUtils;
  */
 public class ValueExpressionFactory {
 
+    private static ValueExpressionFactory _instance;
+
+    public static ValueExpressionFactory getInstance() {
+        if (_instance == null) {
+            _instance = new ValueExpressionFactory();
+        }
+        return _instance;
+    }
+
+    private ValueExpressionFactory() {
+
+    }
+
     public ValueBindingExpression create(String expression) {
         JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
         if (isLiteralExpression(jexlExpr)) {

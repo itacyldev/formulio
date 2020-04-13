@@ -37,6 +37,7 @@ public class UIForm extends UIComponent {
     private List<UIField> fields;
     private Filter filter;
     private String onValidate; // js function to call on validation
+    private String label;
     private boolean readOnly;
 
     public UIForm() {
@@ -301,5 +302,13 @@ public class UIForm extends UIComponent {
 
     public Entity getCurrentEntity() {
         return currentEntity;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }
