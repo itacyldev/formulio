@@ -51,8 +51,8 @@ public class ConfigConverters {
         ConvertUtils.register(new LongConverter(null), Long.class);
         ConvertUtils.register(new FloatConverter(null), Double.TYPE);
         ConvertUtils.register(new FloatConverter(null), Double.class);
-        ConvertUtils.register(new DoubleConverter(null), Double.TYPE);
-        ConvertUtils.register(new DoubleConverter(null), Double.class);
+        ConvertUtils.register(new DoubleConverter(null), Float.TYPE);
+        ConvertUtils.register(new DoubleConverter(null), Float.class);
 
 //        ConvertUtils.lookup()
     }
