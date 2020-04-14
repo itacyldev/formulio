@@ -32,6 +32,7 @@ import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
+import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /**
@@ -119,7 +120,7 @@ public class RenderingEnv {
     }
 
     private CompositeContext createCombinedContext(CompositeContext globalContext, FormContext fContext) {
-        CompositeContext combinedContext = new OrderedCompositeContext();
+        CompositeContext combinedContext = new UnPrefixedCompositeContext();
         combinedContext.addContext(globalContext);
         combinedContext.addContext(fContext);
         return combinedContext;

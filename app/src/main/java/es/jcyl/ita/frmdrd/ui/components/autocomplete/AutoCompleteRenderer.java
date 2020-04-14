@@ -38,7 +38,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  *
  * Creates view elements for autocomplete component
  */
-public class AutocompleteRenderer extends InputRenderer<AutoCompleteTextView, UIAutocomplete> {
+public class AutoCompleteRenderer extends InputRenderer<AutoCompleteTextView, UIAutoComplete> {
 
     private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);
 
@@ -49,7 +49,7 @@ public class AutocompleteRenderer extends InputRenderer<AutoCompleteTextView, UI
 
     @Override
     protected void composeView(RenderingEnv env, InputFieldView<AutoCompleteTextView> baseView,
-                               UIAutocomplete component) {
+                               UIAutoComplete component) {
         AutoCompleteTextView input = baseView.getInputView();
 
         // create items from options
@@ -61,7 +61,7 @@ public class AutocompleteRenderer extends InputRenderer<AutoCompleteTextView, UI
                 items.add(option);
             }
         }
-        input.setThreshold(2);
+        input.setThreshold(0);
         // setup adapter and event handler
         ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
                 android.R.layout.select_dialog_item, items);
@@ -86,7 +86,7 @@ public class AutocompleteRenderer extends InputRenderer<AutoCompleteTextView, UI
 
     @Override
     protected void setMessages(RenderingEnv env, InputFieldView<AutoCompleteTextView> baseView,
-                               UIAutocomplete component) {
+                               UIAutoComplete component) {
 
     }
 

@@ -25,9 +25,8 @@ import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 public class UISelect extends UIInputComponent {
 
     private static final String SELECT_TYPE = "select";
-    private UIOption[] options;
-    private Repository repo;
-
+    protected UIOption[] options;
+    protected Repository repo;
 
     public Repository getRepo() {
         return repo;

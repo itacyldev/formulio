@@ -1,7 +1,12 @@
 package es.jcyl.ita.frmdrd.view.dag;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.jgrapht.util.SupplierUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -231,6 +236,7 @@ public class DAGManager {
      * @param dagId
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private DirectedAcyclicGraph getDagComponent(String dagId,
                                                  Map<String,
                                                          DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
@@ -238,7 +244,9 @@ public class DAGManager {
         if (dags.containsKey(dagId)) {
             dag = dags.get(dagId);
         } else {
-            dag = new DirectedAcyclicGraph(DefaultEdge.class);
+//            dag = new DirectedAcyclicGraph(DefaultEdge.class, DefaultEdge);
+            dag = new DirectedAcyclicGraph(null, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false, false);
+
             dag.addVertex(nodes.get(dagId));
             dags.put(dagId, dag);
         }

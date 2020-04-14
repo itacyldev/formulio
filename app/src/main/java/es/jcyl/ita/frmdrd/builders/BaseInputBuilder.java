@@ -17,20 +17,27 @@ package es.jcyl.ita.frmdrd.builders;
 
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseInputBuilder<C extends UIComponent> {
-
-    protected static ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-
-    protected C baseModel;
+public abstract class BaseInputBuilder<C extends UIInputComponent> extends BaseComponentBuilder<C> {
 
     public BaseInputBuilder() {
-        baseModel = emptyModel();
+        super();
     }
 
+    public BaseInputBuilder<C> withLabel(String label) {
+        this.baseModel.setLabel(label);
+        return this;
+    }
+
+
+    public BaseInputBuilder<C> withId(String id) {
+        this.baseModel.setId(id);
+        return this;
+    }
 
     public BaseInputBuilder<C> withValue(String valueExpression, Class expectedType) {
         this.baseModel.setValueExpression(exprFactory.create(valueExpression, expectedType));
@@ -41,23 +48,4 @@ public abstract class BaseInputBuilder<C extends UIComponent> {
         this.baseModel.setRenderExpression(exprFactory.create(renderExpression));
         return this;
     }
-
-    public BaseInputBuilder<C> withId(String id) {
-        this.baseModel.setId(id);
-        return this;
-    }
-
-    public C build() {
-        C model = doBuild(baseModel);
-        baseModel = emptyModel();
-        return model;
-    }
-
-    protected abstract C emptyModel();
-
-    protected C doBuild(C baseModel) {
-        return baseModel;
-    }
-
-
 }

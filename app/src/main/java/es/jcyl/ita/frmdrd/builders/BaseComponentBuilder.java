@@ -21,31 +21,16 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseInputBuilder<C extends UIComponent> {
+public abstract class BaseComponentBuilder<C extends UIComponent> {
 
     protected static ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     protected C baseModel;
 
-    public BaseInputBuilder() {
-        baseModel = emptyModel();
+    public BaseComponentBuilder(){
+        this.baseModel = emptyModel();
     }
 
-
-    public BaseInputBuilder<C> withValue(String valueExpression, Class expectedType) {
-        this.baseModel.setValueExpression(exprFactory.create(valueExpression, expectedType));
-        return this;
-    }
-
-    public BaseInputBuilder<C> withRender(String renderExpression) {
-        this.baseModel.setRenderExpression(exprFactory.create(renderExpression));
-        return this;
-    }
-
-    public BaseInputBuilder<C> withId(String id) {
-        this.baseModel.setId(id);
-        return this;
-    }
 
     public C build() {
         C model = doBuild(baseModel);

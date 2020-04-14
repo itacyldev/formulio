@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.view.render;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteRenderer;
 import es.jcyl.ita.frmdrd.ui.components.datatable.DatatableRenderer;
 import es.jcyl.ita.frmdrd.ui.components.form.FormRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.CheckBoxFieldRenderer;
@@ -46,6 +47,8 @@ public class RendererFactory {
         renderInstances.put("datatable", new DatatableRenderer());
         renderInstances.put("link", new LinkRenderer());
         renderInstances.put("select", new SelectRenderer());
+        renderInstances.put("autocomplete", new AutoCompleteRenderer());
+
     }
 
     public static RendererFactory getInstance() {

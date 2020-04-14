@@ -15,8 +15,56 @@ package es.jcyl.ita.frmdrd.view.widget;
  * limitations under the License.
  */
 
+import android.content.Context;
+import android.widget.ArrayAdapter;
+
+import androidx.annotation.NonNull;
+
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.query.Filter;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class RepositoryAdapter {
+public class RepositoryAdapter extends ArrayAdapter<Entity> {
+
+    private Filter filter;
+    private Repository repo;
+    private List<Entity> store;
+    private RepoListFilter listFilter;
+    private es.jcyl.ita.crtrepo.context.Context globalContext;
+
+    public RepositoryAdapter(@NonNull Context context, int resource, @NonNull List<Entity> store,
+                             Repository repo, Filter filter, RepoListFilter listFilter) {
+        super(context, resource, store);
+        this.repo = repo;
+        this.filter = filter;
+        this.store = store;
+        this.listFilter = listFilter;
+    }
+    public void setGlobalContext(es.jcyl.ita.crtrepo.context.Context context){
+        this.globalContext = context;
+    }
+
+    @NonNull
+    @Override
+    public android.widget.Filter getFilter() {
+        return listFilter;
+    }
+
+    public class RepoListFilter extends android.widget.Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            return null;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+        }
+    }
 }

@@ -20,37 +20,34 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class SelectBuilder extends BaseInputBuilder<UISelect> {
+public class AutoCompleteBuilder extends BaseInputBuilder<UIAutoComplete> {
     private List<UIOption> options;
 
-    public SelectBuilder() {
+    public AutoCompleteBuilder() {
         this.options = new ArrayList<UIOption>();
     }
 
 
     @Override
-    protected UISelect emptyModel() {
-        return new UISelect();
+    protected UIAutoComplete emptyModel() {
+        return new UIAutoComplete();
     }
 
 
-    public SelectBuilder withId(String id) {
-        this.baseModel.setId(id);
-        return this;
-    }
-    public SelectBuilder addOption(String label, String value) {
+    public AutoCompleteBuilder addOption(String label, String value) {
         options.add(new UIOption(label, value));
         return this;
     }
 
     @Override
-    protected UISelect doBuild(UISelect baseModel) {
+    protected UIAutoComplete doBuild(UIAutoComplete baseModel) {
         if(StringUtils.isBlank(this.baseModel.getId())){
             throw new FormBuilderException("The id cannot be null!.");
         }

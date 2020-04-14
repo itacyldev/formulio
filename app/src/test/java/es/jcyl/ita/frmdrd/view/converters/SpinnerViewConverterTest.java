@@ -191,17 +191,19 @@ public class SpinnerViewConverterTest {
                 .withNumOptions(5)
                 .withValueBindingExpression("${entity.myProperty}")
                 .build();
-        String[] values = new String[]{
+        String[] values = new String[]{null,
                 select.getOptions()[2].getValue(),
                 select.getOptions()[4].getValue(),
-                null,
+
                 "CCCCC" // not existing value in options, has to be return as null
         };
-        String expected[] = {select.getOptions()[2].getValue(),
-                select.getOptions()[4].getValue(), null, null};
+        String expected[] = {null, select.getOptions()[2].getValue(),
+                select.getOptions()[4].getValue(), null};
 
         for (int i = 0; i < values.length; i++) {
             entity.set(bindProperty, values[i]);
+
+            System.out.println("Checking with value: " + values[i]);
 
             DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                     .invoke(ctx, true)

@@ -25,7 +25,7 @@ import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class AutocompleteValueConverter implements ViewValueConverter<AutoCompleteTextView> {
+public class AutoCompleteValueConverter implements ViewValueConverter<AutoCompleteTextView> {
 
     @Override
     public String getValueFromViewAsString(AutoCompleteTextView view) {

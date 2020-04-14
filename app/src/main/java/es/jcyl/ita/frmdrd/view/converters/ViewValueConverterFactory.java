@@ -18,7 +18,6 @@ package es.jcyl.ita.frmdrd.view.converters;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 
 /**
@@ -36,6 +35,7 @@ public class ViewValueConverterFactory {
         map.put("date", new TextViewConverter());
         map.put("boolean", new SwitcherFieldViewConverter());
         map.put("select", new SpinnerValueConverter());
+        map.put("autocomplete", new TextViewConverter());
     }
 
     public static ViewValueConverterFactory getInstance() {

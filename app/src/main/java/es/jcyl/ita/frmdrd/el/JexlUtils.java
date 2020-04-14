@@ -37,7 +37,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public class JexlUtils {
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
-            .strict(true).silent(false).create();
+            .strict(false).silent(false).create();
 
     protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, true,
             256, '$', '#');

@@ -38,71 +38,6 @@ import es.jcyl.ita.crtrepo.context.Context;
 public class UnPrefixedCompositeContext extends MapCompositeContext implements CompositeContext, JexlContext {
     private final Map<String, Context> contexts = new LinkedHashMap();
 
-//
-//    public void setProperty(final String key, final Object value) {
-//        //If the key doesn't exist is added to the first configuration object
-//        if (!this.containsKey(key)) {
-//            this.first().put(key, value);
-//        } else {
-//            // Buscamos en la ultima fuente que contenga esa clave
-//            this.last(key).put(key, value);
-//        }
-//    }
-
-//    /*
-//     * (non-Javadoc)
-//     *
-//     * @see es.jcyl.ita.fwk.Context.Context#clearProperty(java.lang. String )
-//     */
-//    public void clearProperty(final String key) {
-//        for (Entry<String, Context> entry : this.contexts.entrySet()) {
-//            entry.getValue().remove(key);
-//        }
-//    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see es.jcyl.ita.fwk.Context.Context#clear()
-     */
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see es.jcyl.ita.fwk.Context.Context#getValue(java.lang.String)
-     */
-//    public Object getValue(final String prefix, final String key) {
-//        String prKey = getMapKey(prefix);
-//        if (!this.contexts.containsKey(prKey)) {
-//            throw new RuntimeException(String.format(
-//                    "No context found with de prefix [%s].", prefix));
-//        } else {
-//            return this.contexts.get(prKey).getValue(key);
-//        }
-//    }
-//
-
-//
-//    public void putValue(final String prefix, final String key,
-//                         final Object value) {
-//        String prKey = getMapKey(prefix);
-//        if (!this.contexts.containsKey(prKey)) {
-//            throw new RuntimeException(String.format(
-//                    "No context found with de prefix [%s].", prefix));
-//        } else {
-//            this.contexts.get(prKey).put(key, value);
-//        }
-//    }
-//
-//    public void putAllValues(final String prefix, Map<String, Object> values) {
-//        String prKey = getMapKey(prefix);
-//        if (!this.contexts.containsKey(prKey)) {
-//            throw new RuntimeException(String.format(
-//                    "No context found with de prefix [%s].", prefix));
-//        } else {
-//            this.contexts.get(prKey).putAll(values);
-//        }
-//    }
 
     /**
      * Looks up a property in the context, looking in each of the stored context. The key must
@@ -114,11 +49,6 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
     public Object getValue(final String key) {
         String[] newKey = splitKey(key);
         return (newKey == null) ? null : this.contexts.get(newKey[0]).get(newKey[1]);
-//        if (newKey == null) {
-//            return null;
-//        }
-//        Context ctx = this.contexts.get(newKey[0]);
-//        return ctx.get(newKey[1]);
     }
 
 
@@ -330,12 +260,6 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
     /************************************************/
     /*** JexlContext interface implementation **/
     /************************************************/
-
-//
-//
-//    public Object get(String name){
-//        return this.getValue(name);
-//    }
     public void set(String name, Object value) {
         this.put(name, value);
     }

@@ -73,7 +73,7 @@ public class FormViewContext extends AbstractBaseContext {
     @Override
     public String getString(String elementId) {
         InputFieldView fieldView = findInputFieldViewById(elementId);
-        if (view == null) {
+        if (fieldView == null) {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
@@ -83,7 +83,7 @@ public class FormViewContext extends AbstractBaseContext {
     @Override
     public Object getValue(String elementId) {
         InputFieldView fieldView = findInputFieldViewById(elementId);
-        if (view == null) {
+        if (fieldView == null) {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }

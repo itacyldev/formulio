@@ -21,7 +21,7 @@ import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIAutocomplete extends UISelect {
+public class UIAutoComplete extends UISelect {
 
     private static final String TYPE = "autocomplete";
 

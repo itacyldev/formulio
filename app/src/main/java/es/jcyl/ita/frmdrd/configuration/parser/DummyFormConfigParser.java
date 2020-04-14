@@ -4,6 +4,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
@@ -12,22 +13,22 @@ import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.crtrepo.query.Sort;
+import es.jcyl.ita.frmdrd.builders.AutoCompleteBuilder;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.builders.FormControllerBuilder;
-import es.jcyl.ita.frmdrd.builders.SelectBuilder;
 import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
 import es.jcyl.ita.frmdrd.ui.components.link.UIParam;
-import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
@@ -58,7 +59,8 @@ public class DummyFormConfigParser extends FormConfigParser {
     DataTableBuilder formGenerator = new DataTableBuilder();
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     FormControllerBuilder fcBuilder = new FormControllerBuilder();
-    SelectBuilder selectBuilder = new SelectBuilder();
+    AutoCompleteBuilder autoCompleteBuilder = new AutoCompleteBuilder();
+
     @Override
     public void parseFormConfig(String formConfigStr) {
 //        FormController fc1List = new FormListController("MyForm1", "Form number 1.");
@@ -87,12 +89,14 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         // add select to form an
         UIForm uiForm = result.getEdit().getView().getForms().get(0);
-        for(int i=0; i <30;i++){
-            selectBuilder.addOption(""+i,""+i);
+        String[] nouns = randomNouns(50);
+        for (int i = 0; i < 30; i++) {
+            autoCompleteBuilder.addOption(nouns[i], nouns[i]);
         }
-        UISelect select = selectBuilder.withValue("${entity.it_profile}", Integer.class)
-                .withId("profileselect").build();
-        uiForm.addChild(select);
+        UIAutoComplete select = autoCompleteBuilder.withValue("${entity.it_profile}", Integer.class)
+                .withId("profileselect").withLabel("autocomplete").build();
+        uiForm.getChildren().add(0, select);
+        select.setParentForm(uiForm);
 
 
         loadConfig(result.getList());
@@ -105,9 +109,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         result = fcBuilder.withRepo(contactsRepo).withId("formContacts2").build();
         loadConfig(result.getEdit());
         loadConfig(result.getList());
-        createTableFilterView(result.getEdit());
-
-
+//        createTableFilterView(result.getEdit());
 
     }
 
@@ -290,6 +292,30 @@ public class DummyFormConfigParser extends FormConfigParser {
         formController.setView(view1);
 
     }
+
+    /******************************************/
+    /** PARA ELIMINAR **/
+    /****************************************/
+
+    public static int randomInt(int min, int max) {
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+    }
+
+    public static String[] randomNouns(int size) {
+        String[] nouns = new String[size];
+        for (int i = 0; i < size; i++) {
+            int pos = randomInt(0, _nouns.length-1);
+            nouns[i] = _nouns[pos];
+        }
+        return nouns;
+    }
+
+    private static final String[] _nouns = new String[]{"belt", "blouse", "boots", "cap", "cardigan", "coat", "dress", "gloves", "hat", "jacket", "jeans", "jumper", "mini", "skirt", "overalls", "overcoat", "pijamas", "pants", "pantyhose", "raincoat", "scarf", "shirt", "shoes", "shorts", "skirt", "slacks", "slippers", "socks", "stockings", "suit", "sweat", "shirt", "sweater", "sweatshirt", "tie", "trousers", "underclothes", "underpants", "undershirt", "vest", "ankle", "arm", "back", "beard", "blood", "body", "bone", "brain", "cheek", "chest", "chin", "ear", "ears", "elbow", "eye", "eyes", "face", "feet", "finger", "fingers", "flesh", "foot", "hair", "hand", "hands", "head", "heart", "hip", "knee", "knees", "leg", "legs", "lip", "moustache", "mouth", "muscle", "nail", "neck", "nose", "shoulder", "shoulders", "skin", "stomach", "teeth", "throat", "thumb", "thumbs", "toe", "toes", "tongue", "tooth", "wrist", "alligator", "ant", "bear", "bee", "bird", "camel", "cat", "cheetah", "chicken", "chimpanzee", "cow", "crocodile", "deer", "dog", "dolphin", "duck", "eagle", "elephant", "fish", "fly", "fox", "frog", "giraffe", "goat", "goldfish", "hamster", "hippopotamus", "horse", "kangaroo", "kitten", "leopard", "lion", "lizard", "lobster", "monkey", "octopus", "ostrich", "otter", "owl", "oyster", "panda", "parrot", "pelican", "pig", "pigeon", "porcupine", "puppy", "rabbit", "rat", "reindeer", "rhinoceros", "rooster", "scorpion", "seal", "shark", "sheep", "shrimp", "snail", "snake", "sparrow", "spider", "squid", "squirrel", "swallow", "swan", "tiger", "toad", "tortoise", "turtle", "vulture", "walrus", "weasel", "whale", "wolf", "zebra"};
 
 }
 
