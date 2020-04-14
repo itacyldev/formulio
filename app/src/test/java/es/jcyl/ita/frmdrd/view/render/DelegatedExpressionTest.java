@@ -36,20 +36,16 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
-import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.ContextUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
@@ -75,11 +71,11 @@ public class DelegatedExpressionTest {
     }
 
     /**
-     * Creates a view tree and applies rendering conditions based on entity values and checks
-     * the view is not visible
+     * Creates a 4 field dependency tree and check all the fields have the same value at
+     * the end of the test
      */
     @Test
-    public void testSimpleViewWithStringCondsRender() {
+    public void testBasicDependencyChain() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
         Object[] values = createDepsTree(ctx);
@@ -88,7 +84,7 @@ public class DelegatedExpressionTest {
 
         Entity entity = createEntity();
 
-        // set root dependency towards the entity f0 field
+        // set root dependency pointing at entity field f[0]
         String propertyName = entity.getMetadata().getProperties()[0].getName();
         String entityExpr = String.format("${entity.%s}", propertyName);
         // setup f1 so its value will be obtained from entity
@@ -103,11 +99,10 @@ public class DelegatedExpressionTest {
         // walk the tree executing expressions
         View baseFormView = renderHelper.render(env, form.getParent());
 
-        System.out.println("-------------------");
         // check dependencies chain f1, f2, f3 and f4 must have the same value
         Object expectedValue = entity.get(propertyName);
         for (UIInputComponent kid : form.getFields()) {
-            UIInputComponent field = (UIField) kid;
+            UIInputComponent field = kid;
             Assert.assertEquals(expectedValue.toString(), field.getValue(env.getContext()).toString());
         }
     }

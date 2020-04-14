@@ -90,7 +90,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         for(int i=0; i <30;i++){
             selectBuilder.addOption(""+i,""+i);
         }
-        UISelect select = selectBuilder.withValue("${entity.it_profile}", Integer.class).withId("profileselect").build();
+        UISelect select = selectBuilder.withValue("${entity.it_profile}", Integer.class)
+                .withId("profileselect").build();
         uiForm.addChild(select);
 
 
@@ -101,15 +102,17 @@ public class DummyFormConfigParser extends FormConfigParser {
         loadConfig(result.getEdit());
         loadConfig(result.getList());
 
-//        result = fcBuilder.withRepo(contactsRepo).withId("tableTest").build();
-//        createListView1(result.getList());
-//        createEditView1(result.getEdit());
-//        loadConfig(result.getList());
-//        loadConfig(result.getEdit());
+        result = fcBuilder.withRepo(contactsRepo).withId("formContacts2").build();
+        loadConfig(result.getEdit());
+        loadConfig(result.getList());
+        createTableFilterView(result.getEdit());
+
+
+
     }
 
 
-    private void createEditView1(FormController formController) {
+    private void createTableFilterView(FormController formController) {
         List<UIComponent> lst = new ArrayList<UIComponent>();
 
         UIField fieldn = new UIField();
@@ -280,14 +283,6 @@ public class DummyFormConfigParser extends FormConfigParser {
         table.setRoute(formController.getId() + "#edit");
         lst.add(table);
 
-//        UIForm form1 = new UIForm();
-//        form1.setId("form1");
-//        form1.setLabel("Formulario 1");
-//        form1.setChildren(lst);
-//        form1.setRepo(contactsRepo);
-//        List<UIComponent> f = new ArrayList<>();
-//        f.add(form1);
-
         UIView view1 = new UIView("view1List");
 //        view1.setChildren(f);
         view1.setChildren(new UIComponent[]{table});
@@ -296,82 +291,5 @@ public class DummyFormConfigParser extends FormConfigParser {
 
     }
 
-//
-//    public String parseFormConfig2(String formConfigStr) {
-//
-//        UIField field1 = new UIField();
-//        field1.setType(UIField.TYPE.TEXT);
-//        field1.setLabel("campo 1");
-//        field1.setId("campo1");
-//
-//        UIField field2 = new UIField();
-//        field2.setType(UIField.TYPE.BOOLEAN);
-//        field2.setLabel("campo 2");
-//        field2.setId("campo2");
-//        field2.setUpdate("campo3");
-//
-//        UIField field3 = new UIField();
-//        field3.setType(UIField.TYPE.TEXT);
-//        field3.setLabel("campo 3");
-//        field3.setId("campo3");
-//        field3.setRenderCondition("ctx[\"form.campo2\"] == true");
-//
-//        UIDatatable table = new UIDatatable();
-//        table.setId("table1");
-//
-//        UITab tab1_1 = new UITab();
-//        tab1_1.setId("tab1");
-//        tab1_1.addComponent(field1);
-//        tab1_1.addComponent(field2);
-//        tab1_1.addComponent(field3);
-//        tab1_1.addComponent(table);
-//
-//
-//        UIForm form1 = new UIForm();
-//        form1.setId("Form_1");
-//        form1.setLabel("Formulario 1");
-//        form1.addTab(tab1_1);
-//
-//        loadConfig(form1);
-//
-//        UIField field2_1 = new UIField();
-//        field2_1.setType(UIField.TYPE.TEXT);
-//        field2_1.setLabel("campo 1");
-//        field2_1.setId("campo1");
-//
-//        UIField field2_2 = new UIField();
-//        field2_2.setType(UIField.TYPE.BOOLEAN);
-//        field2_2.setLabel("campo 2");
-//        field2_2.setId("campo2");
-//        field2_2.setUpdate("campo3");
-//
-//        UIField field2_3 = new UIField();
-//        field2_3.setType(UIField.TYPE.TEXT);
-//        field2_3.setLabel("campo 3");
-//        field2_3.setId("campo3");
-//        field2_3.setRenderCondition("ctx[\"form.campo2\"] == true");
-//
-//        UIField field2_4 = new UIField();
-//        field2_4.setType(UIField.TYPE.DATE);
-//        field2_4.setLabel("campo 4");
-//        field2_4.setId("campo4");
-//
-//        UITab tab_2_1_1 = new UITab();
-//        tab_2_1_1.setId("tab1");
-//        tab_2_1_1.addComponent(field2_1);
-//        tab_2_1_1.addComponent(field2_2);
-//        tab_2_1_1.addComponent(field2_3);
-//        tab_2_1_1.addComponent(field2_4);
-//
-//
-//        UIForm form2 = new UIForm();
-//        form2.setId("Form_2");
-//        form2.setLabel("Formulario 2");
-//        form2.addTab(tab_2_1_1);
-//
-//        //loadConfig(form2);
-//
-//        return form1.getId();
-//    }
 }
 
