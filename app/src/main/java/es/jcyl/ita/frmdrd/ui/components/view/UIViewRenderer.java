@@ -28,7 +28,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 /**
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class ViewRenderer extends BaseRenderer implements GroupRenderer {
+public class UIViewRenderer extends BaseRenderer implements GroupRenderer {
 
 
     protected View createBaseView(RenderingEnv env, UIComponent component) {

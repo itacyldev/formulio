@@ -26,7 +26,7 @@ import es.jcyl.ita.frmdrd.ui.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.link.LinkRenderer;
 import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
-import es.jcyl.ita.frmdrd.ui.components.view.ViewRenderer;
+import es.jcyl.ita.frmdrd.ui.components.view.UIViewRenderer;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /**
@@ -39,7 +39,7 @@ public class RendererFactory {
     private static final Map<String, Renderer> renderInstances = new HashMap<String, Renderer>();
 
     private RendererFactory() {
-        renderInstances.put("view", new ViewRenderer());
+        renderInstances.put("view", new UIViewRenderer());
         renderInstances.put("form", new FormRenderer());
         renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("date", new DateFieldRenderer());

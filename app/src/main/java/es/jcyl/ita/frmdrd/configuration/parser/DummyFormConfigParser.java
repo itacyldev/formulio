@@ -98,7 +98,6 @@ public class DummyFormConfigParser extends FormConfigParser {
         uiForm.getChildren().add(0, select);
         select.setParentForm(uiForm);
 
-
         loadConfig(result.getList());
 
         EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
@@ -109,7 +108,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         result = fcBuilder.withRepo(contactsRepo).withId("formContacts2").build();
         loadConfig(result.getEdit());
         loadConfig(result.getList());
-//        createTableFilterView(result.getEdit());
+        createTableFilterView(result.getEdit());
 
     }
 
@@ -118,33 +117,33 @@ public class DummyFormConfigParser extends FormConfigParser {
         List<UIComponent> lst = new ArrayList<UIComponent>();
 
         UIField fieldn = new UIField();
-        fieldn.setId("initial");
+        fieldn.setId("ini");
         fieldn.setType(UIField.TYPE.TEXT);
-        fieldn.setLabel("Inicial");
+        fieldn.setLabel("ini");
         fieldn.setReadOnly(true);
         fieldn.setValueExpression(exprFactory.create("${entity.last_name}"));
         lst.add(fieldn);
 
         UIField field0 = new UIField();
-        field0.setId("filter");
+        field0.setId("f1");
         field0.setType(UIField.TYPE.TEXT);
-        field0.setLabel("Filter");
-        field0.setValueExpression(exprFactory.create("${view.initial}"));
+        field0.setLabel("f1");
+        field0.setValueExpression(exprFactory.create("${view.ini}"));
         lst.add(field0);
 
 
         UIField fieldB = new UIField();
         fieldB.setId("f2");
         fieldB.setType(UIField.TYPE.TEXT);
-        fieldB.setLabel("data");
+        fieldB.setLabel("f2");
         lst.add(fieldB);
 
         UIField field1 = new UIField();
-        field1.setId("filtercopy");
+        field1.setId("f3");
         field1.setType(UIField.TYPE.TEXT);
         field1.setLabel("Filter copy");
-        field1.setValueExpression(exprFactory.create("${view.filter} - ${view.f2}"));
-        field1.setRenderExpression(exprFactory.create("${view.filter.length() < 5}"));
+        field1.setValueExpression(exprFactory.create("${view.f1} - ${view.f2}"));
+        field1.setRenderExpression(exprFactory.create("${view.f1.length() < 5}"));
         lst.add(field1);
 
 
@@ -155,8 +154,8 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         // table repository filter
         Filter f = new SQLQueryFilter();
-        Criteria criteria = Criteria.or(ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${view.filter}")),
-                ConditionBinding.cond(Condition.contains("email", null), exprFactory.create("${view.filter}")));
+        Criteria criteria = Criteria.or(ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${view.f1}")),
+                ConditionBinding.cond(Condition.contains("email", null), exprFactory.create("${view.f1}")));
         f.setCriteria(criteria);
         table.setFilter(f);
         lst.add(table);
