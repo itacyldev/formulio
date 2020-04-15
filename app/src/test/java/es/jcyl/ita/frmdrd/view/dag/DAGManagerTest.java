@@ -1,5 +1,6 @@
 package es.jcyl.ita.frmdrd.view.dag;
 
+import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.junit.Assert;
@@ -13,8 +14,8 @@ import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 
@@ -36,8 +37,8 @@ public class DAGManagerTest {
         Assert.assertEquals(2, dags.size());
 
         // Get each field's dag
-        DirectedAcyclicGraph dag1 = dags.get("form.field1");
-        DirectedAcyclicGraph dag2 = dags.get("form.field5");
+        Graph<DAGNode, DefaultEdge> dag1 = viewDags.getDAG("form.field1");
+        Graph<DAGNode, DefaultEdge> dag2 = viewDags.getDAG("form.field5");
 
         Assert.assertEquals(4, dag1.vertexSet().size());
         Assert.assertEquals(2, dag2.vertexSet().size());
@@ -161,3 +162,4 @@ public class DAGManagerTest {
         return formBuilder.build();
     }
 }
+
