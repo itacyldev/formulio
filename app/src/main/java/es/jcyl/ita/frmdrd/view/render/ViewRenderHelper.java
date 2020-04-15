@@ -164,39 +164,40 @@ public class ViewRenderHelper {
         if (viewDAG == null || viewDAG.getDags().size() == 0) {
             return;
         }
+        DirectedAcyclicGraph<DAGNode, DefaultEdge> dag = viewDAG.getDAG(component.getAbsoluteId());
+        if (dag == null) {
+            return;// no dependant components
+        }
         // get current Android view
         View rootView = env.getViewRoot();
-
         // walk the tree in topological order to follow the dependencies from the current element
-        for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
-            System.out.println(">>>> DAG ENCONTRADO: "+ dag.toString());
-            // sets the rendering starting point, when given element is found in the DAG
-            boolean found = false;
+        System.out.println(">>>> DAG ENCONTRADO: " + dag.toString());
+        // sets the rendering starting point, when given element is found in the DAG
+        boolean found = false;
 
-            for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
-                DAGNode node = it.next();
-                System.out.println("Renderizando..... " + node.getId() + " " + node.getComponent());
-                if (!found) {
-                    if (node.getComponent().getId().equals(component.getId())) {
-                        found = true; // start rendering in next element
-                        System.out.println("===========EMPEZAMOS=================");
-                    }
+        for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
+            DAGNode node = it.next();
+            System.out.println("Renderizando..... " + node.getId() + " " + node.getComponent());
+            if (!found) {
+                if (node.getComponent().getId().equals(component.getId())) {
+                    found = true; // start rendering in next element
+                    System.out.println("===========EMPEZAMOS=================");
+                }
+            } else {
+                // find view element to update
+                UIComponent cNode = node.getComponent();
+                View view = ViewHelper.findComponentView(rootView, cNode);
+                if (component instanceof UIForm) {
+                    env.setFormContext(((UIForm) component).getContext());
                 } else {
-                    // find view element to update
-                    UIComponent cNode = node.getComponent();
-                    View view = ViewHelper.findComponentView(rootView, cNode);
-                    if (component instanceof UIForm) {
-                        env.setFormContext(((UIForm) component).getContext());
-                    } else {
-                        env.setFormContext(component.getParentForm().getContext());
-                    }
-                    if (view instanceof DynamicComponent) {
-                        ((DynamicComponent) view).load(env);
-                    } else {
-                        // re-render and replace view
-                        View newView = this.render(env, node.getComponent(), false);
-                        replaceView(view, newView);
-                    }
+                    env.setFormContext(component.getParentForm().getContext());
+                }
+                if (view instanceof DynamicComponent) {
+                    ((DynamicComponent) view).load(env);
+                } else {
+                    // re-render and replace view
+                    View newView = this.render(env, node.getComponent(), false);
+                    replaceView(view, newView);
                 }
             }
         }
