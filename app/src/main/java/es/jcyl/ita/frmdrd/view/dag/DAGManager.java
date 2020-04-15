@@ -235,7 +235,6 @@ public class DAGManager {
      * @param dagId
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private DirectedAcyclicGraph getDagComponent(String dagId,
                                                  Map<String,
                                                          DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags) {
