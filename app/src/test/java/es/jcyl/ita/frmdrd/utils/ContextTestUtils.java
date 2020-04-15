@@ -16,13 +16,15 @@ package es.jcyl.ita.frmdrd.utils;
  */
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ContextUtils {
+public class ContextTestUtils {
 
     public static CompositeContext createGlobalContext() {
         CompositeContext ctx = new OrderedCompositeContext();

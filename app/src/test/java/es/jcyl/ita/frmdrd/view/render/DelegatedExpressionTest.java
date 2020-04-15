@@ -44,7 +44,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
@@ -93,7 +93,7 @@ public class DelegatedExpressionTest {
         // set entity in forms context
         form.getContext().setEntity(entity);
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
         env.setViewContext(ctx);
         env.setViewDAG(viewDAG);
         // walk the tree executing expressions

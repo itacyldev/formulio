@@ -93,10 +93,16 @@ public class DummyFormConfigParser extends FormConfigParser {
         for (int i = 0; i < 30; i++) {
             autoCompleteBuilder.addOption(nouns[i], nouns[i]);
         }
-        UIAutoComplete select = autoCompleteBuilder.withValue("${entity.it_profile}", Integer.class)
-                .withId("profileselect").withLabel("autocomplete").build();
-        uiForm.getChildren().add(0, select);
-        select.setParentForm(uiForm);
+//        UIAutoComplete select = autoCompleteBuilder.withValue("${entity.it_profile}", Integer.class)
+//                .withId("profileselect").withLabel("autocomplete").build();
+//        uiForm.getChildren().add(0, select);
+//        select.setParentForm(uiForm);
+
+        UIAutoComplete select2 = autoCompleteBuilder.withValue("${entity.it_profile}", Integer.class)
+                .withId("profileselect2").withLabel("autocomplete").build();
+        select2.setRepo(contactsRepo);
+        uiForm.getChildren().add(0, select2);
+        select2.setParentForm(uiForm);
 
         loadConfig(result.getList());
 

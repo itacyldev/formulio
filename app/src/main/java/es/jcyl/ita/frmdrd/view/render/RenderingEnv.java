@@ -31,6 +31,7 @@ import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
@@ -110,7 +111,7 @@ public class RenderingEnv {
         // add form to context with full id
         this.globalContext.addContext(formContext);
         // register
-        this.combinedContext = createCombinedContext(globalContext, formContext);
+        this.combinedContext = ContextUtils.combine(globalContext, formContext);
         // register this FormContext
         currentFormContexts.add(formContext);
     }
@@ -119,12 +120,6 @@ public class RenderingEnv {
         return userActionInterceptor;
     }
 
-    private CompositeContext createCombinedContext(CompositeContext globalContext, FormContext fContext) {
-        CompositeContext combinedContext = new UnPrefixedCompositeContext();
-        combinedContext.addContext(globalContext);
-        combinedContext.addContext(fContext);
-        return combinedContext;
-    }
 
     public void addDeferred(String componentId, DeferredView view) {
         if (this.deferredViews == null) {

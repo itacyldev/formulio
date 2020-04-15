@@ -17,8 +17,7 @@ package es.jcyl.ita.frmdrd.view.render;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.Adapter;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -28,25 +27,33 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
+import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.builders.SelectDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
+import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
-import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  */
 @RunWith(RobolectricTestRunner.class)
-public class SelectRendererTest {
+public class AutoCompleteRendererTest {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
@@ -62,30 +69,30 @@ public class SelectRendererTest {
      * the view is not visible
      */
     @Test
-    public void testSimpleSelect() {
+    public void testSimpleAutoComplete() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
 
-        UISelect select = new UISelect();
-        int expectedOptions = RandomUtils.randomInt(0, 5);
-
+        UIAutoComplete select = new UIAutoComplete();
         select.setId(RandomUtils.randomString(4));
 
+        int expectedOptions = RandomUtils.randomInt(0, 5);
         UIOption[] options = new UIOption[expectedOptions];
         for (int i = 0; i < options.length; i++) {
             String name = RandomUtils.randomString(3);
             options[i] = new UIOption(name, name);
         }
         select.setOptions(options);
-        InputFieldView<Spinner> view = (InputFieldView<Spinner>) renderHelper.render(env, select);
+        InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, select);
         Assert.assertNotNull(view);
 
         // check elements in the view
-        SpinnerAdapter adapter = view.getInputView().getAdapter();
+        Adapter adapter = view.getInputView().getAdapter();
         Assert.assertNotNull(adapter);
-        Assert.assertEquals(expectedOptions, adapter.getCount()-1);// empty option was added by renderer
+        Assert.assertEquals(expectedOptions, adapter.getCount() - 1);// empty option was added by renderer
+
     }
 
     @Test
@@ -95,7 +102,7 @@ public class SelectRendererTest {
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
         env.setViewContext(ctx);
 
-        UISelect select = new UISelect();
+        UIAutoComplete select = new UIAutoComplete();
         select.setId(RandomUtils.randomString(4));
         select.setRenderExpression(exprFactory.create("false"));
         View view = renderHelper.render(env, select);
@@ -104,5 +111,38 @@ public class SelectRendererTest {
         Assert.assertTrue(view.getVisibility() == View.GONE);
     }
 
+    /**
+     * Fill the autocomplete values using a repository.
+     */
+    @Test
+    public void testGetOptionsFromRepo() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        env.setViewContext(ctx);
+
+        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        int expectedOptions = RandomUtils.randomInt(0, 13);
+        List<Entity> entities = DevDbBuilder.buildEntities(meta, expectedOptions);
+        // mock the repository to return random entities
+
+        EditableRepository repoMock = mock(EditableRepository.class);
+        when(repoMock.find(any())).thenReturn(entities);
+        when(repoMock.getMeta()).thenReturn(meta);
+        when(repoMock.getFilterClass()).thenReturn(SQLQueryFilter.class);
+
+        UIAutoComplete autoSel = new UIAutoComplete();
+        autoSel.setId("111");
+        autoSel.setRepo(repoMock);
+
+        InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, autoSel);
+        Assert.assertNotNull(view);
+
+        // check elements in the view
+        Adapter adapter = view.getInputView().getAdapter();
+        Assert.assertNotNull(adapter);
+        Assert.assertEquals(expectedOptions, adapter.getCount() - 1);// empty option was added by renderer
+
+    }
 
 }

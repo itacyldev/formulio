@@ -33,7 +33,7 @@ import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
@@ -62,7 +62,7 @@ public class FormViewContextTest {
         ViewRenderHelper renderHelper = new ViewRenderHelper();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
-        CompositeContext gCtx = ContextUtils.createGlobalContext();
+        CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         RenderingEnv env = new RenderingEnv(gCtx, null);
         env.setViewContext(ctx);
 
@@ -94,7 +94,7 @@ public class FormViewContextTest {
         ViewRenderHelper renderHelper = new ViewRenderHelper();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
-        CompositeContext gCtx = ContextUtils.createGlobalContext();
+        CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         RenderingEnv env = new RenderingEnv(gCtx, null);
         env.setViewContext(ctx);
 

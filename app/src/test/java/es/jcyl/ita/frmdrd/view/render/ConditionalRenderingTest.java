@@ -36,7 +36,7 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
@@ -91,7 +91,7 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
         env.setViewContext(ctx);
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
@@ -134,7 +134,7 @@ public class ConditionalRenderingTest {
         field.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
@@ -180,7 +180,7 @@ public class ConditionalRenderingTest {
         field.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
@@ -230,7 +230,7 @@ public class ConditionalRenderingTest {
         form.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the

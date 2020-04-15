@@ -16,37 +16,82 @@ package es.jcyl.ita.frmdrd.view.widget;
  */
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
+import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class RepositoryAdapter extends ArrayAdapter<Entity> {
 
-    private Filter filter;
+    private final int layoutResource;
+    private Filter defFilter;
     private Repository repo;
     private List<Entity> store;
     private RepoListFilter listFilter;
     private es.jcyl.ita.crtrepo.context.Context globalContext;
 
     public RepositoryAdapter(@NonNull Context context, int resource, @NonNull List<Entity> store,
-                             Repository repo, Filter filter, RepoListFilter listFilter) {
+                             UIAutoComplete component) {
         super(context, resource, store);
-        this.repo = repo;
-        this.filter = filter;
+        this.repo = component.getRepo();
+        this.defFilter = component.getFilter();
         this.store = store;
-        this.listFilter = listFilter;
+        this.layoutResource = resource;
+        this.listFilter = new RepoListFilter();
     }
-    public void setGlobalContext(es.jcyl.ita.crtrepo.context.Context context){
-        this.globalContext = context;
+
+    private Filter setupFilter(es.jcyl.ita.crtrepo.context.Context context) {
+        Filter f = FilterHelper.createInstance(repo);
+        if (defFilter != null) {
+            FilterHelper.evaluateFilter(context, defFilter, f);
+        }
+        f.setOffset(0);
+        f.setPageSize(200);
+        return f;
+    }
+
+    @Override
+    public int getCount() {
+        return store.size();
+    }
+
+    @Override
+    public Entity getItem(int position) {
+        return store.get(position);
+    }
+
+    @Override
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
+
+        if (view == null) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(layoutResource, parent, false);
+        }
+
+        Entity entity = getItem(position);
+        TextView strName = view.findViewById(R.id.item_label);
+        strName.setText(entity.getId().toString());
+
+        TextView couponCount = view.findViewById(R.id.item_value);
+        couponCount.setText(entity.getId().toString());
+
+        return view;
     }
 
     @NonNull
@@ -59,12 +104,30 @@ public class RepositoryAdapter extends ArrayAdapter<Entity> {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            return null;
+            FilterResults results = new FilterResults();
+            // combine global context with current entity value
+
+            Filter filter = setupFilter(globalContext);
+            List<Entity> entities = repo.find(filter);
+            results.values = entities;
+            results.count = (int) repo.count(filter);
+
+            return results;
+
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
+            if (results.values != null) {
+                store = (ArrayList<Entity>) results.values;
+            } else {
+                store = null;
+            }
+            if (results.count > 0) {
+                notifyDataSetChanged();
+            } else {
+                notifyDataSetInvalidated();
+            }
         }
     }
 }

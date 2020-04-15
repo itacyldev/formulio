@@ -34,7 +34,7 @@ import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
-import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /**
@@ -65,7 +65,7 @@ public class LinkRendererTest {
     public void testSimpleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
         env.setViewContext(ctx);
 
         // link component
@@ -83,7 +83,7 @@ public class LinkRendererTest {
     public void testNotVisibleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
-        RenderingEnv env = new RenderingEnv(ContextUtils.createGlobalContext(), new ActionController(null, null));
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
         env.setViewContext(ctx);
 
         // link component

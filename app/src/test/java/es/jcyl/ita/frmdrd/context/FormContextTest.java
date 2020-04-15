@@ -42,7 +42,7 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.utils.ContextUtils;
+import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
@@ -81,7 +81,7 @@ public class FormContextTest {
         Entity entity = entityBuilder.withRandomData().build();
 
         // configure the context as the MainController would do during navigation
-        CompositeContext gCtx = ContextUtils.createGlobalContextWithParam("entityId", entity.getId());
+        CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
         RenderingEnv env = new RenderingEnv(gCtx, null);
 
         // create form using entity meta to define UIFields
@@ -131,7 +131,7 @@ public class FormContextTest {
         Entity entity = entityBuilder.withRandomData().build();
 
         // configure the context as the MainController would do
-        CompositeContext gCtx = ContextUtils.createGlobalContextWithParam("entityId", entity.getId());
+        CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
         RenderingEnv env = new RenderingEnv(gCtx, null);
         env.setViewContext(ctx);
 

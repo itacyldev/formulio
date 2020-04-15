@@ -23,6 +23,7 @@ import android.widget.AutoCompleteTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
@@ -32,15 +33,19 @@ import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.widget.RepositoryAdapter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Creates view elements for autocomplete component
  */
-public class AutoCompleteRenderer extends InputRenderer<AutoCompleteTextView, UIAutoComplete> {
+public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAutoComplete> {
 
     private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);
+
+    private List<Entity> entities = new ArrayList<>();
+
 
     @Override
     protected int getComponentLayout() {
@@ -48,24 +53,15 @@ public class AutoCompleteRenderer extends InputRenderer<AutoCompleteTextView, UI
     }
 
     @Override
-    protected void composeView(RenderingEnv env, InputFieldView<AutoCompleteTextView> baseView,
+    protected void composeView(RenderingEnv env, InputFieldView<AutoCompleteView> baseView,
                                UIAutoComplete component) {
         AutoCompleteTextView input = baseView.getInputView();
-
-        // create items from options
-        List<UIOption> items = new ArrayList<UIOption>();
-        // empty value option
-        items.add(EMPTY_OPTION);
-        if (component.getOptions() != null) {
-            for (UIOption option : component.getOptions()) {
-                items.add(option);
-            }
+        ArrayAdapter<UIOption> arrayAdapter;
+        if (component.getRepo() != null) {
+            arrayAdapter = createDynamicArrayAdapter(env, component, input);
+        } else {
+            arrayAdapter = createStaticArrayAdapter(env, component, input);
         }
-        input.setThreshold(0);
-        // setup adapter and event handler
-        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
-                android.R.layout.select_dialog_item, items);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         input.setAdapter(arrayAdapter);
         input.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -82,10 +78,36 @@ public class AutoCompleteRenderer extends InputRenderer<AutoCompleteTextView, UI
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+
+    }
+
+    private ArrayAdapter createDynamicArrayAdapter(RenderingEnv env, UIAutoComplete component, AutoCompleteTextView input) {
+        RepositoryAdapter adapter = new RepositoryAdapter(env.getViewContext(),
+                android.R.layout.select_dialog_item, entities, component);
+        return adapter;
+    }
+
+    private ArrayAdapter createStaticArrayAdapter(RenderingEnv env, UIAutoComplete component, AutoCompleteTextView input) {
+        // create items from options
+        List<UIOption> items = new ArrayList<UIOption>();
+        // empty value option
+        items.add(EMPTY_OPTION);
+        if (component.getOptions() != null) {
+            for (UIOption option : component.getOptions()) {
+                items.add(option);
+            }
+        }
+        input.setThreshold(0);
+        // setup adapter and event handler
+        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
+                android.R.layout.select_dialog_item, items);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return arrayAdapter;
     }
 
     @Override
-    protected void setMessages(RenderingEnv env, InputFieldView<AutoCompleteTextView> baseView,
+    protected void setMessages(RenderingEnv env, InputFieldView<AutoCompleteView> baseView,
                                UIAutoComplete component) {
 
     }
