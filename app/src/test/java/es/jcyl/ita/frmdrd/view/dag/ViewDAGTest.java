@@ -53,6 +53,7 @@ public class ViewDAGTest {
         Assert.assertTrue(dag1.containsVertex(node4));
         Assert.assertTrue(dag1.containsVertex(node7));
 
+
         DirectedAcyclicGraph dag2 = viewDAG.getDAG("node2");
         Assert.assertEquals(4, dag2.vertexSet().size());
         Assert.assertTrue(dag2.containsVertex(node2));
