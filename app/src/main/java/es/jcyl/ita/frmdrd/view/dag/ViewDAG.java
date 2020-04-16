@@ -1,8 +1,8 @@
 package es.jcyl.ita.frmdrd.view.dag;
 
-import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,27 +43,26 @@ public class ViewDAG {
             while (it.hasNext()) {
                 node = it.next();
                 if (node.getId().equals(nodeId)) {
-                    Set<DAGNode> vertexSet = new HashSet<>();
-                    vertexSet.add(node);
-                    Set<DAGNode> descendants = dag.getDescendants(node);
-                    if (descendants != null) {
-                        vertexSet.addAll(descendants);
+                    Set<DAGNode> descendants = getDescendants(node, dag);
+                    if (descendants.size() == 0) {
+                        return null;
                     }
 
-                    // subgraph with all the descendants
-                    AsSubgraph<DAGNode, DefaultEdge> subgraph = new AsSubgraph<>(dag, vertexSet);
+                    Set<DAGNode> vertexSet = new HashSet<>();
+                    // Add the root node
+                    vertexSet.add(node);
+                    // Add the descendants
+                    vertexSet.addAll(descendants);
 
-                    // Need to create a directed graph
+
                     subDAG = new DirectedAcyclicGraph(DefaultEdge.class);
                     // Vertices ara added
-                    for (DAGNode vertex : subgraph.vertexSet()) {
+                    for (DAGNode vertex : vertexSet) {
                         subDAG.addVertex(vertex);
                     }
 
                     // Edges are added
-                    for (DefaultEdge edge : subgraph.edgeSet()) {
-                        subDAG.addEdge(subDAG.getEdgeSource(edge), subDAG.getEdgeTarget(edge));
-                    }
+                    addEdgesToSubDag(vertexSet, dag, subDAG);
 
                     return subDAG;
                 }
@@ -79,4 +78,38 @@ public class ViewDAG {
         dags = null;
     }
 
+    /**
+     * @param node
+     * @param dag
+     * @return
+     */
+    private Set<DAGNode> getDescendants(DAGNode node, DirectedAcyclicGraph<DAGNode, DefaultEdge> dag) {
+        Iterator<DAGNode> iterator = new DepthFirstIterator<DAGNode, DefaultEdge>(dag, node);
+        Set<DAGNode> descendants = new HashSet<>();
+
+        // Do not add start vertex to result.
+        if (iterator.hasNext()) {
+            iterator.next();
+        }
+
+        while (iterator.hasNext()) {
+            DAGNode descendant = iterator.next();
+            descendants.add(descendant);
+        }
+        return descendants;
+    }
+
+    /**
+     * @param vertices
+     * @param dag
+     * @param subDag
+     */
+    private void addEdgesToSubDag(Set<DAGNode> vertices, DirectedAcyclicGraph dag, DirectedAcyclicGraph subDag) {
+        for (DAGNode vertex : vertices) {
+            Set<DefaultEdge> edges = dag.outgoingEdgesOf(vertex);
+            for (DefaultEdge edge : edges) {
+                subDag.addEdge(dag.getEdgeSource(edge), dag.getEdgeTarget(edge));
+            }
+        }
+    }
 }
