@@ -32,7 +32,7 @@ public class DatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable
 
     @Override
     protected DatatableLayout createBaseView(RenderingEnv env, UIDatatable component) {
-        UIDatatable dtComponent = (UIDatatable) component;
+        UIDatatable dtComponent = component;
         DatatableLayout datatableView = (DatatableLayout) View.inflate(env.getViewContext(),
                 R.layout.component_datatable_layout, null);
         datatableView.setDatatable(dtComponent);

@@ -15,6 +15,7 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
  * limitations under the License.
  */
 
+import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -52,10 +53,13 @@ public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAuto
         return R.layout.component_autocomplete;
     }
 
+//    protected InputFieldView createInputFieldView(Context viewContext, View baseView, UIAutoComplete component) {
+//        InputFieldView baseView = super.createInputFieldView(viewContext, baseView, component);
+//    }
     @Override
     protected void composeView(RenderingEnv env, InputFieldView<AutoCompleteView> baseView,
                                UIAutoComplete component) {
-        AutoCompleteTextView input = baseView.getInputView();
+        AutoCompleteView input = baseView.getInputView();
         ArrayAdapter<UIOption> arrayAdapter;
         if (component.getRepo() != null) {
             arrayAdapter = createDynamicArrayAdapter(env, component, input);
@@ -79,6 +83,7 @@ public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAuto
             }
         });
 
+        input.load(env);
 
     }
 

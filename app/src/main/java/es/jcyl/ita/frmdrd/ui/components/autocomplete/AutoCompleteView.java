@@ -17,17 +17,33 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class AutoCompleteView extends androidx.appcompat.widget.AppCompatAutoCompleteTextView implements DynamicComponent {
+public class AutoCompleteView extends androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        implements DynamicComponent {
     private UIAutoComplete component;
     private Repository repo;
+    private List<Entity> entities = new ArrayList<>();
+    private Filter filter;
+    private int pageSize;
+    private int offset;
+    private BaseAdapter adapter;
+
 
     public AutoCompleteView(Context context) {
         super(context);
@@ -43,9 +59,48 @@ public class AutoCompleteView extends androidx.appcompat.widget.AppCompatAutoCom
 
     @Override
     public void load(RenderingEnv env) {
+        // set filter to repo using current view data
+        this.entities.clear();
+        this.pageSize = 100;
+        this.offset = 0;
+        this.filter = setupFilter(env.getContext());
+        // read first page to render data
+        loadData();
+         adapter = new ListEntityAdapter(this.getContext(), this,
+                R.layout.list_item, entities);
+
 
     }
+    private void loadData() {
+        this.filter.setPageSize(this.pageSize);
+        this.filter.setOffset(this.offset);
+        //this.entities.clear();
+        this.entities.addAll(this.repo.find(this.filter));
 
+        //notify that the model changedA
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+
+        this.offset += this.pageSize;
+    }
+    /**
+     * Get the definition filter from the dataTable and construct an effective filter using the
+     * context information.
+     *
+     * @param context
+     * @return
+     */
+    private Filter setupFilter(CompositeContext context) {
+        Filter defFilter = this.component.getFilter();
+        Filter f = FilterHelper.createInstance(repo);
+        if (defFilter != null) {
+            FilterHelper.evaluateFilter(context, defFilter, f);
+        }
+        f.setOffset(this.offset);
+        f.setPageSize(this.pageSize);
+        return f;
+    }
     /**********************************/
 
     public UIAutoComplete getComponent() {
