@@ -17,7 +17,6 @@ package es.jcyl.ita.frmdrd.ui.components.select;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 
 /**
@@ -62,5 +61,14 @@ public class UISelect extends UIInputComponent {
 
     public void setFilter(Filter filter) {
         this.filter = filter;
+    }
+
+    /**
+     * No repository configured to populate select options
+     *
+     * @return
+     */
+    public boolean isStatic() {
+        return (this.repo == null);
     }
 }

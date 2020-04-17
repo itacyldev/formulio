@@ -17,8 +17,10 @@ package es.jcyl.ita.frmdrd.repo.query;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /**
@@ -27,6 +29,8 @@ import es.jcyl.ita.frmdrd.view.ViewConfigException;
  * Reusable functions to treat filters from dynamic components.
  */
 public class FilterHelper {
+
+    private static ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     private static final CriteriaVisitor criteriaVisitor = new CriteriaVisitor();
 
@@ -39,6 +43,13 @@ public class FilterHelper {
                     "class: " + repo.getFilterClass().getName());
         }
         return f;
+    }
+
+    public static Criteria singleCriteria(String property, String valueBindingExpression) {
+        return Criteria.single(
+                ConditionBinding.cond(Condition.contains(property, null),
+                        exprFactory.create(valueBindingExpression))
+        );
     }
 
     /**

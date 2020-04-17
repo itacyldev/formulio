@@ -50,6 +50,7 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
     protected InputFieldView createInputFieldView(Context viewContext, View baseView, C component) {
         InputFieldView fieldView = (InputFieldView) View.inflate(viewContext,
                 R.layout.input_field_view, null);
+        fieldView.setComponent(component);
         fieldView.setConverter(convFactory.get(component));
         fieldView.setTag(getBaseViewTag(component));
         fieldView.addView(baseView);

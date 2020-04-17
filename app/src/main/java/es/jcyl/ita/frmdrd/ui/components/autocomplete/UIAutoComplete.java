@@ -15,13 +15,25 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UIAutoComplete extends UISelect {
+    /**
+     * Expressions used to calculate the value and label of each option when they're obtained
+     * from a repo
+     */
+    private ValueBindingExpression optionValueExpression;
+    private ValueBindingExpression optionLabelExpression;
+    /**
+     * Entity property used to build a criteria to filter current repository, the filter value
+     * will be obtained from current user autocomplete constraint
+     */
+    private String optionFilteringProperty;
+
 
     private static final String TYPE = "autocomplete";
 
@@ -33,5 +45,29 @@ public class UIAutoComplete extends UISelect {
     @Override
     public String getValueConverter() {
         return TYPE;
+    }
+
+    public ValueBindingExpression getOptionValueExpression() {
+        return optionValueExpression;
+    }
+
+    public void setOptionValueExpression(ValueBindingExpression optionValueExpression) {
+        this.optionValueExpression = optionValueExpression;
+    }
+
+    public ValueBindingExpression getOptionLabelExpression() {
+        return optionLabelExpression;
+    }
+
+    public void setOptionLabelExpression(ValueBindingExpression optionLabelExpression) {
+        this.optionLabelExpression = optionLabelExpression;
+    }
+
+    public String getOptionFilteringProperty() {
+        return optionFilteringProperty;
+    }
+
+    public void setOptionFilteringProperty(String optionFilteringProperty) {
+        this.optionFilteringProperty = optionFilteringProperty;
     }
 }

@@ -56,7 +56,6 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     /**
      * Behaviour attributes
      */
-    private DatatableLayout dtLayout;
 
 
     public ListEntityAdapter(final Context context, AutoCompleteView view,
@@ -112,26 +111,14 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
-                // create navigation route using current entity Id as parameter
-                if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getDatatable().getRoute())) {
-                    UserAction action = UserAction.navigate(context, dtLayout.getDatatable(),
-                            dtLayout.getDatatable().getRoute());
-                    action.addParam("entityId", (Serializable) currentEntity.getId());
-                    userActionInterceptor.doAction(action);
-                }
             }
         });
     }
 
     private void setViewsLayout(final ViewColumnHolder holder, Entity entity) {
-        UIColumn[] columns = dtLayout.getDatatable().getColumns();
-        Object[] values = JexlUtils.bulkEval(entity, columns);
-
-        for (int i = 0; i < columns.length && i < holder.viewList.size(); i++) {
-            String stringValue = (String) ConvertUtils.convert(values[i], String.class);
+        for (int i = 0; i < 1 && i < holder.viewList.size(); i++) {
             TextView textView = (TextView) holder.viewList.get(i);
-            textView.setText(DataUtils.nullFormat(stringValue));
+            textView.setText(DataUtils.nullFormat(entity.getId().toString()));
         }
     }
 
@@ -147,8 +134,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         LinearLayout layout = holder.layout;
 
         int index = 0;
-        UIColumn[] columns = dtLayout.getDatatable().getColumns();
-        for (UIColumn column : columns) {
+        for (int i=0;i<1; i++) {
             // create context for this entity to evaluate expression
             TextView view = createTextView(parent);
             layout.addView(view);

@@ -18,6 +18,8 @@ package es.jcyl.ita.frmdrd.view.render;
 import android.content.Context;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -25,6 +27,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -35,6 +38,7 @@ import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
@@ -134,15 +138,27 @@ public class AutoCompleteRendererTest {
         UIAutoComplete autoSel = new UIAutoComplete();
         autoSel.setId("111");
         autoSel.setRepo(repoMock);
+        autoSel.setOptionValueExpression(exprFactory.create("${entity.id}"));
+        String secondPropertyName = meta.getPropertyNames()[1];
+        autoSel.setOptionValueExpression(exprFactory.create(String.format("${entity.%s}", secondPropertyName)));
 
         InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, autoSel);
         Assert.assertNotNull(view);
 
-        // check elements in the view
-        Adapter adapter = view.getInputView().getAdapter();
+        // check number of elements in the adapter
+        ArrayAdapter<Entity> adapter = (ArrayAdapter<Entity>) view.getInputView().getAdapter();
         Assert.assertNotNull(adapter);
-        Assert.assertEquals(expectedOptions, adapter.getCount() - 1);// empty option was added by renderer
+        Assert.assertEquals(expectedOptions, adapter.getCount());
 
+
+        // check options value
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View itemView = adapter.getView(i, null, view);
+            TextView textView = (TextView) itemView.findViewById(R.id.autocomplete_item);
+            Object value = entities.get(i).get(secondPropertyName);
+            String expected = (String) ConvertUtils.convert(value, String.class);
+            Assert.assertEquals(expected, textView.getText());
+        }
     }
 
 }
