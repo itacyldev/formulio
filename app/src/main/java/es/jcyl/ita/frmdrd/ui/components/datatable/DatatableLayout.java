@@ -58,7 +58,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
     private LinearLayout headerView;
     private ListView bodyView;
 
-
     public DatatableLayout(Context context) {
         super(context);
     }
@@ -74,6 +73,33 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
     public void setBodyView(ListView bodyView) {
         this.bodyView = bodyView;
+
+        ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this,
+                R.layout.list_item, entities);
+        this.bodyView.setAdapter(dataAdapter);
+
+        this.bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(final AbsListView view,
+                                             final int scrollState) {
+                int threshold = 1;
+                int count = bodyView.getCount();
+
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    if (bodyView.getLastVisiblePosition() >= count - threshold) {
+                        loadNextPage();
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(final AbsListView view,
+                                 final int firstVisibleItem, final int visibleItemCount,
+                                 final int totalItemCount) {
+            }
+        });
+
+
     }
 
     public void setHeaderView(LinearLayout headerView) {
@@ -94,31 +120,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         this.filter = setupFilter(environment.getContext());
         // read first page to render data
         loadNextPage();
-        ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this,
-                R.layout.list_item, entities);
-
-
-        bodyView.setAdapter(dataAdapter);
-        bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(final AbsListView view,
-                                             final int scrollState) {
-                int threshold = 1;
-                int count = bodyView.getCount();
-
-                if (scrollState == SCROLL_STATE_IDLE) {
-                    if (bodyView.getLastVisiblePosition() >= count - threshold) {
-                        loadNextPage();
-                    }
-                }
-            }
-
-            @Override
-            public void onScroll(final AbsListView view,
-                                 final int firstVisibleItem, final int visibleItemCount,
-                                 final int totalItemCount) {
-            }
-        });
     }
 
     /**
