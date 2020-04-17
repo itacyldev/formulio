@@ -103,6 +103,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         select2.setRepo(contactsRepo);
         uiForm.getChildren().add(0, select2);
         select2.setParentForm(uiForm);
+        select2.setOptionFilteringProperty("last_name");
         select2.setOptionValueExpression(exprFactory.create("${entity.id}"));
         select2.setOptionLabelExpression(exprFactory.create("${entity.last_name}"));
 

@@ -78,7 +78,7 @@ public class EntityListELAdapter extends ArrayAdapter {
         dataList.clear();
         es.jcyl.ita.crtrepo.context.CompositeContext  ctx = globalContext;
         if(constraint !=null){
-            es.jcyl.ita.crtrepo.context.Context viewCtx = new BasicContext("view");
+            es.jcyl.ita.crtrepo.context.Context viewCtx = new BasicContext("this");
             viewCtx.put("value", constraint );
             ctx = ContextUtils.combine(ctx, viewCtx);
         }

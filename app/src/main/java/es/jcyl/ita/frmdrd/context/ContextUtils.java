@@ -30,6 +30,7 @@ public class ContextUtils {
     public static CompositeContext combine(Context ctx1, Context ctx2){
         CompositeContext combinedContext = new UnPrefixedCompositeContext();
         combinedContext.addContext(ctx1);
+        combinedContext.addContext(ctx2);
         return combinedContext;
     }
 }
