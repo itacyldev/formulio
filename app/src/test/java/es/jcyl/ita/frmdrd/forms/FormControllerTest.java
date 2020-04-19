@@ -42,7 +42,6 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -58,7 +57,6 @@ public class FormControllerTest {
     FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     @BeforeClass
     public static void setUp() {

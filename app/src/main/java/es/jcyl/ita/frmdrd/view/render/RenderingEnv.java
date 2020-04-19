@@ -28,12 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /**
@@ -66,6 +64,7 @@ public class RenderingEnv {
         }
     }
 
+
     /**
      * Clears composite context before starting the rendering process
      */
@@ -81,7 +80,7 @@ public class RenderingEnv {
     }
 
     public CompositeContext getContext() {
-        return combinedContext;
+        return (combinedContext == null) ? globalContext : combinedContext;
     }
 
     public void disableInterceptors() {

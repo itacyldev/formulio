@@ -22,6 +22,7 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.render.InputRenderer;
@@ -62,8 +63,14 @@ public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAuto
             }
         });
 
-        input.load(env);
+        // add "this" context for current view
+        AndViewContext vc = new AndViewContext(baseView);
+        Class expected = (component.getValueExpression() == null) ? String.class
+                : component.getValueExpression().getExpectedType();
+        vc.registerViewElement("value", input.getId(), component.getConverter(), expected);
+        vc.setPrefix("this");
 
+        input.load(env);
     }
 
     @Override

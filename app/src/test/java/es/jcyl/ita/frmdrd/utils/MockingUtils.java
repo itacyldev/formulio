@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context;
+package es.jcyl.ita.frmdrd.utils;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,23 +15,21 @@ package es.jcyl.ita.frmdrd.context;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.context.Context;
-import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.frmdrd.actions.ActionController;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ContextUtils {
+public class MockingUtils {
 
 
-    public static CompositeContext combine(Context ctx1, Context ctx2) {
-        CompositeContext combinedContext = new UnPrefixedCompositeContext();
-        if (ctx1 == null || ctx2 == null) {
-            throw new IllegalArgumentException(String.format("Both context must be not null: ctx1:[%s] ctx2:[%s]", ctx1, ctx2));
-        }
-        combinedContext.addContext(ctx1);
-        combinedContext.addContext(ctx2);
-        return combinedContext;
+    public static ActionController mockAC(){
+        ActionController mockAC = mock(ActionController.class);
+        return mockAC;
+
     }
+
 }

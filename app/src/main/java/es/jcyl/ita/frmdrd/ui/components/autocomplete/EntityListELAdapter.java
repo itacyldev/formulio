@@ -33,10 +33,7 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.crtrepo.query.Criteria;
-import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -51,7 +48,7 @@ public class EntityListELAdapter extends ArrayAdapter {
     private final Context mContext;
     private final int itemLayout;
     private final int itemId;
-    private final CompositeContext globalContext;
+    private CompositeContext globalContext;
     private final UIAutoComplete component;
     private Filter listFilter = new ListFilter();
     private es.jcyl.ita.crtrepo.query.Filter defFilter;
@@ -59,33 +56,24 @@ public class EntityListELAdapter extends ArrayAdapter {
     public EntityListELAdapter(RenderingEnv env, int resource, int textViewId, UIAutoComplete component) {
         super(env.getViewContext(), resource);
         dataList = new ArrayList<>();
-
         mContext = env.getViewContext();
-        itemLayout = R.layout.component_autocomplete_listitem;
-        this.itemId = R.id.autocomplete_item; //android.R.layout.simple_spinner_dropdown_item
+        itemLayout = resource;
+        this.itemId = textViewId;
         this.component = component;
-//        Context thisViewContext = createViewInputContext();
-        this.globalContext = env.getContext(); //ContextUtils.combine(env.getContext(), thisViewContext);
         defFilter = component.getFilter();
         if (defFilter == null) {
             // create defFilter
             defFilter = createDefaultDefinitionFilter();
         }
-        loadOptions(null);
     }
 
-    private void loadOptions(CharSequence constraint) {
+    public void load(CompositeContext context) {
+        this.globalContext = context;
         dataList.clear();
-        es.jcyl.ita.crtrepo.context.CompositeContext  ctx = globalContext;
-        if(constraint !=null){
-            es.jcyl.ita.crtrepo.context.Context viewCtx = new BasicContext("this");
-            viewCtx.put("value", constraint );
-            ctx = ContextUtils.combine(ctx, viewCtx);
-        }
-
-        es.jcyl.ita.crtrepo.query.Filter filter = setupFilter(ctx);
+        es.jcyl.ita.crtrepo.query.Filter filter = setupFilter(context);
         dataList.addAll(component.getRepo().find(filter));
     }
+
     /**
      * Get the definition filter from the dataTable and construct an effective filter using the
      * context information.
@@ -104,6 +92,7 @@ public class EntityListELAdapter extends ArrayAdapter {
         f.setPageSize(100);
         return f;
     }
+
     private es.jcyl.ita.crtrepo.query.Filter createDefaultDefinitionFilter() {
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(component.getRepo());
         // add default criteria using autocomplete view input
@@ -146,21 +135,11 @@ public class EntityListELAdapter extends ArrayAdapter {
 
     public class ListFilter extends Filter {
         private Object lock = new Object();
-//
-//        @Override
-//        public CharSequence convertResultToString(Object resultValue) {
-//            String str = ((People) resultValue).getName();
-//            return str;
-//        }
-
-
-
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             if (constraint != null) {
-                loadOptions(constraint);
-
+                load(globalContext);
 
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = dataList;

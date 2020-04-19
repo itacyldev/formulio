@@ -24,12 +24,10 @@ import android.widget.AutoCompleteTextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
+import es.jcyl.ita.frmdrd.context.ContextUtils;
+import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -43,11 +41,6 @@ public class AutoCompleteView extends AutoCompleteTextView
     private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
 
     private UIAutoComplete component;
-    private List<Entity> entities = new ArrayList<>();
-    private Filter filter;
-    private int pageSize = 100;
-    private int offset = 0;
-
 
     public AutoCompleteView(Context context) {
         super(context);
@@ -66,19 +59,26 @@ public class AutoCompleteView extends AutoCompleteTextView
         if (this.component.isStatic()) {
             return;
         }
-        // set filter to repo using current view data
+        // add local "this" context to global context
+        CompositeContext ctx = setupThisContext(env);
+        ((EntityListELAdapter)this.getAdapter()).load(ctx);
+    }
 
-        this.filter = setupFilter(env.getContext());
-        // read first page to render data
-        loadData();
+    private CompositeContext setupThisContext(RenderingEnv env){
+        AndViewContext thisViewCtx = new AndViewContext(this);
+        // the user input will be retrieved as text from the view
+        thisViewCtx.registerViewElement("value", getId(), component.getConverter(), String.class);
+        thisViewCtx.setPrefix("this");
+        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        return ctx;
     }
 
     private void loadData() {
-        Repository repo = this.component.getRepo();
-        this.filter.setPageSize(this.pageSize);
-        this.filter.setOffset(this.offset);
-        this.entities.clear();
-        this.entities.addAll(repo.find(this.filter));
+//        Repository repo = this.component.getRepo();
+//        this.filter.setPageSize(this.pageSize);
+//        this.filter.setOffset(this.offset);
+//        this.entities.clear();
+//        this.entities.addAll(repo.find(this.filter));
 
         //notify that the model changedA
 //        if (this.getAdapter() != null) {
@@ -87,24 +87,6 @@ public class AutoCompleteView extends AutoCompleteTextView
 
     }
 
-    /**
-     * Get the definition filter from the dataTable and construct an effective filter using the
-     * context information.
-     *
-     * @param context
-     * @return
-     */
-    private Filter setupFilter(CompositeContext context) {
-        Repository repo = this.component.getRepo();
-        Filter defFilter = this.component.getFilter();
-        Filter f = FilterHelper.createInstance(repo);
-        if (defFilter != null) {
-            FilterHelper.evaluateFilter(context, defFilter, f);
-        }
-        f.setOffset(this.offset);
-        f.setPageSize(this.pageSize);
-        return f;
-    }
 
     public void initialize(RenderingEnv env, UIAutoComplete component) {
         this.component = component;
@@ -113,16 +95,11 @@ public class AutoCompleteView extends AutoCompleteTextView
             // create adapter using UIOptions
             adapter = createStaticArrayAdapter(env, component);
         } else {
-            this.offset = 0;
-            this.pageSize = 100;
-            // get options querying the repository
-            this.entities = new ArrayList<>();
             adapter = new EntityListELAdapter(env, R.layout.component_autocomplete_listitem,
                     R.id.autocomplete_item, component);
 //            adapter = new ListEntityAdapter(this.getContext(), this,
 //                    R.layout.list_item, entities);
         }
-
         this.setAdapter(adapter);
     }
 

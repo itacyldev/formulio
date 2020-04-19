@@ -21,7 +21,6 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -29,7 +28,6 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 public abstract class BaseRenderer<V extends View, C extends UIComponent> implements Renderer<C> {
 
-    protected static ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     public final View render(RenderingEnv env, C component) {
         V baseView = createBaseView(env, component);

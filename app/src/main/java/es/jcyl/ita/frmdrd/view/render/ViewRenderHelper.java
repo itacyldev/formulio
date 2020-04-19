@@ -83,7 +83,7 @@ public class ViewRenderHelper {
             }
         }
         if (checkDeferred && root.getParent() == null) {
-            // last step in the tree walk, process delegates when we're back in the view root
+            // last step in the tree walk, process delegates when we're back on the view root
             processDeferredViews(env);
         }
         return rootView;

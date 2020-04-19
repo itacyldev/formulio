@@ -39,7 +39,6 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 import static org.mockito.Mockito.mock;
 
@@ -53,7 +52,6 @@ public class ConditionalRenderingTest {
     FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 

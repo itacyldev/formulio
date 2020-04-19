@@ -111,6 +111,7 @@ public class SpinnerViewConverterTest {
                 .withField(field)
                 .render();
         RenderingEnv env = recipe.env;
+        env.disableInterceptors();
 
         Integer[] values = new Integer[]{null, 0, 1, 2, 4, 9};
         Integer[] expected = new Integer[]{null, 0, 1, 2, 4, null};
@@ -155,6 +156,7 @@ public class SpinnerViewConverterTest {
                     .withField(field)
                     .render();
             RenderingEnv env = recipe.env;
+            env.disableInterceptors();
 
             Boolean[] values = new Boolean[]{null, true, false};
             Boolean[] expected = new Boolean[]{null, true, false};
@@ -212,6 +214,7 @@ public class SpinnerViewConverterTest {
                     .render();
 
             RenderingEnv env = recipe.env;
+            env.disableInterceptors();
 
             InputFieldView<Spinner> baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), select);
             Spinner inputView = baseView.getInputView();

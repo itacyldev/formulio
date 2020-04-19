@@ -45,9 +45,8 @@ public class ViewValueConverterFactory {
         return _instance;
     }
 
-    public ViewValueConverter get(UIInputComponent component) {
-        return map.get(component.getValueConverter());
+
+    public ViewValueConverter get(String type) {
+        return map.get(type);
     }
-
-
 }

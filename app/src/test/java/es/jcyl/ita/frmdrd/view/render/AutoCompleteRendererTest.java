@@ -102,8 +102,8 @@ public class AutoCompleteRendererTest {
     @Test
     public void testNotVisibleSelect() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
 
         UIAutoComplete select = new UIAutoComplete();
@@ -116,7 +116,8 @@ public class AutoCompleteRendererTest {
     }
 
     /**
-     * Fill the autocomplete values using a repository.
+     * Fill the autocomplete values using a repository. Create an EL expressino combining two
+     * entity properties and make sure the views in the autocomplete list have the right values.
      */
     @Test
     public void testGetOptionsFromRepo() {
@@ -124,6 +125,7 @@ public class AutoCompleteRendererTest {
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
+        env.initialize();
 
         EntityMeta meta = DevDbBuilder.createRandomMeta();
         int expectedOptions = RandomUtils.randomInt(0, 13);
@@ -140,7 +142,10 @@ public class AutoCompleteRendererTest {
         autoSel.setRepo(repoMock);
         autoSel.setOptionValueExpression(exprFactory.create("${entity.id}"));
         String secondPropertyName = meta.getPropertyNames()[1];
-        autoSel.setOptionValueExpression(exprFactory.create(String.format("${entity.%s}", secondPropertyName)));
+        String thirdPropertyName = meta.getPropertyNames()[2];
+        // create and expression combining two entity properties
+        autoSel.setOptionValueExpression(exprFactory.create(String.format("${entity.%s}-${entity.%s}", secondPropertyName, thirdPropertyName)));
+        autoSel.setOptionLabelExpression(autoSel.getOptionValueExpression()); // label=value
 
         InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, autoSel);
         Assert.assertNotNull(view);
@@ -150,13 +155,14 @@ public class AutoCompleteRendererTest {
         Assert.assertNotNull(adapter);
         Assert.assertEquals(expectedOptions, adapter.getCount());
 
-
         // check options value
         for (int i = 0; i < adapter.getCount(); i++) {
             View itemView = adapter.getView(i, null, view);
             TextView textView = (TextView) itemView.findViewById(R.id.autocomplete_item);
-            Object value = entities.get(i).get(secondPropertyName);
-            String expected = (String) ConvertUtils.convert(value, String.class);
+            Entity entity = entities.get(i);
+            String expected = String.format("%s-%s",
+                    ConvertUtils.convert(entity.get(secondPropertyName), String.class),
+                    ConvertUtils.convert(entity.get(thirdPropertyName), String.class));
             Assert.assertEquals(expected, textView.getText());
         }
     }
