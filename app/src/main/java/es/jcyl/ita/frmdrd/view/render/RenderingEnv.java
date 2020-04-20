@@ -154,5 +154,9 @@ public class RenderingEnv {
     public View getViewRoot() {
         return viewRoot;
     }
+
+    public boolean isInterceptorDisabled(){
+        return this.userActionInterceptor.isDisabled();
+    }
 }
 
