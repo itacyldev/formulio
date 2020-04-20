@@ -38,12 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#282828"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingTop="8dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="8dp" />
-
+                android:orientation="horizontal"/>
             <ListView
                 android:id="@+id/list_view"
                 android:layout_width="wrap_content"

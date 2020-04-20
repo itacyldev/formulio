@@ -22,5 +22,7 @@
     <string name="title_projects">Projects</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="layer_aslist">View as list</string>
+
 
 </resources>

@@ -6,4 +6,6 @@
 
     <color name="TRANSPARENT">#00000000</color>
     <color name="DARKCYAN_SELECTED">#0099cc</color>
+    <color name="BLACK">#000000</color>
+    <color name="GRAY_SELECTED">#222222</color>
 </resources>
