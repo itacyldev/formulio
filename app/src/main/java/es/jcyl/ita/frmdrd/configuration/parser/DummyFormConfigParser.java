@@ -103,6 +103,10 @@ public class DummyFormConfigParser extends FormConfigParser {
         select2.setRepo(contactsRepo);
         uiForm.getChildren().add(0, select2);
         select2.setParentForm(uiForm);
+        select2.setOptionFilteringProperty("last_name");
+        select2.setOptionValueExpression(exprFactory.create("${entity.id}"));
+        select2.setOptionLabelExpression(exprFactory.create("${entity.last_name}"));
+
 
         loadConfig(result.getList());
 
@@ -160,7 +164,8 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         // table repository filter
         Filter f = new SQLQueryFilter();
-        Criteria criteria = Criteria.or(ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${view.f1}")),
+        Criteria criteria = Criteria.or(
+                ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${view.f1}")),
                 ConditionBinding.cond(Condition.contains("email", null), exprFactory.create("${view.f1}")));
         f.setCriteria(criteria);
         table.setFilter(f);
@@ -314,7 +319,7 @@ public class DummyFormConfigParser extends FormConfigParser {
     public static String[] randomNouns(int size) {
         String[] nouns = new String[size];
         for (int i = 0; i < size; i++) {
-            int pos = randomInt(0, _nouns.length-1);
+            int pos = randomInt(0, _nouns.length - 1);
             nouns[i] = _nouns[pos];
         }
         return nouns;

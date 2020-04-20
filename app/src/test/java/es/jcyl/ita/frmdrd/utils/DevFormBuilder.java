@@ -173,6 +173,7 @@ public class DevFormBuilder {
             checkInvokeHasBeenCalled();
             // render the form to setup the viewContext
             mc.renderView(ctx);
+            env.disableInterceptors();
             return this;
         }
 

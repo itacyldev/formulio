@@ -94,6 +94,12 @@ public class JexlUtils {
         return valueExpression.getExpression().evaluate(new JexlContextWrapper(ctx));
     }
 
+    public static Object eval(Entity entity, ValueBindingExpression valueExpression) {
+        JexlContext jc = new MapContext();
+        jc.set("entity", new JexlEntityWrapper(entity));
+        return valueExpression.getExpression().evaluate(jc);
+    }
+
     public static Object[] bulkEval(Entity entity, UIComponent[] components) {
         JexlContext jc = new MapContext();
         jc.set("entity", new JexlEntityWrapper(entity));

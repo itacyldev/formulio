@@ -113,6 +113,9 @@
             <datable>
                 <col value="${entity.f1}" />
                 <col value="${entity.f2} + ${entity.f3}" />
+                <repofilter>
+
+                </repofilter>
             </datable>
         </list>
     </form>

@@ -36,7 +36,6 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
@@ -50,7 +49,6 @@ import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 public class FormViewContextTest {
 
     FormDataBuilder formBuilder = new FormDataBuilder();
-    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     /**
      * Get ui android element value using FormViewContext
@@ -115,12 +113,11 @@ public class FormViewContextTest {
 
             // use a viewConverter to get the value from android view element
             View v = baseView.getInputView();
-            ViewValueConverter<TextView> converter = this.convFactory.get(c);
+            ViewValueConverter<TextView> converter = c.getConverter();
             String actual = converter.getValueFromView((TextView) v, String.class);
 
             // do they match?
             Assert.assertEquals(expected, actual);
         }
     }
-
 }

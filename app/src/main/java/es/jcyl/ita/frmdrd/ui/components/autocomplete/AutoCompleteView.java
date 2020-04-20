@@ -15,19 +15,37 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
-import es.jcyl.ita.crtrepo.Repository;
+import java.util.ArrayList;
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.context.ContextUtils;
+import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
+import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class AutoCompleteView extends androidx.appcompat.widget.AppCompatAutoCompleteTextView implements DynamicComponent {
+@SuppressLint("AppCompatCustomView")
+public class AutoCompleteView extends AutoCompleteTextView
+        implements DynamicComponent {
+    private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
+
     private UIAutoComplete component;
-    private Repository repo;
 
     public AutoCompleteView(Context context) {
         super(context);
@@ -43,24 +61,82 @@ public class AutoCompleteView extends androidx.appcompat.widget.AppCompatAutoCom
 
     @Override
     public void load(RenderingEnv env) {
-
+        if (this.component.isStatic()) {
+            return;
+        }
+        // Create local "this" context for current element and link to the Adapter
+        CompositeContext ctx = setupThisContext(env);
+        ((EntityListELAdapter)this.getAdapter()).load(ctx);
     }
 
-    /**********************************/
-
-    public UIAutoComplete getComponent() {
-        return component;
+    private CompositeContext setupThisContext(RenderingEnv env){
+        AndViewContext thisViewCtx = new AndViewContext(this);
+        // the user input will be retrieved as text from the view
+        thisViewCtx.registerViewElement("value", getId(), component.getConverter(), String.class);
+        thisViewCtx.setPrefix("this");
+        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        return ctx;
     }
 
-    public void setComponent(UIAutoComplete component) {
+    public void initialize(RenderingEnv env, UIAutoComplete component) {
         this.component = component;
+        ArrayAdapter adapter;
+        if (component.isStatic()) {
+            // create adapter using UIOptions
+            adapter = createStaticArrayAdapter(env, component);
+        } else {
+            adapter = new EntityListELAdapter(env, R.layout.component_autocomplete_listitem,
+                    R.id.autocomplete_item, component);
+        }
+        this.setAdapter(adapter);
+
+
+        this.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // notify action
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                if (interceptor != null) {
+                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
-    public Repository getRepo() {
-        return repo;
+
+    private ArrayAdapter createStaticArrayAdapter(RenderingEnv env, UIAutoComplete component) {
+        // create items from options
+        List<UIOption> items = new ArrayList<UIOption>();
+        // empty value option
+        items.add(EMPTY_OPTION);
+        if (component.getOptions() != null) {
+            for (UIOption option : component.getOptions()) {
+                items.add(option);
+            }
+        }
+//        input.setThreshold(0);
+        // setup adapter and event handler
+        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
+                android.R.layout.select_dialog_item, items);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return arrayAdapter;
     }
 
-    public void setRepo(Repository repo) {
-        this.repo = repo;
+
+    public static class EmptyOption extends UIOption {
+        public EmptyOption(String label, String value) {
+            super(label, value);
+        }
+
+        @Override
+        public String toString() {
+            return " ";
+        }
     }
+
+
 }

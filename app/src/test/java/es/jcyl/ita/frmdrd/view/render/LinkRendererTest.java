@@ -35,7 +35,8 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
-import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -47,7 +48,6 @@ public class LinkRendererTest {
     FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
@@ -64,8 +64,8 @@ public class LinkRendererTest {
     @Test
     public void testSimpleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
 
         // link component
@@ -79,11 +79,12 @@ public class LinkRendererTest {
         Assert.assertNotNull(linkView);
 
     }
+
     @Test
     public void testNotVisibleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
 
         // link component

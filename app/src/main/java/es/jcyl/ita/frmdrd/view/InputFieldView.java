@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
 
 /**
@@ -34,6 +35,8 @@ public class InputFieldView<V extends View> extends LinearLayout {
 
     private V inputView;
     private ViewValueConverter converter;
+    private UIInputComponent component;
+
     /**
      * related UIComponents
      */
@@ -115,7 +118,14 @@ public class InputFieldView<V extends View> extends LinearLayout {
         return fieldId;
     }
 
-    /*******/
+    public UIInputComponent getComponent() {
+        return component;
+    }
+
+    public void setComponent(UIInputComponent component) {
+        this.component = component;
+    }
+/*******/
     /** Form and field ids are set during the rendering process */
     /*******/
     public void setFormId(String formId) {

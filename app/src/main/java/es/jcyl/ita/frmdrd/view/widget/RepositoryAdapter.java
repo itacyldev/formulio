@@ -83,13 +83,13 @@ public class RepositoryAdapter extends ArrayAdapter<Entity> {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(layoutResource, parent, false);
         }
-
-        Entity entity = getItem(position);
-        TextView strName = view.findViewById(R.id.item_label);
-        strName.setText(entity.getId().toString());
-
-        TextView couponCount = view.findViewById(R.id.item_value);
-        couponCount.setText(entity.getId().toString());
+//
+//        Entity entity = getItem(position);
+//        TextView strName = view.findViewById(R.id.item_label);
+//        strName.setText(entity.getId().toString());
+//
+//        TextView couponCount = view.findViewById(R.id.item_value);
+//        couponCount.setText(entity.getId().toString());
 
         return view;
     }

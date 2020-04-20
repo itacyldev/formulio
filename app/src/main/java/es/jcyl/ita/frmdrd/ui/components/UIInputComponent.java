@@ -17,11 +17,14 @@ package es.jcyl.ita.frmdrd.ui.components;
 
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UIInputComponent extends UIComponent {
+    private static final ViewValueConverterFactory converterFactory = ViewValueConverterFactory.getInstance();
 
     protected String label;
     private boolean readOnly;
@@ -90,6 +93,9 @@ public class UIInputComponent extends UIComponent {
 
     public String getValueConverter() {
         return valueConverter;
+    }
+    public ViewValueConverter getConverter(){
+        return converterFactory.get(this.getValueConverter());
     }
 
     public void setValueConverter(String valueConverter) {

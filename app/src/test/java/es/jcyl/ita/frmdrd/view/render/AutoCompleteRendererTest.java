@@ -18,6 +18,8 @@ package es.jcyl.ita.frmdrd.view.render;
 import android.content.Context;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -25,6 +27,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -35,6 +38,7 @@ import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
@@ -98,8 +102,8 @@ public class AutoCompleteRendererTest {
     @Test
     public void testNotVisibleSelect() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
 
         UIAutoComplete select = new UIAutoComplete();
@@ -112,7 +116,8 @@ public class AutoCompleteRendererTest {
     }
 
     /**
-     * Fill the autocomplete values using a repository.
+     * Fill the autocomplete values using a repository. Create an EL expressino combining two
+     * entity properties and make sure the views in the autocomplete list have the right values.
      */
     @Test
     public void testGetOptionsFromRepo() {
@@ -120,6 +125,7 @@ public class AutoCompleteRendererTest {
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
+        env.initialize();
 
         EntityMeta meta = DevDbBuilder.createRandomMeta();
         int expectedOptions = RandomUtils.randomInt(0, 13);
@@ -134,15 +140,31 @@ public class AutoCompleteRendererTest {
         UIAutoComplete autoSel = new UIAutoComplete();
         autoSel.setId("111");
         autoSel.setRepo(repoMock);
+        autoSel.setOptionValueExpression(exprFactory.create("${entity.id}"));
+        String secondPropertyName = meta.getPropertyNames()[1];
+        String thirdPropertyName = meta.getPropertyNames()[2];
+        // create and expression combining two entity properties
+        autoSel.setOptionValueExpression(exprFactory.create(String.format("${entity.%s}-${entity.%s}", secondPropertyName, thirdPropertyName)));
+        autoSel.setOptionLabelExpression(autoSel.getOptionValueExpression()); // label=value
 
         InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, autoSel);
         Assert.assertNotNull(view);
 
-        // check elements in the view
-        Adapter adapter = view.getInputView().getAdapter();
+        // check number of elements in the adapter
+        ArrayAdapter<Entity> adapter = (ArrayAdapter<Entity>) view.getInputView().getAdapter();
         Assert.assertNotNull(adapter);
-        Assert.assertEquals(expectedOptions, adapter.getCount() - 1);// empty option was added by renderer
+        Assert.assertEquals(expectedOptions, adapter.getCount());
 
+        // check options value
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View itemView = adapter.getView(i, null, view);
+            TextView textView = (TextView) itemView.findViewById(R.id.autocomplete_item);
+            Entity entity = entities.get(i);
+            String expected = String.format("%s-%s",
+                    ConvertUtils.convert(entity.get(secondPropertyName), String.class),
+                    ConvertUtils.convert(entity.get(thirdPropertyName), String.class));
+            Assert.assertEquals(expected, textView.getText());
+        }
     }
 
 }

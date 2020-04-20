@@ -16,6 +16,10 @@ package es.jcyl.ita.frmdrd.view.render;
  */
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Extends base renderer to define a common creation flow form UIInput components.
+ * I, represents the AndroidView used as base user input, the component attached to InputFieldView
+ * that will be used to get and set data from/to the view.
  */
 
 import android.content.Context;
@@ -30,7 +34,8 @@ import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 
 
-public abstract class InputRenderer<I extends View, C extends UIInputComponent> extends BaseRenderer<InputFieldView, C> {
+public abstract class InputRenderer<I extends View, C extends UIInputComponent>
+        extends BaseRenderer<InputFieldView, C> {
 
     protected static final Object EMPTY_STRING = "";
 
@@ -42,12 +47,13 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent> 
     }
 
 
-    protected InputFieldView createInputFieldView(Context viewContext, View view, C component) {
+    protected InputFieldView createInputFieldView(Context viewContext, View baseView, C component) {
         InputFieldView fieldView = (InputFieldView) View.inflate(viewContext,
                 R.layout.input_field_view, null);
-        fieldView.setConverter(convFactory.get(component));
+        fieldView.setComponent(component);
+        fieldView.setConverter(component.getConverter());
         fieldView.setTag(getBaseViewTag(component));
-        fieldView.addView(view);
+        fieldView.addView(baseView);
         if (component.getParentForm() != null) {
             fieldView.setFormId(component.getParentForm().getId());
         }

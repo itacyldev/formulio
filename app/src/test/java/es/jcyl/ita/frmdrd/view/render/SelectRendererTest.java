@@ -91,8 +91,8 @@ public class SelectRendererTest {
     @Test
     public void testNotVisibleSelect() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), new ActionController(null, null));
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
 
         UISelect select = new UISelect();
