@@ -240,7 +240,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
     private void fillHeader(Context viewContext, LinearLayout headersLayout) {
         headersLayout.removeAllViews();
 
-        HeaderViewListAdapter adapter = (HeaderViewListAdapter) bodyView.getAdapter();
 
         for (UIColumn c : this.getDatatable().getColumns()) {
             final View dataHeader = createHeaderView(viewContext,
