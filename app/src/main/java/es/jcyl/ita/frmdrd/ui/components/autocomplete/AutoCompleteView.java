@@ -18,6 +18,8 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
@@ -26,6 +28,9 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.actions.ActionType;
+import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
@@ -59,7 +64,7 @@ public class AutoCompleteView extends AutoCompleteTextView
         if (this.component.isStatic()) {
             return;
         }
-        // add local "this" context to global context
+        // Create local "this" context for current element and link to the Adapter
         CompositeContext ctx = setupThisContext(env);
         ((EntityListELAdapter)this.getAdapter()).load(ctx);
     }
@@ -73,21 +78,6 @@ public class AutoCompleteView extends AutoCompleteTextView
         return ctx;
     }
 
-    private void loadData() {
-//        Repository repo = this.component.getRepo();
-//        this.filter.setPageSize(this.pageSize);
-//        this.filter.setOffset(this.offset);
-//        this.entities.clear();
-//        this.entities.addAll(repo.find(this.filter));
-
-        //notify that the model changedA
-//        if (this.getAdapter() != null) {
-//            ((ArrayAdapter) getAdapter()).notifyDataSetChanged();
-//        }
-
-    }
-
-
     public void initialize(RenderingEnv env, UIAutoComplete component) {
         this.component = component;
         ArrayAdapter adapter;
@@ -97,10 +87,24 @@ public class AutoCompleteView extends AutoCompleteTextView
         } else {
             adapter = new EntityListELAdapter(env, R.layout.component_autocomplete_listitem,
                     R.id.autocomplete_item, component);
-//            adapter = new ListEntityAdapter(this.getContext(), this,
-//                    R.layout.list_item, entities);
         }
         this.setAdapter(adapter);
+
+
+        this.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // notify action
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                if (interceptor != null) {
+                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
 
@@ -133,4 +137,6 @@ public class AutoCompleteView extends AutoCompleteTextView
             return " ";
         }
     }
+
+
 }

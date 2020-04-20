@@ -47,29 +47,6 @@ public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAuto
                                UIAutoComplete component) {
         AutoCompleteView input = baseView.getInputView();
         input.initialize(env, component);
-
-        input.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // notify action
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                if (interceptor != null) {
-                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        // add "this" context for current view
-        AndViewContext vc = new AndViewContext(baseView);
-        Class expected = (component.getValueExpression() == null) ? String.class
-                : component.getValueExpression().getExpectedType();
-        vc.registerViewElement("value", input.getId(), component.getConverter(), expected);
-        vc.setPrefix("this");
-
         input.load(env);
     }
 

@@ -44,6 +44,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 public class EntityListELAdapter extends ArrayAdapter {
 
     private static final String THIS_VALUE = "${this.value}";
+
     private final List<Entity> dataList;
     private final Context mContext;
     private final int itemLayout;
