@@ -24,12 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.EditText;
-import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +34,21 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.context.impl.BasicContext;
-import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
+import es.jcyl.ita.crtrepo.query.Condition;
+import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.context.ContextUtils;
+import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.util.DataUtils;
+import es.jcyl.ita.frmdrd.view.converters.TextViewConverter;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
@@ -59,10 +62,11 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
     private Repository repo;
     private RenderingEnv renderingEnv;
     private List<Entity> entities = new ArrayList<>();
+
     // view sorting and filtering criteria
     private Filter filter;
 
-    private BasicContext headerContext = new BasicContext("this");
+    private AndViewContext thisViewCtx = new AndViewContext(this);
 
     // inner view elements
     private LinearLayout headerView;
@@ -117,23 +121,22 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
     public void setHeaderView(LinearLayout headerView) {
         this.headerView = headerView;
-
-        //filterContext.addContext(headerContext);
-
     }
 
     /*************************************/
     /** Dynamic component interface **/
     /*************************************/
 
-    public void load(RenderingEnv environment) {
-        this.renderingEnv = environment;
+    public void load(RenderingEnv env) {
+        this.renderingEnv = env;
         fillHeader(this.getContext(), this.headerView);
 
         // set filter to repo using current view data
         this.offset = 0;
         this.entities.clear();
-        this.filter = setupFilter(environment.getContext());
+
+        CompositeContext ctx = setupThisContext(env);
+        this.filter = setupFilter(ctx, this.getDatatable().getFilter());
         // read first page to render data
         loadNextPage();
     }
@@ -145,8 +148,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
      * @param context
      * @return
      */
-    private Filter setupFilter(CompositeContext context) {
-        Filter defFilter = this.getDatatable().getFilter();
+    private Filter setupFilter(CompositeContext context, Filter defFilter) {
         Filter f = FilterHelper.createInstance(repo);
         if (defFilter != null) {
             FilterHelper.evaluateFilter(context, defFilter, f);
@@ -217,35 +219,62 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
             @Override
             public void afterTextChanged(Editable editable) {
-                updateHeaderContext(columnid, filterText.getText().toString());
+                updateFilter();
             }
         });
+
+
+        addHeaderToCtx(columnid);
 
         return output;
     }
 
-    private void updateHeaderContext(String columnId, String text) {
-        if (StringUtils.isNotEmpty(text)) {
-            headerContext.put(columnId, text);
-        } else {
-            headerContext.remove(columnId);
+    private void updateFilter() {
+        ConditionBinding[] conditions = new ConditionBinding[this.getDatatable().getColumns().length];
+        int i = 0;
+        for (UIColumn c : this.getDatatable().getColumns()) {
+            conditions[i] = createHeaderCondition(c);
+            i++;
         }
 
-        CompositeContext filterContext = new OrderedCompositeContext();
-        filterContext.addContext(headerContext);
-        setupFilter(filterContext);
+        Criteria criteria = Criteria.or(conditions);
+        Filter filter = new SQLQueryFilter();
+        filter.setCriteria(criteria);
+
+        CompositeContext ctx = setupThisContext(this.renderingEnv);
+        Filter headerFilter = setupFilter(ctx, filter);
+
+        this.filter = headerFilter;
+
+        loadNextPage();
     }
 
 
+    private ConditionBinding createHeaderCondition(UIColumn column) {
+        ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+        ConditionBinding condtion = ConditionBinding.cond(Condition.contains(column.getId(), null), exprFactory.create("${this." + column.getId() + "}"));
+        return condtion;
+    }
+
+    private void addHeaderToCtx(String columnId) {
+        thisViewCtx.registerViewElement("value", columnId, new TextViewConverter(), String.class);
+    }
+
+    private CompositeContext setupThisContext(RenderingEnv env) {
+        thisViewCtx.setPrefix("this");
+        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        return ctx;
+    }
+
     private void fillHeader(Context viewContext, LinearLayout headersLayout) {
         headersLayout.removeAllViews();
-
 
         for (UIColumn c : this.getDatatable().getColumns()) {
             final View dataHeader = createHeaderView(viewContext,
                     headersLayout, c.getHeaderText(), c.getId());
             headersLayout.addView(dataHeader);
         }
+
         headersLayout.setVisibility(View.VISIBLE);
     }
 
