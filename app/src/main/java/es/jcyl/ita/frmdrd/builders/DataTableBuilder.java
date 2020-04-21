@@ -64,6 +64,7 @@ public class DataTableBuilder {
             col.setId(p.getName());
             col.setHeaderText(p.getName());
             col.setValueExpression(expressionFactory.create("${entity." + p.getName() + "}"));
+            col.setFiltering(true);
             lstCols.add(col);
         }
         datatable.setColumns(lstCols.toArray(new UIColumn[lstCols.size()]));
