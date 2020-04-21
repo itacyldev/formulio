@@ -54,6 +54,9 @@ public class RenderingEnv {
     private ViewUserActionInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private View viewRoot;
+    /** User text typing delay controls */
+    private int inputTypingDelay = 750;
+    private boolean inputDelayDisabled = false;
 
     public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
         this.globalContext = globalContext;
@@ -63,7 +66,6 @@ public class RenderingEnv {
             throw new IllegalStateException("Global context mustn't be null!.");
         }
     }
-
 
     /**
      * Clears composite context before starting the rendering process
@@ -155,8 +157,24 @@ public class RenderingEnv {
         return viewRoot;
     }
 
-    public boolean isInterceptorDisabled(){
+    public boolean isInterceptorDisabled() {
         return this.userActionInterceptor.isDisabled();
+    }
+
+    public void disableInputDelay(boolean disabled) {
+        this.inputDelayDisabled = disabled;
+    }
+
+    public boolean isInputDelayDisabled() {
+        return inputDelayDisabled;
+    }
+
+    public int getInputTypingDelay() {
+        return inputTypingDelay;
+    }
+
+    public void setInputTypingDelay(int inputTypingDelay) {
+        this.inputTypingDelay = inputTypingDelay;
     }
 }
 

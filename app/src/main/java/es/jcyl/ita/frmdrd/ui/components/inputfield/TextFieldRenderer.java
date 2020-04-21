@@ -74,16 +74,12 @@ public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
             Runnable workRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                    if (interceptor != null) {
-                        interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
-                    }
+                    executeAction();
                 }
             };
 
-            @Override
+           @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -94,7 +90,18 @@ public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (!env.isInterceptorDisabled()) {
-                    handler.postDelayed(workRunnable, 300 /*delay*/);
+                    if(env.isInputDelayDisabled()){
+                        executeAction();
+                    } else {
+                        handler.postDelayed(workRunnable, env.getInputTypingDelay());
+                    }
+                }
+            }
+
+            private void executeAction() {
+                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                if (interceptor != null) {
+                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
                 }
             }
         });
