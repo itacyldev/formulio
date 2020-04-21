@@ -26,8 +26,7 @@ class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
 
     @Override
     public String getValueFromViewAsString(Switch view) {
-        Switch inputField = (Switch) view;
-        Boolean viewValue = inputField.isChecked();
+        Boolean viewValue = view.isChecked();
         return viewValue.toString();
     }
 

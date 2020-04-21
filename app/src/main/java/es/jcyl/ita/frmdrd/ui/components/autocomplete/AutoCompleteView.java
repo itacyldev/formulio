@@ -17,6 +17,10 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,6 +50,7 @@ public class AutoCompleteView extends AutoCompleteTextView
     private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
 
     private UIAutoComplete component;
+    private int selection = -1;
 
     public AutoCompleteView(Context context) {
         super(context);
@@ -66,10 +71,10 @@ public class AutoCompleteView extends AutoCompleteTextView
         }
         // Create local "this" context for current element and link to the Adapter
         CompositeContext ctx = setupThisContext(env);
-        ((EntityListELAdapter)this.getAdapter()).load(ctx);
+        ((EntityListELAdapter) this.getAdapter()).load(ctx);
     }
 
-    private CompositeContext setupThisContext(RenderingEnv env){
+    private CompositeContext setupThisContext(RenderingEnv env) {
         AndViewContext thisViewCtx = new AndViewContext(this);
         // the user input will be retrieved as text from the view
         thisViewCtx.registerViewElement("value", getId(), component.getConverter(), String.class);
@@ -90,19 +95,51 @@ public class AutoCompleteView extends AutoCompleteTextView
         }
         this.setAdapter(adapter);
 
+        addClickOptionListener(env, component);
+        addTextChangeListener(env, component);
+    }
 
-        this.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void addClickOptionListener(RenderingEnv env, UIAutoComplete component) {
+        this.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setSelection(position);
                 // notify action
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
                     interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
                 }
             }
+        });
+    }
+
+
+    private void addTextChangeListener(RenderingEnv env, UIAutoComplete component) {
+        Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
+
+        this.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                        if (interceptor != null) {
+                            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+                        }
+                    }
+                }, 500 /*delay*/);
+
             }
         });
     }
@@ -138,5 +175,32 @@ public class AutoCompleteView extends AutoCompleteTextView
         }
     }
 
+    public void setSelection(int optionIdx) {
+        this.selection = optionIdx;
+        if (optionIdx == -1) {
+            this.setText(null);
+        } else {
+            UIOption[] options = component.getOptions();
+            this.setText(options[optionIdx].getLabel());
+        }
+    }
 
+    public int getSelection() {
+        return selection;
+    }
+
+    public String getValue() {
+        if (!component.isForceSelection()) {
+            return this.getText().toString();
+        }
+        if (selection == -1) {
+            return null;
+        } else {
+            return this.component.getOptions()[this.selection].getValue();
+        }
+    }
+
+    public UIOption[] getOptions() {
+        return component.getOptions();
+    }
 }

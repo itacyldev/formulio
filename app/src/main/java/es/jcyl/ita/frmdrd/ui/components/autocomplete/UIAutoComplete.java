@@ -22,6 +22,10 @@ import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UIAutoComplete extends UISelect {
+
+    private static final String TYPE = "autocomplete";
+    private static final String DYN_TYPE = "dynamicAutocomplete";
+
     /**
      * Expressions used to calculate the value and label of each option when they're obtained
      * from a repo
@@ -34,8 +38,8 @@ public class UIAutoComplete extends UISelect {
      */
     private String optionFilteringProperty;
 
+    private boolean forceSelection;
 
-    private static final String TYPE = "autocomplete";
 
     @Override
     public String getRendererType() {
@@ -44,7 +48,15 @@ public class UIAutoComplete extends UISelect {
 
     @Override
     public String getValueConverter() {
-        return TYPE;
+        if(!forceSelection){
+            // use textView selection
+            return "text";
+        }
+        if (this.isStatic()) {
+            return TYPE;
+        } else {
+            return DYN_TYPE;
+        }
     }
 
     public ValueBindingExpression getOptionValueExpression() {
@@ -69,5 +81,13 @@ public class UIAutoComplete extends UISelect {
 
     public void setOptionFilteringProperty(String optionFilteringProperty) {
         this.optionFilteringProperty = optionFilteringProperty;
+    }
+
+    public boolean isForceSelection() {
+        return forceSelection;
+    }
+
+    public void setForceSelection(boolean forceSelection) {
+        this.forceSelection = forceSelection;
     }
 }

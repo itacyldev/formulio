@@ -104,6 +104,7 @@ public class FormScriptingTest {
 
         // set field f1 to a value > 10
         recipe.env.enableInterceptors();
+        recipe.env.disableInputDelay(true);
         form.getContext().getViewContext().put("f1", "12345678910111213");
         // call save method to
         ((FormEditController)recipe.mc.getFormController()).save();

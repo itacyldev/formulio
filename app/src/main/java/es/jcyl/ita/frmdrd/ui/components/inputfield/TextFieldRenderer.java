@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.ui.components.inputfield;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -62,28 +64,47 @@ public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
         // configure input view elements
         baseView.getInputView().setInputType(component.getInputType());
         // set event
-        baseView.getInputView().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        addTextChangeListener(env, baseView.getInputView(), component);
+    }
+
+    private void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
+        Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
+
+        view.addTextChangedListener(new TextWatcher() {
+            Runnable workRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    executeAction();
+                }
+            };
+
+           @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                handler.removeCallbacks(workRunnable);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (!env.isInterceptorDisabled()) {
+                    if(env.isInputDelayDisabled()){
+                        executeAction();
+                    } else {
+                        handler.postDelayed(workRunnable, env.getInputTypingDelay());
+                    }
+                }
+            }
+
+            private void executeAction() {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
                     interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
                 }
             }
         });
-    }
-
-    @Override
-    protected <T> T handleNullValue(UIField component) {
-        return (T) EMPTY_STRING;
     }
 
 }
