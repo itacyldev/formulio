@@ -43,18 +43,24 @@ import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
  * or formId.view.field.
  */
 public class RenderingEnv {
-    // context access
+    /**
+     * context access
+     */
     private CompositeContext globalContext;
     private FormContext formContext;
     private CompositeContext combinedContext;
     private List<FormContext> currentFormContexts;
-    // view rendering
+    /**
+     * view rendering
+     */
     private ViewDAG viewDAG;
     private Map<String, DeferredView> deferredViews;
     private ViewUserActionInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private View viewRoot;
-    /** User text typing delay controls */
+    /**
+     * User text typing delay controls
+     */
     private int inputTypingDelay = 750;
     private boolean inputDelayDisabled = false;
 
@@ -63,7 +69,7 @@ public class RenderingEnv {
         userActionInterceptor = new ViewUserActionInterceptor(actionController);
         currentFormContexts = new ArrayList<>();
         if (globalContext == null) {
-            throw new IllegalStateException("Global context mustn't be null!.");
+            throw new IllegalStateException("Global context cannot be null!.");
         }
     }
 
@@ -98,7 +104,7 @@ public class RenderingEnv {
     }
 
     /**
-     * Every time a form starts the rendering, the RenderEnv stores the context and links it with
+     * Every time a form rendering starts, the RenderEnv stores the context and links it with
      * the formId to the global context. So relative access can be done inside the form elements,
      * but also absolute access inter-form can be achieve throught the global context references.
      *

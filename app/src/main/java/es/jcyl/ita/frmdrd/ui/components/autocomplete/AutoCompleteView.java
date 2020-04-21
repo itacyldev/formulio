@@ -38,6 +38,7 @@ import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -99,47 +100,54 @@ public class AutoCompleteView extends AutoCompleteTextView
         addTextChangeListener(env, component);
     }
 
+    private void executeUserAction(RenderingEnv env, UIComponent component) {
+        ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+        if (interceptor != null) {
+            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+        }
+    }
+
     private void addClickOptionListener(RenderingEnv env, UIAutoComplete component) {
         this.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 setSelection(position);
-                // notify action
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                if (interceptor != null) {
-                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
-                }
+                executeUserAction(env, component);
             }
         });
     }
-
 
     private void addTextChangeListener(RenderingEnv env, UIAutoComplete component) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
         this.addTextChangedListener(new TextWatcher() {
+            Runnable workRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    executeUserAction(env, component);
+                }
+            };
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (!env.isInputDelayDisabled()) {
+                    handler.removeCallbacks(workRunnable);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                        if (interceptor != null) {
-                            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
-                        }
+                if (!env.isInterceptorDisabled()) {
+                    if (env.isInputDelayDisabled()) {
+                        executeUserAction(env, component);
+                    } else {
+                        handler.postDelayed(workRunnable, env.getInputTypingDelay());
                     }
-                }, 500 /*delay*/);
-
+                }
             }
         });
     }

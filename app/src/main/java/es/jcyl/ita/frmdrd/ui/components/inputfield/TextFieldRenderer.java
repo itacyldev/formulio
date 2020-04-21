@@ -12,6 +12,7 @@ import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.InputRenderer;
@@ -67,6 +68,13 @@ public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
         addTextChangeListener(env, baseView.getInputView(), component);
     }
 
+    private void executeUserAction(RenderingEnv env, UIComponent component) {
+        ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+        if (interceptor != null) {
+            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+        }
+    }
+
     private void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
@@ -74,34 +82,29 @@ public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
             Runnable workRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    executeAction();
+                    executeUserAction(env, component);
                 }
             };
 
-           @Override
+            @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                handler.removeCallbacks(workRunnable);
+                if (!env.isInputDelayDisabled()) {
+                    handler.removeCallbacks(workRunnable);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 if (!env.isInterceptorDisabled()) {
-                    if(env.isInputDelayDisabled()){
-                        executeAction();
+                    if (env.isInputDelayDisabled()) {
+                        executeUserAction(env, component);
                     } else {
                         handler.postDelayed(workRunnable, env.getInputTypingDelay());
                     }
-                }
-            }
-
-            private void executeAction() {
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
-                if (interceptor != null) {
-                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
                 }
             }
         });
