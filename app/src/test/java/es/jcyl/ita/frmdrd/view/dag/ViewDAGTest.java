@@ -62,8 +62,7 @@ public class ViewDAGTest {
         Assert.assertTrue(dag2.containsVertex(node7));
 
         DirectedAcyclicGraph dag3 = viewDAG.getDAG("node3");
-        Assert.assertEquals(1, dag3.vertexSet().size());
-        Assert.assertTrue(dag3.containsVertex(node3));
+        Assert.assertNull(dag3);
 
         DirectedAcyclicGraph dag4 = viewDAG.getDAG("node4");
         Assert.assertEquals(2, dag4.vertexSet().size());
@@ -78,15 +77,9 @@ public class ViewDAGTest {
         Assert.assertTrue(dag5.containsVertex(node7));
 
         DirectedAcyclicGraph dag6 = viewDAG.getDAG("node6");
-        Assert.assertEquals(1, dag6.vertexSet().size());
-        Assert.assertTrue(dag6.containsVertex(node6));
+        Assert.assertNull(dag6);
 
         DirectedAcyclicGraph dag7 = viewDAG.getDAG("node7");
-        Assert.assertEquals(1, dag7.vertexSet().size());
-        Assert.assertTrue(dag7.containsVertex(node7));
-
-        DirectedAcyclicGraph dag8 = viewDAG.getDAG("node8");
-        Assert.assertNull(dag8);
-
+        Assert.assertNull(dag7);
     }
 }

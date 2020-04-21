@@ -1,5 +1,5 @@
 <LinearLayout
-    android:id="@+id/aslistitem_header_layout"
+    android:id="@+id/list_header_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="150dp"
     android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
 
 
     <LinearLayout
-        android:id="@+id/aslistitem_header_filter_layout"
+        android:id="@+id/list_header_filter_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -37,7 +37,7 @@
         android:visibility="gone">
 
         <EditText
-            android:id="@+id/aslistitem_header_filter_text"
+            android:id="@+id/list_header_filter_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -46,8 +46,32 @@
             android:inputType="text"
             android:textColor="#fff"/>
 
+        <ImageView
+            android:id="@+id/list_header_filter_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:background="@drawable/selectableimagebackground"
+            android:clickable="true"
+            android:contentDescription="@string/layer_aslist"
+            android:padding="2dp"
+            android:src="@drawable/ic_tool_x"
+            android:visibility="gone"/>
 
-
+        <ImageView
+            android:id="@+id/list_header_filter_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:background="@drawable/selectableimagebackground"
+            android:clickable="true"
+            android:contentDescription="@string/layer_aslist"
+            android:padding="2dp"
+            android:src="@drawable/order_arrow_noorder"/>
     </LinearLayout>
+
+
 
 </LinearLayout>

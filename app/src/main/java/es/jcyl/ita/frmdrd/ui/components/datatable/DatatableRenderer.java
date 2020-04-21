@@ -45,11 +45,12 @@ public class DatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable
         component.getRepo().setContext(env.getContext());
 
         LinearLayout tableView = datatableView.findViewById(R.id.list_layout);
-        ListView bodyView = tableView.findViewById(R.id.list_view);
-        datatableView.setBodyView(bodyView);
 
         LinearLayout headerLayout = tableView.findViewById(R.id.list_layout_headers);
         datatableView.setHeaderView(headerLayout);
+
+        ListView bodyView = tableView.findViewById(R.id.list_view);
+        datatableView.setBodyView(bodyView);
 
         datatableView.load(env);
     }
