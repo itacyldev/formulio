@@ -52,7 +52,7 @@ public class UIColumn extends UIComponent {
         if (filtering) {
             headerFilter = new UIFilter();
             headerFilter.setFilterProperty(this.getId());
-            headerFilter.setOrderPropery(this.getId());
+            headerFilter.setOrderProperty(this.getId());
         }
     }
 

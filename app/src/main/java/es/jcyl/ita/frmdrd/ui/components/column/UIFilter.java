@@ -28,7 +28,7 @@ public class UIFilter {
     private String filterProperty;
     private ValueBindingExpression filterValueExpression;
     private Operator matchingOperator = DEFAULT_OPERATOR;
-    private String orderPropery;
+    private String orderProperty;
 
     public String getFilterProperty() {
         return filterProperty;
@@ -54,11 +54,11 @@ public class UIFilter {
         this.matchingOperator = matchingOperator;
     }
 
-    public String getOrderPropery() {
-        return orderPropery;
+    public String getOrderProperty() {
+        return orderProperty;
     }
 
-    public void setOrderPropery(String orderPropery) {
-        this.orderPropery = orderPropery;
+    public void setOrderProperty(String orderProperty) {
+        this.orderProperty = orderProperty;
     }
 }
