@@ -230,6 +230,11 @@ public class AutoCompleteView extends AutoCompleteTextView
     }
 
     public void setValue(Object value) {
+        if(value == null){
+            this.value = null;
+            setText(null);
+            return;
+        }
         // create filter to get the option from the repo
         Repository repo = this.component.getRepo();
         Condition cond = new Condition(this.component.getValueFilteringProperty(),
@@ -239,7 +244,9 @@ public class AutoCompleteView extends AutoCompleteTextView
         List<Entity> lst = repo.find(f);
 
         if (CollectionUtils.isEmpty(lst)) {
+            // option not found in the repository
             this.value = null;
+            this.setText(null);
         } else {
             Entity entity = lst.get(0);
             // calculate the label to show in the input
