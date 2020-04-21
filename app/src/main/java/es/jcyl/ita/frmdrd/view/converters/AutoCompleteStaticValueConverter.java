@@ -27,13 +27,12 @@ public class AutoCompleteStaticValueConverter implements ViewValueConverter<Auto
 
     @Override
     public String getValueFromViewAsString(AutoCompleteView view) {
-        String value = view.getValue();
-        return value;
+        return getValueFromView(view, String.class);
     }
 
     @Override
     public <C> C getValueFromView(AutoCompleteView view, Class<C> expectedType) {
-        String value = getValueFromViewAsString(view);
+        Object value = view.getValue();
         if (value == null) {
             return null;
         } else {

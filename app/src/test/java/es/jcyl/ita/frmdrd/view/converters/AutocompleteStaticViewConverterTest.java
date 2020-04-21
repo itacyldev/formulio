@@ -76,7 +76,6 @@ public class AutocompleteStaticViewConverterTest {
         lstValues.addAll(Arrays.asList(options));
         lstValues.addAll(Arrays.asList(new String[]{null, "", "   ", " "}));
 
-
         UIAutoComplete field = autoBuilder.withRandomData().withOptionValues(options, options).build();
         field.setForceSelection(true);
         InputFieldView<AutoCompleteView> baseView = (InputFieldView<AutoCompleteView>) renderHelper.render(env, field);
@@ -96,10 +95,4 @@ public class AutocompleteStaticViewConverterTest {
             }
         }
     }
-
-    @Test
-    public void testForceSelectInvalidValue(){
-
-    }
-
 }

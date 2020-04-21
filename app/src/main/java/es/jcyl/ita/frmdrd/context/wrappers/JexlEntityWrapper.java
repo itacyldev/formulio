@@ -24,6 +24,8 @@ import es.jcyl.ita.crtrepo.Entity;
  */
 
 public class JexlEntityWrapper implements JexlContext {
+    private static final String ID_PROP = "id";
+
     Entity entity;
 
     public JexlEntityWrapper(Entity entity) {
@@ -32,7 +34,11 @@ public class JexlEntityWrapper implements JexlContext {
 
     @Override
     public Object get(String name) {
-        return entity.get(name);
+        if (ID_PROP.equalsIgnoreCase(name)) {
+            return entity.getId();
+        } else {
+            return entity.get(name);
+        }
     }
 
     @Override

@@ -16,44 +16,23 @@ package es.jcyl.ita.frmdrd.view.converters;
  */
 
 import android.widget.Adapter;
-import android.widget.AutoCompleteTextView;
 
-import org.mini2Dx.beanutils.ConvertUtils;
-
+import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class AutoCompleteDynamicValueConverter implements ViewValueConverter<AutoCompleteTextView> {
+public class AutoCompleteDynamicValueConverter extends AutoCompleteStaticValueConverter {
 
     @Override
-    public String getValueFromViewAsString(AutoCompleteTextView view) {
-        int position = view.getListSelection();
-        if (position == -1) {
-            return null;
-        }
-        return ((UIOption) view.getAdapter().getItem(position)).getValue();
+    public void setViewValue(AutoCompleteView view, Object value) {
+        view.setValue(value);
     }
 
     @Override
-    public <C> C getValueFromView(AutoCompleteTextView view, Class<C> expectedType) {
-        String value = getValueFromViewAsString(view);
-        if (value == null) {
-            return null;
-        } else {
-            return (C) ConvertUtils.convert(expectedType);
-        }
-    }
+    public void setViewValueAsString(AutoCompleteView view, String value) {
 
-    @Override
-    public void setViewValue(AutoCompleteTextView view, Object value) {
-        String strValue = (String) ConvertUtils.convert(value, String.class);
-        setViewValueAsString(view, strValue);
-    }
-
-    @Override
-    public void setViewValueAsString(AutoCompleteTextView view, String value) {
         if (value == null) {
             view.setSelection(0); // empty option
         } else {

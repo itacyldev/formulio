@@ -72,8 +72,14 @@ public class EntityContext extends AbstractBaseContext {
 
     @Nullable
     @Override
-    public Object get(@Nullable Object o) {
-        return this.entity.get(o.toString());
+    public Object get(@NonNull Object o) {
+        String propName = o.toString();
+        if (propName.toLowerCase().equals("id")) {
+            // direct access to entity pk as "id"
+            return this.entity.getId();
+        } else {
+            return this.entity.get(o.toString());
+        }
     }
 
     @Nullable

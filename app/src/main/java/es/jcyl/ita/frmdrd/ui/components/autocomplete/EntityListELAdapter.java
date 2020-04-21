@@ -24,24 +24,32 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.mini2Dx.beanutils.ConvertUtils;
+import org.mini2Dx.collections.CollectionUtils;
+import org.mini2Dx.collections.ListUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
+import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class EntityListELAdapter extends ArrayAdapter {
+public class EntityListELAdapter extends ArrayAdapter<UIOption> {
 
     private static final String THIS_VALUE = "${this.value}";
 
@@ -97,7 +105,7 @@ public class EntityListELAdapter extends ArrayAdapter {
     private es.jcyl.ita.crtrepo.query.Filter createDefaultDefinitionFilter() {
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(component.getRepo());
         // add default criteria using autocomplete view input
-        Criteria criteria = FilterHelper.singleCriteria(component.getOptionFilteringProperty(), THIS_VALUE);
+        Criteria criteria = FilterHelper.singleCriteria(component.getLabelFilteringProperty(), THIS_VALUE);
         f.setCriteria(criteria);
         return f;
     }
@@ -108,8 +116,8 @@ public class EntityListELAdapter extends ArrayAdapter {
     }
 
     @Override
-    public Entity getItem(int position) {
-        return dataList.get(position);
+    public UIOption getItem(int position) {
+        return new EntityToUIOptionWrapper(dataList.get(position));
     }
 
     @Override
@@ -120,11 +128,9 @@ public class EntityListELAdapter extends ArrayAdapter {
                     .inflate(itemLayout, parent, false);
         }
         // evaluate expression to set view value
-        Entity entity = getItem(position);
-        Object value = JexlUtils.eval(entity, component.getOptionLabelExpression());
-
+        UIOption option = this.getItem(position);
         TextView textView = view.findViewById(this.itemId);
-        textView.setText((String) ConvertUtils.convert(value, String.class));
+        textView.setText((String) ConvertUtils.convert(option.getLabel(), String.class));
         return view;
     }
 
@@ -153,10 +159,44 @@ public class EntityListELAdapter extends ArrayAdapter {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            addAll(dataList);
+//            addAll(dataList);
             notifyDataSetChanged();
         }
 
+    }
+    
+    class EntityToUIOptionWrapper extends UIOption {
+
+        private Entity entity;
+        private String cachedValue;
+        private String cachedLabel;
+
+        public EntityToUIOptionWrapper(String label, String value) {
+            super(label, value);
+        }
+
+        public EntityToUIOptionWrapper(Entity entity) {
+            super("","");
+            this.entity = entity;
+        }
+
+        @Override
+        public String getValue() {
+            if(cachedValue == null){
+                Object value = JexlUtils.eval(entity, component.getOptionValueExpression());
+                cachedValue = (String) ConvertUtils.convert(value, String.class);
+            }
+            return cachedValue;
+        }
+
+        @Override
+        public String getLabel() {
+            if(cachedLabel == null){
+                Object label = JexlUtils.eval(entity, component.getOptionLabelExpression());
+                cachedLabel =(String) ConvertUtils.convert(label, String.class);
+            }
+            return cachedLabel;
+        }
     }
 
 }

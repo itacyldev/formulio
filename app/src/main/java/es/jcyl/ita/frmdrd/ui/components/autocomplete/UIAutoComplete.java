@@ -15,6 +15,7 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
  * limitations under the License.
  */
 
+import es.jcyl.ita.crtrepo.query.Operator;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 
@@ -36,7 +37,11 @@ public class UIAutoComplete extends UISelect {
      * Entity property used to build a criteria to filter current repository, the filter value
      * will be obtained from current user autocomplete constraint
      */
-    private String optionFilteringProperty;
+    private String labelFilteringProperty;
+    private Operator valueFilteringOperator = Operator.EQ;
+    private String valueFilteringProperty;
+
+    private int inputThreshold = 1;
 
     private boolean forceSelection;
 
@@ -48,7 +53,7 @@ public class UIAutoComplete extends UISelect {
 
     @Override
     public String getValueConverter() {
-        if(!forceSelection){
+        if (!forceSelection) {
             // use textView selection
             return "text";
         }
@@ -75,13 +80,6 @@ public class UIAutoComplete extends UISelect {
         this.optionLabelExpression = optionLabelExpression;
     }
 
-    public String getOptionFilteringProperty() {
-        return optionFilteringProperty;
-    }
-
-    public void setOptionFilteringProperty(String optionFilteringProperty) {
-        this.optionFilteringProperty = optionFilteringProperty;
-    }
 
     public boolean isForceSelection() {
         return forceSelection;
@@ -89,5 +87,37 @@ public class UIAutoComplete extends UISelect {
 
     public void setForceSelection(boolean forceSelection) {
         this.forceSelection = forceSelection;
+    }
+
+    public String getLabelFilteringProperty() {
+        return labelFilteringProperty;
+    }
+
+    public void setLabelFilteringProperty(String labelFilteringProperty) {
+        this.labelFilteringProperty = labelFilteringProperty;
+    }
+
+    public String getValueFilteringProperty() {
+        return valueFilteringProperty;
+    }
+
+    public void setValueFilteringProperty(String valueFilteringProperty) {
+        this.valueFilteringProperty = valueFilteringProperty;
+    }
+
+    public Operator getValueFilteringOperator() {
+        return valueFilteringOperator;
+    }
+
+    public void setValueFilteringOperator(Operator valueFilteringOperator) {
+        this.valueFilteringOperator = valueFilteringOperator;
+    }
+
+    public int getInputThreshold() {
+        return inputThreshold;
+    }
+
+    public void setInputThreshold(int inputThreshold) {
+        this.inputThreshold = inputThreshold;
     }
 }

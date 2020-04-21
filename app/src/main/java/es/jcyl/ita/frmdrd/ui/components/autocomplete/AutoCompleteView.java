@@ -27,16 +27,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+import org.mini2Dx.collections.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.crtrepo.query.Condition;
+import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
@@ -51,7 +60,7 @@ public class AutoCompleteView extends AutoCompleteTextView
     private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
 
     private UIAutoComplete component;
-    private int selection = -1;
+    private Object value;
 
     public AutoCompleteView(Context context) {
         super(context);
@@ -143,6 +152,7 @@ public class AutoCompleteView extends AutoCompleteTextView
             public void afterTextChanged(Editable editable) {
                 if (!env.isInterceptorDisabled()) {
                     if (env.isInputDelayDisabled()) {
+                        findCurrentSelection();
                         executeUserAction(env, component);
                     } else {
                         handler.postDelayed(workRunnable, env.getInputTypingDelay());
@@ -150,6 +160,24 @@ public class AutoCompleteView extends AutoCompleteTextView
                 }
             }
         });
+    }
+
+    /**
+     * Uses current TextView value to find the related option in the Option adapter
+     */
+    private void findCurrentSelection() {
+        // get current text
+        String textFilter = this.getText().toString();
+        ArrayAdapter<UIOption> adapter = (ArrayAdapter<UIOption>) getAdapter();
+        int nCounts = adapter.getCount();
+        UIOption option;
+        for (int i = 0; i < nCounts; i++) {
+            option = adapter.getItem(i);
+            if (option.getLabel().equalsIgnoreCase(textFilter)) {
+                this.value = option.getValue();
+                break;
+            }
+        }
     }
 
 
@@ -163,7 +191,7 @@ public class AutoCompleteView extends AutoCompleteTextView
                 items.add(option);
             }
         }
-//        input.setThreshold(0);
+        this.setThreshold(component.getInputThreshold());
         // setup adapter and event handler
         ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
                 android.R.layout.select_dialog_item, items);
@@ -183,32 +211,50 @@ public class AutoCompleteView extends AutoCompleteTextView
         }
     }
 
-    public void setSelection(int optionIdx) {
-        this.selection = optionIdx;
-        if (optionIdx == -1) {
+    public void setSelection(int position) {
+        if (position == -1) {
+            this.value = null;
             this.setText(null);
         } else {
-            UIOption[] options = component.getOptions();
-            this.setText(options[optionIdx].getLabel());
+            UIOption option = (UIOption) this.getAdapter().getItem(position);
+            this.value = option.getValue();
+            this.setText(option.getLabel());
         }
     }
 
-    public int getSelection() {
-        return selection;
-    }
-
-    public String getValue() {
+    public Object getValue() {
         if (!component.isForceSelection()) {
             return this.getText().toString();
         }
-        if (selection == -1) {
-            return null;
+        return this.value;
+    }
+
+    public void setValue(Object value) {
+        // create filter to get the option from the repo
+        Repository repo = this.component.getRepo();
+        Condition cond = new Condition(this.component.getValueFilteringProperty(),
+                this.component.getValueFilteringOperator(), value);
+        es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(repo);
+        f.setCriteria(Criteria.single(cond));
+        List<Entity> lst = repo.find(f);
+
+        if (CollectionUtils.isEmpty(lst)) {
+            this.value = null;
         } else {
-            return this.component.getOptions()[this.selection].getValue();
+            Entity entity = lst.get(0);
+            // calculate the label to show in the input
+            Object oLabel = JexlUtils.eval(entity, component.getOptionLabelExpression());
+            if (oLabel != null) {
+                this.value = value;
+                String label = (String) ConvertUtils.convert(oLabel, String.class);
+                this.setText(label);
+            }
         }
     }
 
     public UIOption[] getOptions() {
         return component.getOptions();
     }
+
+
 }

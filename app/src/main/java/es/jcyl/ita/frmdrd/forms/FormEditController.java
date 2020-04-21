@@ -86,13 +86,16 @@ public class FormEditController extends FormController {
      * Access form fields looking for value bindings that can be setable
      */
     private void updateEntity(UIForm form) {
+        FormViewContext viewContext = form.getContext().getViewContext();
+        EntityContext entityContext = form.getContext().getEntityContext();
         // go over all the form elements looking for bindings that are not readonly
         for (UIInputComponent field : form.getFields()) {
-            updateEntity(form.getContext().getViewContext(), form.getContext().getEntityContext(), field);
+            updateEntity(viewContext, entityContext, field);
         }
     }
 
-    private void updateEntity(FormViewContext viewContext, EntityContext entityContext, UIInputComponent field) {
+    private void updateEntity(FormViewContext viewContext, EntityContext entityContext,
+                              UIInputComponent field) {
         if (!field.getValueExpression().isReadOnly()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());

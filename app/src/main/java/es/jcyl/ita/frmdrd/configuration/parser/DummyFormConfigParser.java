@@ -93,19 +93,22 @@ public class DummyFormConfigParser extends FormConfigParser {
         for (int i = 0; i < nouns.length; i++) {
             autoCompleteBuilder.addOption(nouns[i], nouns[i]);
         }
-        UIAutoComplete select = autoCompleteBuilder.withValue("${entity.it_profile}", Integer.class)
+        UIAutoComplete select = autoCompleteBuilder.withValue("${entity.first_name}", String.class)
                 .withId("profileselect").withLabel("autocomplete").build();
-        uiForm.getChildren().add(0, select);
+        uiForm.getChildren().add( select);
         select.setParentForm(uiForm);
 
-        UIAutoComplete select2 = autoCompleteBuilder.withValue("${entity.it_profile}", Integer.class)
+        UIAutoComplete select2 = autoCompleteBuilder.withValue("${entity.last_name}", String.class)
                 .withId("profileselect2").withLabel("autocomplete").build();
         select2.setRepo(contactsRepo);
-        uiForm.getChildren().add(0, select2);
+        uiForm.getChildren().add(select2);
         select2.setParentForm(uiForm);
-        select2.setOptionFilteringProperty("last_name");
+        select2.setForceSelection(true);
+        select2.setLabelFilteringProperty("last_name");
         select2.setOptionValueExpression(exprFactory.create("${entity.id}"));
+        select2.setValueFilteringProperty("id");
         select2.setOptionLabelExpression(exprFactory.create("${entity.last_name}"));
+        select2.setLabelFilteringProperty("last_name");
 
         loadConfig(result.getList());
 
