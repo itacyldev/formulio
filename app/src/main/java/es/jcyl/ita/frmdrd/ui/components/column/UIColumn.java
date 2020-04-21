@@ -22,9 +22,13 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 public class UIColumn extends UIComponent {
 
-    // sort by, filter by, filter mathing, header expression
 
+    // sort by, filter by, filter matching, header expression
     private String headerText;
+
+    private UIFilter filter;
+    private Boolean filtering;
+    private Boolean ordering;
 
     public String getHeaderText() {
         return headerText;
@@ -33,4 +37,29 @@ public class UIColumn extends UIComponent {
     public void setHeaderText(String headerText) {
         this.headerText = headerText;
     }
+
+    public Boolean isFiltering() {
+        return filtering;
+    }
+
+    public final void setFiltering(Boolean filtering) {
+        this.filtering = filtering;
+    }
+
+    public Boolean isOrdering() {
+        return ordering;
+    }
+
+    public void setOrdering(Boolean ordering) {
+        this.ordering = ordering;
+    }
+
+    public UIFilter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(UIFilter filter) {
+        this.filter = filter;
+    }
+
 }

@@ -28,6 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,10 +92,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
         ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this,
                 R.layout.list_item, entities);
-
-
         this.bodyView.setAdapter(dataAdapter);
-
 
         this.bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -115,8 +114,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                                  final int totalItemCount) {
             }
         });
-
-
     }
 
     public void setHeaderView(LinearLayout headerView) {
@@ -173,6 +170,18 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         this.offset += this.pageSize;
     }
 
+    private void updateData() {
+        this.entities.clear();
+        List<Entity> newEntities = this.repo.find(this.filter);
+        this.entities.addAll(newEntities);
+
+        //notify that the model changedA
+        ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     private View createHeaderView(final Context viewContext, final ViewGroup parent,
                                   final String columnName, final String columnid) {
         View output = null;
@@ -190,21 +199,23 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
         final EditText filterText = (EditText) output
                 .findViewById(R.id.list_header_filter_text);
+        String tag = "header" + columnid;
+        filterText.setTag(tag);
 
+        addHeaderToCtx(columnid, tag);
 
         fieldName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
                 if (filterLayout.getVisibility() == View.VISIBLE) {
                     filterLayout.setVisibility(View.GONE);
+                    filterText.setText("");
                 } else {
                     filterLayout.setVisibility(View.VISIBLE);
                 }
 
             }
         });
-
 
         filterText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -224,8 +235,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         });
 
 
-        addHeaderToCtx(columnid);
-
         return output;
     }
 
@@ -233,11 +242,14 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         ConditionBinding[] conditions = new ConditionBinding[this.getDatatable().getColumns().length];
         int i = 0;
         for (UIColumn c : this.getDatatable().getColumns()) {
-            conditions[i] = createHeaderCondition(c);
-            i++;
+            String headerTextValue = thisViewCtx.getString(c.getId());
+            if (StringUtils.isNotEmpty(headerTextValue)) {
+                conditions[i] = createHeaderCondition(c);
+                i++;
+            }
         }
 
-        Criteria criteria = Criteria.or(conditions);
+        Criteria criteria = Criteria.and(conditions);
         Filter filter = new SQLQueryFilter();
         filter.setCriteria(criteria);
 
@@ -245,8 +257,9 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         Filter headerFilter = setupFilter(ctx, filter);
 
         this.filter = headerFilter;
+        this.offset = 0;
 
-        loadNextPage();
+        updateData();
     }
 
 
@@ -256,8 +269,12 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         return condtion;
     }
 
-    private void addHeaderToCtx(String columnId) {
-        thisViewCtx.registerViewElement("value", columnId, new TextViewConverter(), String.class);
+    private void addHeaderToCtx(String columnId, String tag) {
+        thisViewCtx.registerViewElement(columnId, tag, new TextViewConverter(), String.class);
+    }
+
+    private void removeHeaderCtx(String columnId) {
+        thisViewCtx.remove(columnId);
     }
 
     private CompositeContext setupThisContext(RenderingEnv env) {
