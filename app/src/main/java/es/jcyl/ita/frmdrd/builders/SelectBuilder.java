@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 
 /**

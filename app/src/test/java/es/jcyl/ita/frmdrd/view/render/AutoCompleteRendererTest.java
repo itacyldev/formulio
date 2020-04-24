@@ -44,7 +44,7 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.select;
+package es.jcyl.ita.frmdrd.ui.components.option;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -22,7 +22,7 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -30,7 +30,14 @@ import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 public class UIOptionsAdapterHelper {
     private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);
 
-
+    /**
+     * Gets the selected option of the adapter trying to match the given value with the option
+     * value field
+     *
+     * @param adapter
+     * @param value
+     * @return
+     */
     public static int getSelectionOption(Adapter adapter, String value) {
         int nOptions = adapter.getCount();
 
@@ -57,22 +64,34 @@ public class UIOptionsAdapterHelper {
         }
     }
 
-    public ArrayAdapter createArrayAdapterFromOptions(Context context, UISelect component) {
+    /**
+     * Creates an arrayadapter using the component information
+     *
+     * @param context
+     * @param options
+     * @param addNull
+     * @return
+     */
+    public static ArrayAdapter<UIOption> createArrayAdapterFromOptions(Context context, UIOption[] options,
+                                                                boolean addNull, int layout) {
         // create items from options
         List<UIOption> items = new ArrayList<UIOption>();
         // empty value option
-        if (component.isHasNullOption()) {
+        if (addNull) {
             items.add(EMPTY_OPTION);
         }
-        if (component.getOptions() != null) {
-            for (UIOption option : component.getOptions()) {
+        if (options != null) {
+            for (UIOption option : options) {
                 items.add(option);
             }
         }
         // setup adapter and event handler
-        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(context,
-                android.R.layout.select_dialog_item, items);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(context, layout, items);
+//                android.R.layout.select_dialog_item, items);
         return arrayAdapter;
     }
+
+//    ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
+//            android.R.layout.simple_spinner_item, spinnerItems);
+//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 }

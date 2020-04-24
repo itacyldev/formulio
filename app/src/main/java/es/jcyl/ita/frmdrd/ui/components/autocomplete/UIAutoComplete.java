@@ -130,4 +130,5 @@ public class UIAutoComplete extends UISelect implements FilterableComponent{
     public Set<ValueBindingExpression> getValueBindingExpressions() {
         return ExpressionHelper.getExpressions((FilterableComponent) this);
     }
+
 }

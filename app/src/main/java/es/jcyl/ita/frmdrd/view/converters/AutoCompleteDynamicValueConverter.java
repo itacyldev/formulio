@@ -18,7 +18,7 @@ package es.jcyl.ita.frmdrd.view.converters;
 import android.widget.Adapter;
 
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.select;
+package es.jcyl.ita.frmdrd.ui.components.option;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

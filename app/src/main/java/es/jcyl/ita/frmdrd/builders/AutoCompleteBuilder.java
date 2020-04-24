@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
-import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

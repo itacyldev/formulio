@@ -48,7 +48,8 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -58,7 +59,8 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 @SuppressLint("AppCompatCustomView")
 public class AutoCompleteView extends AutoCompleteTextView
         implements DynamicComponent {
-    private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
+    // TODO:  umm, extract to external class?
+    private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);
     private static final ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     private UIAutoComplete component;
@@ -101,6 +103,7 @@ public class AutoCompleteView extends AutoCompleteTextView
         if (component.isStatic()) {
             // create adapter using UIOptions
             adapter = createStaticArrayAdapter(env, component);
+
         } else {
             adapter = new EntityListELAdapter(env, R.layout.component_autocomplete_listitem,
                     R.id.autocomplete_item, component);
@@ -109,6 +112,10 @@ public class AutoCompleteView extends AutoCompleteTextView
 
         addClickOptionListener(env, component);
         addTextChangeListener(env, component);
+    }
+
+    public boolean hasNullOption() {
+        return this.component.isHasNullOption();
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
@@ -187,7 +194,9 @@ public class AutoCompleteView extends AutoCompleteTextView
         // create items from options
         List<UIOption> items = new ArrayList<UIOption>();
         // empty value option
-        items.add(EMPTY_OPTION);
+        if (hasNullOption()) {
+            items.add(EMPTY_OPTION);
+        }
         if (component.getOptions() != null) {
             for (UIOption option : component.getOptions()) {
                 items.add(option);
@@ -201,17 +210,6 @@ public class AutoCompleteView extends AutoCompleteTextView
         return arrayAdapter;
     }
 
-
-    public static class EmptyOption extends UIOption {
-        public EmptyOption(String label, String value) {
-            super(label, value);
-        }
-
-        @Override
-        public String toString() {
-            return " ";
-        }
-    }
 
     public void setSelection(int position) {
         if (position == -1) {
@@ -232,7 +230,7 @@ public class AutoCompleteView extends AutoCompleteTextView
     }
 
     public void setValue(Object value) {
-        if(value == null){
+        if (value == null) {
             this.value = null;
             setText(null);
             return;

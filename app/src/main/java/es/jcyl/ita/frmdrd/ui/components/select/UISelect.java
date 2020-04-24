@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.ui.components.select;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -28,6 +29,7 @@ public class UISelect extends UIInputComponent {
     protected UIOption[] options;
     protected Repository repo;
     protected Filter filter;
+    private boolean hasNullOption = true;
 
     public Repository getRepo() {
         return repo;
@@ -70,5 +72,14 @@ public class UISelect extends UIInputComponent {
      */
     public boolean isStatic() {
         return (this.repo == null);
+    }
+
+
+    public boolean isHasNullOption() {
+        return hasNullOption;
+    }
+
+    public void setHasNullOption(boolean hasNullOption) {
+        this.hasNullOption = hasNullOption;
     }
 }

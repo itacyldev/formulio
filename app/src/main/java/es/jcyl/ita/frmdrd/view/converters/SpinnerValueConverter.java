@@ -15,13 +15,13 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
-import android.widget.Adapter;
 import android.widget.Spinner;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOptionsAdapterHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -51,23 +51,9 @@ class SpinnerValueConverter implements ViewValueConverter<Spinner> {
 
     @Override
     public void setViewValueAsString(Spinner view, String value) {
-        if (value == null) {
-            view.setSelection(0); // empty option
-        } else {
-            // find the selected option
-            Adapter adapter = view.getAdapter();
-            int nOptions = adapter.getCount();
-            view.setSelected(false);
-            // Empty option is added at position 0
-            for (int i = 1; i < nOptions; i++) {
-                UIOption uiOption = (UIOption) adapter.getItem(i);
-                if (uiOption.getValue().equalsIgnoreCase(value)) {
-                    view.setSelection(i);
-                    return;
-                }
-            }
-            view.setSelection(0); // no value found, empty option
-        }
+        view.setSelected(false);
+        int pos = UIOptionsAdapterHelper.getSelectionOption(view.getAdapter(), value);
+        view.setSelection(pos);
     }
 
     /**

@@ -12,6 +12,8 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOptionsAdapterHelper;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -51,7 +53,9 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
         // create items from options
         List<UIOption> spinnerItems = new ArrayList<UIOption>();
         // empty value option
-        spinnerItems.add(EMPTY_OPTION);
+        if(component.isHasNullOption()){
+            spinnerItems.add(EMPTY_OPTION);
+        }
         if (component.getOptions() != null) {
             for (UIOption option : component.getOptions()) {
                 spinnerItems.add(option);
@@ -59,8 +63,13 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
         }
 
         // setup adapter and event handler
+        UIOptionsAdapterHelper.createArrayAdapterFromOptions(env.getViewContext(), component.getOptions(),
+                component.isHasNullOption(),android.R.layout.simple_spinner_item);
+
         ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
                 android.R.layout.simple_spinner_item, spinnerItems);
+
+
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         input.setAdapter(arrayAdapter);
         input.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

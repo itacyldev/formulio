@@ -24,27 +24,20 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import org.mini2Dx.beanutils.ConvertUtils;
-import org.mini2Dx.collections.CollectionUtils;
-import org.mini2Dx.collections.ListUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
-import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**

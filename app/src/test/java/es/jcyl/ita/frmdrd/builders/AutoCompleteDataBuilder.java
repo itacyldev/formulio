@@ -8,8 +8,7 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
-import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
-import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 
 
 public class AutoCompleteDataBuilder extends AbstractDataBuilder<UIAutoComplete> {
