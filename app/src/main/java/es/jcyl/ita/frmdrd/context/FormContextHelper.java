@@ -31,6 +31,9 @@ public class FormContextHelper {
 
     public static String getMessage(FormContext context, String elementId) {
         // TODO: more than one message
+        if (context == null || elementId == null) {
+            return null;
+        }
         Context msgCtx = context.getContext("messages");
         return (String) msgCtx.get(elementId);
     }

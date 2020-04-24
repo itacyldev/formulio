@@ -132,7 +132,7 @@ public class JexlBindingExpression implements ValueBindingExpression {
             this.isReadOnly = vars.size() > 1;
             if (!isReadOnly) {
                 // check the property is not used to access a method ex: entity.property.method()
-                String accessedProperty = vars.get(0).toLowerCase();
+                String accessedProperty = vars.get(0);
                 this.isReadOnly = !accessedProperty.contains("entity")
                         || hasNestedMethodCall(this.expression.asString(), accessedProperty);
             }

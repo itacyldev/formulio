@@ -102,7 +102,9 @@ public class FormControllerTest {
             String propId = prop.getKey();
             PropertyType propertyType = entity.getMetadata().getPropertyByName(propId);
             Object expected = RandomUtils.randomObject(propertyType.getType());
+
             expectedValues.put(propId, expected);
+
             viewContext.put(propId, expected);
         }
         // execute save and check the repo has been hit with the new values
