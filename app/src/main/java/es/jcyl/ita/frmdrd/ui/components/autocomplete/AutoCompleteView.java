@@ -48,8 +48,9 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOptionsAdapterHelper;
+import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -102,8 +103,9 @@ public class AutoCompleteView extends AutoCompleteTextView
         ArrayAdapter adapter;
         if (component.isStatic()) {
             // create adapter using UIOptions
-            adapter = createStaticArrayAdapter(env, component);
-
+            adapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(), component.getOptions(),
+                    component.hasNullOption(), android.R.layout.select_dialog_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         } else {
             adapter = new EntityListELAdapter(env, R.layout.component_autocomplete_listitem,
                     R.id.autocomplete_item, component);
@@ -112,10 +114,6 @@ public class AutoCompleteView extends AutoCompleteTextView
 
         addClickOptionListener(env, component);
         addTextChangeListener(env, component);
-    }
-
-    public boolean hasNullOption() {
-        return this.component.isHasNullOption();
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
@@ -188,28 +186,6 @@ public class AutoCompleteView extends AutoCompleteTextView
             }
         }
     }
-
-
-    private ArrayAdapter createStaticArrayAdapter(RenderingEnv env, UIAutoComplete component) {
-        // create items from options
-        List<UIOption> items = new ArrayList<UIOption>();
-        // empty value option
-        if (hasNullOption()) {
-            items.add(EMPTY_OPTION);
-        }
-        if (component.getOptions() != null) {
-            for (UIOption option : component.getOptions()) {
-                items.add(option);
-            }
-        }
-        this.setThreshold(component.getInputThreshold());
-        // setup adapter and event handler
-        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
-                android.R.layout.select_dialog_item, items);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        return arrayAdapter;
-    }
-
 
     public void setSelection(int position) {
         if (position == -1) {

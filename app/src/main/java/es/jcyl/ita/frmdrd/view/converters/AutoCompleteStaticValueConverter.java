@@ -48,6 +48,7 @@ public class AutoCompleteStaticValueConverter implements ViewValueConverter<Auto
 
     @Override
     public void setViewValueAsString(AutoCompleteView view, String value) {
+        view.setText(value);
         int pos = UIOptionsAdapterHelper.getSelectionOption(view.getAdapter(), value);
         view.setSelection(pos);
     }

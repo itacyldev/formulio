@@ -75,7 +75,7 @@ public class UISelect extends UIInputComponent {
     }
 
 
-    public boolean isHasNullOption() {
+    public boolean hasNullOption() {
         return hasNullOption;
     }
 

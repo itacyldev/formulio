@@ -50,26 +50,22 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
     protected void composeView(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
         Spinner input = baseView.getInputView();
 
-        // create items from options
-        List<UIOption> spinnerItems = new ArrayList<UIOption>();
-        // empty value option
-        if(component.isHasNullOption()){
-            spinnerItems.add(EMPTY_OPTION);
-        }
-        if (component.getOptions() != null) {
-            for (UIOption option : component.getOptions()) {
-                spinnerItems.add(option);
-            }
-        }
+//
+//        // create items from options
+//        List<UIOption> spinnerItems = new ArrayList<UIOption>();
+//        // empty value option
+//        if (component.hasNullOption()) {
+//            spinnerItems.add(EMPTY_OPTION);
+//        }
+//        if (component.getOptions() != null) {
+//            for (UIOption option : component.getOptions()) {
+//                spinnerItems.add(option);
+//            }
+//        }
 
         // setup adapter and event handler
-        UIOptionsAdapterHelper.createArrayAdapterFromOptions(env.getViewContext(), component.getOptions(),
-                component.isHasNullOption(),android.R.layout.simple_spinner_item);
-
-        ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
-                android.R.layout.simple_spinner_item, spinnerItems);
-
-
+        ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(),
+                component.getOptions(), component.hasNullOption(), android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         input.setAdapter(arrayAdapter);
         input.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

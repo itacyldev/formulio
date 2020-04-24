@@ -72,8 +72,8 @@ public class UIOptionsAdapterHelper {
      * @param addNull
      * @return
      */
-    public static ArrayAdapter<UIOption> createArrayAdapterFromOptions(Context context, UIOption[] options,
-                                                                boolean addNull, int layout) {
+    public static ArrayAdapter<UIOption> createAdapterFromOptions(Context context, UIOption[] options,
+                                                                  boolean addNull, int layout) {
         // create items from options
         List<UIOption> items = new ArrayList<UIOption>();
         // empty value option
