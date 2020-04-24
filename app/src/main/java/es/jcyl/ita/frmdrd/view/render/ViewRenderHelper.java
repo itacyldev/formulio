@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
-import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -69,14 +68,15 @@ public class ViewRenderHelper {
         // render children if needed
         if (renderer instanceof GroupRenderer) {
             GroupRenderer gRenderer = (GroupRenderer) renderer;
-            if (root.isRenderChildren() && CollectionUtils.isNotEmpty(root.getChildren())) {
+            if (root.isRenderChildren() && root.hasChildren()) {
                 // recursively render children components
                 ViewGroup groupView = (ViewGroup) rootView;
                 gRenderer.initGroup(env, root, groupView);
-                int numKids = root.getChildren().size();
+                UIComponent[] kids = root.getChildren();
+                int numKids = kids.length;
                 View[] views = new View[numKids];
                 for (int i = 0; i < numKids; i++) {
-                    views[i] = render(env, root.getChildren().get(i));
+                    views[i] = render(env, kids[i]);
                 }
                 gRenderer.addViews(env, root, groupView, views);
                 gRenderer.endGroup(env, root, groupView);

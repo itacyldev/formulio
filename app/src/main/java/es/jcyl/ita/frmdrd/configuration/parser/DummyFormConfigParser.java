@@ -87,13 +87,13 @@ public class DummyFormConfigParser extends FormConfigParser {
         }
         UIAutoComplete select = autoCompleteBuilder.withValue("${entity.first_name}", String.class)
                 .withId("profileselect").withLabel("autocomplete").build();
-        uiForm.getChildren().add(select);
+        uiForm.addChild(select);
         select.setParentForm(uiForm);
 
         UIAutoComplete select2 = autoCompleteBuilder.withValue("${entity.last_name}", String.class)
                 .withId("profileselect2").withLabel("autocomplete").build();
         select2.setRepo(contactsRepo);
-        uiForm.getChildren().add(select2);
+        uiForm.addChild(select2);
         select2.setParentForm(uiForm);
         select2.setForceSelection(true);
         select2.setLabelFilteringProperty("last_name");
@@ -197,15 +197,19 @@ public class DummyFormConfigParser extends FormConfigParser {
                 toRemove.add(c);
             }
         }
-        uiForm.getChildren().removeAll(toRemove);
+        UIComponent[] kids = uiForm.getChildren();
+        uiForm.removeAll();
+        uiForm.addChild(kids[0]);
 
         // province spinner
         Repository provRepo = repoFactory.getRepo("provincia");
 
-        UIAutoComplete provAuto = autoCompleteBuilder.withValue("${entity.prov}", String.class)
-                .withId("provincia").withLabel("provincia").build();
+        UIAutoComplete provAuto = autoCompleteBuilder.withId("provincia")
+                .withValue("${entity.provmuni.substring(0,2)}", Integer.class)
+                .withLabel("provincia").build();
+        provAuto.setOptions(null);
         provAuto.setRepo(provRepo);
-        uiForm.getChildren().add(provAuto);
+        uiForm.addChild(provAuto);
         provAuto.setParentForm(uiForm);
         provAuto.setForceSelection(true);
         provAuto.setOptionValueExpression(exprFactory.create("${entity.id}"));
@@ -215,10 +219,11 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         // council province-dependant autocomplete
         Repository muniRepo = repoFactory.getRepo("municipio");
-        UIAutoComplete muniAuto = autoCompleteBuilder.withValue("${entity.muni}", String.class)
+        UIAutoComplete muniAuto = autoCompleteBuilder.withValue("${entity.provmuni}", String.class)
                 .withId("municipio").withLabel("municipio").build();
+        muniAuto.setOptions(null);
         muniAuto.setRepo(muniRepo);
-        uiForm.getChildren().add(muniAuto);
+        uiForm.addChild(muniAuto);
         muniAuto.setParentForm(uiForm);
         muniAuto.setForceSelection(true);
         muniAuto.setOptionValueExpression(exprFactory.create("${entity.provmuni}"));
@@ -228,7 +233,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         // muni values depend on selected province
         Filter f = new SQLQueryFilter();
         Filter muniFilter = FilterHelper.createInstance(muniRepo);
-        Criteria criteria = Criteria.or(
+        Criteria criteria = Criteria.and(
                 ConditionBinding.cond(Condition.eq("prov", null), exprFactory.create("${view.provincia}")),
                 ConditionBinding.cond(Condition.contains("name", null), exprFactory.create("${this.value}")));
         muniFilter.setCriteria(criteria);
@@ -239,13 +244,13 @@ public class DummyFormConfigParser extends FormConfigParser {
         UIAutoComplete agentsAC = autoCompleteBuilder.withValue("${entity.contact_id}", String.class)
                 .withId("agent").withLabel("agent").build();
         agentsAC.setRepo(agents);
-        uiForm.getChildren().add(agentsAC);
+        uiForm.addChild(agentsAC);
         agentsAC.setParentForm(uiForm);
 
         agentsAC.setForceSelection(true);
         agentsAC.setOptionValueExpression(exprFactory.create("${entity.contact_id}"));
         agentsAC.setValueFilteringProperty("contact_id");
-        agentsAC.setOptionLabelExpression(exprFactory.create("${entity.name}"));
+        agentsAC.setOptionLabelExpression(exprFactory.create("${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"));
         agentsAC.setLabelFilteringProperty("name");
 
         Filter agentFilter = FilterHelper.createInstance(agents);
@@ -254,7 +259,7 @@ public class DummyFormConfigParser extends FormConfigParser {
                 ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${this.value}")));
         agentFilter.setCriteria(criteria);
         agentsAC.setFilter(agentFilter);
-
+        DAGManager.getInstance().generateDags(result.getEdit().getView());
     }
 
 

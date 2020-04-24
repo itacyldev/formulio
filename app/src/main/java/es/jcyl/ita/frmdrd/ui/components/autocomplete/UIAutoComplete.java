@@ -15,14 +15,18 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
  * limitations under the License.
  */
 
+import java.util.Set;
+
 import es.jcyl.ita.crtrepo.query.Operator;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.ui.components.ExpressionHelper;
+import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIAutoComplete extends UISelect {
+public class UIAutoComplete extends UISelect implements FilterableComponent{
 
     private static final String TYPE = "autocomplete";
     private static final String DYN_TYPE = "dynamicAutocomplete";
@@ -119,5 +123,11 @@ public class UIAutoComplete extends UISelect {
 
     public void setInputThreshold(int inputThreshold) {
         this.inputThreshold = inputThreshold;
+    }
+
+
+    @Override
+    public Set<ValueBindingExpression> getValueBindingExpressions() {
+        return ExpressionHelper.getExpressions((FilterableComponent) this);
     }
 }

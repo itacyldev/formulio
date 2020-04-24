@@ -71,6 +71,17 @@ public class UIInputComponent extends UIComponent {
         }
     }
 
+    /**
+     * Returns true if the component has a two-way binding with and entity field. This is
+     * perform through value binding expressions, if there's no binding expression or is read-only
+     * the component is not bound.
+     *
+     * @return
+     */
+    public boolean isBound() {
+        return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
+    }
+
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
@@ -78,6 +89,7 @@ public class UIInputComponent extends UIComponent {
     public String getDefaultValue() {
         return defaultValue;
     }
+
     public void setDefaultValue(final String defaultValue) {
         this.defaultValue = defaultValue;
     }
@@ -94,11 +106,13 @@ public class UIInputComponent extends UIComponent {
     public String getValueConverter() {
         return valueConverter;
     }
-    public ViewValueConverter getConverter(){
+
+    public ViewValueConverter getConverter() {
         return converterFactory.get(this.getValueConverter());
     }
 
     public void setValueConverter(String valueConverter) {
         this.valueConverter = valueConverter;
     }
+
 }

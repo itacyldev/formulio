@@ -49,6 +49,7 @@ import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.select.UIOption;
+import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
@@ -58,6 +59,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 public class AutoCompleteView extends AutoCompleteTextView
         implements DynamicComponent {
     private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
+    private static final ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
 
     private UIAutoComplete component;
     private Object value;
@@ -86,8 +88,8 @@ public class AutoCompleteView extends AutoCompleteTextView
 
     private CompositeContext setupThisContext(RenderingEnv env) {
         AndViewContext thisViewCtx = new AndViewContext(this);
-        // the user input will be retrieved as text from the view
-        thisViewCtx.registerViewElement("value", getId(), component.getConverter(), String.class);
+        // the user input will be retrieved as text from the view, value is retrieved as raw text
+        thisViewCtx.registerViewElement("value", getId(), convFactory.get("text"), String.class);
         thisViewCtx.setPrefix("this");
         CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
         return ctx;

@@ -40,6 +40,7 @@ import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
+import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
@@ -146,6 +147,9 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             if (constraint != null) {
+                AndViewContext thisContxt = (AndViewContext) globalContext.getContext("this");
+                Object value = thisContxt.getValue("value");
+                System.out.println(value);
                 load(globalContext);
 
                 FilterResults filterResults = new FilterResults();

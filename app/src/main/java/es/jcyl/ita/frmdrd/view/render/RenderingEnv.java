@@ -61,7 +61,7 @@ public class RenderingEnv {
     /**
      * User text typing delay controls
      */
-    private int inputTypingDelay = 750;
+    private int inputTypingDelay = 450;
     private boolean inputDelayDisabled = false;
 
     public RenderingEnv(CompositeContext globalContext, ActionController actionController) {

@@ -20,7 +20,6 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.frmdrd.context.impl.EntityContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
 
@@ -96,7 +95,7 @@ public class FormEditController extends FormController {
 
     private void updateEntity(FormViewContext viewContext, EntityContext entityContext,
                               UIInputComponent field) {
-        if (!field.getValueExpression().isReadOnly()) {
+        if (field.isBound()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();

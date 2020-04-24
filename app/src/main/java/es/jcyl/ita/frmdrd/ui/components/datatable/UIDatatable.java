@@ -15,15 +15,13 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.query.Criteria;
-import es.jcyl.ita.crtrepo.query.Expression;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
-import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
+import es.jcyl.ita.frmdrd.ui.components.ExpressionHelper;
+import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 
@@ -31,7 +29,7 @@ import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIDatatable extends UIComponent {
+public class UIDatatable extends UIComponent implements FilterableComponent {
 
     Repository repo;
 
@@ -128,37 +126,8 @@ public class UIDatatable extends UIComponent {
     }
 
     @Override
-    public ValueBindingExpression[] getValueBindingExpressions() {
-        List<ValueBindingExpression> express = new ArrayList<ValueBindingExpression>();
-        if (getValueExpression() != null) {
-            express.add(getValueExpression());
-        }
-        if (this.getRenderExpression() != null) {
-            express.add(getRenderExpression());
-        }
-        // add all the expressions included in the filter definition
-        if (this.filter != null) {
-            findExpressions(filter.getCriteria(), express);
-        }
-        return express.toArray(new ValueBindingExpression[express.size()]);
+    public Set<ValueBindingExpression> getValueBindingExpressions() {
+        return ExpressionHelper.getExpressions((FilterableComponent) this);
     }
 
-    private void findExpressions(Expression expr, List<ValueBindingExpression> lstExpressions) {
-        if (expr == null) {
-            return;
-        }
-        if (expr instanceof ConditionBinding) {
-            lstExpressions.add(((ConditionBinding) expr).getBindingExpression());
-        } else {
-            if (expr instanceof Criteria) {
-                // do deeper
-                Criteria criteria = (Criteria) expr;
-                if (criteria.getChildren() != null) {
-                    for (Expression kid : criteria.getChildren()) {
-                        findExpressions(kid, lstExpressions);
-                    }
-                }
-            }
-        }
-    }
 }

@@ -21,6 +21,7 @@ import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
@@ -66,7 +67,7 @@ public class FormEditBuilder {
 
         // create fields from properties
         PropertyType[] properties = this.meta.getProperties();
-        UIField[] kids = new UIField[properties.length];
+        UIComponent[] kids = new UIComponent[properties.length];
         for (int i = 0; i < properties.length; i++) {
             kids[i] = fieldBuilder.withProperty(properties[i]).build();
         }

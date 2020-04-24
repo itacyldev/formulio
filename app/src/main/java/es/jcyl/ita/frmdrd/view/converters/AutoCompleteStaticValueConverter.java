@@ -27,7 +27,7 @@ public class AutoCompleteStaticValueConverter implements ViewValueConverter<Auto
 
     @Override
     public String getValueFromViewAsString(AutoCompleteView view) {
-        return getValueFromView(view, String.class);
+            return getValueFromView(view, String.class);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AutoCompleteStaticValueConverter implements ViewValueConverter<Auto
         if (value == null) {
             return null;
         } else {
-            return (C) ConvertUtils.convert(expectedType);
+            return (C) ConvertUtils.convert(value, expectedType);
         }
     }
 

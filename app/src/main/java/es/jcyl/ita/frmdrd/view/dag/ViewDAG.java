@@ -4,6 +4,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.jgrapht.traverse.DepthFirstIterator;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,7 +16,7 @@ public class ViewDAG {
     private Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags;
 
     public Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> getDags() {
-        return dags;
+        return (dags == null) ? Collections.emptyMap() : dags;
     }
 
     public void addDAG(DirectedAcyclicGraph<DAGNode, DefaultEdge> dag) {
