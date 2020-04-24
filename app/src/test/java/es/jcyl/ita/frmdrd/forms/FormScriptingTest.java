@@ -82,7 +82,7 @@ public class FormScriptingTest {
         UIForm form = formBuilder.withMeta(meta).withRandomData().build();
         form.setOnValidate("validateForm");
         // get one of the fields and set a name we'll use in the validation script
-        form.getChildren().get(1).setId("f1"); // the string field for the string property
+        form.getChildren()[1].setId("f1"); // the string field for the string property
 
         // load script
         String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));

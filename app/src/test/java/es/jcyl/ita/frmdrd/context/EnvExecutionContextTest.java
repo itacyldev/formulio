@@ -92,16 +92,16 @@ public class EnvExecutionContextTest {
         lastForm.getContext().setView(view);
 
         // access the context of the last evaluated form using relative paths like view.field or entity.field
-        String id1 = "entity." + lastForm.getChildren().get(0).getId();
-        String id2 = "view." + lastForm.getChildren().get(0).getId();
+        String id1 = "entity." + lastForm.getChildren()[0].getId();
+        String id2 = "view." + lastForm.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
         Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
         Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
 
         // Access each form context using absolute paths
-        id1 = f1.getId() + ".entity." + f1.getChildren().get(0).getId();
-        id2 = f2.getId() + ".view." + f2.getChildren().get(0).getId();
+        id1 = f1.getId() + ".entity." + f1.getChildren()[0].getId();
+        id2 = f2.getId() + ".view." + f2.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
         Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));

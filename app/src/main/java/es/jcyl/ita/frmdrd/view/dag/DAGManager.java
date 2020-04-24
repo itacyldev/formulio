@@ -111,8 +111,7 @@ public class DAGManager {
     private void storeComponents(UIComponent component, Map<String, UIComponent> components) {
         components.put(component.getAbsoluteId(), component);
 
-        List<UIComponent> children = component.getChildren();
-        if (children != null) {
+        if (component.hasChildren()) {
             for (UIComponent child : component.getChildren()) {
                 storeComponents(child, components);
             }

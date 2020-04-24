@@ -3,8 +3,9 @@ package es.jcyl.ita.frmdrd.ui.components;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
@@ -18,7 +19,7 @@ public abstract class UIComponent implements Serializable {
     protected UIComponent root;
     protected UIComponent parent;
     protected UIForm parentForm;
-    protected List<UIComponent> children;
+    protected UIComponent[] children;
 
     private ValueBindingExpression valueExpression;
     private ValueBindingExpression renderExpression;
@@ -59,12 +60,12 @@ public abstract class UIComponent implements Serializable {
         this.parent = parent;
     }
 
-    public List<UIComponent> getChildren() {
+    public UIComponent[] getChildren() {
         return children;
     }
 
     public boolean hasChildren() {
-        return this.children != null && this.children.size() > 0;
+        return this.children != null && this.children.length > 0;
     }
 
     public UIComponent findChild(String id) {
@@ -86,26 +87,33 @@ public abstract class UIComponent implements Serializable {
     }
 
     public void addChild(UIComponent... lstChildren) {
+        UIComponent[] newKids;
         if (children == null) {
-            children = new ArrayList<>();
+            newKids = Arrays.copyOf(lstChildren, lstChildren.length);
+        } else {
+            newKids = Arrays.copyOf(this.children, this.children.length + lstChildren.length);
+            System.arraycopy(lstChildren, 0, newKids, this.children.length, lstChildren.length);
         }
-        for (UIComponent kid : lstChildren) {
-            kid.setParent(this);
-            children.add(kid);
-        }
+        this.children = newKids;
+        linkParent();
     }
 
     public void addChild(UIComponent child) {
+        UIComponent[] newKids;
         if (children == null) {
-            children = new ArrayList<>();
+            newKids = new UIComponent[1];
+        } else {
+            newKids = Arrays.copyOf(this.children, this.children.length + 1);
         }
+        newKids[newKids.length - 1] = child;
+        this.children = newKids;
         child.setParent(this);
-        children.add(child);
     }
-    public void removeAll(){
-        this.children.clear();
+
+    public void removeAll() {
         this.children = null;
     }
+
     public String getRendererType() {
         return rendererType;
     }
@@ -123,19 +131,21 @@ public abstract class UIComponent implements Serializable {
     }
 
     public void setChildren(UIComponent[] children) {
-        this.children = new ArrayList<UIComponent>();
-        for (UIComponent c : children) {
-            c.setParent(this);
-            this.children.add(c);
-        }
+        this.children = children;
+        // re-link children parent
+        linkParent();
     }
 
     public void setChildren(List<UIComponent> children) {
-        this.children = children;
+        this.children = children.toArray(new UIComponent[children.size()]);
         // re-link children parent
+        linkParent();
+    }
+
+    private void linkParent() {
         if (this.children != null) {
-            for (UIComponent c : this.children) {
-                c.setParent(this);
+            for (UIComponent kid : this.children) {
+                kid.setParent(this);
             }
         }
     }
@@ -220,15 +230,8 @@ public abstract class UIComponent implements Serializable {
         }
     }
 
-    public ValueBindingExpression[] getValueBindingExpressions() {
-        List<ValueBindingExpression> express = new ArrayList<ValueBindingExpression>();
-        if (this.valueExpression != null) {
-            express.add(valueExpression);
-        }
-        if (this.renderExpression != null) {
-            express.add(renderExpression);
-        }
-        return express.toArray(new ValueBindingExpression[express.size()]);
+    public Set<ValueBindingExpression> getValueBindingExpressions() {
+        return ExpressionHelper.getExpressions(this);
     }
 
 }

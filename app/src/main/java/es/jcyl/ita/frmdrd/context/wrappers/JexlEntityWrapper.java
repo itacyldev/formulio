@@ -34,11 +34,11 @@ public class JexlEntityWrapper implements JexlContext {
 
     @Override
     public Object get(String name) {
-        if (ID_PROP.equalsIgnoreCase(name)) {
-            return entity.getId();
-        } else {
-            return entity.get(name);
+        Object value = entity.get(name);
+        if (value == null && ID_PROP.equalsIgnoreCase(name)) {
+            value = entity.getId();
         }
+        return value;
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.query.Condition;
@@ -16,11 +17,13 @@ import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.AutoCompleteBuilder;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.builders.FormControllerBuilder;
+import es.jcyl.ita.frmdrd.builders.SelectBuilder;
 import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
@@ -61,21 +64,10 @@ public class DummyFormConfigParser extends FormConfigParser {
     FormControllerBuilder fcBuilder = new FormControllerBuilder();
     AutoCompleteBuilder autoCompleteBuilder = new AutoCompleteBuilder();
 
+    SelectBuilder selectBuilder = new SelectBuilder();
+
     @Override
     public void parseFormConfig(String formConfigStr) {
-//        FormController fc1List = new FormListController("MyForm1", "Form number 1.");
-//        createListView1(fc1List);
-//        loadConfig(fc1List);
-//
-//        FormController fc1Edit = new FormListController("MyForm1", "Form number 1.");
-//        createEditView1(fc1Edit);
-//        loadConfig(fc1Edit);
-
-//        FormController fc2 = new FormController("MyForm2", "Form number 2.");
-//        createListView1(fc2);
-//        createEditView2(fc2);
-//        loadConfig(fc2);
-
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
         FormControllerBuilder.FormBuilderResult result = fcBuilder.withRepo(contactsRepo).build();
         loadConfig(result.getEdit());
@@ -95,13 +87,13 @@ public class DummyFormConfigParser extends FormConfigParser {
         }
         UIAutoComplete select = autoCompleteBuilder.withValue("${entity.first_name}", String.class)
                 .withId("profileselect").withLabel("autocomplete").build();
-        uiForm.getChildren().add( select);
+        uiForm.addChild(select);
         select.setParentForm(uiForm);
 
         UIAutoComplete select2 = autoCompleteBuilder.withValue("${entity.last_name}", String.class)
                 .withId("profileselect2").withLabel("autocomplete").build();
         select2.setRepo(contactsRepo);
-        uiForm.getChildren().add(select2);
+        uiForm.addChild(select2);
         select2.setParentForm(uiForm);
         select2.setForceSelection(true);
         select2.setLabelFilteringProperty("last_name");
@@ -121,6 +113,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         loadConfig(result.getEdit());
         loadConfig(result.getList());
         createTableFilterView(result.getEdit());
+
+        createAgentsForm();
 
     }
 
@@ -188,6 +182,86 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         formController.setView(view1);
     }
+
+    private void createAgentsForm() {
+        EditableRepository contactsRepo = repoFactory.getEditableRepo("agents");
+        FormControllerBuilder.FormBuilderResult result = fcBuilder.withRepo(contactsRepo).build();
+        loadConfig(result.getEdit());
+        loadConfig(result.getList());
+
+        // remove all controls but "id" and  replace them with a select and autocompletes
+        UIForm uiForm = result.getEdit().getMainForm();
+        List<UIComponent> toRemove = new ArrayList<>();
+        for (UIComponent c : uiForm.getChildren()) {
+            if (!c.getId().equalsIgnoreCase("id")) {
+                toRemove.add(c);
+            }
+        }
+        UIComponent[] kids = uiForm.getChildren();
+        uiForm.removeAll();
+        uiForm.addChild(kids[0]);
+
+        // province spinner
+        Repository provRepo = repoFactory.getRepo("provincia");
+
+        UIAutoComplete provAuto = autoCompleteBuilder.withId("provincia")
+                .withValue("${entity.provmuni.substring(0,2)}", Integer.class)
+                .withLabel("provincia").build();
+        provAuto.setOptions(null);
+        provAuto.setRepo(provRepo);
+        uiForm.addChild(provAuto);
+        provAuto.setParentForm(uiForm);
+        provAuto.setForceSelection(true);
+        provAuto.setOptionValueExpression(exprFactory.create("${entity.id}"));
+        provAuto.setValueFilteringProperty("id");
+        provAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
+        provAuto.setLabelFilteringProperty("name");
+
+        // council province-dependant autocomplete
+        Repository muniRepo = repoFactory.getRepo("municipio");
+        UIAutoComplete muniAuto = autoCompleteBuilder.withValue("${entity.provmuni}", String.class)
+                .withId("municipio").withLabel("municipio").build();
+        muniAuto.setOptions(null);
+        muniAuto.setRepo(muniRepo);
+        uiForm.addChild(muniAuto);
+        muniAuto.setParentForm(uiForm);
+        muniAuto.setForceSelection(true);
+        muniAuto.setOptionValueExpression(exprFactory.create("${entity.provmuni}"));
+        muniAuto.setValueFilteringProperty("provmuni");
+        muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
+        muniAuto.setLabelFilteringProperty("name");
+        // muni values depend on selected province
+        Filter f = new SQLQueryFilter();
+        Filter muniFilter = FilterHelper.createInstance(muniRepo);
+        Criteria criteria = Criteria.and(
+                ConditionBinding.cond(Condition.eq("prov", null), exprFactory.create("${view.provincia}")),
+                ConditionBinding.cond(Condition.contains("name", null), exprFactory.create("${this.value}")));
+        muniFilter.setCriteria(criteria);
+        muniAuto.setFilter(muniFilter);
+
+        // agents autocomplete
+        Repository agents = repoFactory.getRepo("contacts");
+        UIAutoComplete agentsAC = autoCompleteBuilder.withValue("${entity.contact_id}", String.class)
+                .withId("agent").withLabel("agent").build();
+        agentsAC.setRepo(agents);
+        uiForm.addChild(agentsAC);
+        agentsAC.setParentForm(uiForm);
+
+        agentsAC.setForceSelection(true);
+        agentsAC.setOptionValueExpression(exprFactory.create("${entity.contact_id}"));
+        agentsAC.setValueFilteringProperty("contact_id");
+        agentsAC.setOptionLabelExpression(exprFactory.create("${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"));
+        agentsAC.setLabelFilteringProperty("name");
+
+        Filter agentFilter = FilterHelper.createInstance(agents);
+        criteria = Criteria.or(
+                ConditionBinding.cond(Condition.eq("first_name", null), exprFactory.create("${this.value}")),
+                ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${this.value}")));
+        agentFilter.setCriteria(criteria);
+        agentsAC.setFilter(agentFilter);
+        DAGManager.getInstance().generateDags(result.getEdit().getView());
+    }
+
 
     private void createEditView2(FormController formController) {
         List<UIComponent> lst = new ArrayList<UIComponent>();
@@ -275,6 +349,7 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         formController.setView(view1);
     }
+
 
     private void createListView1(FormController formController) {
         List<UIComponent> lst = new ArrayList<UIComponent>();

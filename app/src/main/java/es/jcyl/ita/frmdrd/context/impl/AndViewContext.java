@@ -221,8 +221,11 @@ public class AndViewContext extends AbstractBaseContext {
         return entries;
     }
 
+    public Map<String, Alias> getAliases() {
+        return aliases;
+    }
 
-    private class Alias {
+    public class Alias {
         String name;
         int viewId;
         String tagName;
@@ -237,6 +240,11 @@ public class AndViewContext extends AbstractBaseContext {
             this.expectedType = expectedType;
         }
 
+        @NonNull
+        @Override
+        public String toString() {
+            return String.format("name: %s  viewId: %s - tagName: %s",name, viewId, tagName);
+        }
     }
 
     public View getView() {

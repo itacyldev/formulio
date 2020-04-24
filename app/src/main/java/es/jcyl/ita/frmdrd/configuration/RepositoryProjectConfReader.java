@@ -67,6 +67,30 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         builder = repoFactory.getBuilder(eSource);
         builder.build();
 
+        eSource = sourceFactory.getEntitySource("provincia");
+        metaModeler = new SQLiteMetaModeler();
+        meta = metaModeler.readFromSource(eSource);
+        builder = repoFactory.getBuilder(eSource);
+        conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
+        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
+        builder.build();
+
+        eSource = sourceFactory.getEntitySource("municipio");
+        metaModeler = new SQLiteMetaModeler();
+        meta = metaModeler.readFromSource(eSource);
+        builder = repoFactory.getBuilder(eSource);
+        conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
+        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
+        builder.build();
+
+        eSource = sourceFactory.getEntitySource("agents");
+        metaModeler = new SQLiteMetaModeler();
+        meta = metaModeler.readFromSource(eSource);
+        builder = repoFactory.getBuilder(eSource);
+        conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
+        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
+        builder.build();
+
 //         create repository against spatialite database
         eSource = sourceFactory.getEntitySource("inspecciones");
         metaModeler = new SpatiaLiteMetaModeler();
@@ -100,7 +124,24 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.QUERY, query);
         builder.build();
 
+        builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "provincia");
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "provincia");
+        builder.build();
 
+        builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "municipio");
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "municipio");
+        builder.build();
+
+
+        builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "agents");
+        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "assigned_agents");
+        builder.build();
     }
 
     private void createDBSource() {
