@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
  */
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -24,9 +25,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -39,6 +43,7 @@ import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
@@ -59,6 +64,8 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  */
 
 public class DatatableLayout extends LinearLayout implements DynamicComponent, EntitySelector {
+    private final String HEADER_SUFIX = "_header";
+
     private int offset = 0;
     private int pageSize = 20;
     private UIDatatable dataTable;
@@ -68,6 +75,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
     // view sorting and filtering criteria
     private Filter filter;
+    private Sort sort;
 
     private AndViewContext thisViewCtx = new AndViewContext(this);
 
@@ -139,6 +147,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         loadNextPage();
     }
 
+
     /**
      * Get the definition filter from the dataTable and construct an effective filter using the
      * context information.
@@ -160,6 +169,17 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         this.filter.setPageSize(this.pageSize);
         this.filter.setOffset(this.offset);
         //this.entities.clear();
+        addData();
+
+        this.offset += this.pageSize;
+    }
+
+    private void reloadData() {
+        this.entities.clear();
+        addData();
+    }
+
+    private void addData() {
         this.entities.addAll(this.repo.find(this.filter));
 
         //notify that the model changedA
@@ -167,8 +187,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-
-        this.offset += this.pageSize;
     }
 
     private View createHeaderView(final Context viewContext, final ViewGroup parent, final UIColumn column) {
@@ -190,26 +208,27 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         return output;
     }
 
-    private void addHeaderFilterLayout(UIColumn column, View headerLayout, View fieldNameView) {
+    private void addHeaderFilterLayout(final UIColumn column, View headerLayout, View fieldNameView) {
         final LinearLayout filterLayout = headerLayout
                 .findViewById(R.id.list_header_filter_layout);
 
         final EditText filterText = headerLayout
                 .findViewById(R.id.list_header_filter_text);
-
-        String tag = "header" + column.getId();
+        String tag = column.getId() + HEADER_SUFIX;
         filterText.setTag(tag);
-
         addHeaderToCtx(column.getId(), tag);
+
+        final ImageView filterOrder = headerLayout.findViewById(R.id.list_header_filter_order);
+
 
         fieldNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 if (filterLayout.getVisibility() == View.VISIBLE) {
-                    filterLayout.setVisibility(View.GONE);
-                    filterText.setText("");
+                    setHeaderFilterVisibility(View.GONE);
+                    //resetFilter();
                 } else {
-                    filterLayout.setVisibility(View.VISIBLE);
+                    setHeaderFilterVisibility(View.VISIBLE);
                 }
 
             }
@@ -229,6 +248,48 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                 updateFilter();
             }
         });
+
+        filterOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                String columnOrderProperty = column.getHeaderFilter().getOrderProperty();
+
+                Drawable orderImage = null;
+                if (sort == null || !columnOrderProperty.equals(sort.getProperty())) {
+                    sort = createHeaderSort(column, Sort.SortType.ASC);
+                    orderImage = ContextCompat
+                            .getDrawable(getContext(), R.drawable.
+                                    order_arrow_asc);
+
+                    //TODO change all other images to sort disabled
+
+                } else {
+                    Sort.SortType type = sort.getType();
+                    if (type.equals(Sort.SortType.DESC)) {
+                        sort = createHeaderSort(column, Sort.SortType.ASC);
+                        orderImage = ContextCompat
+                                .getDrawable(getContext(), R.drawable.
+                                        order_arrow_asc);
+                    } else {
+                        sort = createHeaderSort(column, Sort.SortType.DESC);
+                        orderImage = ContextCompat
+                                .getDrawable(getContext(), R.drawable.
+                                        order_arrow_desc);
+                    }
+                }
+
+                filterOrder.setImageDrawable(orderImage);
+                updateFilter();
+            }
+        });
+    }
+
+    private void setHeaderFilterVisibility(int visibility) {
+        for (int i = 0; i < this.headerView.getChildCount(); i++) {
+            View header_item = this.headerView.getChildAt(i);
+            View header_filter = header_item.findViewById(R.id.list_header_filter_layout);
+            header_filter.setVisibility(visibility);
+        }
     }
 
     /**
@@ -245,9 +306,17 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
             }
         }
 
-        Criteria criteria = Criteria.and(conditions);
         Filter filter = new SQLQueryFilter();
-        filter.setCriteria(criteria);
+        if (conditions.length > 0) {
+            Criteria criteria = Criteria.and(conditions);
+            filter.setCriteria(criteria);
+        }
+
+        if (sort != null) {
+            Sort[] sorts = {sort};
+            filter.setSorting(sorts);
+        }
+
 
         CompositeContext ctx = setupThisContext(this.renderingEnv);
         Filter headerFilter = setupFilter(ctx, filter);
@@ -255,19 +324,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         this.filter = headerFilter;
         this.offset = 0;
 
-        updateData();
-    }
-
-    private void updateData() {
-        this.entities.clear();
-        List<Entity> newEntities = this.repo.find(this.filter);
-        this.entities.addAll(newEntities);
-
-        //notify that the model changedA
-        ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
+        reloadData();
     }
 
 
@@ -286,6 +343,18 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         ConditionBinding condition = new ConditionBinding(headerFilter.getFilterProperty(), headerFilter.getMatchingOperator(), null);
         condition.setBindingExpression(valueExpression);
         return condition;
+    }
+
+    /**
+     * @param column
+     * @param type
+     * @return
+     */
+    private Sort createHeaderSort(UIColumn column, Sort.SortType type) {
+        String orderProperty = column.getHeaderFilter().getOrderProperty();
+
+        Sort sort = new Sort(orderProperty, type);
+        return sort;
     }
 
     private void addHeaderToCtx(String columnId, String tag) {
