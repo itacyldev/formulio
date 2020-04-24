@@ -25,9 +25,7 @@ import org.apache.commons.jexl3.internal.TemplateEngine;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mini2Dx.beanutils.ConvertUtils;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -48,7 +46,7 @@ import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
  */
 
 public class TestJexlExpressions {
-    ValueExpressionFactory factory =  ValueExpressionFactory.getInstance();
+    ValueExpressionFactory factory = ValueExpressionFactory.getInstance();
 
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(true).silent(false).create();
@@ -105,8 +103,6 @@ public class TestJexlExpressions {
 
     @Test
     public void testLiteralExpressions() {
-
-
         Class[] clazzez = new Class[]{Double.class, Date.class, ByteArray.class, Boolean.class,
                 String.class, Float.class, Integer.class, Long.class};
 
@@ -118,7 +114,36 @@ public class TestJexlExpressions {
             Assert.assertEquals(ve.getClass(), LiteralBindingExpression.class);
             AssertUtils.assertEquals(value, JexlUtils.eval(new BasicContext("t"), ve));
         }
+    }
 
+    /**
+     * Checks the expression is correctly interpreted as readOnly (no two-way binding uicomponent-entityProperty
+     * is possible
+     */
+    @Test
+    public void testReadOnlyExpressions() {
+
+        String[] expressions = new String[]{
+                "${entity.property}",
+                "   ${entity.property   }   ",
+                "   ${  entity.property   }   ",
+                "${entity.property.substring(0,2)}",
+                "${entity.property1 + entity.property2}",
+                "${entity.property1} + ${entity.property2}"
+
+        };
+
+        boolean[] expected = new boolean[]{
+                false, false, false, true, true, true
+        };
+        ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
+        int i = 0;
+        for (String expr : expressions) {
+            System.out.println("Tested expression: " + expr);
+            ValueBindingExpression vbExpression = expressionFactory.create(expr);
+            Assert.assertEquals(expr, expected[i], vbExpression.isReadOnly());
+            i++;
+        }
     }
 
     @Test
@@ -137,15 +162,15 @@ public class TestJexlExpressions {
         view.put("string", RandomUtils.randomString(4));
         view.put("date", RandomUtils.randomDate());
         view.put("long", RandomUtils.randomLong(0, 10000));
-        String[] properties= new String[]{ "string", "date", "long"};
+        String[] properties = new String[]{"string", "date", "long"};
 
 
         for (String expr : funcExpression) {
-            for(String property: properties){
-                String effectiveExpression = String.format(expr,property);
+            for (String property : properties) {
+                String effectiveExpression = String.format(expr, property);
                 JxltEngine.Expression e = engine.createExpression(effectiveExpression);
                 Object value = e.evaluate(context);
-                System.out.println(">>>> using: "  +property);
+                System.out.println(">>>> using: " + property);
                 System.out.println(value);
             }
         }

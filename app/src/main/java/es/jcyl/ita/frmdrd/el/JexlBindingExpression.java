@@ -33,6 +33,8 @@ import java.util.List;
 public class JexlBindingExpression implements ValueBindingExpression {
 
     private static final String IMMEDIATE_EXPRESSION = "org.apache.commons.jexl3.internal.TemplateEngine$ImmediateExpression";
+    private static final String COMPOSITE_EXPRESSION = "org.apache.commons.jexl3.internal.TemplateEngine$CompositeExpression";
+
     private List<String> vars;
     private final JxltEngine.Expression expression;
     private Class expectedType;
@@ -113,16 +115,45 @@ public class JexlBindingExpression implements ValueBindingExpression {
     }
 
     private void setIsReadonly() {
+        if (this.isLiteral) {
+            this.isReadOnly = true;
+            return;
+        }
         // immediate expressions define a direct reference to a bean method
-        this.isReadOnly = !(this.expression.getClass().getName().equals(IMMEDIATE_EXPRESSION));
-//
-//        if (getDependingVariables() == null || getDependingVariables().size() != 1) {
-//            return true;
-//        } else {
-//            // there's just one variable in the expression and it depends on one of the
-//            // entity's properties
-//            return !getDependingVariables().get(0).contains("entity.");
-//        }
+        String className = this.expression.getClass().getName();
+        if (!className.equals(IMMEDIATE_EXPRESSION) && !className.equals(COMPOSITE_EXPRESSION)) {
+            this.isReadOnly = true;
+            return;
+        } else {
+            // there's just one variable in the expression and it depends on one of the
+            // entity properties without submethods call on the property
+            // TODO:
+            List<String> vars = getDependingVariables();
+            this.isReadOnly = vars.size() > 1;
+            if (!isReadOnly) {
+                // check the property is not used to access a method ex: entity.property.method()
+                String accessedProperty = vars.get(0).toLowerCase();
+                this.isReadOnly = !accessedProperty.contains("entity")
+                        || hasNestedMethodCall(this.expression.asString(), accessedProperty);
+            }
+        }
+    }
+
+    /**
+     * Checks if the referenced property is used in the expression to call an additional sub-method
+     *
+     * @param expression
+     * @param accessedProperty
+     * @return
+     */
+    private boolean hasNestedMethodCall(String expression, String accessedProperty) {
+        // TODO: JEXL is hermetic at this point and we cant access AST nodes to check if threre's a method
+        // reference below the property AST node
+        int pos = expression.indexOf(accessedProperty);
+        // check if after the property is something different that " " or "}", it that case the expression
+        // is using a method of the property Object
+        char afterExpressionChar = expression.charAt(pos + accessedProperty.length());
+        return afterExpressionChar != ' ' && afterExpressionChar != '}';
     }
 
     private void setIsLiteral() {

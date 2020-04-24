@@ -27,10 +27,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
@@ -114,6 +114,7 @@ public class AutoCompleteView extends AutoCompleteTextView
 
         addClickOptionListener(env, component);
         addTextChangeListener(env, component);
+        addLostFocusListener(env, component);
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
@@ -133,6 +134,20 @@ public class AutoCompleteView extends AutoCompleteTextView
         });
     }
 
+    private void addLostFocusListener(RenderingEnv env, UIAutoComplete component) {
+        this.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // if current text doesn't match and option, remove if
+                if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {
+                    if(value == null){
+                        setText(null);
+                    }
+                }
+            }
+        });
+    }
+
     private void addTextChangeListener(RenderingEnv env, UIAutoComplete component) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
@@ -140,7 +155,11 @@ public class AutoCompleteView extends AutoCompleteTextView
             Runnable workRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    executeUserAction(env, component);
+                    boolean found = findCurrentSelection();
+                    if (found) {
+                        // if text matches an option
+                        executeUserAction(env, component);
+                    }
                 }
             };
 
@@ -159,8 +178,11 @@ public class AutoCompleteView extends AutoCompleteTextView
             public void afterTextChanged(Editable editable) {
                 if (!env.isInterceptorDisabled()) {
                     if (env.isInputDelayDisabled()) {
-                        findCurrentSelection();
-                        executeUserAction(env, component);
+                        boolean found = findCurrentSelection();
+                        if (found) {
+                            // if text matches an option
+                            executeUserAction(env, component);
+                        }
                     } else {
                         handler.postDelayed(workRunnable, env.getInputTypingDelay());
                     }
@@ -170,9 +192,10 @@ public class AutoCompleteView extends AutoCompleteTextView
     }
 
     /**
-     * Uses current TextView value to find the related option in the Option adapter
+     * Uses current TextView value to find the related option in the Option adapter.
+     * Returns true if an option fits the user input
      */
-    private void findCurrentSelection() {
+    private boolean findCurrentSelection() {
         // get current text
         String textFilter = this.getText().toString();
         ArrayAdapter<UIOption> adapter = (ArrayAdapter<UIOption>) getAdapter();
@@ -182,9 +205,11 @@ public class AutoCompleteView extends AutoCompleteTextView
             option = adapter.getItem(i);
             if (option.getLabel().equalsIgnoreCase(textFilter)) {
                 this.value = option.getValue();
-                break;
+                return true;
             }
         }
+        this.value = null;
+        return false;
     }
 
     public void setSelection(int position) {

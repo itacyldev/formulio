@@ -230,6 +230,9 @@ public class DummyFormConfigParser extends FormConfigParser {
         muniAuto.setValueFilteringProperty("provmuni");
         muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
         muniAuto.setLabelFilteringProperty("name");
+        muniAuto.addValidator(new RequiredValidator());
+
+
         // muni values depend on selected province
         Filter f = new SQLQueryFilter();
         Filter muniFilter = FilterHelper.createInstance(muniRepo);

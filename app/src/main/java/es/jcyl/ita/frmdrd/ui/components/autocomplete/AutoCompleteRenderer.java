@@ -22,6 +22,7 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
@@ -34,8 +35,6 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * Creates view elements for autocomplete component
  */
 public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAutoComplete> {
-
-    private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);
 
     @Override
     protected int getComponentLayout() {
@@ -53,7 +52,10 @@ public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAuto
     @Override
     protected void setMessages(RenderingEnv env, InputFieldView<AutoCompleteView> baseView,
                                UIAutoComplete component) {
-
+        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        if (message != null) {
+            baseView.getInputView().setError(message);
+        }
     }
 
 }
