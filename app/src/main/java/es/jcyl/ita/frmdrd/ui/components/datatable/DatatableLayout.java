@@ -64,8 +64,9 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  */
 
 public class DatatableLayout extends LinearLayout implements DynamicComponent, EntitySelector {
-    private final String HEADER_SUFIX = "_header";
-    private final String ORDER_SUFIX = "_order";
+    private final String HEADER_FILTER_SUFIX = "_header_filter";
+    private final String HEADER_NAME_SUFIX = "_header_name";
+    private final String HEADER_ORDER_SUFIX = "header_order";
 
     private int offset = 0;
     private int pageSize = 20;
@@ -201,6 +202,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         final TextView fieldNameView = output
                 .findViewById(R.id.list_header_textview);
         fieldNameView.setText(DataUtils.nullFormat(columnName));
+        fieldNameView.setTag(column.getId() + HEADER_NAME_SUFIX);
 
         if (column.isFiltering()) {
             addHeaderFilterLayout(column, output, fieldNameView);
@@ -215,12 +217,12 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
         final EditText filterText = headerLayout
                 .findViewById(R.id.list_header_filter_text);
-        String tag = column.getId() + HEADER_SUFIX;
+        String tag = column.getId() + HEADER_FILTER_SUFIX;
         filterText.setTag(tag);
         addHeaderToCtx(column.getId(), tag);
 
         final ImageView filterOrder = headerLayout.findViewById(R.id.list_header_filter_order);
-        filterOrder.setTag(column.getId() + ORDER_SUFIX);
+        filterOrder.setTag(column.getId() + HEADER_ORDER_SUFIX);
 
 
         fieldNameView.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +230,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
             public void onClick(final View v) {
                 if (filterLayout.getVisibility() == View.VISIBLE) {
                     setHeaderFilterVisibility(View.GONE);
-                    //resetFilter();
+                    resetFilter();
                 } else {
                     setHeaderFilterVisibility(View.VISIBLE);
                 }
@@ -288,6 +290,21 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
     }
 
     /**
+     *
+     */
+    private void resetFilter() {
+        sort = null;
+        for (UIColumn column : this.getDatatable().getColumns()) {
+            EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
+            if (StringUtils.isNotEmpty(filterText.getText().toString())) {
+                filterText.setText("");
+            }
+        }
+
+        disableOrderImages(null);
+    }
+
+    /**
      * Sets a no order image for columns other than the parameter
      *
      * @param columnid
@@ -298,8 +315,8 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                         order_arrow_noorder);
 
         for (UIColumn column : this.getDatatable().getColumns()) {
-            if (!columnid.equals(column.getId())) {
-                ImageView orderImageView = this.findViewWithTag(column.getId() + ORDER_SUFIX);
+            if (!column.getId().equals(columnid)) {
+                ImageView orderImageView = this.findViewWithTag(column.getId() + HEADER_ORDER_SUFIX);
                 if (orderImageView != null) {
                     orderImageView.setImageDrawable(orderImage);
                 }
@@ -397,10 +414,12 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
     private void fillHeader(Context viewContext, LinearLayout headersLayout) {
         headersLayout.removeAllViews();
 
+        int i = 0;
         for (UIColumn c : this.getDatatable().getColumns()) {
             final View dataHeader = createHeaderView(viewContext,
                     headersLayout, c);
             headersLayout.addView(dataHeader);
+            i++;
         }
 
         headersLayout.setVisibility(View.VISIBLE);

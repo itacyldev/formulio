@@ -13,6 +13,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
@@ -52,6 +53,13 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     private final int fieldLimit;
     private static final int RECORDS_CACHE = 20;
 
+
+    public void setMinColWidths(Integer[] minColWidths) {
+        this.minColWidths = minColWidths;
+    }
+
+    private Integer[] minColWidths;
+
     /**
      * Behaviour attributes
      */
@@ -64,15 +72,18 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         super(context, textViewResourceId, entities);
         this.context = context;
         this.dtLayout = datatableLayout;
+
         this.fieldLimit = datatableLayout.getDatatable().getNumFieldsToShow();
         this.cacheViews = new View[RECORDS_CACHE];
         this.inflater = LayoutInflater.from(getContext());
+
+        this.minColWidths = new Integer[dtLayout.getDatatable().getColumns().length];
+        Arrays.fill(minColWidths, 0);
     }
 
     @Override
     public View getView(final int position, View convertView,
                         final ViewGroup parent) {
-
         View item = this.cacheViews[position % cacheViews.length];
         ViewColumnHolder holder;
 
@@ -104,8 +115,33 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             cacheViews[position % cacheViews.length] = item;
         }
 
+        adjustColumnWidth((LinearLayout) item);
+
         return item;
     }
+
+    /**
+     * @param rowLayout
+     */
+    public void adjustColumnWidth(LinearLayout rowLayout) {
+
+        Integer nChild = rowLayout.getChildCount();
+        for (int i = 0; i < nChild; i++) {
+            TextView cellView = (TextView) rowLayout.getChildAt(i);
+            Integer colWidth = 0;
+            colWidth = cellView.getMeasuredWidth();
+            Integer maxColWidth = minColWidths[i];
+
+            if (maxColWidth > colWidth) {
+
+                cellView.setWidth(maxColWidth);
+
+            } else {
+                minColWidths[i] = colWidth;
+            }
+        }
+    }
+
 
     private void setOnClickListener(LinearLayout layout,
                                     Entity currentEntity) {
@@ -153,6 +189,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             TextView view = createTextView(parent);
             layout.addView(view);
             holder.viewList.add(view);
+
             index++;
             if (index >= fieldLimit) {
                 final TextView overflowTextView = createTextView(parent);
