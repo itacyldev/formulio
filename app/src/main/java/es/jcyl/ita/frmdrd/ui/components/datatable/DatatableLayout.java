@@ -65,6 +65,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 public class DatatableLayout extends LinearLayout implements DynamicComponent, EntitySelector {
     private final String HEADER_SUFIX = "_header";
+    private final String ORDER_SUFIX = "_order";
 
     private int offset = 0;
     private int pageSize = 20;
@@ -219,6 +220,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         addHeaderToCtx(column.getId(), tag);
 
         final ImageView filterOrder = headerLayout.findViewById(R.id.list_header_filter_order);
+        filterOrder.setTag(column.getId() + ORDER_SUFIX);
 
 
         fieldNameView.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +251,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
             }
         });
 
+
         filterOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -260,9 +263,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                     orderImage = ContextCompat
                             .getDrawable(getContext(), R.drawable.
                                     order_arrow_asc);
-
-                    //TODO change all other images to sort disabled
-
                 } else {
                     Sort.SortType type = sort.getType();
                     if (type.equals(Sort.SortType.DESC)) {
@@ -277,13 +277,41 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                                         order_arrow_desc);
                     }
                 }
-
                 filterOrder.setImageDrawable(orderImage);
+
+                //sets a noorder image for the rest of the columns
+                disableOrderImages(column.getId());
+
                 updateFilter();
             }
         });
     }
 
+    /**
+     * Sets a no order image for columns other than the parameter
+     *
+     * @param columnid
+     */
+    private void disableOrderImages(String columnid) {
+        Drawable orderImage = ContextCompat
+                .getDrawable(getContext(), R.drawable.
+                        order_arrow_noorder);
+
+        for (UIColumn column : this.getDatatable().getColumns()) {
+            if (!columnid.equals(column.getId())) {
+                ImageView orderImageView = this.findViewWithTag(column.getId() + ORDER_SUFIX);
+                if (orderImageView != null) {
+                    orderImageView.setImageDrawable(orderImage);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets the visibility of header filters
+     *
+     * @param visibility
+     */
     private void setHeaderFilterVisibility(int visibility) {
         for (int i = 0; i < this.headerView.getChildCount(); i++) {
             View header_item = this.headerView.getChildAt(i);
@@ -316,7 +344,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
             Sort[] sorts = {sort};
             filter.setSorting(sorts);
         }
-
 
         CompositeContext ctx = setupThisContext(this.renderingEnv);
         Filter headerFilter = setupFilter(ctx, filter);
