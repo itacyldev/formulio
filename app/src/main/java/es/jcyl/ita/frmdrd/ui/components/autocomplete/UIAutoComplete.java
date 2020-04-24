@@ -26,7 +26,7 @@ import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIAutoComplete extends UISelect implements FilterableComponent{
+public class UIAutoComplete extends UISelect implements FilterableComponent {
 
     private static final String TYPE = "autocomplete";
     private static final String DYN_TYPE = "dynamicAutocomplete";

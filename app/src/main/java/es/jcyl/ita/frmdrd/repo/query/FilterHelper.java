@@ -62,8 +62,32 @@ public class FilterHelper {
      * @param output:     the object used to set the values extracted from the context
      */
     public static void evaluateFilter(Context context, Filter definition, Filter output) {
-        // evaluate filter conditions
-        Criteria effectiveCriteria = criteriaVisitor.visit(definition.getCriteria(), context);
+        evaluateFilter(context, definition, output, null);
+    }
+
+    public static void evaluateFilter(Context context, Filter definition, Filter output, String[] mandatory) {
+        // check all mandatory values are fulfilled
+        boolean checkPassed = true;
+        if (mandatory != null) {
+
+            for (String ctxProperty : mandatory) {
+                Object value = null;
+                try {
+                    value = context.get(ctxProperty);
+                } catch (Exception e) {
+                    checkPassed = false;
+                    break;
+                }
+            }
+        }
+        Criteria effectiveCriteria;
+        if (!checkPassed) {
+            // set impossible condition to get no result.
+            effectiveCriteria = Criteria.single(Condition.eq("1", "2"));
+        } else {
+            // evaluate filter conditions
+            effectiveCriteria = criteriaVisitor.visit(definition.getCriteria(), context);
+        }
         output.setCriteria(effectiveCriteria);
         output.setSorting(definition.getSorting());
     }
