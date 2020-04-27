@@ -115,7 +115,9 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             cacheViews[position % cacheViews.length] = item;
         }
 
+        // Adjust the column width to the content size
         adjustColumnWidth((LinearLayout) item);
+        adjustColumnWidth(this.dtLayout.getHeaderView());
 
         return item;
     }
@@ -127,21 +129,18 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
         Integer nChild = rowLayout.getChildCount();
         for (int i = 0; i < nChild; i++) {
-            TextView cellView = (TextView) rowLayout.getChildAt(i);
+            View cellView = rowLayout.getChildAt(i);
             Integer colWidth = 0;
             colWidth = cellView.getMeasuredWidth();
             Integer maxColWidth = minColWidths[i];
 
             if (maxColWidth > colWidth) {
-
-                cellView.setWidth(maxColWidth);
-
+                cellView.setMinimumWidth(maxColWidth);
             } else {
                 minColWidths[i] = colWidth;
             }
         }
     }
-
 
     private void setOnClickListener(LinearLayout layout,
                                     Entity currentEntity) {

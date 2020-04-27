@@ -65,7 +65,6 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 public class DatatableLayout extends LinearLayout implements DynamicComponent, EntitySelector {
     private final String HEADER_FILTER_SUFIX = "_header_filter";
-    private final String HEADER_NAME_SUFIX = "_header_name";
     private final String HEADER_ORDER_SUFIX = "header_order";
 
     private int offset = 0;
@@ -137,7 +136,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
     public void load(RenderingEnv env) {
         this.renderingEnv = env;
-        fillHeader(this.getContext(), this.headerView);
+        fillHeader();
 
         // set filter to repo using current view data
         this.offset = 0;
@@ -189,6 +188,8 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+
+
     }
 
     private View createHeaderView(final Context viewContext, final ViewGroup parent, final UIColumn column) {
@@ -199,10 +200,10 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         LayoutInflater inflater = LayoutInflater.from(viewContext);
         output = inflater.inflate(R.layout.list_item_header, parent,
                 false);
+
         final TextView fieldNameView = output
                 .findViewById(R.id.list_header_textview);
         fieldNameView.setText(DataUtils.nullFormat(columnName));
-        fieldNameView.setTag(column.getId() + HEADER_NAME_SUFIX);
 
         if (column.isFiltering()) {
             addHeaderFilterLayout(column, output, fieldNameView);
@@ -411,18 +412,18 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         return ctx;
     }
 
-    private void fillHeader(Context viewContext, LinearLayout headersLayout) {
-        headersLayout.removeAllViews();
+    private void fillHeader() {
+        headerView.removeAllViews();
 
         int i = 0;
         for (UIColumn c : this.getDatatable().getColumns()) {
-            final View dataHeader = createHeaderView(viewContext,
-                    headersLayout, c);
-            headersLayout.addView(dataHeader);
+            final View dataHeader = createHeaderView(getContext(),
+                    headerView, c);
+            headerView.addView(dataHeader);
             i++;
         }
 
-        headersLayout.setVisibility(View.VISIBLE);
+        headerView.setVisibility(View.VISIBLE);
     }
 
     public UIDatatable getDatatable() {
@@ -436,6 +437,10 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
 
     public RenderingEnv getRenderingEnv() {
         return renderingEnv;
+    }
+
+    public LinearLayout getHeaderView() {
+        return this.headerView;
     }
 
     /*************************************/
