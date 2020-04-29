@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="200dp"
     android:orientation="vertical"
-    >
+    android:background="?attr/background">
 
     <TextView
         android:id="@+id/field_layout_name"
@@ -13,15 +13,14 @@
         android:layout_gravity="center_vertical"
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"
-        android:textColor="#fff"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="16sp" />
 
 
     <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/aslist_scroll"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#000">
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
@@ -35,11 +34,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#282828"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
+
             <ListView
                 android:id="@+id/list_view"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
+
                 android:padding="0dp" />
         </LinearLayout>
 

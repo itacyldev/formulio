@@ -23,15 +23,21 @@ import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
  */
 public class ConfigFacade {
 
+    private static boolean configLoaded = false;
+
     public void init() {
-        RepositoryProjectConfReader configReader = new RepositoryProjectConfReader();
-        configReader.read();
+        if (!configLoaded) {
+            RepositoryProjectConfReader configReader = new RepositoryProjectConfReader();
+            configReader.read();
 
-        FormConfigParser parser = new DummyFormConfigParser();
-        parser.parseFormConfig("");
+            FormConfigParser parser = new DummyFormConfigParser();
+            parser.parseFormConfig("");
 
-        // customize data type converters
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
+            // customize data type converters
+            ConfigConverters confConverter = new ConfigConverters();
+            confConverter.init();
+
+            configLoaded = true;
+        }
     }
 }

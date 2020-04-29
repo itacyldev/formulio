@@ -1,14 +1,15 @@
 package es.jcyl.ita.frmdrd;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -21,7 +22,10 @@ import es.jcyl.ita.frmdrd.configuration.ConfigFacade;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
 
-public class MainActivity extends AppCompatActivity implements FormListFragment.OnListFragmentInteractionListener {
+public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
+
+    protected SharedPreferences settings;
+
     private static final int PERMISSION_REQUEST = 1234;
     ConfigFacade config = new ConfigFacade();
 
@@ -39,7 +43,19 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_dark_theme);
+        if (currentTheme.equals("dark")) {
+            item.setTitle(R.string.action_light_theme);
+        } else {
+            item.setTitle(R.string.action_dark_theme);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -54,8 +70,14 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
             return true;
         }
 
+        if (id == R.id.action_dark_theme) {
+            switchTheme();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
 
     private void initialize() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -79,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
                 return true;
             }
         });
+
+        settings = PreferenceManager
+                .getDefaultSharedPreferences(this);
     }
 
     @Override
@@ -107,5 +132,17 @@ public class MainActivity extends AppCompatActivity implements FormListFragment.
         } else {
             config.init();
         }
+    }
+
+    @Override
+    protected void setTheme() {
+        if (currentTheme.equals("dark")) {
+            setTheme(R.style.Theme_App_Dark);
+        } else {
+            setTheme(R.style.Theme_App_Light);
+        }
+
+        // change text of the menu item
+        invalidateOptionsMenu();
     }
 }

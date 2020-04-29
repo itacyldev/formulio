@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView android:id="@+id/form_list"
-    android:name="es.jcyl.ita.frmdrd.FormListFragment"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/form_list"
+    android:name="es.jcyl.ita.frmdrd.FormListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:background="?attr/background"
     app:layoutManager="LinearLayoutManager"
     tools:context="es.jcyl.ita.frmdrd.view.activities.FormListFragment"
     tools:listitem="@layout/fragment_item" />

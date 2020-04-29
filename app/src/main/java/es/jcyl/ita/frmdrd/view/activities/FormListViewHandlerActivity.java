@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import es.jcyl.ita.frmdrd.BaseActivity;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.UserAction;
@@ -20,7 +21,7 @@ import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
-public class FormListViewHandlerActivity extends AppCompatActivity implements FormActivity<FormListController> {
+public class FormListViewHandlerActivity extends BaseActivity implements FormActivity<FormListController> {
 
     private Router router;
     private RenderingEnv env;
@@ -33,6 +34,7 @@ public class FormListViewHandlerActivity extends AppCompatActivity implements Fo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_form_list_view_handler);
         contentView = this.findViewById(R.id.body_content);
 
@@ -50,6 +52,8 @@ public class FormListViewHandlerActivity extends AppCompatActivity implements Fo
 
         // check if there are messages to show
         UserMessagesHelper.showGlobalMessages(this, mc.getRouter());
+
+
     }
 
     private void renderFAB(MainController mc) {
@@ -111,6 +115,16 @@ public class FormListViewHandlerActivity extends AppCompatActivity implements Fo
     @Override
     public ViewGroup getContentView() {
         return contentView;
+    }
+
+    @Override
+    protected void setTheme(){
+        //currentTheme = sharedPreferences.getString("current_theme", "light");
+        if (currentTheme.equals("light")) {
+            setTheme(R.style.Theme_App_Light_NoActionBar);
+        } else {
+            setTheme(R.style.Theme_App_Dark_NoActionBar);
+        }
     }
 
 }

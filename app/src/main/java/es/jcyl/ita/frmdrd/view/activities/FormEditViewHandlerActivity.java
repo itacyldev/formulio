@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import es.jcyl.ita.frmdrd.BaseActivity;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.UserAction;
@@ -39,7 +41,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class FormEditViewHandlerActivity extends FragmentActivity implements FormActivity<FormEditController> {
+public class FormEditViewHandlerActivity extends BaseActivity implements FormActivity<FormEditController> {
 
     private Router router;
     private RenderingEnv env;
@@ -107,6 +109,16 @@ public class FormEditViewHandlerActivity extends FragmentActivity implements For
         button.setText(formAction.getLabel());
         parent.addView(button);
         return button;
+    }
+
+    @Override
+    protected void setTheme(){
+        //currentTheme = sharedPreferences.getString("current_theme", "light");
+        if (currentTheme.equals("light")) {
+            setTheme(R.style.Theme_App_Light_NoActionBar);
+        } else {
+            setTheme(R.style.Theme_App_Dark_NoActionBar);
+        }
     }
 
     @Override

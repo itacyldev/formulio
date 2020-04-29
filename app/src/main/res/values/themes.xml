@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.App.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="primaryTextColor">@color/onPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="background">@color/background</item>
+        <item name="itemTextColor">@color/onBackground</item>
+        <item name="buttonNormalColor">@color/buttonNormal</item>
+        <item name="buttonHighlightColor">@color/buttonHighlight</item>
+        <item name="buttonTextColor">@color/buttonText</item>
+        <item name="iconNoorder">@drawable/order_arrow_noorder</item>
+        <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
+        <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
+    </style>
+
+
+    <style name="Theme.App.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/dark_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/dark_colorPrimaryVariant</item>
+        <item name="colorAccent">@color/dark_colorAccent</item>
+        <item name="primaryTextColor">@color/dark_onPrimary</item>
+        <item name="colorSecondary">@color/dark_colorSecondary</item>
+        <item name="background">@color/dark_background</item>
+        <item name="itemTextColor">@color/dark_onBackground</item>
+        <item name="buttonNormalColor">@color/dark_buttonNormal</item>
+        <item name="buttonHighlightColor">@color/dark_buttonHighlight</item>
+        <item name="buttonTextColor">@color/dark_buttonText</item>
+        <item name="iconNoorder">@drawable/order_arrow_noorder</item>
+        <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
+        <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
+
+    </style>
+
+    <style name="Theme.App.Light.NoActionBar" parent="Theme.App.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.App.Dark.NoActionBar" parent="Theme.App.Dark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+</resources>

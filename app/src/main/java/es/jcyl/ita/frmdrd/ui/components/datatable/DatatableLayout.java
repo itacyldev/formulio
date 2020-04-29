@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.ui.components.datatable;
  */
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -263,21 +264,15 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                 Drawable orderImage = null;
                 if (sort == null || !columnOrderProperty.equals(sort.getProperty())) {
                     sort = createHeaderSort(column, Sort.SortType.ASC);
-                    orderImage = ContextCompat
-                            .getDrawable(getContext(), R.drawable.
-                                    order_arrow_asc);
+                    orderImage = getOrderIcon(Sort.SortType.ASC);
                 } else {
                     Sort.SortType type = sort.getType();
                     if (type.equals(Sort.SortType.DESC)) {
                         sort = createHeaderSort(column, Sort.SortType.ASC);
-                        orderImage = ContextCompat
-                                .getDrawable(getContext(), R.drawable.
-                                        order_arrow_asc);
+                        orderImage = getOrderIcon(Sort.SortType.ASC);
                     } else {
                         sort = createHeaderSort(column, Sort.SortType.DESC);
-                        orderImage = ContextCompat
-                                .getDrawable(getContext(), R.drawable.
-                                        order_arrow_desc);
+                        orderImage = getOrderIcon(Sort.SortType.DESC);
                     }
                 }
                 filterOrder.setImageDrawable(orderImage);
@@ -288,6 +283,28 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                 updateFilter();
             }
         });
+    }
+
+    /**
+     * Gets the icon depending on app's theme
+     *
+     * @param type
+     * @return
+     */
+    private Drawable getOrderIcon(Sort.SortType type) {
+        Drawable drawableFromTheme;
+        int[] attrs;
+        if (Sort.SortType.ASC.equals(type)) {
+            attrs = new int[]{R.attr.iconOrderAsc};
+        } else if (Sort.SortType.DESC.equals(type)) {
+            attrs = new int[]{R.attr.iconOrderDesc};
+        } else {
+            attrs = new int[]{R.attr.iconNoorder};
+        }
+        TypedArray ta = getContext().obtainStyledAttributes(attrs);
+        drawableFromTheme = ta.getDrawable(0);
+
+        return drawableFromTheme;
     }
 
     /**
