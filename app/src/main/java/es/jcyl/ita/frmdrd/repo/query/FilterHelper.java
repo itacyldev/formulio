@@ -86,7 +86,7 @@ public class FilterHelper {
         Criteria effectiveCriteria;
         if (!checkPassed) {
             // set impossible condition to get no result.
-            effectiveCriteria = Criteria.single(IMPOSSIBLE_CONDITION);
+            effectiveCriteria = Criteria.single(Condition.eq("1", "2"));
         } else {
             // evaluate filter conditions
             effectiveCriteria = criteriaVisitor.visit(definition.getCriteria(), context);
