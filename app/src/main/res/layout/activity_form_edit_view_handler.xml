@@ -7,9 +7,9 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll"
-        android:paddingBottom="40dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="40dp">
 
         <LinearLayout
             android:id="@+id/form_content"
@@ -20,13 +20,13 @@
     </ScrollView>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/form_toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
-        android:background="?attr/colorPrimaryDark"
-        android:gravity="bottom" />
+        android:background="?attr/colorPrimary"
+        android:gravity="bottom"
+        android:orientation="horizontal"/>
 
 </RelativeLayout>

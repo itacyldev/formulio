@@ -2,13 +2,12 @@ package es.jcyl.ita.frmdrd.view.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 
 import es.jcyl.ita.frmdrd.BaseActivity;
 import es.jcyl.ita.frmdrd.MainController;
@@ -106,13 +105,39 @@ public class FormEditViewHandlerActivity extends BaseActivity implements FormAct
                 }
             }
         });
+
         button.setText(formAction.getLabel());
+
+        setButtonStyle(button);
+
         parent.addView(button);
         return button;
     }
 
+    /**
+     * @param button
+     * @return
+     */
+    private void setButtonStyle(Button button) {
+
+        int[] attrs = new int[]{R.attr.buttonNormalColor};
+        TypedArray ta = this.obtainStyledAttributes(attrs);
+        int normalColor = ta.getColor(0, Color.GRAY);
+        button.setBackgroundColor(normalColor);
+
+        attrs = new int[]{R.attr.buttonHighlightColor};
+        ta = this.obtainStyledAttributes(attrs);
+        int highlightColor = ta.getColor(0, Color.GRAY);
+        button.setHighlightColor(highlightColor);
+
+        attrs = new int[]{R.attr.buttonTextColor};
+        ta = this.obtainStyledAttributes(attrs);
+        int textColor = ta.getColor(0, Color.BLACK);
+        button.setTextColor(textColor);
+    }
+
     @Override
-    protected void setTheme(){
+    protected void setTheme() {
         //currentTheme = sharedPreferences.getString("current_theme", "light");
         if (currentTheme.equals("light")) {
             setTheme(R.style.Theme_App_Light_NoActionBar);

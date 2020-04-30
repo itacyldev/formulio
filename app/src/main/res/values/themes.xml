@@ -5,13 +5,22 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/onPrimary</item>
         <item name="primaryTextColor">@color/onPrimary</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
+
         <item name="background">@color/background</item>
         <item name="itemTextColor">@color/onBackground</item>
-        <item name="buttonNormalColor">@color/buttonNormal</item>
-        <item name="buttonHighlightColor">@color/buttonHighlight</item>
+        <item name="clickableTextColor">@color/clickableTextColor</item>
+
+        <!--<item name="backgroundColor">@color/background</item>-->
+        <item name="secondaryBackgroundColor">@color/backgroundSecondary</item>
+        <item name="onBackgroundColor">@color/onBackground</item>
+        <item name="onBackgroundSecondaryColor">@color/onBackgroundSecondary</item>
+
+        <item name="buttonNormalColor">@color/colorPrimaryVariant</item>
+        <item name="buttonHighlightColor">@color/colorPrimary</item>
         <item name="buttonTextColor">@color/buttonText</item>
+
         <item name="iconNoorder">@drawable/order_arrow_noorder</item>
         <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
         <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
@@ -22,13 +31,23 @@
         <item name="colorPrimary">@color/dark_colorPrimary</item>
         <item name="colorPrimaryDark">@color/dark_colorPrimaryVariant</item>
         <item name="colorAccent">@color/dark_colorAccent</item>
+        <item name="android:textColorPrimary">@color/dark_onPrimary</item>
         <item name="primaryTextColor">@color/dark_onPrimary</item>
-        <item name="colorSecondary">@color/dark_colorSecondary</item>
+
         <item name="background">@color/dark_background</item>
         <item name="itemTextColor">@color/dark_onBackground</item>
-        <item name="buttonNormalColor">@color/dark_buttonNormal</item>
-        <item name="buttonHighlightColor">@color/dark_buttonHighlight</item>
+        <item name="clickableTextColor">@color/dark_clickableTextColor</item>
+
+        <!--<item name="backgroundColor">@color/dark_background</item>-->
+        <item name="secondaryBackgroundColor">@color/dark_backgroundSecondary</item>
+        <item name="onBackgroundColor">@color/dark_onBackground</item>
+        <item name="onBackgroundSecondaryColor">@color/dark_onBackgroundSecondary</item>
+
+
+        <item name="buttonNormalColor">@color/dark_colorPrimaryVariant</item>
+        <item name="buttonHighlightColor">@color/dark_colorPrimary</item>
         <item name="buttonTextColor">@color/dark_buttonText</item>
+
         <item name="iconNoorder">@drawable/order_arrow_noorder</item>
         <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
         <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
