@@ -47,13 +47,19 @@ public class ConditionBinding extends Condition {
     }
 
     public static ConditionBinding cond(Condition cond, ValueBindingExpression expr) {
-        ConditionBinding c;
+        ConditionBinding bCond;
         if (cond.getValue() != null) {
-            c = new ConditionBinding(cond.getProperty(), cond.getOp(), cond.getValue());
+            bCond = new ConditionBinding(cond.getProperty(), cond.getOp(), cond.getValue());
         } else {
-            c = new ConditionBinding(cond.getProperty(), cond.getOp(), cond.getValues());
+            bCond = new ConditionBinding(cond.getProperty(), cond.getOp(), cond.getValues());
         }
-        c.setBindingExpression(expr);
-        return c;
+        bCond.setBindingExpression(expr);
+        return bCond;
+    }
+
+    public static ConditionBinding cond(String property, Operator op, ValueBindingExpression expr) {
+        ConditionBinding cond = new ConditionBinding(property, op, null);
+        cond.setBindingExpression(expr);
+        return cond;
     }
 }

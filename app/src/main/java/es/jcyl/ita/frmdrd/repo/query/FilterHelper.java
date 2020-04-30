@@ -69,7 +69,6 @@ public class FilterHelper {
         // check all mandatory values are fulfilled
         boolean checkPassed = true;
         if (mandatory != null) {
-
             for (String ctxProperty : mandatory) {
                 Object value = null;
                 try {
@@ -78,12 +77,16 @@ public class FilterHelper {
                     checkPassed = false;
                     break;
                 }
+                if(value == null){
+                    checkPassed = false;
+                    break;
+                }
             }
         }
         Criteria effectiveCriteria;
         if (!checkPassed) {
             // set impossible condition to get no result.
-            effectiveCriteria = Criteria.single(Condition.eq("1", "2"));
+            effectiveCriteria = Criteria.single(IMPOSSIBLE_CONDITION);
         } else {
             // evaluate filter conditions
             effectiveCriteria = criteriaVisitor.visit(definition.getCriteria(), context);

@@ -17,19 +17,21 @@ package es.jcyl.ita.frmdrd.ui.components.select;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UISelect extends UIInputComponent {
+public class UISelect extends UIInputComponent  implements FilterableComponent {
 
     private static final String SELECT_TYPE = "select";
     protected UIOption[] options;
     protected Repository repo;
     protected Filter filter;
     private boolean hasNullOption = true;
+    private String[] mandatoryFilters;
 
     public Repository getRepo() {
         return repo;
@@ -81,5 +83,15 @@ public class UISelect extends UIInputComponent {
 
     public void setHasNullOption(boolean hasNullOption) {
         this.hasNullOption = hasNullOption;
+    }
+
+
+    @Override
+    public String[] getMandatoryFilters() {
+        return this.mandatoryFilters;
+    }
+
+    public void setMandatoryFilters(String[] mandatoryFilters) {
+        this.mandatoryFilters = mandatoryFilters;
     }
 }

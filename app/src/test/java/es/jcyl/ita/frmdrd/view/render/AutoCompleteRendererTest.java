@@ -140,12 +140,11 @@ public class AutoCompleteRendererTest {
         UIAutoComplete autoSel = new UIAutoComplete();
         autoSel.setId("111");
         autoSel.setRepo(repoMock);
-        autoSel.setOptionValueExpression(exprFactory.create("${entity.id}"));
+        autoSel.setValueProperty("id");
         String secondPropertyName = meta.getPropertyNames()[1];
         String thirdPropertyName = meta.getPropertyNames()[2];
         // create and expression combining two entity properties
-        autoSel.setOptionValueExpression(exprFactory.create(String.format("${entity.%s}-${entity.%s}", secondPropertyName, thirdPropertyName)));
-        autoSel.setOptionLabelExpression(autoSel.getOptionValueExpression()); // label=value
+        autoSel.setOptionLabelExpression(exprFactory.create(String.format("${entity.%s}-${entity.%s}", secondPropertyName, thirdPropertyName)));
 
         InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, autoSel);
         Assert.assertNotNull(view);

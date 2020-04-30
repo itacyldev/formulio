@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.frmdrd.repo.query;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,14 +15,20 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.query.Filter;
+import org.greenrobot.greendao.query.WhereCondition;
+
+import java.util.List;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface FilterableComponent {
+public class ImpossibleCondition implements WhereCondition {
+    @Override
+    public void appendTo(StringBuilder stringBuilder, String s) {
+        stringBuilder.append("1 = 2");
+    }
 
-    Filter getFilter();
-
-    String[] getMandatoryFilters();
+    @Override
+    public void appendValuesTo(List<Object> list) {
+    }
 }

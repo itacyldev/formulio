@@ -224,6 +224,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         uiForm.addChild(muniAuto);
         muniAuto.setParentForm(uiForm);
         muniAuto.setForceSelection(true);
+        muniAuto.setMandatoryFilters(new String[] {"view.provincia"});
         muniAuto.setValueProperty("provmuni");
         muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
         muniAuto.setLabelFilteringProperty("name");

@@ -43,6 +43,7 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
     // paginator / flow configuration
     // row selection
     private int numFieldsToShow = 20;
+    private String[] mandatoryFilters;
 
     public UIDatatable() {
         setRendererType("datatable");
@@ -119,6 +120,15 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
 
     public Filter getFilter() {
         return filter;
+    }
+
+    @Override
+    public String[] getMandatoryFilters() {
+        return this.mandatoryFilters;
+    }
+
+    public void setMandatoryFilters(String[] mandatoryFilters) {
+        this.mandatoryFilters = mandatoryFilters;
     }
 
     public void setFilter(Filter filter) {

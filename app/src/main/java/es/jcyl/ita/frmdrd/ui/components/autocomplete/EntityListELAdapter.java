@@ -89,7 +89,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(repo);
 
         if (defFilter != null) {
-            FilterHelper.evaluateFilter(context, defFilter, f);
+            FilterHelper.evaluateFilter(context, defFilter, f, component.getMandatoryFilters());
         }
         f.setOffset(0);
         f.setPageSize(100);

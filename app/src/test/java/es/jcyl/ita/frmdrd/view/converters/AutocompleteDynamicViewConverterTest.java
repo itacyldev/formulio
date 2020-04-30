@@ -97,14 +97,12 @@ public class AutocompleteDynamicViewConverterTest {
         field.setForceSelection(true);
         String valueProperty = meta.getIdProperties()[0].name;
         field.setValueProperty(valueProperty);
-        field.setOptionValueExpression(exprFactory.create("${entity.id}"));
         String labelFilteringProp = meta.getPropertyNames()[1];
         field.setLabelFilteringProperty(labelFilteringProp);
         field.setOptionLabelExpression(exprFactory.create(String.format("${entity.%s}", labelFilteringProp)));
 
         InputFieldView<AutoCompleteView> baseView = (InputFieldView<AutoCompleteView>) renderHelper.render(env, field);
 
-        AutocompleteDynamicViewConverterTest conv = new AutocompleteDynamicViewConverterTest();
         // user input values, check
         // set empty values and the third property of one o the entities
         Entity entity = entities.get(0);
@@ -121,18 +119,12 @@ public class AutocompleteDynamicViewConverterTest {
             } else {
                 when(repoMock.find(any())).thenReturn(entities);
             }
-
-
             inputView.setValue(value);
             Object actualValue = inputView.getValue();
 
             Assert.assertEquals(expectedValues[i], actualValue);
             i++;
-//            String actual = conv.getValueFromViewAsString(inputView);
-//            if (StringUtils.isBlank(expected)) {
-//                Assert.assertNull(actual); // is value is blank, expected values is null
-//            } else {
-//            }
         }
     }
+
 }
