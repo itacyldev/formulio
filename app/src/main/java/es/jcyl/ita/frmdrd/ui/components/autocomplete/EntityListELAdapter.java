@@ -180,7 +180,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         @Override
         public String getValue() {
             if(cachedValue == null){
-                Object value = JexlUtils.eval(entity, component.getOptionValueExpression());
+                Object value = entity.get(component.getValueProperty());
                 cachedValue = (String) ConvertUtils.convert(value, String.class);
             }
             return cachedValue;

@@ -32,10 +32,9 @@ public class UIAutoComplete extends UISelect implements FilterableComponent {
     private static final String DYN_TYPE = "dynamicAutocomplete";
 
     /**
-     * Expressions used to calculate the value and label of each option when they're obtained
+     * Expression used to calculate the label of each option when they're obtained
      * from a repo
      */
-    private ValueBindingExpression optionValueExpression;
     private ValueBindingExpression optionLabelExpression;
     /**
      * Entity property used to build a criteria to filter current repository, the filter value
@@ -43,7 +42,7 @@ public class UIAutoComplete extends UISelect implements FilterableComponent {
      */
     private String labelFilteringProperty;
     private Operator valueFilteringOperator = Operator.EQ;
-    private String valueFilteringProperty;
+    private String valueProperty;
 
     private int inputThreshold = 1;
 
@@ -66,14 +65,6 @@ public class UIAutoComplete extends UISelect implements FilterableComponent {
         } else {
             return DYN_TYPE;
         }
-    }
-
-    public ValueBindingExpression getOptionValueExpression() {
-        return optionValueExpression;
-    }
-
-    public void setOptionValueExpression(ValueBindingExpression optionValueExpression) {
-        this.optionValueExpression = optionValueExpression;
     }
 
     public ValueBindingExpression getOptionLabelExpression() {
@@ -101,12 +92,12 @@ public class UIAutoComplete extends UISelect implements FilterableComponent {
         this.labelFilteringProperty = labelFilteringProperty;
     }
 
-    public String getValueFilteringProperty() {
-        return valueFilteringProperty;
+    public String getValueProperty() {
+        return valueProperty;
     }
 
-    public void setValueFilteringProperty(String valueFilteringProperty) {
-        this.valueFilteringProperty = valueFilteringProperty;
+    public void setValueProperty(String valueProperty) {
+        this.valueProperty = valueProperty;
     }
 
     public Operator getValueFilteringOperator() {
