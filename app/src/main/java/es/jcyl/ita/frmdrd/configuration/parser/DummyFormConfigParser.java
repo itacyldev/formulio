@@ -97,8 +97,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         select2.setParentForm(uiForm);
         select2.setForceSelection(true);
         select2.setLabelFilteringProperty("last_name");
-        select2.setOptionValueExpression(exprFactory.create("${entity.id}"));
-        select2.setValueFilteringProperty("id");
+        select2.setValueProperty("id");
         select2.setOptionLabelExpression(exprFactory.create("${entity.last_name}"));
         select2.setLabelFilteringProperty("last_name");
 
@@ -212,8 +211,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         uiForm.addChild(provAuto);
         provAuto.setParentForm(uiForm);
         provAuto.setForceSelection(true);
-        provAuto.setOptionValueExpression(exprFactory.create("${entity.id}"));
-        provAuto.setValueFilteringProperty("id");
+        provAuto.setValueProperty("id");
         provAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
         provAuto.setLabelFilteringProperty("name");
 
@@ -226,8 +224,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         uiForm.addChild(muniAuto);
         muniAuto.setParentForm(uiForm);
         muniAuto.setForceSelection(true);
-        muniAuto.setOptionValueExpression(exprFactory.create("${entity.provmuni}"));
-        muniAuto.setValueFilteringProperty("provmuni");
+        muniAuto.setValueProperty("provmuni");
         muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
         muniAuto.setLabelFilteringProperty("name");
         muniAuto.addValidator(new RequiredValidator());
@@ -244,15 +241,14 @@ public class DummyFormConfigParser extends FormConfigParser {
 
         // agents autocomplete
         Repository agents = repoFactory.getRepo("contacts");
-        UIAutoComplete agentsAC = autoCompleteBuilder.withValue("${entity.contact_id}", String.class)
+        UIAutoComplete agentsAC = autoCompleteBuilder.withValue("${entity.contact_id}", Integer.class)
                 .withId("agent").withLabel("agent").build();
         agentsAC.setRepo(agents);
         uiForm.addChild(agentsAC);
         agentsAC.setParentForm(uiForm);
 
         agentsAC.setForceSelection(true);
-        agentsAC.setOptionValueExpression(exprFactory.create("${entity.contact_id}"));
-        agentsAC.setValueFilteringProperty("contact_id");
+        agentsAC.setValueProperty("contact_id");
         agentsAC.setOptionLabelExpression(exprFactory.create("${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"));
         agentsAC.setLabelFilteringProperty("name");
 

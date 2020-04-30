@@ -238,7 +238,7 @@ public class AutoCompleteView extends AutoCompleteTextView
         }
         // create filter to get the option from the repo
         Repository repo = this.component.getRepo();
-        Condition cond = new Condition(this.component.getValueFilteringProperty(),
+        Condition cond = new Condition(this.component.getValueProperty(),
                 this.component.getValueFilteringOperator(), value);
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(repo);
         f.setCriteria(Criteria.single(cond));
@@ -263,6 +263,5 @@ public class AutoCompleteView extends AutoCompleteTextView
     public UIOption[] getOptions() {
         return component.getOptions();
     }
-
 
 }
