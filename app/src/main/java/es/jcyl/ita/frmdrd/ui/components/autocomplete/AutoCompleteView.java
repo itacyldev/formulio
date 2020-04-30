@@ -66,6 +66,7 @@ public class AutoCompleteView extends AutoCompleteTextView
 
     private UIAutoComplete component;
     private Object value;
+    private boolean selectionInProgress = false;
 
     public AutoCompleteView(Context context) {
         super(context);
@@ -128,7 +129,9 @@ public class AutoCompleteView extends AutoCompleteTextView
         this.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectionInProgress = true;
                 setSelection(position);
+                selectionInProgress = false;
                 executeUserAction(env, component);
             }
         });
@@ -140,7 +143,7 @@ public class AutoCompleteView extends AutoCompleteTextView
             public void onFocusChange(View v, boolean hasFocus) {
                 // if current text doesn't match and option, remove if
                 if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {
-                    if(value == null){
+                    if (value == null) {
                         setText(null);
                     }
                 }
@@ -176,6 +179,9 @@ public class AutoCompleteView extends AutoCompleteTextView
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (selectionInProgress) {
+                    return;
+                }
                 if (!env.isInterceptorDisabled()) {
                     if (env.isInputDelayDisabled()) {
                         boolean found = findCurrentSelection();
