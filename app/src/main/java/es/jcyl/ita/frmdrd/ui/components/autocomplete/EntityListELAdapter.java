@@ -142,7 +142,6 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
             if (constraint != null) {
                 AndViewContext thisContxt = (AndViewContext) globalContext.getContext("this");
                 Object value = thisContxt.getValue("value");
-                System.out.println(value);
                 load(globalContext);
 
                 FilterResults filterResults = new FilterResults();

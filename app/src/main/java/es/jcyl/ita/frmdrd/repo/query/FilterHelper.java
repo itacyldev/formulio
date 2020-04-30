@@ -20,6 +20,7 @@ import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.crtrepo.query.RawWhereCondition;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
@@ -67,6 +68,7 @@ public class FilterHelper {
 
     public static void evaluateFilter(Context context, Filter definition, Filter output, String[] mandatory) {
         // check all mandatory values are fulfilled
+        System.out.println("Looking for field: " + mandatory);
         boolean checkPassed = true;
         if (mandatory != null) {
             for (String ctxProperty : mandatory) {
@@ -86,7 +88,7 @@ public class FilterHelper {
         Criteria effectiveCriteria;
         if (!checkPassed) {
             // set impossible condition to get no result.
-            effectiveCriteria = Criteria.single(Condition.eq("1", "2"));
+            effectiveCriteria = Criteria.single(RawWhereCondition.fromString("1=2"));
         } else {
             // evaluate filter conditions
             effectiveCriteria = criteriaVisitor.visit(definition.getCriteria(), context);

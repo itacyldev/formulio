@@ -36,6 +36,7 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
+import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -224,13 +225,11 @@ public class DummyFormConfigParser extends FormConfigParser {
         uiForm.addChild(muniAuto);
         muniAuto.setParentForm(uiForm);
         muniAuto.setForceSelection(true);
-//        muniAuto.setMandatoryFilters(new String[] {"view.provincia"});
+        muniAuto.setMandatoryFilters(new String[]{"view.provincia"});
         muniAuto.setValueProperty("provmuni");
         muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
         muniAuto.setLabelFilteringProperty("name");
         muniAuto.addValidator(new RequiredValidator());
-
-
         // muni values depend on selected province
         Filter f = new SQLQueryFilter();
         Filter muniFilter = FilterHelper.createInstance(muniRepo);
@@ -260,6 +259,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         agentFilter.setCriteria(criteria);
         agentsAC.setFilter(agentFilter);
         DAGManager.getInstance().generateDags(result.getEdit().getView());
+        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(result.getEdit().getView().getId());
+        System.out.println(viewDAG.getDags());
     }
 
 
