@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/background"
         app:cardElevation="5dp"
-        app:cardBackgroundColor="?attr/background"
+        app:cardBackgroundColor="?attr/secondaryBackgroundColor"
         android:layout_margin="5dp">
 
         <RelativeLayout

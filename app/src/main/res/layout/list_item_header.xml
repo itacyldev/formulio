@@ -21,7 +21,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:textColor="?attr/itemTextColor"
+            android:textColor="?attr/clickableTextColor"
 
             android:textSize="18sp"></TextView>
     </LinearLayout>
