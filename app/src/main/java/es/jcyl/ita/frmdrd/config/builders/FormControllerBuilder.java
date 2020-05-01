@@ -16,13 +16,11 @@ package es.jcyl.ita.frmdrd.config.builders;
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.xmlpull.v1.XmlPullParser;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.builders.FormEditBuilder;
 import es.jcyl.ita.frmdrd.builders.FormListBuilder;
 import es.jcyl.ita.frmdrd.config.parser.AbstractComponentBuilder;
-import es.jcyl.ita.frmdrd.config.parser.ConfigConsole;
 import es.jcyl.ita.frmdrd.config.parser.ConfigNode;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -41,11 +39,13 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
     private FormEditBuilder editBuilder = new FormEditBuilder();
     private FormListBuilder listBuilder = new FormListBuilder();
     // current instance construction temporal state
-    private String id;
     private Repository repo;
 
+    public FormControllerBuilder() {
+        super("form");
+    }
+
     public FormControllerBuilder withId(String id) {
-        this.id = id;
         return this;
     }
 
@@ -59,16 +59,6 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
 
     }
 
-    public FormBuilderResult build() {
-        FormBuilderResult result = new FormBuilderResult();
-        if (StringUtils.isBlank(this.id)) {
-            this.id = "fc_" + this.repo.getId();
-        }
-        result.list = this.buildList(this.id);
-        result.edit = this.buildEdit(this.id);
-        clear();
-        return result;
-    }
 
     @Override
     public void addText(String text) {
@@ -80,15 +70,6 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
 
     }
 
-    @Override
-    public void setConsole(ConfigConsole console) {
-
-    }
-
-    @Override
-    public void setParser(XmlPullParser xpp) {
-
-    }
 
     public FormController buildList(String fcId) {
         if (repo == null) {
@@ -140,6 +121,18 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
         actions[2] = new FCAction("delete", "Delete", "back");
         actions[3] = new FCAction("cancel", "Cancel", fcId + "#list");
         return actions;
+    }
+
+
+    public FormBuilderResult build() {
+        FormBuilderResult result = new FormBuilderResult();
+        if (StringUtils.isBlank(this.id)) {
+            this.id = "fc_" + this.repo.getId();
+        }
+        result.list = this.buildList(this.id);
+        result.edit = this.buildEdit(this.id);
+        clear();
+        return result;
     }
 
     public class FormBuilderResult extends ConfigNode {

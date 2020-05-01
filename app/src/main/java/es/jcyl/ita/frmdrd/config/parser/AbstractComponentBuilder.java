@@ -29,27 +29,35 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
     protected String tagName;
     protected String id;
 
-    protected boolean isAttributeSupported(String attName) {
-        return true;
+    public AbstractComponentBuilder(String tagName) {
+        this.tagName = tagName;
     }
 
+
     public final void withAttribute(String name, String value) {
-        if (!isAttributeSupported(name)) {
-            console.error(String.format("[line %s] Unsupported attribute: [%s] in component [%s@%s].", xpp.getLineNumber(), name, tagName, this.id));
+        if (name.toLowerCase().equals("id")) {
+            this.id = name;
         } else {
-            doWithAttribute(name, value);
+            if (!isAttributeSupported(name)) {
+                console.error(String.format("[line %s] Unsupported attribute: [%s] in component [%s@%s].", xpp.getLineNumber(), name, tagName, this.id));
+            } else {
+                doWithAttribute(name, value);
+            }
         }
     }
 
     abstract protected void doWithAttribute(String name, String value);
 
+    protected boolean isAttributeSupported(String attName) {
+        return true;
+    }
 
     @Override
     public void setConsole(ConfigConsole console) {
         this.console = console;
     }
 
-    public void setXpp(XmlPullParser xpp) {
+    public void setParser(XmlPullParser xpp) {
         this.xpp = xpp;
     }
 }
