@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration.parser;
+package es.jcyl.ita.frmdrd.config.parser;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -16,10 +16,10 @@ import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.AutoCompleteBuilder;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
-import es.jcyl.ita.frmdrd.builders.FormControllerBuilder;
+import es.jcyl.ita.frmdrd.config.builders.FormControllerBuilder;
 import es.jcyl.ita.frmdrd.builders.SelectBuilder;
-import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
-import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
+import es.jcyl.ita.frmdrd.config.ContextToRepoBinding;
+import es.jcyl.ita.frmdrd.config.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;

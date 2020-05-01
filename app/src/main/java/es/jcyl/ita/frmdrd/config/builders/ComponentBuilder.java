@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,12 +15,25 @@ package es.jcyl.ita.frmdrd.configuration;
  * limitations under the License.
  */
 
+import org.xmlpull.v1.XmlPullParser;
+
+import es.jcyl.ita.frmdrd.config.parser.ConfigConsole;
+import es.jcyl.ita.frmdrd.config.parser.ConfigNode;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ConfigurationException extends RuntimeException{
+public interface ComponentBuilder {
 
-    public ConfigurationException(String msg){
-        super(msg);
-    }
+    void withAttribute(String name, String value);
+
+    ConfigNode build();
+
+    void addText(String text);
+
+    void addChild(String currentTag, ConfigNode component);
+
+    void setConsole(ConfigConsole console);
+    void setParser(XmlPullParser xpp);
 }

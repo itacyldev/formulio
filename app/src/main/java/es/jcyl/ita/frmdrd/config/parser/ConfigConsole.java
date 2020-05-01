@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration;
+package es.jcyl.ita.frmdrd.config.parser;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -18,5 +18,8 @@ package es.jcyl.ita.frmdrd.configuration;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ConfigValidators {
+public class ConfigConsole {
+
+    public void error(String msg) {
+    }
 }

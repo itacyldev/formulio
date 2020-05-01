@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration.parser;
+package es.jcyl.ita.frmdrd.config.parser;
 
 /**
  * Builds a UIForm object from the form configuration in JSON

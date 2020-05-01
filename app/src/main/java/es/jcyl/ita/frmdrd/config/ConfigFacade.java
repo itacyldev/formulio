@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration;
+package es.jcyl.ita.frmdrd.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,8 +15,8 @@ package es.jcyl.ita.frmdrd.configuration;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.configuration.parser.DummyFormConfigParser;
-import es.jcyl.ita.frmdrd.configuration.parser.FormConfigParser;
+import es.jcyl.ita.frmdrd.config.parser.DummyFormConfigParser;
+import es.jcyl.ita.frmdrd.config.parser.FormConfigParser;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

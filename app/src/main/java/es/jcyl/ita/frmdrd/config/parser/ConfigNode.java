@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration.parser;
+package es.jcyl.ita.frmdrd.config.parser;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -20,7 +20,33 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ComponentParser<C extends UIComponent> {
+public class ConfigNode {
+    private String name;
+    private UIComponent component;
+    private Object configElement;
 
-    C parse();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UIComponent getComponent() {
+        return component;
+    }
+
+    public void setComponent(UIComponent component) {
+        this.component = component;
+    }
+
+    public Object getConfigElement() {
+        return configElement;
+    }
+
+    public void setConfigElement(Object configElement) {
+        this.configElement = configElement;
+    }
 }

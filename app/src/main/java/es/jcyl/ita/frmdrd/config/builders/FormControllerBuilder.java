@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.builders;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,8 +16,14 @@ package es.jcyl.ita.frmdrd.builders;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.xmlpull.v1.XmlPullParser;
 
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.frmdrd.builders.FormEditBuilder;
+import es.jcyl.ita.frmdrd.builders.FormListBuilder;
+import es.jcyl.ita.frmdrd.config.parser.AbstractComponentBuilder;
+import es.jcyl.ita.frmdrd.config.parser.ConfigConsole;
+import es.jcyl.ita.frmdrd.config.parser.ConfigNode;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
@@ -30,7 +36,7 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  * <p>
  * Builder to create list-edit views from a repository.
  */
-public class FormControllerBuilder {
+public class FormControllerBuilder extends AbstractComponentBuilder {
 
     private FormEditBuilder editBuilder = new FormEditBuilder();
     private FormListBuilder listBuilder = new FormListBuilder();
@@ -48,6 +54,11 @@ public class FormControllerBuilder {
         return this;
     }
 
+    @Override
+    protected void doWithAttribute(String name, String value) {
+
+    }
+
     public FormBuilderResult build() {
         FormBuilderResult result = new FormBuilderResult();
         if (StringUtils.isBlank(this.id)) {
@@ -57,6 +68,26 @@ public class FormControllerBuilder {
         result.edit = this.buildEdit(this.id);
         clear();
         return result;
+    }
+
+    @Override
+    public void addText(String text) {
+
+    }
+
+    @Override
+    public void addChild(String currentTag, ConfigNode component) {
+
+    }
+
+    @Override
+    public void setConsole(ConfigConsole console) {
+
+    }
+
+    @Override
+    public void setParser(XmlPullParser xpp) {
+
     }
 
     public FormController buildList(String fcId) {
@@ -111,7 +142,7 @@ public class FormControllerBuilder {
         return actions;
     }
 
-    public class FormBuilderResult {
+    public class FormBuilderResult extends ConfigNode {
         FormEditController edit;
         FormController list;
 
