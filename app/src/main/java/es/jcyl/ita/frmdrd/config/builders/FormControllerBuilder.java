@@ -20,8 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.builders.FormEditBuilder;
 import es.jcyl.ita.frmdrd.builders.FormListBuilder;
-import es.jcyl.ita.frmdrd.config.parser.AbstractComponentBuilder;
-import es.jcyl.ita.frmdrd.config.parser.ConfigNode;
+import es.jcyl.ita.frmdrd.config.reader.AbstractComponentBuilder;
+import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
@@ -66,8 +66,13 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
     }
 
     @Override
-    public void addChild(String currentTag, ConfigNode component) {
+    public void addChild(String currentTag, BaseConfigNode component) {
 
+    }
+
+    @Override
+    public void setName(String tagName) {
+        // do nothing
     }
 
 
@@ -135,7 +140,7 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
         return result;
     }
 
-    public class FormBuilderResult extends ConfigNode {
+    public class FormBuilderResult extends BaseConfigNode {
         FormEditController edit;
         FormController list;
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,39 +15,26 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import org.xmlpull.v1.XmlPullParser;
-
-import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
-import es.jcyl.ita.frmdrd.config.ConfigConsole;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
- * Creates a UIComponent from the read xml configuration
  */
-public interface ComponentBuilder {
+public class ConfigConsole {
 
-    /**
-     * stores current tagName
-     */
-    void setName(String name);
+    private static String currentFile;
 
-    /**
-     * node creation process
-     */
-    void withAttribute(String name, String value);
+    public static void error(String msg) {
+        // TODO: link log library
+    }
 
-    void addText(String text);
+    public static void error(String msg, Throwable t) {
+        // TODO: link log library
+    }
 
-    void addChild(String currentTag, BaseConfigNode component);
+    public static void warn(String msg) {
+        // TODO: link log library
+    }
 
-    BaseConfigNode build();
-
-    /**
-     * Config elements
-     */
-    void setConsole(ConfigConsole console);
-
-    void setParser(XmlPullParser xpp);
-
+    public static void setCurrentFile(String filePath) {
+        currentFile = filePath;
+    }
 }

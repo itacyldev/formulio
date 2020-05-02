@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.parser;
+package es.jcyl.ita.frmdrd.config.reader;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,38 +15,20 @@ package es.jcyl.ita.frmdrd.config.parser;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * Object created by a builder during config reading process.
  */
-public class ConfigNode {
-    private String name;
-    private UIComponent component;
-    private Object configElement;
+interface ConfigNode {
+    String getName();
 
+    Object getElement();
 
-    public String getName() {
-        return name;
-    }
+    Map<String, String> getAttributes();
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public UIComponent getComponent() {
-        return component;
-    }
-
-    public void setComponent(UIComponent component) {
-        this.component = component;
-    }
-
-    public Object getConfigElement() {
-        return configElement;
-    }
-
-    public void setConfigElement(Object configElement) {
-        this.configElement = configElement;
-    }
+    List<ConfigNode> getChildren();
 }

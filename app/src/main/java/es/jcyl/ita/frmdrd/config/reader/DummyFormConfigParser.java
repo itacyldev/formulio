@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.parser;
+package es.jcyl.ita.frmdrd.config.reader;
 
 import org.apache.commons.validator.routines.EmailValidator;
 

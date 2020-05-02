@@ -15,8 +15,8 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.parser.DummyFormConfigParser;
-import es.jcyl.ita.frmdrd.config.parser.FormConfigParser;
+import es.jcyl.ita.frmdrd.config.reader.DummyFormConfigParser;
+import es.jcyl.ita.frmdrd.config.reader.FormConfigParser;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

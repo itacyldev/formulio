@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.parser;
+package es.jcyl.ita.frmdrd.config.reader;
 
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormControllerFactory;

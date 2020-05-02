@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.parser;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,11 +15,23 @@ package es.jcyl.ita.frmdrd.config.parser;
  * limitations under the License.
  */
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * Stores supported attibutes for each tag
  */
-public class ConfigConsole {
+public enum Attributes {
+    form(new HashSet(Arrays.asList(new String[]{"name"}))),
+    list(new HashSet(Arrays.asList(new String[]{"id"}))),
+    edit(new HashSet(Arrays.asList(new String[]{"id"})));
 
-    public void error(String msg) {
+    public final Set<String> attributes;
+
+    Attributes(Set<String> atts) {
+        attributes = atts;
     }
 }

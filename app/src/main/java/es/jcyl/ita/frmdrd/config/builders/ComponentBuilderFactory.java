@@ -17,7 +17,11 @@ package es.jcyl.ita.frmdrd.config.builders;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import es.jcyl.ita.frmdrd.config.parser.ConfigConsole;
+import java.util.HashMap;
+import java.util.Map;
+
+import es.jcyl.ita.frmdrd.config.ConfigConsole;
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -27,6 +31,7 @@ public class ComponentBuilderFactory {
     private XmlPullParser xpp;
     private final ConfigConsole console = new ConfigConsole();
     private static ComponentBuilderFactory _instance;
+    private static final Map<String, Class<? extends ComponentBuilder>> _builders = new HashMap<>();
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -35,15 +40,46 @@ public class ComponentBuilderFactory {
         return _instance;
     }
 
-    public ComponentBuilder getBuilder(String tagName) {
-        ComponentBuilder builder = null;
-        if(tagName.equalsIgnoreCase("form")){
-            return new FormControllerBuilder();
+    private ComponentBuilderFactory() {
+        // default registering
+        registerBuilder("form", FormConfigBuilder.class);
+        registerBuilder("list", GroupingBuilder.class);
+        registerBuilder("edit", GroupingBuilder.class);
+    }
 
+    public void registerBuilder(String tagName, Class<? extends ComponentBuilder> builder) {
+        _builders.put(tagName, builder);
+    }
+
+    public ComponentBuilder getBuilder(String tagName) {
+        Class builderClass = _builders.get(tagName);
+        if (builderClass == null) {
+            return null;
         }
+        ComponentBuilder builder = instantiate(builderClass, tagName);
+        builder.setName(tagName);
         builder.setConsole(console);
-        builder.setParser(xpp);
+
         return builder;
+    }
+
+    private ComponentBuilder instantiate(Class clazz, String tagName) {
+        // try with no parameter
+        try {
+            return (ComponentBuilder) clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+        }
+        // try with one String parameter
+        try {
+            return (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
+        } catch (Exception e) {
+            String msg = String.format("Class [%s] couldn't be instantiated, check it has a " +
+                    "no-parameter constructor or a constructor with one string parameter " +
+                    "(tagName).", clazz.getName());
+            console.error(msg, e);
+            throw new ConfigurationException(msg, e);
+        }
+
 
     }
 

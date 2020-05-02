@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.parser;
+package es.jcyl.ita.frmdrd.config.reader;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,6 +17,10 @@ package es.jcyl.ita.frmdrd.config.parser;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import java.util.Set;
+
+import es.jcyl.ita.frmdrd.config.ConfigConsole;
+import es.jcyl.ita.frmdrd.config.builders.Attributes;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilder;
 
 /**
@@ -28,9 +32,11 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
     protected XmlPullParser xpp;
     protected String tagName;
     protected String id;
+    protected Set<String> attributes;
 
     public AbstractComponentBuilder(String tagName) {
         this.tagName = tagName;
+        this.attributes = Attributes.valueOf(tagName).attributes;
     }
 
 
@@ -39,7 +45,7 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
             this.id = name;
         } else {
             if (!isAttributeSupported(name)) {
-                console.error(String.format("[line %s] Unsupported attribute: [%s] in component [%s@%s].", xpp.getLineNumber(), name, tagName, this.id));
+                console.error(String.format("[line %s] Unsupported attribute: [%s] in component [%s@%s].", xpp.getLineNumber(), name, tagName, id));
             } else {
                 doWithAttribute(name, value);
             }
@@ -49,7 +55,7 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
     abstract protected void doWithAttribute(String name, String value);
 
     protected boolean isAttributeSupported(String attName) {
-        return true;
+        return attributes.contains(attName);
     }
 
     @Override
@@ -59,5 +65,9 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
 
     public void setParser(XmlPullParser xpp) {
         this.xpp = xpp;
+    }
+
+    public void setName(String tagName) {
+        this.tagName = tagName;
     }
 }

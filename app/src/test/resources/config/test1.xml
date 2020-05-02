@@ -1,50 +1,9 @@
 <form id="form1" repoId="contacts">
-    <permissions />
-    <data>
-        <repo type="csv" />
-        <repo type="properties" />
-        <repo type="db" />
-        <repo type="photo" />
-    </data>
-    
+
     <list id="form1#list">
-        <datatable />
-        <datalist />
-        <actions>
-            <add route="formId#edit" />
-        </actions>
     </list>
-    <edit id="form1#edit" onsave="method2">
-        <tabs>
-            <tab>
-                <field onchange="method2" value="${entity.field}" />
-            </tab>
-            <tab>
-                <field />
-            </tab>
-        </tabs>
-        <actions>
-            <save to="form1#list" value="save">
-                <param name="1" value="${entity.contact_id}" />
-            </save>
-            <save value="saveAndStay" />
-            <delete to="form1#list" value="save">
-                <param name="1" value="${entity.contact_id}" />
-            </delete>
-            <cancel value="save" />
-            <nav to="form2#edit" value="next">
-                <param name="1" value="${entity.contact_id}" />
-            </nav>
-        </actions>
-        <script engine="rhino">
-            function method1(param) {
-
-            ctx[entity.f3] = entity.f1 + entity.f2
-
-            }
-            function method2(param) {
-            }
-
-        </script>
+    <edit id="form1#edit">
+    </edit>
+    <edit id="form1#edit2">
     </edit>
 </form>
