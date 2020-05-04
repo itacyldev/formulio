@@ -15,7 +15,10 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
+import android.test.ActivityTestCase;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -23,12 +26,16 @@ import android.widget.SpinnerAdapter;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
+import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
@@ -49,10 +56,11 @@ public class SelectRendererTest {
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
-    @BeforeClass
-    public static void setUp() {
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
+    Context ctx;
+
+    @Before
+    public void setup(){
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
     }
 
     /**
@@ -61,7 +69,9 @@ public class SelectRendererTest {
      */
     @Test
     public void testSimpleSelect() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ConfigConverters confConverter = new ConfigConverters();
+        confConverter.init();
+
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
@@ -88,7 +98,6 @@ public class SelectRendererTest {
 
     @Test
     public void testNotVisibleSelect() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);

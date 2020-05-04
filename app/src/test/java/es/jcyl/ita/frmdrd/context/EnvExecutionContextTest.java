@@ -21,17 +21,18 @@ import android.view.View;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
-import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
@@ -55,8 +56,12 @@ public class EnvExecutionContextTest {
 
     FormDataBuilder formBuilder = new FormDataBuilder();
 
-    @BeforeClass
-    public static void setUp() {
+    Context ctx;
+
+    @Before
+    public void setup() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -67,8 +72,6 @@ public class EnvExecutionContextTest {
      */
     @Test
     public void testResultingCompositeContext() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // create random entity meta and use databuilder to populate entity data
         UIForm f1 = createForm();
         UIForm f2 = createForm();

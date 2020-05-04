@@ -23,11 +23,14 @@ import android.widget.TextView;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
@@ -43,13 +46,18 @@ public class AndViewContextTest {
 
     ViewValueConverterFactory converterFactory = ViewValueConverterFactory.getInstance();
 
+    Context ctx;
+
+    @Before
+    public void setup() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+    }
+
     /**
      * Get ui android element value using FormViewContext
      */
     @Test
     public void testSetValueViewElements() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
@@ -71,8 +79,6 @@ public class AndViewContextTest {
      */
     @Test
     public void testGetValueViewElements() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
@@ -96,8 +102,6 @@ public class AndViewContextTest {
 
     @Test
     public void testAccessThroughCompositeContext() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
@@ -124,8 +128,6 @@ public class AndViewContextTest {
 
     @Test
     public void testShowContent(){
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);

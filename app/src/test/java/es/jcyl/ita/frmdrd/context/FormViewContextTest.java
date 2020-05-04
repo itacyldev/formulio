@@ -23,11 +23,14 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
@@ -50,13 +53,18 @@ public class FormViewContextTest {
 
     FormDataBuilder formBuilder = new FormDataBuilder();
 
+    Context ctx;
+
+    @Before
+    public void setup() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+    }
+
     /**
      * Get ui android element value using FormViewContext
      */
     @Test
     public void testAccessViewValuesFromContext() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         ViewRenderHelper renderHelper = new ViewRenderHelper();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
@@ -87,8 +95,6 @@ public class FormViewContextTest {
      */
     @Test
     public void setSetViewValuesThroughContext() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         ViewRenderHelper renderHelper = new ViewRenderHelper();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 

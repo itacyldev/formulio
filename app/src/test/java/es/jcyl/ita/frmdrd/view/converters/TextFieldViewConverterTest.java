@@ -21,9 +21,11 @@ import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
@@ -32,6 +34,7 @@ import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
@@ -50,8 +53,12 @@ public class TextFieldViewConverterTest {
     FieldDataBuilder fBuilder = new FieldDataBuilder();
     FormDataBuilder formBuilder = new FormDataBuilder();
 
-    @BeforeClass
-    public static void setUp() {
+    Context ctx;
+
+    @Before
+    public void setUp() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -62,8 +69,6 @@ public class TextFieldViewConverterTest {
      */
     @Test
     public void testRenderString() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
         RenderingEnv env = recipe.env;

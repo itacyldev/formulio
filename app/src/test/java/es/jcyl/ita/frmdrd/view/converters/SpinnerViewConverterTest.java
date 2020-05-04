@@ -15,15 +15,15 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Spinner;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.db.meta.DBPropertyType;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.builders.SelectDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
@@ -57,11 +58,16 @@ public class SpinnerViewConverterTest {
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
-    @BeforeClass
-    public static void setUp() {
+    Context ctx;
+
+    @Before
+    public void setUp() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
+
+
 
     /**
      * Generates a select with random String values, and sets/gets the values
@@ -69,8 +75,6 @@ public class SpinnerViewConverterTest {
      */
     @Test
     public void testStringValues() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         String[] values = RandomUtils.randomObjectArray(10, String.class);
         UISelect field = selectBuilder.withRandomData().withOptionValues(values, values).build();
         // create view, form and render
@@ -101,8 +105,6 @@ public class SpinnerViewConverterTest {
      */
     @Test
     public void testIntegerValues() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         String[] options = new String[]{"0", "1", "2", "3", "4"};
         UISelect field = selectBuilder.withRandomData().withOptionValues(options, options).build();
         // create view, form and render
@@ -134,8 +136,6 @@ public class SpinnerViewConverterTest {
      */
     @Test
     public void testBooleanValues() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         List<String[]> stringPairs = new ArrayList<>();
         stringPairs.add(new String[]{"true", "false"});
         stringPairs.add(new String[]{"0", "1"});
@@ -179,7 +179,6 @@ public class SpinnerViewConverterTest {
      */
     @Test
     public void testBindValueFromEntity() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         // create an entity
         String bindProperty = "myProperty";
         EntityMeta<DBPropertyType> meta = this.metaBuilder.withNumProps(1)

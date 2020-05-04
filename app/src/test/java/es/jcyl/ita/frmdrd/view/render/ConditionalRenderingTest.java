@@ -15,21 +15,25 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
@@ -55,8 +59,12 @@ public class ConditionalRenderingTest {
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
-    @BeforeClass
-    public static void setUp() {
+    Context ctx;
+
+    @Before
+    public void setUp() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -67,8 +75,6 @@ public class ConditionalRenderingTest {
      */
     @Test
     public void testSimpleViewWithStringCondsRender() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
@@ -108,8 +114,6 @@ public class ConditionalRenderingTest {
 
     @Test
     public void testSimpleViewWithNumberCondsRender() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
@@ -152,8 +156,6 @@ public class ConditionalRenderingTest {
 
     @Test
     public void testMultipleCondsSimpleViewRender() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
@@ -203,8 +205,6 @@ public class ConditionalRenderingTest {
      */
     @Test
     public void testRenderConditionOnForm() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;

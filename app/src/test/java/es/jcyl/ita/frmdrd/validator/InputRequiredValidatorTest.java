@@ -20,11 +20,14 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
@@ -39,8 +42,12 @@ import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 @RunWith(RobolectricTestRunner.class)
 public class InputRequiredValidatorTest {
 
-    @BeforeClass
-    public static void setUp() {
+    Context ctx;
+
+    @Before
+    public void setup(){
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -52,7 +59,6 @@ public class InputRequiredValidatorTest {
      */
     @Test
     public void testEmptyValue() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         // use a recipe to create objects and preset form context
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
@@ -72,7 +78,6 @@ public class InputRequiredValidatorTest {
 
     @Test
     public void testNotNullValue() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         // use a recipe to create objects and preset form context
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
