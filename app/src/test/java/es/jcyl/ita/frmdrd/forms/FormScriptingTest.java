@@ -20,9 +20,11 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.IOException;
@@ -33,6 +35,7 @@ import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
@@ -54,8 +57,12 @@ public class FormScriptingTest {
     FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
 
-    @BeforeClass
-    public static void setUp() {
+    Context ctx;
+
+    @Before
+    public void setUp() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -69,8 +76,6 @@ public class FormScriptingTest {
      */
     @Test
     public void testValidationScriptOk() throws IOException {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // create random entity meta and use databuilder to populate entity data
         EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
         // entity meta with 1 prop for pk and a second string property

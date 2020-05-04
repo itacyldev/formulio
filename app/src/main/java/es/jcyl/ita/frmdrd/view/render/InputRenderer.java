@@ -23,10 +23,13 @@ package es.jcyl.ita.frmdrd.view.render;
  */
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.apache.commons.lang3.RandomUtils;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
@@ -43,6 +46,8 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
     protected InputFieldView createBaseView(RenderingEnv env, C component) {
         ViewGroup baseView = ViewHelper.inflate(env.getViewContext(),
                 getComponentLayout(), LinearLayout.class);
+
+        baseView.setId(RandomUtils.nextInt());
         return createInputFieldView(env.getViewContext(), baseView, component);
     }
 
@@ -50,6 +55,7 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
     protected InputFieldView createInputFieldView(Context viewContext, View baseView, C component) {
         InputFieldView fieldView = (InputFieldView) View.inflate(viewContext,
                 R.layout.input_field_view, null);
+
         fieldView.setComponent(component);
         fieldView.setConverter(component.getConverter());
         fieldView.setTag(getBaseViewTag(component));

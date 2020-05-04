@@ -15,16 +15,19 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Switch;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mini2Dx.beanutils.ConversionException;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
@@ -33,6 +36,7 @@ import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -52,8 +56,12 @@ public class SwitcherViewConverterTest {
     FieldDataBuilder fBuilder = new FieldDataBuilder();
     FormDataBuilder formBuilder = new FormDataBuilder();
 
-    @BeforeClass
-    public static void setUp() {
+    Context ctx;
+
+    @Before
+    public void setUp() {
+        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -64,7 +72,6 @@ public class SwitcherViewConverterTest {
      */
     @Test
     public void testSupportedStrings() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
                 .withValueBindingExpression("true", Boolean.class) // literal expression
                 .build();
@@ -96,7 +103,6 @@ public class SwitcherViewConverterTest {
 
     @Test
     public void testSupportedNumeric() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
                 .withValueBindingExpression("true", Boolean.class) // literal expression
                 .build();
@@ -152,7 +158,6 @@ public class SwitcherViewConverterTest {
 //
     @Test
     public void testUnsupportedTypes() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
                 .withValueBindingExpression("true", Boolean.class) // literal expression
                 .build();
