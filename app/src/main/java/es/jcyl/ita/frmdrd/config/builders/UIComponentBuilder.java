@@ -39,13 +39,13 @@ public class UIComponentBuilder extends AbstractComponentBuilder {
     protected void doWithAttribute(String name, String value) {
         try {
             if("id".equals(name)
-            if("renderExpression"){
-                setexpression(name, value);
-            }
-            if(isAssignableAttribute(name)){
-                // set attribute using reflection
-                BeanUtils.setProperty(component, name, value);
-            }
+//            if("renderExpression"){
+//                setexpression(name, value);
+//            }
+//            if(isAssignableAttribute(name)){
+//                // set attribute using reflection
+//                BeanUtils.setProperty(component, name, value);
+//            }
         } catch (Exception e) {
             error(String.format("Error while trying to set attribute [%s] on element [${tag}].", name), e);
         }
