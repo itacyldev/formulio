@@ -16,13 +16,14 @@ import es.jcyl.ita.frmdrd.view.ViewConfigException;
 public abstract class UIComponent implements Serializable {
 
     protected String id;
+    private ValueBindingExpression valueExpression;
+    private ValueBindingExpression renderExpression;
+
     protected UIComponent root;
     protected UIComponent parent;
     protected UIForm parentForm;
     protected UIComponent[] children;
 
-    private ValueBindingExpression valueExpression;
-    private ValueBindingExpression renderExpression;
 
     private String rendererType;
     private boolean renderChildren;

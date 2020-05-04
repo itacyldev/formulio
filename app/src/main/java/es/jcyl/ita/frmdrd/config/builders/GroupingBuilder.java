@@ -15,8 +15,13 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.jcyl.ita.frmdrd.config.reader.AbstractComponentBuilder;
 import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
+import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -40,7 +45,7 @@ public class GroupingBuilder extends AbstractComponentBuilder {
     }
 
     @Override
-    public BaseConfigNode build() {
+    public ConfigNode build() {
         return node;
     }
 
@@ -50,12 +55,33 @@ public class GroupingBuilder extends AbstractComponentBuilder {
     }
 
     @Override
-    public void addChild(String currentTag, BaseConfigNode component) {
+    public void addChild(String currentTag, ConfigNode component) {
         this.node.getChildren().add(component);
     }
 
-    @Override
-    public void setName(String tagName) {
-
+    public String getAttribute(String name) {
+        return this.node.getAttributes().get(name);
     }
+
+    public List<ConfigNode> getChildren(String tagName) {
+        List<ConfigNode> kids = new ArrayList<ConfigNode>();
+        for (ConfigNode n : this.node.getChildren()) {
+            if (n.getName().equals(tagName)) {
+                kids.add(n);
+            }
+        }
+        return kids;
+    }
+
+    public UIComponent[] getUIComponents() {
+        List<UIComponent> kids = new ArrayList<UIComponent>();
+        for (ConfigNode n : this.node.getChildren()) {
+            if(n.getElement() instanceof UIComponent)
+            if (n.getName().equals(tagName)) {
+                kids.add((UIComponent) n.getElement());
+            }
+        }
+        return kids.toArray(new UIComponent[kids.size()]);
+    }
+
 }

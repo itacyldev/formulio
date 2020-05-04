@@ -34,7 +34,7 @@ public class FormListBuilder {
     private DataTableBuilder tableBuilder = new DataTableBuilder();
     private String route;
 
-    public FormListBuilder(){
+    public FormListBuilder() {
         baseModel = new UIDatatable();
     }
 
@@ -48,7 +48,8 @@ public class FormListBuilder {
         this.baseModel.setFilter(filter);
         return this;
     }
-    public FormListBuilder withDataTableRoute(String route){
+
+    public FormListBuilder withDataTableRoute(String route) {
         this.route = route;
         return this;
     }
@@ -65,7 +66,7 @@ public class FormListBuilder {
         // add form
         UIForm form = new UIForm();
         form.addChild(table);
-        form.setId("form"+RandomStringUtils.randomAlphanumeric(4));
+        form.setId("form" + RandomStringUtils.randomAlphanumeric(4));
 
         return form;
     }

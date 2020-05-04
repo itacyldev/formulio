@@ -42,9 +42,10 @@ public class ComponentBuilderFactory {
 
     private ComponentBuilderFactory() {
         // default registering
-        registerBuilder("form", FormConfigBuilder.class);
+        registerBuilder("main", FormConfigBuilder.class);
         registerBuilder("list", GroupingBuilder.class);
         registerBuilder("edit", GroupingBuilder.class);
+        registerBuilder("form", FormBuilder.class);
     }
 
     public void registerBuilder(String tagName, Class<? extends ComponentBuilder> builder) {
@@ -58,7 +59,6 @@ public class ComponentBuilderFactory {
         }
         ComponentBuilder builder = instantiate(builderClass, tagName);
         builder.setName(tagName);
-        builder.setConsole(console);
 
         return builder;
     }

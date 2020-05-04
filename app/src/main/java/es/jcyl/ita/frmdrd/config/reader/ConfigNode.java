@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * Object created by a builder during config reading process.
  */
-interface ConfigNode {
+public interface ConfigNode {
     String getName();
 
     Object getElement();
@@ -31,4 +31,6 @@ interface ConfigNode {
     Map<String, String> getAttributes();
 
     List<ConfigNode> getChildren();
+
+    List<String> getTexts();
 }

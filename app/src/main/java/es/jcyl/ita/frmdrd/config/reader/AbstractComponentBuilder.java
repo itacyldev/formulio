@@ -15,59 +15,93 @@ package es.jcyl.ita.frmdrd.config.reader;
  * limitations under the License.
  */
 
-import org.xmlpull.v1.XmlPullParser;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.frmdrd.config.ConfigConsole;
-import es.jcyl.ita.frmdrd.config.builders.Attributes;
+import es.jcyl.ita.frmdrd.config.meta.Attributes;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilder;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+
+import static es.jcyl.ita.frmdrd.config.ConfigConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public abstract class AbstractComponentBuilder implements ComponentBuilder {
 
-    protected ConfigConsole console;
-    protected XmlPullParser xpp;
-    protected String tagName;
-    protected String id;
-    protected Set<String> attributes;
+    private BaseConfigNode node;
+    protected Set<String> attributeNames;
 
     public AbstractComponentBuilder(String tagName) {
-        this.tagName = tagName;
-        this.attributes = Attributes.valueOf(tagName).attributes;
+        this.attributeNames = Attributes.valueOf(tagName).attributes;
+        node = new BaseConfigNode();
+        node.setName(tagName);
     }
 
-
     public final void withAttribute(String name, String value) {
-        if (name.toLowerCase().equals("id")) {
-            this.id = name;
+        if (!isAttributeSupported(name)) {
+            error(String.format("Unsupported attribute: [%s] in component ${tag}.", name));
         } else {
-            if (!isAttributeSupported(name)) {
-                console.error(String.format("[line %s] Unsupported attribute: [%s] in component [%s@%s].", xpp.getLineNumber(), name, tagName, id));
-            } else {
-                doWithAttribute(name, value);
-            }
+            node.getAttributes().put(name, value);
+            doWithAttribute(name, value);
         }
     }
 
-    abstract protected void doWithAttribute(String name, String value);
-
-    protected boolean isAttributeSupported(String attName) {
-        return attributes.contains(attName);
+    public void setName(String tagName) {
+        this.node.setName(tagName);
     }
 
     @Override
-    public void setConsole(ConfigConsole console) {
-        this.console = console;
+    public void addChild(String currentTag, ConfigNode component) {
+        this.node.getChildren().add(component);
     }
 
-    public void setParser(XmlPullParser xpp) {
-        this.xpp = xpp;
+    @Override
+    public void addText(String text) {
+        this.node.addText(text);
     }
 
-    public void setName(String tagName) {
-        this.tagName = tagName;
+    @Override
+    public final ConfigNode build() {
+        Object element = doBuild();
+        node.setElement(element);
+        return node;
     }
+
+    /****** Extension points *******/
+
+    protected boolean isAttributeSupported(String attName) {
+        return attributeNames.contains(attName);
+    }
+
+    abstract protected void doWithAttribute(String name, String value) ;
+
+    abstract protected Object doBuild();
+
+    /******* Helper methods ********/
+
+    public String getAttribute(String name) {
+        return this.node.getAttributes().get(name);
+    }
+
+    public List<ConfigNode> getChildren(String tagName) {
+        List<ConfigNode> kids = new ArrayList<ConfigNode>();
+        for (ConfigNode n : this.node.getChildren()) {
+            if (n.getName().equals(tagName)) {
+                kids.add(n);
+            }
+        }
+        return kids;
+    }
+
+    public UIComponent[] getUIComponents() {
+        List<UIComponent> kids = new ArrayList<UIComponent>();
+        for (ConfigNode n : this.node.getChildren()) {
+            if (n.getElement() instanceof UIComponent)
+                kids.add((UIComponent) n.getElement());
+        }
+        return kids.toArray(new UIComponent[kids.size()]);
+    }
+
 }

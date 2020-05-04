@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.config.meta;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,23 +15,21 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Stores supported attibutes for each tag
  */
-public enum Attributes {
-    form(new HashSet(Arrays.asList(new String[]{"name"}))),
-    list(new HashSet(Arrays.asList(new String[]{"id"}))),
-    edit(new HashSet(Arrays.asList(new String[]{"id"})));
+public class Attribute {
+    private final String name;
+    private final boolean assignable;
+    private Class type;
 
-    public final Set<String> attributes;
+    public Attribute(String name, boolean assignable) {
+        this(name, assignable, String.class);
+    }
 
-    Attributes(Set<String> atts) {
-        attributes = atts;
+    public Attribute(String name, boolean assignable, Class type) {
+        this.name = name;
+        this.assignable = assignable;
+        this.type = type;
     }
 }

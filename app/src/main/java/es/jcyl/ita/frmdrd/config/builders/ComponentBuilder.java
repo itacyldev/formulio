@@ -17,8 +17,9 @@ package es.jcyl.ita.frmdrd.config.builders;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.config.ConfigConsole;
+import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
+import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -39,15 +40,8 @@ public interface ComponentBuilder {
 
     void addText(String text);
 
-    void addChild(String currentTag, BaseConfigNode component);
+    void addChild(String childTag, ConfigNode component);
 
-    BaseConfigNode build();
-
-    /**
-     * Config elements
-     */
-    void setConsole(ConfigConsole console);
-
-    void setParser(XmlPullParser xpp);
+    ConfigNode build();
 
 }

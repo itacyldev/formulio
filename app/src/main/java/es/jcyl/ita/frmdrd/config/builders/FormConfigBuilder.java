@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.config.builders;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.reader.AbstractComponentBuilder;
 import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
+import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -51,7 +52,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder {
     }
 
     @Override
-    public void addChild(String currentTag, BaseConfigNode component) {
+    public void addChild(String currentTag, ConfigNode component) {
 
     }
 }

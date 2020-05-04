@@ -15,12 +15,16 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
+import org.xmlpull.v1.XmlPullParser;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ConfigConsole {
 
     private static String currentFile;
+    private static String currentTag;
+    private static XmlPullParser xpp;
 
     public static void error(String msg) {
         // TODO: link log library
@@ -36,5 +40,13 @@ public class ConfigConsole {
 
     public static void setCurrentFile(String filePath) {
         currentFile = filePath;
+    }
+
+    public static void setCurrentElement(String tag) {
+        currentTag = tag;
+    }
+
+    public static void setParser(XmlPullParser xpp) {
+        xpp = xpp;
     }
 }

@@ -31,6 +31,7 @@ public class BaseConfigNode implements ConfigNode {
     private Object element;
     private Map<String, String> attributes;
     private List<ConfigNode> children;
+    private List<String> texts;
 
     @Override
     public String getName() {
@@ -66,4 +67,15 @@ public class BaseConfigNode implements ConfigNode {
         return children;
     }
 
+    public void addText(String text) {
+        if (this.texts == null) {
+            this.texts = new ArrayList<>();
+        }
+        this.texts.add(text);
+    }
+
+    @Override
+    public List<String> getTexts() {
+        return texts;
+    }
 }

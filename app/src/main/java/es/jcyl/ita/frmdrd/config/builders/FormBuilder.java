@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.builders;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -26,7 +26,7 @@ import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.config.builders.GroupingBuilder;
+import es.jcyl.ita.frmdrd.builders.FormEditBuilder;
 import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
@@ -36,35 +36,32 @@ import static es.jcyl.ita.frmdrd.config.ConfigConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
- * Builder class to create UIForm instances from an Entity metadata information. It maps each
- * metadata property to the most most suitable field component for each table column.
  */
-public class FormEditBuilder extends GroupingBuilder {
+class FormBuilder extends GroupingBuilder {
 
     protected RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
     private UIForm baseModel;
-    private FieldBuilder fieldBuilder = new FieldBuilder();
 
-    public FormEditBuilder() {
-        super("edit");
+    public FormBuilder(String tagName) {
+        super("form");
         baseModel = new UIForm();
     }
 
-    public FormEditBuilder withRepo(Repository repo) {
+
+    public FormBuilder withRepo(Repository repo) {
         this.baseModel.setRepo(repo);
         return this;
     }
 
-    public FormEditBuilder withRepo(String repoId) {
+    public FormBuilder withRepo(String repoId) {
         Repository repo = this.repoFactory.getRepo(repoId);
         withRepo(repo);
         return this;
     }
 
 
-    public FormEditBuilder withFilter(Filter filter) {
+    public FormBuilder withFilter(Filter filter) {
         this.baseModel.setFilter(filter);
         return this;
     }
@@ -117,18 +114,62 @@ public class FormEditBuilder extends GroupingBuilder {
         }
     }
 
-    /**
-     * Checks if nested form if defined, if not, a
-     */
-    private void setForm() {
+    private void setComponents() {
+        this.baseModel.setChildren(this.getUIComponents());
     }
 
 
+    /**
+     * Creates form uicomponents automatically from repository meta
+     */
+    private void setAutoFields() {
+        // if properties attribute is set use it to select repo fields
+        String propertySelector = this.getAttribute("properties");
+
+        Repository repo = this.baseModel.getRepo();
+        EntityMeta meta = repo.getMeta();
+        PropertyType[] properties;
+
+        boolean all = "*".equals(propertySelector.trim()) || "all".equals(propertySelector.trim().toLowerCase());
+        if (all) {
+            properties = meta.getProperties();
+        } else {
+            // select properties by name
+            StringTokenizer stk = new StringTokenizer(propertySelector, ",");
+            properties = new PropertyType[stk.countTokens()];
+            int i = 0;
+            PropertyType prop;
+            while (stk.hasMoreElements()) {
+                String propName = stk.nextToken();
+                prop = meta.getPropertyByName(propName);
+                if (prop == null) {
+                    error(String.format("No property found [%s] in meta from [%s] repository. " +
+                            "Available properties: [%s].", propName, repo.getId(), meta.getPropertyNames()));
+                } else {
+                    properties[i] = prop;
+                }
+                i++;
+            }
+        }
+
+
+
+
+        // create fields from properties
+        List<UIComponent> kids = new ArrayList<>();
+
+        for (int i = 0; i < properties.length; i++) {
+            kids[i] = fieldBuilder.withProperty(properties[i]).build();
+        }
+
+
+        this.baseModel.setChildren(kids);
+
+    }
 
     public ConfigNode build() {
         setRepository();
         setFilter();
-        setForm();
         setComponents();
 
         // if no nested field is defined, create from repository meta with 'fields' attribute
@@ -143,6 +184,5 @@ public class FormEditBuilder extends GroupingBuilder {
         node.setElement(model);
         return node;
     }
-
 
 }

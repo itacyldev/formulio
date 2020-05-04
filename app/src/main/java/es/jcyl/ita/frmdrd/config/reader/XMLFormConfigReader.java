@@ -16,10 +16,8 @@ import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
-import es.jcyl.ita.frmdrd.config.builders.FormControllerBuilder;
 
 import static es.jcyl.ita.frmdrd.config.ConfigConsole.error;
-import static es.jcyl.ita.frmdrd.config.ConfigConsole.warn;
 
 /**
  * Reads form configuration files and creates form controllers and view Components
@@ -41,7 +39,9 @@ public class XMLFormConfigReader {
         xpp.setInput(is, null);
 
         ConfigConsole.setCurrentFile(file.getAbsolutePath());
-        BaseConfigNode root = processFile(xpp);
+        ConfigConsole.setParser(xpp);
+
+        ConfigNode root = processFile(xpp);
 
         FormConfig config = (FormConfig) root.getElement();
         checkName(config, file.getName());
@@ -61,13 +61,12 @@ public class XMLFormConfigReader {
         }
     }
 
-    private BaseConfigNode processFile(XmlPullParser xpp) throws IOException, XmlPullParserException {
+    private ConfigNode processFile(XmlPullParser xpp) throws IOException, XmlPullParserException {
         ComponentBuilder currentBuilder = null, parentBuilder = null;
 
         Stack<ComponentBuilder> builderStack = new Stack<>();
 
         String currentTag = null;
-
 
         int eventType = xpp.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -80,13 +79,15 @@ public class XMLFormConfigReader {
                 }
                 // get builder for this tag
                 currentTag = xpp.getName();
+                ConfigConsole.setCurrentElement(currentTag);
                 currentBuilder = builderFactory.getBuilder(currentTag);
                 if (currentBuilder == null) {
-                    String msg =String.format("No builder found for tag [%s], current element and nested ones are ignored.", currentTag);
+                    String msg = "No builder found for tag ${tag} in file ${file}, current element " +
+                            "and nested ones will be ignored.";
                     error(msg);
-                    throw new ConfigurationException(msg);
+                    throw new ConfigurationException("Error during XML config reading. See console for details.");
                 } else {
-                    currentBuilder.setParser(xpp);
+//                    currentBuilder.setParser(xpp);
                     setAttributes(xpp, currentBuilder);
                 }
             } else if (eventType == XmlPullParser.TEXT) {
@@ -95,7 +96,7 @@ public class XMLFormConfigReader {
 
             } else if (eventType == XmlPullParser.END_TAG) {
                 // tell the builder to create element and append to parent builder
-                BaseConfigNode component = currentBuilder.build();
+                ConfigNode component = currentBuilder.build();
                 if (!builderStack.empty()) {
                     // restore parent builder from the pile
                     parentBuilder = builderStack.pop();

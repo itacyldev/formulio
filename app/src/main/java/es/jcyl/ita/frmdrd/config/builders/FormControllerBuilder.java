@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.builders.FormEditBuilder;
 import es.jcyl.ita.frmdrd.builders.FormListBuilder;
-import es.jcyl.ita.frmdrd.config.reader.AbstractComponentBuilder;
 import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -34,16 +33,14 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  * <p>
  * Builder to create list-edit views from a repository.
  */
-public class FormControllerBuilder extends AbstractComponentBuilder {
+public class FormControllerBuilder {
 
     private FormEditBuilder editBuilder = new FormEditBuilder();
     private FormListBuilder listBuilder = new FormListBuilder();
     // current instance construction temporal state
     private Repository repo;
+    private String id;
 
-    public FormControllerBuilder() {
-        super("form");
-    }
 
     public FormControllerBuilder withId(String id) {
         return this;
@@ -52,27 +49,6 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
     public FormControllerBuilder withRepo(Repository repo) {
         this.repo = repo;
         return this;
-    }
-
-    @Override
-    protected void doWithAttribute(String name, String value) {
-
-    }
-
-
-    @Override
-    public void addText(String text) {
-
-    }
-
-    @Override
-    public void addChild(String currentTag, BaseConfigNode component) {
-
-    }
-
-    @Override
-    public void setName(String tagName) {
-        // do nothing
     }
 
 
@@ -100,22 +76,22 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
         actions[2] = new FCAction("delete", "Delete", null);
         return actions;
     }
-
-    public FormEditController buildEdit(String fcId) {
-        if (repo == null) {
-            throw new IllegalStateException("No repo provided, cannot create the form.");
-        }
-        FormEditController fc = new FormEditController(fcId + "#edit", "Form " + this.repo.getId());
-        fc.setMainRepo(repo);
-        // create views
-        UIForm editForm = editBuilder.witRepo(this.repo).build();
-        UIView editView = new UIView(fc.getId() + ">view");
-        editView.addChild(editForm);
-        fc.setView(editView);
-        fc.setMainForm(editForm);
-        fc.setActions(defaultEditActions(fcId));
-        return fc;
-    }
+//
+//    public FormEditController buildEdit(String fcId) {
+//        if (repo == null) {
+//            throw new IllegalStateException("No repo provided, cannot create the form.");
+//        }
+//        FormEditController fc = new FormEditController(fcId + "#edit", "Form " + this.repo.getId());
+//        fc.setMainRepo(repo);
+//        // create views
+//        UIForm editForm = editBuilder.withRepo(this.repo).build();
+//        UIView editView = new UIView(fc.getId() + ">view");
+//        editView.addChild(editForm);
+//        fc.setView(editView);
+//        fc.setMainForm(editForm);
+//        fc.setActions(defaultEditActions(fcId));
+//        return fc;
+//    }
 
 
     public FCAction[] defaultEditActions(String fcId) {
@@ -135,7 +111,7 @@ public class FormControllerBuilder extends AbstractComponentBuilder {
             this.id = "fc_" + this.repo.getId();
         }
         result.list = this.buildList(this.id);
-        result.edit = this.buildEdit(this.id);
+//        result.edit = this.buildEdit(this.id);
         clear();
         return result;
     }

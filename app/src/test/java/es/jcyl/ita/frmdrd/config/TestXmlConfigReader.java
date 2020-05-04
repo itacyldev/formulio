@@ -45,11 +45,15 @@ public class TestXmlConfigReader {
     }
 
     @Test
-    public void testBasic() throws Exception {
+    public void testBasicForm() throws Exception {
         File file = TestUtils.findFile("config/test1.xml");
+
         XMLFormConfigReader reader = new XMLFormConfigReader();
         FormConfig config = reader.read(file);
+
         Assert.assertNotNull(config);
+        Assert.assertNotNull(config.getList());
+        Assert.assertNotNull(config.getEdits());
     }
 
 
