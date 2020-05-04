@@ -17,24 +17,20 @@ package es.jcyl.ita.frmdrd.validator;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.frmdrd.MainActivity;
-import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
-import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
+import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
