@@ -1,0 +1,9 @@
+<form id="form1" repoId="contacts">
+
+    <list id="form1#list">
+    </list>
+    <edit id="form1#edit">
+    </edit>
+    <edit id="form1#edit2">
+    </edit>
+</form>

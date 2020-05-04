@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.converters;
+package es.jcyl.ita.frmdrd.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -18,18 +18,25 @@ package es.jcyl.ita.frmdrd.converters;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mini2Dx.beanutils.ConvertUtils;
-import org.mini2Dx.beanutils.converters.LongConverter;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
-import es.jcyl.ita.frmdrd.config.ConfigConverters;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.XMLFormatter;
+
+import es.jcyl.ita.crtrepo.test.utils.TestUtils;
+import es.jcyl.ita.frmdrd.config.reader.XMLFormConfigReader;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  * Tests to check commons-converters functionallity
  */
-//@RunWith(RobolectricTestRunner.class)
-public class ConvertUtilsTest {
+@RunWith(RobolectricTestRunner.class)
+public class TestXmlConfigReader {
 
     @BeforeClass
     public static void setUp() {
@@ -38,14 +45,11 @@ public class ConvertUtilsTest {
     }
 
     @Test
-    public void testLongDefaultValue() {
-
-        ConvertUtils.register(new LongConverter(null), Long.TYPE);
-        ConvertUtils.register(new LongConverter(null), Long.class);
-
-        // get converter and try to convert and empty value
-        Object value = ConvertUtils.convert("", Long.class);
-        Assert.assertNull(value);
+    public void testBasic() throws Exception {
+        File file = TestUtils.findFile("config/test1.xml");
+        XMLFormConfigReader reader = new XMLFormConfigReader();
+        FormConfig config = reader.read(file);
+        Assert.assertNotNull(config);
     }
 
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.repo.query;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,20 +15,39 @@ package es.jcyl.ita.frmdrd.repo.query;
  * limitations under the License.
  */
 
-import org.greenrobot.greendao.query.WhereCondition;
+import org.xmlpull.v1.XmlPullParser;
 
-import java.util.List;
+import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
+import es.jcyl.ita.frmdrd.config.ConfigConsole;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Creates a UIComponent from the read xml configuration
  */
-public class ImpossibleCondition implements WhereCondition {
-    @Override
-    public void appendTo(StringBuilder stringBuilder, String s) {
-        stringBuilder.append("1 = 2");
-    }
+public interface ComponentBuilder {
 
-    @Override
-    public void appendValuesTo(List<Object> list) {
-    }
+    /**
+     * stores current tagName
+     */
+    void setName(String name);
+
+    /**
+     * node creation process
+     */
+    void withAttribute(String name, String value);
+
+    void addText(String text);
+
+    void addChild(String currentTag, BaseConfigNode component);
+
+    BaseConfigNode build();
+
+    /**
+     * Config elements
+     */
+    void setConsole(ConfigConsole console);
+
+    void setParser(XmlPullParser xpp);
+
 }

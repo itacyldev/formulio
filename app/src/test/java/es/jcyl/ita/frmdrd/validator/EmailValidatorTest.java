@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
@@ -79,6 +80,7 @@ public class EmailValidatorTest {
 
     @Test
     public void testValidEmail() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         // use a recipe to create objects and preset form context
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
@@ -99,6 +101,7 @@ public class EmailValidatorTest {
 
     @Test
     public void testInvalidEmail() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         // use a recipe to create objects and preset form context
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();

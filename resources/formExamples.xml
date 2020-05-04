@@ -1,5 +1,5 @@
 <examples>
-    <form id="form1" repoId="contacts">
+    <form id="form1" repo="contacts">
         <permissions />
         <data>
             <repo type="csv" />
@@ -52,7 +52,7 @@
     <!-- formulario minimo -->
     <form>
         <data>
-            <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" tableName="tableName" />
+            <repo dbFile="relativeToDataFolderOrAbsolute/file.sqlite" dbTable="tableName" />
         </data>
     </form>
     <!-- si el repositorio se ha registrado ya -->

@@ -29,6 +29,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.configuration.ConfigConverters;
+import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.forms.FormEditController;

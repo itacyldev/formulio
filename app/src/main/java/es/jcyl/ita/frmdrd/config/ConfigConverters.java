@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration;
+package es.jcyl.ita.frmdrd.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.builders;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -18,6 +18,10 @@ package es.jcyl.ita.frmdrd.builders;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.frmdrd.builders.FormEditBuilder;
+import es.jcyl.ita.frmdrd.builders.FormListBuilder;
+import es.jcyl.ita.frmdrd.config.reader.AbstractComponentBuilder;
+import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
@@ -30,16 +34,18 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  * <p>
  * Builder to create list-edit views from a repository.
  */
-public class FormControllerBuilder {
+public class FormControllerBuilder extends AbstractComponentBuilder {
 
     private FormEditBuilder editBuilder = new FormEditBuilder();
     private FormListBuilder listBuilder = new FormListBuilder();
     // current instance construction temporal state
-    private String id;
     private Repository repo;
 
+    public FormControllerBuilder() {
+        super("form");
+    }
+
     public FormControllerBuilder withId(String id) {
-        this.id = id;
         return this;
     }
 
@@ -48,16 +54,27 @@ public class FormControllerBuilder {
         return this;
     }
 
-    public FormBuilderResult build() {
-        FormBuilderResult result = new FormBuilderResult();
-        if (StringUtils.isBlank(this.id)) {
-            this.id = "fc_" + this.repo.getId();
-        }
-        result.list = this.buildList(this.id);
-        result.edit = this.buildEdit(this.id);
-        clear();
-        return result;
+    @Override
+    protected void doWithAttribute(String name, String value) {
+
     }
+
+
+    @Override
+    public void addText(String text) {
+
+    }
+
+    @Override
+    public void addChild(String currentTag, BaseConfigNode component) {
+
+    }
+
+    @Override
+    public void setName(String tagName) {
+        // do nothing
+    }
+
 
     public FormController buildList(String fcId) {
         if (repo == null) {
@@ -111,7 +128,19 @@ public class FormControllerBuilder {
         return actions;
     }
 
-    public class FormBuilderResult {
+
+    public FormBuilderResult build() {
+        FormBuilderResult result = new FormBuilderResult();
+        if (StringUtils.isBlank(this.id)) {
+            this.id = "fc_" + this.repo.getId();
+        }
+        result.list = this.buildList(this.id);
+        result.edit = this.buildEdit(this.id);
+        clear();
+        return result;
+    }
+
+    public class FormBuilderResult extends BaseConfigNode {
         FormEditController edit;
         FormController list;
 

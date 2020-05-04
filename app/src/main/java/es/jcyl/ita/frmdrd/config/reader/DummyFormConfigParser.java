@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration.parser;
+package es.jcyl.ita.frmdrd.config.reader;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -16,10 +16,10 @@ import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.AutoCompleteBuilder;
 import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
-import es.jcyl.ita.frmdrd.builders.FormControllerBuilder;
+import es.jcyl.ita.frmdrd.config.builders.FormControllerBuilder;
 import es.jcyl.ita.frmdrd.builders.SelectBuilder;
-import es.jcyl.ita.frmdrd.configuration.ContextToRepoBinding;
-import es.jcyl.ita.frmdrd.configuration.RepositoryProjectConfReader;
+import es.jcyl.ita.frmdrd.config.ContextToRepoBinding;
+import es.jcyl.ita.frmdrd.config.RepositoryProjectConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
@@ -36,6 +36,7 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
+import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -224,13 +225,11 @@ public class DummyFormConfigParser extends FormConfigParser {
         uiForm.addChild(muniAuto);
         muniAuto.setParentForm(uiForm);
         muniAuto.setForceSelection(true);
-//        muniAuto.setMandatoryFilters(new String[] {"view.provincia"});
+        muniAuto.setMandatoryFilters(new String[]{"view.provincia"});
         muniAuto.setValueProperty("provmuni");
         muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
         muniAuto.setLabelFilteringProperty("name");
         muniAuto.addValidator(new RequiredValidator());
-
-
         // muni values depend on selected province
         Filter f = new SQLQueryFilter();
         Filter muniFilter = FilterHelper.createInstance(muniRepo);
@@ -260,6 +259,8 @@ public class DummyFormConfigParser extends FormConfigParser {
         agentFilter.setCriteria(criteria);
         agentsAC.setFilter(agentFilter);
         DAGManager.getInstance().generateDags(result.getEdit().getView());
+        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(result.getEdit().getView().getId());
+        System.out.println(viewDAG.getDags());
     }
 
 

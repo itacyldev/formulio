@@ -21,7 +21,6 @@ import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.crtrepo.query.Operator;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
-import es.jcyl.ita.frmdrd.repo.query.CriteriaVisitor;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -45,9 +44,7 @@ import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 @RunWith(RobolectricTestRunner.class)
 public class FilterHelperTest {
 
-    CriteriaVisitor visitor = new CriteriaVisitor();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-
 
     /**
      * Test mandatory fileds
@@ -72,22 +69,22 @@ public class FilterHelperTest {
 
         BasicContext bCtx = new BasicContext("test");
         bCtx.set("a", 10);
-        bCtx.set("b", "a");
 
-        Criteria criteria = Criteria.single(ConditionBinding.cond(propertyName1, Operator.EQ, exprFactory.create("${c}", Integer.class)));
+        Criteria criteria = Criteria.single(ConditionBinding.cond(propertyName1, Operator.GT, exprFactory.create("${a}", Integer.class)));
         filterDef.setCriteria(criteria);
 
-        String[] mandatoryFilters = new String[]{"a", "b", "c"};
+        String[] mandatoryFilters = new String[]{"a"};
         FilterHelper.evaluateFilter(bCtx, filterDef, effFilter, mandatoryFilters);
-
         // filter should include one immpossible condition
-        Assert.assertEquals(1, effFilter.getCriteria().getChildren().length);
         List list = repo.find(effFilter);
-        Assert.assertEquals(0, list.size());
+        Assert.assertTrue(list.size() > 0);
+        // remove a value from the context
 
-
-
-//        mandatoryFilters = new String[]{"a", "b"};
-
+        bCtx.remove("a");
+        effFilter = FilterHelper.createInstance(repo);
+        FilterHelper.evaluateFilter(bCtx, filterDef, effFilter, mandatoryFilters);
+        // filter should include one immpossible condition
+        list = repo.find(effFilter);
+        Assert.assertTrue(list.size() == 0);
     }
 }

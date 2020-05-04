@@ -18,7 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.configuration.ConfigFacade;
+import es.jcyl.ita.frmdrd.config.ConfigFacade;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
 

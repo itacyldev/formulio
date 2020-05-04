@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.configuration;
+package es.jcyl.ita.frmdrd.config.reader;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,8 +15,20 @@ package es.jcyl.ita.frmdrd.configuration;
  * limitations under the License.
  */
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * Object created by a builder during config reading process.
  */
-public class ConfigValidators {
+interface ConfigNode {
+    String getName();
+
+    Object getElement();
+
+    Map<String, String> getAttributes();
+
+    List<ConfigNode> getChildren();
 }
