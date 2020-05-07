@@ -15,12 +15,13 @@ package es.jcyl.ita.frmdrd.forms;
  * limitations under the License.
  */
 
-import android.view.View;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.meta.Identifiable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
@@ -30,11 +31,12 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  * <p>
  * Stores form configuration, view, permissions, etc. and provides operations to perform CRUD over and entity
  */
-public abstract class FormController {
+public abstract class FormController implements Identifiable {
     protected String id;
     protected String name;
     protected UIView view;
-    protected Repository mainRepo;
+    protected Repository repo;
+    protected Filter filter;
     protected ViewGroup contentView; // Android view element where the UIView is rendered
     private FCAction[] actions; // form actions ids
 
@@ -57,10 +59,10 @@ public abstract class FormController {
 
     public EditableRepository getEditableRepo() {
         try {
-            return (EditableRepository) mainRepo;
+            return (EditableRepository) this.repo;
         } catch (ClassCastException e) {
             throw new FormException(String.format("You can't use a readonly repository to modify " +
-                    "entity data repoId:[%s].", mainRepo.getId()));
+                    "entity data repoId:[%s].", repo.getId()));
         }
     }
 
@@ -109,14 +111,6 @@ public abstract class FormController {
         this.view = view;
     }
 
-    public Repository getMainRepo() {
-        return mainRepo;
-    }
-
-    public void setMainRepo(Repository mainRepo) {
-        this.mainRepo = mainRepo;
-    }
-
     public FCAction[] getActions() {
         return actions;
     }
@@ -136,6 +130,22 @@ public abstract class FormController {
             }
             return null;
         }
+    }
+
+    public Repository getRepo() {
+        return repo;
+    }
+
+    public void setRepo(Repository repo) {
+        this.repo = repo;
+    }
+
+    public Filter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(Filter filter) {
+        this.filter = filter;
     }
 
     public boolean hasAction(String name) {

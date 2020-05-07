@@ -20,23 +20,27 @@ import org.xmlpull.v1.XmlPullParser;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ConfigConsole {
+public class DevConsole {
 
     private static String currentFile;
     private static String currentTag;
     private static XmlPullParser xpp;
 
-    public static void error(String msg) {
+    public static String error(String msg) {
         // TODO: link log library
+        return msg;
     }
 
-    public static void error(String msg, Throwable t) {
+    public static String error(String msg, Throwable t) {
         // TODO: link log library
+        return msg;
     }
 
     public static void warn(String msg) {
         // TODO: link log library
     }
+
+    //
 
     public static void setCurrentFile(String filePath) {
         currentFile = filePath;

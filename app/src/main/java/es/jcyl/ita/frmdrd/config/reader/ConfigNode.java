@@ -30,6 +30,8 @@ public interface ConfigNode {
 
     Map<String, String> getAttributes();
 
+    String getAttribute(String name);
+
     List<ConfigNode> getChildren();
 
     List<String> getTexts();

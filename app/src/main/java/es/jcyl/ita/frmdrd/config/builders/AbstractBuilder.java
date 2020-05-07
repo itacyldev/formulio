@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.reader;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,26 +15,36 @@ package es.jcyl.ita.frmdrd.config.reader;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.BeanUtils;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.meta.Attribute;
 import es.jcyl.ita.frmdrd.config.meta.Attributes;
-import es.jcyl.ita.frmdrd.config.builders.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
+import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
-import static es.jcyl.ita.frmdrd.config.ConfigConsole.error;
+import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Builder that stores XML node information of the tag (attributes and nested childre).
+ * It also validates given attributes against Attribute definition of current tag.
  */
-public abstract class AbstractComponentBuilder implements ComponentBuilder {
+public abstract class AbstractBuilder<E> implements ComponentBuilder {
 
-    private BaseConfigNode node;
-    protected Set<String> attributeNames;
+    protected BaseConfigNode node;
+    protected Map<String, Attribute> attributes;
+    protected ComponentResolver resolver;
 
-    public AbstractComponentBuilder(String tagName) {
-        this.attributeNames = Attributes.valueOf(tagName).attributes;
+    public AbstractBuilder(String tagName) {
+        this.attributes = Attributes.getDefinition(tagName);
         node = new BaseConfigNode();
         node.setName(tagName);
     }
@@ -44,7 +54,6 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
             error(String.format("Unsupported attribute: [%s] in component ${tag}.", name));
         } else {
             node.getAttributes().put(name, value);
-            doWithAttribute(name, value);
         }
     }
 
@@ -62,6 +71,7 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
         this.node.addText(text);
     }
 
+
     @Override
     public final ConfigNode build() {
         Object element = doBuild();
@@ -69,15 +79,14 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
         return node;
     }
 
+
     /****** Extension points *******/
 
     protected boolean isAttributeSupported(String attName) {
-        return attributeNames.contains(attName);
+        return (attributes == null) ? false : attributes.containsKey(attName);
     }
 
-    abstract protected void doWithAttribute(String name, String value) ;
-
-    abstract protected Object doBuild();
+    protected abstract Object doBuild();
 
     /******* Helper methods ********/
 
@@ -104,4 +113,7 @@ public abstract class AbstractComponentBuilder implements ComponentBuilder {
         return kids.toArray(new UIComponent[kids.size()]);
     }
 
+    public void setResolver(ComponentResolver resolver) {
+        this.resolver = resolver;
+    }
 }

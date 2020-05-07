@@ -15,17 +15,22 @@ package es.jcyl.ita.frmdrd.config.meta;
  * limitations under the License.
  */
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CONVERTER;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DESCRIPTION;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.MAINFORM;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.NAME;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ONSAVE;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.READONLY;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.RENDER;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.REPO;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE;
 
@@ -35,7 +40,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE;
  * Stores supported attibutes for each tag
  */
 public class Attributes {
-    private static final Map<String, Set<Attribute>> registry = new HashMap<>();
+    private static final Map<String, Map<String, Attribute>> registry = new HashMap<>();
 
     static {
         initialize();
@@ -43,29 +48,41 @@ public class Attributes {
 
     private static void initialize() {
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
-        Attribute[] input = new Attribute[]{TYPE, LABEL, READONLY, CONVERTER};
 
-        Set<Attribute> baseInput = define(base, input);
+        Attribute[] baseDesc = new Attribute[]{ID, NAME, DESCRIPTION, PROPERTIES, REPO};
+        register("main", define(baseDesc));
+        register("list", define(baseDesc, new Attribute[]{ENTITYSELECTOR}));
+        register("edit", define(baseDesc, new Attribute[]{MAINFORM}));
+        register("form", define(baseDesc, new Attribute[]{ONSAVE}));
+
+        Attribute[] input = new Attribute[]{TYPE, LABEL, READONLY, CONVERTER};
+        Map<String, Attribute> baseInput = define(base, input);
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
+
+        register("link", define(baseDesc, new Attribute[]{ROUTE}));
+
     }
 
-    private static Set<Attribute> define(Attribute[]... attributeSets) {
-        Set<Attribute> atts = new HashSet();
+    private static Map<String, Attribute> define(Attribute[]... attributeSets) {
+        Map<String, Attribute> atts = new HashMap();
         for (Attribute[] attSet : attributeSets) {
-            atts.addAll(Arrays.asList(attSet));
+            for (Attribute att : attSet) {
+                if (!atts.containsKey(att.name)) {
+                    atts.put(att.name, att);
+                }
+            }
         }
         return atts;
-
     }
 
 
-    public static void register(String name, Set<Attribute> atts) {
+    public static void register(String name, Map<String, Attribute> atts) {
         registry.put(name, atts);
     }
 
-    public static Set<Attribute> getDefinition(String name) {
+    public static Map<String, Attribute> getDefinition(String name) {
         return registry.get(name);
     }
 

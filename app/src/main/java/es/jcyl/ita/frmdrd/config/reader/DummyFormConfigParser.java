@@ -19,7 +19,7 @@ import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.config.builders.FormControllerBuilder;
 import es.jcyl.ita.frmdrd.builders.SelectBuilder;
 import es.jcyl.ita.frmdrd.config.ContextToRepoBinding;
-import es.jcyl.ita.frmdrd.config.RepositoryProjectConfReader;
+import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
@@ -313,7 +313,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         lst.add(field3);
 
         // datatable
-        RepositoryProjectConfReader config = new RepositoryProjectConfReader();
+        RepositoryConfReader config = new RepositoryConfReader("");
         config.read();
         EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
 //        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
@@ -367,7 +367,7 @@ public class DummyFormConfigParser extends FormConfigParser {
         newCol.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
         table.getColumns()[0] = newCol;
         table.setId("table1");
-        RepositoryProjectConfReader config = new RepositoryProjectConfReader();
+        RepositoryConfReader config = new RepositoryConfReader("");
         config.read();
         table.setRepo(contactsRepo);
         table.setRoute(formController.getId() + "#edit");

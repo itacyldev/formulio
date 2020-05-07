@@ -147,7 +147,7 @@ public class DevFormBuilder {
         public CreateOneFieldForm withRepo(EditableRepository repository) {
             checkInvokeHasBeenCalled();
             this.repo = repository;
-            this.mc.getFormController().setMainRepo(repository);
+            this.mc.getFormController().setRepo(repository);
             this.form.setRepo(repo);
             return this;
         }

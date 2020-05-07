@@ -18,7 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.config.ConfigFacade;
+import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
 
@@ -27,10 +27,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected SharedPreferences settings;
 
     private static final int PERMISSION_REQUEST = 1234;
-    ConfigFacade config = new ConfigFacade();
+    Config config = new Config("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        getApplication().getFilesDir();
+
         super.onCreate(savedInstanceState);
         checkPermissions();
         setContentView(R.layout.activity_main);

@@ -20,8 +20,11 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.config.ConfigConsole;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
+import es.jcyl.ita.frmdrd.forms.FormListController;
+
+import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -29,9 +32,9 @@ import es.jcyl.ita.frmdrd.config.ConfigurationException;
 public class ComponentBuilderFactory {
 
     private XmlPullParser xpp;
-    private final ConfigConsole console = new ConfigConsole();
     private static ComponentBuilderFactory _instance;
     private static final Map<String, Class<? extends ComponentBuilder>> _builders = new HashMap<>();
+    private ComponentResolver componentResolver;
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -43,8 +46,7 @@ public class ComponentBuilderFactory {
     private ComponentBuilderFactory() {
         // default registering
         registerBuilder("main", FormConfigBuilder.class);
-        registerBuilder("list", GroupingBuilder.class);
-        registerBuilder("edit", GroupingBuilder.class);
+        registerBuilder("list", FormListControllerBuilder.class);
         registerBuilder("form", FormBuilder.class);
     }
 
@@ -55,35 +57,43 @@ public class ComponentBuilderFactory {
     public ComponentBuilder getBuilder(String tagName) {
         Class builderClass = _builders.get(tagName);
         if (builderClass == null) {
-            return null;
+            // use default builder
+            builderClass = DefaultComponentBuilder.class;
         }
-        ComponentBuilder builder = instantiate(builderClass, tagName);
+        ComponentBuilder builder = newComponentBuilder(builderClass, tagName);
         builder.setName(tagName);
 
         return builder;
     }
 
-    private ComponentBuilder instantiate(Class clazz, String tagName) {
+    private ComponentBuilder newComponentBuilder(Class clazz, String tagName) {
+        ComponentBuilder builder = null;
         // try with no parameter
         try {
-            return (ComponentBuilder) clazz.getDeclaredConstructor().newInstance();
+            builder = (ComponentBuilder) clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
         }
         // try with one String parameter
         try {
-            return (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
+            builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
         } catch (Exception e) {
             String msg = String.format("Class [%s] couldn't be instantiated, check it has a " +
                     "no-parameter constructor or a constructor with one string parameter " +
                     "(tagName).", clazz.getName());
-            console.error(msg, e);
-            throw new ConfigurationException(msg, e);
+            throw new ConfigurationException(error(msg, e), e);
         }
-
-
+        if (builder instanceof AbstractComponentBuilder) {
+            // common builder configuration
+            ((AbstractComponentBuilder) builder).setResolver(this.componentResolver);
+        }
+        return builder;
     }
 
     public void setXmlParser(XmlPullParser xpp) {
         this.xpp = xpp;
+    }
+
+    public void setComponentResolver(ComponentResolver componentResolver) {
+        this.componentResolver = componentResolver;
     }
 }

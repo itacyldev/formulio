@@ -11,13 +11,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Stack;
 
-import es.jcyl.ita.frmdrd.config.ConfigConsole;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
+import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 
-import static es.jcyl.ita.frmdrd.config.ConfigConsole.error;
+import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /**
  * Reads form configuration files and creates form controllers and view Components
@@ -26,10 +27,13 @@ public class XMLFormConfigReader {
 
     XmlPullParserFactory factory;
     ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
+    ComponentResolver resolver;
 
     public XMLFormConfigReader() throws XmlPullParserException {
         this.factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(false);
+        resolver = new ComponentResolver();
+        builderFactory.setComponentResolver(resolver);
     }
 
 
@@ -38,8 +42,8 @@ public class XMLFormConfigReader {
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput(is, null);
 
-        ConfigConsole.setCurrentFile(file.getAbsolutePath());
-        ConfigConsole.setParser(xpp);
+        DevConsole.setCurrentFile(file.getAbsolutePath());
+        DevConsole.setParser(xpp);
 
         ConfigNode root = processFile(xpp);
 
@@ -68,38 +72,39 @@ public class XMLFormConfigReader {
 
         String currentTag = null;
 
+        // not thread-safe
+        resolver.clear();
+
         int eventType = xpp.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
+
             if (eventType == XmlPullParser.START_DOCUMENT) {
 
             } else if (eventType == XmlPullParser.START_TAG) {
-                // store current builder in the pile
-                if (currentBuilder != null) {
-                    builderStack.push(currentBuilder);
-                }
                 // get builder for this tag
                 currentTag = xpp.getName();
-                ConfigConsole.setCurrentElement(currentTag);
+                DevConsole.setCurrentElement(currentTag);
                 currentBuilder = builderFactory.getBuilder(currentTag);
                 if (currentBuilder == null) {
-                    String msg = "No builder found for tag ${tag} in file ${file}, current element " +
-                            "and nested ones will be ignored.";
-                    error(msg);
-                    throw new ConfigurationException("Error during XML config reading. See console for details.");
-                } else {
-//                    currentBuilder.setParser(xpp);
-                    setAttributes(xpp, currentBuilder);
+                    throw new ConfigurationException(error("No builder found for tag ${tag} " +
+                            "in file ${file}, current element and nested ones will be ignored."));
                 }
+                setAttributes(xpp, currentBuilder, resolver);
+                // store current builder in the pile
+                builderStack.push(currentBuilder);
+
             } else if (eventType == XmlPullParser.TEXT) {
                 // add text to current builder
                 currentBuilder.addText(xpp.getText());
-
             } else if (eventType == XmlPullParser.END_TAG) {
                 // tell the builder to create element and append to parent builder
+
+                currentBuilder = builderStack.pop();
                 ConfigNode component = currentBuilder.build();
+                System.out.println("Building component: " + component.getName());
                 if (!builderStack.empty()) {
-                    // restore parent builder from the pile
-                    parentBuilder = builderStack.pop();
+                    // get parent builder from the pile
+                    parentBuilder = builderStack.peek();
                     parentBuilder.addChild(currentTag, component);
                     currentBuilder = parentBuilder;
                 }
@@ -109,9 +114,15 @@ public class XMLFormConfigReader {
         return currentBuilder.build();
     }
 
-    private void setAttributes(XmlPullParser xpp, ComponentBuilder builder) {
+    private void setAttributes(XmlPullParser xpp, ComponentBuilder builder, ComponentResolver idResolver) {
         for (int i = 0; i < xpp.getAttributeCount(); i++) {
-            builder.withAttribute(xpp.getAttributeName(i), xpp.getAttributeValue(i));
+            String attName = xpp.getAttributeName(i);
+            String value =  xpp.getAttributeValue(i);
+            if ("id".equals(attName.toLowerCase())) {
+                // register current component id
+                idResolver.addComponentId(value, xpp.getName());
+            }
+            builder.withAttribute(attName,value);
         }
     }
 }

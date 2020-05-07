@@ -18,8 +18,6 @@ package es.jcyl.ita.frmdrd.config.builders;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.frmdrd.builders.FormEditBuilder;
-import es.jcyl.ita.frmdrd.builders.FormListBuilder;
 import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -35,8 +33,8 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  */
 public class FormControllerBuilder {
 
-    private FormEditBuilder editBuilder = new FormEditBuilder();
-    private FormListBuilder listBuilder = new FormListBuilder();
+//    private FormEditBuilder editBuilder = new FormEditBuilder();
+//    private FormListControllerBuilder listBuilder = new FormListControllerBuilder();
     // current instance construction temporal state
     private Repository repo;
     private String id;
@@ -57,11 +55,11 @@ public class FormControllerBuilder {
             throw new IllegalStateException("No repo provided, cannot create the form.");
         }
         FormListController fc = new FormListController(fcId + "#list", "Form " + this.repo.getId());
-        fc.setMainRepo(repo);
+        fc.setRepo(repo);
         // create views
-        UIForm listForm = listBuilder.witRepo(repo).withDataTableRoute(fcId + "#edit").build();
+//        UIForm listForm = listBuilder.witRepo(repo).withDataTableRoute(fcId + "#edit").build();
         UIView listView = new UIView(fc.getId() + ">view");
-        listView.addChild(listForm);
+//        listView.addChild(listForm);
         fc.setView(listView);
         fc.setActions(defaultListActions(fcId));
 

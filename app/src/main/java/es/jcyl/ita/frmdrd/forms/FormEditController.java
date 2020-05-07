@@ -31,7 +31,6 @@ import es.jcyl.ita.frmdrd.validation.ValidatorException;
 public class FormEditController extends FormController {
     private UIForm mainForm;
 
-
     public FormEditController(String id, String name) {
         super(id, name);
     }

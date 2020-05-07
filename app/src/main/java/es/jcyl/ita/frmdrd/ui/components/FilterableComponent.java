@@ -15,12 +15,16 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public interface FilterableComponent {
+
+    void setRepo(Repository repo);
+    void setFilter(Filter filter);
 
     Filter getFilter();
 

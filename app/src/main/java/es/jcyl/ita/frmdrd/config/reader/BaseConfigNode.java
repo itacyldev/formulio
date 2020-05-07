@@ -60,6 +60,11 @@ public class BaseConfigNode implements ConfigNode {
     }
 
     @Override
+    public String getAttribute(String name) {
+        return this.attributes.get(name);
+    }
+
+    @Override
     public List<ConfigNode> getChildren() {
         if (children == null) {
             this.children = new ArrayList<>();

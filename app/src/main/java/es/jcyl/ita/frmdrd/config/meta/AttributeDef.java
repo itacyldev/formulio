@@ -28,14 +28,23 @@ public class AttributeDef {
     public static Attribute LABEL = new Attribute("label", true);
     public static Attribute READONLY = new Attribute("readonly", true, Boolean.class);
     public static Attribute CONVERTER = new Attribute("converter", false);
-
+    // component description
     public static Attribute NAME = new Attribute("name", true);
     public static Attribute DESCRIPTION = new Attribute("description", true);
 
     public static Attribute PROPERTIES = new Attribute("properties", true);
+    // edit view
+    public static Attribute MAINFORM = new Attribute("mainForm", true);
+    // list view
+    public static Attribute ENTITYSELECTOR = new Attribute("entitySelector", true);
 
-    public static Attribute REPO = new Attribute("repo", false);
+    // common trasversal parameters
+    public static Attribute ROUTE = new Attribute("route", true);
+
+    // datatable
+
     // repository definition
+    public static Attribute REPO = new Attribute("repo", true);
     public static Attribute DBFILE = new Attribute("dbFile", true);
     public static Attribute DBTABLE = new Attribute("dbTable", true);
 

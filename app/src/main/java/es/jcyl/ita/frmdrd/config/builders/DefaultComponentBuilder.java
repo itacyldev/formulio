@@ -19,25 +19,16 @@ import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
- * Creates a UIComponent from the read xml configuration
+ *
+ * Default builder that just returns the XML node.
  */
-public interface ComponentBuilder {
+public class DefaultComponentBuilder extends AbstractBuilder {
+    public DefaultComponentBuilder(String tagName) {
+        super(tagName);
+    }
 
-    /**
-     * stores current tagName
-     */
-    void setName(String name);
-
-    /**
-     * node creation process
-     */
-    void withAttribute(String name, String value);
-
-    void addText(String text);
-
-    void addChild(String childTag, ConfigNode component);
-
-    ConfigNode build();
-
+    @Override
+    protected Object doBuild() {
+        return null;
+    }
 }

@@ -1,5 +1,10 @@
-<main id="form1" repoId="contacts">
-    <list id="form1#list"></list>
+<main name="myFirstForm" description="An example of short description" id="form1" repoId="contacts">
+    <list id="mylist">
+
+    </list>
+    <!--
+
     <edit id="form1#edit"></edit>
     <edit id="form1#edit2"></edit>
+    -->
 </main>

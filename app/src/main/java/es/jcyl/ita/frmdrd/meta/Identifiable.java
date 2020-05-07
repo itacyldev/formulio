@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.meta;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,29 +15,14 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import java.io.Serializable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
- * Creates a UIComponent from the read xml configuration
  */
-public interface ComponentBuilder {
+public interface Identifiable extends Serializable {
 
-    /**
-     * stores current tagName
-     */
-    void setName(String name);
+    String getId();
 
-    /**
-     * node creation process
-     */
-    void withAttribute(String name, String value);
-
-    void addText(String text);
-
-    void addChild(String childTag, ConfigNode component);
-
-    ConfigNode build();
-
+    void setId(String id);
 }

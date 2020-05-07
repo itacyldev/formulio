@@ -26,8 +26,6 @@ import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
  */
 public class FormListController extends FormController {
     // form used to refer to the repository used to count entities
-    private Repository repo;
-    private Filter filter;
     private EntitySelector entitySelector;
 
     public FormListController(String id, String name) {
@@ -51,14 +49,6 @@ public class FormListController extends FormController {
     /****************************/
     /** GETTER/SETTERS **/
     /****************************/
-
-    public Repository getRepo() {
-        return repo;
-    }
-
-    public void setRepo(Repository repo) {
-        this.repo = repo;
-    }
 
     public Filter getFilter() {
         return filter;

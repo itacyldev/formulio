@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config;
+package es.jcyl.ita.frmdrd.config.repo;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -23,6 +23,7 @@ import java.io.File;
 
 import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.EntitySourceFactory;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.Source;
 import es.jcyl.ita.crtrepo.builders.EntitySourceBuilder;
 import es.jcyl.ita.crtrepo.builders.RepositoryBuilder;
@@ -38,12 +39,23 @@ import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDaoConfig;
 import es.jcyl.ita.crtrepo.db.sqlite.meta.SQLiteMetaModeler;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.MetaModeler;
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.DevConsole;
+
+import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader {
+public class RepositoryConfReader extends AbstractRepoConfigurationReader {
+
+
+    private final String baseFolder;
+
+    public RepositoryConfReader(String folder) {
+        this.baseFolder = folder;
+    }
 
     @Override
     public void read() {
@@ -51,6 +63,56 @@ public class RepositoryProjectConfReader extends AbstractRepoConfigurationReader
         createDBSource();
         createEntitySources();
         createRepositories();
+    }
+
+    private File locateFile(String path) {
+        File f = new File(path);
+        if (f.isAbsolute()) {
+            if (!f.exists()) {
+                throw new ConfigurationException(error("Error during RepoConfReader " +
+                        "initialization, file not found: " + path));
+            }
+        } else {
+            f = new File(baseFolder, path);
+            if (!f.exists()) {
+                throw new ConfigurationException(error(String.format("Error during " +
+                        "RepoConfReader initialization, file not found in base folder [%s]: ", baseFolder) + path));
+            }
+        }
+        return f;
+    }
+
+    public Repository createFromFile(String filePath, String tableName) {
+        File dbFile = locateFile(filePath);
+        // check if exists another repository against that source
+        String absPath = dbFile.getAbsolutePath();
+        Source source = this.sourceFactory.getSource(absPath);
+        if (source == null) {
+            SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+            // use absolute path as source Id
+            source = new Source<>(absPath, absPath, new StandardDatabase(sqDb));
+            this.sourceFactory.registerSource(source);
+        }
+
+        // create entity source
+        String entityId = absPath + "#" + tableName;
+        EntitySource eSource = sourceFactory.getEntitySource(entityId);
+        if (eSource == null) {
+            EntitySourceBuilder builder;
+            builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
+            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, source);
+            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, tableName);
+            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, entityId);
+            builder.build();
+        }
+
+        // create repository
+        MetaModeler metaModeler = new SQLiteMetaModeler();
+        EntityMeta meta = metaModeler.readFromSource(eSource);
+        EntityDaoConfig conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
+        RepositoryBuilder builder = repoFactory.getBuilder(eSource);
+        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
+        return builder.build();
     }
 
     private void createRepositories() {

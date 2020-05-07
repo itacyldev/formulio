@@ -15,44 +15,45 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.reader.AbstractComponentBuilder;
-import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.forms.FormListController;
+
+import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormConfigBuilder extends AbstractComponentBuilder {
-    FormConfig config;
+public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
 
-    public FormConfigBuilder() {
-        super("form");
-        config = new FormConfig("");
+
+    public FormConfigBuilder(String tagName) {
+        super(tagName, FormConfig.class); // main
     }
 
     @Override
-    protected void doWithAttribute(String name, String value) {
-        if ("name".equals(name)) {
-            config.setName(name);
+    protected void doWithAttribute(FormConfig element, String name, String value) {
+
+    }
+
+    @Override
+    protected void doConfigure(FormConfig formConfig, ConfigNode node) {
+        // get list and edit views, check and set to configuration
+        List<ConfigNode> list = getChildren(node, "list");
+        if (list.size() != 1) {
+            error(String.format("Each form file must contain one and just one 'list' element, found: [%s]", list.size()));
         }
-    }
+        formConfig.setList((FormListController) list.get(0).getElement());
 
-    @Override
-    public BaseConfigNode build() {
-        BaseConfigNode node = new BaseConfigNode();
-        node.setName(this.tagName);
-        node.setElement(this.config);
-        return node;
-    }
-
-    @Override
-    public void addText(String text) {
-
-    }
-
-    @Override
-    public void addChild(String currentTag, ConfigNode component) {
-
+        List<ConfigNode> edits = getChildren(node, "edit");
+        List<FormEditController> lst = new ArrayList<>();
+        for (ConfigNode n : edits) {
+            lst.add((FormEditController) n.getElement());
+        }
+        formConfig.setEdits(lst);
     }
 }

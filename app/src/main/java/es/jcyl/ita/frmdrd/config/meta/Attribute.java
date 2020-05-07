@@ -19,9 +19,9 @@ package es.jcyl.ita.frmdrd.config.meta;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class Attribute {
-    private final String name;
-    private final boolean assignable;
-    private Class type;
+    public final String name;
+    public final boolean assignable;
+    public Class type;
 
     public Attribute(String name, boolean assignable) {
         this(name, assignable, String.class);
@@ -32,4 +32,5 @@ public class Attribute {
         this.assignable = assignable;
         this.type = type;
     }
+
 }

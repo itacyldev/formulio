@@ -19,22 +19,22 @@ import java.util.List;
 
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
+import es.jcyl.ita.frmdrd.meta.Identifiable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Base class that gathers the information in a form configuration file.
  */
 
-public class FormConfig {
+public class FormConfig implements Identifiable {
+
+    private String id;
     private String name;
+    private String description;
     private String filePath;
     private FormListController list;
     private List<FormEditController> edits;
-
-    public FormConfig(String fileName) {
-        this.name = name;
-    }
 
     public String getName() {
         return name;
@@ -66,5 +66,23 @@ public class FormConfig {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+this.id = id;
     }
 }

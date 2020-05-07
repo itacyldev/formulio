@@ -2,7 +2,6 @@ package es.jcyl.ita.frmdrd.ui.components;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +9,11 @@ import java.util.Set;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.meta.Identifiable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
-public abstract class UIComponent implements Serializable {
+public abstract class UIComponent implements Identifiable {
 
     protected String id;
     private ValueBindingExpression valueExpression;

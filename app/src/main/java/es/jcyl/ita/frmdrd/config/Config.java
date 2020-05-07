@@ -15,23 +15,37 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
+import java.util.HashMap;
+import java.util.Map;
+
 import es.jcyl.ita.frmdrd.config.reader.DummyFormConfigParser;
 import es.jcyl.ita.frmdrd.config.reader.FormConfigParser;
+import es.jcyl.ita.frmdrd.config.reader.XMLFormConfigReader;
+import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * Configuration initializer and commons point to store and share configuration parameters.
  */
-public class ConfigFacade {
+public class Config {
 
     private static boolean configLoaded = false;
+    private String projectFolder;
+    private static RepositoryConfReader repoConfigReader;
+    private static XMLFormConfigReader formConfigReader;
+
+
+
+    public Config(String projectFolder){
+        this.projectFolder = projectFolder;
+    }
+
+
 
     public void init() {
         if (!configLoaded) {
-            RepositoryProjectConfReader configReader = new RepositoryProjectConfReader();
-            configReader.read();
-
-            FormConfigParser parser = new DummyFormConfigParser();
-            parser.parseFormConfig("");
+            repoConfigReader = new RepositoryConfReader(this.projectFolder);
 
             // customize data type converters
             ConfigConverters confConverter = new ConfigConverters();
@@ -39,5 +53,21 @@ public class ConfigFacade {
 
             configLoaded = true;
         }
+    }
+
+    public void read(){
+        repoConfigReader.read();
+
+        FormConfigParser parser = new DummyFormConfigParser();
+        parser.parseFormConfig("");
+
+    }
+
+    public static RepositoryConfReader getRepoConfigReader() {
+        return repoConfigReader;
+    }
+
+    public static XMLFormConfigReader getFormConfigReader() {
+        return formConfigReader;
     }
 }

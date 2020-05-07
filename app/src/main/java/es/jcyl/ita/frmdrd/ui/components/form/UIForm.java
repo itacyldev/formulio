@@ -19,6 +19,7 @@ import es.jcyl.ita.frmdrd.context.impl.ViewStateHolder;
 import es.jcyl.ita.frmdrd.forms.FormException;
 import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
+import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.validation.Validator;
@@ -27,7 +28,7 @@ import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 
-public class UIForm extends UIComponent {
+public class UIForm extends UIComponent implements FilterableComponent {
 
     private FormContext context;
     private final ViewStateHolder memento;
@@ -293,6 +294,11 @@ public class UIForm extends UIComponent {
 
     public Filter getFilter() {
         return filter;
+    }
+
+    @Override
+    public String[] getMandatoryFilters() {
+        return new String[0];
     }
 
     public void setFilter(Filter filter) {

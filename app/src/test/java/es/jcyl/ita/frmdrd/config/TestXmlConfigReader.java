@@ -40,6 +40,8 @@ public class TestXmlConfigReader {
 
     @BeforeClass
     public static void setUp() {
+        Config config = new Config("");
+        config.init();
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -52,6 +54,9 @@ public class TestXmlConfigReader {
         FormConfig config = reader.read(file);
 
         Assert.assertNotNull(config);
+        // check attributes
+        Assert.assertNotNull(config.getName());
+        Assert.assertNotNull(config.getDescription());
         Assert.assertNotNull(config.getList());
         Assert.assertNotNull(config.getEdits());
     }
