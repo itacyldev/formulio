@@ -15,7 +15,11 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
+import android.util.Log;
+
 import org.xmlpull.v1.XmlPullParser;
+
+import java.util.logging.Level;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -25,25 +29,38 @@ public class DevConsole {
     private static String currentFile;
     private static String currentTag;
     private static XmlPullParser xpp;
+    private static boolean hasError;
 
     public static String error(String msg) {
         // TODO: link log library
+        hasError = true;
+        _writeMsg(Log.ERROR, msg);
         return msg;
     }
 
     public static String error(String msg, Throwable t) {
         // TODO: link log library
+        hasError = true;
+        _writeMsg(Log.ERROR, msg);
         return msg;
     }
 
+
     public static void warn(String msg) {
         // TODO: link log library
+        _writeMsg(Log.WARN, msg);
     }
 
     //
+    private static void _writeMsg(int errorLevel, String msg) {
+        System.out.println(msg);
+    }
 
     public static void setCurrentFile(String filePath) {
-        currentFile = filePath;
+        currentFile = filePath;hasError = false;
+    }
+    public static boolean  hasCurrentFileError(){
+        return hasError;
     }
 
     public static void setCurrentElement(String tag) {

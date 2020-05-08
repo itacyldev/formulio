@@ -15,24 +15,112 @@ package es.jcyl.ita.frmdrd.config.reader;
  * limitations under the License.
  */
 
+import org.mini2Dx.collections.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Object created by a builder during config reading process.
  */
-public interface ConfigNode {
-    String getName();
+public class ConfigNode<E> {
+    private String name;
+    private Map<String, String> attributes;
+    private List<ConfigNode> children;
+    private List<String> texts;
+    // related object built from current node information
+    private E element;
 
-    Object getElement();
+    public ConfigNode(String tag) {
+        this.name = tag;
+    }
 
-    Map<String, String> getAttributes();
+    public String getName() {
+        return name;
+    }
 
-    String getAttribute(String name);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    List<ConfigNode> getChildren();
+    public E getElement() {
+        return element;
+    }
 
-    List<String> getTexts();
+    public void setElement(E element) {
+        this.element = element;
+    }
+
+    public Map<String, String> getAttributes() {
+        if (attributes == null) {
+            this.attributes = new HashMap<>();
+        }
+        return attributes;
+    }
+
+    public String getId() {
+        return getAttribute("id");
+    }
+
+    public void setAttribute(String name, String value){
+        if (attributes == null) {
+            this.attributes = new HashMap<>();
+        }
+        this.attributes.put(name, value);
+    }
+
+    public String getAttribute(String name) {
+        return (attributes == null) ? null : this.attributes.get(name);
+    }
+
+    public boolean hasChildren(){
+        return CollectionUtils.isNotEmpty(this.children);
+    }
+
+    public List<ConfigNode> getChildren() {
+        if (children == null) {
+            this.children = new ArrayList<>();
+        }
+        return children;
+    }
+
+    public void addChild(ConfigNode kid) {
+        if (children == null) {
+            this.children = new ArrayList<>();
+        }
+        this.children.add(kid);
+    }
+
+    public void setChildren(List<ConfigNode> kids) {
+        this.children = kids;
+    }
+
+    public void addText(String text) {
+        if (this.texts == null) {
+            this.texts = new ArrayList<>();
+        }
+        this.texts.add(text);
+    }
+
+    public List<String> getTexts() {
+        return texts;
+    }
+
+    public void setId(String id) {
+        if (attributes == null) {
+            this.attributes = new HashMap<>();
+        }
+        this.attributes.put("id", id);
+    }
+
+    public ConfigNode copy() {
+        ConfigNode n = new ConfigNode(this.getName());
+        n.getAttributes().putAll(this.attributes);
+        n.setChildren(this.children);
+        return n;
+    }
 }

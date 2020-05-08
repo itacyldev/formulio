@@ -15,20 +15,21 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import java.util.List;
+
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Default builder that just returns the XML node.
  */
-public class DefaultComponentBuilder extends AbstractBuilder {
-    public DefaultComponentBuilder(String tagName) {
-        super(tagName);
+class DefaultComponentBuilder implements ComponentBuilder{
+    @Override
+    public Object build(ConfigNode node) {
+        return null;
     }
 
     @Override
-    protected Object doBuild() {
-        return null;
+    public void processChildren(ConfigNode node) {
+
     }
 }

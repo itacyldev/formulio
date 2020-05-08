@@ -35,7 +35,7 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class FormBuilder extends AbstractComponentBuilder<UIForm> {
+class FormBuilder extends AbstractUIComponentBuilder<UIForm> {
 
     protected RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 

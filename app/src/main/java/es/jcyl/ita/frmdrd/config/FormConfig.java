@@ -17,6 +17,7 @@ package es.jcyl.ita.frmdrd.config;
 
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.meta.Identifiable;
@@ -35,6 +36,7 @@ public class FormConfig implements Identifiable {
     private String filePath;
     private FormListController list;
     private List<FormEditController> edits;
+    private Repository repo;
 
     public String getName() {
         return name;
@@ -84,5 +86,13 @@ public class FormConfig implements Identifiable {
     @Override
     public void setId(String id) {
 this.id = id;
+    }
+
+    public void setRepo(Repository repo) {
+        this.repo = repo;
+    }
+
+    public Repository getRepo() {
+        return repo;
     }
 }

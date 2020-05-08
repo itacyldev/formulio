@@ -22,13 +22,22 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 import java.util.logging.XMLFormatter;
 
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
+import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
+import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.XMLFormConfigReader;
+import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -44,22 +53,68 @@ public class TestXmlConfigReader {
         config.init();
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
+        // register repos
+        RepositoryUtils.registerMock("contacts");
+    }
+
+    /**
+     * Reads basic xml and checks the configNode tree is correctly read.
+     * @throws Exception
+     */
+    @Test
+    public void testReadConfigNodes() throws Exception {
+        XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
+        XMLFormConfigReader reader = new XMLFormConfigReader();
+
+        File file = TestUtils.findFile("config/test1.xml");
+
+        InputStream is = new FileInputStream(file);
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(is, null);
+
+        ConfigNode node = reader.readFile(xpp);
+
+        Assert.assertNotNull(node);
+        // check attributes
+        Assert.assertNotNull(node.getName());
+        Assert.assertNotNull(node.getAttribute("description"));
+        Assert.assertNotNull(node.getAttribute("name"));
+        Assert.assertNotNull(node.getAttribute("repo"));
+        Assert.assertEquals(node.getAttribute("id"), "form1");
+
+        // check nested elements ids
+        List<ConfigNode> kids = node.getChildren();
+        Assert.assertNotNull(kids);
+        // list
+        Assert.assertEquals(kids.get(0).getName(), "list");
+        Assert.assertNotNull(kids.get(0).getId());
+        // edit1
+        Assert.assertEquals(kids.get(1).getName(), "edit");
+        Assert.assertEquals(kids.get(1).getId(), "form1#edit");
+        // edit2
+        Assert.assertEquals(kids.get(2).getName(), "edit");
+        Assert.assertNotNull(kids.get(2).getId());
     }
 
     @Test
-    public void testBasicForm() throws Exception {
+    public void testBasicBuild() throws Exception {
         File file = TestUtils.findFile("config/test1.xml");
-
         XMLFormConfigReader reader = new XMLFormConfigReader();
-        FormConfig config = reader.read(file);
+        FormConfig formConfig = reader.read(file);
+        Assert.assertNotNull(formConfig);
+        Assert.assertNotNull(formConfig.getList());
+        Assert.assertNotNull(formConfig.getEdits());
+        Assert.assertEquals(2, formConfig.getEdits().size());
+        Assert.assertNotNull(formConfig.getEdits().get(0));
+        Assert.assertNotNull(formConfig.getEdits().get(1));
 
-        Assert.assertNotNull(config);
-        // check attributes
-        Assert.assertNotNull(config.getName());
-        Assert.assertNotNull(config.getDescription());
-        Assert.assertNotNull(config.getList());
-        Assert.assertNotNull(config.getEdits());
+        // check every object has a repo value
+        Assert.assertNotNull(formConfig.getRepo());
+        Assert.assertNotNull(formConfig.getList().getRepo());
+        for(FormEditController c: formConfig.getEdits()){
+            Assert.assertNotNull(c.getId());
+            Assert.assertNotNull(c.getRepo());
+        }
     }
-
 
 }

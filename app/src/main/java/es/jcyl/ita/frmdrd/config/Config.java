@@ -15,17 +15,13 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
-import es.jcyl.ita.frmdrd.config.reader.DummyFormConfigParser;
-import es.jcyl.ita.frmdrd.config.reader.FormConfigParser;
 import es.jcyl.ita.frmdrd.config.reader.XMLFormConfigReader;
+import es.jcyl.ita.frmdrd.config.reader.dummy.DummyFormConfigReader;
 import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Configuration initializer and commons point to store and share configuration parameters.
  */
 public class Config {
@@ -36,11 +32,9 @@ public class Config {
     private static XMLFormConfigReader formConfigReader;
 
 
-
-    public Config(String projectFolder){
+    public Config(String projectFolder) {
         this.projectFolder = projectFolder;
     }
-
 
 
     public void init() {
@@ -55,12 +49,10 @@ public class Config {
         }
     }
 
-    public void read(){
+    public void read() {
         repoConfigReader.read();
-
-        FormConfigParser parser = new DummyFormConfigParser();
-        parser.parseFormConfig("");
-
+        DummyFormConfigReader reader = new DummyFormConfigReader();
+        reader.read(null);
     }
 
     public static RepositoryConfReader getRepoConfigReader() {

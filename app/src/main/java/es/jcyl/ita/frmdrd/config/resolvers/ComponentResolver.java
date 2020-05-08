@@ -29,7 +29,7 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
- * Stores element information for current XML processing process.
+ * Helper class with shortcuts to find elments in the component tree
  */
 public class ComponentResolver {
 

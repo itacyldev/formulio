@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.frmdrd.config.Config;
-import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
 
@@ -37,7 +36,7 @@ public class RepositoryAttributeResolver {
     private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
 
-    public Repository getRepository(ConfigNode node) {
+    public Repository resolve(ConfigNode node) {
         // make sure the repository is uniquely defined
         boolean defined = false;
         String repoAtt = node.getAttribute("repo");
@@ -54,19 +53,23 @@ public class RepositoryAttributeResolver {
         // check if there a direct repository definition with dbFile and dbTable attributes
         String dbFile = node.getAttribute("dbFile");
         String dbTable = node.getAttribute("dbTable");
-        if (StringUtils.isNotBlank(dbFile) || StringUtils.isNotBlank(dbTable)) {
+        boolean isDbFileSet = StringUtils.isNotBlank(dbFile);
+        boolean isTableNameSet = StringUtils.isNotBlank(dbTable);
+        if (isDbFileSet || isTableNameSet) {
             if (defined) {
                 error(String.format("Repository is already defined with attribute 'repo' but a new " +
                                 "definition is found with attributes dbFile and dbTable in form [%s]."
                         , id(node)));
+            } else if (isDbFileSet ^ isTableNameSet) {
+                error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
+                                "must be set in tag {tag} id[%s." , id(node)));
             } else {
                 // try to create a repository from current configuration
-
-                defined = true;
+                return repoReader.createFromFile(dbFile, dbTable);
             }
         }
         // create repository using dbFile and dbTable
-        return repoReader.createFromFile(dbFile, dbTable);
+        return null;
     }
 
     private String id(ConfigNode node) {

@@ -15,18 +15,22 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import java.util.List;
-
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
- * Creates a UIComponent from the read xml configuration
  */
-public interface ComponentBuilder<E> {
+public abstract class AbstractUIComponentBuilder<E extends UIComponent> extends AbstractComponentBuilder<E> {
 
-    E build(ConfigNode<E> node);
+    public AbstractUIComponentBuilder(String tagName, Class<? extends E> clazz) {
+        super(tagName, clazz);
+    }
 
-    void processChildren(ConfigNode<E> node);
+    @Override
+    public void processChildren(ConfigNode<E> node) {
+        UIComponent[] uiComponents = getUIChildren(node);
+        node.getElement().setChildren(uiComponents);
+    }
+
 }

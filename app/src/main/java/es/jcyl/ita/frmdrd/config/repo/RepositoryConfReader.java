@@ -24,6 +24,7 @@ import java.io.File;
 import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.EntitySourceFactory;
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.crtrepo.Source;
 import es.jcyl.ita.crtrepo.builders.EntitySourceBuilder;
 import es.jcyl.ita.crtrepo.builders.RepositoryBuilder;
@@ -40,7 +41,6 @@ import es.jcyl.ita.crtrepo.db.sqlite.meta.SQLiteMetaModeler;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.MetaModeler;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
-import es.jcyl.ita.frmdrd.config.DevConsole;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 

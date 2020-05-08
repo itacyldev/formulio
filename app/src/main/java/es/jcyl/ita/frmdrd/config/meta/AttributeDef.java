@@ -44,7 +44,7 @@ public class AttributeDef {
     // datatable
 
     // repository definition
-    public static Attribute REPO = new Attribute("repo", true);
+    public static Attribute REPO = new Attribute("repo", false);
     public static Attribute DBFILE = new Attribute("dbFile", true);
     public static Attribute DBTABLE = new Attribute("dbTable", true);
 

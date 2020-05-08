@@ -15,18 +15,15 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
 import es.jcyl.ita.frmdrd.config.meta.Attributes;
-import es.jcyl.ita.frmdrd.config.reader.BaseConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.meta.Identifiable;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
@@ -39,37 +36,39 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * Builder that instantiates and element from and specific class and may extend the
  * building process with specific treatment of attributte values or child elements.
  */
-public abstract class AbstractComponentBuilder<E extends Identifiable> extends AbstractBuilder {
+public abstract class AbstractComponentBuilder<E extends Identifiable> implements ComponentBuilder<E> {
 
     protected Map<String, Attribute> attributeDefs;
     private Class<? extends E> elementType;
+    private ComponentBuilderFactory factory;
+//    protected ComponentResolver resolver;
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
-        super(tagName);
         this.attributeDefs = Attributes.getDefinition(tagName);
         this.elementType = clazz;
     }
 
     @Override
-    protected E doBuild() {
+    public E build(ConfigNode<E> node) {
         E element = instantiate();
-        setAttributes(element, this.node);
-        setId(element);
-        doConfigure(element, this.node);
+        setAttributes(element, node);
+//        setId(element);
+        doConfigure(element, node);
         return element;
     }
 
-    /**
-     * Verifies that the element has the id attribute set or creates one based on element tag name.
-     */
-    protected void setId(E element) {
-        if (StringUtils.isBlank(element.getId())) {
-            // number elements with of current tag
-            String tag = this.node.getName();
-            Set<String> tags = this.resolver.getIdsForTag(tag);
-            element.setId(tag + tags.size() + 1); // table1, table2, table3,..
-        }
-    }
+
+//    /**
+//     * Verifies that the element has the id attribute set or creates one based on element tag name.
+//     */
+//    protected void setId(E element) {
+//        if (StringUtils.isBlank(element.getId())) {
+//            // number elements with of current tag
+//            String tag = this.node.getName();
+//            Set<String> tags = this.resolver.getIdsForTag(tag);
+//            element.setId(tag + tags.size() + 1); // table1, table2, table3,..
+//        }
+//    }
 
     /****** Extension points *******/
 
@@ -84,7 +83,7 @@ public abstract class AbstractComponentBuilder<E extends Identifiable> extends A
         }
     }
 
-    protected void setAttributes(E element, BaseConfigNode node) {
+    protected void setAttributes(E element, ConfigNode node) {
         Map<String, String> attributes = node.getAttributes();
         String tagName = node.getName();
         for (Map.Entry<String, String> entry : attributes.entrySet()) {
@@ -99,7 +98,8 @@ public abstract class AbstractComponentBuilder<E extends Identifiable> extends A
                     doWithAttribute(element, attName, entry.getValue());
                 }
             } catch (Exception e) {
-                error(String.format("Error while trying to set attribute [%s] on element [${tag}].", attName), e);
+                throw new ConfigurationException(error(String.format("Error while trying to set " +
+                        "attribute [%s] on element [${tag}].", attName), e), e);
             }
         }
     }
@@ -108,29 +108,65 @@ public abstract class AbstractComponentBuilder<E extends Identifiable> extends A
 
     protected abstract void doConfigure(E element, ConfigNode node);
 
-    /******* Helper methods ********/
 
-    public String getAttribute(String name) {
-        return this.node.getAttributes().get(name);
-    }
+    /******* Helper methods ********/
 
     public List<ConfigNode> getChildren(ConfigNode root, String tagName) {
         List<ConfigNode> kids = new ArrayList<ConfigNode>();
-        for (ConfigNode n : root.getChildren()) {
-            if (n.getName().equals(tagName)) {
-                kids.add(n);
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode n : children) {
+                if (n.getName().equals(tagName)) {
+                    kids.add(n);
+                }
             }
         }
         return kids;
     }
 
-    public UIComponent[] getUIComponents(ConfigNode root) {
+    public List<ConfigNode> getNestedByTag(ConfigNode root, String tagName) {
+        List<ConfigNode> result = new ArrayList<>();
+        findNestedByTag(root, tagName, result);
+        return result;
+    }
+
+    /**
+     * Recursively goes over the component tree storing fields in the given List
+     */
+    private void findNestedByTag(ConfigNode root, String tagName, List<ConfigNode> found) {
+        if (root.getName().equals(tagName)) {
+            found.add(root);
+        } else {
+            if (root.hasChildren()) {
+                List<ConfigNode> children = root.getChildren();
+                for (ConfigNode n : children) {
+                    findNestedByTag(n, tagName, found);
+                }
+            }
+        }
+    }
+//    private find
+
+    public UIComponent[] getUIChildren(ConfigNode root) {
         List<UIComponent> kids = new ArrayList<UIComponent>();
-        for (ConfigNode n : root.getChildren()) {
-            if (n.getElement() instanceof UIComponent)
-                kids.add((UIComponent) n.getElement());
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode n : children) {
+                if (n.getElement() instanceof UIComponent)
+                    kids.add((UIComponent) n.getElement());
+            }
         }
         return kids.toArray(new UIComponent[kids.size()]);
+    }
+
+    /**** internal work methods **/
+
+    public void setFactory(ComponentBuilderFactory factory) {
+        this.factory = factory;
+    }
+
+    protected ComponentBuilderFactory getFactory() {
+        return this.factory;
     }
 
 }

@@ -15,11 +15,12 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import org.mini2Dx.collections.CollectionUtils;
+
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.forms.FCAction;
@@ -50,38 +51,33 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
     @Override
     protected void doConfigure(FormListController ctl, ConfigNode node) {
-        Repository repo = repoResolver.getRepository(this.node);
+        Repository repo = repoResolver.resolve(node);
         ctl.setRepo(repo);
 
         // find nested filter if exists
-        List<ConfigNode> repoFilters = getChildren("repoFilter");
-        if(repoFilters.size()>1)
-            error(String.format("Just one nested repoFilter element can be defined in 'list', found: []", repoFilters.size()));
-        else  if(repoFilters.size()==1){
-            ctl.setFilter((Filter) repoFilters.get(0).getElement());
+        List<ConfigNode> repoFilters = getChildren(node,"repoFilter");
+        if (CollectionUtils.isNotEmpty(repoFilters)) {
+            if (repoFilters.size() > 1)
+                error(String.format("Just one nested repoFilter element can be defined in 'list', found: []", repoFilters.size()));
+            else if (repoFilters.size() == 1) {
+                ctl.setFilter((Filter) repoFilters.get(0).getElement());
+            }
         }
         // find entitySelector
         UIView listView = new UIView(ctl.getId() + ">view");
-        // add nested ui elements
-        UIComponent[] uiComponents = getUIComponents(node);
-        listView.setChildren(uiComponents);
-
-        // TODO: resolver needed here
         ctl.setView(listView);
-//        ctl.setActions(defaultListActions(fcId));
-
-
     }
-    public FCAction[] defaultListActions(String fcId) {
-        FCAction[] actions = new FCAction[3];
-        // save and cancel
-        actions[0] = new FCAction("add", "New", fcId + "#edit");
-        actions[1] = new FCAction("edit", "Edit", fcId + "#edit");
-        actions[2] = new FCAction("delete", "Delete", null);
-        return actions;
+
+    @Override
+    public void processChildren(ConfigNode<FormListController> node) {
+        // add nested ui elements
+        UIComponent[] uiComponents = getUIChildren(node);
+        node.getElement().getView().setChildren(uiComponents);
     }
+
     @Override
     protected FormListController instantiate() {
         return new FormListController("", "");
     }
+
 }

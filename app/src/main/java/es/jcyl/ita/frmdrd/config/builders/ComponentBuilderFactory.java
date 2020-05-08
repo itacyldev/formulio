@@ -22,7 +22,7 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
-import es.jcyl.ita.frmdrd.forms.FormListController;
+import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -35,6 +35,7 @@ public class ComponentBuilderFactory {
     private static ComponentBuilderFactory _instance;
     private static final Map<String, Class<? extends ComponentBuilder>> _builders = new HashMap<>();
     private ComponentResolver componentResolver;
+    private RepositoryAttributeResolver repoAttResolver;
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -47,11 +48,18 @@ public class ComponentBuilderFactory {
         // default registering
         registerBuilder("main", FormConfigBuilder.class);
         registerBuilder("list", FormListControllerBuilder.class);
+        registerBuilder("edit", FormEditControllerBuilder.class);
         registerBuilder("form", FormBuilder.class);
+
+        repoAttResolver = new RepositoryAttributeResolver();
     }
 
     public void registerBuilder(String tagName, Class<? extends ComponentBuilder> builder) {
         _builders.put(tagName, builder);
+    }
+
+    public <T> ComponentBuilder<T> getBuilder(String tagName, Class<T> type) {
+        return (ComponentBuilder<T>) getBuilder(tagName);
     }
 
     public ComponentBuilder getBuilder(String tagName) {
@@ -61,7 +69,9 @@ public class ComponentBuilderFactory {
             builderClass = DefaultComponentBuilder.class;
         }
         ComponentBuilder builder = newComponentBuilder(builderClass, tagName);
-        builder.setName(tagName);
+        if (builder == null) {
+            throw new ConfigurationException("No builder found for tagName: " + tagName);
+        }
 
         return builder;
     }
@@ -74,17 +84,18 @@ public class ComponentBuilderFactory {
         } catch (Exception e) {
         }
         // try with one String parameter
-        try {
-            builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
-        } catch (Exception e) {
-            String msg = String.format("Class [%s] couldn't be instantiated, check it has a " +
-                    "no-parameter constructor or a constructor with one string parameter " +
-                    "(tagName).", clazz.getName());
-            throw new ConfigurationException(error(msg, e), e);
+        if (builder == null) {
+            try {
+                builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
+            } catch (Exception e) {
+                String msg = String.format("Class [%s] couldn't be instantiated, check it has a " +
+                        "no-parameter constructor or a constructor with one string parameter " +
+                        "(tagName).", clazz.getName());
+                throw new ConfigurationException(error(msg, e), e);
+            }
         }
         if (builder instanceof AbstractComponentBuilder) {
-            // common builder configuration
-            ((AbstractComponentBuilder) builder).setResolver(this.componentResolver);
+            ((AbstractComponentBuilder) builder).setFactory(this);
         }
         return builder;
     }
@@ -93,7 +104,21 @@ public class ComponentBuilderFactory {
         this.xpp = xpp;
     }
 
+    /**
+     * Externally created and initialized
+     *
+     * @param componentResolver
+     */
     public void setComponentResolver(ComponentResolver componentResolver) {
         this.componentResolver = componentResolver;
+    }
+
+
+    public ComponentResolver getComponentResolver() {
+        return componentResolver;
+    }
+
+    public RepositoryAttributeResolver getRepoAttResolver() {
+        return repoAttResolver;
     }
 }
