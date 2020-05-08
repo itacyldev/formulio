@@ -65,10 +65,6 @@ public class RepositoryAttributeResolver {
                 defined = true;
             }
         }
-        if (!defined) {
-            throw new ConfigurationException(error(String.format("No proper repository configuration in form [%s], check " +
-                    "configuration file ${file}. ", id(node))));
-        }
         // create repository using dbFile and dbTable
         return repoReader.createFromFile(dbFile, dbTable);
     }
