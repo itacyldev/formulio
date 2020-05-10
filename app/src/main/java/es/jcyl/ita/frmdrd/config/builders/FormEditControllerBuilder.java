@@ -18,16 +18,19 @@ package es.jcyl.ita.frmdrd.config.builders;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
-import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
@@ -40,6 +43,8 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  */
 public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEditController> {
     private static RepositoryAttributeResolver repoResolver;
+
+    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("new", "update", "cancel", "delete", "nav"));
 
 
     public FormEditControllerBuilder(String tagName) {
@@ -70,12 +75,6 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         UIView view = new UIView(ctl.getId() + ">view");
         ctl.setView(view);
 
-        // check if there's a defined form
-        setUpForms(ctl, node);
-
-        // add first-level nested ui elements
-        UIComponent[] uiComponents = getUIChildren(node);
-        view.setChildren(uiComponents);
 
 //        ctl.setActions(defaultListActions(fcId));
 
@@ -89,14 +88,15 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
     }
 
-    private void setUpForms(FormEditController ctl, ConfigNode node) {
+    private void setUpForms(ConfigNode<FormEditController> node) {
+        FormEditController ctl = node.getElement();
         // get nested forms
         List<ConfigNode> forms = getNestedByTag(node, "form");
         int numForms = forms.size();
         UIForm mainForm = null;
         if (numForms == 0) {
             // create default form using current node attributes
-            mainForm = createDefaultForm(ctl, node);
+            mainForm = createDefaultForm(node);
             ctl.getView().addChild(mainForm);
         } else if (numForms == 1) {
             mainForm = (UIForm) forms.get(0).getElement();
@@ -126,28 +126,47 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
         }
         ctl.setMainForm(mainForm);
+        // add forms
     }
 
     /**
      * Gets form builder and use current node values to create the
      *
-     * @param ctl
-     * @param node
+     * @param node: configuration node containing the form information
      * @return
      */
-    private UIForm createDefaultForm(FormEditController ctl, ConfigNode node) {
+    private UIForm createDefaultForm(ConfigNode<FormEditController> node) {
         ComponentBuilder<UIForm> formBuilder = this.getFactory().getBuilder("form", UIForm.class);
-        UIForm form = formBuilder.build(node);
+        UIForm form = formBuilder.build((ConfigNode) node);
         return form;
     }
 
-    public FCAction[] defaultListActions(String fcId) {
-        FCAction[] actions = new FCAction[3];
-        // save and cancel
-        actions[0] = new FCAction("add", "New", fcId + "#edit");
-        actions[1] = new FCAction("edit", "Edit", fcId + "#edit");
-        actions[2] = new FCAction("delete", "Delete", null);
-        return actions;
+
+    @Override
+    public void processChildren(ConfigNode<FormEditController> node) {
+        // add nested ui elements
+        UIComponent[] uiComponents = getUIChildren(node);
+        node.getElement().getView().setChildren(uiComponents);
+
+        setUpForms(node);
+        setUpActions(node);
+    }
+
+
+    /**
+     * Searchs for actions in nested configuration
+     *
+     * @param node
+     */
+    private void setUpActions(ConfigNode<FormEditController> node) {
+        List<ConfigNode> actions = getNestedByTag(node, ACTION_SET);
+        FCAction[] lstActions = new FCAction[actions.size()];
+
+        for (int i = 0; i < actions.size(); i++) {
+            lstActions[i] = (FCAction) actions.get(i).getElement();
+            lstActions[i].setType(actions.get(i).getName());
+        }
+        node.getElement().setActions(lstActions);
     }
 
     @Override
@@ -155,10 +174,4 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         return new FormEditController("", "");
     }
 
-    @Override
-    public void processChildren(ConfigNode<FormEditController> node) {
-        // add nested ui elements
-        UIComponent[] uiComponents = getUIChildren(node);
-        node.getElement().getView().setChildren(uiComponents);
-    }
 }

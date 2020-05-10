@@ -134,6 +134,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     PERMISSION_REQUEST);
         } else {
             config.init();
+            config.read();
         }
     }
 

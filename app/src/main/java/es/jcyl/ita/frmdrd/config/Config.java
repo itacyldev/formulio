@@ -15,7 +15,9 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.reader.XMLFormConfigReader;
+import android.net.Uri;
+
+import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
 import es.jcyl.ita.frmdrd.config.reader.dummy.DummyFormConfigReader;
 import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
 
@@ -29,7 +31,7 @@ public class Config {
     private static boolean configLoaded = false;
     private String projectFolder;
     private static RepositoryConfReader repoConfigReader;
-    private static XMLFormConfigReader formConfigReader;
+    private static XMLFileFormConfigReader formConfigReader;
 
 
     public Config(String projectFolder) {
@@ -52,14 +54,14 @@ public class Config {
     public void read() {
         repoConfigReader.read();
         DummyFormConfigReader reader = new DummyFormConfigReader();
-        reader.read(null);
+        reader.read("conf1", Uri.EMPTY);
     }
 
     public static RepositoryConfReader getRepoConfigReader() {
         return repoConfigReader;
     }
 
-    public static XMLFormConfigReader getFormConfigReader() {
+    public static XMLFileFormConfigReader getFormConfigReader() {
         return formConfigReader;
     }
 }

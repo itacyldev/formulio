@@ -15,10 +15,7 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import java.util.Map;
-
-import es.jcyl.ita.frmdrd.config.meta.Attribute;
-import es.jcyl.ita.frmdrd.config.meta.Attributes;
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 

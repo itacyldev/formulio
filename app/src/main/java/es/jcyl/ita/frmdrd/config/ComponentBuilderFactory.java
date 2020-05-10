@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -20,9 +20,15 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.frmdrd.config.builders.DefaultComponentBuilder;
+import es.jcyl.ita.frmdrd.config.builders.FormBuilder;
+import es.jcyl.ita.frmdrd.config.builders.FormConfigBuilder;
+import es.jcyl.ita.frmdrd.config.builders.FormEditControllerBuilder;
+import es.jcyl.ita.frmdrd.config.builders.FormListControllerBuilder;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
+import es.jcyl.ita.frmdrd.forms.FCAction;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -33,7 +39,7 @@ public class ComponentBuilderFactory {
 
     private XmlPullParser xpp;
     private static ComponentBuilderFactory _instance;
-    private static final Map<String, Class<? extends ComponentBuilder>> _builders = new HashMap<>();
+    private static final Map<String, ComponentBuilder> _builders = new HashMap<>();
     private ComponentResolver componentResolver;
     private RepositoryAttributeResolver repoAttResolver;
 
@@ -46,15 +52,24 @@ public class ComponentBuilderFactory {
 
     private ComponentBuilderFactory() {
         // default registering
-        registerBuilder("main", FormConfigBuilder.class);
-        registerBuilder("list", FormListControllerBuilder.class);
-        registerBuilder("edit", FormEditControllerBuilder.class);
-        registerBuilder("form", FormBuilder.class);
+        registerBuilder("main", newBuilder(FormConfigBuilder.class, "main"));
+        registerBuilder("list", newBuilder(FormListControllerBuilder.class, "list"));
+        registerBuilder("edit", newBuilder(FormEditControllerBuilder.class, "edit"));
+        registerBuilder("form", newBuilder(FormBuilder.class, "form"));
+
+        ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
+        // same component builder with different alias
+        registerBuilder("nav", defaultActionBuilder);
+        registerBuilder("new", defaultActionBuilder);
+        registerBuilder("update", defaultActionBuilder);
+        registerBuilder("delete", defaultActionBuilder);
+        registerBuilder("cancel", defaultActionBuilder);
 
         repoAttResolver = new RepositoryAttributeResolver();
     }
 
-    public void registerBuilder(String tagName, Class<? extends ComponentBuilder> builder) {
+
+    public void registerBuilder(String tagName, ComponentBuilder builder) {
         _builders.put(tagName, builder);
     }
 
@@ -63,20 +78,23 @@ public class ComponentBuilderFactory {
     }
 
     public ComponentBuilder getBuilder(String tagName) {
-        Class builderClass = _builders.get(tagName);
-        if (builderClass == null) {
-            // use default builder
-            builderClass = DefaultComponentBuilder.class;
-        }
-        ComponentBuilder builder = newComponentBuilder(builderClass, tagName);
-        if (builder == null) {
-            throw new ConfigurationException("No builder found for tagName: " + tagName);
-        }
+        ComponentBuilder builder = _builders.get(tagName);
+//        if (builder == null) {
+//            // create default builder for this tag and register
+//            registerBuilder(tagName, new ComponentBuilder() {
+//
+//            // use default builder
+//            builderClass = DefaultComponentBuilder.class;
+//        }
+//        ComponentBuilder builder = newComponentBuilder(builderClass, tagName);
+//        if (builder == null) {
+//            throw new ConfigurationException("No builder found for tagName: " + tagName);
+//        }
 
         return builder;
     }
 
-    private ComponentBuilder newComponentBuilder(Class clazz, String tagName) {
+    private ComponentBuilder newBuilder(Class clazz, String tagName) {
         ComponentBuilder builder = null;
         // try with no parameter
         try {
@@ -94,11 +112,16 @@ public class ComponentBuilderFactory {
                 throw new ConfigurationException(error(msg, e), e);
             }
         }
-        if (builder instanceof AbstractComponentBuilder) {
-            ((AbstractComponentBuilder) builder).setFactory(this);
-        }
+        ((AbstractComponentBuilder) builder).setFactory(this);
         return builder;
     }
+
+    private ComponentBuilder newDefaultBuilder(Class elementType, String tag) {
+        AbstractComponentBuilder builder = new DefaultComponentBuilder(tag, elementType);
+        builder.setFactory(this);
+        return builder;
+    }
+
 
     public void setXmlParser(XmlPullParser xpp) {
         this.xpp = xpp;

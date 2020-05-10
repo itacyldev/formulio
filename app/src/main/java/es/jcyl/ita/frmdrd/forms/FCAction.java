@@ -15,20 +15,21 @@ package es.jcyl.ita.frmdrd.forms;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.actions.UserAction;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * 
+ * <p>
  * Allowed user actions/buttons to be shown in the FormController interface
  */
 public class FCAction {
 
-    private final String label;
-    private final String type;
-    private final String route;
+    private String label;
+    private String type;
+    private String route;
 
-    public FCAction(String type, String label, String route){
+    public FCAction() {
+    }
+
+    public FCAction(String type, String label, String route) {
         this.type = type;
         this.label = label;
         this.route = route;
@@ -44,5 +45,17 @@ public class FCAction {
 
     public String getType() {
         return type;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
     }
 }

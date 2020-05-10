@@ -18,14 +18,18 @@ package es.jcyl.ita.frmdrd.config.builders;
 import org.mini2Dx.beanutils.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
 import es.jcyl.ita.frmdrd.config.meta.Attributes;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.meta.Identifiable;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -36,7 +40,7 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * Builder that instantiates and element from and specific class and may extend the
  * building process with specific treatment of attributte values or child elements.
  */
-public abstract class AbstractComponentBuilder<E extends Identifiable> implements ComponentBuilder<E> {
+public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E> {
 
     protected Map<String, Attribute> attributeDefs;
     private Class<? extends E> elementType;
@@ -126,21 +130,28 @@ public abstract class AbstractComponentBuilder<E extends Identifiable> implement
 
     public List<ConfigNode> getNestedByTag(ConfigNode root, String tagName) {
         List<ConfigNode> result = new ArrayList<>();
-        findNestedByTag(root, tagName, result);
+        Set<String> set = new HashSet<>(Arrays.asList(tagName));
+        findNestedByTag(root, set, result);
+        return result;
+    }
+
+    public List<ConfigNode> getNestedByTag(ConfigNode root, Set<String> tagNames) {
+        List<ConfigNode> result = new ArrayList<>();
+        findNestedByTag(root, tagNames, result);
         return result;
     }
 
     /**
      * Recursively goes over the component tree storing fields in the given List
      */
-    private void findNestedByTag(ConfigNode root, String tagName, List<ConfigNode> found) {
-        if (root.getName().equals(tagName)) {
+    private void findNestedByTag(ConfigNode root, Set<String> tagNames, List<ConfigNode> found) {
+        if (tagNames.contains(root.getName())) {
             found.add(root);
         } else {
             if (root.hasChildren()) {
                 List<ConfigNode> children = root.getChildren();
                 for (ConfigNode n : children) {
-                    findNestedByTag(n, tagName, found);
+                    findNestedByTag(n, tagNames, found);
                 }
             }
         }

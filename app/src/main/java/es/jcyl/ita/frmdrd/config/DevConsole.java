@@ -17,19 +17,24 @@ package es.jcyl.ita.frmdrd.config;
 
 import android.util.Log;
 
+import org.apache.commons.jexl3.MapContext;
 import org.xmlpull.v1.XmlPullParser;
 
-import java.util.logging.Level;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class DevConsole {
 
-    private static String currentFile;
-    private static String currentTag;
     private static XmlPullParser xpp;
     private static boolean hasError;
+    private static MapContext ctx;
+    private static String currentFile;
+
+    public static void clear() {
+        ctx.clear();
+    }
 
     public static String error(String msg) {
         // TODO: link log library
@@ -53,18 +58,22 @@ public class DevConsole {
 
     //
     private static void _writeMsg(int errorLevel, String msg) {
-        System.out.println(msg);
+        System.out.println(JexlUtils.eval(ctx, msg));
     }
 
     public static void setCurrentFile(String filePath) {
-        currentFile = filePath;hasError = false;
+        ctx = new MapContext();
+        ctx.set("file", filePath);
+        currentFile = filePath;
+        hasError = false;
     }
-    public static boolean  hasCurrentFileError(){
+
+    public static boolean hasCurrentFileError() {
         return hasError;
     }
 
     public static void setCurrentElement(String tag) {
-        currentTag = tag;
+        ctx.set("tag", tag);
     }
 
     public static void setParser(XmlPullParser xpp) {

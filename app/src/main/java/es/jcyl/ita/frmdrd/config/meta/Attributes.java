@@ -61,6 +61,14 @@ public class Attributes {
         register("text", baseInput);
         register("date", baseInput);
 
+        Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL});
+        register("action", actionAttributes);
+        register("new", actionAttributes);
+        register("update", actionAttributes);
+        register("nav", actionAttributes);
+        register("cancel", actionAttributes);
+        register("delete", actionAttributes);
+
         register("link", define(baseDesc, new Attribute[]{ROUTE}));
 
     }

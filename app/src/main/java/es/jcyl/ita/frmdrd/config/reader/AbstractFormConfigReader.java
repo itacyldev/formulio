@@ -1,19 +1,17 @@
 package es.jcyl.ita.frmdrd.config.reader;
 
+import android.net.Uri;
+
 import org.mini2Dx.collections.CollectionUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.stream.Stream;
 
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
-
-import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -39,35 +37,15 @@ public abstract class AbstractFormConfigReader {
     FormControllerFactory controllerFactory = FormControllerFactory.getInstance();
 
 
-    public FormConfig read(File file) throws ConfigurationException {
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            throw new ConfigurationException(error("Error while trying to read configuration file: " + file.getAbsolutePath()));
-        }
-        return read(file.getAbsolutePath(), is);
-    }
-
-    public FormConfig read(String name, File file) throws ConfigurationException {
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            throw new ConfigurationException(error("Error while trying to read configuration file: " + file.getAbsolutePath()));
-        }
-        return read(name, is);
-    }
-
+    public abstract FormConfig read(String name, Uri uri) throws ConfigurationException;
     public abstract FormConfig read(String name, InputStream is) throws ConfigurationException;
-
 
     protected void register(FormController form) {
         controllerFactory.register(form);
     }
 
     protected void register(FormConfig formConfig) {
-        controllerFactory.register(formConfig.getList());
+        register(formConfig.getList());
         if (CollectionUtils.isNotEmpty(formConfig.getEdits())) {
             for (FormEditController edit : formConfig.getEdits()) {
                 register(edit);

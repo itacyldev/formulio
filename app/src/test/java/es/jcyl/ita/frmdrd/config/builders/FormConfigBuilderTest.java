@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,8 +15,6 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
-import android.net.Uri;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,9 +29,12 @@ import java.io.InputStream;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
+import es.jcyl.ita.frmdrd.config.Config;
+import es.jcyl.ita.frmdrd.config.ConfigConverters;
+import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
-import es.jcyl.ita.frmdrd.config.reader.dummy.DummyFormConfigReader;
+import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 
@@ -43,7 +44,7 @@ import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
  * Tests to check commons-converters functionallity
  */
 @RunWith(RobolectricTestRunner.class)
-public class TestXmlConfigReader {
+public class FormConfigBuilderTest {
 
     @BeforeClass
     public static void setUp() {
@@ -53,27 +54,20 @@ public class TestXmlConfigReader {
         confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
-
-
     }
-    @Test
-    public void testMeausreMethod(){
 
-        DummyFormConfigReader reader = new DummyFormConfigReader();
-        reader.read("",Uri.EMPTY);
-    }
 
     /**
      * Reads basic xml and checks the configNode tree is correctly read.
+     *
      * @throws Exception
      */
     @Test
-    public void testReadConfigNodes() throws Exception {
-        XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
+    public void testReadNodeTree() throws Exception {
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
 
         File file = TestUtils.findFile("config/formConfig.xml");
-
         InputStream is = new FileInputStream(file);
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput(is, null);
@@ -81,7 +75,7 @@ public class TestXmlConfigReader {
         ConfigNode node = reader.readFile(xpp);
 
         Assert.assertNotNull(node);
-        // check attributes
+        // check main attributes
         Assert.assertNotNull(node.getName());
         Assert.assertNotNull(node.getAttribute("description"));
         Assert.assertNotNull(node.getAttribute("name"));
@@ -100,14 +94,18 @@ public class TestXmlConfigReader {
         // edit2
         Assert.assertEquals(kids.get(2).getName(), "edit");
         Assert.assertNotNull(kids.get(2).getId());
+
+        // check controllers
     }
 
     @Test
-    public void testBasicBuild() throws Exception {
+    public void testFormConfigCreation() throws Exception {
         File file = TestUtils.findFile("config/formConfig.xml");
         XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
 
-        FormConfig formConfig = reader.read("test1", Uri.fromFile(file));
+        InputStream is = new FileInputStream(file);
+
+        FormConfig formConfig = reader.read("test1", is);
         Assert.assertNotNull(formConfig);
         Assert.assertNotNull(formConfig.getList());
         Assert.assertNotNull(formConfig.getEdits());
@@ -118,9 +116,27 @@ public class TestXmlConfigReader {
         // check every object has a repo value
         Assert.assertNotNull(formConfig.getRepo());
         Assert.assertNotNull(formConfig.getList().getRepo());
-        for(FormEditController c: formConfig.getEdits()){
+        for (FormEditController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
             Assert.assertNotNull(c.getRepo());
+        }
+
+        // check FormListController actions
+        FCAction[] actions = formConfig.getList().getActions();
+        // check is not null, and all of them have a route and label
+        for (FCAction action : actions) {
+            Assert.assertNotNull(action.getLabel());
+            Assert.assertNotNull(action.getRoute());
+            Assert.assertNotNull(action.getType());
+        }
+
+        // check editViews have a defaultForm nested
+        for(FormEditController edit: formConfig.getEdits()){
+            Assert.assertNotNull(edit.getMainForm());
+            Assert.assertNotNull(edit.getActions());
+            for (FCAction action : edit.getActions()) {
+                Assert.assertNotNull(action.getType());
+            }
         }
     }
 

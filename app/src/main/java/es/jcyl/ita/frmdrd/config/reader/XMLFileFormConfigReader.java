@@ -15,11 +15,15 @@ package es.jcyl.ita.frmdrd.config.reader;
  * limitations under the License.
  */
 
+import android.net.Uri;
+
 import org.apache.commons.lang3.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -27,11 +31,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.builders.ComponentBuilder;
-import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
 import es.jcyl.ita.frmdrd.config.meta.Attributes;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
@@ -46,13 +50,13 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * that uses builders to create view components and controllers.
  */
 
-public class XMLFormConfigReader extends AbstractFormConfigReader {
+public class XMLFileFormConfigReader extends AbstractFormConfigReader {
 
     private XmlPullParserFactory factory;
     private ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
     private ComponentResolver resolver;
 
-    public XMLFormConfigReader() throws XmlPullParserException {
+    public XMLFileFormConfigReader() throws XmlPullParserException {
         this.factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(false);
         resolver = new ComponentResolver();
@@ -60,16 +64,13 @@ public class XMLFormConfigReader extends AbstractFormConfigReader {
     }
 
 
-    /**
-     * If name attribute has not been set, use the file name as default value
-     *
-     * @param config
-     */
-    private void checkName(FormConfig config, String fileName) {
-        // get default name, in case it hasn't been set in the "form" tag
-        if (StringUtils.isBlank(config.getName())) {
-            String defName = fileName.substring(0, fileName.lastIndexOf("."));
-            config.setName(defName);
+    @Override
+    public FormConfig read(String name, Uri uri) throws ConfigurationException {
+        try {
+            // works just for file schemes!!!!
+            return read(name, new FileInputStream(uri.getPath()));
+        } catch (FileNotFoundException e) {
+            throw new ConfigurationException("Error while opening config file " + uri.toString(), e);
         }
     }
 
@@ -98,6 +99,19 @@ public class XMLFormConfigReader extends AbstractFormConfigReader {
             throw new ConfigurationException("An error occurred during configuration reading, check developer console.");
         }
         return config;
+    }
+
+    /**
+     * If name attribute has not been set, use the file name as default value
+     *
+     * @param config
+     */
+    private void checkName(FormConfig config, String fileName) {
+        // get default name, in case it hasn't been set in the "form" tag
+        if (StringUtils.isBlank(config.getName())) {
+            String defName = fileName.substring(0, fileName.lastIndexOf("."));
+            config.setName(defName);
+        }
     }
 
     public ConfigNode readFile(XmlPullParser xpp) throws IOException, XmlPullParserException {
@@ -150,15 +164,18 @@ public class XMLFormConfigReader extends AbstractFormConfigReader {
     }
 
     private void build(ConfigNode root) {
-
         ComponentBuilder builder = builderFactory.getBuilder(root.getName());
-        Object element = builder.build(root);
-        root.setElement(element);
+        if (builder != null) {
+            Object element = builder.build(root);
+            root.setElement(element);
+        }
         List<ConfigNode> children = root.getChildren();
         for (ConfigNode kid : children) {
             build(kid);
         }
-        builder.processChildren(root);
+        if (builder != null) {
+            builder.processChildren(root);
+        }
     }
 
 //
@@ -225,7 +242,7 @@ public class XMLFormConfigReader extends AbstractFormConfigReader {
                 idResolver.addComponentId(value, xpp.getName());
             }
             if (!isAttributeSupported(attributesDef, attName)) {
-                error(String.format("Unsupported attribute: [%s] in component ${tag}.", attName));
+                error(String.format("Unsupported attribute: '%s' in element <${tag}/> in file '${file}'.", attName));
             } else {
                 node.getAttributes().put(attName, value);
             }
@@ -235,4 +252,5 @@ public class XMLFormConfigReader extends AbstractFormConfigReader {
     protected boolean isAttributeSupported(Map<String, Attribute> attributes, String attName) {
         return (attributes == null) ? false : attributes.containsKey(attName);
     }
+
 }

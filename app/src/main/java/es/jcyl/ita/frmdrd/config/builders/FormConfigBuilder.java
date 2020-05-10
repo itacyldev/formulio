@@ -84,15 +84,15 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         if (ArrayUtils.isEmpty(listCtl.getActions())) {
             // we can set default list-actions just if there's only one (and only one) editView
             int numEditViews = edits.size();
-            if(numEditViews == 0){
+            if (numEditViews == 0) {
                 warn("List-view with no edit-views in file ${file}, no default actions added.");
-            } else if(numEditViews >1){
+            } else if (numEditViews > 1) {
                 throw new ConfigurationException(error("List-view with more that one edit-view " +
                         "and with no actions defined!. When you have more that one <edit/> in a form, " +
                         "you have to use <actions/> element in the <list/> to define with view will " +
                         "be navigated from the list."));
             } else {
-                // setup defaul views
+                // setup default views
                 FormEditController editCtl = edits.get(0);
                 FCAction[] listActions = defaultListActions(editCtl.getId());
                 listCtl.setActions(listActions);
@@ -121,7 +121,9 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
             ConfigNode listNode = node.copy();
             String listId = formConfig.getId() + "#list";
             listController = new FormListController(listId, "list");
+            listNode.setElement(listController);
             listBuilder.doConfigure(listController, listNode);
+            listBuilder.processChildren(listNode);
         }
 
         // if repo attribute is not defined use parent repo
@@ -142,10 +144,12 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
             }
         } else {
             // if no edit found, create one using main node attributes
-            ConfigNode listNode = node.copy();
+            ConfigNode editNode = node.copy();
             String listId = formConfig.getId() + "#edit";
             FormEditController editController = new FormEditController(listId, "edit");
-            editBuilder.doConfigure(editController, listNode);
+            editNode.setElement(editController);
+            editBuilder.doConfigure(editController, editNode);
+            editBuilder.processChildren(editNode);
             edits.add(editController);
         }
         // if no repo is defined, use parent's
@@ -166,11 +170,10 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
      * @return
      */
     private FCAction[] defaultEditActions(String fcListId) {
-        FCAction[] actions = new FCAction[4];
+        FCAction[] actions = new FCAction[2];
         // save and cancel
         actions[0] = new FCAction("save", "Save", "back");
-        actions[2] = new FCAction("delete", "Delete", "back");
-        actions[3] = new FCAction("cancel", "Cancel", fcListId);
+        actions[1] = new FCAction("cancel", "Cancel", fcListId);
         return actions;
     }
 

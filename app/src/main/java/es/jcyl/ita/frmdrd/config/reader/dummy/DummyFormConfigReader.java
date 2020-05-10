@@ -1,5 +1,7 @@
 package es.jcyl.ita.frmdrd.config.reader.dummy;
 
+import android.net.Uri;
+
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.InputStream;
@@ -19,7 +21,8 @@ import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.builders.FormConfigBuilder;
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.reader.AbstractFormConfigReader;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
@@ -66,11 +69,36 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     AutoCompleteBuilder autoCompleteBuilder = new AutoCompleteBuilder();
 
+    ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
+
+
+    @Override
+    public FormConfig read(String name, Uri uri) throws ConfigurationException {
+        return read(name, (InputStream)null);
+    }
 
     @Override
     public FormConfig read(String name, InputStream is) throws ConfigurationException {
 
-        FormConfigBuilder builder = new FormConfigBuilder("main");
+        FormConfig formConfig = createFormTest1();
+
+//        EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
+//
+//        result = fcBuilder.withRepo(inspecRepo).build();
+//        loadConfig(result.getEdit());
+//        loadConfig(result.getList());
+//
+//        result = fcBuilder.withRepo(contactsRepo).withId("formContacts2").build();
+//        loadConfig(result.getEdit());
+//        loadConfig(result.getList());
+//        createTableFilterView(result.getEdit());
+//
+//        createAgentsForm();
+        return formConfig;
+    }
+
+    private FormConfig createFormTest1() {
+        ComponentBuilder<FormConfig> builder = builderFactory.getBuilder("main", FormConfig.class);
 
         ConfigNode<FormConfig> node = new ConfigNode<>("main");
         node.setAttribute("repo", "contacts");
@@ -115,19 +143,6 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
         select2.setValueProperty("id");
         select2.setOptionLabelExpression(exprFactory.create("${entity.last_name}"));
         select2.setLabelFilteringProperty("last_name");
-
-//        EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
-//
-//        result = fcBuilder.withRepo(inspecRepo).build();
-//        loadConfig(result.getEdit());
-//        loadConfig(result.getList());
-//
-//        result = fcBuilder.withRepo(contactsRepo).withId("formContacts2").build();
-//        loadConfig(result.getEdit());
-//        loadConfig(result.getList());
-//        createTableFilterView(result.getEdit());
-//
-//        createAgentsForm();
         return formConfig;
     }
 

@@ -41,7 +41,6 @@ public class AttributeDef {
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
 
-    // datatable
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", false);

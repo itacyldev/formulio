@@ -17,7 +17,10 @@ package es.jcyl.ita.frmdrd.config.builders;
 
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
@@ -38,6 +41,8 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  */
 public class FormListControllerBuilder extends AbstractComponentBuilder<FormListController> {
 
+    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("new", "update", "cancel", "delete", "nav"));
+
     private static RepositoryAttributeResolver repoResolver = new RepositoryAttributeResolver();
 
     public FormListControllerBuilder(String tagName) {
@@ -55,7 +60,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         ctl.setRepo(repo);
 
         // find nested filter if exists
-        List<ConfigNode> repoFilters = getChildren(node,"repoFilter");
+        List<ConfigNode> repoFilters = getChildren(node, "repoFilter");
         if (CollectionUtils.isNotEmpty(repoFilters)) {
             if (repoFilters.size() > 1)
                 error(String.format("Just one nested repoFilter element can be defined in 'list', found: []", repoFilters.size()));
@@ -73,6 +78,24 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         // add nested ui elements
         UIComponent[] uiComponents = getUIChildren(node);
         node.getElement().getView().setChildren(uiComponents);
+
+        setUpActions(node);
+    }
+
+    /**
+     * Searchs for actions in nested configuration
+     *
+     * @param node
+     */
+    private void setUpActions(ConfigNode<FormListController> node) {
+        List<ConfigNode> actions = getNestedByTag(node, ACTION_SET);
+        FCAction[] lstActions = new FCAction[actions.size()];
+
+        for (int i = 0; i < actions.size(); i++) {
+            lstActions[i] = (FCAction) actions.get(i).getElement();
+            lstActions[i].setType(actions.get(i).getName());
+        }
+        node.getElement().setActions(lstActions);
     }
 
     @Override

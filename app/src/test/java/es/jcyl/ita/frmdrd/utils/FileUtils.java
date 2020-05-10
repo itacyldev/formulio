@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.utils;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,33 +15,28 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.ComponentBuilder;
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.meta.Identifiable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Supportting class to hold configu
  */
-public class DefaultComponentBuilder extends AbstractComponentBuilder {
+public class FileUtils {
 
-    public DefaultComponentBuilder(String tagName, Class clazz) {
-        super(tagName, clazz);
-    }
-
-    @Override
-    protected void doWithAttribute(Object element, String name, String value) {
-
-    }
-
-    @Override
-    protected void doConfigure(Object element, ConfigNode node) {
-
-    }
-
-    @Override
-    public void processChildren(ConfigNode node) {
-
+    public static InputStream createStream(String string) {
+        File file = null;
+        try {
+            file = File.createTempFile("xml-test", ".xml");
+            file.deleteOnExit();
+            PrintWriter out = new PrintWriter(file);
+            out.write(string);
+            out.close();
+            return new FileInputStream(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
