@@ -32,7 +32,7 @@ import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
+import es.jcyl.ita.frmdrd.builders.UIDatatableBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
@@ -49,7 +49,7 @@ public class DataTableBuilderTest {
 
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    DataTableBuilder dtBuilder = new DataTableBuilder();
+    UIDatatableBuilder dtBuilder = new UIDatatableBuilder("datatable");
 
     @BeforeClass
     public static void setUp() {

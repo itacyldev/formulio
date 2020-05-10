@@ -34,6 +34,7 @@ public class ConfigNode<E> {
     private List<String> texts;
     // related object built from current node information
     private E element;
+    private ConfigNode parent;
 
     public ConfigNode(String tag) {
         this.name = tag;
@@ -92,6 +93,7 @@ public class ConfigNode<E> {
         if (children == null) {
             this.children = new ArrayList<>();
         }
+        kid.setParent(this);
         this.children.add(kid);
     }
 
@@ -122,5 +124,13 @@ public class ConfigNode<E> {
         n.getAttributes().putAll(this.attributes);
         n.setChildren(this.children);
         return n;
+    }
+
+    public ConfigNode getParent() {
+        return parent;
+    }
+
+    public void setParent(ConfigNode parent) {
+        this.parent = parent;
     }
 }

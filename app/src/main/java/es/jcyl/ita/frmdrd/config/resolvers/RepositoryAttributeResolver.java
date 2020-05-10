@@ -41,11 +41,8 @@ public class RepositoryAttributeResolver {
         boolean defined = false;
         String repoAtt = node.getAttribute("repo");
         if (StringUtils.isNotBlank(repoAtt)) {
-            // find repository
-            Repository repo = this.repoFactory.getRepo(repoAtt);
-            if (repo == null) {
-                error(String.format("Invalid repo Id found: [%s] in form [%s].", repoAtt, id(node)));
-            } else {
+            Repository repo = getRepoById(node, repoAtt);
+            if (repo != null) {
                 return repo;
             }
         }
@@ -62,14 +59,51 @@ public class RepositoryAttributeResolver {
                         , id(node)));
             } else if (isDbFileSet ^ isTableNameSet) {
                 error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                                "must be set in tag {tag} id[%s." , id(node)));
+                        "must be set in tag {tag} id[%s.", id(node)));
             } else {
                 // try to create a repository from current configuration
                 return repoReader.createFromFile(dbFile, dbTable);
             }
         }
-        // create repository using dbFile and dbTable
+
+        // try to find repository Id in an ancestor
+        String parentRepoId = findParentRepo(node);
+        if (parentRepoId != null) {
+            Repository repo = getRepoById(node, parentRepoId);
+            return repo;
+        }
+
         return null;
+    }
+
+    private Repository getRepoById(ConfigNode node, String repoAtt) {
+        // find repository
+        Repository repo = this.repoFactory.getRepo(repoAtt);
+        if (repo == null) {
+            error(String.format("Invalid repo Id found: [%s] in form [%s].", repoAtt, id(node)));
+        } else {
+            return repo;
+        }
+        return null;
+    }
+
+    /**
+     * Goes up in the node hierarchy to find a parent with a "repo" attribute set
+     *
+     * @param root
+     * @return
+     */
+    private String findParentRepo(ConfigNode root) {
+        ConfigNode node = root.getParent();
+        String repoId = null;
+        while (node != null) {
+            repoId = node.getAttribute("repo");
+            if (StringUtils.isNotBlank(repoId)) {
+                return repoId;
+            }
+            node = node.getParent();
+        }
+        return repoId;
     }
 
     private String id(ConfigNode node) {

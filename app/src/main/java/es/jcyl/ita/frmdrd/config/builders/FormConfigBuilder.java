@@ -172,8 +172,8 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
     private FCAction[] defaultEditActions(String fcListId) {
         FCAction[] actions = new FCAction[2];
         // save and cancel
-        actions[0] = new FCAction("save", "Save", "back");
-        actions[1] = new FCAction("cancel", "Cancel", fcListId);
+        actions[0] = new FCAction("save", "Save", fcListId);
+        actions[1] = new FCAction("cancel", "Cancel", "back");
         return actions;
     }
 

@@ -69,23 +69,6 @@ public abstract class UIComponent implements Identifiable {
         return this.children != null && this.children.length > 0;
     }
 
-    public UIComponent findChild(String id) {
-        if (this.getId().equalsIgnoreCase(id)) {
-            return this;
-        } else {
-            if (!this.hasChildren()) {
-                return null;
-            } else {
-                for (UIComponent kid : this.getChildren()) {
-                    UIComponent found = kid.findChild(id);
-                    if (found != null) {
-                        return found;
-                    }
-                }
-                return null;
-            }
-        }
-    }
 
     public void addChild(UIComponent... lstChildren) {
         UIComponent[] newKids;

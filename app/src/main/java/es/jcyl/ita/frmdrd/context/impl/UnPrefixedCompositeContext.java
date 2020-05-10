@@ -48,7 +48,7 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
      */
     public Object getValue(final String key) {
         String[] newKey = splitKey(key);
-        return (newKey == null) ? null : this.contexts.get(newKey[0]).get(newKey[1]);
+        return (newKey == null || this.contexts == null) ? null : this.contexts.get(newKey[0]).get(newKey[1]);
     }
 
 

@@ -36,6 +36,8 @@ import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.forms.FormListController;
+import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 
 /**
@@ -98,6 +100,58 @@ public class FormConfigBuilderTest {
         // check controllers
     }
 
+    private static final String TEST_BASIC1 = "<main repo=\"contacts\"/>";
+
+    @Test
+    public void testFormConfigDefaultCreation() throws Exception {
+
+        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
+        InputStream is = XmlConfigUtils.createStream(TEST_BASIC1);
+        FormConfig formConfig = reader.read("test1", is);
+        Assert.assertNotNull(formConfig);
+        Assert.assertNotNull(formConfig.getList());
+        Assert.assertNotNull(formConfig.getEdits());
+        Assert.assertTrue(formConfig.getEdits().size() > 0);
+        Assert.assertNotNull(formConfig.getRepo());
+
+        // check editController
+        FormEditController ctl = formConfig.getEdits().get(0);
+        Assert.assertNotNull(ctl.getRepo());
+        Assert.assertNotNull(ctl.getMainForm());
+        Assert.assertNotNull(ctl.getActions());
+        Assert.assertTrue(ctl.getActions().length > 0);
+        // check editActions
+        FCAction[] actions = ctl.getActions();
+        String listCtlId = formConfig.getList().getId(); // id of related listController
+        for (FCAction action : actions) {
+            if (action.getType().equalsIgnoreCase("save")) {
+                Assert.assertEquals(listCtlId, action.getRoute());
+            } else if (action.getType().equalsIgnoreCase("cancel")) {
+                Assert.assertEquals("back", action.getRoute());
+            }
+        }
+        // check listController
+        FormListController ctlList = formConfig.getList();
+        Assert.assertNotNull(ctlList.getRepo());
+        Assert.assertNotNull(ctlList.getActions());
+        Assert.assertTrue(ctlList.getActions().length > 0);
+        // list.add/edit must point to editController
+
+        // check listActions
+        actions = ctl.getActions();
+        String editCtrlId = ctl.getId(); // id of related editController
+        for (FCAction action : actions) {
+            if (action.getType().equalsIgnoreCase("add")
+                    || action.getType().equalsIgnoreCase("update")) {
+                Assert.assertEquals(editCtrlId, action.getRoute());
+            }
+        }
+//        Assert.assertNotNull(ctlList.getEntitySelector()); pending of #203650
+
+
+    }
+
+
     @Test
     public void testFormConfigCreation() throws Exception {
         File file = TestUtils.findFile("config/formConfig.xml");
@@ -131,7 +185,7 @@ public class FormConfigBuilderTest {
         }
 
         // check editViews have a defaultForm nested
-        for(FormEditController edit: formConfig.getEdits()){
+        for (FormEditController edit : formConfig.getEdits()) {
             Assert.assertNotNull(edit.getMainForm());
             Assert.assertNotNull(edit.getActions());
             for (FCAction action : edit.getActions()) {

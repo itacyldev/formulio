@@ -110,7 +110,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
     abstract protected void doWithAttribute(E element, String name, String value);
 
-    protected abstract void doConfigure(E element, ConfigNode node);
+    protected abstract void doConfigure(E element, ConfigNode<E> node);
 
 
     /******* Helper methods ********/
@@ -179,5 +179,6 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected ComponentBuilderFactory getFactory() {
         return this.factory;
     }
+
 
 }

@@ -94,7 +94,7 @@ public class XMLFileFormConfigReader extends AbstractFormConfigReader {
             throw new ConfigurationException(error("Error while trying to read configuration file ${file}.", e), e);
         }
 
-        checkName(config, name);
+        setDefaultName(config, name);
         if (DevConsole.hasCurrentFileError()) {
             throw new ConfigurationException("An error occurred during configuration reading, check developer console.");
         }
@@ -106,11 +106,10 @@ public class XMLFileFormConfigReader extends AbstractFormConfigReader {
      *
      * @param config
      */
-    private void checkName(FormConfig config, String fileName) {
+    private void setDefaultName(FormConfig config, String name) {
         // get default name, in case it hasn't been set in the "form" tag
         if (StringUtils.isBlank(config.getName())) {
-            String defName = fileName.substring(0, fileName.lastIndexOf("."));
-            config.setName(defName);
+            config.setName(name);
         }
     }
 

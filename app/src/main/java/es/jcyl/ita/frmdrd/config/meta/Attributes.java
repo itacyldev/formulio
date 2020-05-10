@@ -54,6 +54,7 @@ public class Attributes {
         register("list", define(baseDesc, new Attribute[]{ENTITYSELECTOR}));
         register("edit", define(baseDesc, new Attribute[]{MAINFORM}));
         register("form", define(baseDesc, new Attribute[]{ONSAVE}));
+        register("datatable", define(baseDesc, new Attribute[]{ROUTE}));
 
         Attribute[] input = new Attribute[]{TYPE, LABEL, READONLY, CONVERTER};
         Map<String, Attribute> baseInput = define(base, input);

@@ -20,6 +20,7 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.frmdrd.builders.UIDatatableBuilder;
 import es.jcyl.ita.frmdrd.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.frmdrd.config.builders.DefaultComponentBuilder;
 import es.jcyl.ita.frmdrd.config.builders.FormBuilder;
@@ -28,6 +29,7 @@ import es.jcyl.ita.frmdrd.config.builders.FormEditControllerBuilder;
 import es.jcyl.ita.frmdrd.config.builders.FormListControllerBuilder;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -42,6 +44,7 @@ public class ComponentBuilderFactory {
     private static final Map<String, ComponentBuilder> _builders = new HashMap<>();
     private ComponentResolver componentResolver;
     private RepositoryAttributeResolver repoAttResolver;
+    private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -56,6 +59,7 @@ public class ComponentBuilderFactory {
         registerBuilder("list", newBuilder(FormListControllerBuilder.class, "list"));
         registerBuilder("edit", newBuilder(FormEditControllerBuilder.class, "edit"));
         registerBuilder("form", newBuilder(FormBuilder.class, "form"));
+        registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "form"));
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
         // same component builder with different alias
@@ -143,5 +147,9 @@ public class ComponentBuilderFactory {
 
     public RepositoryAttributeResolver getRepoAttResolver() {
         return repoAttResolver;
+    }
+
+    public ValueExpressionFactory getExpressionFactory() {
+        return expressionFactory;
     }
 }

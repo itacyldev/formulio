@@ -32,7 +32,6 @@ public class AttributeDef {
     public static Attribute NAME = new Attribute("name", true);
     public static Attribute DESCRIPTION = new Attribute("description", true);
 
-    public static Attribute PROPERTIES = new Attribute("properties", true);
     // edit view
     public static Attribute MAINFORM = new Attribute("mainForm", true);
     // list view
@@ -41,12 +40,13 @@ public class AttributeDef {
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
 
-
     // repository definition
     public static Attribute REPO = new Attribute("repo", false);
     public static Attribute DBFILE = new Attribute("dbFile", true);
     public static Attribute DBTABLE = new Attribute("dbTable", true);
+    public static Attribute PROPERTIES = new Attribute("properties", true);
 
+    // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);
 
 

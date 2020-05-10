@@ -17,7 +17,6 @@ import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.AutoCompleteBuilder;
-import es.jcyl.ita.frmdrd.builders.DataTableBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.ContextToRepoBinding;
 import es.jcyl.ita.frmdrd.config.FormConfig;
@@ -65,7 +64,6 @@ import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 
 public class DummyFormConfigReader extends AbstractFormConfigReader {
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-    DataTableBuilder formGenerator = new DataTableBuilder();
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     AutoCompleteBuilder autoCompleteBuilder = new AutoCompleteBuilder();
 
@@ -146,70 +144,70 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
         return formConfig;
     }
 
-
-    private void createTableFilterView(FormController formController) {
-        List<UIComponent> lst = new ArrayList<UIComponent>();
-
-        UIField fieldn = new UIField();
-        fieldn.setId("ini");
-        fieldn.setType(UIField.TYPE.TEXT);
-        fieldn.setLabel("ini");
-        fieldn.setReadOnly(true);
-        fieldn.setValueExpression(exprFactory.create("${entity.last_name}"));
-        lst.add(fieldn);
-
-        UIField field0 = new UIField();
-        field0.setId("f1");
-        field0.setType(UIField.TYPE.TEXT);
-        field0.setLabel("f1");
-        field0.setValueExpression(exprFactory.create("${view.ini}"));
-        lst.add(field0);
-
-
-        UIField fieldB = new UIField();
-        fieldB.setId("f2");
-        fieldB.setType(UIField.TYPE.TEXT);
-        fieldB.setLabel("f2");
-        lst.add(fieldB);
-
-        UIField field1 = new UIField();
-        field1.setId("f3");
-        field1.setType(UIField.TYPE.TEXT);
-        field1.setLabel("Filter copy");
-        field1.setValueExpression(exprFactory.create("${view.f1} - ${view.f2}"));
-        field1.setRenderExpression(exprFactory.create("${view.f1.length() < 5}"));
-        lst.add(field1);
-
-
-        String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
-        UIDatatable table = formGenerator.createDataTableFromRepo(formController.getEditableRepo(), fieldFilter);
-        table.setId("table1");
-        table.setRoute(formController.getId());
-
-        // table repository filter
-        Filter f = new SQLQueryFilter();
-        Criteria criteria = Criteria.or(
-                ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${view.f1}")),
-                ConditionBinding.cond(Condition.contains("email", null), exprFactory.create("${view.f1}")));
-        f.setCriteria(criteria);
-        table.setFilter(f);
-        lst.add(table);
-
-        UIForm form1 = new UIForm();
-        form1.setId("form1");
-        form1.setLabel("Formulario 1");
-        form1.setChildren(lst);
-        form1.setRenderExpression(exprFactory.create("true"));
-        form1.setRepo(formController.getEditableRepo());
-        List<UIComponent> viewKids = new ArrayList<>();
-        viewKids.add(form1);
-        UIView view1 = new UIView("view1");
-        view1.setChildren(viewKids);
-
-        DAGManager.getInstance().generateDags(view1);
-
-        formController.setView(view1);
-    }
+//
+//    private void createTableFilterView(FormController formController) {
+//        List<UIComponent> lst = new ArrayList<UIComponent>();
+//
+//        UIField fieldn = new UIField();
+//        fieldn.setId("ini");
+//        fieldn.setType(UIField.TYPE.TEXT);
+//        fieldn.setLabel("ini");
+//        fieldn.setReadOnly(true);
+//        fieldn.setValueExpression(exprFactory.create("${entity.last_name}"));
+//        lst.add(fieldn);
+//
+//        UIField field0 = new UIField();
+//        field0.setId("f1");
+//        field0.setType(UIField.TYPE.TEXT);
+//        field0.setLabel("f1");
+//        field0.setValueExpression(exprFactory.create("${view.ini}"));
+//        lst.add(field0);
+//
+//
+//        UIField fieldB = new UIField();
+//        fieldB.setId("f2");
+//        fieldB.setType(UIField.TYPE.TEXT);
+//        fieldB.setLabel("f2");
+//        lst.add(fieldB);
+//
+//        UIField field1 = new UIField();
+//        field1.setId("f3");
+//        field1.setType(UIField.TYPE.TEXT);
+//        field1.setLabel("Filter copy");
+//        field1.setValueExpression(exprFactory.create("${view.f1} - ${view.f2}"));
+//        field1.setRenderExpression(exprFactory.create("${view.f1.length() < 5}"));
+//        lst.add(field1);
+//
+//
+//        String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
+//        UIDatatable table = formGenerator.createDataTableFromRepo(formController.getEditableRepo(), fieldFilter);
+//        table.setId("table1");
+//        table.setRoute(formController.getId());
+//
+//        // table repository filter
+//        Filter f = new SQLQueryFilter();
+//        Criteria criteria = Criteria.or(
+//                ConditionBinding.cond(Condition.contains("first_name", null), exprFactory.create("${view.f1}")),
+//                ConditionBinding.cond(Condition.contains("email", null), exprFactory.create("${view.f1}")));
+//        f.setCriteria(criteria);
+//        table.setFilter(f);
+//        lst.add(table);
+//
+//        UIForm form1 = new UIForm();
+//        form1.setId("form1");
+//        form1.setLabel("Formulario 1");
+//        form1.setChildren(lst);
+//        form1.setRenderExpression(exprFactory.create("true"));
+//        form1.setRepo(formController.getEditableRepo());
+//        List<UIComponent> viewKids = new ArrayList<>();
+//        viewKids.add(form1);
+//        UIView view1 = new UIView("view1");
+//        view1.setChildren(viewKids);
+//
+//        DAGManager.getInstance().generateDags(view1);
+//
+//        formController.setView(view1);
+//    }
 
     private void createAgentsForm() {
 //        EditableRepository contactsRepo = repoFactory.getEditableRepo("agents");
@@ -291,123 +289,123 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
 //        System.out.println(viewDAG.getDags());
     }
 
+//
+//    private void createEditView2(FormController formController) {
+//        List<UIComponent> lst = new ArrayList<UIComponent>();
+//        UIField field0 = new UIField();
+//        field0.setId("contactId");
+//        field0.setType(UIField.TYPE.TEXT);
+//        field0.setLabel("Id");
+//        field0.setValueExpression(exprFactory.create("${entity.contact_id}", Long.class));
+//        lst.add(field0);
+//
+//        UIField field1 = new UIField();
+//        field1.setType(UIField.TYPE.TEXT);
+//        field1.setLabel("FirstName");
+//        field1.setId("firstName");
+//        field1.setValueExpression(exprFactory.create("${entity.first_name}"));
+//        field1.addValidator(new RequiredValidator());
+//        lst.add(field1);
+//
+//        UIField field6 = new UIField();
+//        field6.setType(UIField.TYPE.TEXT);
+//        field6.setLabel("Last Name");
+//        field6.setId("lastName");
+//        field6.setValueExpression(exprFactory.create("${entity.last_name}"));
+//        field6.addValidator(new RequiredValidator());
+//        lst.add(field6);
+//
+//        UIField field4 = new UIField();
+//        field4.setId("email");
+//        field4.setType(UIField.TYPE.TEXT);
+//        field4.setLabel("Email");
+//        field4.setValueExpression(exprFactory.create("${entity.email}"));
+//        field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
+//        field4.setRenderExpression(exprFactory.create("${entity.it_profile}"));
+//        lst.add(field4);
+//
+//        UIField field2 = new UIField();
+//        field2.setId("f2");
+//        field2.setType(UIField.TYPE.BOOLEAN);
+//        field2.setLabel("IT profile");
+//        field2.setValueExpression(exprFactory.create("${entity.it_profile}", Long.class));
+//        lst.add(field2);
+//
+//        UIField field3 = new UIField();
+//        field3.setId("salary");
+//        field3.setType(UIField.TYPE.TEXT);
+//        field3.setLabel("Salary");
+//        field3.setValueExpression(exprFactory.create("${entity.salary}", Double.class));
+//        lst.add(field3);
+//
+//        // datatable
+//        RepositoryConfReader config = new RepositoryConfReader("");
+//        config.read();
+//        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+////        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+////        contactsRepo.setContext(MainController.getInstance().getGlobalContext());
+//        String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
+//        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
+//        List<String> deps = new ArrayList<>();
+//        deps.add("view.f0");
+//        ContextToRepoBinding.getInstance().setRepoContextDeps(contactsRepo.getId(), deps);
+//        table.setId("table1");
+//        table.setRepo(contactsRepo);
+//        table.setRoute("MyForm1#edit");
+//        // order the table by a fixed criteria
+//        Filter f = new SQLQueryFilter();
+//        Criteria criteria = Criteria.or(Condition.contains("first_name", "%a%"),
+//                Condition.contains("last_name", "%a%"));
+//        f.setCriteria(criteria);
+//        f.setSorting(new Sort[]{Sort.asc("email")});
+//        table.setFilter(f);
+//        lst.add(table);
+//
+//        UIForm form1 = new UIForm();
+//        form1.setId("form1");
+//        form1.setLabel("Formulario 1");
+//        form1.setChildren(lst);
+//        form1.setRenderExpression(exprFactory.create("true"));
+//        form1.setRepo(contactsRepo);
+//        List<UIComponent> lstView = new ArrayList<>();
+//        lstView.add(form1);
+//        UIView view1 = new UIView("view2");
+//        view1.setChildren(lstView);
+//
+//        DAGManager.getInstance().generateDags(view1);
+//
+//        formController.setView(view1);
+//    }
 
-    private void createEditView2(FormController formController) {
-        List<UIComponent> lst = new ArrayList<UIComponent>();
-        UIField field0 = new UIField();
-        field0.setId("contactId");
-        field0.setType(UIField.TYPE.TEXT);
-        field0.setLabel("Id");
-        field0.setValueExpression(exprFactory.create("${entity.contact_id}", Long.class));
-        lst.add(field0);
-
-        UIField field1 = new UIField();
-        field1.setType(UIField.TYPE.TEXT);
-        field1.setLabel("FirstName");
-        field1.setId("firstName");
-        field1.setValueExpression(exprFactory.create("${entity.first_name}"));
-        field1.addValidator(new RequiredValidator());
-        lst.add(field1);
-
-        UIField field6 = new UIField();
-        field6.setType(UIField.TYPE.TEXT);
-        field6.setLabel("Last Name");
-        field6.setId("lastName");
-        field6.setValueExpression(exprFactory.create("${entity.last_name}"));
-        field6.addValidator(new RequiredValidator());
-        lst.add(field6);
-
-        UIField field4 = new UIField();
-        field4.setId("email");
-        field4.setType(UIField.TYPE.TEXT);
-        field4.setLabel("Email");
-        field4.setValueExpression(exprFactory.create("${entity.email}"));
-        field4.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
-        field4.setRenderExpression(exprFactory.create("${entity.it_profile}"));
-        lst.add(field4);
-
-        UIField field2 = new UIField();
-        field2.setId("f2");
-        field2.setType(UIField.TYPE.BOOLEAN);
-        field2.setLabel("IT profile");
-        field2.setValueExpression(exprFactory.create("${entity.it_profile}", Long.class));
-        lst.add(field2);
-
-        UIField field3 = new UIField();
-        field3.setId("salary");
-        field3.setType(UIField.TYPE.TEXT);
-        field3.setLabel("Salary");
-        field3.setValueExpression(exprFactory.create("${entity.salary}", Double.class));
-        lst.add(field3);
-
-        // datatable
-        RepositoryConfReader config = new RepositoryConfReader("");
-        config.read();
-        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
-//        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
-//        contactsRepo.setContext(MainController.getInstance().getGlobalContext());
-        String[] fieldFilter = new String[]{"contact_id", "first_name", "email"};
-        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
-        List<String> deps = new ArrayList<>();
-        deps.add("view.f0");
-        ContextToRepoBinding.getInstance().setRepoContextDeps(contactsRepo.getId(), deps);
-        table.setId("table1");
-        table.setRepo(contactsRepo);
-        table.setRoute("MyForm1#edit");
-        // order the table by a fixed criteria
-        Filter f = new SQLQueryFilter();
-        Criteria criteria = Criteria.or(Condition.contains("first_name", "%a%"),
-                Condition.contains("last_name", "%a%"));
-        f.setCriteria(criteria);
-        f.setSorting(new Sort[]{Sort.asc("email")});
-        table.setFilter(f);
-        lst.add(table);
-
-        UIForm form1 = new UIForm();
-        form1.setId("form1");
-        form1.setLabel("Formulario 1");
-        form1.setChildren(lst);
-        form1.setRenderExpression(exprFactory.create("true"));
-        form1.setRepo(contactsRepo);
-        List<UIComponent> lstView = new ArrayList<>();
-        lstView.add(form1);
-        UIView view1 = new UIView("view2");
-        view1.setChildren(lstView);
-
-        DAGManager.getInstance().generateDags(view1);
-
-        formController.setView(view1);
-    }
-
-
-    private void createListView1(FormController formController) {
-        List<UIComponent> lst = new ArrayList<UIComponent>();
-
-
-        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
-//        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
-        String[] fieldFilter = new String[]{"first_name", "email", "it_profile"};
-        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
-        // add new column with two fields calc
-        UIColumn newCol = new UIColumn();
-        newCol.setId("calc");
-        newCol.setHeaderText("Name");
-        newCol.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
-        table.getColumns()[0] = newCol;
-        table.setId("table1");
-        RepositoryConfReader config = new RepositoryConfReader("");
-        config.read();
-        table.setRepo(contactsRepo);
-        table.setRoute(formController.getId() + "#edit");
-        lst.add(table);
-
-        UIView view1 = new UIView("view1List");
-//        view1.setChildren(f);
-        view1.setChildren(new UIComponent[]{table});
-
-        formController.setView(view1);
-
-    }
+//
+//    private void createListView1(FormController formController) {
+//        List<UIComponent> lst = new ArrayList<UIComponent>();
+//
+//
+//        EditableRepository contactsRepo = repoFactory.getEditableRepo("contacts");
+////        Repository contactsRepo = repoFactory.getRepo("filteredContacts");
+//        String[] fieldFilter = new String[]{"first_name", "email", "it_profile"};
+//        UIDatatable table = formGenerator.createDataTableFromRepo(contactsRepo, fieldFilter);
+//        // add new column with two fields calc
+//        UIColumn newCol = new UIColumn();
+//        newCol.setId("calc");
+//        newCol.setHeaderText("Name");
+//        newCol.setValueExpression(exprFactory.create("${entity.first_name} ${entity.last_name}"));
+//        table.getColumns()[0] = newCol;
+//        table.setId("table1");
+//        RepositoryConfReader config = new RepositoryConfReader("");
+//        config.read();
+//        table.setRepo(contactsRepo);
+//        table.setRoute(formController.getId() + "#edit");
+//        lst.add(table);
+//
+//        UIView view1 = new UIView("view1List");
+////        view1.setChildren(f);
+//        view1.setChildren(new UIComponent[]{table});
+//
+//        formController.setView(view1);
+//
+//    }
 
     /******************************************/
     /** PARA ELIMINAR **/

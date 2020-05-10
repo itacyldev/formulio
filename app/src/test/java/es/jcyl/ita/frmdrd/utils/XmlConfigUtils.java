@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FileUtils {
+public class XmlConfigUtils {
 
     public static InputStream createStream(String string) {
         File file = null;
@@ -38,5 +38,10 @@ public class FileUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static final String BASE = "<main repo=\"contacts\"><list>%s</list></main>";
+    public static String createMainList(String nestedXml){
+        return String.format(BASE, nestedXml);
     }
 }
