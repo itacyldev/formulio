@@ -15,11 +15,21 @@ package es.jcyl.ita.frmdrd.utils;
  * limitations under the License.
  */
 
+import org.junit.Assert;
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.List;
+
+import es.jcyl.ita.frmdrd.config.FormConfig;
+import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
+import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -44,4 +54,11 @@ public class XmlConfigUtils {
     public static String createMainList(String nestedXml){
         return String.format(BASE, nestedXml);
     }
+
+    public static FormConfig readFormConfig(String xml) throws XmlPullParserException {
+        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
+        InputStream is = XmlConfigUtils.createStream(xml);
+        return reader.read("test1", is);
+    }
+
 }

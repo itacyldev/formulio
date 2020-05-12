@@ -2,45 +2,25 @@ package es.jcyl.ita.frmdrd.config.reader.dummy;
 
 import android.net.Uri;
 
-import org.apache.commons.validator.routines.EmailValidator;
-
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
-import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
-import es.jcyl.ita.crtrepo.query.Condition;
-import es.jcyl.ita.crtrepo.query.Criteria;
-import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.builders.AutoCompleteBuilder;
-import es.jcyl.ita.frmdrd.config.ConfigurationException;
-import es.jcyl.ita.frmdrd.config.ContextToRepoBinding;
-import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
-import es.jcyl.ita.frmdrd.config.ComponentBuilderFactory;
+import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.reader.AbstractFormConfigReader;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
-import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
-import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
-import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
-import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
 import es.jcyl.ita.frmdrd.ui.components.link.UIParam;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.validation.CommonsValidatorWrapper;
-import es.jcyl.ita.frmdrd.validation.RequiredValidator;
-import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -72,13 +52,13 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
 
     @Override
     public FormConfig read(String name, Uri uri) throws ConfigurationException {
-        return read(name, (InputStream)null);
+        return read(name, (InputStream) null);
     }
 
     @Override
     public FormConfig read(String name, InputStream is) throws ConfigurationException {
 
-        FormConfig formConfig = createFormTest1();
+//        FormConfig formConfig = createFormTest1();
 
 //        EditableRepository inspecRepo = repoFactory.getEditableRepo("inspecciones");
 //
@@ -91,14 +71,14 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
 //        loadConfig(result.getList());
 //        createTableFilterView(result.getEdit());
 //
-//        createAgentsForm();
-        return formConfig;
+        return createAgentsForm();
     }
 
     private FormConfig createFormTest1() {
         ComponentBuilder<FormConfig> builder = builderFactory.getBuilder("main", FormConfig.class);
 
         ConfigNode<FormConfig> node = new ConfigNode<>("main");
+        node.setAttribute("id", "test1");
         node.setAttribute("repo", "contacts");
         FormConfig formConfig = builder.build(node);
         node.setElement(formConfig);
@@ -209,11 +189,18 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
 //        formController.setView(view1);
 //    }
 
-    private void createAgentsForm() {
-//        EditableRepository contactsRepo = repoFactory.getEditableRepo("agents");
-//        FormControllerBuilder.FormBuilderResult result = fcBuilder.withRepo(contactsRepo).build();
-//        loadConfig(result.getEdit());
-//        loadConfig(result.getList());
+    private FormConfig createAgentsForm() {
+        ComponentBuilder<FormConfig> builder = builderFactory.getBuilder("main", FormConfig.class);
+
+        ConfigNode<FormConfig> node = new ConfigNode<>("main");
+        node.setAttribute("id", "agents");
+        node.setAttribute("repo", "agents");
+        FormConfig formConfig = builder.build(node);
+        node.setElement(formConfig);
+        builder.processChildren(node);
+        register(formConfig);
+
+
 //
 //        // remove all controls but "id" and  replace them with a select and autocompletes
 //        UIForm uiForm = result.getEdit().getMainForm();
@@ -287,6 +274,8 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
 //        DAGManager.getInstance().generateDags(result.getEdit().getView());
 //        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(result.getEdit().getView().getId());
 //        System.out.println(viewDAG.getDags());
+
+        return formConfig;
     }
 
 //

@@ -23,15 +23,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormListController;
-import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -60,11 +61,8 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
     @Override
     protected void doConfigure(FormListController ctl, ConfigNode node) {
-        Repository repo = repoResolver.resolve(node);
-        ctl.setRepo(repo);
-
         // find nested filter if exists
-        List<ConfigNode> repoFilters = getChildren(node, "repoFilter");
+        List<ConfigNode> repoFilters = ConfigNodeHelper.getChildrenByTag(node, "repoFilter");
         if (CollectionUtils.isNotEmpty(repoFilters)) {
             if (repoFilters.size() > 1)
                 error(String.format("Just one nested repoFilter element can be defined in 'list', found: []", repoFilters.size()));
@@ -80,10 +78,20 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
     @Override
     public void processChildren(ConfigNode<FormListController> node) {
         // add nested ui elements
-        UIComponent[] uiComponents = getUIChildren(node);
+        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().getView().setChildren(uiComponents);
 
-//        setUpEntitySelector(node); see issue #203650
+
+        setUpEntitySelector(node); // see issue #203650
+        setUpActions(node);
+    }
+
+    private void setUpTables(ConfigNode<FormListController> node) {
+        FormListController ctl = node.getElement();
+
+        // get nested forms
+        List<ConfigNode> forms = ConfigNodeHelper.getNestedByTag(node, "data");
+
     }
 
     /**
@@ -94,37 +102,42 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * @param node
      */
     private void setUpEntitySelector(ConfigNode<FormListController> node) {
-        EntitySelector selector = null;
-        List<ConfigNode> entitySelectors = getNestedByTag(node, ENTITY_SELECTOR_SET);
+        Object selector = null;
+        List<ConfigNode> entitySelectors = ConfigNodeHelper.getNestedByTag(node, ENTITY_SELECTOR_SET);
         String entitySelectorId = node.getAttribute("entitySelector");
+
         if (StringUtils.isNotBlank(entitySelectorId)) {
-            // try to find the referenced component in the selectors list
-            for (ConfigNode n : entitySelectors) {
-                if (n.getId().equals(entitySelectorId)) {
-                    Object element = n.getElement();
-                    if (element != null && element instanceof EntitySelector) {
-                        throw new ConfigurationException(error(String.format("The attribute 'entitySelector' " +
-                                "references an object that doesn't implements EntitySelector interfaces. " +
-                                "This attribute can be used to point to one of these components: [%s] ", ENTITY_SELECTOR_SET)));
-                    } else {
-                        selector = (EntitySelector) element;
-                    }
-                }
-            }
+//            // try to find the referenced component in the selectors list
+//            for (ConfigNode n : entitySelectors) {
+//                if (n.getId().equals(entitySelectorId)) {
+//                    Object element = n.getElement();
+//                    if (element != null && element instanceof EntitySelector) {
+//                        throw new ConfigurationException(error(String.format("The attribute 'entitySelector' " +
+//                                "references an object that doesn't implements EntitySelector interfaces. " +
+//                                "This attribute can be used to point to one of these components: [%s] ", ENTITY_SELECTOR_SET)));
+//                    } else {
+//                        selector = element;
+//                    }
+//                }
+//            }
+            throw new UnsupportedOperationException("Not supported yet!");
         } else {// the attribute is not set
             int numSelectors = entitySelectors.size();
             if (numSelectors == 0) {
-                selector = createDefaultSelector(node);
+                // create default selector and add to view
+                UIDatatable table = createDefaultSelector(node);
+                node.getElement().getView().addChild(table);
+//                selector = (EntitySelector) table;
             } else if (numSelectors == 1) {
                 // if there's just one entitySelector use it
-                selector = (EntitySelector) entitySelectors.get(0).getElement();
+                selector = entitySelectors.get(0).getElement();
             } else {
                 throw new ConfigurationException(error("The <list/> form defined in " +
                         "file '${file}' has more than one EntitySelector, use the attribute 'entitySelector'" +
                         " to set the id of the main selector"));
             }
         }
-        node.getElement().setEntitySelector(selector);
+//        node.getElement().setEntitySelector(selector);
 
     }
 
@@ -134,8 +147,17 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * @param node
      * @return
      */
-    private EntitySelector createDefaultSelector(ConfigNode<FormListController> node) {
-        return null;
+    private UIDatatable createDefaultSelector(ConfigNode<FormListController> node) {
+        ComponentBuilder<UIDatatable> builder = this.getFactory().getBuilder("datatable", UIDatatable.class);
+
+        ConfigNode newNode = node.copy();
+        node.addChild(newNode);
+        newNode.setId("datatable" + node.getId());
+        UIDatatable table = builder.build(newNode);
+        newNode.setElement(table);
+        builder.processChildren(newNode);
+
+        return table;
     }
 
     /**
@@ -144,7 +166,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * @param node
      */
     private void setUpActions(ConfigNode<FormListController> node) {
-        List<ConfigNode> actions = getNestedByTag(node, ACTION_SET);
+        List<ConfigNode> actions = ConfigNodeHelper.getNestedByTag(node, ACTION_SET);
         FCAction[] lstActions = new FCAction[actions.size()];
 
         for (int i = 0; i < actions.size(); i++) {

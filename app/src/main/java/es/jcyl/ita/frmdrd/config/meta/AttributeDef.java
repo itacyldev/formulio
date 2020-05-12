@@ -20,28 +20,37 @@ package es.jcyl.ita.frmdrd.config.meta;
  */
 public class AttributeDef {
     // component common attributes
-    public static Attribute ID = new Attribute("id", true);
-    public static Attribute VALUE = new Attribute("value", false);
-    public static Attribute RENDER = new Attribute("render", false);
+    public static Attribute ID = new Attribute("id");
+    public static Attribute VALUE = new Attribute("value", "value", "binding");
+    public static Attribute RENDER = new Attribute("render", "value", "binding");
     // common input fields
-    public static Attribute TYPE = new Attribute("type", true);
-    public static Attribute LABEL = new Attribute("label", true);
-    public static Attribute READONLY = new Attribute("readonly", true, Boolean.class);
+//    public static Attribute TYPE = new Attribute("type", true);
+    public static Attribute LABEL = new Attribute("label");
+    public static Attribute READONLY = new Attribute("readonly", Boolean.class);
     public static Attribute CONVERTER = new Attribute("converter", false);
     // component description
-    public static Attribute NAME = new Attribute("name", true);
-    public static Attribute DESCRIPTION = new Attribute("description", true);
+    public static Attribute NAME = new Attribute("name");
+    public static Attribute DESCRIPTION = new Attribute("description");
 
     // edit view
-    public static Attribute MAINFORM = new Attribute("mainForm", true);
+    public static Attribute MAINFORM = new Attribute("mainForm");
     // list view
-    public static Attribute ENTITYSELECTOR = new Attribute("entitySelector", true);
+    public static Attribute ENTITYSELECTOR = new Attribute("entitySelector");
+
+    // column
+    public static Attribute HEADER_TEXT = new Attribute("headerText");
+    public static Attribute FILTERING = new Attribute("filtering", Boolean.class);
+    public static Attribute ORDERING = new Attribute("ordering", Boolean.class);
+
+    // input
+    public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
+    public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
 
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
 
     // repository definition
-    public static Attribute REPO = new Attribute("repo", false);
+    public static Attribute REPO = new Attribute("repo", "repo", "repo");
     public static Attribute DBFILE = new Attribute("dbFile", true);
     public static Attribute DBTABLE = new Attribute("dbTable", true);
     public static Attribute PROPERTIES = new Attribute("properties", true);

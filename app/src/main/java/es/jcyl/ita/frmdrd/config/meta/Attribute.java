@@ -15,22 +15,58 @@ package es.jcyl.ita.frmdrd.config.meta;
  * limitations under the License.
  */
 
+import androidx.annotation.NonNull;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class Attribute {
     public final String name;
     public final boolean assignable;
-    public Class type;
+    public final Class type;
+    public final String resolver;
+    public final String setter;
+
+
+    public Attribute(String name) {
+        this(name, String.class);
+    }
 
     public Attribute(String name, boolean assignable) {
-        this(name, assignable, String.class);
-    }
-
-    public Attribute(String name, boolean assignable, Class type) {
         this.name = name;
         this.assignable = assignable;
-        this.type = type;
+        this.type = String.class;
+        this.setter = null;
+        this.resolver = null;
     }
 
+    public Attribute(String name, Class type) {
+        this.name = name;
+        this.assignable = true;
+        this.type = type;
+        this.setter = null;
+        this.resolver = null;
+    }
+
+    public Attribute(String name, String setter, Class type) {
+        this.name = name;
+        this.assignable = true;
+        this.setter = setter;
+        this.type = type;
+        this.resolver = null;
+    }
+
+    public Attribute(String name, String setter, String resolver) {
+        this.name = name;
+        this.assignable = true; // by resolver
+        this.setter = setter;
+        this.type = null;
+        this.resolver = resolver;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
+    }
 }

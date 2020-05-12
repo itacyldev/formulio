@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.frmdrd.config.AttributeResolver;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
@@ -30,23 +31,21 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * <p>
  * Helper class used during config reading to obtain reference to a repository.
  */
-public class RepositoryAttributeResolver {
+public class RepositoryAttributeResolver implements AttributeResolver<Repository> {
 
-    private RepositoryConfReader repoReader = Config.getRepoConfigReader();
-    private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+    private static RepositoryConfReader repoReader = Config.getRepoConfigReader();
+    private static RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
-
-    public Repository resolve(ConfigNode node) {
+    public Repository resolve(ConfigNode node, String attName) {
         // make sure the repository is uniquely defined
         boolean defined = false;
-        String repoAtt = node.getAttribute("repo");
+        String repoAtt = node.getAttribute(attName);
         if (StringUtils.isNotBlank(repoAtt)) {
             Repository repo = getRepoById(node, repoAtt);
             if (repo != null) {
                 return repo;
             }
         }
-
         // check if there a direct repository definition with dbFile and dbTable attributes
         String dbFile = node.getAttribute("dbFile");
         String dbTable = node.getAttribute("dbTable");
@@ -59,7 +58,7 @@ public class RepositoryAttributeResolver {
                         , id(node)));
             } else if (isDbFileSet ^ isTableNameSet) {
                 error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                        "must be set in tag {tag} id[%s.", id(node)));
+                        "must be set in tag ${tag} id[%s.", id(node)));
             } else {
                 // try to create a repository from current configuration
                 return repoReader.createFromFile(dbFile, dbTable);
@@ -67,20 +66,15 @@ public class RepositoryAttributeResolver {
         }
 
         // try to find repository Id in an ancestor
-        String parentRepoId = findParentRepo(node);
-        if (parentRepoId != null) {
-            Repository repo = getRepoById(node, parentRepoId);
-            return repo;
-        }
-
-        return null;
+        Repository parentRepo = findParentRepo(node);
+        return parentRepo;
     }
 
-    private Repository getRepoById(ConfigNode node, String repoAtt) {
+    public static Repository getRepoById(ConfigNode node, String repoAtt) {
         // find repository
-        Repository repo = this.repoFactory.getRepo(repoAtt);
+        Repository repo = repoFactory.getRepo(repoAtt);
         if (repo == null) {
-            error(String.format("Invalid repo Id found: [%s] in form [%s].", repoAtt, id(node)));
+            error(String.format("Invalid repo Id found: [%s] in form [%s].", repoAtt, node.getId()));
         } else {
             return repo;
         }
@@ -93,17 +87,17 @@ public class RepositoryAttributeResolver {
      * @param root
      * @return
      */
-    private String findParentRepo(ConfigNode root) {
+    public static Repository findParentRepo(ConfigNode root) {
         ConfigNode node = root.getParent();
         String repoId = null;
         while (node != null) {
             repoId = node.getAttribute("repo");
             if (StringUtils.isNotBlank(repoId)) {
-                return repoId;
+                return getRepoById(node, repoId);
             }
             node = node.getParent();
         }
-        return repoId;
+        return null;
     }
 
     private String id(ConfigNode node) {

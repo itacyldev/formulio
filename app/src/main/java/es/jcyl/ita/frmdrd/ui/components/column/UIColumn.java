@@ -25,7 +25,6 @@ public class UIColumn extends UIComponent {
 
     // sort by, filter by, filter matching, header expression
     private String headerText;
-
     private UIFilter headerFilter;
     private Boolean filtering;
     private Boolean ordering = true;

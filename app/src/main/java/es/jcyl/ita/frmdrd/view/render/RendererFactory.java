@@ -43,7 +43,7 @@ public class RendererFactory {
         renderInstances.put("form", new FormRenderer());
         renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("date", new DateFieldRenderer());
-        renderInstances.put("boolean", new CheckBoxFieldRenderer());
+        renderInstances.put("switcher", new CheckBoxFieldRenderer());
         renderInstances.put("datatable", new DatatableRenderer());
         renderInstances.put("link", new LinkRenderer());
         renderInstances.put("select", new SelectRenderer());

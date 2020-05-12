@@ -32,12 +32,12 @@ import java.util.Set;
 import java.util.Stack;
 
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
-import es.jcyl.ita.frmdrd.config.ComponentBuilderFactory;
+import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
-import es.jcyl.ita.frmdrd.config.meta.Attributes;
+import es.jcyl.ita.frmdrd.config.meta.TagDef;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -91,7 +91,7 @@ public class XMLFileFormConfigReader extends AbstractFormConfigReader {
             build(rootNode);
             config = (FormConfig) rootNode.getElement();
         } catch (Exception e) {
-            throw new ConfigurationException(error("Error while trying to read configuration file ${file}.", e), e);
+            throw new ConfigurationException(error("Error while trying to read configuration file '${file}'.", e), e);
         }
 
         setDefaultName(config, name);
@@ -164,6 +164,8 @@ public class XMLFileFormConfigReader extends AbstractFormConfigReader {
 
     private void build(ConfigNode root) {
         ComponentBuilder builder = builderFactory.getBuilder(root.getName());
+        DevConsole.setCurrentElement(root.getName());
+
         if (builder != null) {
             Object element = builder.build(root);
             root.setElement(element);
@@ -231,7 +233,7 @@ public class XMLFileFormConfigReader extends AbstractFormConfigReader {
 //    }
 
     private void setAttributes(XmlPullParser xpp, ConfigNode node, ComponentResolver idResolver) {
-        Map<String, Attribute> attributesDef = Attributes.getDefinition(node.getName());
+        Map<String, Attribute> attributesDef = TagDef.getDefinition(node.getName());
 
         for (int i = 0; i < xpp.getAttributeCount(); i++) {
             String attName = xpp.getAttributeName(i);

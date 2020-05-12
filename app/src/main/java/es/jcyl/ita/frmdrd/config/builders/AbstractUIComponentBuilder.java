@@ -15,6 +15,7 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
@@ -29,7 +30,7 @@ public abstract class AbstractUIComponentBuilder<E extends UIComponent> extends 
 
     @Override
     public void processChildren(ConfigNode<E> node) {
-        UIComponent[] uiComponents = getUIChildren(node);
+        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().setChildren(uiComponents);
     }
 

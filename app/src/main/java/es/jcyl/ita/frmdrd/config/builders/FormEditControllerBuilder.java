@@ -23,9 +23,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
@@ -46,7 +46,6 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
     private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("new", "update", "cancel", "delete", "nav"));
 
-
     public FormEditControllerBuilder(String tagName) {
         super(tagName, FormEditController.class);
     }
@@ -58,15 +57,12 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
     @Override
     protected void doConfigure(FormEditController ctl, ConfigNode node) {
-        repoResolver = getFactory().getRepoAttResolver();
-        Repository repo = repoResolver.resolve(node);
-        ctl.setRepo(repo);
-
         // find nested filter if exists
-        List<ConfigNode> repoFilters = getChildren(node, "repoFilter");
+        List<ConfigNode> repoFilters = ConfigNodeHelper.getChildrenByTag(node, "repoFilter");
         if (CollectionUtils.isNotEmpty(repoFilters)) {
             if (repoFilters.size() > 1)
-                error(String.format("Just one nested repoFilter element can be defined in 'list', found: []", repoFilters.size()));
+                error(String.format("Just one nested repoFilter element can be defined in " +
+                        "<edit/>, found: []", repoFilters.size()));
             else if (repoFilters.size() == 1) {
                 ctl.setFilter((Filter) repoFilters.get(0).getElement());
             }
@@ -74,24 +70,22 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         // find entitySelector
         UIView view = new UIView(ctl.getId() + ">view");
         ctl.setView(view);
+    }
 
+    @Override
+    public void processChildren(ConfigNode<FormEditController> node) {
+        // add nested ui elements
+        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
+        node.getElement().getView().setChildren(uiComponents);
 
-//        ctl.setActions(defaultListActions(fcId));
-
-
-//        UIForm editForm = editBuilder.withRepo(this.repo).build();
-//        UIView editView = new UIView(fc.getId() + ">view");
-//        editView.addChild(editForm);
-//        fc.setView(editView);
-//        fc.setMainForm(editForm);
-//        fc.setActions(defaultEditActions(fcId));
-
+        setUpForms(node);
+        setUpActions(node);
     }
 
     private void setUpForms(ConfigNode<FormEditController> node) {
         FormEditController ctl = node.getElement();
         // get nested forms
-        List<ConfigNode> forms = getNestedByTag(node, "form");
+        List<ConfigNode> forms = ConfigNodeHelper.getNestedByTag(node, "form");
         int numForms = forms.size();
         UIForm mainForm = null;
         if (numForms == 0) {
@@ -137,19 +131,13 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
      */
     private UIForm createDefaultForm(ConfigNode<FormEditController> node) {
         ComponentBuilder<UIForm> formBuilder = this.getFactory().getBuilder("form", UIForm.class);
-        UIForm form = formBuilder.build((ConfigNode) node);
+        ConfigNode formNode = node.copy();
+        node.addChild(formNode);
+        formNode.setId("form" + node.getId());
+        UIForm form = formBuilder.build((ConfigNode) formNode);
+        formNode.setElement(form);
+        formBuilder.processChildren(formNode);
         return form;
-    }
-
-
-    @Override
-    public void processChildren(ConfigNode<FormEditController> node) {
-        // add nested ui elements
-        UIComponent[] uiComponents = getUIChildren(node);
-        node.getElement().getView().setChildren(uiComponents);
-
-        setUpForms(node);
-        setUpActions(node);
     }
 
 
@@ -159,7 +147,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
      * @param node
      */
     private void setUpActions(ConfigNode<FormEditController> node) {
-        List<ConfigNode> actions = getNestedByTag(node, ACTION_SET);
+        List<ConfigNode> actions = ConfigNodeHelper.getNestedByTag(node, ACTION_SET);
         FCAction[] lstActions = new FCAction[actions.size()];
 
         for (int i = 0; i < actions.size(); i++) {

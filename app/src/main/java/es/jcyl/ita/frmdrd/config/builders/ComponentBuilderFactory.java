@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -20,17 +20,15 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.builders.UIDatatableBuilder;
-import es.jcyl.ita.frmdrd.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.frmdrd.config.builders.DefaultComponentBuilder;
-import es.jcyl.ita.frmdrd.config.builders.FormBuilder;
-import es.jcyl.ita.frmdrd.config.builders.FormConfigBuilder;
-import es.jcyl.ita.frmdrd.config.builders.FormEditControllerBuilder;
-import es.jcyl.ita.frmdrd.config.builders.FormListControllerBuilder;
+import es.jcyl.ita.frmdrd.config.AttributeResolver;
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FCAction;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -42,8 +40,9 @@ public class ComponentBuilderFactory {
     private XmlPullParser xpp;
     private static ComponentBuilderFactory _instance;
     private static final Map<String, ComponentBuilder> _builders = new HashMap<>();
+    private Map<String, AttributeResolver> _resolvers = new HashMap<>();
+
     private ComponentResolver componentResolver;
-    private RepositoryAttributeResolver repoAttResolver;
     private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
 
     public static ComponentBuilderFactory getInstance() {
@@ -58,8 +57,11 @@ public class ComponentBuilderFactory {
         registerBuilder("main", newBuilder(FormConfigBuilder.class, "main"));
         registerBuilder("list", newBuilder(FormListControllerBuilder.class, "list"));
         registerBuilder("edit", newBuilder(FormEditControllerBuilder.class, "edit"));
-        registerBuilder("form", newBuilder(FormBuilder.class, "form"));
-        registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "form"));
+        registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
+
+        registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
+        registerBuilder("column", newDefaultBuilder(UIColumn.class, "column"));
+
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
         // same component builder with different alias
@@ -69,12 +71,27 @@ public class ComponentBuilderFactory {
         registerBuilder("delete", defaultActionBuilder);
         registerBuilder("cancel", defaultActionBuilder);
 
-        repoAttResolver = new RepositoryAttributeResolver();
+        ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
+        registerBuilder("input", inputFieldBuilder);
+        registerBuilder("text", inputFieldBuilder);
+        registerBuilder("switcher", inputFieldBuilder);
+        registerBuilder("date", inputFieldBuilder);
+
+
+        BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
+        registerAttResolver("value", exprResolver);
+        registerAttResolver("render", exprResolver);
+        registerAttResolver("repo", new RepositoryAttributeResolver());
     }
 
 
     public void registerBuilder(String tagName, ComponentBuilder builder) {
         _builders.put(tagName, builder);
+    }
+
+    public void registerAttResolver(String resolverId, AttributeResolver resolver) {
+        _resolvers.put(resolverId, resolver);
+
     }
 
     public <T> ComponentBuilder<T> getBuilder(String tagName, Class<T> type) {
@@ -145,11 +162,12 @@ public class ComponentBuilderFactory {
         return componentResolver;
     }
 
-    public RepositoryAttributeResolver getRepoAttResolver() {
-        return repoAttResolver;
-    }
 
     public ValueExpressionFactory getExpressionFactory() {
         return expressionFactory;
+    }
+
+    public AttributeResolver getAttributeResolver(String resolver) {
+        return this._resolvers.get(resolver);
     }
 }

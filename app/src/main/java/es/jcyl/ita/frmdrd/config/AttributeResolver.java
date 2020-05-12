@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,20 +15,13 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import org.mini2Dx.beanutils.BeanUtils;
-
-import es.jcyl.ita.frmdrd.config.ConfigurationException;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-
-import static es.jcyl.ita.frmdrd.config.DevConsole.error;
+import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
  */
-public abstract class UIComponentBuilder<C extends UIComponent> extends AbstractComponentBuilder<C> {
+public interface AttributeResolver<E> {
 
-
-    public UIComponentBuilder(String tagName, Class<? extends C> clazz) {
-        super(tagName, clazz);
-    }
+    E resolve(ConfigNode node, String attName);
 }

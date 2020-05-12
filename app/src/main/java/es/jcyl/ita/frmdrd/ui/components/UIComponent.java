@@ -69,6 +69,9 @@ public abstract class UIComponent implements Identifiable {
         return this.children != null && this.children.length > 0;
     }
 
+    public void addChild(UIComponent child) {
+        addChild(new UIComponent[]{child});
+    }
 
     public void addChild(UIComponent... lstChildren) {
         UIComponent[] newKids;
@@ -80,18 +83,6 @@ public abstract class UIComponent implements Identifiable {
         }
         this.children = newKids;
         linkParent();
-    }
-
-    public void addChild(UIComponent child) {
-        UIComponent[] newKids;
-        if (children == null) {
-            newKids = new UIComponent[1];
-        } else {
-            newKids = Arrays.copyOf(this.children, this.children.length + 1);
-        }
-        newKids[newKids.length - 1] = child;
-        this.children = newKids;
-        child.setParent(this);
     }
 
     public void removeAll() {
@@ -114,17 +105,16 @@ public abstract class UIComponent implements Identifiable {
         this.root = root;
     }
 
+    public void setChildren(List<UIComponent> children) {
+        setChildren(children.toArray(new UIComponent[children.size()]));
+    }
+
     public void setChildren(UIComponent[] children) {
         this.children = children;
         // re-link children parent
         linkParent();
     }
 
-    public void setChildren(List<UIComponent> children) {
-        this.children = children.toArray(new UIComponent[children.size()]);
-        // re-link children parent
-        linkParent();
-    }
 
     private void linkParent() {
         if (this.children != null) {

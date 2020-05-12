@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.config.builders;
  */
 
 import org.mini2Dx.beanutils.BeanUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import es.jcyl.ita.frmdrd.config.AttributeResolver;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
-import es.jcyl.ita.frmdrd.config.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
-import es.jcyl.ita.frmdrd.config.meta.Attributes;
+import es.jcyl.ita.frmdrd.config.meta.TagDef;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
@@ -48,7 +49,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 //    protected ComponentResolver resolver;
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
-        this.attributeDefs = Attributes.getDefinition(tagName);
+        this.attributeDefs = TagDef.getDefinition(tagName);
         this.elementType = clazz;
     }
 
@@ -57,22 +58,11 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         E element = instantiate();
         setAttributes(element, node);
 //        setId(element);
+        node.setElement(element);
         doConfigure(element, node);
         return element;
     }
 
-
-//    /**
-//     * Verifies that the element has the id attribute set or creates one based on element tag name.
-//     */
-//    protected void setId(E element) {
-//        if (StringUtils.isBlank(element.getId())) {
-//            // number elements with of current tag
-//            String tag = this.node.getName();
-//            Set<String> tags = this.resolver.getIdsForTag(tag);
-//            element.setId(tag + tags.size() + 1); // table1, table2, table3,..
-//        }
-//    }
 
     /****** Extension points *******/
 
@@ -89,13 +79,27 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
     protected void setAttributes(E element, ConfigNode node) {
         Map<String, String> attributes = node.getAttributes();
-        String tagName = node.getName();
+
         for (Map.Entry<String, String> entry : attributes.entrySet()) {
             String attName = entry.getKey();
             try {
-                if (this.attributeDefs.get(attName).assignable) {
+                Attribute attribute = this.attributeDefs.get(attName);
+                if (attribute == null) {
+                    error(String.format("Invalid attribute found in tag <${tag}/>: [%s].", attName));
+                } else if (attribute.assignable) {
+                    String setter = (attribute.setter == null) ? attName : attribute.setter;
+                    Object value;
+                    if (attribute.resolver == null) {
+                        // convert value if needed
+                        value = (attribute.type == null) ? entry.getValue() :
+                                ConvertUtils.convert(entry.getValue(), attribute.type);
+                    } else {
+                        // use resolver to set attribute
+                        AttributeResolver resolver = getAttributeResolver(attribute.resolver);
+                        value = resolver.resolve(node, attribute.name);
+                    }
                     // set attribute using reflection
-                    BeanUtils.setProperty(element, attName, entry.getValue());
+                    BeanUtils.setProperty(element, setter, value);
                 } else {
                     //TODO: create strategies per attribute?
                     // for now let the builder assume this responsability and reuse with helpers
@@ -108,6 +112,10 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
+    protected AttributeResolver getAttributeResolver(String resolver) {
+        return this.getFactory().getAttributeResolver(resolver);
+    }
+
     abstract protected void doWithAttribute(E element, String name, String value);
 
     protected abstract void doConfigure(E element, ConfigNode<E> node);
@@ -115,60 +123,6 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
     /******* Helper methods ********/
 
-    public List<ConfigNode> getChildren(ConfigNode root, String tagName) {
-        List<ConfigNode> kids = new ArrayList<ConfigNode>();
-        List<ConfigNode> children = root.getChildren();
-        if (children != null) {
-            for (ConfigNode n : children) {
-                if (n.getName().equals(tagName)) {
-                    kids.add(n);
-                }
-            }
-        }
-        return kids;
-    }
-
-    public List<ConfigNode> getNestedByTag(ConfigNode root, String tagName) {
-        List<ConfigNode> result = new ArrayList<>();
-        Set<String> set = new HashSet<>(Arrays.asList(tagName));
-        findNestedByTag(root, set, result);
-        return result;
-    }
-
-    public List<ConfigNode> getNestedByTag(ConfigNode root, Set<String> tagNames) {
-        List<ConfigNode> result = new ArrayList<>();
-        findNestedByTag(root, tagNames, result);
-        return result;
-    }
-
-    /**
-     * Recursively goes over the component tree storing fields in the given List
-     */
-    private void findNestedByTag(ConfigNode root, Set<String> tagNames, List<ConfigNode> found) {
-        if (tagNames.contains(root.getName())) {
-            found.add(root);
-        } else {
-            if (root.hasChildren()) {
-                List<ConfigNode> children = root.getChildren();
-                for (ConfigNode n : children) {
-                    findNestedByTag(n, tagNames, found);
-                }
-            }
-        }
-    }
-//    private find
-
-    public UIComponent[] getUIChildren(ConfigNode root) {
-        List<UIComponent> kids = new ArrayList<UIComponent>();
-        List<ConfigNode> children = root.getChildren();
-        if (children != null) {
-            for (ConfigNode n : children) {
-                if (n.getElement() instanceof UIComponent)
-                    kids.add((UIComponent) n.getElement());
-            }
-        }
-        return kids.toArray(new UIComponent[kids.size()]);
-    }
 
     /**** internal work methods **/
 

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
@@ -50,10 +51,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
 
     @Override
     protected void doConfigure(FormConfig formConfig, ConfigNode node) {
-        // setup repository
-        RepositoryAttributeResolver repoAttResolver = this.getFactory().getRepoAttResolver();
-        Repository repo = repoAttResolver.resolve(node);
-        formConfig.setRepo(repo);
+
     }
 
 
@@ -110,7 +108,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
     private void configureListView(FormConfig formConfig, ConfigNode node) {
         // get list and edit views, check and set to configuration
         FormListController listController = null;
-        List<ConfigNode> list = getChildren(node, "list");
+        List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
         if (list.size() > 1) {
             throw new ConfigurationException(error(String.format("Each form file must contain just " +
                     "one 'list' element, found: [%s]", list.size())));
@@ -119,6 +117,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         } else {
             // if no list view, create
             ConfigNode listNode = node.copy();
+            node.addChild(listNode);
             String listId = formConfig.getId() + "#list";
             listController = new FormListController(listId, "list");
             listNode.setElement(listController);
@@ -137,7 +136,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
     private void configureEditViews(FormConfig formConfig, ConfigNode node) {
         List<FormEditController> edits = new ArrayList<>();
 
-        List<ConfigNode> list = getChildren(node, "edit");
+        List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "edit");
         if (list.size() > 1) {
             for (ConfigNode n : list) {
                 edits.add((FormEditController) n.getElement());
@@ -145,7 +144,9 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         } else {
             // if no edit found, create one using main node attributes
             ConfigNode editNode = node.copy();
+            node.addChild(editNode);
             String listId = formConfig.getId() + "#edit";
+
             FormEditController editController = new FormEditController(listId, "edit");
             editNode.setElement(editController);
             editBuilder.doConfigure(editController, editNode);

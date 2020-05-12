@@ -8,12 +8,11 @@ import static es.jcyl.ita.frmdrd.ui.components.inputfield.UIField.TYPE.TEXT;
 
 public class UIField extends UIInputComponent {
     public enum TYPE {
-        TEXT, DATE, BOOLEAN // SIGN
+        TEXT, DATE, SWITCHER // SIGN
     }
 
     private TYPE type = TEXT;
     private int inputType = InputType.TYPE_CLASS_TEXT;
-
 
     @Override
     public String getRendererType() {
@@ -41,6 +40,9 @@ public class UIField extends UIInputComponent {
         this.inputType = inputType;
     }
 
+    public void setTypeStr(String type) {
+        this.type = TYPE.valueOf(type.toUpperCase());
+    }
 
 
 }

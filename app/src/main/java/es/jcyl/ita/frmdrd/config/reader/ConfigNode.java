@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.config.reader;
  * limitations under the License.
  */
 
+import androidx.annotation.NonNull;
+
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -67,7 +69,7 @@ public class ConfigNode<E> {
         return getAttribute("id");
     }
 
-    public void setAttribute(String name, String value){
+    public void setAttribute(String name, String value) {
         if (attributes == null) {
             this.attributes = new HashMap<>();
         }
@@ -78,7 +80,7 @@ public class ConfigNode<E> {
         return (attributes == null) ? null : this.attributes.get(name);
     }
 
-    public boolean hasChildren(){
+    public boolean hasChildren() {
         return CollectionUtils.isNotEmpty(this.children);
     }
 
@@ -120,10 +122,23 @@ public class ConfigNode<E> {
     }
 
     public ConfigNode copy() {
+        return copy(false, false);
+    }
+
+    public ConfigNode copy(boolean copyDependants, boolean copyAscendant) {
         ConfigNode n = new ConfigNode(this.getName());
         n.getAttributes().putAll(this.attributes);
-        n.setChildren(this.children);
+        if (copyDependants) {
+            n.setChildren(this.children);
+        }
+        if (copyAscendant) {
+            n.setParent(this.parent);
+        }
         return n;
+    }
+
+    public boolean hasAttribute(String attName) {
+        return attributes.containsKey(attName);
     }
 
     public ConfigNode getParent() {
@@ -132,5 +147,11 @@ public class ConfigNode<E> {
 
     public void setParent(ConfigNode parent) {
         this.parent = parent;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("<%s - %s/>]", this.name, this.attributes);
     }
 }

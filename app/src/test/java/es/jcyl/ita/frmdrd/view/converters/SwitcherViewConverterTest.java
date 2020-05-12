@@ -15,15 +15,11 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.widget.Switch;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mini2Dx.beanutils.ConversionException;
@@ -72,7 +68,7 @@ public class SwitcherViewConverterTest {
      */
     @Test
     public void testSupportedStrings() {
-        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.SWITCHER)
                 .withValueBindingExpression("true", Boolean.class) // literal expression
                 .build();
         // prepare data/state
@@ -103,7 +99,7 @@ public class SwitcherViewConverterTest {
 
     @Test
     public void testSupportedNumeric() {
-        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.SWITCHER)
                 .withValueBindingExpression("true", Boolean.class) // literal expression
                 .build();
         // prepare data/state
@@ -158,7 +154,7 @@ public class SwitcherViewConverterTest {
 //
     @Test
     public void testUnsupportedTypes() {
-        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.BOOLEAN)
+        UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.SWITCHER)
                 .withValueBindingExpression("true", Boolean.class) // literal expression
                 .build();
         // prepare data/state

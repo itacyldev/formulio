@@ -15,8 +15,6 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
-import java.util.List;
-
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
 /**

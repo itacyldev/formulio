@@ -15,25 +15,21 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.io.InputStream;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.config.ComponentBuilder;
-import es.jcyl.ita.frmdrd.config.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
-import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 
@@ -43,9 +39,8 @@ import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
  * Tests to check commons-converters functionallity
  */
 @RunWith(RobolectricTestRunner.class)
-public class DatatableBuilderBuilderTest {
+public class ValueBindingAttResolverTest {
 
-    ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
 
     @BeforeClass
     public static void setUp() {
@@ -54,28 +49,50 @@ public class DatatableBuilderBuilderTest {
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
-        RepositoryUtils.registerMock("contacts");
     }
 
 
-    private static final String TEST_BASIC1 = "<datatable/>";
-
+    private static final String XML_TEST_BASIC = "<datatable />";
     @Test
     public void testBasicDatatable() throws Exception {
-        ComponentBuilder<UIDatatable> builder = builderFactory.getBuilder("datatable", UIDatatable.class);
+        RepositoryUtils.registerMock("contacts");
 
-        String xml = XmlConfigUtils.createMainList(TEST_BASIC1);
-        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
-        InputStream is = XmlConfigUtils.createStream(xml);
-        FormConfig formConfig = reader.read("test1", is);
-        Assert.assertNotNull(formConfig);
+        String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 
-        // find datatable and check
-        List<UIComponent> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
         Assert.assertNotNull(datables);
+
         // repo must be set with parent value "contacts"
         UIDatatable datatable = (UIDatatable) datables.get(0);
+        Assert.assertNotNull(datatable.getId());
         Assert.assertEquals(formConfig.getRepo(), datatable.getRepo());
+    }
+
+    private static final String XML_TEST_REPO = "<datatable id=\"mydatatable\" route=\"aRouteToForm\" repo=\"contacts2\"/>";
+    @Test
+    public void tesDatatableAttributes() throws Exception {
+        RepositoryUtils.registerMock("contacts2");
+
+        String xml = XmlConfigUtils.createMainList(XML_TEST_REPO);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
+
+        // repo must be set with parent value "contacts"
+        UIDatatable datatable = (UIDatatable) datables.get(0);
+
+        Assert.assertEquals("mydatatable", datatable.getId());
+        Assert.assertEquals("aRouteToForm", datatable.getRoute());
+        Assert.assertEquals(RepositoryUtils.getRepo("contacts2"), datatable.getRepo());
+    }
+
+
+
+    @AfterClass
+    public static void tearDown() {
+        RepositoryUtils.unregisterMock("contacts");
+        RepositoryUtils.unregisterMock("contacts2");
     }
 
 }

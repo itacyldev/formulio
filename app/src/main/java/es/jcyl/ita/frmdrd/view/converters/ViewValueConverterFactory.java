@@ -33,7 +33,7 @@ public class ViewValueConverterFactory {
     private ViewValueConverterFactory() {
         map.put("text", new TextViewConverter());
         map.put("date", new TextViewConverter());
-        map.put("boolean", new SwitcherFieldViewConverter());
+        map.put("switcher", new SwitcherFieldViewConverter());
         map.put("select", new SpinnerValueConverter());
         map.put("autocomplete", new AutoCompleteStaticValueConverter());
         map.put("dynamicAutocomplete", new AutoCompleteDynamicValueConverter());

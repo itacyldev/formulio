@@ -24,6 +24,8 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * Gathers error to show them in developer console and provides decorartors to enrich the messages
+ * with context information ${tag}, ${file} and ${line}
  */
 public class DevConsole {
 
@@ -39,26 +41,30 @@ public class DevConsole {
     public static String error(String msg) {
         // TODO: link log library
         hasError = true;
-        _writeMsg(Log.ERROR, msg);
-        return msg;
+        return _writeMsg(Log.ERROR, msg, null);
     }
 
     public static String error(String msg, Throwable t) {
         // TODO: link log library
         hasError = true;
-        _writeMsg(Log.ERROR, msg);
-        return msg;
+        return _writeMsg(Log.ERROR, msg, t);
     }
 
 
-    public static void warn(String msg) {
+    public static String warn(String msg) {
         // TODO: link log library
-        _writeMsg(Log.WARN, msg);
+        return _writeMsg(Log.WARN, msg, null);
     }
 
     //
-    private static void _writeMsg(int errorLevel, String msg) {
-        System.out.println(JexlUtils.eval(ctx, msg));
+    private static String _writeMsg(int errorLevel, String msg, Throwable t) {
+        ctx.set("line", xpp.getLineNumber());
+        String effMsg = String.valueOf(JexlUtils.eval(ctx, msg));
+        System.out.println(effMsg);
+        if (t != null) {
+            System.err.println(t.getStackTrace());
+        }
+        return effMsg;
     }
 
     public static void setCurrentFile(String filePath) {
@@ -76,7 +82,7 @@ public class DevConsole {
         ctx.set("tag", tag);
     }
 
-    public static void setParser(XmlPullParser xpp) {
-        xpp = xpp;
+    public static void setParser(XmlPullParser parser) {
+        xpp = parser;
     }
 }

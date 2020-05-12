@@ -209,7 +209,8 @@ public class AutoCompleteView extends AutoCompleteTextView
         UIOption option;
         for (int i = 0; i < nCounts; i++) {
             option = adapter.getItem(i);
-            if (option.getLabel().equalsIgnoreCase(textFilter)) {
+            if (option != null && option.getLabel() != null
+                    && option.getLabel().equalsIgnoreCase(textFilter)) {
                 this.value = option.getValue();
                 return true;
             }

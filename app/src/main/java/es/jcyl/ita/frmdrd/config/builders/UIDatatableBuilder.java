@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.builders;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.builders;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,14 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
-import es.jcyl.ita.frmdrd.config.builders.AbstractUIComponentBuilder;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -38,7 +40,10 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  */
 public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> {
 
-    public UIDatatableBuilder(String tagName) {
+    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+
+
+    protected UIDatatableBuilder(String tagName) {
         super(tagName, UIDatatable.class);
     }
 
@@ -50,9 +55,7 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
 
     @Override
     protected void doConfigure(UIDatatable element, ConfigNode<UIDatatable> node) {
-        RepositoryAttributeResolver repoResolver = this.getFactory().getRepoAttResolver();
-        Repository repo = repoResolver.resolve(node);
-        element.setRepo(repo);
+
     }
 
 
@@ -61,8 +64,38 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
 //        UIComponent[] uiComponents = getUIChildren(node);
 //        node.getElement().setChildren(uiComponents);
 
+        UIBuilderHelper.setUpRepo(node, true);
         setUpColumns(node);
+    }
 
+    /**
+     * If repository attribute is not set, use resolver to get a parent reference
+     *
+     * @param node
+     */
+    private void setUpRepo(ConfigNode<UIDatatable> node) {
+        UIDatatable table = node.getElement();
+        // check if there's a nested repository definition
+        boolean hasAttRepo = node.hasAttribute("repo");
+
+        List<ConfigNode> lstRepos = ConfigNodeHelper.getChildrenByTag(node, "repo");
+        if (CollectionUtils.isNotEmpty(lstRepos) && hasAttRepo) {
+            throw new ConfigurationException(error("The element ${tag} has the attribute 'repo' set" +
+                    "But it also has a nested repository defined, just one of the options can be used."));
+        } else if (lstRepos.size() > 1) {
+            throw new ConfigurationException(error("Just one nested repo can be defined " +
+                    "in ${tag} component."));
+        } else if (lstRepos.size() == 1) {
+            // get nested repository definition from nested node
+            Repository repo = (Repository) lstRepos.get(0).getElement();
+            table.setRepo(repo);
+        }
+        // if not defined, try to get repo from parent nodes
+        if (table.getRepo() == null) {
+            RepositoryAttributeResolver repoResolver = (RepositoryAttributeResolver) getAttributeResolver("repo");
+            Repository repo = repoResolver.findParentRepo(node);
+            table.setRepo(repo);
+        }
     }
 
     private void setUpColumns(ConfigNode<UIDatatable> node) {
@@ -70,7 +103,7 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
         UIDatatable dataTable = node.getElement();
 
         // get nested defined columns
-        List<ConfigNode> colNodes = getNestedByTag(node, "column");
+        List<ConfigNode> colNodes = ConfigNodeHelper.getNestedByTag(node, "column");
 
         for (ConfigNode n : colNodes) {
             UIColumn col = (UIColumn) n.getElement();
@@ -84,7 +117,7 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
         if (StringUtils.isBlank(propertySelector)) {
             if (columns.size() == 0) {
                 // no property is selected and no nested column elements, by default add all properties
-                colsToAdd = createColumns(dataTable.getRepo(), new String[0]);
+                colsToAdd = createDefaultColumns(dataTable.getRepo(), new String[0]);
             }
         } else {
             if (propertySelector.equals("*") || propertySelector.equals("all")) {
@@ -95,7 +128,7 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
                 propertyFilter = StringUtils.split(propertySelector, ",");
             }
             // create columns with property selection
-            colsToAdd = createColumns(dataTable.getRepo(), propertyFilter);
+            colsToAdd = createDefaultColumns(dataTable.getRepo(), propertyFilter);
         }
         if (colsToAdd != null) {
             columns.addAll(colsToAdd);
@@ -123,33 +156,31 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
     public UIDatatable createDataTableFromRepo(Repository repo, String[] properties) {
         UIDatatable datatable = new UIDatatable();
         datatable.setRepo(repo);
-        List<UIColumn> lstCols = createColumns(repo, properties);
+        List<UIColumn> lstCols = createDefaultColumns(repo, properties);
         datatable.setColumns(lstCols.toArray(new UIColumn[lstCols.size()]));
 
         return datatable;
     }
 
-    private List<UIColumn> createColumns(Repository repo, String[] properties) {
-        EntityMeta meta = repo.getMeta();
-        List<UIColumn> lstCols = new ArrayList<UIColumn>();
+    private List<UIColumn> createDefaultColumns(Repository repo, String[] propertyNames) {
+        List<UIColumn> lstCols = new ArrayList<>();
 
-        ValueExpressionFactory exprFactory = getFactory().getExpressionFactory();
-
-        for (String propName : properties) {
-            PropertyType p = meta.getPropertyByName(propName);
-            if (p == null) {
-                throw new ConfigurationException(error(String.format("No property found with name [%s] in " +
-                        "EntityMeta from repository [%s]", propName, repo.getId())));
-            }
-            // create columns
-            UIColumn col = new UIColumn();
-            col.setId(p.getName());
-            col.setHeaderText(p.getName());
-            col.setValueExpression(exprFactory.create("${entity." + p.getName() + "}"));
-            col.setFiltering(true);
+        PropertyType[] properties;
+        properties = UIBuilderHelper.getPropertiesFromRepo(repo, propertyNames);
+        for (PropertyType property : properties) {
+            UIColumn col = createColumn(property);
             lstCols.add(col);
         }
         return lstCols;
+    }
+
+    private UIColumn createColumn(PropertyType property) {
+        UIColumn col = new UIColumn();
+        col.setId(property.getName());
+        col.setHeaderText(property.getName());
+        col.setValueExpression(exprFactory.create("${entity." + property.getName() + "}"));
+        col.setFiltering(true);
+        return col;
     }
 
 }

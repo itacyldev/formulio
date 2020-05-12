@@ -42,16 +42,15 @@ public class UIComponentHelper {
         }
     }
 
-    public static List<UIComponent> findByClass(UIComponent root, Class<?> clazz) {
-        List<UIComponent> lst = new ArrayList<>();
+    public static <T> List<T> findByClass(UIComponent root, Class<T> clazz) {
+        List<T> lst = new ArrayList<>();
         _findByClass(root, clazz, lst);
         return lst;
     }
 
-    private static void _findByClass(UIComponent root, Class<?> clazz, List<UIComponent> output) {
-
+    private static <T> void _findByClass(UIComponent root, Class<T> clazz, List<T> output) {
         if (clazz.isInstance(root)) {
-            output.add(root);
+            output.add((T) root);
         } else {
             if (!root.hasChildren()) {
                 return;

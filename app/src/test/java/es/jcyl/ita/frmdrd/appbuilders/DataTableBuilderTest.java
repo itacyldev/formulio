@@ -29,11 +29,11 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
-import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.frmdrd.builders.UIDatatableBuilder;
+import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
+import es.jcyl.ita.frmdrd.config.builders.UIDatatableBuilder;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 
@@ -48,13 +48,13 @@ import static org.mockito.Mockito.when;
 public class DataTableBuilderTest {
 
     EntityDataBuilder entityBuilder;
-    EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    UIDatatableBuilder dtBuilder = new UIDatatableBuilder("datatable");
+    private static UIDatatableBuilder  dtBuilder;
 
     @BeforeClass
     public static void setUp() {
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
+        dtBuilder = (UIDatatableBuilder) ComponentBuilderFactory.getInstance().getBuilder("datatable", UIDatatable.class);
     }
 
     /**
@@ -82,7 +82,7 @@ public class DataTableBuilderTest {
         for (PropertyType p : meta.getProperties()) {
             // find columns
             UIColumn c = datatable.getColumn(p.getName());
-            Assert.assertNotNull("No column found for property " + p.getName(),c);
+            Assert.assertNotNull("No column found for property " + p.getName(), c);
         }
     }
 
@@ -105,14 +105,14 @@ public class DataTableBuilderTest {
 
         // Get two fields and create expresion f1,f2
         PropertyType[] properties = meta.getProperties();
-        String[] fieldFilter = new String[] {properties[0].getName(), properties[1].getName()};
+        String[] fieldFilter = new String[]{properties[0].getName(), properties[1].getName()};
         UIDatatable datatable = dtBuilder.createDataTableFromRepo(mockRepo, fieldFilter);
 
         // check all entity properties are included as columns
         Assert.assertEquals(datatable.getRepo(), mockRepo);
         Assert.assertEquals(fieldFilter.length, datatable.getColumns().length);
 
-        for (String pName: fieldFilter) {
+        for (String pName : fieldFilter) {
             // find columns
             UIColumn c = datatable.getColumn(pName);
             Assert.assertNotNull("No column found for property " + pName);

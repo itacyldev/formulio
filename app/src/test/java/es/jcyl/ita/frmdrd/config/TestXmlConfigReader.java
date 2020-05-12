@@ -56,20 +56,23 @@ public class TestXmlConfigReader {
 
 
     }
-    @Test
-    public void testMeausreMethod(){
 
+    @Test
+    public void testDummyConfig() {
+
+        RepositoryUtils.registerMock("agents");
         DummyFormConfigReader reader = new DummyFormConfigReader();
-        reader.read("",Uri.EMPTY);
+        reader.read("", Uri.EMPTY);
     }
 
     /**
      * Reads basic xml and checks the configNode tree is correctly read.
+     *
      * @throws Exception
      */
     @Test
     public void testReadConfigNodes() throws Exception {
-        XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
 
         File file = TestUtils.findFile("config/formConfig.xml");
@@ -118,7 +121,7 @@ public class TestXmlConfigReader {
         // check every object has a repo value
         Assert.assertNotNull(formConfig.getRepo());
         Assert.assertNotNull(formConfig.getList().getRepo());
-        for(FormEditController c: formConfig.getEdits()){
+        for (FormEditController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
             Assert.assertNotNull(c.getRepo());
         }

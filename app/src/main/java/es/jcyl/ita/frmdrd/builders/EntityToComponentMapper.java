@@ -34,7 +34,7 @@ public class EntityToComponentMapper {
 
     public EntityToComponentMapper() {
         defaultMap = new HashMap<>();
-        defaultMap.put(Boolean.class, UIField.TYPE.BOOLEAN);
+        defaultMap.put(Boolean.class, UIField.TYPE.SWITCHER);
         defaultMap.put(Date.class, UIField.TYPE.DATE);
         defaultMap.put(Character.class, UIField.TYPE.TEXT);
         defaultMap.put(String.class, UIField.TYPE.TEXT);

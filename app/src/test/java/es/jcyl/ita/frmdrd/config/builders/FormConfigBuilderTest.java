@@ -37,8 +37,11 @@ import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
-import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
+import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
+import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
+import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -100,6 +103,9 @@ public class FormConfigBuilderTest {
         // check controllers
     }
 
+    /**
+     * Check formEdit and formList are properly created
+     */
     private static final String TEST_BASIC1 = "<main repo=\"contacts\"/>";
 
     @Test
@@ -114,7 +120,9 @@ public class FormConfigBuilderTest {
         Assert.assertTrue(formConfig.getEdits().size() > 0);
         Assert.assertNotNull(formConfig.getRepo());
 
+        //////////////////////////
         // check editController
+        //////////////////////////
         FormEditController ctl = formConfig.getEdits().get(0);
         Assert.assertNotNull(ctl.getRepo());
         Assert.assertNotNull(ctl.getMainForm());
@@ -130,7 +138,13 @@ public class FormConfigBuilderTest {
                 Assert.assertEquals("back", action.getRoute());
             }
         }
+        // check FormEditController has a form
+        List<UIForm> forms = UIComponentHelper.findByClass(ctl.getView(), UIForm.class);
+        Assert.assertTrue("No default FORM found for FormEditController", forms.size() == 1);
+
+        //////////////////////////
         // check listController
+        //////////////////////////
         FormListController ctlList = formConfig.getList();
         Assert.assertNotNull(ctlList.getRepo());
         Assert.assertNotNull(ctlList.getActions());
@@ -146,6 +160,9 @@ public class FormConfigBuilderTest {
                 Assert.assertEquals(editCtrlId, action.getRoute());
             }
         }
+        // check listAction has a table
+        List<UIDatatable> tables = UIComponentHelper.findByClass(ctlList.getView(), UIDatatable.class);
+        Assert.assertTrue("No default table found for FormListController", tables.size() == 1);
 //        Assert.assertNotNull(ctlList.getEntitySelector()); pending of #203650
 
 
@@ -161,6 +178,7 @@ public class FormConfigBuilderTest {
 
         FormConfig formConfig = reader.read("test1", is);
         Assert.assertNotNull(formConfig);
+        Assert.assertNotNull(formConfig.getRepo());
         Assert.assertNotNull(formConfig.getList());
         Assert.assertNotNull(formConfig.getEdits());
         Assert.assertEquals(2, formConfig.getEdits().size());

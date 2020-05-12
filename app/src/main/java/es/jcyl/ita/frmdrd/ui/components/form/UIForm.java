@@ -2,7 +2,6 @@ package es.jcyl.ita.frmdrd.ui.components.form;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +20,7 @@ import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
@@ -54,36 +54,23 @@ public class UIForm extends UIComponent implements FilterableComponent {
      * @param id
      */
     public UIComponent getElement(String id) {
-        return findChild(this, id);
-    }
-
-    /**
-     * Recursively go over the component tree storing forms in the given array
-     *
-     * @param root
-     */
-    private UIComponent findChild(UIComponent root, String id) {
-        if (root.getId().equalsIgnoreCase(id)) {
-            return root;
-        } else {
-            if (root.hasChildren()) {
-                for (UIComponent c : root.getChildren()) {
-                    UIComponent found = findChild(c, id);
-                    if (found != null) {
-                        return found;
-                    }
-                }
-            }
-        }
-        return null;
+        return UIComponentHelper.findChild(this, id);
     }
 
     public List<UIInputComponent> getFields() {
-        if (this.fields == null) {
-            this.fields = new ArrayList<UIInputComponent>();
-            findFields(this, this.fields);
-        }
         return this.fields;
+    }
+
+    @Override
+    public void setChildren(UIComponent[] children) {
+        super.setChildren(children);
+        this.fields = UIComponentHelper.findByClass(this, UIInputComponent.class);
+    }
+
+    @Override
+    public void addChild(UIComponent... lstChildren) {
+        super.addChild(lstChildren);
+        this.fields = UIComponentHelper.findByClass(this, UIInputComponent.class);
     }
 
     /**
@@ -173,7 +160,7 @@ public class UIForm extends UIComponent implements FilterableComponent {
         } else {
             // what if its null? throw an Exception?
             currentEntity = findEntity(globalCtx, entityId);
-            if(currentEntity == null){
+            if (currentEntity == null) {
                 throw new FormException("No entity found with the id: " + entityId);
             }
         }
