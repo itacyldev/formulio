@@ -18,12 +18,12 @@ package es.jcyl.ita.frmdrd.config.builders;
 import android.text.InputType;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
@@ -39,12 +39,10 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 
-import static es.jcyl.ita.frmdrd.config.DevConsole.error;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIFormBuilder extends AbstractUIComponentBuilder<UIForm> {
+public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
 
     private ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     private ValidatorFactory validatorFactory = ValidatorFactory.getInstance();
@@ -54,19 +52,21 @@ public class UIFormBuilder extends AbstractUIComponentBuilder<UIForm> {
     }
 
     @Override
-    protected void doWithAttribute(UIForm element, String name, String value) {
+    protected void setupOnSubtreeStarts(ConfigNode<UIForm> node) {
     }
 
     @Override
-    protected void doConfigure(UIForm element, ConfigNode<UIForm> node) {
+    protected void setupOnSubtreeEnds(ConfigNode<UIForm> node) {
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
-        element.setChildren(uiComponents);
+        node.getElement().setChildren(uiComponents);
+
         UIBuilderHelper.setUpRepo(node, true);
         setUpFields(node);
     }
 
     /**
-     * Creates form input components automatically from repository meta
+     * Creates form input components automatically from repository meta filtering properties
+     * with "properties" attribute
      *
      * @param node
      */
@@ -82,7 +82,7 @@ public class UIFormBuilder extends AbstractUIComponentBuilder<UIForm> {
 
         List<UIInputComponent> fieldsToAdd = null;
         if (StringUtils.isBlank(propertySelector)) {
-            if (fields.size() == 0) {
+            if (CollectionUtils.isEmpty(fields)) {
                 // no property is selected and no nested input fields, by default add all properties
                 fieldsToAdd = createDefaultFields(form.getRepo(), new String[0]);
             }
@@ -92,22 +92,31 @@ public class UIFormBuilder extends AbstractUIComponentBuilder<UIForm> {
                 propertyFilter = new String[0];
             } else {
                 // comma-separated list of property names
-                propertyFilter = StringUtils.split(propertySelector, ",");
+                propertyFilter = StringUtils.split(propertySelector.replace(" ", ""), ",");
             }
             // check if the property is already included in the XML (equal ID)
             List<String> filteredProperties = new ArrayList<>();
             for (String str : propertyFilter) {
+                boolean found = false;
                 for (UIInputComponent c : fields) {
-                    if (!c.getId().equalsIgnoreCase(str)) {
-                        filteredProperties.add(str);
+                    if (c.getId().equalsIgnoreCase(str)) {
+                        found = true;
+                        break;
                     }
+                }
+                if(!found){
+                    filteredProperties.add(str);
                 }
             }
             // create columns with property selection
             fieldsToAdd = createDefaultFields(form.getRepo(), filteredProperties.toArray(new String[filteredProperties.size()]));
         }
         if (fieldsToAdd != null) {
-            fields.addAll(fieldsToAdd);
+            if (fields == null) {
+                fields = fieldsToAdd;
+            } else {
+                fields.addAll(fieldsToAdd);
+            }
             form.setChildren(fields.toArray(new UIComponent[fields.size()]));
         }
     }
@@ -130,8 +139,6 @@ public class UIFormBuilder extends AbstractUIComponentBuilder<UIForm> {
         }
         return kids;
     }
-
-
 
 
     public UIField.TYPE getType(PropertyType property) {

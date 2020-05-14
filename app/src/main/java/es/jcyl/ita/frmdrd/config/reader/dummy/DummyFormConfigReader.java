@@ -2,11 +2,20 @@ package es.jcyl.ita.frmdrd.config.reader.dummy;
 
 import android.net.Uri;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
+import es.jcyl.ita.crtrepo.query.Condition;
+import es.jcyl.ita.crtrepo.query.Criteria;
+import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.builders.AutoCompleteBuilder;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
@@ -14,13 +23,20 @@ import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.reader.AbstractFormConfigReader;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
 import es.jcyl.ita.frmdrd.ui.components.link.UIParam;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+import es.jcyl.ita.frmdrd.validation.RequiredValidator;
+import es.jcyl.ita.frmdrd.view.dag.DAGManager;
+import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -189,90 +205,90 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
 //        formController.setView(view1);
 //    }
 
-    private FormConfig createAgentsForm() {
-        ComponentBuilder<FormConfig> builder = builderFactory.getBuilder("main", FormConfig.class);
+    private FormConfig createAgentsForm()  {
+        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
 
         ConfigNode<FormConfig> node = new ConfigNode<>("main");
         node.setAttribute("id", "agents");
         node.setAttribute("repo", "agents");
-        FormConfig formConfig = builder.build(node);
-        node.setElement(formConfig);
-        builder.processChildren(node);
+        reader.build(node);
+        FormConfig formConfig = node.getElement();
         register(formConfig);
 
 
-//
-//        // remove all controls but "id" and  replace them with a select and autocompletes
-//        UIForm uiForm = result.getEdit().getMainForm();
-//        List<UIComponent> toRemove = new ArrayList<>();
-//        for (UIComponent c : uiForm.getChildren()) {
-//            if (!c.getId().equalsIgnoreCase("id")) {
-//                toRemove.add(c);
-//            }
-//        }
-//        UIComponent[] kids = uiForm.getChildren();
-//        uiForm.removeAll();
-//        uiForm.addChild(kids[0]);
-//
-//        // province spinner
-//        Repository provRepo = repoFactory.getRepo("provincia");
-//
-//        UIAutoComplete provAuto = autoCompleteBuilder.withId("provincia")
-//                .withValue("${entity.provmuni.substring(0,2)}", Integer.class)
-//                .withLabel("provincia").build();
-//        provAuto.setOptions(null);
-//        provAuto.setRepo(provRepo);
-//        uiForm.addChild(provAuto);
-//        provAuto.setParentForm(uiForm);
-//        provAuto.setForceSelection(true);
-//        provAuto.setValueProperty("id");
-//        provAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
-//        provAuto.setLabelFilteringProperty("name");
-//
-//        // council province-dependant autocomplete
-//        Repository muniRepo = repoFactory.getRepo("municipio");
-//        UIAutoComplete muniAuto = autoCompleteBuilder.withValue("${entity.provmuni}", String.class)
-//                .withId("municipio").withLabel("municipio").build();
-//        muniAuto.setOptions(null);
-//        muniAuto.setRepo(muniRepo);
-//        uiForm.addChild(muniAuto);
-//        muniAuto.setParentForm(uiForm);
-//        muniAuto.setForceSelection(true);
-//        muniAuto.setMandatoryFilters(new String[]{"view.provincia"});
-//        muniAuto.setValueProperty("provmuni");
-//        muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
-//        muniAuto.setLabelFilteringProperty("name");
-//        muniAuto.addValidator(new RequiredValidator());
-//        // muni values depend on selected province
-//        Filter f = new SQLQueryFilter();
-//        Filter muniFilter = FilterHelper.createInstance(muniRepo);
-//        Criteria criteria = Criteria.and(
-//                ConditionBinding.cond(Condition.eq("prov", null), exprFactory.create("${view.provincia}")),
-//                ConditionBinding.cond(Condition.contains("name", null), exprFactory.create("${this.value}")));
-//        muniFilter.setCriteria(criteria);
-//        muniAuto.setFilter(muniFilter);
-//
-//        // agents autocomplete
-//        Repository agents = repoFactory.getRepo("contacts");
-//        UIAutoComplete agentsAC = autoCompleteBuilder.withValue("${entity.contact_id}", Integer.class)
-//                .withId("agent").withLabel("agent").build();
-//        agentsAC.setRepo(agents);
-//        uiForm.addChild(agentsAC);
-//        agentsAC.setParentForm(uiForm);
-//
-//        agentsAC.setForceSelection(true);
-//        agentsAC.setValueProperty("contact_id");
-//        agentsAC.setOptionLabelExpression(exprFactory.create("${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"));
-//        agentsAC.setLabelFilteringProperty("name");
-//
-//        Filter agentFilter = FilterHelper.createInstance(agents);
-//        criteria = Criteria.or(
-//                ConditionBinding.cond(Condition.eq("first_name", null), exprFactory.create("${this.value}")),
-//                ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${this.value}")));
-//        agentFilter.setCriteria(criteria);
-//        agentsAC.setFilter(agentFilter);
-//        DAGManager.getInstance().generateDags(result.getEdit().getView());
-//        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(result.getEdit().getView().getId());
+
+        // remove all controls but "id" and  replace them with a select and autocompletes
+        FormEditController edit = formConfig.getEdits().get(0);
+        UIForm uiForm = edit.getMainForm();
+        List<UIComponent> toRemove = new ArrayList<>();
+        for (UIComponent c : uiForm.getChildren()) {
+            if (!c.getId().equalsIgnoreCase("id")) {
+                toRemove.add(c);
+            }
+        }
+        UIComponent[] kids = uiForm.getChildren();
+        uiForm.removeAll();
+        uiForm.addChild(kids[0]);
+
+        // province spinner
+        Repository provRepo = repoFactory.getRepo("provincia");
+
+        UIAutoComplete provAuto = autoCompleteBuilder.withId("provincia")
+                .withValue("${entity.provmuni.substring(0,2)}", Integer.class)
+                .withLabel("provincia").build();
+        provAuto.setOptions(null);
+        provAuto.setRepo(provRepo);
+        uiForm.addChild(provAuto);
+        provAuto.setParentForm(uiForm);
+        provAuto.setForceSelection(true);
+        provAuto.setValueProperty("id");
+        provAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
+        provAuto.setLabelFilteringProperty("name");
+
+        // council province-dependant autocomplete
+        Repository muniRepo = repoFactory.getRepo("municipio");
+        UIAutoComplete muniAuto = autoCompleteBuilder.withValue("${entity.provmuni}", String.class)
+                .withId("municipio").withLabel("municipio").build();
+        muniAuto.setOptions(null);
+        muniAuto.setRepo(muniRepo);
+        uiForm.addChild(muniAuto);
+        muniAuto.setParentForm(uiForm);
+        muniAuto.setForceSelection(true);
+        muniAuto.setMandatoryFilters(new String[]{"view.provincia"});
+        muniAuto.setValueProperty("provmuni");
+        muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
+        muniAuto.setLabelFilteringProperty("name");
+        muniAuto.addValidator(new RequiredValidator());
+        // muni values depend on selected province
+        Filter f = new SQLQueryFilter();
+        Filter muniFilter = FilterHelper.createInstance(muniRepo);
+        Criteria criteria = Criteria.and(
+                ConditionBinding.cond(Condition.eq("prov", null), exprFactory.create("${view.provincia}")),
+                ConditionBinding.cond(Condition.contains("name", null), exprFactory.create("${this.value}")));
+        muniFilter.setCriteria(criteria);
+        muniAuto.setFilter(muniFilter);
+
+        // agents autocomplete
+        Repository agents = repoFactory.getRepo("contacts");
+        UIAutoComplete agentsAC = autoCompleteBuilder.withValue("${entity.contact_id}", Integer.class)
+                .withId("agent").withLabel("agent").build();
+        agentsAC.setRepo(agents);
+        uiForm.addChild(agentsAC);
+        agentsAC.setParentForm(uiForm);
+
+        agentsAC.setForceSelection(true);
+        agentsAC.setValueProperty("contact_id");
+        agentsAC.setOptionLabelExpression(exprFactory.create("${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"));
+        agentsAC.setLabelFilteringProperty("name");
+
+        Filter agentFilter = FilterHelper.createInstance(agents);
+        criteria = Criteria.or(
+                ConditionBinding.cond(Condition.eq("first_name", null), exprFactory.create("${this.value}")),
+                ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${this.value}")));
+        agentFilter.setCriteria(criteria);
+        agentsAC.setFilter(agentFilter);
+        DAGManager.getInstance().generateDags(edit.getView());
+//        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(edit.getView().getId());
 //        System.out.println(viewDAG.getDags());
 
         return formConfig;

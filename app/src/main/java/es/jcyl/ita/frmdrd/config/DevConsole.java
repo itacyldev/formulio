@@ -58,7 +58,9 @@ public class DevConsole {
 
     //
     private static String _writeMsg(int errorLevel, String msg, Throwable t) {
-        ctx.set("line", xpp.getLineNumber());
+        if(xpp!=null){
+            ctx.set("line", xpp.getLineNumber());
+        }
         String effMsg = String.valueOf(JexlUtils.eval(ctx, msg));
         System.out.println(effMsg);
         if (t != null) {
@@ -79,10 +81,17 @@ public class DevConsole {
     }
 
     public static void setCurrentElement(String tag) {
+        if(ctx == null){
+            ctx = new MapContext();
+        }
         ctx.set("tag", tag);
     }
 
     public static void setParser(XmlPullParser parser) {
         xpp = parser;
+    }
+
+    public static void debug(String s) {
+        _writeMsg(Log.DEBUG, s, null);
     }
 }

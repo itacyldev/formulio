@@ -15,11 +15,12 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.BeanUtils;
-import org.mini2Dx.collections.CollectionUtils;
+import org.mini2Dx.beanutils.BeanUtilsBean;
+import org.mini2Dx.beanutils.PropertyUtilsBean;
 
 import java.util.Arrays;
-import java.util.List;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
@@ -27,7 +28,6 @@ import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -36,6 +36,7 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * Helper class that sets UIComponent common attributes
  */
 public class UIBuilderHelper {
+    private static PropertyUtilsBean propUtils = BeanUtilsBean.getInstance().getPropertyUtils();
 
     public static void setUpRepo(ConfigNode node, boolean mandatory) {
         Object currentRepo = getElementValue(node.getElement(), "repo");
@@ -44,41 +45,22 @@ public class UIBuilderHelper {
             // it should be already setup
             return;
         }
-
-        Object element = node.getElement();
-        Repository repo = null;
-
-        List<ConfigNode> lstRepos = ConfigNodeHelper.getChildrenByTag(node, "repo");
-        if (CollectionUtils.isNotEmpty(lstRepos) && hasAttRepo) {
-            throw new ConfigurationException(error("The element ${tag} has the attribute 'repo' set" +
-                    "But it also has a nested repository defined, just one of the options can be used."));
-        } else if (lstRepos.size() > 1) {
-            throw new ConfigurationException(error("Just one nested repo can be defined " +
-                    "in ${tag} component."));
-        } else if (lstRepos.size() == 1) {
-            // get nested repository definition from nested node
-            repo = (Repository) lstRepos.get(0).getElement();
-        }
-        // if not defined, try to get repo from parent nodes
-        if (repo == null) {
-            repo = RepositoryAttributeResolver.findParentRepo(node);
-        }
-        if (repo == null && mandatory) {
-            throw new ConfigurationException(error("No repository found for <${tag}/> with id =" + node.getId()));
-        }
-        setElementValue(element, "repo", repo);
+        // go upwards in the tree looking for a parent with the repo attribute set
+        ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
+        Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
+        setElementValue(node.getElement(), "repo", repo);
     }
 
-    private static Object getElementValue(Object element, String property) {
+    public static Object getElementValue(Object element, String property) {
         try {
-            return BeanUtils.getProperty(element, property);
+            return propUtils.getNestedProperty(element, property);
         } catch (Exception e) {
             throw new ConfigurationException(error(String.format("Error while trying to get " +
                     "attribute '%s' in object [%s] ", property, element.getClass().getName())));
         }
     }
 
-    private static void setElementValue(Object element, String property, Object value) {
+    public static void setElementValue(Object element, String property, Object value) {
         try {
             BeanUtils.setProperty(element, property, value);
         } catch (Exception e) {
@@ -125,5 +107,27 @@ public class UIBuilderHelper {
             }
         }
         return properties;
+    }
+
+
+    /**
+     * If dbFile and dbTableName are defined, created nested <repo/> node to be
+     * processed by RepoConfigBuilder
+     *
+     * @param node
+     */
+    public static void addDefaultRepoNode(ConfigNode node) {
+        String dbFile = node.getAttribute("dbFile");
+        String tableName = node.getAttribute("tableName");
+
+        if (StringUtils.isNotBlank(dbFile) && StringUtils.isNotBlank(tableName)) {
+            ConfigNode repoNode = new ConfigNode("repo");
+            repoNode.setAttribute("dbFile", dbFile);
+            repoNode.setAttribute("tableName", tableName);
+            node.getChildren().add(0, repoNode);
+        } else if (StringUtils.isNotBlank(dbFile) ^ StringUtils.isNotBlank(tableName)) {
+            error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
+                    "must be set in tag ${tag} id[%s].", node.getId()));
+        }
     }
 }

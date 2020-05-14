@@ -114,6 +114,8 @@ public class FormConfigBuilderTest {
         XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
         InputStream is = XmlConfigUtils.createStream(TEST_BASIC1);
         FormConfig formConfig = reader.read("test1", is);
+
+
         Assert.assertNotNull(formConfig);
         Assert.assertNotNull(formConfig.getList());
         Assert.assertNotNull(formConfig.getEdits());
@@ -164,8 +166,6 @@ public class FormConfigBuilderTest {
         List<UIDatatable> tables = UIComponentHelper.findByClass(ctlList.getView(), UIDatatable.class);
         Assert.assertTrue("No default table found for FormListController", tables.size() == 1);
 //        Assert.assertNotNull(ctlList.getEntitySelector()); pending of #203650
-
-
     }
 
 
@@ -209,6 +209,8 @@ public class FormConfigBuilderTest {
             for (FCAction action : edit.getActions()) {
                 Assert.assertNotNull(action.getType());
             }
+            Assert.assertNotNull(edit.getAction("cancel"));
+            Assert.assertNotNull(edit.getAction("save"));
         }
     }
 

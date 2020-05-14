@@ -29,16 +29,23 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private static final int PERMISSION_REQUEST = 1234;
     Config config = new Config("");
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        getApplication().getFilesDir();
+//
+//        super.onCreate(savedInstanceState);
+//        checkPermissions();
+//        setContentView(R.layout.activity_main);
+//        initialize();
+//
+//    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void doOnCreate() {
         getApplication().getFilesDir();
-
-        super.onCreate(savedInstanceState);
         checkPermissions();
         setContentView(R.layout.activity_main);
         initialize();
-
     }
 
 

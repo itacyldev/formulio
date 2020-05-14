@@ -68,6 +68,7 @@ public class UIDatatableBuilderTest {
         // repo must be set with parent value "contacts"
         UIDatatable datatable = datables.get(0);
         Assert.assertNotNull(datatable.getId());
+        Assert.assertNotNull(datatable.getRoute());
         Assert.assertEquals(formConfig.getRepo(), datatable.getRepo());
     }
 

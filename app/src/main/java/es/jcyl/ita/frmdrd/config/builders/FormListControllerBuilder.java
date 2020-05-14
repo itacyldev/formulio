@@ -45,7 +45,7 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  */
 public class FormListControllerBuilder extends AbstractComponentBuilder<FormListController> {
 
-    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("new", "update", "cancel", "delete", "nav"));
+    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("add", "update", "cancel", "delete", "nav"));
     private static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable"));
 
     private static RepositoryAttributeResolver repoResolver = new RepositoryAttributeResolver();
@@ -60,12 +60,14 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
 
     @Override
-    protected void doConfigure(FormListController ctl, ConfigNode node) {
+    protected void setupOnSubtreeStarts(ConfigNode<FormListController> node) {
+        FormListController ctl = node.getElement();
         // find nested filter if exists
         List<ConfigNode> repoFilters = ConfigNodeHelper.getChildrenByTag(node, "repoFilter");
         if (CollectionUtils.isNotEmpty(repoFilters)) {
             if (repoFilters.size() > 1)
-                error(String.format("Just one nested repoFilter element can be defined in 'list', found: []", repoFilters.size()));
+                error(String.format("Just one nested repoFilter element can be defined in 'list', " +
+                        "found: []", repoFilters.size()));
             else if (repoFilters.size() == 1) {
                 ctl.setFilter((Filter) repoFilters.get(0).getElement());
             }
@@ -73,25 +75,69 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         // find entitySelector
         UIView listView = new UIView(ctl.getId() + ">view");
         ctl.setView(listView);
+
+        // setup actions must be configured at start of he subtree, so the can be
+        // used by nested elements to configure themselves if needed
+        createDefaultActionNodes(node);
+        UIBuilderHelper.addDefaultRepoNode(node);
+        // if no repo configuration is defined, use parent
+        UIBuilderHelper.setUpRepo(node, true);
+    }
+
+
+    /**
+     * Searchs for actions in current Form file configuration. If no action if found for current list-form
+     * it creates default action-nodes.
+     *
+     * @param node
+     */
+    private void createDefaultActionNodes(ConfigNode<FormListController> node) {
+        List<ConfigNode> actions = ConfigNodeHelper.getDescendantByTag(node, ACTION_SET);
+
+        if (CollectionUtils.isEmpty(actions)) { // add default actions
+            ConfigNode root = ConfigNodeHelper.getRoot(node);
+            List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(root, "edit");
+            String editId;
+            if (edits.size() > 1) {
+                throw new ConfigurationException(error("List-view with more that one edit-view " +
+                        "and with no actions defined!. When you have more that one <edit/> in a form, " +
+                        "you have to use <actions/> element in the <list/> to define which view will " +
+                        "be navigated from the list."));
+            }
+            // there must be at least one create by FormConfigBuilder
+            editId = edits.get(0).getId();
+
+            String listId = node.getId();
+            node.addChild(createActionNode("add", listId + "#add", "Add", editId));
+            node.addChild(createActionNode("update", listId + "#update", "Update", editId));
+            node.addChild(createActionNode("delete", listId + "#delete", "Delete", null));
+        }
     }
 
     @Override
-    public void processChildren(ConfigNode<FormListController> node) {
+    protected void setupOnSubtreeEnds(ConfigNode<FormListController> node) {
         // add nested ui elements
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().getView().setChildren(uiComponents);
 
-
-        setUpEntitySelector(node); // see issue #203650
         setUpActions(node);
+        setUpEntitySelector(node); // see issue #203650
     }
 
-    private void setUpTables(ConfigNode<FormListController> node) {
-        FormListController ctl = node.getElement();
+    /**
+     * Searchs for actions in nested configuration
+     *
+     * @param node
+     */
+    private void setUpActions(ConfigNode<FormListController> node) {
+        List<ConfigNode> actions = ConfigNodeHelper.getChildrenByTag(node, ACTION_SET);
+        FCAction[] lstActions = new FCAction[actions.size()];
 
-        // get nested forms
-        List<ConfigNode> forms = ConfigNodeHelper.getNestedByTag(node, "data");
-
+        for (int i = 0; i < actions.size(); i++) {
+            lstActions[i] = (FCAction) actions.get(i).getElement();
+            lstActions[i].setType(actions.get(i).getName());
+        }
+        node.getElement().setActions(lstActions);
     }
 
     /**
@@ -103,7 +149,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      */
     private void setUpEntitySelector(ConfigNode<FormListController> node) {
         Object selector = null;
-        List<ConfigNode> entitySelectors = ConfigNodeHelper.getNestedByTag(node, ENTITY_SELECTOR_SET);
+        List<ConfigNode> entitySelectors = ConfigNodeHelper.getDescendantByTag(node, ENTITY_SELECTOR_SET);
         String entitySelectorId = node.getAttribute("entitySelector");
 
         if (StringUtils.isNotBlank(entitySelectorId)) {
@@ -160,20 +206,13 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         return table;
     }
 
-    /**
-     * Searchs for actions in nested configuration
-     *
-     * @param node
-     */
-    private void setUpActions(ConfigNode<FormListController> node) {
-        List<ConfigNode> actions = ConfigNodeHelper.getNestedByTag(node, ACTION_SET);
-        FCAction[] lstActions = new FCAction[actions.size()];
 
-        for (int i = 0; i < actions.size(); i++) {
-            lstActions[i] = (FCAction) actions.get(i).getElement();
-            lstActions[i].setType(actions.get(i).getName());
-        }
-        node.getElement().setActions(lstActions);
+    private ConfigNode createActionNode(String action, String id, String label, String route) {
+        ConfigNode node = new ConfigNode(action);
+        node.setId(id);
+        node.setAttribute("label", label);
+        node.setAttribute("route", route);
+        return node;
     }
 
     @Override

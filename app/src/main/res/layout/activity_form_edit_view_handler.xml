@@ -12,7 +12,7 @@
         android:paddingBottom="40dp">
 
         <LinearLayout
-            android:id="@+id/form_content"
+            android:id="@+id/body_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

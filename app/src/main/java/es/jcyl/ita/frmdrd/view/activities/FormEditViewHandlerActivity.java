@@ -1,24 +1,18 @@
 package es.jcyl.ita.frmdrd.view.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import es.jcyl.ita.frmdrd.BaseActivity;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
-import es.jcyl.ita.frmdrd.router.Router;
-import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -40,35 +34,45 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class FormEditViewHandlerActivity extends BaseActivity implements FormActivity<FormEditController> {
+public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditController>
+        implements FormActivity<FormEditController> {
 
-    private Router router;
-    private RenderingEnv env;
-    private FormEditController formController;
-    /**
-     * View element used to render the forms defined for this controller
-     */
-    private ViewGroup contentView;
+//    private Router router;
+//    private RenderingEnv env;
+//    private FormEditController formController;
+//    /**
+//     * View element used to render the forms defined for this controller
+//     */
+//    private ViewGroup contentView;
+
+//    @Override
+//    protected void onCreate(final Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_form_edit_view_handler);
+//        contentView = this.findViewById(R.id.form_content);
+//
+//        MainController mc = MainController.getInstance();
+//        mc.registerActivity(this);
+//
+//        // render edit view content and link content view
+//        View viewRoot = mc.renderView(this);
+//        contentView.addView(viewRoot);
+//
+//        // check if there are messages to show
+//        UserMessagesHelper.showGlobalMessages(this, mc.getRouter());
+//    }
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_form_edit_view_handler);
-        contentView = this.findViewById(R.id.form_content);
+    protected int getLayoutResource() {
+        return R.layout.activity_form_edit_view_handler;
+    }
 
-        MainController mc = MainController.getInstance();
-        mc.registerActivity(this);
-
-        // render edit view content and link content view
-        View viewRoot = mc.renderView(this);
-        contentView.addView(viewRoot);
-
+    @Override
+    protected void doRender() {
         // add action buttons
         ViewGroup toolBar = findViewById(R.id.form_toolbar);
         renderToolBar(toolBar);
 
-        // check if there are messages to show
-        UserMessagesHelper.showGlobalMessages(this, mc.getRouter());
     }
 
     private void renderToolBar(ViewGroup parentView) {
@@ -136,38 +140,5 @@ public class FormEditViewHandlerActivity extends BaseActivity implements FormAct
         button.setTextColor(textColor);
     }
 
-    @Override
-    protected void setTheme() {
-        //currentTheme = sharedPreferences.getString("current_theme", "light");
-        if (currentTheme.equals("light")) {
-            setTheme(R.style.Theme_App_Light_NoActionBar);
-        } else {
-            setTheme(R.style.Theme_App_Dark_NoActionBar);
-        }
-    }
 
-    @Override
-    public void setFormController(FormEditController formController) {
-        this.formController = formController;
-    }
-
-    @Override
-    public void setRouter(Router router) {
-        this.router = router;
-    }
-
-    @Override
-    public void setRenderingEnv(RenderingEnv env) {
-        this.env = env;
-    }
-
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
-
-    @Override
-    public ViewGroup getContentView() {
-        return contentView;
-    }
 }

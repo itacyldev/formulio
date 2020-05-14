@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.builders;
+package es.jcyl.ita.frmdrd.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -19,9 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.config.Config;
-import es.jcyl.ita.frmdrd.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.frmdrd.config.meta.TagDef;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.config.repo.RepoConfig;
 import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -29,45 +29,47 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class RepoConfigBuilder extends AbstractComponentBuilder<Repository> {
+public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
     private static RepositoryConfReader repoReader = Config.getRepoConfigReader();
 
     public RepoConfigBuilder(String tagName) {
-        super(tagName, Repository.class);
+        super(tagName, RepoConfig.class);
     }
 
     @Override
-    protected void doWithAttribute(Repository element, String name, String value) {
+    protected void doWithAttribute(RepoConfig element, String name, String value) {
 
     }
 
     @Override
-    protected void setupOnSubtreeStarts(ConfigNode<Repository> node) {
-
-        // find first parent that admits repository
-        ConfigNode parent = findRepoParent(node);
-
-        boolean defined = node.getAttribute("repo");
-
+    protected void setupOnSubtreeStarts(ConfigNode<RepoConfig> node) {
         // check if there a direct repository definition with dbFile and dbTable attributes
         String dbFile = node.getAttribute("dbFile");
         String dbTable = node.getAttribute("dbTable");
         boolean isDbFileSet = StringUtils.isNotBlank(dbFile);
         boolean isTableNameSet = StringUtils.isNotBlank(dbTable);
 
-        if (isDbFileSet || isTableNameSet) {
-            if (defined) {
-                error(String.format("Repository is already defined with attribute 'repo' but a new " +
-                                "definition is found with attributes dbFile and dbTable in form [%s]."
-                        , node.getId()));
-            } else if (isDbFileSet ^ isTableNameSet) {
-                error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                        "must be set in tag ${tag} id[%s.", node.getId()));
-            } else {
-                // try to create a repository from current configuration
-                Repository repo = repoReader.createFromFile(dbFile, dbTable);
-            }
+        Repository repo = null;
+        if (isDbFileSet ^ isTableNameSet) {
+            error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
+                    "must be set in tag ${tag} id[%s.", node.getId()));
+        } else if (isDbFileSet && isTableNameSet) {
+            // try to create a repository from current configuration
+            repo = repoReader.createFromFile(dbFile, dbTable);
         }
+
+        // find first parent that admits "repo" attribute and if doesn't have a repo already defined by
+        // attribute "repo", set current repo to it
+        ConfigNode parent = findRepoParent(node);
+        if (!parent.hasAttribute("repo")) {
+            parent.setAttribute("repo", repo.getId());
+            UIBuilderHelper.setElementValue(parent.getElement(), "repo", repo);
+        }
+    }
+
+    @Override
+    protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
+
     }
 
     /**
@@ -76,7 +78,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<Repository> {
      * @param node
      * @return
      */
-    private ConfigNode findRepoParent(ConfigNode<Repository> node) {
+    private ConfigNode findRepoParent(ConfigNode<RepoConfig> node) {
         ConfigNode parent = node.getParent();
         if (parent == null) {
             return null;
@@ -91,9 +93,5 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<Repository> {
         }
     }
 
-    @Override
-    protected void setupOnSubtreeEnds(ConfigNode<Repository> node) {
-
-    }
 
 }

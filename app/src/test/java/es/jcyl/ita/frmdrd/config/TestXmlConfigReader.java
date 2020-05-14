@@ -54,7 +54,6 @@ public class TestXmlConfigReader {
         // register repos
         RepositoryUtils.registerMock("contacts");
 
-
     }
 
     @Test

@@ -59,6 +59,8 @@ public class ComponentBuilderFactory {
         registerBuilder("edit", newBuilder(FormEditControllerBuilder.class, "edit"));
         registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
 
+        registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
+
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newDefaultBuilder(UIColumn.class, "column"));
 
@@ -66,9 +68,10 @@ public class ComponentBuilderFactory {
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
         // same component builder with different alias
         registerBuilder("nav", defaultActionBuilder);
-        registerBuilder("new", defaultActionBuilder);
+        registerBuilder("add", defaultActionBuilder);
         registerBuilder("update", defaultActionBuilder);
         registerBuilder("delete", defaultActionBuilder);
+        registerBuilder("save", defaultActionBuilder);
         registerBuilder("cancel", defaultActionBuilder);
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");

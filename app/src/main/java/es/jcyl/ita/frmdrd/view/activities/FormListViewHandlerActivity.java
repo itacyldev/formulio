@@ -1,62 +1,61 @@
 package es.jcyl.ita.frmdrd.view.activities;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import es.jcyl.ita.frmdrd.BaseActivity;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.forms.FormListController;
-import es.jcyl.ita.frmdrd.router.Router;
-import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
-public class FormListViewHandlerActivity extends BaseActivity implements FormActivity<FormListController> {
+public class FormListViewHandlerActivity extends BaseFormActivity<FormListController>
+        implements FormActivity<FormListController> {
 
-    private Router router;
-    private RenderingEnv env;
-    private FormListController formController;
+
     /**
      * View element used to render the forms defined for this controller
      */
-    private ViewGroup contentView;
+//    private ViewGroup contentView;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        setContentView(R.layout.activity_form_list_view_handler);
+//        contentView = this.findViewById(R.id.body_content);
+//
+//        MainController mc = MainController.getInstance();
+//        mc.registerActivity(this);
+//
+//        // render edit view content and link content view
+//        View viewRoot = mc.renderView(this);
+//        contentView.addView(viewRoot);
+//
+//        // check if there are messages to show
+//        UserMessagesHelper.showGlobalMessages(this, mc.getRouter());
+//    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected int getLayoutResource() {
+        return R.layout.activity_form_list_view_handler;
+    }
 
-        setContentView(R.layout.activity_form_list_view_handler);
-        contentView = this.findViewById(R.id.body_content);
-
-        MainController mc = MainController.getInstance();
-        mc.registerActivity(this);
-
-        // render edit view content and link content view
-        View viewRoot = mc.renderView(this);
-        contentView.addView(viewRoot);
-
+    @Override
+    protected void doRender() {
         // action buttons
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        renderFAB(mc);
-
-        // check if there are messages to show
-        UserMessagesHelper.showGlobalMessages(this, mc.getRouter());
-
-
+        renderFAB();
     }
 
-    private void renderFAB(MainController mc) {
+
+    private void renderFAB() {
         FloatingActionButton fab = findViewById(R.id.fab);
         if (!this.formController.hasAction("add")) {
             fab.hide();
@@ -66,7 +65,8 @@ public class FormListViewHandlerActivity extends BaseActivity implements FormAct
                 @Override
                 public void onClick(View view) {
                     // FAB new entity button, navigate to form view without entityId
-                    ViewUserActionInterceptor userActionInterceptor = mc.getRenderingEnv().getUserActionInterceptor();
+
+                    ViewUserActionInterceptor userActionInterceptor = env.getUserActionInterceptor();
                     if (userActionInterceptor != null) {
                         UserAction action = UserAction.navigate(context, null,
                                 formController.getAction("add").getRoute());
@@ -88,43 +88,6 @@ public class FormListViewHandlerActivity extends BaseActivity implements FormAct
         MainController mc = MainController.getInstance();
         mc.getActionController().doUserAction(UserAction.back(this));
         finish();
-    }
-
-
-    @Override
-    public void setFormController(FormListController formController) {
-        this.formController = formController;
-    }
-
-
-    @Override
-    public void setRouter(Router router) {
-        this.router = router;
-    }
-
-    @Override
-    public void setRenderingEnv(RenderingEnv env) {
-        this.env = env;
-    }
-
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
-
-    @Override
-    public ViewGroup getContentView() {
-        return contentView;
-    }
-
-    @Override
-    protected void setTheme(){
-        //currentTheme = sharedPreferences.getString("current_theme", "light");
-        if (currentTheme.equals("light")) {
-            setTheme(R.style.Theme_App_Light_NoActionBar);
-        } else {
-            setTheme(R.style.Theme_App_Dark_NoActionBar);
-        }
     }
 
 }

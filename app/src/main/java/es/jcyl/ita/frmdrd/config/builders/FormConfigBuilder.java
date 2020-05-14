@@ -15,31 +15,26 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
-import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
-import static es.jcyl.ita.frmdrd.config.DevConsole.warn;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
-
-    private FormListControllerBuilder listBuilder;
-    private FormEditControllerBuilder editBuilder;
 
     public FormConfigBuilder(String tagName) {
         super(tagName, FormConfig.class);
@@ -49,150 +44,106 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
     protected void doWithAttribute(FormConfig element, String name, String value) {
     }
 
-    @Override
-    protected void doConfigure(FormConfig formConfig, ConfigNode node) {
-
-    }
-
 
     @Override
-    public void processChildren(ConfigNode<FormConfig> node) {
-        // configure builders
-        listBuilder = (FormListControllerBuilder) getFactory().getBuilder("list");
-        editBuilder = (FormEditControllerBuilder) getFactory().getBuilder("edit");
+    protected void setupOnSubtreeStarts(ConfigNode<FormConfig> node) {
         FormConfig formConfig = node.getElement();
-        configureListView(formConfig, node);
-        configureEditViews(formConfig, node);
-        setUpDefaultActions(formConfig);
+        List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
+        if (list.size() == 0) {
+            // if no nested List, create one node and attach to current node
+            addDefaultListNode(formConfig, node);
+        }
+        List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(node, "edit");
+        if (edits.size() == 0) {
+            // if no nested Edit, create one node and attach to current node
+            addDefaultEditNode(formConfig, node);
+        }
+        UIBuilderHelper.addDefaultRepoNode(node);
     }
 
-    private void setUpDefaultActions(FormConfig formConfig) {
-        String listId = formConfig.getList().getId();
 
-        // if the edit has no actions set default actions (Save, Cancel Delete
-        FCAction[] fcActions = defaultEditActions(listId);
-        List<FormEditController> edits = formConfig.getEdits();
-        for (FormEditController edit : edits) {
-            if (ArrayUtils.isEmpty(edit.getActions())) {
-                edit.setActions(fcActions);
-            }
-        }
-        // if list has no actions setup default actions
-        FormListController listCtl = formConfig.getList();
-        if (ArrayUtils.isEmpty(listCtl.getActions())) {
-            // we can set default list-actions just if there's only one (and only one) editView
-            int numEditViews = edits.size();
-            if (numEditViews == 0) {
-                warn("List-view with no edit-views in file ${file}, no default actions added.");
-            } else if (numEditViews > 1) {
-                throw new ConfigurationException(error("List-view with more that one edit-view " +
-                        "and with no actions defined!. When you have more that one <edit/> in a form, " +
-                        "you have to use <actions/> element in the <list/> to define with view will " +
-                        "be navigated from the list."));
-            } else {
-                // setup default views
-                FormEditController editCtl = edits.get(0);
-                FCAction[] listActions = defaultListActions(editCtl.getId());
-                listCtl.setActions(listActions);
-            }
-        }
+    @Override
+    protected void setupOnSubtreeEnds(ConfigNode<FormConfig> node) {
+        // attach list and edit controllers to current formConfig
+        setUpListController(node);
+        setUpEditControllers(node);
+    }
+
+    private void addDefaultListNode(FormConfig formConfig, ConfigNode node) {
+        // add list node
+        ConfigNode listNode = addDefaultNode(formConfig, node, "list");
+
+//        // find edit views
+//        List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(node, "edit");
+//        String editId;
+//        if (edits.size() == 0) {
+//            // it will be created later with this id
+//            editId = formConfig.getId() + "#list";
+//        } else if (edits.size() == 1) {
+//            editId = edits.get(0).getId();
+//        } else {
+//            throw new ConfigurationException(error("List-view with more that one edit-view " +
+//                    "and with no actions defined!. When you have more that one <edit/> in a form, " +
+//                    "you have to use <actions/> element in the <list/> to define which view will " +
+//                    "be navigated from the list."));
+//        }
+    }
+
+    private void addDefaultEditNode(FormConfig formConfig, ConfigNode node) {
+        // add list node
+        ConfigNode editNode = addDefaultNode(formConfig, node, "edit");
+        // get list node, it will be previously created
+//        List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
+//        String fcListId = list.get(0).getId();
+//
+//        editNode.addChild(createActionNode("save", fcListId + "#save", "Save", fcListId));
+//        editNode.addChild(createActionNode("cancel", fcListId + "#cancel", "Cancel", "back"));
+    }
+
+    private ConfigNode createActionNode(String action, String id, String label, String route) {
+        ConfigNode node = new ConfigNode(action);
+        node.setId(id);
+        node.setAttribute("label", label);
+        node.setAttribute("route", route);
+        return node;
+    }
+
+    private ConfigNode addDefaultNode(FormConfig formConfig, ConfigNode node, String tag) {
+        ConfigNode newNode = node.copy();
+        String id = formConfig.getId() + "#" + tag;
+        newNode.setName(tag);
+        newNode.setId(id);
+        node.addChild(newNode);
+        return newNode;
     }
 
     /**
-     * Checks nested form-list element to attach it to current formConfig. If no form-list
-     * configuration is found it creates one using current formConfig attributes.
+     * Finds nested list Element and sets to FormConfig
      *
-     * @param formConfig
      * @param node
      */
-    private void configureListView(FormConfig formConfig, ConfigNode node) {
-        // get list and edit views, check and set to configuration
-        FormListController listController = null;
+    private void setUpListController(ConfigNode<FormConfig> node) {
         List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
-        if (list.size() > 1) {
-            throw new ConfigurationException(error(String.format("Each form file must contain just " +
-                    "one 'list' element, found: [%s]", list.size())));
-        } else if (list.size() == 1) {
-            listController = (FormListController) list.get(0).getElement();
-        } else {
-            // if no list view, create
-            ConfigNode listNode = node.copy();
-            node.addChild(listNode);
-            String listId = formConfig.getId() + "#list";
-            listController = new FormListController(listId, "list");
-            listNode.setElement(listController);
-            listBuilder.doConfigure(listController, listNode);
-            listBuilder.processChildren(listNode);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new ConfigurationException(error("Each form file must contain just " +
+                    "one 'list' element"));
         }
-
-        // if repo attribute is not defined use parent repo
-        if (listController.getRepo() == null) {
-            listController.setRepo(formConfig.getRepo());
-        }
-        formConfig.setList(listController);
+        node.getElement().setList((FormListController) list.get(0).getElement());
     }
 
 
-    private void configureEditViews(FormConfig formConfig, ConfigNode node) {
-        List<FormEditController> edits = new ArrayList<>();
-
+    private void setUpEditControllers(ConfigNode<FormConfig> node) {
         List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "edit");
-        if (list.size() > 1) {
-            for (ConfigNode n : list) {
-                edits.add((FormEditController) n.getElement());
-            }
-        } else {
-            // if no edit found, create one using main node attributes
-            ConfigNode editNode = node.copy();
-            node.addChild(editNode);
-            String listId = formConfig.getId() + "#edit";
-
-            FormEditController editController = new FormEditController(listId, "edit");
-            editNode.setElement(editController);
-            editBuilder.doConfigure(editController, editNode);
-            editBuilder.processChildren(editNode);
-            edits.add(editController);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new ConfigurationException(error("Each form file must contain at least " +
+                    "one 'edit' element"));
         }
-        // if no repo is defined, use parent's
-        for (FormEditController c : edits) {
-            if (c.getRepo() == null) {
-                c.setRepo(formConfig.getRepo());
-            }
+        List<FormEditController> edits = new ArrayList<>();
+        for (ConfigNode editNode : list) {
+            edits.add((FormEditController) editNode.getElement());
         }
-        formConfig.setEdits(edits);
+        node.getElement().setEdits(edits);
     }
 
-
-    /**
-     * Creates default actions for edit view. The given string is the id of the list controller
-     * to return after cancel action.
-     *
-     * @param fcListId
-     * @return
-     */
-    private FCAction[] defaultEditActions(String fcListId) {
-        FCAction[] actions = new FCAction[2];
-        // save and cancel
-        actions[0] = new FCAction("save", "Save", fcListId);
-        actions[1] = new FCAction("cancel", "Cancel", "back");
-        return actions;
-    }
-
-
-    /**
-     * Creates defaulta actions for list view. The given string is the Id of the main edit-view to
-     * redirect when the user chooses an entity.
-     *
-     * @param fcEditId
-     * @return
-     */
-    private FCAction[] defaultListActions(String fcEditId) {
-        FCAction[] actions = new FCAction[3];
-        // save and cancel
-        actions[0] = new FCAction("add", "New", fcEditId);
-        actions[1] = new FCAction("edit", "Edit", fcEditId);
-        actions[2] = new FCAction("delete", "Delete", null);
-        return actions;
-    }
 
 }

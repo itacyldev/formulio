@@ -17,6 +17,34 @@ package es.jcyl.ita.frmdrd.config.repo;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * Class to hold repository configuration during config reading process
  */
 public class RepoConfig {
+    private String dbFile;
+    private String tableName;
+    private String sql;
+
+    public String getDbFile() {
+        return dbFile;
+    }
+
+    public void setDbFile(String dbFile) {
+        this.dbFile = dbFile;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public void setSql(String sql) {
+        this.sql = sql;
+    }
 }

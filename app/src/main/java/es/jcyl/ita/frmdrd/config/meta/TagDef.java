@@ -61,6 +61,8 @@ public class TagDef {
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE}));
 
+        register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
+
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
         Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE};
         Map<String, Attribute> baseInput = define(base, input);
@@ -73,11 +75,12 @@ public class TagDef {
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL});
         register("action", actionAttributes);
-        register("new", actionAttributes);
+        register("add", actionAttributes);
         register("update", actionAttributes);
-        register("nav", actionAttributes);
+        register("save", actionAttributes);
         register("cancel", actionAttributes);
         register("delete", actionAttributes);
+        register("nav", actionAttributes);
 
         register("link", define(base, new Attribute[]{ROUTE}));
 
@@ -102,6 +105,10 @@ public class TagDef {
 
     public static Map<String, Attribute> getDefinition(String name) {
         return registry.get(name);
+    }
+
+    public static boolean supportsAttribute(String tagName, String attName){
+        return getDefinition(tagName).containsKey(attName);
     }
 
 

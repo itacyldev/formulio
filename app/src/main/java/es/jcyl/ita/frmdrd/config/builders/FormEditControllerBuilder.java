@@ -44,7 +44,7 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEditController> {
     private static RepositoryAttributeResolver repoResolver;
 
-    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("new", "update", "cancel", "delete", "nav"));
+    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("add", "update", "save", "cancel", "delete", "nav"));
 
     public FormEditControllerBuilder(String tagName) {
         super(tagName, FormEditController.class);
@@ -56,7 +56,8 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
 
     @Override
-    protected void doConfigure(FormEditController ctl, ConfigNode node) {
+    protected void setupOnSubtreeStarts(ConfigNode<FormEditController> node) {
+        FormEditController ctl = node.getElement();
         // find nested filter if exists
         List<ConfigNode> repoFilters = ConfigNodeHelper.getChildrenByTag(node, "repoFilter");
         if (CollectionUtils.isNotEmpty(repoFilters)) {
@@ -70,22 +71,71 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         // find entitySelector
         UIView view = new UIView(ctl.getId() + ">view");
         ctl.setView(view);
+        // setup actions must be configured at start of he subtree, so the can be
+        // used by nested elements to configure themselves if needed
+        createDefaultActionNodes(node);
+
+        UIBuilderHelper.addDefaultRepoNode(node);
+        // if no repo configuration is defined, use parent
+        UIBuilderHelper.setUpRepo(node, true);
     }
 
+    /**
+     * Searchs for actions in nested configuration. It is called in the subtree start, so
+     * it has to handle ConfigNodes and not elements
+     *
+     * @param node
+     */
+    private void createDefaultActionNodes(ConfigNode<FormEditController> node) {
+        List<ConfigNode> actions = ConfigNodeHelper.getDescendantByTag(node, ACTION_SET);
+
+        if (CollectionUtils.isEmpty(actions)) { // add default actions
+            ConfigNode root = ConfigNodeHelper.getRoot(node);
+            List<ConfigNode> listCtls = ConfigNodeHelper.getChildrenByTag(root, "list");
+            String listId;
+            if (listCtls.size() > 1) {
+                throw new ConfigurationException(error("Just one <list/> element can be nested in a form configuration."));
+            }
+            // there must be at least one create by FormConfigBuilder
+            listId = listCtls.get(0).getId();
+
+            node.addChild(createActionNode("save", listId + "#save", "Save", listId));
+            node.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back"));
+        }
+    }
+
+
     @Override
-    public void processChildren(ConfigNode<FormEditController> node) {
+    protected void setupOnSubtreeEnds(ConfigNode<FormEditController> node) {
         // add nested ui elements
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().getView().setChildren(uiComponents);
 
-        setUpForms(node);
         setUpActions(node);
+        setUpForms(node);
+    }
+
+
+    /**
+     * Searchs for actions in nested configuration
+     *
+     * @param node
+     */
+    private void setUpActions(ConfigNode<FormEditController> node) {
+        List<ConfigNode> actions = ConfigNodeHelper.getChildrenByTag(node, ACTION_SET);
+        FCAction[] lstActions = new FCAction[actions.size()];
+
+        for (int i = 0; i < actions.size(); i++) {
+            lstActions[i] = (FCAction) actions.get(i).getElement();
+            lstActions[i].setType(actions.get(i).getName());
+        }
+        node.getElement().setActions(lstActions);
     }
 
     private void setUpForms(ConfigNode<FormEditController> node) {
         FormEditController ctl = node.getElement();
         // get nested forms
-        List<ConfigNode> forms = ConfigNodeHelper.getNestedByTag(node, "form");
+        List<ConfigNode> forms = ConfigNodeHelper.getDescendantByTag(node, "form");
         int numForms = forms.size();
         UIForm mainForm = null;
         if (numForms == 0) {
@@ -141,20 +191,12 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
 
-    /**
-     * Searchs for actions in nested configuration
-     *
-     * @param node
-     */
-    private void setUpActions(ConfigNode<FormEditController> node) {
-        List<ConfigNode> actions = ConfigNodeHelper.getNestedByTag(node, ACTION_SET);
-        FCAction[] lstActions = new FCAction[actions.size()];
-
-        for (int i = 0; i < actions.size(); i++) {
-            lstActions[i] = (FCAction) actions.get(i).getElement();
-            lstActions[i].setType(actions.get(i).getName());
-        }
-        node.getElement().setActions(lstActions);
+    private ConfigNode createActionNode(String action, String id, String label, String route) {
+        ConfigNode node = new ConfigNode(action);
+        node.setId(id);
+        node.setAttribute("label", label);
+        node.setAttribute("route", route);
+        return node;
     }
 
     @Override

@@ -23,9 +23,9 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class AbstractUIComponentBuilder<E extends UIComponent> extends AbstractComponentBuilder<E> {
+public class BaseUIComponentBuilder<E extends UIComponent> extends AbstractComponentBuilder<E> {
 
-    public AbstractUIComponentBuilder(String tagName, Class<? extends E> clazz) {
+    public BaseUIComponentBuilder(String tagName, Class<? extends E> clazz) {
         super(tagName, clazz);
     }
 
@@ -40,7 +40,7 @@ public abstract class AbstractUIComponentBuilder<E extends UIComponent> extends 
     }
 
     @Override
-    public void setupOnSubtreeEnds(ConfigNode<E> node) {
+    protected void setupOnSubtreeEnds(ConfigNode<E> node) {
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().setChildren(uiComponents);
     }

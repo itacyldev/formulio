@@ -18,12 +18,7 @@ package es.jcyl.ita.frmdrd.config.builders;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import es.jcyl.ita.frmdrd.config.AttributeResolver;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
@@ -31,7 +26,6 @@ import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
 import es.jcyl.ita.frmdrd.config.meta.TagDef;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -46,7 +40,6 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected Map<String, Attribute> attributeDefs;
     private Class<? extends E> elementType;
     private ComponentBuilderFactory factory;
-//    protected ComponentResolver resolver;
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
         this.attributeDefs = TagDef.getDefinition(tagName);
@@ -57,14 +50,24 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     public E build(ConfigNode<E> node) {
         E element = instantiate();
         setAttributes(element, node);
-//        setId(element);
         node.setElement(element);
-        doConfigure(element, node);
+        setupOnSubtreeStarts(node);
         return element;
     }
 
+    @Override
+    public final void processChildren(ConfigNode<E> node) {
+        setupOnSubtreeEnds(node);
+    }
 
     /****** Extension points *******/
+
+    protected abstract void doWithAttribute(E element, String name, String value);
+
+    protected abstract void setupOnSubtreeStarts(ConfigNode<E> node);
+
+    protected abstract void setupOnSubtreeEnds(ConfigNode<E> node);
+
 
     protected E instantiate() {
         try {
@@ -115,13 +118,6 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected AttributeResolver getAttributeResolver(String resolver) {
         return this.getFactory().getAttributeResolver(resolver);
     }
-
-    abstract protected void doWithAttribute(E element, String name, String value);
-
-    protected abstract void doConfigure(E element, ConfigNode<E> node);
-
-
-    /******* Helper methods ********/
 
 
     /**** internal work methods **/

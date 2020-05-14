@@ -15,9 +15,7 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.meta.Identifiable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -32,16 +30,13 @@ public class DefaultComponentBuilder extends AbstractComponentBuilder {
 
     @Override
     protected void doWithAttribute(Object element, String name, String value) {
-
     }
 
     @Override
-    protected void doConfigure(Object element, ConfigNode node) {
-
+    protected void setupOnSubtreeStarts(ConfigNode node) {
     }
 
     @Override
-    public void processChildren(ConfigNode node) {
-
+    protected void setupOnSubtreeEnds(ConfigNode node) {
     }
 }

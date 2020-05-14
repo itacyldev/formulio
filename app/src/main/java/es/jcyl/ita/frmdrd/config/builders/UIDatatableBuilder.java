@@ -19,7 +19,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
@@ -27,74 +30,52 @@ import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> {
+public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
+
+    private static final Set<String> NAV_ACTIONS = new HashSet<String>(Arrays.asList("add", "update"));
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-
 
     protected UIDatatableBuilder(String tagName) {
         super(tagName, UIDatatable.class);
     }
 
-
     @Override
-    protected void doWithAttribute(UIDatatable element, String name, String value) {
-
-    }
-
-    @Override
-    protected void doConfigure(UIDatatable element, ConfigNode<UIDatatable> node) {
-
-    }
-
-
-    @Override
-    public void processChildren(ConfigNode<UIDatatable> node) {
-//        UIComponent[] uiComponents = getUIChildren(node);
-//        node.getElement().setChildren(uiComponents);
-
+    public void setupOnSubtreeEnds(ConfigNode<UIDatatable> node) {
         UIBuilderHelper.setUpRepo(node, true);
         setUpColumns(node);
+        setUpRoute(node);
     }
 
-    /**
-     * If repository attribute is not set, use resolver to get a parent reference
-     *
-     * @param node
-     */
-    private void setUpRepo(ConfigNode<UIDatatable> node) {
-        UIDatatable table = node.getElement();
-        // check if there's a nested repository definition
-        boolean hasAttRepo = node.hasAttribute("repo");
-
-        List<ConfigNode> lstRepos = ConfigNodeHelper.getChildrenByTag(node, "repo");
-        if (CollectionUtils.isNotEmpty(lstRepos) && hasAttRepo) {
-            throw new ConfigurationException(error("The element ${tag} has the attribute 'repo' set" +
-                    "But it also has a nested repository defined, just one of the options can be used."));
-        } else if (lstRepos.size() > 1) {
-            throw new ConfigurationException(error("Just one nested repo can be defined " +
-                    "in ${tag} component."));
-        } else if (lstRepos.size() == 1) {
-            // get nested repository definition from nested node
-            Repository repo = (Repository) lstRepos.get(0).getElement();
-            table.setRepo(repo);
+    private void setUpRoute(ConfigNode<UIDatatable> node) {
+        if (node.hasAttribute("route")) {
+            return; // already defined
         }
-        // if not defined, try to get repo from parent nodes
-        if (table.getRepo() == null) {
-            RepositoryAttributeResolver repoResolver = (RepositoryAttributeResolver) getAttributeResolver("repo");
-            Repository repo = repoResolver.findParentRepo(node);
-            table.setRepo(repo);
+        // get add action from list controller to define default route
+        ConfigNode listNode = ConfigNodeHelper.getAscendantByTag(node, "list");
+        if (listNode == null) {
+            // the table is not nested in the listController, doesn't have to be automatically set
+            return;
+        }
+        // find add or update action to configure the destination for when user click on table element
+        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(listNode, NAV_ACTIONS);
+        if (CollectionUtils.isEmpty(addActions)) {
+            throw new ConfigurationException(error("Error trying to create default datatable for " +
+                    "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
+                    "no 'add' action. use 'route' attribute on <datatable/> instead to set the id " +
+                    "of the destination form."));
+        } else {
+            ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
+            node.getElement().setRoute(addAction.getAttribute("route"));
         }
     }
 
@@ -103,7 +84,7 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
         UIDatatable dataTable = node.getElement();
 
         // get nested defined columns
-        List<ConfigNode> colNodes = ConfigNodeHelper.getNestedByTag(node, "column");
+        List<ConfigNode> colNodes = ConfigNodeHelper.getDescendantByTag(node, "column");
 
         for (ConfigNode n : colNodes) {
             UIColumn col = (UIColumn) n.getElement();
@@ -125,7 +106,7 @@ public class UIDatatableBuilder extends AbstractUIComponentBuilder<UIDatatable> 
                 propertyFilter = new String[0];
             } else {
                 // comma-separated list of property names
-                propertyFilter = StringUtils.split(propertySelector, ",");
+                propertyFilter = StringUtils.split(propertySelector.replace(" ", ""), ",");
             }
             // create columns with property selection
             colsToAdd = createDefaultColumns(dataTable.getRepo(), propertyFilter);

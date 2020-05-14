@@ -32,16 +32,22 @@ public class ConfigNodeHelper {
 
     /**
      * Returns the nodes that hang from root parameter with the given tagName.
+     *
      * @param root
      * @param tagName
      * @return
      */
     public static List<ConfigNode> getChildrenByTag(ConfigNode root, String tagName) {
+        Set<String> set = new HashSet<>(Arrays.asList(tagName));
+        return getChildrenByTag(root, set);
+    }
+
+    public static List<ConfigNode> getChildrenByTag(ConfigNode root, Set<String> tagNames) {
         List<ConfigNode> kids = new ArrayList<ConfigNode>();
         List<ConfigNode> children = root.getChildren();
         if (children != null) {
             for (ConfigNode n : children) {
-                if (n.getName().equals(tagName)) {
+                if (tagNames.contains(n.getName())) {
                     kids.add(n);
                 }
             }
@@ -50,12 +56,86 @@ public class ConfigNodeHelper {
     }
 
     /**
+     * Walks the tree upwards to return the tree root.
+     *
+     * @param node
+     * @return
+     */
+    public static ConfigNode getRoot(ConfigNode node) {
+        ConfigNode parent = node.getParent();
+        if(parent == null){
+            return node;
+        }
+        while (parent.getParent() != null) {
+            parent = parent.getParent();
+        }
+        return parent;
+    }
+
+    /**
+     * Walks the tree upwards looking for a ned with the given tag.
+     *
+     * @param node
+     * @param tagName
+     * @return
+     */
+    public static ConfigNode getAscendantByTag(ConfigNode node, String tagName) {
+        Set<String> set = new HashSet<>(Arrays.asList(tagName));
+        return getAscendantByTag(node, set);
+    }
+
+
+    /**
+     * Walks the tree upwards looking for a ned with the given set of tags.
+     *
+     * @param node
+     * @param tagNames
+     * @return
+     */
+    public static ConfigNode getAscendantByTag(ConfigNode node, Set<String> tagNames) {
+        ConfigNode parent = node.getParent();
+        if (parent == null) {
+            return null;
+        } else {
+            while (parent != null) {
+                if (tagNames.contains(parent.getName())) {
+                    return parent;
+                }
+                parent = parent.getParent();
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Returns the first ascendant with a value in the the given attribute name
+     * @param node
+     * @param attName
+     * @return
+     */
+    public static ConfigNode findAscendantWithAttribute(ConfigNode node, String attName){
+        ConfigNode parent = node.getParent();
+        if (parent == null) {
+            return null;
+        } else {
+            while (parent != null) {
+                if (parent.hasAttribute(attName)) {
+                    return parent;
+                }
+                parent = parent.getParent();
+            }
+            return null;
+        }
+    }
+
+    /**
      * Searchs in the nested subtree all the nodes with the given tagName.
+     *
      * @param root
      * @param tagName
      * @return
      */
-    public static List<ConfigNode> getNestedByTag(ConfigNode root, String tagName) {
+    public static List<ConfigNode> getDescendantByTag(ConfigNode root, String tagName) {
         List<ConfigNode> result = new ArrayList<>();
         Set<String> set = new HashSet<>(Arrays.asList(tagName));
         findNestedByTag(root, set, result);
@@ -64,11 +144,12 @@ public class ConfigNodeHelper {
 
     /**
      * Searchs in the nested subtree all the nodes that have one of the given tagNames.
+     *
      * @param root
      * @param tagNames
      * @return
      */
-    public static  List<ConfigNode> getNestedByTag(ConfigNode root, Set<String> tagNames) {
+    public static List<ConfigNode> getDescendantByTag(ConfigNode root, Set<String> tagNames) {
         List<ConfigNode> result = new ArrayList<>();
         findNestedByTag(root, tagNames, result);
         return result;
@@ -77,7 +158,7 @@ public class ConfigNodeHelper {
     /**
      * Recursively goes over the component tree storing fields in the given List
      */
-    private static  void findNestedByTag(ConfigNode root, Set<String> tagNames, List<ConfigNode> found) {
+    private static void findNestedByTag(ConfigNode root, Set<String> tagNames, List<ConfigNode> found) {
         if (tagNames.contains(root.getName())) {
             found.add(root);
         } else {

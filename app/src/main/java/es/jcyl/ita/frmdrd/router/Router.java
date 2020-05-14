@@ -66,8 +66,12 @@ public class Router {
         return currentViewMessages;
     }
 
-
     public void back(android.content.Context context) {
+        back(context, null);
+    }
+
+    public void back(android.content.Context context, String[] messages) {
+        this.currentViewMessages = messages;
         State lastState = popHistory();
         if (lastState != null) {
             doNavigate(context, lastState);

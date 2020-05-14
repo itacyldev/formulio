@@ -16,8 +16,12 @@ package es.jcyl.ita.frmdrd;
  */
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,6 +47,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
 import es.jcyl.ita.frmdrd.view.activities.FormActivity;
 import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.activities.FormListViewHandlerActivity;
@@ -290,6 +295,5 @@ public class MainController {
     public void setFormController(FormController fc, UIView view) {
         this.formController = fc;
     }
-
 
 }

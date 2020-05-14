@@ -54,8 +54,12 @@ public class XmlConfigUtils {
     public static String createMainList(String nestedXml){
         return String.format(BASE, nestedXml);
     }
+    public static final String BASE_EDIT = "<main repo=\"contacts\"><edit>%s</edit></main>";
+    public static String createMainEdit(String nestedXml){
+        return String.format(BASE_EDIT, nestedXml);
+    }
 
-    public static FormConfig readFormConfig(String xml) throws XmlPullParserException {
+    public static FormConfig readFormConfig(String xml) {
         XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
         InputStream is = XmlConfigUtils.createStream(xml);
         return reader.read("test1", is);

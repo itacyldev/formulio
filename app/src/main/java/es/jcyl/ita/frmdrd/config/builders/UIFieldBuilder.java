@@ -28,35 +28,24 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * <p>
  * Provides functionality to create fields easily from configuration.
  */
-public class UIFieldBuilder extends AbstractComponentBuilder<UIField> {
+public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
 
     public UIFieldBuilder(String tagName) {
         super(tagName, UIField.class);
     }
 
     @Override
-    protected void doWithAttribute(UIField element, String name, String value) {
-    }
-
-    @Override
-    protected void doConfigure(UIField element, ConfigNode<UIField> node) {
+    protected void setupOnSubtreeStarts(ConfigNode<UIField> node) {
         // get input type from "type" attribute or use tagName
         String type = node.getAttribute("type");
         if (StringUtils.isBlank(type)) {
             type = node.getName();
         }
         try {
-            element.setType(UIField.TYPE.valueOf(type.toUpperCase()));
+            node.getElement().setType(UIField.TYPE.valueOf(type.toUpperCase()));
         } catch (Exception e) {
             throw new ConfigurationException(error(String.format("Invalid input type: [%s] expected " +
                     "one of: %s", type, UIField.TYPE.values())));
         }
-
     }
-
-    @Override
-    public void processChildren(ConfigNode<UIField> node) {
-    }
-
-
 }

@@ -24,15 +24,17 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
+import es.jcyl.ita.crtrepo.db.meta.DBPropertyType;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.FormConfig;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
-import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
-import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 
@@ -42,7 +44,7 @@ import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
  * Tests to check commons-converters functionallity
  */
 @RunWith(RobolectricTestRunner.class)
-public class UIDatatableBuilderTest {
+public class UIFormBuilderTest {
 
     @BeforeClass
     public static void setUp() {
@@ -55,131 +57,108 @@ public class UIDatatableBuilderTest {
     }
 
 
-    private static final String XML_TEST_BASIC = "<datatable/>";
-
-    @Test
-    public void testBasicDatatable() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
-
-        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
-        Assert.assertNotNull(datables);
-
-        // repo must be set with parent value "contacts"
-        UIDatatable datatable = datables.get(0);
-        Assert.assertNotNull(datatable.getId());
-        Assert.assertNotNull(datatable.getRoute());
-        Assert.assertEquals(formConfig.getRepo(), datatable.getRepo());
-    }
-
-    private static final String XML_TEST_REPO = "<datatable id=\"mydatatable\" route=\"aRouteToForm\" repo=\"contacts2\"/>";
-
-    @Test
-    public void tesDatatableAttributes() throws Exception {
-        RepositoryUtils.registerMock("contacts2");
-
-        String xml = XmlConfigUtils.createMainList(XML_TEST_REPO);
-
-        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
-
-        // repo must be set with parent value "contacts"
-        UIDatatable datatable = (UIDatatable) datables.get(0);
-
-        Assert.assertEquals("mydatatable", datatable.getId());
-        Assert.assertEquals("aRouteToForm", datatable.getRoute());
-        Assert.assertEquals(RepositoryUtils.getRepo("contacts2"), datatable.getRepo());
-    }
-
     /**
-     * Create table with default columns and check there's and element UIColumn per each
-     * repository property
+     * Create empty form and check its created and repo attribute is set
      *
      * @throws Exception
      */
-    private static final String XML_TEST_DEFAULT_COLS = "<datatable repo=\"defColsRepo\"/>";
+    private static final String XML_TEST_BASIC = "<form/>";
 
     @Test
-    public void testDefaultColumns() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_DEFAULT_COLS);
-        // register repository mock with a random meta
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
-        RepositoryUtils.registerMock("defColsRepo", meta);
-
+    public void testBasicForm() throws Exception {
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_BASIC);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
-        UIDatatable datatable = datables.get(0);
 
-        // check columns
-        Assert.assertEquals(meta.getProperties().length, datatable.getColumns().length);
-        String[] propNames = meta.getPropertyNames();
-        boolean found;
-        for (String name : propNames) {
-            found = false;
-            for (UIColumn col : datatable.getColumns()) {
-                if (col.getId().equals(name)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Assert.fail(String.format("Expected UIColumn with id [%s] for " +
-                        "property [%s] but not found.", name, meta.getPropertyByName(name)));
-            }
-        }
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        Assert.assertNotNull(forms);
+        Assert.assertTrue("One form is expected, found: " + forms.size(), forms.size() == 1);
+
+        // repo must be set with parent value "contacts"
+        UIForm form = forms.get(0);
+        Assert.assertNotNull(form.getId());
+        Assert.assertNotNull(form.getRepo());
+        Assert.assertEquals(formConfig.getRepo(), form.getRepo());
+
+        // the form must have as many fields as the repo meta
+        int numProperties = form.getRepo().getMeta().getProperties().length;
+        Assert.assertNotNull(form.getFields());
+        Assert.assertEquals("Unexpected number of fields in form.", numProperties, form.getFields().size());
     }
 
+    private static final String XML_TEST_ATTS = "<form id=\"myFormId\" repo=\"otherRepo\" />";
+
+    @Test
+    public void testFormAttributes() throws Exception {
+        Repository otherRepo = RepositoryUtils.registerMock("otherRepo");
+
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_ATTS);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+
+        // repo must be set with parent value "contacts"
+        UIForm form = forms.get(0);
+        Assert.assertEquals(form.getId(), "myFormId");
+        Assert.assertEquals(otherRepo, form.getRepo());
+    }
+
+
     /**
-     * Tests the evaluation of "properties" attribute to filter the properties selected from repository.
-     * Two columns are selected from the repo and one additional column is manually configured.
+     * Tests the automatic creation of inputFields using properties attribute and the merge with already defined properties.
+     * Creates a meta with 5 properties. Two of then has to be included due to "properties" filter and another
+     * two has been defined with tags. Prop3 must have he tag information.
      *
      * @throws Exception
      */
-    private static final String XML_TEST_PROP_ATT = "<datatable repo=\"defColsRepo\" properties=\"col1,col3\">" +
-            "<column id=\"mycol\"/>" +
-            "</datatable>";
+    private static final String XML_TEST_INPUTS = "<form repo=\"otherRepo\" properties=\"prop2, prop3, prop4\">" +
+            "  <text id=\"prop1\"/>" +
+            "  <text id=\"prop3\" label=\"mycustomlabel\"/>" +
+            "  <text id=\"noPropField\"/>" +
+            "</form>";
 
     @Test
-    public void testPropertiesAttribute() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_PROP_ATT);
-
-        // set properties col1 y col2
+    public void testNestedInputs() throws Exception {
         EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-        EntityMeta meta = metaBuilder.withNumProps(1)
-                .addProperties(new String[]{"col1", "col2", "col3"},
-                        new Class[]{String.class, String.class, String.class})
+        EntityMeta<DBPropertyType> meta = metaBuilder.withNumProps(0)
+                .addProperties(new String[]{"prop1", "prop2", "prop3", "prop4", "prop5"},
+                        new Class[]{String.class, String.class, String.class, String.class, String.class})
                 .build();
+        Repository otherRepo = RepositoryUtils.registerMock("otherRepo", meta);
 
-        RepositoryUtils.registerMock("defColsRepo", meta);
-
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_INPUTS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
-        UIDatatable datatable = datables.get(0);
 
-        // check columns
-        String[] expectedColsIds = new String[]{"col1", "col3", "mycol"};
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
 
-        Assert.assertEquals(expectedColsIds.length, datatable.getColumns().length);
-        boolean found;
-        for (String name : expectedColsIds) {
-            found = false;
-            for (UIColumn col : datatable.getColumns()) {
-                if (col.getId().equals(name)) {
+        // repo must be set with parent value "contacts"
+        UIForm form = forms.get(0);
+        String[] expectedProperties = new String[]{"prop1", "prop2", "prop3", "prop4", "noPropField"};
+        Assert.assertEquals(expectedProperties.length, form.getFields().size());
+        for (String expected : expectedProperties) {
+            boolean found = false;
+            for (UIInputComponent field : form.getFields()) {
+                if (field.getId().equals(expected)) {
                     found = true;
+                    if (field.getId().equals("prop3")) {
+                        // check definition matches the tag and the field has not been created automatically
+                        Assert.assertEquals("mycustomlabel", field.getLabel());
+                    }
                     break;
                 }
             }
             if (!found) {
-                Assert.fail(String.format("Expected UIColumn with id [%s] for " +
-                        "property [%s] but not found.", name, meta.getPropertyByName(name)));
+                Assert.fail("Not found filed with id: " + expected);
             }
         }
     }
+
 
     @AfterClass
     public static void tearDown() {
         RepositoryUtils.unregisterMock("contacts");
-        RepositoryUtils.unregisterMock("contacts2");
     }
 
 }
