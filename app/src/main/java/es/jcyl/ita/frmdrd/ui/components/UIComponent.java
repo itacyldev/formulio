@@ -16,6 +16,8 @@ import es.jcyl.ita.frmdrd.view.ViewConfigException;
 public abstract class UIComponent implements Identifiable {
 
     protected String id;
+    protected String label;
+
     private ValueBindingExpression valueExpression;
     private ValueBindingExpression renderExpression;
 
@@ -188,6 +190,14 @@ public abstract class UIComponent implements Identifiable {
                         this.getId(), this.renderExpression, e));
             }
         }
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @Override
