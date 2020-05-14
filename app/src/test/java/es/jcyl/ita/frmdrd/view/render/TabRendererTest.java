@@ -1,6 +1,6 @@
 package es.jcyl.ita.frmdrd.view.render;
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import static org.mockito.Mockito.mock;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Javier Ramos (javier.ramos@itacyl.es)
  * <p>
  */
 @RunWith(RobolectricTestRunner.class)
