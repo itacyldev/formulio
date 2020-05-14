@@ -11,8 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
-
 import es.jcyl.ita.frmdrd.R;
 
 public class TabFragment extends Fragment {
@@ -24,21 +22,22 @@ public class TabFragment extends Fragment {
     ViewPagerAdapter viewPagerAdapter;
     ViewPager viewPager;
 
-    public TabFragment(){
+    public TabFragment() {
         super();
     }
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tab, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab, container);
+        //contentView = view.findViewById(R.id.tab_content);
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        contentView = view.findViewById(R.id.tab_content);
+
     }
 
 
@@ -62,7 +61,8 @@ public class TabFragment extends Fragment {
         this.title = title;
     }
 
-    public void addContent(View view) {
-        contentView.addView(view);
-    }
+//    public void addContent(View view) {
+//
+//        contentView.addView(view);
+//    }
 }

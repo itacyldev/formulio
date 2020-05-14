@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
-    List<TabFragment> tabFragments = new ArrayList<>();
+    private List<TabFragment> tabFragments = new ArrayList<>();
 
     public ViewPagerAdapter(Fragment fragment) {
         super(fragment);
@@ -29,6 +29,10 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return tabFragments.size();
+    }
+
+    public TabFragment getFragment(int position){
+        return tabFragments.get(position);
     }
 }
 
