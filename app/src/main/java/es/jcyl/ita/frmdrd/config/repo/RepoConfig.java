@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.config.repo;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,23 +15,8 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class AbstractUIComponentBuilder<E extends UIComponent> extends AbstractComponentBuilder<E> {
-
-    public AbstractUIComponentBuilder(String tagName, Class<? extends E> clazz) {
-        super(tagName, clazz);
-    }
-
-    @Override
-    public void processChildren(ConfigNode<E> node) {
-        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
-        node.getElement().setChildren(uiComponents);
-    }
-
+public class RepoConfig {
 }
