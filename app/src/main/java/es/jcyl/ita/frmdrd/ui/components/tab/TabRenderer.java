@@ -41,7 +41,7 @@ public class TabRenderer extends BaseGroupRenderer<UITab> implements GroupRender
 
         int fragCount = 0;
         for (View view : views) {
-            tabLayout.addTab(tabLayout.newTab().setText(view.getTag().toString()));
+            tabLayout.addTab(tabLayout.newTab());
             adapter.createFragment(fragCount);
             adapter.notifyDataSetChanged();
 
