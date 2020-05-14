@@ -54,7 +54,7 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
             contentView.addView(viewRoot);
         }catch(Exception e){
             DevConsole.error("Error trying to render view " + this.formController.getId(),e);
-            router.back(this, new String[] {"Sorry, there was an error trying to render the view. " +
+            router.back(this, new String[] {"Sorry, there was an error while trying to render the view. " +
                     "See console for details."});
         }
 
