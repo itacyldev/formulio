@@ -2,11 +2,10 @@ package es.jcyl.ita.frmdrd.ui.components.tab;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
-public class UITab extends UIComponent {
+public class UITabItem extends UIComponent {
 
-    public UITab() {
-        this.setRendererType("tab");
+    public UITabItem(){
+        this.setRendererType("tabitem");
         this.setRenderChildren(true);
     }
-
 }

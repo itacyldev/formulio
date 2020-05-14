@@ -26,6 +26,8 @@ import es.jcyl.ita.frmdrd.ui.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.link.LinkRenderer;
 import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
+import es.jcyl.ita.frmdrd.ui.components.tab.TabItemRenderer;
+import es.jcyl.ita.frmdrd.ui.components.tab.TabRenderer;
 import es.jcyl.ita.frmdrd.ui.components.view.UIViewRenderer;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
@@ -48,7 +50,8 @@ public class RendererFactory {
         renderInstances.put("link", new LinkRenderer());
         renderInstances.put("select", new SelectRenderer());
         renderInstances.put("autocomplete", new AutoCompleteRenderer());
-
+        renderInstances.put("tab", new TabRenderer());
+        renderInstances.put("tabitem", new TabItemRenderer());
     }
 
     public static RendererFactory getInstance() {
