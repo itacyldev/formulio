@@ -99,7 +99,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
     private es.jcyl.ita.crtrepo.query.Filter createDefaultDefinitionFilter() {
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(component.getRepo());
         // add default criteria using autocomplete view input
-        Criteria criteria = FilterHelper.singleCriteria(component.getLabelFilteringProperty(), THIS_VALUE);
+        Criteria criteria = FilterHelper.singleCriteria(component.getOptionLabelFilteringProperty(), THIS_VALUE);
         f.setCriteria(criteria);
         return f;
     }
@@ -179,7 +179,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         @Override
         public String getValue() {
             if(cachedValue == null){
-                Object value = entity.get(component.getValueProperty());
+                Object value = entity.get(component.getOptionValueProperty());
                 cachedValue = (String) ConvertUtils.convert(value, String.class);
             }
             return cachedValue;

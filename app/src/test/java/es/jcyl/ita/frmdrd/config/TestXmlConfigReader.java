@@ -32,9 +32,12 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
+import es.jcyl.ita.frmdrd.config.reader.FormConfigReader;
+import es.jcyl.ita.frmdrd.config.reader.ProjectResourceReader;
 import es.jcyl.ita.frmdrd.config.reader.dummy.DummyFormConfigReader;
+import es.jcyl.ita.frmdrd.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.project.ProjectResource;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 
 /**
@@ -47,12 +50,12 @@ public class TestXmlConfigReader {
 
     @BeforeClass
     public static void setUp() {
-        Config config = new Config("");
-        config.init();
+        Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
+        DevConsole.clear();
 
     }
 
@@ -60,6 +63,8 @@ public class TestXmlConfigReader {
     public void testDummyConfig() {
 
         RepositoryUtils.registerMock("agents");
+        RepositoryUtils.registerMock("provincia");
+        RepositoryUtils.registerMock("municipio");
         DummyFormConfigReader reader = new DummyFormConfigReader();
         reader.read("", Uri.EMPTY);
     }
@@ -72,7 +77,7 @@ public class TestXmlConfigReader {
     @Test
     public void testReadConfigNodes() throws Exception {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
+        XmlConfigFileReader reader = new XmlConfigFileReader();
 
         File file = TestUtils.findFile("config/formConfig.xml");
 
@@ -107,9 +112,11 @@ public class TestXmlConfigReader {
     @Test
     public void testBasicBuild() throws Exception {
         File file = TestUtils.findFile("config/formConfig.xml");
-        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
 
-        FormConfig formConfig = reader.read("test1", Uri.fromFile(file));
+        ProjectResourceReader<FormConfig> reader = new FormConfigReader();
+        ProjectResource resource = new ProjectResource(file, ProjectResource.ResourceType.FORM);
+        FormConfig formConfig = reader.read(resource);
+
         Assert.assertNotNull(formConfig);
         Assert.assertNotNull(formConfig.getList());
         Assert.assertNotNull(formConfig.getEdits());

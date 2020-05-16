@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.config.meta;
  * limitations under the License.
  */
 
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -22,6 +24,8 @@ public class AttributeDef {
     // component common attributes
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "value", "binding");
+    // TODO: fix this workaround and set option.value as a ValueBindingExpression #204221
+    public static Attribute CODE = new Attribute("code", "value", String.class); // alternative to value with no expression
     public static Attribute RENDER = new Attribute("render", "value", "binding");
     // common input fields
 //    public static Attribute TYPE = new Attribute("type", true);
@@ -51,9 +55,15 @@ public class AttributeDef {
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");
-    public static Attribute DBFILE = new Attribute("dbFile", true);
+    public static Attribute DBFILE = new Attribute("dbFile", "dbFile", "pathResolver");
     public static Attribute DBTABLE = new Attribute("dbTable", true);
     public static Attribute PROPERTIES = new Attribute("properties", true);
+
+    // autocomplete
+    public static Attribute VALUE_PROPERTY = new Attribute("valueProperty");
+    public static Attribute LABEL_EXPRESSION = new Attribute("labelExpression", "labelExpression", "binding");
+    public static Attribute LABEL_FILTERING_PROP = new Attribute("labelFilteringProperty");
+    public static Attribute FORCE_SELECTION = new Attribute("forceSelection", Boolean.class);
 
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);

@@ -25,7 +25,7 @@ public class UIColumn extends UIComponent {
 
     // sort by, filter by, filter matching, header expression
     private String headerText;
-    private UIFilter headerFilter;
+    private UIColumnFilter headerFilter;
     private Boolean filtering;
     private Boolean ordering = true;
 
@@ -49,7 +49,7 @@ public class UIColumn extends UIComponent {
         this.filtering = filtering;
 
         if (filtering) {
-            headerFilter = new UIFilter();
+            headerFilter = new UIColumnFilter();
             headerFilter.setFilterProperty(this.getId());
             headerFilter.setOrderProperty(this.getId());
         }
@@ -63,11 +63,11 @@ public class UIColumn extends UIComponent {
         this.ordering = ordering;
     }
 
-    public UIFilter getHeaderFilter() {
+    public UIColumnFilter getHeaderFilter() {
         return headerFilter;
     }
 
-    public void setHeaderFilter(UIFilter filter) {
+    public void setHeaderFilter(UIColumnFilter filter) {
         this.headerFilter = filter;
     }
 

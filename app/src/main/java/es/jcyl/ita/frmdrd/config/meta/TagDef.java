@@ -18,16 +18,20 @@ package es.jcyl.ita.frmdrd.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CODE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBTABLE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FILTERING;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL_EXPRESSION;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ONSAVE;
@@ -39,6 +43,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE_PROPERTY;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -71,7 +76,14 @@ public class TagDef {
         register("text", baseInput);
         register("date", baseInput);
 
+        Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
+        register("select", select);
+        register("autocomplete", select);
+        register("options", define(new Attribute[]{VALUE_PROPERTY, LABEL_EXPRESSION, LABEL_FILTERING_PROP}));
+        register("option", define(new Attribute[]{ID, CODE, LABEL}));
+
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
+
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL});
         register("action", actionAttributes);
@@ -107,7 +119,14 @@ public class TagDef {
         return registry.get(name);
     }
 
-    public static boolean supportsAttribute(String tagName, String attName){
+    public static boolean isDefinedTag(String tagName) {
+        return registry.containsKey(tagName);
+    }
+
+    public static boolean supportsAttribute(String tagName, String attName) {
+        if (!isDefinedTag(tagName)) {
+            return false;
+        }
         return getDefinition(tagName).containsKey(attName);
     }
 

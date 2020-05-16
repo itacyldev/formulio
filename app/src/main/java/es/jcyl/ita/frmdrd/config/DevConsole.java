@@ -17,9 +17,15 @@ package es.jcyl.ita.frmdrd.config;
 
 import android.util.Log;
 
-import org.apache.commons.jexl3.MapContext;
-import org.xmlpull.v1.XmlPullParser;
+import org.apache.commons.jexl3.JexlContext;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 /**
@@ -28,25 +34,28 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
  * with context information ${tag}, ${file} and ${line}
  */
 public class DevConsole {
+    private static final String DEV_CONSOLE = "devconsole";
 
-    private static XmlPullParser xpp;
-    private static boolean hasError;
-    private static MapContext ctx;
-    private static String currentFile;
+    private static ConfigReadingInfo configReadingInfo;
+    // TODO: limit this with a pile
+    private static List<String> console = new ArrayList<>();
+
 
     public static void clear() {
-        ctx.clear();
+        console.clear();
     }
 
     public static String error(String msg) {
         // TODO: link log library
-        hasError = true;
         return _writeMsg(Log.ERROR, msg, null);
+    }
+
+    public static String info(String s) {
+        return _writeMsg(Log.INFO, s, null);
     }
 
     public static String error(String msg, Throwable t) {
         // TODO: link log library
-        hasError = true;
         return _writeMsg(Log.ERROR, msg, t);
     }
 
@@ -58,40 +67,62 @@ public class DevConsole {
 
     //
     private static String _writeMsg(int errorLevel, String msg, Throwable t) {
-        if(xpp!=null){
-            ctx.set("line", xpp.getLineNumber());
+        String effMsg = String.valueOf(JexlUtils.eval(devContext, msg));
+        console.add(effMsg);
+        if (errorLevel == Log.ERROR) {
+            System.err.println(effMsg);
+        } else {
+            System.out.println(effMsg);
         }
-        String effMsg = String.valueOf(JexlUtils.eval(ctx, msg));
-        System.out.println(effMsg);
+//        Log.e(DEV_CONSOLE, effMsg);
         if (t != null) {
-            System.err.println(t.getStackTrace());
+            Log.e(DEV_CONSOLE, Log.getStackTraceString(t));
         }
         return effMsg;
     }
 
-    public static void setCurrentFile(String filePath) {
-        ctx = new MapContext();
-        ctx.set("file", filePath);
-        currentFile = filePath;
-        hasError = false;
-    }
-
-    public static boolean hasCurrentFileError() {
-        return hasError;
-    }
-
-    public static void setCurrentElement(String tag) {
-        if(ctx == null){
-            ctx = new MapContext();
-        }
-        ctx.set("tag", tag);
-    }
-
-    public static void setParser(XmlPullParser parser) {
-        xpp = parser;
-    }
 
     public static void debug(String s) {
         _writeMsg(Log.DEBUG, s, null);
     }
+
+    public static void setConfigReadingInfo(ConfigReadingInfo info) {
+        configReadingInfo = info;
+    }
+
+    private static final Set<String> PROPS = new HashSet<String>(Arrays.asList("project", "file", "line", "tag"));
+    private static JexlContext devContext = new JexlContext() {
+        @Override
+        public Object get(String name) {
+            if (configReadingInfo == null) {
+                return null;
+            }
+            if (name.equals("line")) {
+                return (configReadingInfo.getXpp() != null) ? configReadingInfo.getXpp().getLineNumber() : -1;
+            } else if (name.equals("project")) {
+                return configReadingInfo.getProject().getId();
+            } else if (name.equals("projectFolder")) {
+                return configReadingInfo.getProject().getBaseFolder();
+            } else if (name.equals("tag")) {
+                return configReadingInfo.getCurrentTag();
+            }
+            return "";
+        }
+
+        @Override
+        public void set(String name, Object value) {
+            throw new UnsupportedOperationException("Not implemented");
+        }
+
+        @Override
+        public boolean has(String name) {
+            return PROPS.contains(name);
+        }
+    };
+
+
+    public static List<String> getMessages() {
+        return console;
+    }
+
 }

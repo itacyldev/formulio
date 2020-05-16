@@ -140,7 +140,7 @@ public class AutoCompleteRendererTest {
         UIAutoComplete autoSel = new UIAutoComplete();
         autoSel.setId("111");
         autoSel.setRepo(repoMock);
-        autoSel.setValueProperty("id");
+        autoSel.setOptionValueProperty("id");
         String secondPropertyName = meta.getPropertyNames()[1];
         String thirdPropertyName = meta.getPropertyNames()[2];
         // create and expression combining two entity properties

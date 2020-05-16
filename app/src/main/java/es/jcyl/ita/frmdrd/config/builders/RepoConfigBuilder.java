@@ -18,11 +18,10 @@ package es.jcyl.ita.frmdrd.config.builders;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.frmdrd.config.Config;
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.meta.TagDef;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.repo.RepoConfig;
-import es.jcyl.ita.frmdrd.config.repo.RepositoryConfReader;
+import es.jcyl.ita.frmdrd.config.elements.RepoConfig;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -30,7 +29,6 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
-    private static RepositoryConfReader repoReader = Config.getRepoConfigReader();
 
     public RepoConfigBuilder(String tagName) {
         super(tagName, RepoConfig.class);
@@ -44,24 +42,27 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<RepoConfig> node) {
         // check if there a direct repository definition with dbFile and dbTable attributes
-        String dbFile = node.getAttribute("dbFile");
-        String dbTable = node.getAttribute("dbTable");
+        RepoConfig element = node.getElement();
+        String dbFile = element.getDbFile();
+        String dbTable = element.getDbTable();
         boolean isDbFileSet = StringUtils.isNotBlank(dbFile);
         boolean isTableNameSet = StringUtils.isNotBlank(dbTable);
 
         Repository repo = null;
         if (isDbFileSet ^ isTableNameSet) {
-            error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                    "must be set in tag ${tag} id[%s.", node.getId()));
+            throw new ConfigurationException(error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
+                    "must be set in tag ${tag} id[%s.", element.getId())));
         } else if (isDbFileSet && isTableNameSet) {
             // try to create a repository from current configuration
-            repo = repoReader.createFromFile(dbFile, dbTable);
+            repo = getFactory().getRepoReader().createFromFile(element.getId(), dbFile, dbTable);
         }
 
         // find first parent that admits "repo" attribute and if doesn't have a repo already defined by
         // attribute "repo", set current repo to it
         ConfigNode parent = findRepoParent(node);
-        if (!parent.hasAttribute("repo")) {
+        if (parent == null) {
+            return;
+        } else if (!parent.hasAttribute("repo")) {
             parent.setAttribute("repo", repo.getId());
             UIBuilderHelper.setElementValue(parent.getElement(), "repo", repo);
         }

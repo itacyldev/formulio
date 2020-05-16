@@ -37,30 +37,6 @@ import es.jcyl.ita.frmdrd.forms.FormEditController;
 public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditController>
         implements FormActivity<FormEditController> {
 
-//    private Router router;
-//    private RenderingEnv env;
-//    private FormEditController formController;
-//    /**
-//     * View element used to render the forms defined for this controller
-//     */
-//    private ViewGroup contentView;
-
-//    @Override
-//    protected void onCreate(final Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_form_edit_view_handler);
-//        contentView = this.findViewById(R.id.form_content);
-//
-//        MainController mc = MainController.getInstance();
-//        mc.registerActivity(this);
-//
-//        // render edit view content and link content view
-//        View viewRoot = mc.renderView(this);
-//        contentView.addView(viewRoot);
-//
-//        // check if there are messages to show
-//        UserMessagesHelper.showGlobalMessages(this, mc.getRouter());
-//    }
 
     @Override
     protected int getLayoutResource() {

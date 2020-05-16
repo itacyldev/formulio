@@ -55,7 +55,7 @@ import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
-import es.jcyl.ita.frmdrd.ui.components.column.UIFilter;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumnFilter;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 import es.jcyl.ita.frmdrd.view.converters.TextViewConverter;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -395,7 +395,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
      * @return
      */
     private ConditionBinding createHeaderCondition(UIColumn column) {
-        UIFilter headerFilter = column.getHeaderFilter();
+        UIColumnFilter headerFilter = column.getHeaderFilter();
         ValueBindingExpression valueExpression = headerFilter.getFilterValueExpression();
         if (valueExpression == null) {
             ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();

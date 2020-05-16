@@ -22,13 +22,20 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.config.AttributeResolver;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
+import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.elements.OptionsConfig;
+import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
+import es.jcyl.ita.frmdrd.config.reader.RepositoriesReader;
+import es.jcyl.ita.frmdrd.config.resolvers.AbstractAttributeResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
+import es.jcyl.ita.frmdrd.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
+import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -40,8 +47,9 @@ public class ComponentBuilderFactory {
     private XmlPullParser xpp;
     private static ComponentBuilderFactory _instance;
     private static final Map<String, ComponentBuilder> _builders = new HashMap<>();
-    private Map<String, AttributeResolver> _resolvers = new HashMap<>();
+    private Map<String, AbstractAttributeResolver> _resolvers = new HashMap<>();
 
+    private ConfigReadingInfo info;
     private ComponentResolver componentResolver;
     private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
 
@@ -80,11 +88,16 @@ public class ComponentBuilderFactory {
         registerBuilder("switcher", inputFieldBuilder);
         registerBuilder("date", inputFieldBuilder);
 
+        registerBuilder("select", newBuilder(UISelectBuilder.class, "select"));
+        registerBuilder("autocomplete", newBuilder(UIAutocompleteBuilder.class, "autocomplete"));
+
+        registerBuilder("option", newDefaultBuilder(UIOption.class, "option"));
+        registerBuilder("options", newDefaultBuilder(OptionsConfig.class, "options"));
 
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
-        registerAttResolver("value", exprResolver);
-        registerAttResolver("render", exprResolver);
+        registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
+        registerAttResolver("pathResolver", new RelativePathAttResolver());
     }
 
 
@@ -92,7 +105,8 @@ public class ComponentBuilderFactory {
         _builders.put(tagName, builder);
     }
 
-    public void registerAttResolver(String resolverId, AttributeResolver resolver) {
+    public void registerAttResolver(String resolverId, AbstractAttributeResolver resolver) {
+        resolver.setFactory(this);
         _resolvers.put(resolverId, resolver);
 
     }
@@ -102,20 +116,7 @@ public class ComponentBuilderFactory {
     }
 
     public ComponentBuilder getBuilder(String tagName) {
-        ComponentBuilder builder = _builders.get(tagName);
-//        if (builder == null) {
-//            // create default builder for this tag and register
-//            registerBuilder(tagName, new ComponentBuilder() {
-//
-//            // use default builder
-//            builderClass = DefaultComponentBuilder.class;
-//        }
-//        ComponentBuilder builder = newComponentBuilder(builderClass, tagName);
-//        if (builder == null) {
-//            throw new ConfigurationException("No builder found for tagName: " + tagName);
-//        }
-
-        return builder;
+        return _builders.get(tagName);
     }
 
     private ComponentBuilder newBuilder(Class clazz, String tagName) {
@@ -172,5 +173,17 @@ public class ComponentBuilderFactory {
 
     public AttributeResolver getAttributeResolver(String resolver) {
         return this._resolvers.get(resolver);
+    }
+
+    public ConfigReadingInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(ConfigReadingInfo info) {
+        this.info = info;
+    }
+
+    public RepositoriesReader getRepoReader() {
+        return Config.getInstance().getRepoConfigReader();
     }
 }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FormuDruid</string>
     <string name="action_settings">Settings</string>
+    <string name="action_dev_console">Developer console</string>
 
     <string name="action_dark_theme">Dark Theme</string>
     <string name="action_light_theme">Light Theme</string>

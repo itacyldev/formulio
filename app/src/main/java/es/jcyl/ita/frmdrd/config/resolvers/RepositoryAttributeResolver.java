@@ -28,7 +28,7 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * <p>
  * Helper class used during config reading to obtain reference to a repository.
  */
-public class RepositoryAttributeResolver implements AttributeResolver<Repository> {
+public class RepositoryAttributeResolver extends AbstractAttributeResolver<Repository>{
 
     private static RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 

@@ -1,9 +1,10 @@
 package es.jcyl.ita.frmdrd;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,30 +16,29 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.mini2Dx.collections.CollectionUtils;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.frmdrd.config.Config;
+import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.project.Project;
+import es.jcyl.ita.frmdrd.project.ProjectRepository;
 import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
+
+import static es.jcyl.ita.frmdrd.config.DevConsole.warn;
 
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
     protected SharedPreferences settings;
 
     private static final int PERMISSION_REQUEST = 1234;
-    Config config = new Config("");
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        getApplication().getFilesDir();
-//
-//        super.onCreate(savedInstanceState);
-//        checkPermissions();
-//        setContentView(R.layout.activity_main);
-//        initialize();
-//
-//    }
 
     @Override
     protected void doOnCreate() {
@@ -48,12 +48,10 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         initialize();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -85,7 +83,17 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
+        if (id == R.id.action_dev_console) {
+            openDevConsole();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openDevConsole() {
+        Intent intent = new Intent(this, DevConsoleActivity.class);
+        startActivity(intent);
     }
 
 
@@ -140,9 +148,45 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                             .toArray(new String[]{}),
                     PERMISSION_REQUEST);
         } else {
-            config.init();
-            config.read();
+            doInitConfiguration();
         }
+    }
+
+    private void doInitConfiguration() {
+
+//        String projectsFolder = getApplicationContext().getFilesDir() + "/projects";
+        String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
+
+        File f = new File(projectsFolder);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        Config config = Config.init(projectsFolder);
+
+        ProjectRepository projectRepo = config.getProjectRepo();
+        List<Project> projects = projectRepo.listAll();
+        if (CollectionUtils.isEmpty(projects)) {
+            Toast.makeText(this, warn("No projects found!!. Create a folder under " + projectsFolder),
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, DevConsole.info("Opening project " + projects.get(0).getId()), Toast.LENGTH_LONG).show();
+            try {
+                config.readConfig(projects.get(0));
+                debugConfig();
+
+            } catch (Exception e) {
+                DevConsole.error("Error while trying to open project.", e);
+                Toast.makeText(this, "An error occurred while trying to read your projects. See console for details",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void debugConfig() {
+        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+        Set<String> repoIds = repoFactory.getRepoIds();
+        DevConsole.info("Repos registered: " + repoIds);
+
     }
 
     @Override

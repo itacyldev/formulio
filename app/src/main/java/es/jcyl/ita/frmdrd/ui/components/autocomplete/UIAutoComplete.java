@@ -31,18 +31,25 @@ public class UIAutoComplete extends UISelect {
     private static final String TYPE = "autocomplete";
     private static final String DYN_TYPE = "dynamicAutocomplete";
 
+
+    /**
+     * When autocomplete uses a repo to collect the options from entities, this value indicates
+     * the property name of the option-entity used as option value.
+     */
+    private String optionValueProperty;
+
+    /**
+     * Entity property used to build a criteria to filter current repository, the filter value
+     * will be obtained from current user autocomplete constraint
+     */
+    private String optionLabelFilteringProperty;
     /**
      * Expression used to calculate the label of each option when they're obtained
      * from a repo
      */
     private ValueBindingExpression optionLabelExpression;
-    /**
-     * Entity property used to build a criteria to filter current repository, the filter value
-     * will be obtained from current user autocomplete constraint
-     */
-    private String labelFilteringProperty;
+
     private Operator valueFilteringOperator = Operator.EQ;
-    private String valueProperty;
 
     private int inputThreshold = 1;
 
@@ -84,20 +91,20 @@ public class UIAutoComplete extends UISelect {
         this.forceSelection = forceSelection;
     }
 
-    public String getLabelFilteringProperty() {
-        return labelFilteringProperty;
+    public String getOptionLabelFilteringProperty() {
+        return optionLabelFilteringProperty;
     }
 
-    public void setLabelFilteringProperty(String labelFilteringProperty) {
-        this.labelFilteringProperty = labelFilteringProperty;
+    public void setOptionLabelFilteringProperty(String optionLabelFilteringProperty) {
+        this.optionLabelFilteringProperty = optionLabelFilteringProperty;
     }
 
-    public String getValueProperty() {
-        return valueProperty;
+    public String getOptionValueProperty() {
+        return optionValueProperty;
     }
 
-    public void setValueProperty(String valueProperty) {
-        this.valueProperty = valueProperty;
+    public void setOptionValueProperty(String optionValueProperty) {
+        this.optionValueProperty = optionValueProperty;
     }
 
     public Operator getValueFilteringOperator() {

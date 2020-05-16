@@ -17,11 +17,16 @@ package es.jcyl.ita.frmdrd.utils;
 
 import org.mockito.Mockito;
 
+import java.io.File;
+
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
+import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.test.utils.TestUtils;
+import es.jcyl.ita.frmdrd.project.ProjectRepository;
 
 import static org.mockito.Mockito.when;
 
@@ -37,6 +42,16 @@ public class RepositoryUtils {
         repoFactory.register(entityId, repo);
     }
 
+    public static ProjectRepository createTestProjectRepo(){
+        File f = TestUtils.findFile("config/projectTemplate");
+        return createProjectRepo(f);
+    }
+
+    public static ProjectRepository createProjectRepo(File baseFolder){
+        ProjectRepository repo = new  ProjectRepository(baseFolder);
+        return repo;
+    }
+
     public static Repository registerMock(String id) {
         EntityMeta meta = DevDbBuilder.createRandomMeta();
         return registerMock(id, meta);
@@ -45,6 +60,7 @@ public class RepositoryUtils {
     public static Repository registerMock(String id, EntityMeta meta) {
         EditableRepository mock = Mockito.mock(EditableRepository.class);
         when(mock.getMeta()).thenReturn(meta);
+        when(mock.getFilterClass()).thenReturn(SQLQueryFilter.class);
         register(id, mock);
         return mock;
     }

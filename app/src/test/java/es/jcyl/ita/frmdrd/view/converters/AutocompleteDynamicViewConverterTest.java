@@ -96,9 +96,9 @@ public class AutocompleteDynamicViewConverterTest {
         // force option selection
         field.setForceSelection(true);
         String valueProperty = meta.getIdProperties()[0].name;
-        field.setValueProperty(valueProperty);
+        field.setOptionValueProperty(valueProperty);
         String labelFilteringProp = meta.getPropertyNames()[1];
-        field.setLabelFilteringProperty(labelFilteringProp);
+        field.setOptionLabelFilteringProperty(labelFilteringProp);
         field.setOptionLabelExpression(exprFactory.create(String.format("${entity.%s}", labelFilteringProp)));
 
         InputFieldView<AutoCompleteView> baseView = (InputFieldView<AutoCompleteView>) renderHelper.render(env, field);

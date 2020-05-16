@@ -24,6 +24,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme_Light"
         tools:replace="android:theme,android:label">
+        <activity android:name=".DevConsoleActivity"></activity>
         <activity android:name=".view.activities.FormListViewHandlerActivity" />
         <activity
             android:name=".MainActivity"

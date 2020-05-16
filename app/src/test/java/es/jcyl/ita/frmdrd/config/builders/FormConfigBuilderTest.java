@@ -20,8 +20,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,8 +30,7 @@ import es.jcyl.ita.crtrepo.test.utils.TestUtils;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
+import es.jcyl.ita.frmdrd.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
@@ -53,55 +50,13 @@ public class FormConfigBuilderTest {
 
     @BeforeClass
     public static void setUp() {
-        Config config = new Config("");
-        config.init();
+        Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
     }
 
-
-    /**
-     * Reads basic xml and checks the configNode tree is correctly read.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testReadNodeTree() throws Exception {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
-
-        File file = TestUtils.findFile("config/formConfig.xml");
-        InputStream is = new FileInputStream(file);
-        XmlPullParser xpp = factory.newPullParser();
-        xpp.setInput(is, null);
-
-        ConfigNode node = reader.readFile(xpp);
-
-        Assert.assertNotNull(node);
-        // check main attributes
-        Assert.assertNotNull(node.getName());
-        Assert.assertNotNull(node.getAttribute("description"));
-        Assert.assertNotNull(node.getAttribute("name"));
-        Assert.assertNotNull(node.getAttribute("repo"));
-        Assert.assertEquals(node.getAttribute("id"), "form1");
-
-        // check nested elements ids
-        List<ConfigNode> kids = node.getChildren();
-        Assert.assertNotNull(kids);
-        // list
-        Assert.assertEquals(kids.get(0).getName(), "list");
-        Assert.assertNotNull(kids.get(0).getId());
-        // edit1
-        Assert.assertEquals(kids.get(1).getName(), "edit");
-        Assert.assertEquals(kids.get(1).getId(), "form1#edit");
-        // edit2
-        Assert.assertEquals(kids.get(2).getName(), "edit");
-        Assert.assertNotNull(kids.get(2).getId());
-
-        // check controllers
-    }
 
     /**
      * Check formEdit and formList are properly created
@@ -111,10 +66,7 @@ public class FormConfigBuilderTest {
     @Test
     public void testFormConfigDefaultCreation() throws Exception {
 
-        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
-        InputStream is = XmlConfigUtils.createStream(TEST_BASIC1);
-        FormConfig formConfig = reader.read("test1", is);
-
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(TEST_BASIC1);
 
         Assert.assertNotNull(formConfig);
         Assert.assertNotNull(formConfig.getList());
@@ -172,11 +124,8 @@ public class FormConfigBuilderTest {
     @Test
     public void testFormConfigCreation() throws Exception {
         File file = TestUtils.findFile("config/formConfig.xml");
-        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(file);
 
-        InputStream is = new FileInputStream(file);
-
-        FormConfig formConfig = reader.read("test1", is);
         Assert.assertNotNull(formConfig);
         Assert.assertNotNull(formConfig.getRepo());
         Assert.assertNotNull(formConfig.getList());

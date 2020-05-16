@@ -1,0 +1,4 @@
+<repos>
+    <repo dbFile="dbTest.sqlite" id="contacts" dbTable="contacts" />
+    <repo dbFile="dbTest.sqlite" id="agents" dbTable="assigned_agents" />
+</repos>

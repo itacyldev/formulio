@@ -64,4 +64,8 @@ public class FormControllerFactory {
         }
         return lst;
     }
+
+    public void clear(){
+        formInstances.clear();
+    }
 }

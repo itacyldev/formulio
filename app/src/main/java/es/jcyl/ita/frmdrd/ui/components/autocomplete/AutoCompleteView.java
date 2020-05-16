@@ -245,7 +245,7 @@ public class AutoCompleteView extends AutoCompleteTextView
         }
         // create filter to get the option from the repo
         Repository repo = this.component.getRepo();
-        Condition cond = new Condition(this.component.getValueProperty(),
+        Condition cond = new Condition(this.component.getOptionValueProperty(),
                 this.component.getValueFilteringOperator(), value);
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(repo);
         f.setCriteria(Criteria.single(cond));

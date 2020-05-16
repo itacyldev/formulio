@@ -110,7 +110,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
                 }
             } catch (Exception e) {
                 throw new ConfigurationException(error(String.format("Error while trying to set " +
-                        "attribute [%s] on element [${tag}].", attName), e), e);
+                        "attribute '%s' on element <${tag}/>.", attName), e), e);
             }
         }
     }

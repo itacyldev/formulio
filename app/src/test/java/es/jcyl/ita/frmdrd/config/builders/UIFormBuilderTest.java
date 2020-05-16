@@ -48,8 +48,7 @@ public class UIFormBuilderTest {
 
     @BeforeClass
     public static void setUp() {
-        Config config = new Config("");
-        config.init();
+        Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

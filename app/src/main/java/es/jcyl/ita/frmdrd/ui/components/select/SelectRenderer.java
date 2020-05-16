@@ -5,9 +5,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
@@ -50,23 +47,11 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
     protected void composeView(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
         Spinner input = baseView.getInputView();
 
-//
-//        // create items from options
-//        List<UIOption> spinnerItems = new ArrayList<UIOption>();
-//        // empty value option
-//        if (component.hasNullOption()) {
-//            spinnerItems.add(EMPTY_OPTION);
-//        }
-//        if (component.getOptions() != null) {
-//            for (UIOption option : component.getOptions()) {
-//                spinnerItems.add(option);
-//            }
-//        }
-
         // setup adapter and event handler
         ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(),
                 component.getOptions(), component.hasNullOption(), android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         input.setAdapter(arrayAdapter);
         input.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

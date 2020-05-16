@@ -25,7 +25,7 @@ import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BindingExpressionAttResolver implements AttributeResolver<ValueBindingExpression> {
+public class BindingExpressionAttResolver extends AbstractAttributeResolver<ValueBindingExpression> {
 
     ValueExpressionFactory factory = ValueExpressionFactory.getInstance();
 

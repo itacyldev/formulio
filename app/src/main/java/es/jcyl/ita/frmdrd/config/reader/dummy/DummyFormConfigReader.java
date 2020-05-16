@@ -2,8 +2,6 @@ package es.jcyl.ita.frmdrd.config.reader.dummy;
 
 import android.net.Uri;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +19,8 @@ import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.reader.AbstractFormConfigReader;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.reader.XMLFileFormConfigReader;
+import es.jcyl.ita.frmdrd.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
@@ -36,7 +33,6 @@ import es.jcyl.ita.frmdrd.ui.components.link.UIParam;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.view.dag.DAGManager;
-import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -58,7 +54,7 @@ import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DummyFormConfigReader extends AbstractFormConfigReader {
+public class DummyFormConfigReader  {
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     AutoCompleteBuilder autoCompleteBuilder = new AutoCompleteBuilder();
@@ -66,12 +62,10 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
     ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
 
 
-    @Override
     public FormConfig read(String name, Uri uri) throws ConfigurationException {
         return read(name, (InputStream) null);
     }
 
-    @Override
     public FormConfig read(String name, InputStream is) throws ConfigurationException {
 
 //        FormConfig formConfig = createFormTest1();
@@ -99,7 +93,7 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
         FormConfig formConfig = builder.build(node);
         node.setElement(formConfig);
         builder.processChildren(node);
-        register(formConfig);
+//        register(formConfig);
 
         // modify edit view
         FormEditController editCtl = formConfig.getEdits().get(0);
@@ -133,10 +127,10 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
         uiForm.addChild(select2);
         select2.setParentForm(uiForm);
         select2.setForceSelection(true);
-        select2.setLabelFilteringProperty("last_name");
-        select2.setValueProperty("id");
+        select2.setOptionLabelFilteringProperty("last_name");
+        select2.setOptionValueProperty("id");
         select2.setOptionLabelExpression(exprFactory.create("${entity.last_name}"));
-        select2.setLabelFilteringProperty("last_name");
+        select2.setOptionLabelFilteringProperty("last_name");
         return formConfig;
     }
 
@@ -206,14 +200,14 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
 //    }
 
     private FormConfig createAgentsForm()  {
-        XMLFileFormConfigReader reader = new XMLFileFormConfigReader();
+        XmlConfigFileReader reader = new XmlConfigFileReader();
 
         ConfigNode<FormConfig> node = new ConfigNode<>("main");
         node.setAttribute("id", "agents");
         node.setAttribute("repo", "agents");
         reader.build(node);
         FormConfig formConfig = node.getElement();
-        register(formConfig);
+//        register(formConfig);
 
 
 
@@ -241,9 +235,9 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
         uiForm.addChild(provAuto);
         provAuto.setParentForm(uiForm);
         provAuto.setForceSelection(true);
-        provAuto.setValueProperty("id");
+        provAuto.setOptionValueProperty("id");
         provAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
-        provAuto.setLabelFilteringProperty("name");
+        provAuto.setOptionLabelFilteringProperty("name");
 
         // council province-dependant autocomplete
         Repository muniRepo = repoFactory.getRepo("municipio");
@@ -255,9 +249,9 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
         muniAuto.setParentForm(uiForm);
         muniAuto.setForceSelection(true);
         muniAuto.setMandatoryFilters(new String[]{"view.provincia"});
-        muniAuto.setValueProperty("provmuni");
+        muniAuto.setOptionValueProperty("provmuni");
         muniAuto.setOptionLabelExpression(exprFactory.create("${entity.name}"));
-        muniAuto.setLabelFilteringProperty("name");
+        muniAuto.setOptionLabelFilteringProperty("name");
         muniAuto.addValidator(new RequiredValidator());
         // muni values depend on selected province
         Filter f = new SQLQueryFilter();
@@ -277,9 +271,9 @@ public class DummyFormConfigReader extends AbstractFormConfigReader {
         agentsAC.setParentForm(uiForm);
 
         agentsAC.setForceSelection(true);
-        agentsAC.setValueProperty("contact_id");
+        agentsAC.setOptionValueProperty("contact_id");
         agentsAC.setOptionLabelExpression(exprFactory.create("${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"));
-        agentsAC.setLabelFilteringProperty("name");
+        agentsAC.setOptionLabelFilteringProperty("name");
 
         Filter agentFilter = FilterHelper.createInstance(agents);
         criteria = Criteria.or(

@@ -87,11 +87,7 @@ public class UIOptionsAdapterHelper {
         }
         // setup adapter and event handler
         ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(context, layout, items);
-//                android.R.layout.select_dialog_item, items);
         return arrayAdapter;
     }
 
-//    ArrayAdapter<UIOption> arrayAdapter = new ArrayAdapter<UIOption>(env.getViewContext(),
-//            android.R.layout.simple_spinner_item, spinnerItems);
-//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 }
