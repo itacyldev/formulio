@@ -17,7 +17,6 @@ package es.jcyl.ita.frmdrd.config.resolvers;
 
 import org.apache.commons.lang3.StringUtils;
 
-import es.jcyl.ita.frmdrd.config.AttributeResolver;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
@@ -33,9 +32,13 @@ public class BindingExpressionAttResolver extends AbstractAttributeResolver<Valu
         String expStr = node.getAttribute(attName);
         ValueBindingExpression expression = null;
         if (StringUtils.isNotBlank(expStr)) {
-            expression = factory.create(expStr);
+            if (!node.hasAttribute("converter")) {
+                expression = factory.create(expStr);
+            } else {
+                // TODO: take in count converters when creating expression #204351
+                expression = factory.create(expStr, Integer.class);
+            }
         }
-        // TODO: take in count converters when creating expression
         return expression;
     }
 }

@@ -54,7 +54,8 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIForm> node) {
         // inherit repo attribute
-        UIBuilderHelper.inheritAttribute(node, "repo");
+//        UIBuilderHelper.inheritAttribute(node, "repo");
+        UIBuilderHelper.setUpRepo(node, true);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().setChildren(uiComponents);
 
-        UIBuilderHelper.setUpRepo(node, true);
+        // cannot setup nodes until the repo is resolved
         setUpFields(node);
     }
 

@@ -42,6 +42,8 @@ public class UIAutocompleteBuilder extends BaseUIComponentBuilder<UIAutoComplete
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIAutoComplete> node) {
+        UIBuilderHelper.setUpValueExpressionType(node);
+
         UIAutoComplete element = node.getElement();
         // attach nested options
         List<ConfigNode> optionNodes = ConfigNodeHelper.getDescendantByTag(node, "option");

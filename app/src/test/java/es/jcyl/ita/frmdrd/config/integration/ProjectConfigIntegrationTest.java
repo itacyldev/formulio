@@ -152,6 +152,12 @@ public class ProjectConfigIntegrationTest {
         PropertyType[] properties = meta.getProperties();
         Assert.assertEquals(properties.length + 1, form.getFields().size());
 
+        // check all autos have a binding expresions
+        List<UIAutoComplete> autos = UIComponentHelper.findByClass(view, UIAutoComplete.class);
+        for(UIAutoComplete atc: autos){
+            Assert.assertNotNull(atc.getValueExpression());
+        }
+
     }
 
     private void assertEditController(FormController ctl) {

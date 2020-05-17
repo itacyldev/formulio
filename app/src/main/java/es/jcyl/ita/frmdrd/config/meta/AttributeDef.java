@@ -23,10 +23,10 @@ import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 public class AttributeDef {
     // component common attributes
     public static Attribute ID = new Attribute("id");
-    public static Attribute VALUE = new Attribute("value", "value", "binding");
+    public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     // TODO: fix this workaround and set option.value as a ValueBindingExpression #204221
     public static Attribute CODE = new Attribute("code", "value", String.class); // alternative to value with no expression
-    public static Attribute RENDER = new Attribute("render", "value", "binding");
+    public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
     // common input fields
 //    public static Attribute TYPE = new Attribute("type", true);
     public static Attribute LABEL = new Attribute("label");

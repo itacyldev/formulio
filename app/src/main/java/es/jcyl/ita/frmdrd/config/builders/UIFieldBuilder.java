@@ -17,8 +17,11 @@ package es.jcyl.ita.frmdrd.config.builders;
 
 import org.apache.commons.lang3.StringUtils;
 
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -47,5 +50,10 @@ public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
             throw new ConfigurationException(error(String.format("Invalid input type: [%s] expected " +
                     "one of: %s", type, UIField.TYPE.values())));
         }
+    }
+
+    @Override
+    protected void setupOnSubtreeEnds(ConfigNode<UIField> node) {
+        UIBuilderHelper.setUpValueExpressionType(node);
     }
 }

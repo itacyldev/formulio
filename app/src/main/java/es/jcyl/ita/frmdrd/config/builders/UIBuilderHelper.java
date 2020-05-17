@@ -28,6 +28,8 @@ import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -134,14 +136,38 @@ public class UIBuilderHelper {
 
     /**
      * If given attribute is not set in current node, get it from the first ancestor that has it set
+     *
      * @param node
      * @param attName
      */
     public static void inheritAttribute(ConfigNode node, String attName) {
-        if(!node.hasAttribute(attName)){
+        if (!node.hasAttribute(attName)) {
             String ascendantAttValue = ConfigNodeHelper.findAscendantAtt(node, attName);
-            if(ascendantAttValue !=null){
+            if (ascendantAttValue != null) {
                 node.setAttribute(attName, ascendantAttValue);
+            }
+        }
+    }
+
+    public static void setUpValueExpressionType(ConfigNode<? extends UIInputComponent> node) {
+
+        // set converter if needed
+        UIInputComponent element = node.getElement();
+        ValueBindingExpression expr = element.getValueExpression();
+        if (expr != null && !expr.isReadOnly()) {
+            String propertyName = expr.getBindingProperty();
+            EntityMeta meta = null;
+            try {
+                UIForm form = (UIForm) ConfigNodeHelper.getAscendantByTag(node, "form").getElement();
+                meta = form.getRepo().getMeta();
+                String[] splits = propertyName.split("\\.");
+                int pos = splits.length-1;
+                PropertyType property = meta.getPropertyByName(splits[pos]);
+
+                // set convering type
+                expr.setExpectedType(property.getType());
+            } catch (Exception e) {
+                // TODO: I'm pretty sure this is never not going to happen #204350
             }
         }
     }
