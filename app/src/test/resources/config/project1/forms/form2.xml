@@ -1,4 +1,4 @@
-<main name="Agents form" description="An example of short description" id="form2" repo="agents">
+<main name="Agents form" description="An example of short description" id="form2" repo="agentsRepo">
     <edit>
         <form properties="all">
             <autocomplete forceSelection="true" id="provincia" label="provincia" repo="provRepo">
@@ -9,6 +9,12 @@
                 value="${entity.provmuni}">
                 <options labelExpression="${entity.name}" labelFilteringProperty="name"
                     valueProperty="provmuni" />
+            </autocomplete>
+            <autocomplete forceSelection="true" id="contact_id" label="Agent" repo="contacts"
+                value="${entity.contact_id}">
+                <options
+                    labelExpression="${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"
+                    labelFilteringProperty="last_name" valueProperty="contact_id" />
             </autocomplete>
         </form>
     </edit>

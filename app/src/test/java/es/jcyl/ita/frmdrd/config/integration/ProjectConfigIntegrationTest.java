@@ -139,7 +139,7 @@ public class ProjectConfigIntegrationTest {
 
         UIView view = edit.getView();
         List<UIAutoComplete> list = UIComponentHelper.findByClass(view, UIAutoComplete.class);
-        Assert.assertEquals("agents", edit.getRepo().getId());
+        Assert.assertEquals("agentsRepo", edit.getRepo().getId());
         Assert.assertTrue(CollectionUtils.isNotEmpty(list));
         UIAutoComplete auto = list.get(0);
         Assert.assertEquals("provRepo", auto.getRepo().getId());
