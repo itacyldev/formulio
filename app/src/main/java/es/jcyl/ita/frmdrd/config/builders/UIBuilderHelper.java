@@ -28,6 +28,7 @@ import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -128,6 +129,20 @@ public class UIBuilderHelper {
         } else if (StringUtils.isNotBlank(dbFile) ^ StringUtils.isNotBlank(tableName)) {
             error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
                     "must be set in tag ${tag} id[%s].", node.getId()));
+        }
+    }
+
+    /**
+     * If given attribute is not set in current node, get it from the first ancestor that has it set
+     * @param node
+     * @param attName
+     */
+    public static void inheritAttribute(ConfigNode node, String attName) {
+        if(!node.hasAttribute(attName)){
+            String ascendantAttValue = ConfigNodeHelper.findAscendantAtt(node, attName);
+            if(ascendantAttValue !=null){
+                node.setAttribute(attName, ascendantAttValue);
+            }
         }
     }
 }

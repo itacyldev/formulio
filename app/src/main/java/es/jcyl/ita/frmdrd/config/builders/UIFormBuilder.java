@@ -53,6 +53,8 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIForm> node) {
+        // inherit repo attribute
+        UIBuilderHelper.inheritAttribute(node, "repo");
     }
 
     @Override
@@ -89,7 +91,7 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
         } else {
             if (propertySelector.equals("*") || propertySelector.equals("all")) {
                 // use all repo properties
-                propertyFilter = new String[0];
+                propertyFilter = form.getRepo().getMeta().getPropertyNames();
             } else {
                 // comma-separated list of property names
                 propertyFilter = StringUtils.split(propertySelector.replace(" ", ""), ",");

@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Stores FormController instances.
  */
 public class FormControllerFactory {
@@ -43,16 +43,10 @@ public class FormControllerFactory {
     }
 
     public void register(FormController controller) {
-        if (formInstances.containsKey(controller.getId())) {
-            throw new FormException("There's already one form registered with id: " + controller.getId());
-        }
         formInstances.put(controller.getId(), controller);
     }
 
     public FormController getController(String id) {
-        if (!formInstances.containsKey(id)) {
-            throw new FormException("No FormControllerInstance found with the id: " + id);
-        }
         return formInstances.get(id);
     }
 
@@ -65,11 +59,12 @@ public class FormControllerFactory {
         }
         return lst;
     }
-    public Collection<FormController> getList(){
+
+    public Collection<FormController> getList() {
         return formInstances.values();
     }
 
-    public void clear(){
+    public void clear() {
         formInstances.clear();
     }
 }

@@ -24,16 +24,13 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.forms.FCAction;
-import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -73,10 +70,14 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
                 ctl.setFilter((Filter) repoFilters.get(0).getElement());
             }
         }
-        // find entitySelector
         UIView listView = new UIView(ctl.getId() + ">view");
         ctl.setView(listView);
 
+        // if no nested repo defined, inherit attribute from parent
+        if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
+            UIBuilderHelper.inheritAttribute(node, "repo");
+        }
+        createDefaultSelector(node);
         // setup actions must be configured at start of he subtree, so the can be
         // used by nested elements to configure themselves if needed
         createDefaultActionNodes(node);
@@ -85,6 +86,25 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         UIBuilderHelper.setUpRepo(node, true);
     }
 
+    /**
+     * In case current formController doesn't have and entitySelector, it creates a default datatable
+     * connected to current repository.
+     *
+     * @param root
+     * @return
+     */
+    private void createDefaultSelector(ConfigNode<FormListController> root) {
+        if (ConfigNodeHelper.hasDescendantByTag(root, ENTITY_SELECTOR_SET)) {
+            // it already has a datatable
+            return;
+        }
+        ConfigNode tableNode = new ConfigNode("datatable");
+        tableNode.setId("datatable" + root.getId());
+        if (root.hasAttribute("repo")) {
+            tableNode.setAttribute("repo", root.getAttribute("repo"));
+        }
+        root.addChild(tableNode);
+    }
 
     /**
      * Searchs for actions in current Form file configuration. If no action if found for current list-form
@@ -173,12 +193,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
             throw new UnsupportedOperationException("Not supported yet!");
         } else {// the attribute is not set
             int numSelectors = entitySelectors.size();
-            if (numSelectors == 0) {
-                // create default selector and add to view
-                UIDatatable table = createDefaultSelector(node);
-                node.getElement().getView().addChild(table);
-//                selector = (EntitySelector) table;
-            } else if (numSelectors == 1) {
+            if (numSelectors == 1) {
                 // if there's just one entitySelector use it
                 selector = entitySelectors.get(0).getElement();
             } else {
@@ -191,27 +206,27 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
     }
 
-    /**
-     * Uses datatableBuilder to create a default entitySelector with current repository
-     *
-     * @param node
-     * @return
-     */
-    private UIDatatable createDefaultSelector(ConfigNode<FormListController> node) {
-        ComponentBuilder<UIDatatable> builder = this.getFactory().getBuilder("datatable", UIDatatable.class);
-
-        ConfigNode newNode = new ConfigNode("datatable");
-        node.addChild(newNode);
-        if(node.hasAttribute("repo")){
-            newNode.setAttribute("repo", node.getAttribute("repo"));
-        }
-        newNode.setId("datatable" + node.getId());
-        UIDatatable table = builder.build(newNode);
-        newNode.setElement(table);
-        builder.processChildren(newNode);
-
-        return table;
-    }
+//    /**
+//     * Uses datatableBuilder to create a default entitySelector with current repository
+//     *
+//     * @param node
+//     * @return
+//     */
+//    private UIDatatable createDefaultUISelector(ConfigNode<FormListController> node) {
+//        ComponentBuilder<UIDatatable> builder = this.getFactory().getBuilder("datatable", UIDatatable.class);
+//
+//        ConfigNode newNode = new ConfigNode("datatable");
+//        node.addChild(newNode);
+//        if (node.hasAttribute("repo")) {
+//            newNode.setAttribute("repo", node.getAttribute("repo"));
+//        }
+//        newNode.setId("datatable" + node.getId());
+//        UIDatatable table = builder.build(newNode);
+//        newNode.setElement(table);
+//        builder.processChildren(newNode);
+//
+//        return table;
+//    }
 
 
     private ConfigNode createActionNode(String action, String id, String label, String route) {

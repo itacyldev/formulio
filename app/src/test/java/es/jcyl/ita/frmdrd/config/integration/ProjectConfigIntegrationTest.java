@@ -142,7 +142,7 @@ public class ProjectConfigIntegrationTest {
         Assert.assertEquals("agents", edit.getRepo().getId());
         Assert.assertTrue(CollectionUtils.isNotEmpty(list));
         UIAutoComplete auto = list.get(0);
-        Assert.assertEquals("provincia", auto.getRepo().getId());
+        Assert.assertEquals("provRepo", auto.getRepo().getId());
 
         // check edit controllers
 

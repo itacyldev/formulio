@@ -64,7 +64,7 @@ public class RelativePathAttResolverTest {
 
         Assert.assertNotNull(formConfig.getList().getRepo());
         // the repository is automatically assigned to the formlist
-        Assert.assertEquals(formConfig.getList().getRepo().getId(),"myRepoTest01");
+        Assert.assertEquals("myRepoTest01", formConfig.getList().getRepo().getId());
     }
 
     @AfterClass

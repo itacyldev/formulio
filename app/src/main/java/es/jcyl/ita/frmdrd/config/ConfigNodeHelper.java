@@ -55,6 +55,24 @@ public class ConfigNodeHelper {
         return kids;
     }
 
+
+    public static boolean hasChildrenByTag(ConfigNode node, String tagName) {
+        Set<String> set = new HashSet<>(Arrays.asList(tagName));
+        return hasChildrenByTag(node, set);
+    }
+
+    public static boolean hasChildrenByTag(ConfigNode root, Set<String> tagNames) {
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode n : children) {
+                if (tagNames.contains(n.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static ConfigNode getFirstChildrenByTag(ConfigNode root, String tagName) {
         Set<String> set = new HashSet<>(Arrays.asList(tagName));
         return getFirstChildrenByTag(root, set);
@@ -234,7 +252,7 @@ public class ConfigNodeHelper {
     }
 
 
-    public static String findParentAtt(ConfigNode node, String attName) {
+    public static String findAscendantAtt(ConfigNode node, String attName) {
         ConfigNode current = node.getParent();
         while(current !=null){
             if(current.hasAttribute(attName)){

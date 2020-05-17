@@ -72,6 +72,11 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         UIView view = new UIView(ctl.getId() + ">view");
         ctl.setView(view);
 
+        // if no nested repo defined, inherit attribute from parent
+        if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
+            UIBuilderHelper.inheritAttribute(node, "repo");
+        }
+
         // if no nested form, create one
         createDefaultForm(node);
         // setup actions must be configured at start of he subtree, so the can be
@@ -190,7 +195,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         ConfigNode formNode = new ConfigNode("form");
         formNode.setId("form" + root.getId());
         if(root.hasAttribute("repo")){
-            formNode.setAttribute("repo", formNode.getAttribute("repo"));
+            formNode.setAttribute("repo", root.getAttribute("repo"));
         }
         List<ConfigNode> rootChildren = new ArrayList<>();
         rootChildren.add(formNode);

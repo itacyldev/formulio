@@ -50,6 +50,11 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
     }
 
     @Override
+    protected void setupOnSubtreeStarts(ConfigNode<UIDatatable> node) {
+        UIBuilderHelper.inheritAttribute(node, "repo");
+    }
+
+    @Override
     public void setupOnSubtreeEnds(ConfigNode<UIDatatable> node) {
         UIBuilderHelper.setUpRepo(node, true);
         setUpColumns(node);

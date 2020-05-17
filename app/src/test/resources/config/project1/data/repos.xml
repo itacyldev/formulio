@@ -1,6 +1,6 @@
 <repos>
     <repo dbFile="dbTest.sqlite" id="contacts" dbTable="contacts" />
     <repo dbFile="dbTest.sqlite" id="agents" dbTable="assigned_agents" />
-    <repo dbFile="dbTest.sqlite" id="provincia" dbTable="provincia" />
-    <repo dbFile="dbTest.sqlite" id="municipio" dbTable="municipio" />
+    <repo dbFile="dbTest.sqlite" id="provRepo" dbTable="provincia" />
+    <repo dbFile="dbTest.sqlite" id="muniRepo" dbTable="municipio" />
 </repos>

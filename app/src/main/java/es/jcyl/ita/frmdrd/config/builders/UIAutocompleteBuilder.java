@@ -104,13 +104,13 @@ public class UIAutocompleteBuilder extends BaseUIComponentBuilder<UIAutoComplete
         String propertyName = element.getOptionValueProperty();
         if (!meta.containsProperty(propertyName)) {
             throw new ConfigurationException(DevConsole.error(String.format("Invalid repo property referenced " +
-                            "in element <autocomplete/> [%s] it doesn't exists in  repo [%s]",
+                            "in element <autocomplete/>. Property '%s' doesn't exists in  repo [%s]",
                     propertyName, element.getRepo().getId())));
         }
         propertyName = element.getOptionLabelFilteringProperty();
         if (!meta.containsProperty(propertyName)) {
             throw new ConfigurationException(DevConsole.error(String.format("Invalid repo property referenced " +
-                            "in element <autocomplete/> [%s] it doesn't exists in  repo [%s]",
+                            "in element <autocomplete/>. Property '%s' doesn't exists in  repo [%s]",
                     propertyName, element.getRepo().getId())));
         }
     }

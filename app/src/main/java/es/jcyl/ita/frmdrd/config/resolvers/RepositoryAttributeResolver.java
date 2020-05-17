@@ -15,13 +15,8 @@ package es.jcyl.ita.frmdrd.config.resolvers;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
-import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
@@ -34,26 +29,19 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  */
 public class RepositoryAttributeResolver extends AbstractAttributeResolver<Repository> {
 
-    private static final Set<String> INHERIT_PARENT_REPO = new HashSet<String>(Arrays.asList("list", "datatable", "edit", "form"));
-
     private static RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
     public Repository resolve(ConfigNode node, String attName) {
         // make sure the repository is uniquely defined
         String repoAtt = node.getAttribute(attName);
-        if (repoAtt == null && INHERIT_PARENT_REPO.contains(node.getName())) {
-            // get repository from parent
-            repoAtt = ConfigNodeHelper.findParentAtt(node, "repo");
-        }
-
         Repository repo = repoFactory.getRepo(repoAtt);
         if (repo == null) {
             throw new ConfigurationException(
-                    error(String.format("Invalid repo Id found: [%s] in file '${file}. Make sure " +
+                    error(String.format("Invalid repo Id found: [%s] in file '${file}'. Make sure " +
                                     "the id is correct and it's defined in repo.xml file. If the <repo/> " +
                                     "tag is inside current form file, make sure the repo is defined before " +
-                                    "current element <${tag}/>",
-                            repoAtt)));
+                                    "current element <%s/>",
+                            repoAtt, node)));
         }
         return repo;
     }
