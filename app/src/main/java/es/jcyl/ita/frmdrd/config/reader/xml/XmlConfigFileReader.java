@@ -33,11 +33,12 @@ import java.util.Stack;
 
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
 import es.jcyl.ita.frmdrd.config.meta.TagDef;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.reader.listener.ReadingProcessListener;
+import es.jcyl.ita.frmdrd.config.reader.ReadingProcessListener;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.debug;
@@ -168,8 +169,10 @@ public class XmlConfigFileReader {
             debug("Processing children of <${tag}/>");
             builder.processChildren(root);
         }
-        debug("Ending tag: ${tag}");
+        DevConsole.debug(root);
+        DevConsole.debug("Ending tag: ${tag}");
     }
+
 
     private void setAttributes(XmlPullParser xpp, ConfigNode node, ComponentResolver idResolver) {
         Map<String, Attribute> attributesDef = TagDef.getDefinition(node.getName());

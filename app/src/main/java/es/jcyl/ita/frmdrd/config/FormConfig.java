@@ -17,7 +17,10 @@ package es.jcyl.ita.frmdrd.config;
 
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.meta.Identifiable;
@@ -28,7 +31,7 @@ import es.jcyl.ita.frmdrd.meta.Identifiable;
  * Base class that gathers the information in a form configuration file.
  */
 
-public class FormConfig implements Identifiable {
+public class FormConfig extends Entity implements Identifiable {
 
     private String id;
     private String name;
@@ -37,6 +40,14 @@ public class FormConfig implements Identifiable {
     private FormListController list;
     private List<FormEditController> edits;
     private Repository repo;
+
+    public FormConfig(){
+        super(null, null);
+    }
+
+    public FormConfig(EntitySource source, EntityMeta meta) {
+        super(source, meta);
+    }
 
     public String getName() {
         return name;
@@ -86,6 +97,10 @@ public class FormConfig implements Identifiable {
     @Override
     public void setId(String id) {
 this.id = id;
+    }
+
+    public void setId(Object id) {
+        this.id = (String)id;
     }
 
     public void setRepo(Repository repo) {

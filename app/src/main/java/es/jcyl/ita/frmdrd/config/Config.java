@@ -24,12 +24,14 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
-import es.jcyl.ita.frmdrd.config.reader.FormConfigReader;
-import es.jcyl.ita.frmdrd.config.reader.ProjectResourceReader;
-import es.jcyl.ita.frmdrd.config.reader.RepositoriesReader;
+import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
+import es.jcyl.ita.frmdrd.project.FormConfigRepository;
 import es.jcyl.ita.frmdrd.project.Project;
 import es.jcyl.ita.frmdrd.project.ProjectRepository;
 import es.jcyl.ita.frmdrd.project.ProjectResource;
+import es.jcyl.ita.frmdrd.project.handlers.FormConfigHandler;
+import es.jcyl.ita.frmdrd.project.handlers.ProjectResourceHandler;
+import es.jcyl.ita.frmdrd.project.handlers.RepositoryConfHandler;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -38,13 +40,16 @@ import es.jcyl.ita.frmdrd.project.ProjectResource;
  */
 public class Config {
     private static Config _instance;
-    private static Map<ProjectResource.ResourceType, ProjectResourceReader> _readers = new HashMap<ProjectResource.ResourceType, ProjectResourceReader>();
+    private static Map<ProjectResource.ResourceType, ProjectResourceHandler> _handlers = new HashMap<ProjectResource.ResourceType, ProjectResourceHandler>();
 
     private boolean configLoaded = false;
     private String appBaseFolder;
 
-    private RepositoriesReader repoConfigReader;
+    private RepositoryConfHandler repoConfigReader;
     private ProjectRepository projectRepo;
+    private FormConfigRepository formConfigRepo;
+    private FormControllerFactory formControllerFactory = FormControllerFactory.getInstance();
+
     private static ConfigReadingInfo readingListener = new ConfigReadingInfo();
 
     private Config(String appBaseFolder) {
@@ -79,28 +84,48 @@ public class Config {
             ConfigConverters confConverter = new ConfigConverters();
             confConverter.init();
             // repository holder
-            repoConfigReader = new RepositoriesReader();
+            repoConfigReader = new RepositoryConfHandler();
             // project
             projectRepo = new ProjectRepository(new File(this.appBaseFolder));
             configLoaded = true;
         }
     }
 
-    private static void registerReaders() {
-        ProjectResourceReader reader = new FormConfigReader();
-        reader.setListener(readingListener);
-        _readers.put(ProjectResource.ResourceType.FORM, reader);
-        reader = new RepositoriesReader();
-        reader.setListener(readingListener);
-        _readers.put(ProjectResource.ResourceType.DATA, reader);
+    private void clear() {
+        // clear defined forms configs, form controllers and repos
+        if (formConfigRepo != null) {
+            this.formConfigRepo.deleteAll();
+        }
+        formControllerFactory.clear();
+        repoConfigReader.clear();
     }
+
+
+    private static void registerReaders() {
+        ProjectResourceHandler reader = new FormConfigHandler();
+        reader.setListener(readingListener);
+        _handlers.put(ProjectResource.ResourceType.FORM, reader);
+        reader = new RepositoryConfHandler();
+        reader.setListener(readingListener);
+        _handlers.put(ProjectResource.ResourceType.DATA, reader);
+    }
+
 
     public void readConfig(Project project) {
         if (!project.isOpened()) {
             project.open();
         }
+        // clear all previous configs
+        clear();
+
         readingListener.setProject(project);
         DevConsole.setConfigReadingInfo(readingListener);
+
+        // create new formConfig repo to hold current project configuration and set to resource handler
+        formConfigRepo = new FormConfigRepository(project);
+        FormConfigHandler formConfigHandler = (FormConfigHandler) _handlers.get(ProjectResource.ResourceType.FORM);
+        formConfigHandler.setFormConfigRepo(formConfigRepo);
+
         // set current shared into with builder factory
         ComponentBuilderFactory.getInstance().setInfo(readingListener);
 
@@ -113,20 +138,30 @@ public class Config {
             // TODO: Create class ProjectResources to handle files, projectTemplates, etc. #204283
             // the data config files have to be read first, know the project is ordering them
             for (ProjectResource resource : configFiles) {
-                ProjectResourceReader rReader = _readers.get(resource.type);
-                rReader.read(resource);
-                rReader.setListener(readingListener);
+                readingListener.setCurrentFile(resource.file.getAbsolutePath());
+                DevConsole.info("Processing file '${file}'");
+                // get a reader for the file and a register for the resulting config object
+                ProjectResourceHandler handler = _handlers.get(resource.type);
+                handler.handle(resource);
             }
         }
     }
 
+
+    /**
+     * Common repositories
+     *
+     * @return
+     */
     public ProjectRepository getProjectRepo() {
         return projectRepo;
     }
 
-    public RepositoriesReader getRepoConfigReader() {
+    public RepositoryConfHandler getRepoConfigReader() {
         return repoConfigReader;
     }
 
-
+    public FormConfigRepository getFormConfigRepo() {
+        return formConfigRepo;
+    }
 }

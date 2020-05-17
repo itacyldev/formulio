@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.frmdrd.config.Config;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -101,6 +103,9 @@ public class ConfigNode<E> {
 
     public void setChildren(List<ConfigNode> kids) {
         this.children = kids;
+        for(ConfigNode n: kids){
+            n.setParent(this);
+        }
     }
 
     public void addText(String text) {

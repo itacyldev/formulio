@@ -15,13 +15,11 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.FormConfig;
@@ -51,16 +49,27 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
         if (list.size() == 0) {
             // if no nested List, create one node and attach to current node
-            addDefaultListNode(formConfig, node);
+            addDefaultNode(formConfig, node, "list");
         }
         List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(node, "edit");
         if (edits.size() == 0) {
             // if no nested Edit, create one node and attach to current node
-            addDefaultEditNode(formConfig, node);
+            addDefaultNode(formConfig, node, "edit");
         }
         UIBuilderHelper.addDefaultRepoNode(node);
     }
 
+    private ConfigNode addDefaultNode(FormConfig formConfig, ConfigNode node, String tag) {
+        ConfigNode newNode = node.copy();
+        String id = formConfig.getId() + "#" + tag;
+        newNode.setName(tag);
+        newNode.setId(id);
+        if(node.hasAttribute("repo")){
+            newNode.setAttribute("repo", node.getAttribute("repo"));
+        }
+        node.addChild(newNode);
+        return newNode;
+    }
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<FormConfig> node) {
@@ -69,53 +78,6 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         setUpEditControllers(node);
     }
 
-    private void addDefaultListNode(FormConfig formConfig, ConfigNode node) {
-        // add list node
-        ConfigNode listNode = addDefaultNode(formConfig, node, "list");
-
-//        // find edit views
-//        List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(node, "edit");
-//        String editId;
-//        if (edits.size() == 0) {
-//            // it will be created later with this id
-//            editId = formConfig.getId() + "#list";
-//        } else if (edits.size() == 1) {
-//            editId = edits.get(0).getId();
-//        } else {
-//            throw new ConfigurationException(error("List-view with more that one edit-view " +
-//                    "and with no actions defined!. When you have more that one <edit/> in a form, " +
-//                    "you have to use <actions/> element in the <list/> to define which view will " +
-//                    "be navigated from the list."));
-//        }
-    }
-
-    private void addDefaultEditNode(FormConfig formConfig, ConfigNode node) {
-        // add list node
-        ConfigNode editNode = addDefaultNode(formConfig, node, "edit");
-        // get list node, it will be previously created
-//        List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
-//        String fcListId = list.get(0).getId();
-//
-//        editNode.addChild(createActionNode("save", fcListId + "#save", "Save", fcListId));
-//        editNode.addChild(createActionNode("cancel", fcListId + "#cancel", "Cancel", "back"));
-    }
-
-    private ConfigNode createActionNode(String action, String id, String label, String route) {
-        ConfigNode node = new ConfigNode(action);
-        node.setId(id);
-        node.setAttribute("label", label);
-        node.setAttribute("route", route);
-        return node;
-    }
-
-    private ConfigNode addDefaultNode(FormConfig formConfig, ConfigNode node, String tag) {
-        ConfigNode newNode = node.copy();
-        String id = formConfig.getId() + "#" + tag;
-        newNode.setName(tag);
-        newNode.setId(id);
-        node.addChild(newNode);
-        return newNode;
-    }
 
     /**
      * Finds nested list Element and sets to FormConfig

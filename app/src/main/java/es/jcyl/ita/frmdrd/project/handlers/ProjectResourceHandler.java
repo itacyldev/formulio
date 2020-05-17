@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.reader;
+package es.jcyl.ita.frmdrd.project.handlers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,17 +15,17 @@ package es.jcyl.ita.frmdrd.config.reader;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.reader.listener.ReadingProcessListener;
+import es.jcyl.ita.frmdrd.config.reader.ReadingProcessListener;
 import es.jcyl.ita.frmdrd.project.ProjectResource;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Responsible of read an specific project resource and register the objects found in the resource.
  */
-public interface ProjectResourceReader<T> {
+public interface ProjectResourceHandler<T> {
 
-    void clear();
-
-    T read(ProjectResource resource);
+    T handle(ProjectResource resource);
 
     void setListener(ReadingProcessListener listener);
 

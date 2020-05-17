@@ -1,0 +1,7 @@
+<main name="Agents form" description="An example of short description" id="form2" repo="agents">
+    <edit>
+        <form properties="all">
+            <autocomplete id="provincia" label="provincia" repo="provincia" />
+        </form>
+    </edit>
+</main>

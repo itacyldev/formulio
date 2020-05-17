@@ -88,7 +88,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
             try {
                 Attribute attribute = this.attributeDefs.get(attName);
                 if (attribute == null) {
-                    error(String.format("Invalid attribute found in tag <${tag}/>: [%s].", attName));
+                    error(String.format("Invalid attribute found in tag <%s/>: [%s].", node.getName(), attName));
                 } else if (attribute.assignable) {
                     String setter = (attribute.setter == null) ? attName : attribute.setter;
                     Object value;
@@ -110,7 +110,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
                 }
             } catch (Exception e) {
                 throw new ConfigurationException(error(String.format("Error while trying to set " +
-                        "attribute '%s' on element <${tag}/>.", attName), e), e);
+                        "attribute '%s' on element <%s/>.", attName, node.getName()), e), e);
             }
         }
     }

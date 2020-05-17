@@ -30,6 +30,7 @@ import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.forms.FCAction;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
@@ -92,26 +93,27 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * @param node
      */
     private void createDefaultActionNodes(ConfigNode<FormListController> node) {
-        List<ConfigNode> actions = ConfigNodeHelper.getDescendantByTag(node, ACTION_SET);
-
-        if (CollectionUtils.isEmpty(actions)) { // add default actions
-            ConfigNode root = ConfigNodeHelper.getRoot(node);
-            List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(root, "edit");
-            String editId;
-            if (edits.size() > 1) {
-                throw new ConfigurationException(error("List-view with more that one edit-view " +
-                        "and with no actions defined!. When you have more that one <edit/> in a form, " +
-                        "you have to use <actions/> element in the <list/> to define which view will " +
-                        "be navigated from the list."));
-            }
-            // there must be at least one create by FormConfigBuilder
-            editId = edits.get(0).getId();
-
-            String listId = node.getId();
-            node.addChild(createActionNode("add", listId + "#add", "Add", editId));
-            node.addChild(createActionNode("update", listId + "#update", "Update", editId));
-            node.addChild(createActionNode("delete", listId + "#delete", "Delete", null));
+        if (ConfigNodeHelper.hasDescendantByTag(node, ACTION_SET)) {
+            return;
         }
+        ConfigNode root = ConfigNodeHelper.getRoot(node);
+        List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(root, "edit");
+        String editId;
+        if (edits.size() > 1) {
+            throw new ConfigurationException(error("List-view with more that one edit-view " +
+                    "and with no actions defined!. When you have more that one <edit/> in a form, " +
+                    "you have to use <actions/> element in the <list/> to define which view will " +
+                    "be navigated from the list."));
+        }
+        // there must be at least one create by FormConfigBuilder
+        editId = edits.get(0).getId();
+
+        String listId = node.getId();
+        ConfigNode actionsNode = new ConfigNode("actions");
+        node.addChild(actionsNode);
+        actionsNode.addChild(createActionNode("add", listId + "#add", "Add", editId));
+        actionsNode.addChild(createActionNode("update", listId + "#update", "Update", editId));
+        actionsNode.addChild(createActionNode("delete", listId + "#delete", "Delete", null));
     }
 
     @Override
@@ -130,12 +132,14 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * @param node
      */
     private void setUpActions(ConfigNode<FormListController> node) {
-        List<ConfigNode> actions = ConfigNodeHelper.getChildrenByTag(node, ACTION_SET);
-        FCAction[] lstActions = new FCAction[actions.size()];
+        ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
 
-        for (int i = 0; i < actions.size(); i++) {
-            lstActions[i] = (FCAction) actions.get(i).getElement();
-            lstActions[i].setType(actions.get(i).getName());
+        List<ConfigNode> actionList = actions.getChildren();
+        FCAction[] lstActions = new FCAction[actionList.size()];
+
+        for (int i = 0; i < actionList.size(); i++) {
+            lstActions[i] = (FCAction) actionList.get(i).getElement();
+            lstActions[i].setType(actionList.get(i).getName());
         }
         node.getElement().setActions(lstActions);
     }
@@ -196,8 +200,11 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
     private UIDatatable createDefaultSelector(ConfigNode<FormListController> node) {
         ComponentBuilder<UIDatatable> builder = this.getFactory().getBuilder("datatable", UIDatatable.class);
 
-        ConfigNode newNode = node.copy();
+        ConfigNode newNode = new ConfigNode("datatable");
         node.addChild(newNode);
+        if(node.hasAttribute("repo")){
+            newNode.setAttribute("repo", node.getAttribute("repo"));
+        }
         newNode.setId("datatable" + node.getId());
         UIDatatable table = builder.build(newNode);
         newNode.setElement(table);

@@ -42,12 +42,12 @@ public class Project extends Entity {
     private static final String[] CONFIG_FOLDERS = new String[]{"data", "forms"};
     private List<ProjectResource> configFiles;
 
-    public Project(String baseFolder) {
-        this(null, null);
-    }
-
     public Project(EntitySource source, EntityMeta meta) {
         super(source, meta);
+    }
+
+    public void setBaseFolder(String path){
+        set("baseFolder", path);
     }
 
     public String getName() {

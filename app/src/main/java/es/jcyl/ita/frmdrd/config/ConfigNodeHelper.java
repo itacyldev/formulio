@@ -55,6 +55,24 @@ public class ConfigNodeHelper {
         return kids;
     }
 
+    public static ConfigNode getFirstChildrenByTag(ConfigNode root, String tagName) {
+        Set<String> set = new HashSet<>(Arrays.asList(tagName));
+        return getFirstChildrenByTag(root, set);
+
+    }
+
+    public static ConfigNode getFirstChildrenByTag(ConfigNode root, Set<String> tagNames) {
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode n : children) {
+                if (tagNames.contains(n.getName())) {
+                    return n;
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Walks the tree upwards to return the tree root.
      *
@@ -63,7 +81,7 @@ public class ConfigNodeHelper {
      */
     public static ConfigNode getRoot(ConfigNode node) {
         ConfigNode parent = node.getParent();
-        if(parent == null){
+        if (parent == null) {
             return node;
         }
         while (parent.getParent() != null) {
@@ -82,6 +100,15 @@ public class ConfigNodeHelper {
     public static ConfigNode getAscendantByTag(ConfigNode node, String tagName) {
         Set<String> set = new HashSet<>(Arrays.asList(tagName));
         return getAscendantByTag(node, set);
+    }
+
+    public static boolean hasDescendantByTag(ConfigNode node, String tagName) {
+        Set<String> set = new HashSet<>(Arrays.asList(tagName));
+        return hasNestedByTag(node, set);
+    }
+
+    public static boolean hasDescendantByTag(ConfigNode node, Set<String> tagNames) {
+        return hasNestedByTag(node, tagNames);
     }
 
 
@@ -109,11 +136,12 @@ public class ConfigNodeHelper {
 
     /**
      * Returns the first ascendant with a value in the the given attribute name
+     *
      * @param node
      * @param attName
      * @return
      */
-    public static ConfigNode findAscendantWithAttribute(ConfigNode node, String attName){
+    public static ConfigNode findAscendantWithAttribute(ConfigNode node, String attName) {
         ConfigNode parent = node.getParent();
         if (parent == null) {
             return null;
@@ -170,6 +198,27 @@ public class ConfigNodeHelper {
             }
         }
     }
+
+    /**
+     * Recursively goes over the component tree storing fields in the given List
+     */
+    private static boolean hasNestedByTag(ConfigNode root, Set<String> tagNames) {
+        if (tagNames.contains(root.getName())) {
+            return true;
+        } else {
+            if (root.hasChildren()) {
+                List<ConfigNode> children = root.getChildren();
+                boolean found;
+                for (ConfigNode n : children) {
+                    found = hasNestedByTag(n, tagNames);
+                    if (found) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
 //    private find
 
     public static UIComponent[] getUIChildren(ConfigNode root) {
@@ -182,5 +231,17 @@ public class ConfigNodeHelper {
             }
         }
         return kids.toArray(new UIComponent[kids.size()]);
+    }
+
+
+    public static String findParentAtt(ConfigNode node, String attName) {
+        ConfigNode current = node.getParent();
+        while(current !=null){
+            if(current.hasAttribute(attName)){
+                return current.getAttribute(attName);
+            }
+            current = current.getParent();
+        }
+        return null;
     }
 }

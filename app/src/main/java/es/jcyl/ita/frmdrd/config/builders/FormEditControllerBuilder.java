@@ -18,13 +18,13 @@ package es.jcyl.ita.frmdrd.config.builders;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
@@ -71,6 +71,9 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         // find entitySelector
         UIView view = new UIView(ctl.getId() + ">view");
         ctl.setView(view);
+
+        // if no nested form, create one
+        createDefaultForm(node);
         // setup actions must be configured at start of he subtree, so the can be
         // used by nested elements to configure themselves if needed
         createDefaultActionNodes(node);
@@ -87,21 +90,24 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
      * @param node
      */
     private void createDefaultActionNodes(ConfigNode<FormEditController> node) {
-        List<ConfigNode> actions = ConfigNodeHelper.getDescendantByTag(node, ACTION_SET);
-
-        if (CollectionUtils.isEmpty(actions)) { // add default actions
-            ConfigNode root = ConfigNodeHelper.getRoot(node);
-            List<ConfigNode> listCtls = ConfigNodeHelper.getChildrenByTag(root, "list");
-            String listId;
-            if (listCtls.size() > 1) {
-                throw new ConfigurationException(error("Just one <list/> element can be nested in a form configuration."));
-            }
-            // there must be at least one create by FormConfigBuilder
-            listId = listCtls.get(0).getId();
-
-            node.addChild(createActionNode("save", listId + "#save", "Save", listId));
-            node.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back"));
+        if (ConfigNodeHelper.hasDescendantByTag(node, ACTION_SET)) {
+            // it already has a form
+            return;
         }
+        ConfigNode root = ConfigNodeHelper.getRoot(node);
+        List<ConfigNode> listCtls = ConfigNodeHelper.getChildrenByTag(root, "list");
+        String listId;
+        if (listCtls.size() > 1) {
+            throw new ConfigurationException(error("Just one <list/> element can be nested in a form configuration."));
+        }
+        // there must be at least one create by FormConfigBuilder
+        listId = listCtls.get(0).getId();
+
+        ConfigNode actionsNode = new ConfigNode("actions");
+        node.addChild(actionsNode);
+
+        actionsNode.addChild(createActionNode("save", listId + "#save", "Save", listId));
+        actionsNode.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back"));
     }
 
 
@@ -122,12 +128,14 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
      * @param node
      */
     private void setUpActions(ConfigNode<FormEditController> node) {
-        List<ConfigNode> actions = ConfigNodeHelper.getChildrenByTag(node, ACTION_SET);
-        FCAction[] lstActions = new FCAction[actions.size()];
+        ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
 
-        for (int i = 0; i < actions.size(); i++) {
-            lstActions[i] = (FCAction) actions.get(i).getElement();
-            lstActions[i].setType(actions.get(i).getName());
+        List<ConfigNode> actionList = actions.getChildren();
+        FCAction[] lstActions = new FCAction[actionList.size()];
+
+        for (int i = 0; i < actionList.size(); i++) {
+            lstActions[i] = (FCAction) actionList.get(i).getElement();
+            lstActions[i].setType(actionList.get(i).getName());
         }
         node.getElement().setActions(lstActions);
     }
@@ -138,11 +146,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         List<ConfigNode> forms = ConfigNodeHelper.getDescendantByTag(node, "form");
         int numForms = forms.size();
         UIForm mainForm = null;
-        if (numForms == 0) {
-            // create default form using current node attributes
-            mainForm = createDefaultForm(node);
-            ctl.getView().addChild(mainForm);
-        } else if (numForms == 1) {
+        if (numForms == 1) {
             mainForm = (UIForm) forms.get(0).getElement();
         } else {
             // if more that one form is defined, the mainForm att must be set
@@ -174,20 +178,33 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
     /**
-     * Gets form builder and use current node values to create the
+     * If current <edit/> element doesnt have a form, create one and nested all elements except actions
      *
-     * @param node: configuration node containing the form information
      * @return
      */
-    private UIForm createDefaultForm(ConfigNode<FormEditController> node) {
-        ComponentBuilder<UIForm> formBuilder = this.getFactory().getBuilder("form", UIForm.class);
-        ConfigNode formNode = node.copy();
-        node.addChild(formNode);
-        formNode.setId("form" + node.getId());
-        UIForm form = formBuilder.build((ConfigNode) formNode);
-        formNode.setElement(form);
-        formBuilder.processChildren(formNode);
-        return form;
+    private void createDefaultForm(ConfigNode<FormEditController> root) {
+        if (ConfigNodeHelper.hasDescendantByTag(root, "form")) {
+            // it already has a form
+            return;
+        }
+        ConfigNode formNode = new ConfigNode("form");
+        formNode.setId("form" + root.getId());
+        if(root.hasAttribute("repo")){
+            formNode.setAttribute("repo", formNode.getAttribute("repo"));
+        }
+        List<ConfigNode> rootChildren = new ArrayList<>();
+        rootChildren.add(formNode);
+
+        List<ConfigNode> formChildren = new ArrayList<>();
+        for (ConfigNode n : root.getChildren()) {
+            if (n.getName().equals("actions")) {
+                rootChildren.add(n);
+            } else {
+                formChildren.add(n);
+            }
+        }
+        root.setChildren(rootChildren);
+        formNode.setChildren(formChildren);
     }
 
 

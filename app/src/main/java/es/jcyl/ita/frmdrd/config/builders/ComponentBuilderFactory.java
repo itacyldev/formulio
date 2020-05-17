@@ -26,7 +26,7 @@ import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.elements.OptionsConfig;
 import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
-import es.jcyl.ita.frmdrd.config.reader.RepositoriesReader;
+import es.jcyl.ita.frmdrd.project.handlers.RepositoryConfHandler;
 import es.jcyl.ita.frmdrd.config.resolvers.AbstractAttributeResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
@@ -183,7 +183,7 @@ public class ComponentBuilderFactory {
         this.info = info;
     }
 
-    public RepositoriesReader getRepoReader() {
+    public RepositoryConfHandler getRepoReader() {
         return Config.getInstance().getRepoConfigReader();
     }
 }

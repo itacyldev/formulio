@@ -43,7 +43,7 @@ public class RepositoryUtils {
     }
 
     public static ProjectRepository createTestProjectRepo(){
-        File f = TestUtils.findFile("config/projectTemplate");
+        File f = TestUtils.findFile("config/project1");
         return createProjectRepo(f);
     }
 

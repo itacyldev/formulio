@@ -23,7 +23,7 @@ import es.jcyl.ita.crtrepo.query.Sort;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ProjectFilter implements Filter {
+public class BasicFilter implements Filter {
     @Override
     public void setOffset(int i) {
 

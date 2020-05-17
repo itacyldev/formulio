@@ -1,6 +1,9 @@
-package es.jcyl.ita.frmdrd.config.reader.listener;
+package es.jcyl.ita.frmdrd.project.handlers;
+
+import es.jcyl.ita.frmdrd.config.reader.ReadingProcessListener;
+
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +19,15 @@ package es.jcyl.ita.frmdrd.config.reader.listener;
  */
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public interface ReadingProcessListener {
 
-    void newElement(String tag);
+public abstract class AbstractProjectResourceHandler<T> implements ProjectResourceHandler<T> {
+
+    protected ReadingProcessListener listener;
+
+    public void setListener(ReadingProcessListener listener) {
+        this.listener = listener;
+    }
+
 }

@@ -15,8 +15,6 @@ package es.jcyl.ita.frmdrd.project;
  * limitations under the License.
  */
 
-import android.net.Uri;
-
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
@@ -24,6 +22,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
@@ -33,7 +32,7 @@ import es.jcyl.ita.crtrepo.meta.PropertyType;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ProjectRepository implements Repository<Project, String, ProjectFilter> {
+public class ProjectRepository implements EditableRepository<Project, String, BasicFilter> {
 
     private final EntityMeta projectMeta;
     private final EntitySource projectSource;
@@ -41,34 +40,8 @@ public class ProjectRepository implements Repository<Project, String, ProjectFil
 
     public ProjectRepository(File baseFolder) {
         this.baseFolder = baseFolder;
-        this.projectMeta = createProjectMeta();
+        this.projectMeta = createMeta();
         this.projectSource = createSource();
-    }
-
-    private EntitySource createSource() {
-        return new EntitySource() {
-            @Override
-            public String getSourceId() {
-                return baseFolder.getAbsolutePath();
-            }
-
-            @Override
-            public String getEntityTypeId() {
-                return "project";
-            }
-        };
-    }
-
-    private EntityMeta createProjectMeta() {
-        List<PropertyType> propList = new ArrayList<>();
-        propList.add(new PropertyType("id", String.class, "", true));
-        propList.add(new PropertyType("name", String.class, "", true));
-        propList.add(new PropertyType("description", String.class, "", true));
-        propList.add(new PropertyType("baseFolder", String.class, "", true));
-
-        EntityMeta meta = new EntityMeta<>("project",
-                propList.toArray(new PropertyType[propList.size()]), new String[]{"id"});
-        return meta;
     }
 
     @Override
@@ -77,12 +50,12 @@ public class ProjectRepository implements Repository<Project, String, ProjectFil
     }
 
     @Override
-    public List<Project> find(ProjectFilter projectFilter) {
+    public List<Project> find(BasicFilter projectFilter) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
     @Override
-    public long count(ProjectFilter projectFilter) {
+    public long count(BasicFilter projectFilter) {
         return find(projectFilter).size();
     }
 
@@ -140,7 +113,65 @@ public class ProjectRepository implements Repository<Project, String, ProjectFil
     }
 
     @Override
-    public Class<ProjectFilter> getFilterClass() {
+    public Class<BasicFilter> getFilterClass() {
         return null;
+    }
+
+
+
+    private EntitySource createSource() {
+        return new EntitySource() {
+            @Override
+            public String getSourceId() {
+                return baseFolder.getAbsolutePath();
+            }
+
+            @Override
+            public String getEntityTypeId() {
+                return "project";
+            }
+        };
+    }
+
+    private EntityMeta createMeta() {
+        List<PropertyType> propList = new ArrayList<>();
+        propList.add(new PropertyType("id", String.class, "", true));
+        propList.add(new PropertyType("name", String.class, "", false));
+        propList.add(new PropertyType("description", String.class, "", false));
+        propList.add(new PropertyType("baseFolder", String.class, "", false));
+
+        EntityMeta meta = new EntityMeta<>("project",
+                propList.toArray(new PropertyType[propList.size()]), new String[]{"id"});
+        return meta;
+    }
+
+    @Override
+    public Project findById(String s) {
+        return null;
+    }
+
+    @Override
+    public boolean existsById(String s) {
+        return false;
+    }
+
+    @Override
+    public void save(Project project) {
+
+    }
+
+    @Override
+    public void delete(Project project) {
+
+    }
+
+    @Override
+    public void deleteById(String s) {
+
+    }
+
+    @Override
+    public void deleteAll() {
+
     }
 }

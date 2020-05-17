@@ -81,7 +81,7 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
         String[] propertyFilter;
 
         List<UIInputComponent> fieldsToAdd = null;
-        if (StringUtils.isBlank(propertySelector)) {
+        if (propertySelector == null) {
             if (CollectionUtils.isEmpty(fields)) {
                 // no property is selected and no nested input fields, by default add all properties
                 fieldsToAdd = createDefaultFields(form.getRepo(), new String[0]);
@@ -104,7 +104,7 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
                         break;
                     }
                 }
-                if(!found){
+                if (!found) {
                     filteredProperties.add(str);
                 }
             }

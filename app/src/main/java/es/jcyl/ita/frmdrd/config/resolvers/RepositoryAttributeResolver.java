@@ -15,9 +15,13 @@ package es.jcyl.ita.frmdrd.config.resolvers;
  * limitations under the License.
  */
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
-import es.jcyl.ita.frmdrd.config.AttributeResolver;
+import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 
@@ -28,13 +32,20 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  * <p>
  * Helper class used during config reading to obtain reference to a repository.
  */
-public class RepositoryAttributeResolver extends AbstractAttributeResolver<Repository>{
+public class RepositoryAttributeResolver extends AbstractAttributeResolver<Repository> {
+
+    private static final Set<String> INHERIT_PARENT_REPO = new HashSet<String>(Arrays.asList("list", "datatable", "edit", "form"));
 
     private static RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
     public Repository resolve(ConfigNode node, String attName) {
         // make sure the repository is uniquely defined
         String repoAtt = node.getAttribute(attName);
+        if (repoAtt == null && INHERIT_PARENT_REPO.contains(node.getName())) {
+            // get repository from parent
+            repoAtt = ConfigNodeHelper.findParentAtt(node, "repo");
+        }
+
         Repository repo = repoFactory.getRepo(repoAtt);
         if (repo == null) {
             throw new ConfigurationException(
@@ -46,5 +57,6 @@ public class RepositoryAttributeResolver extends AbstractAttributeResolver<Repos
         }
         return repo;
     }
+
 
 }

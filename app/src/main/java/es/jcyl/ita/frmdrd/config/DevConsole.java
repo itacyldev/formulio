@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 
@@ -35,11 +36,15 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
  */
 public class DevConsole {
     private static final String DEV_CONSOLE = "devconsole";
+    private static int level = Log.ERROR;
 
     private static ConfigReadingInfo configReadingInfo;
     // TODO: limit this with a pile
     private static List<String> console = new ArrayList<>();
 
+    public static void setLevel(int l) {
+        level = l;
+    }
 
     public static void clear() {
         console.clear();
@@ -67,6 +72,9 @@ public class DevConsole {
 
     //
     private static String _writeMsg(int errorLevel, String msg, Throwable t) {
+        if (errorLevel < level) {
+            return msg;
+        }
         String effMsg = String.valueOf(JexlUtils.eval(devContext, msg));
         console.add(effMsg);
         if (errorLevel == Log.ERROR) {
@@ -105,6 +113,8 @@ public class DevConsole {
                 return configReadingInfo.getProject().getBaseFolder();
             } else if (name.equals("tag")) {
                 return configReadingInfo.getCurrentTag();
+            } else if (name.equals("file")) {
+                return configReadingInfo.getCurrentFile();
             }
             return "";
         }
@@ -125,4 +135,7 @@ public class DevConsole {
         return console;
     }
 
+    public static void debug(ConfigNode root) {
+        // TODO #204330
+    }
 }

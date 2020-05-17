@@ -27,7 +27,6 @@ import java.io.File;
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
-import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.project.Project;
@@ -57,7 +56,7 @@ public class RelativePathAttResolverTest {
     public void testAttributes() throws Exception {
         ProjectRepository prjRepo = RepositoryUtils.createTestProjectRepo();
         ComponentBuilderFactory factory = ComponentBuilderFactory.getInstance();
-        File dataFolder = TestUtils.findFile("config/projectTemplate");
+        File dataFolder = TestUtils.findFile("config/project1");
         Project p = prjRepo.createFromFolder(dataFolder);
         String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 

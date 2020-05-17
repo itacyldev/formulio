@@ -32,8 +32,8 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.config.reader.FormConfigReader;
-import es.jcyl.ita.frmdrd.config.reader.ProjectResourceReader;
+import es.jcyl.ita.frmdrd.project.handlers.FormConfigHandler;
+import es.jcyl.ita.frmdrd.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.frmdrd.config.reader.dummy.DummyFormConfigReader;
 import es.jcyl.ita.frmdrd.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
@@ -113,9 +113,9 @@ public class TestXmlConfigReader {
     public void testBasicBuild() throws Exception {
         File file = TestUtils.findFile("config/formConfig.xml");
 
-        ProjectResourceReader<FormConfig> reader = new FormConfigReader();
+        ProjectResourceHandler<FormConfig> reader = new FormConfigHandler();
         ProjectResource resource = new ProjectResource(file, ProjectResource.ResourceType.FORM);
-        FormConfig formConfig = reader.read(resource);
+        FormConfig formConfig = reader.handle(resource);
 
         Assert.assertNotNull(formConfig);
         Assert.assertNotNull(formConfig.getList());

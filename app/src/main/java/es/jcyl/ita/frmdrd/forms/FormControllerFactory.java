@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.forms;
  */
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,9 @@ public class FormControllerFactory {
             }
         }
         return lst;
+    }
+    public Collection<FormController> getList(){
+        return formInstances.values();
     }
 
     public void clear(){

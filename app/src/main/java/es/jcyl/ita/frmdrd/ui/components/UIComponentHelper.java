@@ -63,4 +63,21 @@ public class UIComponentHelper {
         }
     }
 
+    public static <T> T findFirstByClass(UIComponent root, Class<T> clazz) {
+        if (clazz.isInstance(root)) {
+            return (T) root;
+        } else {
+            if (!root.hasChildren()) {
+                return null;
+            } else {
+                for (UIComponent kid : root.getChildren()) {
+                    T found = findFirstByClass(kid, clazz);
+                    if(found!=null){
+                        return found;
+                    }
+                }
+                return null;
+            }
+        }
+    }
 }

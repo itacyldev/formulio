@@ -17,7 +17,6 @@ package es.jcyl.ita.frmdrd.config.reader;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import es.jcyl.ita.frmdrd.config.reader.listener.ReadingProcessListener;
 import es.jcyl.ita.frmdrd.project.Project;
 
 /**
