@@ -2,15 +2,14 @@ package es.jcyl.ita.frmdrd.ui.components.tab;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
-
-import org.apache.commons.lang3.RandomUtils;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
@@ -28,36 +27,35 @@ public class TabRenderer extends BaseGroupRenderer<UITab> implements GroupRender
 
     @Override
     protected void setupView(RenderingEnv env, ViewGroup baseView, UITab component) {
+        FragmentActivity fragmentActivity = (FragmentActivity) env.getViewContext();
+
         TabLayout tabLayout = baseView.findViewById(R.id.tab_layout);
         ViewPager2 viewPager = baseView.findViewById(R.id.viewPager);
 
-        TabFragment fragment = new TabFragment();
-        FragmentTransaction ft = ((AppCompatActivity) env.getViewContext()).getSupportFragmentManager().beginTransaction();
-        ft.add(RandomUtils.nextInt(), fragment).commit();
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragment);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
+
+        TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                tab.setText("Tab " + position);
+            }
+        };
+
+        TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, strategy);
+        mediator.attach();
     }
 
     @Override
 
     public void addViews(RenderingEnv env, UITab component, ViewGroup root, View[] views) {
-        TabLayout tabLayout = root.findViewById(R.id.tab_layout);
         ViewPager2 viewPager = root.findViewById(R.id.viewPager);
-
         ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
 
         int fragCount = 0;
         for (View view : views) {
-            tabLayout.addTab(tabLayout.newTab());
-            adapter.createFragment(fragCount);
-            TabFragment fragment = adapter.getFragment(fragCount);
-
-            FragmentTransaction ft = ((AppCompatActivity) env.getViewContext()).getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.tab_content, fragment).commit();
-
-            ((LinearLayout) fragment.getView()).addView(view);
-            adapter.notifyDataSetChanged();
+            adapter.addView(view, fragCount, ((AppCompatActivity) env.getViewContext()));
 
             fragCount++;
         }
