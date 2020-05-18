@@ -24,8 +24,8 @@ public class Attribute {
     public final String name;
     public final boolean assignable;
     public final Class type;
-    public final String resolver;
-    public final String setter;
+    public String resolver;
+    public String setter;
 
 
     public Attribute(String name) {
