@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -39,7 +40,9 @@ public class TabRenderer extends BaseGroupRenderer<UITab> implements GroupRender
         TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                tab.setText("Tab " + position);
+                UIComponent[] children = component.getChildren();
+                UITabItem tabItem = (UITabItem) children[position];
+                tab.setText(tabItem.getLabel());
             }
         };
 

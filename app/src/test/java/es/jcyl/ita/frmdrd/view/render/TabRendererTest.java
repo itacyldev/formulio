@@ -99,6 +99,8 @@ public class TabRendererTest {
 
         View tabView = renderHelper.render(env, tab);
 
+
+
         // check there's a TextView element
         Assert.assertNotNull(tabView);
 

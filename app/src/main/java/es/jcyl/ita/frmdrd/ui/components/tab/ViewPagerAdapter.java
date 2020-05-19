@@ -18,6 +18,8 @@ import es.jcyl.ita.frmdrd.R;
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
     private List<TabFragment> tabFragments = new ArrayList<>();
+
+    private List<View> tabContents = new ArrayList<>();
     ClassLoader classLoader;
 
     public ViewPagerAdapter(FragmentActivity fragmentActivity) {
@@ -28,14 +30,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-
-        FragmentFactory factory = new FragmentFactory();
-        //TabFragment fragment = (TabFragment)factory.instantiate(classLoader, TabFragment.class.getName());
-        TabFragment fragment = TabFragment.newInstance(position);
-
-        tabFragments.add(fragment);
-
-        return fragment;
+        //TabFragment fragment = TabFragment.newInstance(position);
+        return tabFragments.get(position);
     }
 
     @Override
@@ -44,15 +40,15 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     }
 
     public void addView(View view, int position, FragmentActivity fragmentActivity) {
-        TabFragment fragment = (TabFragment) createFragment(position);
-
+        TabFragment fragment = TabFragment.newInstance(position);
+        tabFragments.add(fragment);
 //        FragmentManager fm = fragmentActivity.getSupportFragmentManager();
 //        fm.beginTransaction().add(R.id.body_content, fragment).commit();
 
         fragment.setTabView(view);
 
 
-        this.notifyDataSetChanged();
+       this.notifyDataSetChanged();
     }
 }
 
