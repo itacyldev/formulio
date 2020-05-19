@@ -84,7 +84,6 @@ public class TagDef {
 
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 
-
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL});
         register("action", actionAttributes);
         register("add", actionAttributes);
