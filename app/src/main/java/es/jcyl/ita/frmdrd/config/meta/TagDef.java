@@ -95,6 +95,9 @@ public class TagDef {
 
         register("link", define(base, new Attribute[]{ROUTE}));
 
+        register("tab", define(base, new Attribute[]{ID}));
+        register("tabitem", define(base, new Attribute[]{ID, LABEL}));
+
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

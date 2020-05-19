@@ -36,6 +36,8 @@ import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
+import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
+import es.jcyl.ita.frmdrd.ui.components.tab.UITabItem;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -98,6 +100,9 @@ public class ComponentBuilderFactory {
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
+
+        registerBuilder("tab", newDefaultBuilder(UITab.class,"tab"));
+        registerBuilder("tabitem", newDefaultBuilder(UITabItem.class,"tabitem"));
     }
 
 
