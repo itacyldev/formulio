@@ -6,25 +6,18 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentFactory;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.frmdrd.R;
-
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
     private List<TabFragment> tabFragments = new ArrayList<>();
 
-    private List<View> tabContents = new ArrayList<>();
-    ClassLoader classLoader;
 
     public ViewPagerAdapter(FragmentActivity fragmentActivity) {
         super(fragmentActivity);
-        classLoader = fragmentActivity.getClassLoader();
     }
 
     @NonNull
@@ -42,13 +35,15 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public void addView(View view, int position, FragmentActivity fragmentActivity) {
         TabFragment fragment = TabFragment.newInstance(position);
         tabFragments.add(fragment);
-//        FragmentManager fm = fragmentActivity.getSupportFragmentManager();
-//        fm.beginTransaction().add(R.id.body_content, fragment).commit();
-
         fragment.setTabView(view);
+        this.notifyDataSetChanged();
+    }
 
-
-       this.notifyDataSetChanged();
+    public TabFragment getFragmentAt(int position) {
+        if (tabFragments.size() > position)
+            return tabFragments.get(position);
+        else
+            return null;
     }
 }
 

@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import es.jcyl.ita.frmdrd.R;
@@ -17,8 +15,6 @@ public class TabFragment extends Fragment {
 
     private View tabView;
     private static final String ARG_COUNT = "param1";
-    private Integer counter;
-
 
     public static TabFragment newInstance(int position) {
         TabFragment fragment = new TabFragment();
@@ -32,31 +28,10 @@ public class TabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_tab, container, false);
-//        ViewGroup contentView = view.findViewById(R.id.content_view);
         if (tabView != null) {
             view.addView(tabView);
         }
         return view;
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        TextView textViewCounter = view.findViewById(R.id.content_view);
-//        textViewCounter.setText("Fragment No " + counter);
-//        ViewGroup contentView = view.findViewById(R.id.content_view);
-//        if (tabView != null) {
-//            contentView.addView(tabView);
-//        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            counter = getArguments().getInt(ARG_COUNT);
-        }
     }
 
     public String getTitle() {
@@ -71,4 +46,7 @@ public class TabFragment extends Fragment {
         tabView = view;
     }
 
+    public View getTabView() {
+        return tabView;
+    }
 }
