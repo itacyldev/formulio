@@ -44,9 +44,8 @@ public class RelativePathAttResolver extends AbstractAttributeResolver<String> {
             referencedFile = new File(dataBasePath, path);
         }
         if (!referencedFile.exists()) {
-            String elementInfo = String.format("<%s %s=\"%s\"/>", node.getName(), attName, node.getAttribute(attName));
             throw new ConfigurationException(error(String.format("The referenced file '%s' in element %s ' inside file " +
-                    "'${file}' does not exists.", referencedFile.getAbsolutePath(), elementInfo)));
+                    "'${file}' does not exists.", referencedFile.getAbsolutePath(), node.toString())));
         }
         return referencedFile.getAbsolutePath();
     }
