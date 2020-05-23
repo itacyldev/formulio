@@ -42,7 +42,7 @@ public class RelativePathAttResolver extends AbstractAttributeResolver<String> {
             referencedFile = new File(dataBasePath, path);
         }
         if (!referencedFile.exists()) {
-            DevConsole.error("The referenced file [%s]in file '${file}' does not exists.");
+            DevConsole.error(String.format("The referenced file [%s] in file '${file}' does not exists.", referencedFile.getAbsolutePath()));
         }
         return referencedFile.getAbsolutePath();
     }
