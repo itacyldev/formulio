@@ -17,8 +17,10 @@ package es.jcyl.ita.frmdrd.config.resolvers;
 
 import java.io.File;
 
-import es.jcyl.ita.frmdrd.config.DevConsole;
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+
+import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -43,8 +45,8 @@ public class RelativePathAttResolver extends AbstractAttributeResolver<String> {
         }
         if (!referencedFile.exists()) {
             String elementInfo = String.format("<%s %s=\"%s\"/>", node.getName(), attName, node.getAttribute(attName));
-            DevConsole.error(String.format("The referenced file '%s' in element %s ' inside file " +
-                    "'${file}' does not exists.", referencedFile.getAbsolutePath(), elementInfo));
+            throw new ConfigurationException(error(String.format("The referenced file '%s' in element %s ' inside file " +
+                    "'${file}' does not exists.", referencedFile.getAbsolutePath(), elementInfo)));
         }
         return referencedFile.getAbsolutePath();
     }
