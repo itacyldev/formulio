@@ -16,7 +16,12 @@ package es.jcyl.ita.frmdrd.view.render;
  */
 
 import android.content.Context;
-import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,8 +42,10 @@ import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.tab.TabFragment;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITabItem;
+import es.jcyl.ita.frmdrd.ui.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 
 import static org.mockito.Mockito.mock;
@@ -97,31 +104,19 @@ public class TabRendererTest {
         tab.setId(RandomUtils.randomString(4));
         tab.setChildren(lstTabItem);
 
-        View tabView = renderHelper.render(env, tab);
-
+        LinearLayout tabView = (LinearLayout) renderHelper.render(env, tab);
         // check there's a TextView element
         Assert.assertNotNull(tabView);
 
-    }
+        TabLayout tabLayout = (TabLayout) tabView.getChildAt(0);
 
-//    @Test
-//    public void testNotVisibleLink() {
-//        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-//        ActionController mockAC = mock(ActionController.class);
-//        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
-//        env.setViewContext(ctx);
-//
-//        // link component
-//        UILink link = new UILink();
-//        link.setId(RandomUtils.randomString(4));
-//        link.setRenderExpression(exprFactory.create("false"));
-//        link.setRoute("form1");
-//
-//        View linkView = renderHelper.render(env, link);
-//
-//        // check there's a TextView element
-//        Assert.assertNotNull(linkView);
-//        Assert.assertTrue(linkView.getVisibility() == View.GONE);
-//
-//    }
+        Assert.assertEquals(2, tabLayout.getTabCount());
+        Assert.assertEquals(tabItem1.getLabel(), tabLayout.getTabAt(0).getText());
+        Assert.assertEquals(tabItem2.getLabel(), tabLayout.getTabAt(1).getText());
+
+        ViewPager2 viewPager = (ViewPager2) tabView.getChildAt(1);
+
+        ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
+        Assert.assertEquals(2, adapter.getItemCount());
+    }
 }
