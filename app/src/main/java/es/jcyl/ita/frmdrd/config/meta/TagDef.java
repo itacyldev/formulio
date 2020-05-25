@@ -18,7 +18,6 @@ package es.jcyl.ita.frmdrd.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
-import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CODE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBTABLE;
@@ -80,7 +79,9 @@ public class TagDef {
         register("select", select);
         register("autocomplete", select);
         register("options", define(new Attribute[]{VALUE_PROPERTY, LABEL_EXPRESSION, LABEL_FILTERING_PROP}));
-        register("option", define(new Attribute[]{ID, CODE, LABEL}));
+        // attribute value in option element is a fixed value we don't need an expression
+        Attribute optionValue = new Attribute("value");
+        register("option", define(new Attribute[]{ID, optionValue, LABEL}));
 
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 

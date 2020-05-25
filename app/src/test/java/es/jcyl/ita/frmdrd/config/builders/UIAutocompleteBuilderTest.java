@@ -82,9 +82,9 @@ public class UIAutocompleteBuilderTest {
 
     private static final String XML_OPTIONS = "<autocomplete>" +
             "<options>" +
-            "<option code=\"optionVal1\" label=\"option1\"/>" +
-            "<option code=\"optionVal2\" label=\"option2\"/>" +
-            "<option code=\"optionVal3\" label=\"option3\"/>" +
+            "<option value=\"optionVal1\" label=\"option1\"/>" +
+            "<option value=\"optionVal2\" label=\"option2\"/>" +
+            "<option value=\"optionVal3\" label=\"option3\"/>" +
             "</options>" +
             "</autocomplete>";
 

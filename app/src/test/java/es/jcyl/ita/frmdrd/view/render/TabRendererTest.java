@@ -88,7 +88,6 @@ public class TabRendererTest {
         field1.setId(RandomUtils.randomString(4));
         tabItem1.addChild(field1);
 
-
         UITabItem tabItem2 = new UITabItem();
         tabItem2.setLabel("tab 2");
         UIField field2 = new UIField();
