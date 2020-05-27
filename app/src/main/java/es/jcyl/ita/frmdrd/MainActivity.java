@@ -117,18 +117,14 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_previous:
-                        Toast.makeText(MainActivity.this, "Projects",
+                    case R.id.action_projects:
+                        Toast.makeText(MainActivity.this, getString(R.string.projects),
                                 Toast.LENGTH_SHORT).show();
                         Fragment projectListFragment = new ProjectListFragment();
                         loadFragment(projectListFragment);
                         break;
-                    case R.id.action_new:
-                        Toast.makeText(MainActivity.this, "New",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.action_next:
-                        Toast.makeText(MainActivity.this, "Forms",
+                    case R.id.action_forms:
+                        Toast.makeText(MainActivity.this, getString(R.string.forms),
                                 Toast.LENGTH_SHORT).show();
                         Fragment formListFragment = new FormListFragment();
                         loadFragment(formListFragment);
