@@ -13,6 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,6 +34,7 @@ import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.project.Project;
 import es.jcyl.ita.frmdrd.project.ProjectRepository;
 import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
+import es.jcyl.ita.frmdrd.view.fragments.projects.ProjectListFragment;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.warn;
 
@@ -96,6 +101,15 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
+    private void loadFragment(Fragment fragment) {
+        // create a FragmentManager
+        FragmentManager fm = getSupportFragmentManager();
+        // create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.fragment_content_main, fragment);
+        fragmentTransaction.commit(); // save the changes
+    }
 
     private void initialize() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -104,16 +118,20 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_previous:
-                        Toast.makeText(MainActivity.this, "Previous",
+                        Toast.makeText(MainActivity.this, "Projects",
                                 Toast.LENGTH_SHORT).show();
+                        Fragment projectListFragment = new ProjectListFragment();
+                        loadFragment(projectListFragment);
                         break;
                     case R.id.action_new:
                         Toast.makeText(MainActivity.this, "New",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_next:
-                        Toast.makeText(MainActivity.this, "Next",
+                        Toast.makeText(MainActivity.this, "Forms",
                                 Toast.LENGTH_SHORT).show();
+                        Fragment formListFragment = new FormListFragment();
+                        loadFragment(formListFragment);
                         break;
                 }
                 return true;
@@ -122,6 +140,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);
+        Fragment projectListFragment = new ProjectListFragment();
+        loadFragment(projectListFragment);
     }
 
     @Override

@@ -178,7 +178,7 @@ public class MainController {
     private void registerFormTypeViews() {
         staticMap = new HashMap<>(2);
         staticMap.put(FormEditController.class, FormEditViewHandlerActivity.class);
-        staticMap.put(FormListController.class, FormListViewHandlerActivity.class);
+        staticMap.put(FormListController.class,  FormListViewHandlerActivity.class);
         // TODO: dynamic mapping for extensions
 
     }
