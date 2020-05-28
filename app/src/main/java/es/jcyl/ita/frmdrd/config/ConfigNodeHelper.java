@@ -237,7 +237,6 @@ public class ConfigNodeHelper {
             return false;
         }
     }
-//    private find
 
     public static UIComponent[] getUIChildren(ConfigNode root) {
         List<UIComponent> kids = new ArrayList<UIComponent>();
@@ -251,11 +250,10 @@ public class ConfigNodeHelper {
         return kids.toArray(new UIComponent[kids.size()]);
     }
 
-
     public static String findAscendantAtt(ConfigNode node, String attName) {
         ConfigNode current = node.getParent();
-        while(current !=null){
-            if(current.hasAttribute(attName)){
+        while (current != null) {
+            if (current.hasAttribute(attName)) {
                 return current.getAttribute(attName);
             }
             current = current.getParent();
