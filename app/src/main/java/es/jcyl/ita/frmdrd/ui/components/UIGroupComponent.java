@@ -13,13 +13,13 @@ public class UIGroupComponent extends UIComponent {
     @Override
     public void setChildren(UIComponent[] children) {
         super.setChildren(children);
-        this.fields = UIComponentHelper.findDescendatByClass(this, UIInputComponent.class);
+        this.fields = UIComponentHelper.findByClass(this, UIInputComponent.class);
     }
 
     @Override
     public void addChild(UIComponent... lstChildren) {
         super.addChild(lstChildren);
-        this.fields = UIComponentHelper.findDescendatByClass(this, UIInputComponent.class);
+        this.fields = UIComponentHelper.findByClass(this, UIInputComponent.class);
     }
 
     public List<UIInputComponent> getFields() {
