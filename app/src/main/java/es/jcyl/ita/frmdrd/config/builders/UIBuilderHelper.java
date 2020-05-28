@@ -188,7 +188,7 @@ public class UIBuilderHelper {
      * @param root
      * @param repo
      */
-    public static void addPropertiesNodes(ConfigNode root, Repository repo) {
+    public static void addNodesFromPropertiesAtt(ConfigNode root, Repository repo) {
         // get the existing properties in the repo
         String[] propertyNames = getEffectiveAttributeProperties(repo, root);
 

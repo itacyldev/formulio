@@ -35,6 +35,6 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
 
         // Add a child node for all the properties defined in the properties attribute
         Repository repo = node.getElement().getRepo();
-        UIBuilderHelper.addPropertiesNodes(node, repo);
+        UIBuilderHelper.addNodesFromPropertiesAtt(node, repo);
     }
 }
