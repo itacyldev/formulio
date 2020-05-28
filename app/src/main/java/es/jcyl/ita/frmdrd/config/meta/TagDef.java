@@ -96,7 +96,7 @@ public class TagDef {
         register("link", define(base, new Attribute[]{ROUTE}));
 
         register("tab", define(base, new Attribute[]{ID}));
-        register("tabitem", define(base, new Attribute[]{ID, LABEL}));
+        register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
 
     }
 
