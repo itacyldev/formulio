@@ -59,10 +59,6 @@ public class TabRendererTest {
 
     Context ctx;
 
-    FormDataBuilder formBuilder = new FormDataBuilder();
-    EntityDataBuilder entityBuilder;
-    EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
     @Before

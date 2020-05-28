@@ -18,23 +18,27 @@ package es.jcyl.ita.frmdrd.config.builders;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.tab.UITabItem;
+import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
+
+import static es.jcyl.ita.frmdrd.config.builders.UIBuilderHelper.getElementValue;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
+public class UITabItemBuilder extends BaseUIComponentBuilder<UITabItem> {
 
-    public UIFormBuilder(String tagName) {
-        super("form", UIForm.class);
+    public UITabItemBuilder(String tagName) {
+        super("tabitem", UITabItem.class);
     }
 
     @Override
-    protected void setupOnSubtreeStarts(ConfigNode<UIForm> node) {
-        UIBuilderHelper.setUpRepo(node, true);
-
-        // Add a child node for all the properties defined in the properties attribute
-        Repository repo = node.getElement().getRepo();
+    protected void setupOnSubtreeStarts(ConfigNode<UITabItem> node) {
+        // Add config node for all the properties defined in the properties attribute
+        ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
+        Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
         UIBuilderHelper.addPropertiesNodes(node, repo);
     }
 }

@@ -1,5 +1,6 @@
 package es.jcyl.ita.frmdrd.view.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
+import es.jcyl.ita.frmdrd.project.Project;
 import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -108,6 +111,11 @@ public class FormListFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
+        }
+        if (context instanceof Activity){
+            Project selectedProject = Config.getInstance().getSelectedProject();
+            String projectName = (selectedProject == null)? null: selectedProject.getName();
+            ((Activity)context).setTitle(projectName);
         }
     }
 

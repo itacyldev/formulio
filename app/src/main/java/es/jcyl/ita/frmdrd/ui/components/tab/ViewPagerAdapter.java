@@ -1,6 +1,5 @@
 package es.jcyl.ita.frmdrd.ui.components.tab;
 
-
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -10,6 +9,26 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/*
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @author Javier Ramos (javier.ramos@itacyl.es)
+ */
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
@@ -23,7 +42,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        //TabFragment fragment = TabFragment.newInstance(position);
         return tabFragments.get(position);
     }
 
@@ -37,13 +55,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         tabFragments.add(fragment);
         fragment.setTabView(view);
         this.notifyDataSetChanged();
-    }
-
-    public TabFragment getFragmentAt(int position) {
-        if (tabFragments.size() > position)
-            return tabFragments.get(position);
-        else
-            return null;
     }
 }
 

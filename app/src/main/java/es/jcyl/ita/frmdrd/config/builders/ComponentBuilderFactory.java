@@ -26,7 +26,6 @@ import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.elements.OptionsConfig;
 import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
-import es.jcyl.ita.frmdrd.project.handlers.RepositoryConfHandler;
 import es.jcyl.ita.frmdrd.config.resolvers.AbstractAttributeResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
@@ -34,10 +33,10 @@ import es.jcyl.ita.frmdrd.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FCAction;
+import es.jcyl.ita.frmdrd.project.handlers.RepositoryConfHandler;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
-import es.jcyl.ita.frmdrd.ui.components.tab.UITabItem;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -101,8 +100,8 @@ public class ComponentBuilderFactory {
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
 
-        registerBuilder("tab", newDefaultBuilder(UITab.class,"tab"));
-        registerBuilder("tabitem", newDefaultBuilder(UITabItem.class,"tabitem"));
+        registerBuilder("tab", new BaseUIComponentBuilder("tab", UITab.class));
+        registerBuilder("tabitem", newBuilder(UITabItemBuilder.class, "tabitem"));
     }
 
 

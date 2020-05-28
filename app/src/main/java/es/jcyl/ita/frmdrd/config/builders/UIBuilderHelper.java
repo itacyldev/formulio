@@ -15,22 +15,34 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import android.text.InputType;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.BeanUtilsBean;
 import org.mini2Dx.beanutils.PropertyUtilsBean;
+import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.crtrepo.types.ByteArray;
+import es.jcyl.ita.crtrepo.types.Geometry;
+import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -161,7 +173,7 @@ public class UIBuilderHelper {
                 UIForm form = (UIForm) ConfigNodeHelper.getAscendantByTag(node, "form").getElement();
                 meta = form.getRepo().getMeta();
                 String[] splits = propertyName.split("\\.");
-                int pos = splits.length-1;
+                int pos = splits.length - 1;
                 PropertyType property = meta.getPropertyByName(splits[pos]);
 
                 // set convering type
@@ -171,4 +183,165 @@ public class UIBuilderHelper {
             }
         }
     }
+
+    /**
+     * @param root
+     * @param repo
+     */
+    public static void addPropertiesNodes(ConfigNode root, Repository repo) {
+        // get the existing properties in the repo
+        String[] propertyNames = getEffectiveAttributeProperties(repo, root);
+
+        PropertyType[] properties;
+
+        if (CollectionUtils.isEmpty(root.getChildren()) && ArrayUtils.isEmpty(propertyNames) || !ArrayUtils.isEmpty(propertyNames)) {
+            properties = UIBuilderHelper.getPropertiesFromRepo(repo, propertyNames);
+            for (PropertyType property : properties) {
+                ConfigNode<UIInputComponent> node = createNode(property);
+                root.addChild(node);
+            }
+        }
+    }
+
+    /**
+     * Gets the list of properties defined in the node attribute that are in the repository
+     *
+     * @param repo
+     * @param node
+     * @return A list with all existing properties
+     */
+    private static String[] getEffectiveAttributeProperties(Repository repo, ConfigNode node) {
+        List<String> effectiveProps = new ArrayList<>();
+        EntityMeta meta;
+        try {
+            meta = repo.getMeta();
+            String propertySelector = node.getAttribute("properties");
+
+            String[] properties;
+            if (!propertySelector.equals("*") && !propertySelector.equals("all")) {
+                properties = propertySelector.replace(" ", "").split(",");
+                for (String property : properties) {
+                    //TODO check JEXL exception
+                    if (meta.containsProperty(property) && !isChildIncluded(property, node)) {
+                        effectiveProps.add(property);
+                    }
+                }
+            } else {
+                properties = meta.getPropertyNames();
+                for (String property : properties) {
+                    if (!isChildIncluded(property, node)) {
+                        effectiveProps.add(property);
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+            //TODO manage when repo.getMeta() throws an exception
+        }
+
+        return effectiveProps.toArray(new String[effectiveProps.size()]);
+    }
+
+    /**
+     * Checks if a node already has a child for a property name
+     *
+     * @param propertyName
+     * @param root
+     * @return
+     */
+    private static boolean isChildIncluded(String propertyName, ConfigNode root) {
+        boolean isIncluded = false;
+
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode child : children) {
+                if (child.getId().equals(propertyName)) {
+                    isIncluded = true;
+                    break;
+                }
+            }
+        }
+
+        return isIncluded;
+    }
+
+    /**
+     * Maps the property type to the most suitable Field type
+     *
+     * @param property
+     * @return
+     */
+    public static ConfigNode createNode(PropertyType property) {
+        ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+
+        UIField.TYPE type = UIBuilderHelper.getType(property);
+
+        ConfigNode node = new ConfigNode("input");
+        node.setId(property.name);
+        node.setAttribute("type", type.toString());
+        node.setAttribute("label", property.name);
+
+        ComponentBuilder<UIField> builder = ComponentBuilderFactory.getInstance().getBuilder("input", UIField.class);
+
+        UIField field = builder.build(node);
+        node.setElement(field);
+
+
+        ValueBindingExpression ve = exprFactory.create("${entity." + property.name + "}", property.getType());
+        field.setValueExpression(ve);
+        if (property.isPrimaryKey()) {
+            // if the property is pk, do not show if the value is empty
+            ve = exprFactory.create("${not empty(entity." + property.name + ")}", property.getType());
+            field.setRenderExpression(ve);
+            field.setReadOnly(true);
+        }
+
+        UIBuilderHelper.addValidators(field, property);
+
+        return node;
+    }
+
+    public static UIField.TYPE getType(PropertyType property) {
+        Class type = property.getType();
+        if (Number.class.isAssignableFrom(type) || ByteArray.class == type || String.class == type) {
+            return UIField.TYPE.TEXT;
+        }
+        if (Boolean.class == type) {
+            return UIField.TYPE.TEXT;
+        }
+        if (Geometry.class == type) {
+            // TODO: by now, lets show the wkt
+            return UIField.TYPE.TEXT;
+        }
+        throw new ConfigurationException(String.format("Unsupported data type in property [%s]: " + type, property.getName()));
+    }
+
+    public static void addValidators(UIField baseModel, PropertyType property) {
+        ValidatorFactory validatorFactory = ValidatorFactory.getInstance();
+        Class type = property.getType();
+
+        if (property.isMandatory() != null && property.isMandatory()) {
+            baseModel.addValidator(validatorFactory.getValidator("required"));
+        }
+
+        if (type == Integer.class || type == Short.class || type == Long.class) {
+            baseModel.addValidator(validatorFactory.getValidator("integer"));
+            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
+        if (type == Float.class || type == Double.class) {
+            baseModel.addValidator(validatorFactory.getValidator("decimal"));
+            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        }
+        // used the label to set a validator email, correo, mail, phone, telefono,...
+        String label = baseModel.getLabel();
+        if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
+            baseModel.addValidator(validatorFactory.getValidator("email"));
+            baseModel.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        }
+        if (label.toLowerCase().contains("phone") || label.toLowerCase().contains("telefono")) {
+            baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
+        }
+    }
+
 }

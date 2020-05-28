@@ -35,6 +35,7 @@ import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 
@@ -152,6 +153,88 @@ public class UIFormBuilderTest {
                 Assert.fail("Not found filed with id: " + expected);
             }
         }
+    }
+
+    /**
+     * Tests the automatic creation of inputFields using properties attribute and the merge with already defined properties.
+     * Creates a meta with 5 properties. Two of then has to be included due to "properties" filter and another
+     * two has been defined with tags. Prop3 must have he tag information.
+     *
+     * @throws Exception
+     */
+    private static final String XML_TEST_FORM_WITH_TABS_AND_FIELDS = "<form repo=\"otherRepo\" properties=\"prop4\">" +
+            "  <tab>" +
+            "    <tabitem label=\"tabitem 1\">" +
+            "      <text id=\"prop1\" label=\"mycustomlabel\"/>" +
+            "    </tabitem>" +
+            "    <tabitem label=\"tabitem 2\">" +
+            "      <text id=\"prop2\" label=\"mycustomlabel2\"/>" +
+            "    </tabitem>" +
+            "  </tab>" +
+            "  <text id=\"prop3\"/>" +
+            "</form>";
+
+    @Test
+    public void testFormWithTabsAndFields() throws Exception {
+        EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+        EntityMeta<DBPropertyType> meta = metaBuilder.withNumProps(0)
+                .addProperties(new String[]{"prop1", "prop2", "prop3", "prop4"},
+                        new Class[]{String.class, String.class, String.class, String.class, String.class})
+                .build();
+        Repository otherRepo = RepositoryUtils.registerMock("otherRepo", meta);
+
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_FORM_WITH_TABS_AND_FIELDS);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+
+
+        UIForm form = forms.get(0);
+        Assert.assertEquals(3, form.getChildren().length);
+        Assert.assertTrue(form.getChildren()[0] instanceof UITab);
+
+        Assert.assertEquals("prop3",form.getChildren()[1].getId());
+        Assert.assertEquals("prop4",form.getChildren()[2].getId());
+    }
+
+    /**
+     * Tests the automatic creation of inputFields using properties attribute and the merge with already defined properties.
+     * Creates a meta with 5 properties. Two of then has to be included due to "properties" filter and another
+     * two has been defined with tags. Prop3 must have he tag information.
+     *
+     * @throws Exception
+     */
+    private static final String XML_TEST_FORM_WITH_TAB = "<form repo=\"otherRepo\">" +
+            "  <tab>" +
+            "    <tabitem label=\"tabitem 1\">" +
+            "      <text id=\"prop1\" label=\"mycustomlabel\"/>" +
+            "    </tabitem>" +
+            "    <tabitem label=\"tabitem 2\">" +
+            "      <text id=\"prop2\" label=\"mycustomlabel2\"/>" +
+            "    </tabitem>" +
+            "  </tab>" +
+            "</form>";
+
+    @Test
+    public void testFormWithTab() throws Exception {
+        EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+        EntityMeta<DBPropertyType> meta = metaBuilder.withNumProps(0)
+                .addProperties(new String[]{"prop1", "prop2", "prop3", "prop4"},
+                        new Class[]{String.class, String.class, String.class, String.class, String.class})
+                .build();
+        Repository otherRepo = RepositoryUtils.registerMock("otherRepo", meta);
+
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_FORM_WITH_TAB);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+
+
+        UIForm form = forms.get(0);
+        Assert.assertEquals(1, form.getChildren().length);
+        Assert.assertTrue(form.getChildren()[0] instanceof UITab);
     }
 
 

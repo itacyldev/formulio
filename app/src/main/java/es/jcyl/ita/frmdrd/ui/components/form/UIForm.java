@@ -21,6 +21,7 @@ import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
 import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
+import es.jcyl.ita.frmdrd.ui.components.UIGroupComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
@@ -28,17 +29,15 @@ import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 
-public class UIForm extends UIComponent implements FilterableComponent {
+public class UIForm extends UIGroupComponent implements FilterableComponent {
 
     private FormContext context;
     private final ViewStateHolder memento;
     private Repository repo;
     private String entityId = "params.entityId";
     private Entity currentEntity;
-    private List<UIInputComponent> fields;
     private Filter filter;
     private String onValidate; // js function to call on validation
-    private String label;
     private boolean readOnly;
 
     public UIForm() {
@@ -59,18 +58,6 @@ public class UIForm extends UIComponent implements FilterableComponent {
 
     public List<UIInputComponent> getFields() {
         return this.fields;
-    }
-
-    @Override
-    public void setChildren(UIComponent[] children) {
-        super.setChildren(children);
-        this.fields = UIComponentHelper.findByClass(this, UIInputComponent.class);
-    }
-
-    @Override
-    public void addChild(UIComponent... lstChildren) {
-        super.addChild(lstChildren);
-        this.fields = UIComponentHelper.findByClass(this, UIInputComponent.class);
     }
 
     /**
@@ -300,11 +287,4 @@ public class UIForm extends UIComponent implements FilterableComponent {
         return currentEntity;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
 }
