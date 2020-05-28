@@ -14,6 +14,8 @@ package es.jcyl.ita.frmdrd.view.fragments.projects;/*
  * limitations under the License.
  */
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ import java.util.List;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.project.Project;
+import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
 
 /**
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
@@ -37,6 +40,14 @@ public class ProjectListFragment extends Fragment {
     private static final String TAG = "ProjectRVFragment";
 
     private List<Project> projectList;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity){
+            ((Activity)context).setTitle(R.string.app_name);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){

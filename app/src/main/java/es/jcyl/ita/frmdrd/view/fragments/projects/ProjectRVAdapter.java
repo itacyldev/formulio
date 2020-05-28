@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.project.Project;
 
 /**
@@ -44,8 +45,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Todo Selecting project
-                    projectList.get(getAdapterPosition());
+                    Config.getInstance().setSelectedProject(projectList.get(getAdapterPosition()));
                 }
             });
 

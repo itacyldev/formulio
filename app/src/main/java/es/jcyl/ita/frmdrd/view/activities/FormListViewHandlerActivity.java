@@ -25,6 +25,7 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
     @Override
     protected void doRender() {
         // action buttons
+        setTitle(formController.getName());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         renderFAB();

@@ -50,6 +50,8 @@ public class Config {
     private FormConfigRepository formConfigRepo;
     private FormControllerFactory formControllerFactory = FormControllerFactory.getInstance();
 
+    private Project selectedProject;
+
     private static ConfigReadingInfo readingListener = new ConfigReadingInfo();
 
     private Config(String appBaseFolder) {
@@ -155,6 +157,14 @@ public class Config {
      */
     public ProjectRepository getProjectRepo() {
         return projectRepo;
+    }
+
+    public void setSelectedProject(Project project){
+        this.selectedProject = project;
+    }
+
+    public Project getSelectedProject(){
+        return this.selectedProject;
     }
 
     public RepositoryConfHandler getRepoConfigReader() {

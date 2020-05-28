@@ -79,6 +79,7 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     public Project createFromFolder(File folder) {
         Project prj = new Project(projectSource, projectMeta);
         prj.set("baseFolder", folder.getAbsolutePath());
+        prj.set("name", folder.getName());
         return prj;
     }
 
