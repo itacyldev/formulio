@@ -16,9 +16,12 @@ package es.jcyl.ita.frmdrd.view.render;
  */
 
 import android.content.Context;
-import android.view.ViewGroup;
+import android.content.res.TypedArray;
+import android.icu.text.RelativeDateTimeFormatter;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -33,20 +36,19 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
-import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
-import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
-import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.ui.components.tab.TabFragment;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITabItem;
 import es.jcyl.ita.frmdrd.ui.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
+import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
 
 import static org.mockito.Mockito.mock;
 
@@ -63,7 +65,13 @@ public class TabRendererTest {
 
     @Before
     public void setup() {
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+        MainController mainController = MainController.getInstance();
+        FormEditController mockFC = mock(FormEditController.class);
+        mainController.setFormController(mockFC, null);
+
+        ctx = Robolectric.buildActivity(FormEditViewHandlerActivity.class).create().get();
+        ctx.setTheme(R.style.AppTheme_Dark);
+
     }
 
     /**
@@ -75,7 +83,6 @@ public class TabRendererTest {
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
-
 
         UITabItem tabItem1 = new UITabItem();
         tabItem1.setLabel("tab 1");

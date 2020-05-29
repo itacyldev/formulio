@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -51,7 +50,6 @@ public class TabRenderer extends BaseGroupRenderer<UITab> implements GroupRender
         TabLayout tabLayout = baseView.findViewById(R.id.tab_layout);
         ViewPager2 viewPager = baseView.findViewById(R.id.viewPager);
 
-
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
 
@@ -76,7 +74,7 @@ public class TabRenderer extends BaseGroupRenderer<UITab> implements GroupRender
 
         int fragCount = 0;
         for (View view : views) {
-            adapter.addView(view, fragCount, ((AppCompatActivity) env.getViewContext()));
+            adapter.addView(view, fragCount);
 
             fragCount++;
         }
