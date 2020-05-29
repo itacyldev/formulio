@@ -21,10 +21,8 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
@@ -39,7 +37,7 @@ import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
-import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
@@ -68,8 +66,9 @@ public class FormContextTest {
     Context ctx;
 
     @Before
-    public void setup(){
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+    public void setup() {
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.Theme_App_Light);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
@@ -165,7 +164,6 @@ public class FormContextTest {
                     expected, actual);
         }
     }
-
 
 
 }

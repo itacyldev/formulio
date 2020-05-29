@@ -15,10 +15,7 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
-import android.app.Activity;
 import android.content.Context;
-import android.test.ActivityTestCase;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -27,14 +24,11 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
-import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -59,8 +53,9 @@ public class SelectRendererTest {
     Context ctx;
 
     @Before
-    public void setup(){
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+    public void setup() {
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.Theme_App_Light);
     }
 
     /**
@@ -93,7 +88,7 @@ public class SelectRendererTest {
         // check elements in the view
         SpinnerAdapter adapter = view.getInputView().getAdapter();
         Assert.assertNotNull(adapter);
-        Assert.assertEquals(expectedOptions, adapter.getCount()-1);// empty option was added by renderer
+        Assert.assertEquals(expectedOptions, adapter.getCount() - 1);// empty option was added by renderer
     }
 
     @Test

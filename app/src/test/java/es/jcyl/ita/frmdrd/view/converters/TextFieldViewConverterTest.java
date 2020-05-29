@@ -35,6 +35,7 @@ import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
 import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -57,7 +58,8 @@ public class TextFieldViewConverterTest {
 
     @Before
     public void setUp() {
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme( R.style.Theme_App_Light);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();

@@ -50,7 +50,8 @@ public class AndViewContextTest {
 
     @Before
     public void setup() {
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme( R.style.Theme_App_Light);
     }
 
     /**

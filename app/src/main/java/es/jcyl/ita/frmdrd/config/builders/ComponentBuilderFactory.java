@@ -95,13 +95,13 @@ public class ComponentBuilderFactory {
         registerBuilder("option", newDefaultBuilder(UIOption.class, "option"));
         registerBuilder("options", newDefaultBuilder(OptionsConfig.class, "options"));
 
+        registerBuilder("tab", newBasicBuilder(UITab.class, "tab"));
+        registerBuilder("tabitem", newBuilder(UITabItemBuilder.class, "tabitem"));
+
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
-
-        registerBuilder("tab", new BaseUIComponentBuilder("tab", UITab.class));
-        registerBuilder("tabitem", newBuilder(UITabItemBuilder.class, "tabitem"));
     }
 
 
@@ -147,6 +147,12 @@ public class ComponentBuilderFactory {
 
     private ComponentBuilder newDefaultBuilder(Class elementType, String tag) {
         AbstractComponentBuilder builder = new DefaultComponentBuilder(tag, elementType);
+        builder.setFactory(this);
+        return builder;
+    }
+
+    private ComponentBuilder newBasicBuilder(Class elementType, String tag) {
+        AbstractComponentBuilder builder = new BaseUIComponentBuilder(tag, elementType);
         builder.setFactory(this);
         return builder;
     }

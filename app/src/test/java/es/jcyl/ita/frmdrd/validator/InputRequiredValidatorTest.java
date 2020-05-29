@@ -17,14 +17,15 @@ package es.jcyl.ita.frmdrd.validator;
 
 import android.content.Context;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
-import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
@@ -42,8 +43,9 @@ public class InputRequiredValidatorTest {
     Context ctx;
 
     @Before
-    public void setup(){
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+    public void setup() {
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.Theme_App_Light);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
@@ -67,7 +69,7 @@ public class InputRequiredValidatorTest {
         formViewContext.put(recipe.field.getId(), "");
 
         // execute validation
-        ((FormEditController)recipe.mc.getFormController()).validate(recipe.field);
+        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
 
         // assert there's a message in the context for this field
         Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
@@ -86,7 +88,7 @@ public class InputRequiredValidatorTest {
         formViewContext.put(recipe.field.getId(), "xxxxxxxxx");
 
         // execute validation
-        ((FormEditController)recipe.mc.getFormController()).validate(recipe.field);
+        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
 
         // assert there's a message in the context for this field
         Assert.assertNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
