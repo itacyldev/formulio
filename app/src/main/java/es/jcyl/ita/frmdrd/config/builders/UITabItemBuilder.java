@@ -39,6 +39,6 @@ public class UITabItemBuilder extends BaseUIComponentBuilder<UITabItem> {
         // Add config node for all the properties defined in the properties attribute
         ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
         Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
-        UIBuilderHelper.addPropertiesNodes(node, repo);
+        UIBuilderHelper.addNodesFromPropertiesAtt(node, repo);
     }
 }
