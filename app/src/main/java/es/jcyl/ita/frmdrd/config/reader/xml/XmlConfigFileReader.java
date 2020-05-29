@@ -90,7 +90,9 @@ public class XmlConfigFileReader {
         }
         try {
             ConfigNode rootNode = readFile(xpp);
-            build(rootNode);
+            if (rootNode != null) { // file is not empty
+                build(rootNode);
+            }
             return rootNode;
         } catch (Exception e) {
             throw new ConfigurationException(error("Error while trying to read configuration file '${file}'.", e), e);

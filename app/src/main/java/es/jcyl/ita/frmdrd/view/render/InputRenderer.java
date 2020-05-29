@@ -112,7 +112,6 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
     protected void setupLabel(RenderingEnv env, TextView labelView, C component) {
         labelView.setTag("label_" + component.getId());
         labelView.setText(component.getLabel());
-        component.getValidators()
     }
 
     protected void setupInputView(RenderingEnv env, InputFieldView<I> baseView, I inputView, C component) {

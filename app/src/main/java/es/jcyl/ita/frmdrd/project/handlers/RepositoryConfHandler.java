@@ -22,6 +22,7 @@ import org.greenrobot.greendao.database.StandardDatabase;
 
 import java.io.File;
 
+import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.EntitySourceFactory;
 import es.jcyl.ita.crtrepo.Repository;
@@ -61,8 +62,29 @@ public class RepositoryConfHandler extends AbstractRepoConfigurationReader imple
         XmlConfigFileReader reader = new XmlConfigFileReader();
         reader.setListener(this.listener);
         reader.read(Uri.fromFile(resource.file));
-        // nothing to do, repos are registered during reading process
+        // repos are registered during reading process, just check entities metadata
+        checkRepos();
+
         return null;
+    }
+
+    private void checkRepos() {
+        for (String repoId : repoFactory.getRepoIds()) {
+            validate(repoFactory.getRepo(repoId));
+        }
+    }
+
+    private void validate(Repository repo) {
+        // TODO: if this grows, create separated validators or create an implementor
+        //  for each repo implementation
+        if (repo instanceof EditableRepository) {
+            // make sure the repo has a pk
+            if (!repo.getMeta().hasIdProperties()) {
+                throw new ConfigurationException(error(String.format("The repository %s has no primary key defined. " +
+                        "Can't create an editable repository without a proper PK column (And it should be a one-column PK). " +
+                        "Check your SQLite database.", repo.getId())));
+            }
+        }
     }
 
     @Override
