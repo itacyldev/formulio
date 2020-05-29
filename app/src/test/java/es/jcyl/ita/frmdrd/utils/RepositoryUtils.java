@@ -71,7 +71,7 @@ public class RepositoryUtils {
 
     public static void unregisterMock(String... repos) {
         for (String str : repos) {
-            repoFactory.unregiser(str);
+            repoFactory.unregister(str);
         }
     }
 }

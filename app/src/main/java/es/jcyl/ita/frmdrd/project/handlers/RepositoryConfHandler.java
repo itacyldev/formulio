@@ -80,7 +80,7 @@ public class RepositoryConfHandler extends AbstractRepoConfigurationReader imple
         if (repo instanceof EditableRepository) {
             // make sure the repo has a pk
             if (!repo.getMeta().hasIdProperties()) {
-                throw new ConfigurationException(error(String.format("The repository %s has no primary key defined. " +
+                throw new ConfigurationException(error(String.format("The repository [%s] has no primary key defined. " +
                         "Can't create an editable repository without a proper PK column (And it should be a one-column PK). " +
                         "Check your SQLite database.", repo.getId())));
             }

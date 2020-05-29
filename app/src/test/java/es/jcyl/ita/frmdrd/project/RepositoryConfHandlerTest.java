@@ -16,6 +16,7 @@ package es.jcyl.ita.frmdrd.project;
  */
 
 import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,6 +54,12 @@ public class RepositoryConfHandlerTest {
         // register repos
     }
 
+    @AfterClass
+    public static void tearDown() {
+        // remove invalid repos
+
+    }
+
     /**
      * If a repo with no pk columns is defined the config process must fail
      */
@@ -63,14 +70,15 @@ public class RepositoryConfHandlerTest {
                 .withIdProperties(null).build();
         EditableRepository repo = mock(EditableRepository.class);
         when(repo.getMeta()).thenReturn(meta);
-        when(repo.getId()).thenReturn("repo1");
+        String REPO_ID = "RepositoryConfHandlerTestInvalidRepo";
+        when(repo.getId()).thenReturn(REPO_ID);
 
         File emptyF = File.createTempFile("empty", ".xml");
         FileUtils.write(emptyF, "", Charset.defaultCharset());
 
         ProjectResource pr = new ProjectResource(emptyF, ProjectResource.ResourceType.DATA);
 
-        RepositoryFactory.getInstance().register("repo1", repo);
+        RepositoryFactory.getInstance().register(REPO_ID, repo);
 
         RepositoryConfHandler handler = new RepositoryConfHandler();
         // make it read an empty f
@@ -79,6 +87,9 @@ public class RepositoryConfHandlerTest {
             Assert.fail("The test should've failed!.");
         } catch (ConfigurationException e) {
             e.getMessage().contains("The repository repo1 has no primary key defined");
+        } finally {
+            // teardown
+            RepositoryFactory.getInstance().unregister(REPO_ID);
         }
     }
 
@@ -91,18 +102,21 @@ public class RepositoryConfHandlerTest {
         EntityMeta meta = metaBuilder.withNumProps(1).build();
         EditableRepository repo = mock(EditableRepository.class);
         when(repo.getMeta()).thenReturn(meta);
-        when(repo.getId()).thenReturn("repo1");
+        String REPO_ID = "RepositoryConfHandlerTestValidRepo";
+
+        when(repo.getId()).thenReturn(REPO_ID);
 
         File emptyF = File.createTempFile("empty", ".xml");
         FileUtils.write(emptyF, "", Charset.defaultCharset());
 
         ProjectResource pr = new ProjectResource(emptyF, ProjectResource.ResourceType.DATA);
 
-        RepositoryFactory.getInstance().register("repo1", repo);
+        RepositoryFactory.getInstance().register(REPO_ID, repo);
 
         RepositoryConfHandler handler = new RepositoryConfHandler();
         // make it read an empty f
         handler.handle(pr);
+
     }
 
 }
