@@ -29,6 +29,8 @@
     <string name="layer_aslist">View as list</string>
     <string name="projects">Projects</string>
     <string name="forms">Forms</string>
+    <string name="permissions">Permissions</string>
+    <string name="mustacceptallpermits">Must accept all permits.</string>
 
 
 </resources>

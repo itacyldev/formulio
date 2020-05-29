@@ -1,6 +1,8 @@
 package es.jcyl.ita.frmdrd;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -48,9 +50,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     protected void doOnCreate() {
         getApplication().getFilesDir();
-        checkPermissions();
         setContentView(R.layout.activity_main);
-        initialize();
+        checkPermissions();
     }
 
     @Override
@@ -146,7 +147,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     protected void checkPermissions() {
-        List permsList = new ArrayList();
+        List<String> permsList = new ArrayList<>();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -160,11 +161,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
 
         if (permsList.size() > 0) {
-            ActivityCompat.requestPermissions(this, (String[]) permsList
-                            .toArray(new String[]{}),
-                    PERMISSION_REQUEST);
+            ActivityCompat.requestPermissions(this, permsList
+                            .toArray(new String[]{}), PERMISSION_REQUEST);
+        }else {
+            doInitConfiguration();
         }
-        doInitConfiguration();
     }
 
     private void doInitConfiguration() {
@@ -195,6 +196,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                         Toast.LENGTH_LONG).show();
             }
         }
+        initialize();
     }
 
     private void debugConfig() {
@@ -214,5 +216,42 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         // change text of the menu item
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST: {
+                if (grantResults.length > 0) {
+                    boolean allAcepted = true;
+                    for (int result : grantResults) {
+                        if (result != PackageManager.PERMISSION_GRANTED) {
+                            allAcepted = false;
+                            break;
+                        }
+                    }
+                    if (allAcepted) {
+                        doInitConfiguration();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder
+                                (this);
+                        builder.setTitle(R.string.permissions);
+                        builder.setMessage(R.string.mustacceptallpermits)
+                                .setPositiveButton(R.string.accept, new
+                                        DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.dismiss();
+                                                finish();
+                                            }
+                                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                }
+            }
+        }
     }
 }
