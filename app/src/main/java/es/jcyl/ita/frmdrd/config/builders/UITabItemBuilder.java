@@ -18,19 +18,16 @@ package es.jcyl.ita.frmdrd.config.builders;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITabItem;
-import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 
 import static es.jcyl.ita.frmdrd.config.builders.UIBuilderHelper.getElementValue;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UITabItemBuilder extends BaseUIComponentBuilder<UITabItem> {
+public class UITabItemBuilder extends UIGroupComponentBuilder<UITabItem> {
 
-    public UITabItemBuilder(String tagName) {
+    public UITabItemBuilder() {
         super("tabitem", UITabItem.class);
     }
 
@@ -39,6 +36,6 @@ public class UITabItemBuilder extends BaseUIComponentBuilder<UITabItem> {
         // Add config node for all the properties defined in the properties attribute
         ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
         Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
-        UIBuilderHelper.addNodesFromPropertiesAtt(node, repo);
+        addNodesFromPropertiesAtt(node, repo);
     }
 }
