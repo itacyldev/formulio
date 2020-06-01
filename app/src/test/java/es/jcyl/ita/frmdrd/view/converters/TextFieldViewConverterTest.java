@@ -22,10 +22,8 @@ import android.widget.TextView;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
@@ -34,7 +32,6 @@ import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
-import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;

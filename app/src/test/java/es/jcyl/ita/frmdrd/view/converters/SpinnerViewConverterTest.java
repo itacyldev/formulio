@@ -15,7 +15,6 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.widget.Spinner;
 
@@ -25,7 +24,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -37,7 +35,6 @@ import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.db.meta.DBPropertyType;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
-import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.builders.SelectDataBuilder;

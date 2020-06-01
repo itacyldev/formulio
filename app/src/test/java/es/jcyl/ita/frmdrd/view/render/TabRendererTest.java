@@ -16,12 +16,8 @@ package es.jcyl.ita.frmdrd.view.render;
  */
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.icu.text.RelativeDateTimeFormatter;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -39,8 +35,6 @@ import java.util.List;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
@@ -51,6 +45,7 @@ import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -69,9 +64,8 @@ public class TabRendererTest {
         FormEditController mockFC = mock(FormEditController.class);
         mainController.setFormController(mockFC, null);
 
-        ctx = Robolectric.buildActivity(FormEditViewHandlerActivity.class).create().get();
+        ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
         ctx.setTheme(R.style.AppTheme_Dark);
-
     }
 
     /**
@@ -80,9 +74,9 @@ public class TabRendererTest {
      */
     @Test
     public void test2Tabs() {
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
-        env.setViewContext(ctx);
+        RenderingEnv env = mock(RenderingEnv.class);
+        when(env.getViewContext()).thenReturn(ctx);
+        when(env.getContext()).thenReturn(ContextTestUtils.createGlobalContext());
 
         UITabItem tabItem1 = new UITabItem();
         tabItem1.setLabel("tab 1");
