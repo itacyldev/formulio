@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -120,8 +122,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     case R.id.action_projects:
                         Toast.makeText(MainActivity.this, getString(R.string.projects),
                                 Toast.LENGTH_SHORT).show();
-                        Fragment projectListFragment = new ProjectListFragment();
-                        loadFragment(projectListFragment);
+                        loadFragment(ProjectListFragment.newInstance(
+                                Config.getInstance().getProjectRepo()));
                         break;
                     case R.id.action_forms:
                         Toast.makeText(MainActivity.this, getString(R.string.forms),
@@ -136,8 +138,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);
-        Fragment projectListFragment = new ProjectListFragment();
-        loadFragment(projectListFragment);
+
+        loadFragment(ProjectListFragment.newInstance(
+                Config.getInstance().getProjectRepo()));
     }
 
     @Override
