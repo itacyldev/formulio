@@ -45,7 +45,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Config.getInstance().setSelectedProject(projectList.get(getAdapterPosition()));
+                    Config.getInstance().setCurrentProject(projectList.get(getAdapterPosition()));
                 }
             });
 

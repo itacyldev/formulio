@@ -28,6 +28,7 @@ import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIGroupComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
@@ -92,6 +93,7 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
     private ConfigNode createNode(PropertyType property) {
         ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
+        UIField.TYPE type = getType(property);
 
         ConfigNode node = new ConfigNode("input");
         node.setId(property.name);
@@ -100,24 +102,19 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
 
         ComponentBuilder<UIField> builder = ComponentBuilderFactory.getInstance().getBuilder("input", UIField.class);
 
-//        UIField.TYPE type = getType(property);
-        node.setAttribute("type", getType(property).toString());
         UIField field = builder.build(node);
         node.setElement(field);
-        node.setAttribute("value", "${entity." + property.name + "}", ConvertsMaps.getConverter(property.getType()));
 
-//        ValueBindingExpression ve = exprFactory.create("${entity." + property.name + "}", property.getType());
-//        field.setValueExpression(ve);
+        ValueBindingExpression ve = exprFactory.create("${entity." + property.name + "}", property.getType());
+        field.setValueExpression(ve);
         if (property.isPrimaryKey()) {
             // if the property is pk, do not show if the value is empty
-//            ve = exprFactory.create("${not empty(entity." + property.name + ")}", property.getType());
-//            field.setRenderExpression(ve);
-//            field.setReadOnly(true);
-            node.setAttribute("render", "${not empty(entity." + property.name + ")}");
-            node.setAttribute("readOnly", "true");
+            ve = exprFactory.create("${not empty(entity." + property.name + ")}", property.getType());
+            field.setRenderExpression(ve);
+            field.setReadOnly(true);
         }
 
-        addValidators(node, property);
+        addValidators(field, property);
 
         return node;
     }
@@ -137,24 +134,21 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
         throw new ConfigurationException(String.format("Unsupported data type in property [%s]: " + type, property.getName()));
     }
 
-    private void addValidators(ConfigNode node, PropertyType property) {
+    private void addValidators(UIField baseModel, PropertyType property) {
         ValidatorFactory validatorFactory = ValidatorFactory.getInstance();
         Class type = property.getType();
 
         if (property.isMandatory() != null && property.isMandatory()) {
-
             baseModel.addValidator(validatorFactory.getValidator("required"));
         }
 
         if (type == Integer.class || type == Short.class || type == Long.class) {
             baseModel.addValidator(validatorFactory.getValidator("integer"));
-            node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER));
-//            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER);
+            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER);
         }
         if (type == Float.class || type == Double.class) {
             baseModel.addValidator(validatorFactory.getValidator("decimal"));
-//            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
+            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         }
         // used the label to set a validator email, correo, mail, phone, telefono,...
         String label = baseModel.getLabel();
@@ -166,4 +160,5 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
             baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
         }
     }
+
 }

@@ -15,10 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -185,11 +184,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             Toast.makeText(this, warn("No projects found!!. Create a folder under " + projectsFolder),
                     Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, DevConsole.info("Opening project " + projects.get(0).getId()), Toast.LENGTH_LONG).show();
+            Project prj = projects.get(0);
+            Config.getInstance().setCurrentProject(prj);
+            Toast.makeText(this, DevConsole.info("Opening project " + prj.getId()), Toast.LENGTH_LONG).show();
             try {
                 config.readConfig(projects.get(0));
                 debugConfig();
-
             } catch (Exception e) {
                 DevConsole.error("Error while trying to open project.", e);
                 Toast.makeText(this, "An error occurred while trying to read your projects. See console for details",

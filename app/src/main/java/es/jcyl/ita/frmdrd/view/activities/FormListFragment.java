@@ -14,14 +14,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
 import es.jcyl.ita.frmdrd.project.Project;
-import es.jcyl.ita.frmdrd.router.Router;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
  * A fragment representing a list of Items.
@@ -113,7 +110,7 @@ public class FormListFragment extends Fragment {
                     + " must implement OnListFragmentInteractionListener");
         }
         if (context instanceof Activity){
-            Project selectedProject = Config.getInstance().getSelectedProject();
+            Project selectedProject = Config.getInstance().getCurrentProject();
             String projectName = (selectedProject == null)? null: selectedProject.getName();
             ((Activity)context).setTitle(projectName);
         }

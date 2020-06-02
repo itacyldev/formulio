@@ -29,8 +29,6 @@ import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 public class BindingExpressionAttResolver extends AbstractAttributeResolver<ValueBindingExpression> {
 
 
-    Map<String, Class> convTypes = null;
-
     ValueExpressionFactory factory = ValueExpressionFactory.getInstance();
 
     public ValueBindingExpression resolve(ConfigNode node, String attName) {
@@ -41,8 +39,7 @@ public class BindingExpressionAttResolver extends AbstractAttributeResolver<Valu
                 expression = factory.create(expStr);
             } else {
                 // TODO: take in count converters when creating expression #204351
-                String converter = node.getAttribute("converter");
-                expression = factory.create(expStr, ConverterMap.get(converter));
+                expression = factory.create(expStr, Integer.class);
             }
         }
         return expression;
