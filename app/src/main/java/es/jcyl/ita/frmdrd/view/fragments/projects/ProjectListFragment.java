@@ -21,25 +21,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.project.Project;
-import es.jcyl.ita.frmdrd.view.activities.FormListFragment;
+import es.jcyl.ita.frmdrd.project.ProjectRepository;
 
 /**
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
  */
 public class ProjectListFragment extends Fragment {
 
-    private static final String TAG = "ProjectRVFragment";
+    private static final String TAG = "ProjectListFragment";
 
-    private List<Project> projectList;
+    public static final String PROJECT_LIST = "PROJECT_LIST";
 
     @Override
     public void onAttach(Context context) {
@@ -52,7 +52,6 @@ public class ProjectListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        loadProjects();
     }
 
     @Override
@@ -65,13 +64,21 @@ public class ProjectListFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mReciclerView.setLayoutManager(mLayoutManager);
         mReciclerView.scrollToPosition(0);
-
-        ProjectRVAdapter mAdapter = new ProjectRVAdapter(projectList);
+        Bundle arguments = getArguments();
+        ArrayList<Project> projects = (arguments != null)?
+                (ArrayList<Project>)arguments.getSerializable(PROJECT_LIST)
+                : new ArrayList<>();
+        ProjectRVAdapter mAdapter = new ProjectRVAdapter(projects);
         mReciclerView.setAdapter(mAdapter);
         return rootView;
     }
 
-    private void loadProjects(){
-        projectList = Config.getInstance().getProjectRepo().listAll();
+    public static ProjectListFragment newInstance(@NonNull final ProjectRepository projectRepository){
+        final Bundle bundle = new Bundle();
+        bundle.putSerializable(PROJECT_LIST, new ArrayList<>(projectRepository.listAll()));
+
+        ProjectListFragment fragment = new ProjectListFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 }
