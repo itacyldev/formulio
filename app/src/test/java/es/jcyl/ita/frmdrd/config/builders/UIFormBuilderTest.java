@@ -84,6 +84,10 @@ public class UIFormBuilderTest {
         int numProperties = form.getRepo().getMeta().getProperties().length;
         Assert.assertNotNull(form.getFields());
         Assert.assertEquals("Unexpected number of fields in form.", numProperties, form.getFields().size());
+        // check all forms han rendering expressions
+        for (UIInputComponent c : form.getFields()) {
+            Assert.assertNotNull("Null renderExpression found in component: " + c.getId(), c.getRenderExpression());
+        }
     }
 
     private static final String XML_TEST_ATTS = "<form id=\"myFormId\" repo=\"otherRepo\" />";
@@ -194,8 +198,8 @@ public class UIFormBuilderTest {
         Assert.assertEquals(3, form.getChildren().length);
         Assert.assertTrue(form.getChildren()[0] instanceof UITab);
 
-        Assert.assertEquals("prop3",form.getChildren()[1].getId());
-        Assert.assertEquals("prop4",form.getChildren()[2].getId());
+        Assert.assertEquals("prop3", form.getChildren()[1].getId());
+        Assert.assertEquals("prop4", form.getChildren()[2].getId());
     }
 
     /**
