@@ -24,7 +24,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.Entity;
@@ -32,7 +31,7 @@ import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -60,7 +59,8 @@ public class EnvExecutionContextTest {
 
     @Before
     public void setup() {
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.Theme_App_Light);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();

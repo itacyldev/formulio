@@ -16,16 +16,15 @@ package es.jcyl.ita.frmdrd.config.builders;
  */
 
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
+public class UIFormBuilder extends UIGroupComponentBuilder<UIForm> {
 
-    public UIFormBuilder(String tagName) {
+    public UIFormBuilder() {
         super("form", UIForm.class);
     }
 
@@ -35,6 +34,6 @@ public class UIFormBuilder extends BaseUIComponentBuilder<UIForm> {
 
         // Add a child node for all the properties defined in the properties attribute
         Repository repo = node.getElement().getRepo();
-        UIBuilderHelper.addNodesFromPropertiesAtt(node, repo);
+        addNodesFromPropertiesAtt(node, repo);
     }
 }

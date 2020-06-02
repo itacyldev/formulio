@@ -15,18 +15,17 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -70,7 +69,8 @@ public class DelegatedExpressionTest {
 
     @Before
     public void setUp() {
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.Theme_App_Light);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();

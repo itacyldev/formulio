@@ -26,11 +26,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
 import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
@@ -50,7 +48,8 @@ public class AndViewContextTest {
 
     @Before
     public void setup() {
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme( R.style.Theme_App_Light);
     }
 
     /**

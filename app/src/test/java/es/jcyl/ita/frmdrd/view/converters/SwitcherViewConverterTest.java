@@ -18,12 +18,13 @@ package es.jcyl.ita.frmdrd.view.converters;
 import android.content.Context;
 import android.widget.Switch;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mini2Dx.beanutils.ConversionException;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
@@ -32,7 +33,7 @@ import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.crtrepo.types.Geometry;
-import es.jcyl.ita.frmdrd.MainActivity;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -56,7 +57,8 @@ public class SwitcherViewConverterTest {
 
     @Before
     public void setUp() {
-        ctx = Robolectric.buildActivity(MainActivity.class).create().get();
+        ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.Theme_App_Light);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
@@ -124,7 +126,8 @@ public class SwitcherViewConverterTest {
             AssertUtils.assertEquals(expected[i], actual);
         }
     }
-//
+
+    //
 //    @Test
 //    public void testUnSupportedStrings() {
 //        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
@@ -178,7 +181,7 @@ public class SwitcherViewConverterTest {
             } catch (ConversionException e) {
                 hasFailed = true;
             }
-            Assert.assertTrue("The converter should've failed during the conversion of type "+clazz, hasFailed);
+            Assert.assertTrue("The converter should've failed during the conversion of type " + clazz, hasFailed);
         }
     }
 

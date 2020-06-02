@@ -165,8 +165,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         if (permsList.size() > 0) {
             ActivityCompat.requestPermissions(this, permsList
-                            .toArray(new String[]{}), PERMISSION_REQUEST);
-        }else {
+                    .toArray(new String[]{}), PERMISSION_REQUEST);
+        } else {
             doInitConfiguration();
         }
     }

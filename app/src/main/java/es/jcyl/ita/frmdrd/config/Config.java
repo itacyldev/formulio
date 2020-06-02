@@ -60,7 +60,7 @@ public class Config {
 
     public static Config getInstance() {
         if (_instance == null) {
-            throw new ConfigurationException("You first have to call to init method providin " +
+            throw new ConfigurationException("You first have to call to init method providing " +
                     "the base folder of the configuration you want to read.");
         }
         return _instance;
@@ -111,7 +111,6 @@ public class Config {
         reader.setListener(readingListener);
         _handlers.put(ProjectResource.ResourceType.DATA, reader);
     }
-
 
     public void readConfig(Project project) {
         if (!project.isOpened()) {
