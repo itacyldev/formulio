@@ -36,11 +36,12 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
  */
 public class DevConsole {
     private static final String DEV_CONSOLE = "devconsole";
-    private static int level = Log.ERROR;
+    private static int level = Log.DEBUG;
 
     private static ConfigReadingInfo configReadingInfo;
     // TODO: limit this with a pile
     private static List<String> console = new ArrayList<>();
+
 
     public static void setLevel(int l) {
         level = l;
@@ -138,4 +139,21 @@ public class DevConsole {
     public static void debug(ConfigNode root) {
         // TODO #204330
     }
+
+    public static boolean isDebugEnabled() {
+        return isLevelEnabled(Log.DEBUG);
+    }
+
+    public static boolean isInfoEnabled() {
+        return isLevelEnabled(Log.DEBUG);
+    }
+
+    public static boolean isWarnEnabled() {
+        return isLevelEnabled(Log.DEBUG);
+    }
+
+    private static boolean isLevelEnabled(int logLevel) {
+        return level > logLevel;
+    }
+
 }

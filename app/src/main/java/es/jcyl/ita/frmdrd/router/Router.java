@@ -18,12 +18,17 @@ package es.jcyl.ita.frmdrd.router;
 import android.app.Activity;
 import android.content.Context;
 
+import org.mini2Dx.collections.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.config.DevConsole;
+
+import static es.jcyl.ita.frmdrd.config.DevConsole.debug;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -114,6 +119,9 @@ public class Router {
             this.memento.add(current);
         }
         this.current = new State(formId, params);
+        if (DevConsole.isDebugEnabled()) {
+            debugHistory();
+        }
     }
 
     public void registerActivity(Activity activity) {
@@ -136,5 +144,16 @@ public class Router {
         public String toString() {
             return String.format("%s - %s", formId, params);
         }
+    }
+
+    private void debugHistory() {
+        debug("----- Router -----");
+        if (CollectionUtils.isNotEmpty(memento)) {
+            for (State state : memento) {
+                debug(state.toString());
+            }
+        }
+        debug(this.current.toString());
+        debug("------------------");
     }
 }
