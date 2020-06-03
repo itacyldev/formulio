@@ -153,7 +153,7 @@ public class DevConsole {
     }
 
     private static boolean isLevelEnabled(int logLevel) {
-        return level > logLevel;
+        return logLevel >= level;
     }
 
 }

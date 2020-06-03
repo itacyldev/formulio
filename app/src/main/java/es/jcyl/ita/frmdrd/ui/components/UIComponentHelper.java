@@ -18,6 +18,8 @@ package es.jcyl.ita.frmdrd.ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -80,4 +82,5 @@ public class UIComponentHelper {
             }
         }
     }
+
 }

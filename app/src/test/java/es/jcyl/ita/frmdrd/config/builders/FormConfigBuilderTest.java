@@ -22,21 +22,20 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 
@@ -95,6 +94,7 @@ public class FormConfigBuilderTest {
         // check FormEditController has a form
         List<UIForm> forms = UIComponentHelper.findByClass(ctl.getView(), UIForm.class);
         Assert.assertTrue("No default FORM found for FormEditController", forms.size() == 1);
+        assertRootIsLinked(ctl.getView());
 
         //////////////////////////
         // check listController
@@ -103,6 +103,7 @@ public class FormConfigBuilderTest {
         Assert.assertNotNull(ctlList.getRepo());
         Assert.assertNotNull(ctlList.getActions());
         Assert.assertTrue(ctlList.getActions().length > 0);
+        assertRootIsLinked(ctlList.getView());
         // list.add/edit must point to editController
 
         // check listActions
@@ -117,9 +118,29 @@ public class FormConfigBuilderTest {
         // check listAction has a table
         List<UIDatatable> tables = UIComponentHelper.findByClass(ctlList.getView(), UIDatatable.class);
         Assert.assertTrue("No default table found for FormListController", tables.size() == 1);
+
 //        Assert.assertNotNull(ctlList.getEntitySelector()); pending of #203650
     }
 
+    /**
+     * check every element in the tree is linked to the root
+     *
+     * @param view
+     */
+    private void assertRootIsLinked(UIView view) {
+        assertComponent(view, view);
+
+    }
+
+    public static void assertComponent(UIComponent root, UIView view) {
+        if (!root.hasChildren()) {
+            Assert.assertEquals("the view is not properly linked", view, root.getRoot());
+        } else {
+            for (UIComponent kid : root.getChildren()) {
+                assertComponent(kid, view);
+            }
+        }
+    }
 
     @Test
     public void testFormConfigCreation() throws Exception {
@@ -132,11 +153,15 @@ public class FormConfigBuilderTest {
         Assert.assertNotNull(formConfig.getEdits());
         Assert.assertEquals(2, formConfig.getEdits().size());
         Assert.assertNotNull(formConfig.getEdits().get(0));
+        assertRootIsLinked(formConfig.getEdits().get(0).getView());
         Assert.assertNotNull(formConfig.getEdits().get(1));
+        assertRootIsLinked(formConfig.getEdits().get(1).getView());
 
         // check every object has a repo value
         Assert.assertNotNull(formConfig.getRepo());
         Assert.assertNotNull(formConfig.getList().getRepo());
+        assertRootIsLinked(formConfig.getList().getView());
+
         for (FormEditController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
             Assert.assertNotNull(c.getRepo());

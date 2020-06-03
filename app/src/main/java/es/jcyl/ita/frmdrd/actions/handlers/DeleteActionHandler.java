@@ -41,8 +41,7 @@ public class DeleteActionHandler extends AbstractActionHandler implements Action
             UserMessagesHelper.toast(action.getViewContext(), msg);
         } else {
             Router router = mc.getRouter();
-            router.navigate(action.getViewContext(), action.getRoute(), action.getParams(),
-                    new String[]{msg});
+            router.navigate(action, msg);
         }
     }
 }

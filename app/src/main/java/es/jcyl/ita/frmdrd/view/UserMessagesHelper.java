@@ -18,6 +18,8 @@ package es.jcyl.ita.frmdrd.view;
 import android.content.Context;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import es.jcyl.ita.frmdrd.router.Router;
 
 /**
@@ -31,7 +33,7 @@ public class UserMessagesHelper {
     public static void showGlobalMessages(Context viewContext, Router router) {
         // TODO: use the global context to store the messages instead of the router
         String[] messages = router.getGlobalMessages();
-        if (messages != null) {
+        if (ArrayUtils.isNotEmpty(messages)) {
             toast(viewContext, messages);
             router.clearGlobalMessages();
         }
@@ -42,7 +44,7 @@ public class UserMessagesHelper {
     }
 
     public static void toast(Context viewContext, String[] msg) {
-        // TODO: spetial toast: https://stackoverflow.com/questions/22594376/display-two-toast-messages-at-once
+        // TODO: special toast: https://stackoverflow.com/questions/22594376/display-two-toast-messages-at-once
         // for now, show just first one
         toast(viewContext, msg[0]);
     }

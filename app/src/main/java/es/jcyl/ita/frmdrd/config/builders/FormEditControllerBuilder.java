@@ -70,7 +70,9 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         }
         // find entitySelector
         UIView view = new UIView(ctl.getId() + ">view");
+        view.setFormController(ctl);
         ctl.setView(view);
+
 
         // if no nested repo defined, inherit attribute from parent
         if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
@@ -111,8 +113,8 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         ConfigNode actionsNode = new ConfigNode("actions");
         node.addChild(actionsNode);
 
-        actionsNode.addChild(createActionNode("save", listId + "#save", "Save", listId));
-        actionsNode.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back"));
+        actionsNode.addChild(createActionNode("save", listId + "#save", "Save", listId, "false"));
+        actionsNode.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back", "false"));
     }
 
 
@@ -121,6 +123,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         // add nested ui elements
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().getView().setChildren(uiComponents);
+        node.getElement().getView().setRoot(node.getElement().getView());
 
         setUpActions(node);
         setUpForms(node);
@@ -213,11 +216,12 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
 
-    private ConfigNode createActionNode(String action, String id, String label, String route) {
+    private ConfigNode createActionNode(String action, String id, String label, String route, String registerInHistory) {
         ConfigNode node = new ConfigNode(action);
         node.setId(id);
         node.setAttribute("label", label);
         node.setAttribute("route", route);
+        node.setAttribute("registerInHistory", registerInHistory);
         return node;
     }
 

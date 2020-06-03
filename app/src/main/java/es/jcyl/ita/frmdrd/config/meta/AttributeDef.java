@@ -15,8 +15,6 @@ package es.jcyl.ita.frmdrd.config.meta;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -52,6 +50,8 @@ public class AttributeDef {
 
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
+    public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
+
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");

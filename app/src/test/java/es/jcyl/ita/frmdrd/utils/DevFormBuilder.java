@@ -53,7 +53,7 @@ public class DevFormBuilder {
         }
         FormEditController fc = new FormEditController("c", "");
         fc.setView(view);
-//        fc.setViewContext(viewContext);
+        view.setFormController(fc);
         fc.setMainForm(mainForm);
         return fc;
     }

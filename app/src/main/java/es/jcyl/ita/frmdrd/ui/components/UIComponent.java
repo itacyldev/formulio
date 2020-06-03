@@ -11,6 +11,7 @@ import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.meta.Identifiable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 public abstract class UIComponent implements Identifiable {
@@ -21,7 +22,7 @@ public abstract class UIComponent implements Identifiable {
     private ValueBindingExpression valueExpression;
     private ValueBindingExpression renderExpression;
 
-    protected UIComponent root;
+    protected UIView root;
     protected UIComponent parent;
     protected UIForm parentForm;
     protected UIComponent[] children;
@@ -61,6 +62,9 @@ public abstract class UIComponent implements Identifiable {
 
     public void setParent(UIComponent parent) {
         this.parent = parent;
+        if(parent!=null){
+            this.root = parent.getRoot();
+        }
     }
 
     public UIComponent[] getChildren() {
@@ -99,12 +103,17 @@ public abstract class UIComponent implements Identifiable {
         this.rendererType = rendererType;
     }
 
-    public UIComponent getRoot() {
+    public UIView getRoot() {
         return root;
     }
 
-    public void setRoot(UIComponent root) {
+    public void setRoot(UIView root) {
         this.root = root;
+        if (this.children != null) {
+            for (UIComponent kid : this.children) {
+                kid.setRoot(root);
+            }
+        }
     }
 
     public void setChildren(List<UIComponent> children) {

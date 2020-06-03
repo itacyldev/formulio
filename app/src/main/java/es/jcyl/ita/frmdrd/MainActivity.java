@@ -6,9 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.forms.FormController;
@@ -145,7 +144,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     @Override
     public void onListFragmentInteraction(FormController form) {
-        MainController.getInstance().getRouter().navigate(this, form.getId(), null);
+        MainController.getInstance().getRouter().navigate(UserAction.navigate(this, null, form.getId()));
     }
 
     protected void checkPermissions() {

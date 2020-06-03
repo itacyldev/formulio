@@ -61,8 +61,13 @@ public class ActionController {
     public void doUserAction(UserAction action) {
         // TODO: log user interactions
         ActionHandler handler = actionMap.get(action.getType().toLowerCase());
-        handler.handle(mc.getFormController(), action);
-        // TODO: catch errors, log, toast for user with meaningful information
+        // make sure the formController referred by the action is the current form controller,
+        // in other case dismiss action
+        if ((action.getFormController() == null)
+                || (action.getFormController() == mc.getFormController())) {
+            handler.handle(mc.getFormController(), action);
+            // TODO: catch errors, log, toast for user with meaningful information
+        }
     }
 
 }

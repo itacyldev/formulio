@@ -25,6 +25,7 @@ public class FCAction {
     private String label;
     private String type;
     private String route;
+    private boolean registerInHistory = true;
 
     public FCAction() {
     }
@@ -57,5 +58,13 @@ public class FCAction {
 
     public void setRoute(String route) {
         this.route = route;
+    }
+
+    public boolean isRegisterInHistory() {
+        return registerInHistory;
+    }
+
+    public void setRegisterInHistory(boolean registerInHistory) {
+        this.registerInHistory = registerInHistory;
     }
 }

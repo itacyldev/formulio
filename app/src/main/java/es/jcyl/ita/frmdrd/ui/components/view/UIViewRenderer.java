@@ -4,8 +4,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -28,32 +29,23 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 /**
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class UIViewRenderer extends BaseRenderer implements GroupRenderer {
+public class UIViewRenderer extends BaseGroupRenderer<UIView> implements GroupRenderer<UIView> {
 
-
-    protected View createBaseView(RenderingEnv env, UIComponent component) {
-        // TODO: provide different layout implementors
-        return View.inflate(env.getViewContext(), R.layout.component_view, null);
+    protected ViewGroup createBaseView(RenderingEnv env, UIView component) {
+        return ViewHelper.inflate(env.getViewContext(), R.layout.component_view, ViewGroup.class);
     }
 
+
     @Override
-    protected void setupView(RenderingEnv env, View baseView, UIComponent component) {
+    protected void setupView(RenderingEnv env, ViewGroup baseView, UIView component) {
 
     }
 
-    @Override
-    public void initGroup(RenderingEnv env, UIComponent component, ViewGroup root) {
-    }
 
     @Override
-    public void addViews(RenderingEnv env, UIComponent component, ViewGroup root, View[] views) {
+    public void addViews(RenderingEnv env, UIView component, ViewGroup root, View[] views) {
         for (View view : views) {
             root.addView(view);
         }
     }
-
-    @Override
-    public void endGroup(RenderingEnv env, UIComponent component, ViewGroup root) {
-    }
-
 }

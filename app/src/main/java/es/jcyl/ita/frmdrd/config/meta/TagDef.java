@@ -37,6 +37,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ONSAVE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.READONLY;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.REGISTER_IN_HISTORY;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ROUTE;
@@ -85,7 +86,7 @@ public class TagDef {
 
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 
-        Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL});
+        Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, REGISTER_IN_HISTORY});
         register("action", actionAttributes);
         register("add", actionAttributes);
         register("update", actionAttributes);

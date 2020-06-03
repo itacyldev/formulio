@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.config.DevConsole;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.debug;
@@ -49,17 +50,15 @@ public class Router {
         this.memento = new ArrayList<>();
     }
 
-    public void navigate(android.content.Context context, String route, Map<String, Serializable> params) {
-        this.navigate(context, route, params, null);
-    }
-
-    public void navigate(android.content.Context context, String route, Map<String, Serializable> params, String[] messages) {
+    public void navigate(UserAction action, String... messages) {
         this.currentViewMessages = messages;
-        if ("back".equalsIgnoreCase(route)) {
-            this.back(context);
+        if ("back".equalsIgnoreCase(action.getRoute())) {
+            this.back(action.getViewContext());
         } else {
-            mc.navigate(context, route, params);
-            recordHistory(route, params);
+            mc.navigate(action.getViewContext(), action.getRoute(), action.getParams());
+            if (action.isRegisterInHistory()) {
+                recordHistory(action.getRoute(), action.getParams());
+            }
         }
     }
 
@@ -101,6 +100,9 @@ public class Router {
             int lastPos = this.memento.size() - 1;
             this.current = this.memento.remove(lastPos);
         }
+        if (DevConsole.isDebugEnabled()) {
+            debugHistory();
+        }
         return current;
     }
 
@@ -132,6 +134,23 @@ public class Router {
         this.currentActivity = activity;
     }
 
+    /**
+     * Removes from history the number of given steps
+     *
+     * @param steps
+     */
+    public void popHistory(int steps) {
+        if (steps < 0) {
+            throw new IllegalArgumentException("Negative number while trying to pop history from router");
+        }
+        if (steps == 0) {
+            return;// nothing to do
+        }
+        for(int i=0;i<steps;i++){
+            this.popHistory();
+        }
+    }
+
     public class State {
         String formId;
         Map<String, Serializable> params;
@@ -153,7 +172,7 @@ public class Router {
                 debug(state.toString());
             }
         }
-        debug(this.current.toString());
+        debug("Current: " + this.current);
         debug("------------------");
     }
 }
