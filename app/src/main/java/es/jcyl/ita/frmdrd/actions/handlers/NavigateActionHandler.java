@@ -54,7 +54,7 @@ public class NavigateActionHandler extends AbstractActionHandler implements Acti
                     "formId.", action.getOrigin()));
         }
         try {
-            router.navigate(action.getViewContext(), formId, action.getParams());
+            router.navigate(action);
         } catch (FormException e) {
             UserMessagesHelper.toast(action.getViewContext(), e.getLocalizedMessage());
         }

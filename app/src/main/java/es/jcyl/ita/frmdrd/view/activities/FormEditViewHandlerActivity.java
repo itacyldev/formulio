@@ -80,16 +80,13 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
             public void onClick(View view) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(context, null, formAction.getType(),
-                            formAction.getRoute()));
+                    interceptor.doAction(new UserAction(formController, context, null, formAction.getType(),
+                            formAction.getRoute(), formAction.isRegisterInHistory()));
                 }
             }
         });
-
         button.setText(formAction.getLabel());
-
         setButtonStyle(button);
-
         parent.addView(button);
         return button;
     }

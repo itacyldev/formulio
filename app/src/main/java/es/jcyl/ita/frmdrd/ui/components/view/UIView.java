@@ -18,7 +18,7 @@ package es.jcyl.ita.frmdrd.ui.components.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
@@ -28,11 +28,13 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 public class UIView extends UIComponent {
 
+    FormController formController;
     List<UIForm> forms;
 
     public UIView(String id) {
         setId(id);
         setRendererType("view");
+        setRoot(this);
     }
 
     @Override
@@ -99,6 +101,13 @@ public class UIView extends UIComponent {
                 }
             }
         }
+    }
 
+    public FormController getFormController() {
+        return formController;
+    }
+
+    public void setFormController(FormController formController) {
+        this.formController = formController;
     }
 }

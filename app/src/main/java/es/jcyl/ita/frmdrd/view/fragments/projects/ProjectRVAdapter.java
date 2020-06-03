@@ -1,4 +1,5 @@
-package es.jcyl.ita.frmdrd.view.fragments.projects;/*
+package es.jcyl.ita.frmdrd.view.fragments.projects;
+/*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +46,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Config.getInstance().setSelectedProject(projectList.get(getAdapterPosition()));
+                    Config.getInstance().setCurrentProject(projectList.get(getAdapterPosition()));
                 }
             });
 

@@ -29,7 +29,8 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class FormRenderer extends BaseGroupRenderer<UIForm> implements GroupRenderer<UIForm> {
+public class UIFormRenderer extends BaseGroupRenderer<UIForm> implements GroupRenderer<UIForm> {
+
 
     protected ViewGroup createBaseView(RenderingEnv env, UIForm component) {
         return ViewHelper.inflate(env.getViewContext(), R.layout.component_form,ViewGroup.class);

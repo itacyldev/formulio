@@ -258,7 +258,7 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
         if (this.onValidate != null) {
             ScriptEngine srcEngine = ScriptEngine.getInstance();
             // TODO: we have to pass a combination of globalContext + formContext
-            Map result = srcEngine.execute(this.id, getContext(), this.onValidate, null);
+            Map result = srcEngine.execute(this.id, getContext(), this.onValidate);
             if (result.containsKey("error")) {
                 throw new ValidatorException((String) result.get("message"));
             }

@@ -31,6 +31,7 @@ import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.forms.FCAction;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
@@ -71,6 +72,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
             }
         }
         UIView listView = new UIView(ctl.getId() + ">view");
+        listView.setFormController(ctl);
         ctl.setView(listView);
 
         // if no nested repo defined, inherit attribute from parent
@@ -141,6 +143,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         // add nested ui elements
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().getView().setChildren(uiComponents);
+        node.getElement().getView().setRoot(node.getElement().getView());
 
         setUpActions(node);
         setUpEntitySelector(node); // see issue #203650

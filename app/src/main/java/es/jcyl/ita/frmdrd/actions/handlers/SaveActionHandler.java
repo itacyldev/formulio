@@ -54,8 +54,9 @@ public class SaveActionHandler extends AbstractActionHandler implements ActionHa
             if (StringUtils.isBlank(action.getRoute())) {
                 UserMessagesHelper.toast(action.getViewContext(), msg);
             } else {
-                router.navigate(action.getViewContext(), action.getRoute(), action.getParams(),
-                        new String[]{msg});
+                // don't want to go back to form detail if user presses back button
+                router.popHistory(1);
+                router.navigate(action, msg);
             }
         } catch (ValidatorException e) {
             // re-render the form content

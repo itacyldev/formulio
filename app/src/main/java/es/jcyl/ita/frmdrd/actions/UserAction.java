@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
@@ -34,23 +35,33 @@ public class UserAction {
     private String name;
     private String route;
     private String origin;
+    private boolean registerInHistory;
     private Map<String, Serializable> params;
+    private FormController fc;
 
     public UserAction(UIComponent component, String actionType) {
-        this.component = component;
-        this.type = actionType;
+        this(null, null, component, actionType, null, true);
     }
 
-    public UserAction(android.content.Context context, String actionType) {
-        this.viewContext = context;
-        this.type = actionType;
+    public UserAction(FormController fc, android.content.Context context, String actionType) {
+        this(fc, context, null, actionType, null, true);
     }
 
     public UserAction(android.content.Context context, UIComponent component, String actionType, String route) {
+        this(null, context, component, actionType, route, true);
+    }
+
+    public UserAction(FormController fc, android.content.Context context, UIComponent component, String actionType, String route, boolean registerInHistory) {
+        if (fc != null) {
+            this.fc = fc;
+        } else if (component != null && component.getRoot() != null) {
+            this.fc = component.getRoot().getFormController();
+        }
         this.viewContext = context;
         this.component = component;
         this.type = actionType;
         this.route = route;
+        this.registerInHistory = registerInHistory;
     }
 
     public void addParam(String param, Serializable value) {
@@ -100,6 +111,10 @@ public class UserAction {
         return route;
     }
 
+    public FormController getFormController() {
+        return fc;
+    }
+
     /*********************************/
     /** Default action types **/
     /*********************************/
@@ -147,4 +162,11 @@ public class UserAction {
         return action;
     }
 
+    public boolean isRegisterInHistory() {
+        return registerInHistory;
+    }
+
+    public void setRegisterInHistory(boolean registerInHistory) {
+        this.registerInHistory = registerInHistory;
+    }
 }

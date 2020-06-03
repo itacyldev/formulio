@@ -50,7 +50,7 @@ public class Config {
     private FormConfigRepository formConfigRepo;
     private FormControllerFactory formControllerFactory = FormControllerFactory.getInstance();
 
-    private Project selectedProject;
+    private Project currentProject;
 
     private static ConfigReadingInfo readingListener = new ConfigReadingInfo();
 
@@ -158,12 +158,12 @@ public class Config {
         return projectRepo;
     }
 
-    public void setSelectedProject(Project project){
-        this.selectedProject = project;
+    public void setCurrentProject(Project project){
+        this.currentProject = project;
     }
 
-    public Project getSelectedProject(){
-        return this.selectedProject;
+    public Project getCurrentProject(){
+        return this.currentProject;
     }
 
     public RepositoryConfHandler getRepoConfigReader() {

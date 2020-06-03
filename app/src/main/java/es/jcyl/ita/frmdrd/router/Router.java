@@ -18,12 +18,18 @@ package es.jcyl.ita.frmdrd.router;
 import android.app.Activity;
 import android.content.Context;
 
+import org.mini2Dx.collections.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.actions.UserAction;
+import es.jcyl.ita.frmdrd.config.DevConsole;
+
+import static es.jcyl.ita.frmdrd.config.DevConsole.debug;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -44,17 +50,15 @@ public class Router {
         this.memento = new ArrayList<>();
     }
 
-    public void navigate(android.content.Context context, String route, Map<String, Serializable> params) {
-        this.navigate(context, route, params, null);
-    }
-
-    public void navigate(android.content.Context context, String route, Map<String, Serializable> params, String[] messages) {
+    public void navigate(UserAction action, String... messages) {
         this.currentViewMessages = messages;
-        if ("back".equalsIgnoreCase(route)) {
-            this.back(context);
+        if ("back".equalsIgnoreCase(action.getRoute())) {
+            this.back(action.getViewContext());
         } else {
-            mc.navigate(context, route, params);
-            recordHistory(route, params);
+            mc.navigate(action.getViewContext(), action.getRoute(), action.getParams());
+            if (action.isRegisterInHistory()) {
+                recordHistory(action.getRoute(), action.getParams());
+            }
         }
     }
 
@@ -96,6 +100,9 @@ public class Router {
             int lastPos = this.memento.size() - 1;
             this.current = this.memento.remove(lastPos);
         }
+        if (DevConsole.isDebugEnabled()) {
+            debugHistory();
+        }
         return current;
     }
 
@@ -114,6 +121,9 @@ public class Router {
             this.memento.add(current);
         }
         this.current = new State(formId, params);
+        if (DevConsole.isDebugEnabled()) {
+            debugHistory();
+        }
     }
 
     public void registerActivity(Activity activity) {
@@ -122,6 +132,23 @@ public class Router {
             this.currentActivity.finish();
         }
         this.currentActivity = activity;
+    }
+
+    /**
+     * Removes from history the number of given steps
+     *
+     * @param steps
+     */
+    public void popHistory(int steps) {
+        if (steps < 0) {
+            throw new IllegalArgumentException("Negative number while trying to pop history from router");
+        }
+        if (steps == 0) {
+            return;// nothing to do
+        }
+        for(int i=0;i<steps;i++){
+            this.popHistory();
+        }
     }
 
     public class State {
@@ -136,5 +163,16 @@ public class Router {
         public String toString() {
             return String.format("%s - %s", formId, params);
         }
+    }
+
+    private void debugHistory() {
+        debug("----- Router -----");
+        if (CollectionUtils.isNotEmpty(memento)) {
+            for (State state : memento) {
+                debug(state.toString());
+            }
+        }
+        debug("Current: " + this.current);
+        debug("------------------");
     }
 }

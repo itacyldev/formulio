@@ -20,7 +20,7 @@ import java.util.Map;
 
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteRenderer;
 import es.jcyl.ita.frmdrd.ui.components.datatable.DatatableRenderer;
-import es.jcyl.ita.frmdrd.ui.components.form.FormRenderer;
+import es.jcyl.ita.frmdrd.ui.components.form.UIFormRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.TextFieldRenderer;
@@ -42,7 +42,7 @@ public class RendererFactory {
 
     private RendererFactory() {
         renderInstances.put("view", new UIViewRenderer());
-        renderInstances.put("form", new FormRenderer());
+        renderInstances.put("form", new UIFormRenderer());
         renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("date", new DateFieldRenderer());
         renderInstances.put("switcher", new CheckBoxFieldRenderer());
