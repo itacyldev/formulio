@@ -15,13 +15,21 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
+import android.content.Context;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
@@ -158,8 +166,32 @@ public class Config {
         return projectRepo;
     }
 
-    public void setCurrentProject(Project project){
-        this.currentProject = project;
+    /**
+     * Read the configuration of the selected project as current. If there are problems do not set it.
+     *
+     * @param context
+     * @param project Selected project.
+     */
+    public void setCurrentProject(final Context context, @NonNull final Project project){
+        Toast.makeText(context, DevConsole.info(context.getString(R.string.opening_project) + project.getId()), Toast.LENGTH_LONG).show();
+        try {
+            readConfig(project);
+            currentProject = project;
+            debugConfig();
+        } catch (Exception e) {
+            DevConsole.error("Error while trying to open project.", e);
+            Toast.makeText(context, "An error occurred while trying to read your projects. See console for details",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Read the configuration of the selected project as current. If there are problems do not set it.
+     */
+    private void debugConfig() {
+        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+        Set<String> repoIds = repoFactory.getRepoIds();
+        DevConsole.info("Repos registered: " + repoIds);
     }
 
     public Project getCurrentProject(){

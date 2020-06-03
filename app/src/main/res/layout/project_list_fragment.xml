@@ -4,6 +4,6 @@
     android:id="@+id/rvProjects"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:background="?attr/background" />

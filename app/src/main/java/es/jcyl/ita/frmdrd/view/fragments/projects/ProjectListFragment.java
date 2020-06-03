@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import es.jcyl.ita.frmdrd.MainActivity;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.project.Project;
 import es.jcyl.ita.frmdrd.project.ProjectRepository;
@@ -45,7 +47,7 @@ public class ProjectListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Activity){
-            ((Activity)context).setTitle(R.string.app_name);
+            ((Activity)context).setTitle(getString(R.string.projects_of) + getString(R.string.app_name));
         }
     }
 
@@ -70,6 +72,11 @@ public class ProjectListFragment extends Fragment {
                 : new ArrayList<>();
         ProjectRVAdapter mAdapter = new ProjectRVAdapter(projects);
         mReciclerView.setAdapter(mAdapter);
+
+        if (projects.isEmpty()){
+            Toast.makeText(getContext(), getString(R.string.no_projects),
+                    Toast.LENGTH_SHORT).show();
+        }
         return rootView;
     }
 

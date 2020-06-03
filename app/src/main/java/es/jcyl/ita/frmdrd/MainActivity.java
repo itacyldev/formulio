@@ -119,16 +119,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_projects:
-                        Toast.makeText(MainActivity.this, getString(R.string.projects),
-                                Toast.LENGTH_SHORT).show();
                         loadFragment(ProjectListFragment.newInstance(
                                 Config.getInstance().getProjectRepo()));
                         break;
                     case R.id.action_forms:
-                        Toast.makeText(MainActivity.this, getString(R.string.forms),
-                                Toast.LENGTH_SHORT).show();
-                        Fragment formListFragment = new FormListFragment();
-                        loadFragment(formListFragment);
+                        loadFragment(new FormListFragment());
                         break;
                 }
                 return true;
@@ -138,8 +133,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
-        loadFragment(ProjectListFragment.newInstance(
-                Config.getInstance().getProjectRepo()));
+        loadFragment(new FormListFragment());
     }
 
     @Override
@@ -187,25 +181,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     Toast.LENGTH_LONG).show();
         } else {
             Project prj = projects.get(0);
-            Config.getInstance().setCurrentProject(prj);
-            Toast.makeText(this, DevConsole.info("Opening project " + prj.getId()), Toast.LENGTH_LONG).show();
-            try {
-                config.readConfig(projects.get(0));
-                debugConfig();
-            } catch (Exception e) {
-                DevConsole.error("Error while trying to open project.", e);
-                Toast.makeText(this, "An error occurred while trying to read your projects. See console for details",
-                        Toast.LENGTH_LONG).show();
-            }
+            Config.getInstance().setCurrentProject(this, prj);
         }
         initialize();
-    }
-
-    private void debugConfig() {
-        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-        Set<String> repoIds = repoFactory.getRepoIds();
-        DevConsole.info("Repos registered: " + repoIds);
-
     }
 
     @Override

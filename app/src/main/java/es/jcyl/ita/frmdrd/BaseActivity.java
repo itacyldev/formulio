@@ -1,20 +1,10 @@
 package es.jcyl.ita.frmdrd;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.forms.FormEditController;
-import es.jcyl.ita.frmdrd.router.Router;
-import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
-import es.jcyl.ita.frmdrd.view.activities.FormActivity;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 public abstract class BaseActivity extends AppCompatActivity  {
 

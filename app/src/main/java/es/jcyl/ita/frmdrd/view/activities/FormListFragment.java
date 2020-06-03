@@ -111,8 +111,10 @@ public class FormListFragment extends Fragment {
         }
         if (context instanceof Activity){
             Project selectedProject = Config.getInstance().getCurrentProject();
-            String projectName = (selectedProject == null)? null: selectedProject.getName();
-            ((Activity)context).setTitle(projectName);
+            String title = (selectedProject == null)?
+                    getString(R.string.no_current_project)
+                    : getString(R.string.forms_of) + selectedProject.getName();
+            ((Activity)context).setTitle(title);
         }
     }
 
