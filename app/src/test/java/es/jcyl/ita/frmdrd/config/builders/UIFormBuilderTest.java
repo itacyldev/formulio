@@ -84,9 +84,9 @@ public class UIFormBuilderTest {
         int numProperties = form.getRepo().getMeta().getProperties().length;
         Assert.assertNotNull(form.getFields());
         Assert.assertEquals("Unexpected number of fields in form.", numProperties, form.getFields().size());
-        // check all forms han rendering expressions
+        // check all forms has rendering expressions
         for (UIInputComponent c : form.getFields()) {
-            Assert.assertNotNull("Null renderExpression found in component: " + c.getId(), c.getRenderExpression());
+            Assert.assertNotNull("Null renderExpression found in component: " + c.getId(), c.getValueExpression());
         }
     }
 

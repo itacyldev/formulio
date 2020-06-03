@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.converters.ConverterMap;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 
@@ -42,7 +43,7 @@ public class BindingExpressionAttResolver extends AbstractAttributeResolver<Valu
             } else {
                 // TODO: take in count converters when creating expression #204351
                 String converter = node.getAttribute("converter");
-                expression = factory.create(expStr, ConverterMap.get(converter));
+                expression = factory.create(expStr, ConverterMap.getConverter(converter));
             }
         }
         return expression;

@@ -28,11 +28,13 @@ import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.converters.ConverterMap;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.UIGroupComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 
 import static es.jcyl.ita.frmdrd.config.builders.UIBuilderHelper.getElementValue;
@@ -95,24 +97,18 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
 
         ConfigNode node = new ConfigNode("input");
         node.setId(property.name);
-        node.setAttribute("type", type.toString());
+        node.setAttribute("type", getType(property).toString());
         node.setAttribute("label", property.name);
 
         ComponentBuilder<UIField> builder = ComponentBuilderFactory.getInstance().getBuilder("input", UIField.class);
 
-//        UIField.TYPE type = getType(property);
-        node.setAttribute("type", getType(property).toString());
+
         UIField field = builder.build(node);
         node.setElement(field);
-        node.setAttribute("value", "${entity." + property.name + "}", ConvertsMaps.getConverter(property.getType()));
+        node.setAttribute("value", "${entity." + property.name + "}", ConverterMap.getConverter(property.getType()));
 
-//        ValueBindingExpression ve = exprFactory.create("${entity." + property.name + "}", property.getType());
-//        field.setValueExpression(ve);
         if (property.isPrimaryKey()) {
             // if the property is pk, do not show if the value is empty
-//            ve = exprFactory.create("${not empty(entity." + property.name + ")}", property.getType());
-//            field.setRenderExpression(ve);
-//            field.setReadOnly(true);
             node.setAttribute("render", "${not empty(entity." + property.name + ")}");
             node.setAttribute("readOnly", "true");
         }
@@ -138,32 +134,40 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
     }
 
     private void addValidators(ConfigNode node, PropertyType property) {
-        ValidatorFactory validatorFactory = ValidatorFactory.getInstance();
         Class type = property.getType();
 
+        UIField baseModel = (UIField) node.getElement();
         if (property.isMandatory() != null && property.isMandatory()) {
-
-            baseModel.addValidator(validatorFactory.getValidator("required"));
+            node.addChild(createValidatorNode("required"));
         }
 
         if (type == Integer.class || type == Short.class || type == Long.class) {
-            baseModel.addValidator(validatorFactory.getValidator("integer"));
+            node.addChild(createValidatorNode("integer"));
             node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER));
-//            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER);
         }
+
         if (type == Float.class || type == Double.class) {
-            baseModel.addValidator(validatorFactory.getValidator("decimal"));
-//            baseModel.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            node.addChild(createValidatorNode("decimal"));
             node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
         }
+
         // used the label to set a validator email, correo, mail, phone, telefono,...
         String label = baseModel.getLabel();
         if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
-            baseModel.addValidator(validatorFactory.getValidator("email"));
+            node.addChild(createValidatorNode("email"));
             baseModel.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         }
         if (label.toLowerCase().contains("phone") || label.toLowerCase().contains("telefono")) {
             baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
         }
+    }
+
+    private ConfigNode<Validator> createValidatorNode(String type) {
+        ValidatorFactory validatorFactory = ValidatorFactory.getInstance();
+        ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
+        Validator validator = validatorFactory.getValidator(type);
+        validatorNode.setElement(validator);
+
+        return validatorNode;
     }
 }

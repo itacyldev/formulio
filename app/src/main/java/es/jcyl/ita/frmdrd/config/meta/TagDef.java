@@ -99,6 +99,7 @@ public class TagDef {
         register("tab", define(base, new Attribute[]{ID}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
 
+        register("validator", define(base, new Attribute[]{TYPE}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

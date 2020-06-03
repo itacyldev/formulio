@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.config.Config;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -71,11 +69,15 @@ public class ConfigNode<E> {
         return getAttribute("id");
     }
 
-    public void setAttribute(String name, String value) {
+    public void setAttribute(String name, String value, String converter) {
         if (attributes == null) {
             this.attributes = new HashMap<>();
         }
         this.attributes.put(name, value);
+    }
+
+    public void setAttribute(String name, String value) {
+        setAttribute(name, value, null);
     }
 
     public String getAttribute(String name) {
@@ -103,7 +105,7 @@ public class ConfigNode<E> {
 
     public void setChildren(List<ConfigNode> kids) {
         this.children = kids;
-        for(ConfigNode n: kids){
+        for (ConfigNode n : kids) {
             n.setParent(this);
         }
     }
