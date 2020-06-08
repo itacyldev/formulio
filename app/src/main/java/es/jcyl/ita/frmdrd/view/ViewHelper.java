@@ -63,6 +63,55 @@ public class ViewHelper {
         return views;
     }
 
+    /**
+     * Find the set of tags that are under a root view.
+     *
+     * @param rootView
+     * @return
+     */
+    public static Set<String> getTags(View rootView) {
+        Set<String> tags = new HashSet<>();
+
+        for (View view : getViewList(rootView)) {
+            if (view.getTag() instanceof String) {
+                tags.add((String) view.getTag());
+            }
+        }
+
+        return tags;
+    }
+
+    /**
+     * Recursively loops through the view tree, and returns a listing.
+     *
+     * @param view Root view.
+     * @return All views of tree.
+     */
+    private static List<View> getViewList(View view) {
+        List<View> viewList = new ArrayList<>();
+        if (view instanceof ViewGroup) {
+            int numViews = ((ViewGroup) view).getChildCount();
+            if (numViews <= 0) {
+                return viewList;
+            }
+            for (int index = 0; index < numViews; index++) {
+                viewList.addAll(getViewList(((ViewGroup) view).getChildAt(index)));
+            }
+            return viewList;
+        } else {
+            viewList.add(view);
+            return viewList;
+        }
+    }
+
+    public static View findLabelView(View rootView, String componentId){
+        return rootView.findViewWithTag("label_" + componentId);
+    }
+
+    public static View findLabelView(View rootView, UIComponent component){
+        return rootView.findViewWithTag("label_" + component.getId());
+    }
+
     public static View findComponentView(View rootView, String formId, String componentId) {
         // same name rule followed by FileRenderer to tag the BaseView of
         // the InputFileView: formId:elementId

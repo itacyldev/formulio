@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.render;
+package es.jcyl.ita.frmdrd.ui.components;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -35,6 +35,8 @@ import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.link.UILink;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
 import static org.mockito.Mockito.mock;
 

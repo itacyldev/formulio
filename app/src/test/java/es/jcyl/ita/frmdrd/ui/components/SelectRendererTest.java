@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.render;
+package es.jcyl.ita.frmdrd.ui.components;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -19,6 +19,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -28,15 +29,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Set;
+
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
+import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
 import static org.mockito.Mockito.mock;
 
@@ -106,5 +114,27 @@ public class SelectRendererTest {
         Assert.assertTrue(view.getVisibility() == View.GONE);
     }
 
+    @Test
+    public void fieldLabelRendererTest() {
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        env.setViewContext(ctx);
 
+        UIField field = new UIField();
+        field.setId(RandomUtils.randomString(4));
+        field.setLabel("some text");
+        View view = renderHelper.render(env, field);
+
+        Assert.assertEquals("The label is not correct.",
+                "some text",
+                (String) ((TextView)ViewHelper.findLabelView(view, field)).getText());
+
+        RequiredValidator mockRequired = mock(RequiredValidator.class);
+        field.addValidator(mockRequired);
+        view = renderHelper.render(env, field);
+
+        Assert.assertEquals("The label must be marked with asterisk.",
+                "* some text",
+                (String) ((TextView)ViewHelper.findLabelView(view, field)).getText());
+    }
 }

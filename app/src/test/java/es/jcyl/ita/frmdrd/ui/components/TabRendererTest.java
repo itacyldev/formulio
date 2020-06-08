@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.render;
+package es.jcyl.ita.frmdrd.ui.components;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -43,6 +43,8 @@ import es.jcyl.ita.frmdrd.ui.components.tab.UITabItem;
 import es.jcyl.ita.frmdrd.ui.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
