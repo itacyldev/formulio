@@ -23,7 +23,7 @@
             android:paddingRight="10dp"
             android:textColor="?attr/clickableTextColor"
 
-            android:textSize="18sp"></TextView>
+            android:textSize="18sp" />
     </LinearLayout>
 
 

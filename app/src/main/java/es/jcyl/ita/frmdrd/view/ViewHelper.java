@@ -19,11 +19,14 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -64,12 +67,41 @@ public class ViewHelper {
     }
 
     /**
+     * Find views containing a text
+     *
+     * @param rootView
+     * @param text
+     * @return
+     */
+    public static Set<View> findViewsContainingText(@NonNull View rootView, @NonNull String text){
+        Set<View> viewSet = new HashSet<>();
+        ArrayList<View> viewList = new ArrayList<>();
+        rootView.findViewsWithText(viewList, text, View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+        viewSet.addAll(viewList);
+        viewList.clear();
+        rootView.findViewsWithText(viewList, text, View.FIND_VIEWS_WITH_TEXT);
+        viewSet.addAll(viewList);
+        return viewSet;
+    }
+
+    public static <T> Set<T> findViewsContainingText(@NonNull View rootView, @NonNull String text,
+                                                    @NonNull Class<T> clazz){
+        Set<T> viewSet = new HashSet<>();
+        for (View view : findViewsContainingText(rootView, text)) {
+            if (view.getClass().getName().equals(clazz.getName())) {
+                viewSet.add((T)view);
+            }
+        }
+        return viewSet;
+    }
+
+    /**
      * Find the set of tags that are under a root view.
      *
      * @param rootView
      * @return
      */
-    public static Set<String> getTags(View rootView) {
+    public static Set<String> getTags(@NonNull  View rootView) {
         Set<String> tags = new HashSet<>();
 
         for (View view : getViewList(rootView)) {
@@ -87,7 +119,7 @@ public class ViewHelper {
      * @param view Root view.
      * @return All views of tree.
      */
-    private static List<View> getViewList(View view) {
+    private static List<View> getViewList(@NonNull View view) {
         List<View> viewList = new ArrayList<>();
         if (view instanceof ViewGroup) {
             int numViews = ((ViewGroup) view).getChildCount();

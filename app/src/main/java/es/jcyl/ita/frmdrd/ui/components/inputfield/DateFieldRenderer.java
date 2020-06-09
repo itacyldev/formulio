@@ -98,6 +98,13 @@ public class DateFieldRenderer extends InputRenderer<Button, UIField> {
                 input.setText(strValue);
             }
         });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                input.setText("");
+            }
+        });
     }
 
     @Override

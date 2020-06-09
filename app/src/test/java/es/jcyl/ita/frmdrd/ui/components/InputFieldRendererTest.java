@@ -1,6 +1,6 @@
 package es.jcyl.ita.frmdrd.ui.components;
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 José Ramón Cuevas (joseramon.cuevas@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,27 +17,23 @@ package es.jcyl.ita.frmdrd.ui.components;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Set;
+
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
-import es.jcyl.ita.frmdrd.config.ConfigConverters;
-import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
-import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
-import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.view.InputFieldView;
@@ -85,5 +81,28 @@ public class InputFieldRendererTest {
         Assert.assertEquals("The label must be marked with asterisk.",
                 "* some text",
                 ((TextView)ViewHelper.findLabelView(view, field)).getText());
+    }
+
+    @Test
+    public void clearFieldTest(){
+        ActionController mockAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        env.setViewContext(ctx);
+
+        UIField field = new UIField();
+        field.setId(RandomUtils.randomString(4));
+        InputFieldView inputFieldView = (InputFieldView) renderHelper.render(env, field);
+        Set<ImageView> viewSet = ViewHelper.findViewsContainingText(inputFieldView,
+                "Cancel", ImageView.class);
+        ImageView eraseImage = viewSet.isEmpty()? null : viewSet.iterator().next();
+        inputFieldView.setValueString("filling");
+
+        Assert.assertNotNull("Erase image missing.", eraseImage);
+        Assert.assertEquals("Incorrectly filled.",
+                "filling", inputFieldView.getValueString());
+
+        eraseImage.performClick();
+        Assert.assertEquals("The field has not been cleaned.",
+                "", inputFieldView.getValueString());
     }
 }

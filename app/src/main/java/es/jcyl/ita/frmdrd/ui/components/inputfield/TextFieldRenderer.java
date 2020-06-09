@@ -4,7 +4,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import es.jcyl.ita.frmdrd.R;
@@ -66,6 +68,15 @@ public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
         baseView.getInputView().setInputType(component.getInputType());
         // set event
         addTextChangeListener(env, baseView.getInputView(), component);
+
+        ImageView resetButton = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_x,
+                ImageView.class);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                baseView.getInputView().setText("");
+            }
+        });
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
