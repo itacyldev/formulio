@@ -98,6 +98,10 @@ public class ComponentBuilderFactory {
         registerBuilder("tab", newBasicBuilder(UITab.class, "tab"));
         registerBuilder("tabitem", newBuilder(UITabItemBuilder.class, "tabitem"));
 
+        registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
+
+        //registerBuilder("param", newBasicBuilder(ValidatorBuilder.class, "validator"));
+
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());

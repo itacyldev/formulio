@@ -15,12 +15,19 @@ package es.jcyl.ita.frmdrd.validation;
  * limitations under the License.
  */
 
-import org.apache.commons.validator.routines.DoubleValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.apache.commons.validator.routines.IntegerValidator;
+import org.apache.commons.validator.routines.IBANValidator;
+import org.apache.commons.validator.routines.RegexValidator;
+import org.mini2Dx.collections.MapUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
+
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.DevConsole;
+import es.jcyl.ita.frmdrd.converters.ConverterMap;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -36,15 +43,23 @@ public class ValidatorFactory {
         return _instance;
     }
 
-
     /**
      * Validatos with no parameters
      */
     private void registerStaticValidators() {
         staticValidators.put("required", new RequiredValidator());
-        staticValidators.put("integer", new CommonsValidatorWrapper(IntegerValidator.getInstance()));
-        staticValidators.put("decimal", new CommonsValidatorWrapper(DoubleValidator.getInstance()));
+
+        staticValidators.put("integer", new NumberValidator(Integer.class));
+        staticValidators.put("short", new NumberValidator(Short.class));
+        staticValidators.put("long", new NumberValidator(Long.class));
+
+        staticValidators.put("decimal", new NumberValidator(Double.class));
+        staticValidators.put("double", new NumberValidator(Double.class));
+        staticValidators.put("float", new NumberValidator(Float.class));
+
         staticValidators.put("email", new CommonsValidatorWrapper(EmailValidator.getInstance()));
+
+        staticValidators.put("iban", new CommonsValidatorWrapper(IBANValidator.getInstance()));
     }
 
     public ValidatorFactory() {
@@ -53,10 +68,76 @@ public class ValidatorFactory {
     }
 
     public Validator getValidator(String type) {
-        return staticValidators.get(type.toLowerCase());
+        return getValidator(type, null);
     }
 
     public Validator getValidator(String type, Map<String, String> params) {
-        throw new UnsupportedOperationException("not implemented yet!");
+        Validator validator = null;
+
+        if (staticValidators.containsKey(type) && MapUtils.isEmpty(params)) {
+            validator = staticValidators.get(type);
+        } else {
+            switch (type) {
+                case "regex": {
+                    validator = getRegexValidator(params);
+                    break;
+                }
+                case "number": {
+                    validator = getNumberValidator(params);
+                    break;
+                }
+            }
+        }
+        return validator;
+    }
+
+
+    public Validator getNumberValidator(Map<String, String> params) {
+        Validator validator = null;
+        String numberType = params.get("numberType");
+
+        Class numberClass = null;
+        if (StringUtils.isNotEmpty(numberType)) {
+            numberClass = ConverterMap.getConverter(numberType.toLowerCase());
+        } else {
+            //default class
+            numberClass = Integer.class;
+        }
+
+        validator = new NumberValidator(numberClass);
+
+        return validator;
+    }
+
+
+    /**
+     * Creates a Regex validator with
+     *
+     * @param params
+     * @return
+     */
+    public Validator getRegexValidator(Map<String, String> params) {
+        Validator validator = null;
+        String pattern = params.get("pattern");
+        if (StringUtils.isEmpty(pattern)) {
+            throw new ConfigurationException("Regex validator must have a pattern");
+        }
+
+        boolean caseSensitive = false;
+        if (params.containsKey("caseSensitive")) {
+            String caseSensitiveStr = params.get("caseSensitive");
+            caseSensitive = Boolean.parseBoolean(caseSensitiveStr);
+        }
+        try {
+            RegexValidator commonsValidator = new RegexValidator(pattern, caseSensitive);
+            validator = new CommonsValidatorWrapper(commonsValidator);
+
+        } catch (PatternSyntaxException ex) {
+            String msg = "Validator pattern " + pattern + " is not valid";
+            DevConsole.error(msg);
+            throw new ConfigurationException(msg);
+        }
+        return validator;
     }
 }
+

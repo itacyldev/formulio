@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
+import java.util.Arrays;
+
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
@@ -46,6 +48,17 @@ public class UIInputComponent extends UIComponent {
         }
         newArray[newArray.length - 1] = validator;
         validators = newArray;
+    }
+
+    public void addValidator(Validator... lstValidator) {
+        Validator[] newValidators;
+        if (validators == null) {
+            newValidators = Arrays.copyOf(lstValidator, lstValidator.length);
+        } else {
+            newValidators = Arrays.copyOf(this.validators, this.validators.length + lstValidator.length);
+            System.arraycopy(lstValidator, 0, newValidators, this.validators.length, lstValidator.length);
+        }
+        this.validators = newValidators;
     }
 
     /**

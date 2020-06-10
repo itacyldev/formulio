@@ -110,7 +110,7 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
         if (property.isPrimaryKey()) {
             // if the property is pk, do not show if the value is empty
             node.setAttribute("render", "${not empty(entity." + property.name + ")}");
-            node.setAttribute("readOnly", "true");
+            node.setAttribute("readonly", "true");
         }
 
         addValidators(node, property);
@@ -163,10 +163,9 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
     }
 
     private ConfigNode<Validator> createValidatorNode(String type) {
-        ValidatorFactory validatorFactory = ValidatorFactory.getInstance();
         ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
-        Validator validator = validatorFactory.getValidator(type);
-        validatorNode.setElement(validator);
+        validatorNode.setAttribute("type", type);
+
 
         return validatorNode;
     }

@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.config;
  * limitations under the License.
  */
 
+import android.text.InputType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -23,6 +25,8 @@ import java.util.Set;
 
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.validation.Validator;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -250,6 +254,18 @@ public class ConfigNodeHelper {
         return kids.toArray(new UIComponent[kids.size()]);
     }
 
+    public static Validator[] getValidators(ConfigNode root) {
+        List<Validator> kids = new ArrayList<Validator>();
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode n : children) {
+                if (n.getElement() instanceof Validator)
+                    kids.add((Validator) n.getElement());
+            }
+        }
+        return kids.toArray(new Validator[kids.size()]);
+    }
+
     public static String findAscendantAtt(ConfigNode node, String attName) {
         ConfigNode current = node.getParent();
         while (current != null) {
@@ -259,5 +275,41 @@ public class ConfigNodeHelper {
             current = current.getParent();
         }
         return null;
+    }
+
+    public static void addValidators(ConfigNode node, String... types) {
+
+        UIField baseModel = (UIField) node.getElement();
+
+        for (String type : types) {
+            node.addChild(createValidatorNode(type));
+            if (type.equalsIgnoreCase("integer") || type.equalsIgnoreCase("short") || type.equalsIgnoreCase("long")) {
+                node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER));
+            }
+
+            if (type.equalsIgnoreCase("float") || type.equalsIgnoreCase("double")) {
+                node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
+            }
+        }
+
+
+        // used the label to set a validator email, correo, mail, phone, telefono,...
+        String label = baseModel.getLabel();
+        if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
+            node.addChild(createValidatorNode("email"));
+            baseModel.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        }
+        if (label.toLowerCase().contains("phone") || label.toLowerCase().contains("telefono")) {
+            baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
+        }
+    }
+
+    private static ConfigNode<Validator> createValidatorNode(String type) {
+        ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
+        validatorNode.setAttribute("type", type);
+        //Validator validator = validatorFactory.getValidator(type);
+        //validatorNode.setElement(validator);
+
+        return validatorNode;
     }
 }

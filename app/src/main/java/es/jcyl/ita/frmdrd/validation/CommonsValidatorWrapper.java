@@ -81,4 +81,17 @@ public class CommonsValidatorWrapper implements es.jcyl.ita.frmdrd.validation.Va
             throw new ValidatorException(msg);
         }
     }
+
+    public Class getDelegateClass() {
+        Class clazz = null;
+        if (abstractDelegate != null) {
+            clazz = abstractDelegate.getClass();
+        }
+
+        if (delegate != null) {
+            clazz = delegate.getClass();
+        }
+
+        return clazz;
+    }
 }

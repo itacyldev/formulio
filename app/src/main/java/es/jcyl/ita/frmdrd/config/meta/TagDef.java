@@ -42,6 +42,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.TYPE;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALIDATOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE_PROPERTY;
 
@@ -69,7 +70,7 @@ public class TagDef {
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
-        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE};
+        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", baseInput);
         register("checkbox", baseInput);
@@ -101,6 +102,10 @@ public class TagDef {
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
 
         register("validator", define(base, new Attribute[]{TYPE}));
+
+        register("param", define(base, new Attribute[]{NAME, VALUE}));
+
+
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

@@ -30,8 +30,6 @@ import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 public class BindingExpressionAttResolver extends AbstractAttributeResolver<ValueBindingExpression> {
 
 
-    Map<String, Class> convTypes = null;
-
     ValueExpressionFactory factory = ValueExpressionFactory.getInstance();
 
     public ValueBindingExpression resolve(ConfigNode node, String attName) {

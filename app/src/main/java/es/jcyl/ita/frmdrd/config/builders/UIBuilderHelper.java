@@ -238,4 +238,28 @@ public class UIBuilderHelper {
         return isIncluded;
     }
 
+    /**
+     * Checks if a node already has a child for a property name
+     *
+     * @param validatorType
+     * @param root
+     * @return
+     */
+    public static boolean isValidatorIncluded(String validatorType, ConfigNode root) {
+        boolean isIncluded = false;
+
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode child : children) {
+                if (child.getAttribute("type").equals(validatorType)) {
+                    isIncluded = true;
+                    break;
+                }
+            }
+        }
+
+        return isIncluded;
+    }
+
+
 }

@@ -17,12 +17,11 @@ package es.jcyl.ita.frmdrd.config.builders;
 
 import org.apache.commons.lang3.StringUtils;
 
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.validation.Validator;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -50,10 +49,30 @@ public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
             throw new ConfigurationException(error(String.format("Invalid input type: [%s] expected " +
                     "one of: %s", type, UIField.TYPE.values())));
         }
+
+        String validatorSelector = node.getAttribute("validator");
+        if (StringUtils.isNotEmpty(validatorSelector)) {
+            String[] validators = validatorSelector.replace(" ", "").split(",");
+            addValidatorNode(node, validators);
+        }
+
     }
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIField> node) {
         UIBuilderHelper.setUpValueExpressionType(node);
+
+        Validator[] validators = ConfigNodeHelper.getValidators(node);
+        node.getElement().addValidator(validators);
+    }
+
+    private void addValidatorNode(ConfigNode<UIField> root, String[] validators) {
+        for (String validator : validators) {
+            if (!UIBuilderHelper.isValidatorIncluded(validator, root)) {
+                ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
+                validatorNode.setAttribute("type", validator);
+                root.addChild(validatorNode);
+            }
+        }
     }
 }
