@@ -27,7 +27,7 @@
         android:layout_weight="0"
         android:clickable="true"
         android:textColor="?attr/itemTextColor"
-        android:textSize="12sp"></Button>
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/field_layout_today"
@@ -37,7 +37,7 @@
         android:clickable="true"
         android:text="@string/today"
         android:textColor="?attr/itemTextColor"
-        android:textSize="12sp"></Button>
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/field_layout_x"

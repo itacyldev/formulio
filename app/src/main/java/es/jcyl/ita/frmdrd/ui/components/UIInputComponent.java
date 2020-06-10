@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.ui.components;
 import java.util.Arrays;
 
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.validation.RequiredValidator;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
@@ -128,4 +129,15 @@ public class UIInputComponent extends UIComponent {
         this.valueConverter = valueConverter;
     }
 
+    public boolean isMandatory(){
+        if (validators == EMPTY_VALIDATOR){
+            return false;
+        }
+        for (Validator validator : validators) {
+            if (validator instanceof RequiredValidator) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

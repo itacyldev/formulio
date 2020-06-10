@@ -26,7 +26,7 @@
         android:layout_weight="1"
         android:clickable="true"
         android:inputType="text"
-        android:textColor="?attr/itemTextColor"></EditText>
+        android:textColor="?attr/itemTextColor" />
 
     <ImageView
         android:id="@+id/field_layout_x"
