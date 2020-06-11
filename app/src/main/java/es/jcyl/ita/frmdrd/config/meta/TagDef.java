@@ -68,6 +68,7 @@ public class TagDef {
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE}));
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
+        register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
         Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR};
