@@ -1,49 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- <color name="colorPrimary">#008577</color>
-     <color name="colorPrimaryDark">#00574B</color>
-     <color name="colorAccent">#D81B60</color>-->
-
 
     <color name="TRANSPARENT">#00000000</color>
     <color name="DARKCYAN_SELECTED">#0099cc</color>
     <color name="GRAY_SELECTED">#222222</color>
 
+    <!-- LIGHT THEME -->
+    <color name="light_PrimaryColorVariant">#00766c</color>
+    <color name="light_PrimaryColor">#26a69a</color>
+    <color name="light_OnPrimaryColor">#FFFFFF</color>
+    <color name="light_AccentColor">#00b2cc</color>
 
-    <color name="colorPrimary">#26a69a</color>
-    <color name="colorPrimaryVariant">#00766c</color>
-    <color name="colorAccent">#00b2cc</color>
-    <color name="onPrimary">#000000</color>
+    <color name="light_SurfaceColor">#F4F4F4</color>
+    <color name="light_OnSurfaceColor">#282828</color>
+    <color name="light_ErrorColor">#EC2A2A</color>
 
-    <color name="background">#FFFFFF</color>
-    <color name="backgroundSecondary">#FFFFFF</color>
-    <color name="onBackground">#121212</color>
-    <color name="onBackgroundSecondary">#282828</color>
+    <color name="light_Surface2Color">#000000</color>
+    <color name="light_OnSurface2Color">#007ac1</color>
 
-    <color name="buttonNormal">#e30425</color>
-    <color name="buttonHighlight">#ff554f</color>
-    <color name="buttonText">#FFFFFF</color>
+    <color name="light_Surface3Color">#282828</color>
+    <color name="light_OnSurface3Color">#D7D7D7</color>
 
-    <color name="clickableTextColor">#007ac1</color>
+    <color name="light_BackgroundColor">#FFFFFF</color>
+    <color name="light_OnBackgroundColor">#121212</color>
+
+    <color name="buttonNormal_Light">#e30425</color>
+    <color name="buttonHighlight_Light">#ff554f</color>
+    <color name="buttonText_Light">#FFFFFF</color>
 
 
     <!-- DARK THEME -->
-    <color name="dark_colorPrimary">#00766c</color>
-    <color name="dark_colorPrimaryVariant">#26a69a</color>
-    <color name="dark_colorAccent">#00e5ff</color>
-    <color name="dark_onPrimary">#FFFFFF</color>
+    <color name="dark_PrimaryColorVariant">#26a69a</color>
+    <color name="dark_PrimaryColor">#00766c</color>
+    <color name="dark_OnPrimaryColor">#FFFFFF</color>
+    <color name="dark_AccentColor">#00e5ff</color>
 
-    <color name="dark_background">#121212</color>
-    <color name="dark_backgroundSecondary">#282828</color>
-    <color name="dark_onBackground">#EAEAEA</color>
-    <color name="dark_onBackgroundSecondary">#D7D7D7</color>
+    <color name="dark_SurfaceColor">#282828</color>
+    <color name="dark_OnSurfaceColor">#D7D7D7</color>
+    <color name="dark_ErrorColor">#FF1A1A</color>
 
+    <color name="dark_Surface2Color">#000000</color>
+    <color name="dark_OnSurface2Color">#03a9f4</color>
 
-    <color name="dark_buttonNormal">#76be2f</color>
-    <color name="dark_buttonHighlight">#81c784</color>
-    <color name="dark_buttonText">#FFFFFF</color>
+    <color name="dark_Surface3Color">#282828</color>
+    <color name="dark_OnSurface3Color">#D7D7D7</color>
 
-    <color name="dark_clickableTextColor">#03a9f4</color>
+    <color name="dark_BackgroundColor">#121212</color>
+    <color name="dark_OnBackgroundColor">#EAEAEA</color>
 
+    <color name="buttonNormal_Dark">#76be2f</color>
+    <color name="buttonHighlight_Dark">#81c784</color>
+    <color name="buttonText_Dark">#FFFFFF</color>
 
 </resources>

@@ -71,7 +71,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.project_row_view, viewGroup, false);
+                .inflate(R.layout.project_list_item, viewGroup, false);
         return new ViewHolder(v);
     }
 

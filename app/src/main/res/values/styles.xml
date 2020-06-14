@@ -1,39 +1,86 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme_Dark" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="ActionBarPopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">?attr/AppBackgroundColor</item>
+        <item name="android:textColor">?attr/onAppBackgroundColor</item>
     </style>
 
-    <style name="AppTheme_Light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorBackground">@android:color/white</item>
-        <item name="android:textColor">@android:color/black</item>
+    <style name="BottomNavigationStyle">
+        <item name="android:background">?attr/primaryColor</item>
+        <item name="itemBackground">?attr/primaryColor</item>
+        <item name="itemIconTint">?attr/onPrimaryColor</item>
+        <item name="itemTextColor">?attr/onPrimaryColor</item>
+    </style>
+    
+    <style name="CardViewItemStyle">
+        <item name="cardElevation">5dp</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardBackgroundColor">?attr/surfaceColor</item>
+        <item name="cardUseCompatPadding">true</item>
     </style>
 
+    <style name="TextViewItemStyle">
+        <item name="android:textAppearance">?attr/textAppearanceListItem</item>
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+    </style>
 
-    <style name="UserFormPagerTitleStrip">
-        <item name="android:layout_width">fill_parent</item>
+    <style name="EditTextStyle">
+        <item name="android:textAppearance">?attr/textAppearanceListItem</item>
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+        <item name="backgroundTint">?attr/onSurfaceColor</item>
+    </style>
+
+    <style name="AutocompleteStyle">
+        <item name="android:background">?attr/surfaceColor</item>
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+        <item name="android:popupBackground">?attr/AppBackgroundColor</item>
+        <item name="colorControlNormal">?attr/onSurfaceColor</item>
+        <item name="colorControlHighlight">?attr/onSurface2Color</item>
+    </style>
+
+    <style name="AutocompleteStyle.Label">
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="FloatingActionAddButtomStyle">
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@color/DARKCYAN_SELECTED</item>
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="backgroundTint">?attr/primaryColor</item>
+        <item name="tint">?attr/onPrimaryColor</item>
+        <item name="srcCompat">@android:drawable/ic_input_add</item>
+    </style>
+
+    <style name="ListHeader_textView">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:textColor">?attr/onSurface2Color</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="AppTheme_Dark.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="ListHeader_filterText">
+        <item name="android:textColor">?attr/onSurface3Color</item>
     </style>
 
-    <style name="AppTheme_Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="ListHeader_cancelImage">
+        <item name="android:background">@drawable/selectableimagebackground</item>
+        <item name="android:padding">2dp</item>
     </style>
 
-    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="ListHeader_orderImage">
+        <item name="android:background">@drawable/selectableimagebackground</item>
+        <item name="android:contentDescription">@string/layer_aslist</item>
+        <item name="android:padding">2dp</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
+    <style name="TextField_cancelImage">
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_weight">0</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="tint">?attr/onSurfaceColor</item>
+    </style>
+
 </resources>

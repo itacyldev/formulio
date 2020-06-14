@@ -189,9 +189,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     protected void setTheme() {
         if (currentTheme.equals("dark")) {
-            setTheme(R.style.Theme_App_Dark);
+            setTheme(R.style.FormudruidDark);
         } else {
-            setTheme(R.style.Theme_App_Light);
+            setTheme(R.style.FormudruidLight);
         }
 
         // change text of the menu item

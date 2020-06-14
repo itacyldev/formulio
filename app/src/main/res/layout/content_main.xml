@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
@@ -21,13 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="?attr/colorPrimary"
-        app:itemBackground="?attr/colorPrimary"
-        app:itemIconTint="?attr/buttonTextColor"
-        app:itemTextColor="?attr/buttonTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_main" />
+        app:menu="@menu/bottom_nav_main"
+        style="@style/BottomNavigationStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,8 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:layout_marginBottom="5dp"
-        android:textColor="?attr/itemTextColor"/>
+        android:layout_marginBottom="5dp" />
     <!-- Spinner Element -->
     <Spinner
         android:id="@+id/input_view"

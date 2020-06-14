@@ -27,6 +27,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 import org.mini2Dx.collections.CollectionUtils;
@@ -58,7 +60,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 @SuppressLint("AppCompatCustomView")
-public class AutoCompleteView extends AutoCompleteTextView
+public class AutoCompleteView extends AppCompatAutoCompleteTextView
         implements DynamicComponent {
     // TODO:  umm, extract to external class?
     private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);

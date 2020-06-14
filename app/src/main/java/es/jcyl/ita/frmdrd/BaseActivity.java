@@ -26,9 +26,9 @@ public abstract class BaseActivity extends AppCompatActivity  {
     protected void setTheme() {
         //currentTheme = sharedPreferences.getString("current_theme", "light");
         if (currentTheme.equals("light")) {
-            setTheme(R.style.Theme_App_Light_NoActionBar);
+            setTheme(R.style.FormudruidLight_NoActionBar);
         } else {
-            setTheme(R.style.Theme_App_Dark_NoActionBar);
+            setTheme(R.style.FormudruidDark_NoActionBar);
         }
     }
 
@@ -45,10 +45,10 @@ public abstract class BaseActivity extends AppCompatActivity  {
     protected void switchTheme() {
 
         if (currentTheme.equals("light")) {
-            setTheme(R.style.Theme_App_Dark);
+            setTheme(R.style.FormudruidDark);
             sharedPreferences.edit().putString("current_theme", "dark").apply();
         } else {
-            setTheme(R.style.Theme_App_Light);
+            setTheme(R.style.FormudruidLight);
             sharedPreferences.edit().putString("current_theme", "light").apply();
         }
 
