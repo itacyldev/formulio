@@ -103,7 +103,6 @@ public class TagDef {
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
 
         register("validator", define(base, new Attribute[]{TYPE}));
-
         register("param", define(base, new Attribute[]{NAME, VALUE}));
 
 

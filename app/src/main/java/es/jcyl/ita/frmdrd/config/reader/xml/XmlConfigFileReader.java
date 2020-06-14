@@ -186,11 +186,9 @@ public class XmlConfigFileReader {
                 // register current component id
                 idResolver.addComponentId(value, xpp.getName());
             }
-            if (!isAttributeSupported(attributesDef, attName)) {
-                error(String.format("Unsupported attribute: '%s' in element <${tag}/> in file '${file}'.", attName));
-            } else {
-                node.getAttributes().put(attName, value);
-            }
+
+            node.getAttributes().put(attName, value);
+
         }
     }
 

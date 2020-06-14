@@ -69,6 +69,7 @@ public class ComponentBuilderFactory {
         registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
+        registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newDefaultBuilder(UIColumn.class, "column"));
