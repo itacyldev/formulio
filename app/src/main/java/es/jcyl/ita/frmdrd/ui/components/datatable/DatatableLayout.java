@@ -102,7 +102,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         this.bodyView = bodyView;
 
         ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this,
-                R.layout.list_item, entities);
+                R.layout.entity_list_item, entities);
         this.bodyView.setAdapter(dataAdapter);
 
         this.bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -199,7 +199,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         String columnName = column.getHeaderText();
 
         LayoutInflater inflater = LayoutInflater.from(viewContext);
-        output = inflater.inflate(R.layout.list_item_header, parent,
+        output = inflater.inflate(R.layout.entity_list_header, parent,
                 false);
 
         final TextView fieldNameView = output

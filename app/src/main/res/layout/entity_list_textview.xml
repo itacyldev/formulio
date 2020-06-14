@@ -4,8 +4,6 @@
     android:layout_height="fill_parent"
     android:maxLines="1"
     android:textSize="18sp"
-    android:background="?attr/background"
-    android:textColor="?attr/itemTextColor"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:gravity="center_vertical">

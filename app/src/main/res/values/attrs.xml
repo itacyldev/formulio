@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="primaryTextColor" format="reference"/>
-    <attr name="itemTextColor" format="reference"/>
-    <attr name="secondaryTextColor" format="reference"/>
-<!--    <attr name="backgroundColor" format="reference"/>-->
-    <attr name="secondaryBackgroundColor" format="reference"/>
-    <attr name="onBackgroundColor" format="reference"/>
-    <attr name="onBackgroundSecondaryColor" format="reference"/>
+    <attr name="primaryColorVariant" format="reference"/>
+    <attr name="primaryColor" format="reference"/>
+    <attr name="onPrimaryColor" format="reference" />
+    <attr name="accentColor" format="reference" />
+
+    <attr name="surfaceColor" format="reference"/>
+    <attr name="onSurfaceColor" format="reference"/>
+    <attr name="errorColor" format="reference"/>
+
+    <attr name="surface2Color" format="reference"/>
+    <attr name="onSurface2Color" format="reference"/>
+
+    <attr name="surface3Color" format="reference"/>
+    <attr name="onSurface3Color" format="reference"/>
+
+    <attr name="AppBackgroundColor" format="reference"/>
+    <attr name="onAppBackgroundColor" format="reference"/>
+
     <attr name="buttonNormalColor" format="reference"/>
     <attr name="buttonHighlightColor" format="reference" />
     <attr name="buttonTextColor" format="reference" />
-    <attr name="clickableTextColor" format="reference" />
-
-
 
     <attr name="iconNoorder" format="reference"/>
     <attr name="iconOrderAsc" format="reference"/>

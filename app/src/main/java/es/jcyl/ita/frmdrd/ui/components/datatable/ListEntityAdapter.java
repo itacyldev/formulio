@@ -91,7 +91,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
         if (item == null) {
 
-            item = inflater.inflate(R.layout.list_item, parent, false);
+            item = inflater.inflate(R.layout.entity_list_item, parent, false);
 
             holder = new ViewColumnHolder();
             holder.position = position;
@@ -202,7 +202,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     private TextView createTextView(final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         TextView output = (TextView) inflater.inflate(
-                R.layout.list_item_textview, parent, false);
+                R.layout.entity_list_textview, parent, false);
         return output;
     }
 

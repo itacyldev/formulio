@@ -3,21 +3,19 @@
     android:id="@+id/field_layout_layout"
     android:layout_width="fill_parent"
     android:layout_height="200dp"
-    android:orientation="vertical"
-    android:background="?attr/background">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/field_layout_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:gravity="center_vertical"
-        android:textColor="?attr/primaryTextColor"
         android:textSize="16sp" />
 
 
-    <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <HorizontalScrollView
         android:id="@+id/aslist_scroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

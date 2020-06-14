@@ -1,52 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.App.Light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/onPrimary</item>
-        <item name="primaryTextColor">@color/onPrimary</item>
+    <style name="FormudruidLight" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="primaryColorVariant">@color/light_PrimaryColorVariant</item>
+        <item name="primaryColor">@color/light_PrimaryColor</item>
+        <item name="onPrimaryColor">@color/light_OnPrimaryColor</item>
+        <item name="accentColor">@color/light_AccentColor</item>
 
-        <item name="background">@color/background</item>
-        <item name="itemTextColor">@color/onBackground</item>
-        <item name="clickableTextColor">@color/clickableTextColor</item>
+        <item name="surfaceColor">@color/light_SurfaceColor</item>
+        <item name="onSurfaceColor">@color/light_OnSurfaceColor</item>
+        <item name="errorColor">@color/light_ErrorColor</item>
 
-        <!--<item name="backgroundColor">@color/background</item>-->
-        <item name="secondaryBackgroundColor">@color/backgroundSecondary</item>
-        <item name="onBackgroundColor">@color/onBackground</item>
-        <item name="onBackgroundSecondaryColor">@color/onBackgroundSecondary</item>
+        <item name="surface2Color">@color/light_Surface2Color</item>
+        <item name="onSurface2Color">@color/light_OnSurface2Color</item>
 
-        <item name="buttonNormalColor">@color/colorPrimaryVariant</item>
-        <item name="buttonHighlightColor">@color/colorPrimary</item>
-        <item name="buttonTextColor">@color/buttonText</item>
+        <item name="surface3Color">@color/light_OnSurfaceColor</item>
+        <item name="onSurface3Color">@color/light_SurfaceColor</item>
 
-        <item name="iconNoorder">@drawable/order_arrow_noorder</item>
-        <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
-        <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
-    </style>
+        <item name="AppBackgroundColor">@color/light_BackgroundColor</item>
+        <item name="onAppBackgroundColor">@color/light_OnBackgroundColor</item>
 
+        <!-- Action Bar, Poppup Menu, WindowBackgroud and NavigationBar-->
+        <item name="colorPrimaryDark">?attr/primaryColorVariant</item>
+        <item name="colorPrimary">?attr/primaryColor</item>
+        <item name="colorAccent">?attr/accentColor</item>
+        <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
+        <item name="android:windowBackground">?attr/AppBackgroundColor</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
 
-    <style name="Theme.App.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/dark_colorPrimary</item>
-        <item name="colorPrimaryDark">@color/dark_colorPrimaryVariant</item>
-        <item name="colorAccent">@color/dark_colorAccent</item>
-        <item name="android:textColorPrimary">@color/dark_onPrimary</item>
-        <item name="primaryTextColor">@color/dark_onPrimary</item>
+        <!-- Card View Item -->
+        <item name="cardViewStyle">@style/CardViewItemStyle</item>
+        <!-- Text View Item -->
+        <item name="android:textViewStyle">@style/TextViewItemStyle</item>
+        <!-- EditText View Item -->
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
 
-        <item name="background">@color/dark_background</item>
-        <item name="itemTextColor">@color/dark_onBackground</item>
-        <item name="clickableTextColor">@color/dark_clickableTextColor</item>
-
-        <!--<item name="backgroundColor">@color/dark_background</item>-->
-        <item name="secondaryBackgroundColor">@color/dark_backgroundSecondary</item>
-        <item name="onBackgroundColor">@color/dark_onBackground</item>
-        <item name="onBackgroundSecondaryColor">@color/dark_onBackgroundSecondary</item>
-
-
-        <item name="buttonNormalColor">@color/dark_colorPrimaryVariant</item>
-        <item name="buttonHighlightColor">@color/dark_colorPrimary</item>
-        <item name="buttonTextColor">@color/dark_buttonText</item>
+        <item name="buttonNormalColor">@color/light_PrimaryColorVariant</item>
+        <item name="buttonHighlightColor">@color/light_PrimaryColor</item>
+        <item name="buttonTextColor">@color/buttonText_Light</item>
 
         <item name="iconNoorder">@drawable/order_arrow_noorder</item>
         <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
@@ -54,12 +45,56 @@
 
     </style>
 
-    <style name="Theme.App.Light.NoActionBar" parent="Theme.App.Light">
+    <style name="FormudruidDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="primaryColorVariant">@color/dark_PrimaryColorVariant</item>
+        <item name="primaryColor">@color/dark_PrimaryColor</item>
+        <item name="onPrimaryColor">@color/dark_OnPrimaryColor</item>
+        <item name="accentColor">@color/dark_AccentColor</item>
+
+        <item name="surfaceColor">@color/dark_SurfaceColor</item>
+        <item name="onSurfaceColor">@color/dark_OnSurfaceColor</item>
+        <item name="errorColor">@color/dark_ErrorColor</item>
+
+        <item name="surface2Color">@color/dark_Surface2Color</item>
+        <item name="onSurface2Color">@color/dark_OnSurface2Color</item>
+
+        <item name="surface3Color">@color/dark_SurfaceColor</item>
+        <item name="onSurface3Color">@color/dark_OnSurfaceColor</item>
+
+        <item name="AppBackgroundColor">@color/dark_BackgroundColor</item>
+        <item name="onAppBackgroundColor">@color/dark_OnBackgroundColor</item>
+
+        <!-- Action Bar, Poppup Menu, WindowBackgroud and NavigationBar-->
+        <item name="colorPrimaryDark">?attr/primaryColorVariant</item>
+        <item name="colorPrimary">?attr/primaryColor</item>
+        <item name="colorAccent">?attr/accentColor</item>
+        <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
+        <item name="android:windowBackground">?attr/AppBackgroundColor</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+
+        <!-- Card View Item , project_list & form_list-->
+        <item name="cardViewStyle">@style/CardViewItemStyle</item>
+        <!-- Text View -->
+        <item name="android:textViewStyle">@style/TextViewItemStyle</item>
+        <!-- EditText View Item -->
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+
+        <item name="buttonNormalColor">@color/dark_PrimaryColorVariant</item>
+        <item name="buttonHighlightColor">@color/dark_PrimaryColor</item>
+        <item name="buttonTextColor">@color/buttonText_Dark</item>
+
+        <item name="iconNoorder">@drawable/order_arrow_noorder</item>
+        <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
+        <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
+
+    </style>
+
+    <style name="FormudruidLight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.App.Dark.NoActionBar" parent="Theme.App.Dark">
+    <style name="FormudruidDark.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
