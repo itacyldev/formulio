@@ -34,8 +34,8 @@
         <item name="android:background">?attr/surfaceColor</item>
         <item name="android:textColor">?attr/onSurfaceColor</item>
         <item name="android:popupBackground">?attr/AppBackgroundColor</item>
-        <item name="colorControlNormal">?attr/onSurfaceColor</item>
-        <item name="colorControlHighlight">?attr/onSurface2Color</item>
+        <!--<item name="colorControlNormal">?attr/onSurfaceColor</item>
+        <item name="colorControlHighlight">?attr/onSurface2Color</item>-->
     </style>
 
     <style name="AutocompleteStyle.Label">

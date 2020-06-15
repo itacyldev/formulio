@@ -77,6 +77,7 @@ public class AutoCompleteRendererTest {
     @Test
     public void testSimpleAutoComplete() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
@@ -104,6 +105,7 @@ public class AutoCompleteRendererTest {
     @Test
     public void testNotVisibleSelect() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
@@ -124,6 +126,7 @@ public class AutoCompleteRendererTest {
     @Test
     public void testGetOptionsFromRepo() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);

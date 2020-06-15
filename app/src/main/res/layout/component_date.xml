@@ -14,10 +14,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textColor="?attr/itemTextColor"
+        android:textColor="?attr/onSurfaceColor"
         android:textSize="16sp" />
 
     <Button
@@ -26,7 +26,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="0"
         android:clickable="true"
-        android:textColor="?attr/itemTextColor"
+        android:textColor="?attr/onSurfaceColor"
         android:textSize="12sp" />
 
     <Button
@@ -36,7 +36,7 @@
         android:layout_weight="0"
         android:clickable="true"
         android:text="@string/today"
-        android:textColor="?attr/itemTextColor"
+        android:textColor="?attr/onSurfaceColor"
         android:textSize="12sp" />
 
     <ImageView
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_weight="0"
         android:background="@drawable/selectablebuttonbackground"
         android:clickable="true"

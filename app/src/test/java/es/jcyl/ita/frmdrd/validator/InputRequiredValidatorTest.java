@@ -45,7 +45,7 @@ public class InputRequiredValidatorTest {
     @Before
     public void setup() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        ctx.setTheme(R.style.Theme_App_Light);
+        ctx.setTheme(R.style.FormudruidLight);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();

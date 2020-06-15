@@ -80,7 +80,7 @@ public class ProjectListFragmentTest {
 
         FragmentScenario<ProjectListFragment> scenario =
                 FragmentScenario.launchInContainer(ProjectListFragment.class, bundle
-                        , R.style.Theme_App_Light_NoActionBar, fragmentFactory);
+                        , R.style.FormudruidLight_NoActionBar, fragmentFactory);
 
         onView(withRecyclerView(R.id.rvProjects).atPosition(0)).check(doesNotExist());
     }
@@ -101,7 +101,7 @@ public class ProjectListFragmentTest {
 
         FragmentScenario<ProjectListFragment> scenario =
                 FragmentScenario.launchInContainer(ProjectListFragment.class, bundle
-                        , R.style.Theme_App_Light_NoActionBar, fragmentFactory);
+                        , R.style.FormudruidLight_NoActionBar, fragmentFactory);
 
         onView(withRecyclerView(R.id.rvProjects).atPosition(0))
                 .check(matches(hasDescendant(withText(NAME_PROJECT_1))))
@@ -127,7 +127,7 @@ public class ProjectListFragmentTest {
 
         FragmentScenario<ProjectListFragment> scenario =
                 FragmentScenario.launchInContainer(ProjectListFragment.class, bundle
-                        , R.style.Theme_App_Light_NoActionBar, fragmentFactory);
+                        , R.style.FormudruidLight_NoActionBar, fragmentFactory);
 
         onView(withRecyclerView(R.id.rvProjects).atPosition(0))
                 .check(matches(hasDescendant(withText(NAME_PROJECT_1))))

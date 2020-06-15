@@ -67,7 +67,7 @@ public class TabRendererTest {
         mainController.setFormController(mockFC, null);
 
         ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
-        ctx.setTheme(R.style.AppTheme_Dark);
+        ctx.setTheme(R.style.FormudruidDark);
     }
 
     /**

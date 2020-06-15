@@ -56,7 +56,7 @@ public class TextFieldViewConverterTest {
     @Before
     public void setUp() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        ctx.setTheme( R.style.Theme_App_Light);
+        ctx.setTheme( R.style.FormudruidLight);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();

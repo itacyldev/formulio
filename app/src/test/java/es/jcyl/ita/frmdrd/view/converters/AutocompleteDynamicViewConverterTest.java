@@ -34,6 +34,7 @@ import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.builders.AutoCompleteDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -74,6 +75,7 @@ public class AutocompleteDynamicViewConverterTest {
     @Test
     public void testOptionsFromRepo() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
 
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
