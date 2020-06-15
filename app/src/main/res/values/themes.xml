@@ -23,6 +23,7 @@
         <!-- Action Bar, Poppup Menu, WindowBackgroud and NavigationBar-->
         <item name="colorPrimaryDark">?attr/primaryColorVariant</item>
         <item name="colorPrimary">?attr/primaryColor</item>
+        <item name="android:textColorPrimary">?attr/onPrimaryColor</item>
         <item name="colorAccent">?attr/accentColor</item>
         <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
         <item name="android:windowBackground">?attr/AppBackgroundColor</item>
@@ -67,6 +68,7 @@
         <!-- Action Bar, Poppup Menu, WindowBackgroud and NavigationBar-->
         <item name="colorPrimaryDark">?attr/primaryColorVariant</item>
         <item name="colorPrimary">?attr/primaryColor</item>
+        <item name="android:textColorPrimary">?attr/onPrimaryColor</item>
         <item name="colorAccent">?attr/accentColor</item>
         <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
         <item name="android:windowBackground">?attr/AppBackgroundColor</item>
