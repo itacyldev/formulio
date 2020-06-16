@@ -261,5 +261,27 @@ public class UIBuilderHelper {
         return isIncluded;
     }
 
+    /**
+     * Finds a child node of the given Class
+     *
+     * @param root
+     * @param clazz
+     * @return
+     */
+    public static <T> ConfigNode<T> findNodeByClass(ConfigNode root, Class<T> clazz) {
+        ConfigNode<T> node = null;
+
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode child : children) {
+                if (clazz.isInstance(child)) {
+                    node = child;
+                    break;
+                }
+            }
+        }
+        return node;
+    }
+
 
 }

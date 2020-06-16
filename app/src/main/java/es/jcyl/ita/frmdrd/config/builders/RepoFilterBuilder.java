@@ -15,12 +15,16 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.query.Expression;
+import java.util.ArrayList;
+import java.util.List;
+
+import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.project.BasicFilter;
-import es.jcyl.ita.frmdrd.repo.filter.FilterVisitor;
+import es.jcyl.ita.frmdrd.repo.filter.RepoFilterVisitor;
+import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -45,13 +49,28 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
     protected void setupOnSubtreeEnds(ConfigNode<RepoFilter> node) {
         RepoFilter repofilter = node.getElement();
 
-        Expression[] expressions = new Expression[node.getChildren().size()];
+        RepoFilterVisitor visitor = new RepoFilterVisitor();
+        List<String> mandatoryFields = new ArrayList<>();
+        Criteria criteria = (Criteria) visitor.visit(node, mandatoryFields);
 
-        for (ConfigNode child : node.getChildren()) {
-
-        }
         Filter filter = new BasicFilter();
-        FilterVisitor visitor = new FilterVisitor();
-        visitor.visit(node);
+        filter.setCriteria(criteria);
+        repofilter.setFilter(filter);
+
+        if (mandatoryFields.size() > 0) {
+            repofilter.setMandatoryFields(mandatoryFields.toArray(new String[mandatoryFields.size()]));
+        }
+
+        setupParentRepoFilter(node);
+    }
+
+    public void setupParentRepoFilter(ConfigNode<RepoFilter> node) {
+        RepoFilter repoFilter = node.getElement();
+
+        ConfigNode<FilterableComponent> parent = node.getParent();
+        FilterableComponent parentComponent = parent.getElement();
+
+        parentComponent.setFilter(repoFilter.getFilter());
+        parentComponent.setMandatoryFilters(repoFilter.getMandatoryFields());
     }
 }

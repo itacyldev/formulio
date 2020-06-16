@@ -24,6 +24,9 @@ import es.jcyl.ita.crtrepo.query.Sort;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class BasicFilter implements Filter {
+
+    private Criteria criteria;
+
     @Override
     public void setOffset(int i) {
 
@@ -56,7 +59,7 @@ public class BasicFilter implements Filter {
 
     @Override
     public void setCriteria(Criteria criteria) {
-
+        this.criteria = criteria;
     }
 
     @Override
@@ -66,6 +69,6 @@ public class BasicFilter implements Filter {
 
     @Override
     public Criteria getCriteria() {
-        return null;
+        return criteria;
     }
 }

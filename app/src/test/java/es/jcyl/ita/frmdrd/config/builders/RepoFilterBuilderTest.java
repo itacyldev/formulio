@@ -24,11 +24,16 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
+import es.jcyl.ita.crtrepo.query.Criteria;
+import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
+import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
+import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 
@@ -38,40 +43,55 @@ import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 @RunWith(RobolectricTestRunner.class)
 public class RepoFilterBuilderTest {
 
+    EntityDataBuilder entityBuilder;
+    private static RepoFilterBuilder filterBuilder;
+
     @BeforeClass
     public static void setUp() {
+
+        filterBuilder = (RepoFilterBuilder) ComponentBuilderFactory.getInstance().getBuilder("repofilter", RepoFilter.class);
+
         Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
+
         // register repos
         RepositoryUtils.registerMock("contacts");
     }
 
 
-    private static final String XML_TEST_BASIC = "<repofilter>" +
-            "  <eq property=\"profile\" value=\"agenteForestal\" mandatory=\"true\"/>" +
-            "  <eq property=\"provincia\" value=\"${view.provincia}\" mandatory=\"true\"/>" +
-            "  <eq property=\"municipio\" value=\"${this.value}\"/>" +
-            "</repofilter>";
+    private static final String XML_TEST_BASIC =
+            "  <form repo=\"contacts\">" +
+                    "  <repofilter>" +
+                    "    <eq property=\"profile\" value=\"agenteForestal\" mandatory=\"true\"/>" +
+                    "    <eq property=\"provincia\" value=\"${view.provincia}\" />" +
+                    "  </repofilter>" +
+                    "</form>";
+
 
     @Test
     public void testBasicRepoFilter() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<RepoFilter> repoFilterList = UIComponentHelper.findByClass(formConfig.getList().getView(), RepoFilter.class);
-        Assert.assertNotNull(repoFilterList);
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> formList = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        Assert.assertNotNull(formList);
 
         // repo must be set with parent value "contacts"
-        RepoFilter repofilter = repoFilterList.get(0);
-        Assert.assertNotNull(repofilter);
+        UIForm form = formList.get(0);
+        Filter filter = form.getFilter();
+        Assert.assertNotNull(filter);
+
+        Criteria criteria = filter.getCriteria();
+        Assert.assertEquals(Criteria.CriteriaType.AND, criteria.getType());
+        Assert.assertEquals(3, criteria.getChildren().length);
     }
 
 
     @AfterClass
     public static void tearDown() {
         RepositoryUtils.unregisterMock("contacts");
-        RepositoryUtils.unregisterMock("contacts2");
     }
 
 }

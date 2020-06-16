@@ -24,9 +24,12 @@ import es.jcyl.ita.crtrepo.query.Filter;
 public interface FilterableComponent {
 
     void setRepo(Repository repo);
+
     void setFilter(Filter filter);
 
     Filter getFilter();
 
     String[] getMandatoryFilters();
+
+    void setMandatoryFilters(String[] mandatoryFields);
 }

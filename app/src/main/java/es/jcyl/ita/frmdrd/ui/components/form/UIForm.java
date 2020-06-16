@@ -40,6 +40,8 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
     private String onValidate; // js function to call on validation
     private boolean readOnly;
 
+    private String[] mandatoryFilters;
+
     public UIForm() {
         this.setRendererType("form");
         this.setRenderChildren(true);
@@ -272,7 +274,12 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
 
     @Override
     public String[] getMandatoryFilters() {
-        return new String[0];
+        return mandatoryFilters;
+    }
+
+    @Override
+    public void setMandatoryFilters(String[] mandatoryFilters) {
+        this.mandatoryFilters = mandatoryFilters;
     }
 
     public void setFilter(Filter filter) {
