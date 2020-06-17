@@ -11,13 +11,13 @@
         android:id="@+id/label_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/AutocompleteStyle.Label" />
+        style="@style/Autocomplete_label" />
 
     <es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView
         android:id="@+id/input_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/AutocompleteStyle"/>
+        style="@style/Autocomplete_edittext"/>
 </LinearLayout>
 
 

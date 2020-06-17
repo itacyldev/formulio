@@ -16,7 +16,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="15dp"
         android:gravity="center_vertical"
-        android:textSize="16sp" />
+        style="@style/Textfield_label" />
 
     <EditText
         android:id="@+id/input_view"
@@ -25,7 +25,7 @@
         android:layout_weight="1"
         android:clickable="true"
         android:inputType="text"
-        style="@style/EditTextStyle"
+        style="@style/Textfield_edittext"
         android:focusable="true" />
 
     <ImageView
@@ -37,6 +37,6 @@
         android:contentDescription="@string/tool_buttons_x"
         android:padding="5dp"
         android:src="@drawable/ic_tool_x"
-        style="@style/TextField_cancelImage" />
+        style="@style/Textfield_cancel_button" />
 
 </LinearLayout>

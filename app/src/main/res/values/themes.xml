@@ -25,21 +25,19 @@
         <item name="colorPrimary">?attr/primaryColor</item>
         <item name="android:textColorPrimary">?attr/onPrimaryColor</item>
         <item name="colorAccent">?attr/accentColor</item>
-        <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
+        <item name="actionBarPopupTheme">@style/ActionBarPopupStyle</item>
         <item name="android:windowBackground">?attr/AppBackgroundColor</item>
         <item name="android:navigationBarColor">@android:color/black</item>
 
-        <!-- Card View Item -->
-        <item name="cardViewStyle">@style/CardViewItemStyle</item>
-        <!-- Text View Item -->
-        <item name="android:textViewStyle">@style/TextViewItemStyle</item>
-        <!-- EditText View Item -->
-        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <!-- Default Text View -->
+        <item name="android:textViewStyle">@style/Default_TextView_font</item>
 
+        <!-- Button Style -->
         <item name="buttonNormalColor">@color/light_PrimaryColorVariant</item>
         <item name="buttonHighlightColor">@color/light_PrimaryColor</item>
         <item name="buttonTextColor">@color/buttonText_Light</item>
 
+        <!-- Icon Order -->
         <item name="iconNoorder">@drawable/order_arrow_noorder</item>
         <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
         <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
@@ -70,21 +68,19 @@
         <item name="colorPrimary">?attr/primaryColor</item>
         <item name="android:textColorPrimary">?attr/onPrimaryColor</item>
         <item name="colorAccent">?attr/accentColor</item>
-        <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
+        <item name="actionBarPopupTheme">@style/ActionBarPopupStyle</item>
         <item name="android:windowBackground">?attr/AppBackgroundColor</item>
         <item name="android:navigationBarColor">@android:color/black</item>
 
-        <!-- Card View Item , project_list & form_list-->
-        <item name="cardViewStyle">@style/CardViewItemStyle</item>
-        <!-- Text View -->
-        <item name="android:textViewStyle">@style/TextViewItemStyle</item>
-        <!-- EditText View Item -->
-        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <!-- Default Text View -->
+        <item name="android:textViewStyle">@style/Default_TextView_font</item>
 
+        <!-- Button Style -->
         <item name="buttonNormalColor">@color/dark_PrimaryColorVariant</item>
         <item name="buttonHighlightColor">@color/dark_PrimaryColor</item>
         <item name="buttonTextColor">@color/buttonText_Dark</item>
 
+        <!-- Icon Order -->
         <item name="iconNoorder">@drawable/order_arrow_noorder</item>
         <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
         <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
