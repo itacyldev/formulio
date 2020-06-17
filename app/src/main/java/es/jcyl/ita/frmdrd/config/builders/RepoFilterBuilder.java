@@ -64,7 +64,13 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
         setupParentRepoFilter(node);
     }
 
-    public void setupParentRepoFilter(ConfigNode<RepoFilter> node) {
+
+    /**
+     * Set filter and mandatory fields on repofilter's parent component
+     *
+     * @param node
+     */
+    private void setupParentRepoFilter(ConfigNode<RepoFilter> node) {
         RepoFilter repoFilter = node.getElement();
 
         ConfigNode<FilterableComponent> parent = node.getParent();

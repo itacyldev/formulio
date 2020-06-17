@@ -26,11 +26,12 @@ import es.jcyl.ita.crtrepo.query.Expression;
 import es.jcyl.ita.crtrepo.query.Operator;
 import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  * <p>
- * Evaluates the criteria conditions using context information.
+ * Creates a Criteria based on repofilter node descendants
  */
 public class RepoFilterVisitor {
     private static final FilterElement FILTER_ELEMENT = new FilterElement();
@@ -57,9 +58,17 @@ public class RepoFilterVisitor {
                 Operator operator = Operator.valueOf(node.getName().toUpperCase());
                 String property = node.getAttribute("property");
                 String value = node.getAttribute("value");
-                Condition condition = new Condition(property, operator, value);
 
+                Condition condition = null;
 
+                if (value.startsWith("$")) {
+                    // Jexl Expression
+                    condition = new ConditionBinding(property, operator, value);
+                } else {
+                    condition = new Condition(property, operator, value);
+                }
+
+                // add mandatory fields
                 if (node.getAttributes().containsKey("mandatory")) {
                     String isMandatory = node.getAttribute("mandatory");
                     if ("true".equalsIgnoreCase(isMandatory)) {

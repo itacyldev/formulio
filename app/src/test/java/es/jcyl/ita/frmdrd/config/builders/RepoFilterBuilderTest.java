@@ -24,13 +24,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
@@ -43,14 +41,8 @@ import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 @RunWith(RobolectricTestRunner.class)
 public class RepoFilterBuilderTest {
 
-    EntityDataBuilder entityBuilder;
-    private static RepoFilterBuilder filterBuilder;
-
     @BeforeClass
     public static void setUp() {
-
-        filterBuilder = (RepoFilterBuilder) ComponentBuilderFactory.getInstance().getBuilder("repofilter", RepoFilter.class);
-
         Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
@@ -63,8 +55,8 @@ public class RepoFilterBuilderTest {
     private static final String XML_TEST_BASIC =
             "  <form repo=\"contacts\">" +
                     "  <repofilter>" +
-                    "    <eq property=\"profile\" value=\"agenteForestal\" mandatory=\"true\"/>" +
-                    "    <eq property=\"provincia\" value=\"${view.provincia}\" />" +
+                    "    <eq property=\"prop1\" value=\"field1\"/>" +
+                    "    <eq property=\"prop2\" value=\"field2\" />" +
                     "  </repofilter>" +
                     "</form>";
 
@@ -78,16 +70,80 @@ public class RepoFilterBuilderTest {
         List<UIForm> formList = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(formList);
 
-        // repo must be set with parent value "contacts"
         UIForm form = formList.get(0);
         Filter filter = form.getFilter();
         Assert.assertNotNull(filter);
 
         Criteria criteria = filter.getCriteria();
         Assert.assertEquals(Criteria.CriteriaType.AND, criteria.getType());
-        Assert.assertEquals(3, criteria.getChildren().length);
+        Assert.assertEquals(2, criteria.getChildren().length);
     }
 
+
+    private static final String XML_TEST_MANDATORY_FIELDS =
+            "  <form repo=\"contacts\">" +
+                    "  <repofilter>" +
+                    "    <eq property=\"prop1\" value=\"field1\" mandatory=\"true\"/>" +
+                    "    <eq property=\"prop2\" value=\"field2\"  mandatory=\"True\"/>" +
+                    "  </repofilter>" +
+                    "</form>";
+
+    @Test
+    public void testMandatoryRepoFilter() throws Exception {
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_MANDATORY_FIELDS);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> formList = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        Assert.assertNotNull(formList);
+
+
+        UIForm form = formList.get(0);
+        String[] mandatoryFields = form.getMandatoryFilters();
+        Assert.assertNotNull(mandatoryFields);
+
+        Assert.assertEquals(2, mandatoryFields.length);
+    }
+
+    private static final String XML_TEST_NESTED_CRITERIA =
+            "  <form repo=\"contacts\">" +
+                    "  <repofilter>" +
+                    "    <or>" +
+                    "      <and>" +
+                    "        <eq property=\"prop1\" value=\"field1\"/>" +
+                    "        <eq property=\"prop2\" value=\"field2\"/>" +
+                    "      </and>" +
+                    "      <and>" +
+                    "        <eq property=\"prop3\" value=\"field3\"/>" +
+                    "        <eq property=\"prop4\" value=\"field4\"/>" +
+                    "      </and>" +
+                    "    </or>" +
+                    "  </repofilter>" +
+                    "</form>";
+
+    @Test
+    public void testNestedCriteriaRepoFilter() throws Exception {
+        String xml = XmlConfigUtils.createMainEdit(XML_TEST_NESTED_CRITERIA);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> formList = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        Assert.assertNotNull(formList);
+
+        UIForm form = formList.get(0);
+        Filter filter = form.getFilter();
+        Assert.assertNotNull(filter);
+
+        Criteria criteria = (Criteria) filter.getCriteria().getChildren()[0];
+        Assert.assertEquals(Criteria.CriteriaType.OR, criteria.getType());
+        Assert.assertEquals(2, criteria.getChildren().length);
+
+        Assert.assertEquals(Criteria.CriteriaType.AND, ((Criteria) (criteria.getChildren()[0])).getType());
+        Assert.assertEquals(Criteria.CriteriaType.AND, ((Criteria) (criteria.getChildren()[1])).getType());
+
+        Assert.assertEquals(2, ((Criteria) (criteria.getChildren()[0])).getChildren().length);
+        Assert.assertEquals(2, ((Criteria) (criteria.getChildren()[1])).getChildren().length);
+    }
 
     @AfterClass
     public static void tearDown() {
