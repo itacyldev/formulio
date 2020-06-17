@@ -31,6 +31,7 @@ import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 
@@ -58,6 +59,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UIDatatable> node) {
         setUpColumns(node);
+        setUpNumVisibleRows(node);
         setUpRoute(node);
     }
 
@@ -82,6 +84,18 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
             ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
             node.getElement().setRoute(addAction.getAttribute("route"));
         }
+    }
+
+    private void setUpNumVisibleRows(ConfigNode<UIDatatable> node) {
+        int numVisibleRows = 1; // Number of default visible rows
+        if (node.hasAttribute("numVisibleRows")){
+            numVisibleRows = Integer.parseInt(node.getAttribute("numVisibleRows"));
+        }
+        if (node.getParent().getElement() instanceof FormListController){
+            numVisibleRows = -1; // Fill container with rows
+        }
+        UIDatatable dataTable = node.getElement();
+        dataTable.setNumVisibleRows(numVisibleRows);
     }
 
     private void setUpColumns(ConfigNode<UIDatatable> node) {

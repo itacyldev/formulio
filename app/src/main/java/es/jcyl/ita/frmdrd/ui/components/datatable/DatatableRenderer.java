@@ -1,8 +1,11 @@
 package es.jcyl.ita.frmdrd.ui.components.datatable;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
@@ -30,6 +33,8 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 public class DatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable> {
 
+    private final static float ROW_HEIGHT_DP = 38.75f;
+
     @Override
     protected DatatableLayout createBaseView(RenderingEnv env, UIDatatable component) {
         UIDatatable dtComponent = component;
@@ -50,8 +55,30 @@ public class DatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable
         datatableView.setHeaderView(headerLayout);
 
         ListView bodyView = tableView.findViewById(R.id.list_view);
+        setLayoutParams(bodyView, env.getViewContext(), component);
         datatableView.setBodyView(bodyView);
 
         datatableView.load(env);
+    }
+
+    /**
+     * Sets dimension parameters.
+     *
+     * @param tableView DataTable container.
+     * @param context  Context for resources.
+     * @param component
+     */
+    private void setLayoutParams(@NonNull ListView tableView,
+                                 @NonNull Context context, @NonNull UIDatatable component) {
+        final int layout_width = ListView.LayoutParams.WRAP_CONTENT;
+        final int layout_height;
+        if (component.getNumVisibleRows() < 0){
+            layout_height = ListView.LayoutParams.MATCH_PARENT;
+        } else {
+            layout_height = (int)(context.getResources().getDisplayMetrics().density *
+                    ROW_HEIGHT_DP *
+                    component.getNumVisibleRows());
+        }
+        tableView.setLayoutParams(new LinearLayout.LayoutParams(layout_width, layout_height));
     }
 }

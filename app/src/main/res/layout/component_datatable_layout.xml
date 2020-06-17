@@ -3,7 +3,8 @@
     android:id="@+id/field_layout_layout"
     android:layout_width="fill_parent"
     android:layout_height="200dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/Component_background">
 
     <TextView
         android:id="@+id/field_layout_name"
@@ -31,8 +32,8 @@
                 android:id="@+id/list_layout_headers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#282828"
-                android:orientation="horizontal" />
+                android:orientation="horizontal"
+                style="@style/Datatable_header_container"/>
 
             <ListView
                 android:id="@+id/list_view"

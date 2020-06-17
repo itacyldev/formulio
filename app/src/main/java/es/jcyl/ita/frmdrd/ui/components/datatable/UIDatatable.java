@@ -45,6 +45,8 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
     private int numFieldsToShow = 20;
     private String[] mandatoryFilters;
 
+    private int numVisibleRows;
+
     public UIDatatable() {
         setRendererType("datatable");
     }
@@ -108,6 +110,14 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
             }
         }
         return null;
+    }
+
+    public int getNumVisibleRows(){
+        return this.numVisibleRows;
+    }
+
+    public void setNumVisibleRows(final int numVisibleRows){
+        this.numVisibleRows = numVisibleRows;
     }
 
     public int getNumFieldsToShow() {

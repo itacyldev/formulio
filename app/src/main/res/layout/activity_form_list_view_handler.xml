@@ -26,6 +26,6 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        style="@style/FloatingActionAddButtomStyle"/>
+        style="@style/FloatingActionAddButtonStyle"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

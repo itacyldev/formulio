@@ -19,7 +19,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            style="@style/ListHeader_textView" />
+            style="@style/Datatable_header_title" />
     </LinearLayout>
 
 
@@ -40,7 +40,7 @@
             android:clickable="true"
             android:inputType="text"
             android:focusable="true"
-            style="@style/ListHeader_filterText" />
+            style="@style/Datatable_header_filter" />
 
         <ImageView
             android:id="@+id/list_header_filter_search"
@@ -53,7 +53,7 @@
             android:src="@drawable/ic_tool_x"
             android:visibility="gone"
             android:focusable="true"
-            style="@style/ListHeader_cancelImage" />
+            style="@style/Datatable_header_filter_cancel" />
 
         <ImageView
             android:id="@+id/list_header_filter_order"
@@ -64,7 +64,7 @@
             android:clickable="true"
             android:src="?attr/iconNoorder"
             android:focusable="true"
-            style="@style/ListHeader_orderImage" />
+            style="@style/Datatable_header_filter_order" />
     </LinearLayout>
 
 

@@ -66,6 +66,9 @@ public class AttributeDef {
     public static Attribute LABEL_FILTERING_PROP = new Attribute("labelFilteringProperty");
     public static Attribute FORCE_SELECTION = new Attribute("forceSelection", Boolean.class);
 
+    // datatable
+    public static Attribute NUM_VISIBLE_ROWS = new Attribute("numVisibleRows", Integer.class);
+
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);
 

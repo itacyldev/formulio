@@ -33,6 +33,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL_EXPRESSION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.NAME;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ONSAVE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.PROPERTIES;
@@ -65,7 +66,7 @@ public class TagDef {
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
-        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE}));
+        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));
