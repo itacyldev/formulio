@@ -26,12 +26,9 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.config.Config;
-import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.project.Project;
 import es.jcyl.ita.frmdrd.project.ProjectRepository;
@@ -52,6 +49,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         getApplication().getFilesDir();
         setContentView(R.layout.activity_main);
         checkPermissions();
+
     }
 
     @Override
@@ -234,4 +232,5 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         }
     }
+
 }
