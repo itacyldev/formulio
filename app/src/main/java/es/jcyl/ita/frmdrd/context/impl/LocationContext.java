@@ -16,14 +16,17 @@ package es.jcyl.ita.frmdrd.context.impl;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.context.AbstractMapContext;
 import android.location.Location;
+
+import es.jcyl.ita.crtrepo.context.AbstractMapContext;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
 public class LocationContext extends AbstractMapContext {
+
+
 
     private Location lastLocation;
     private double minAccuracy;
@@ -42,5 +45,7 @@ public class LocationContext extends AbstractMapContext {
         return get((String) key);
     }
 
-
+    public void setLastLocation(Location lastLocation) {
+        this.lastLocation = lastLocation;
+    }
 }

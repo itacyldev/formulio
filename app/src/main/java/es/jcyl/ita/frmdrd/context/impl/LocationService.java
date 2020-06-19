@@ -17,16 +17,20 @@ package es.jcyl.ita.frmdrd.context.impl;
  */
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
-
 import es.jcyl.ita.frmdrd.MainController;
+import es.jcyl.ita.frmdrd.R;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -34,6 +38,10 @@ import es.jcyl.ita.frmdrd.MainController;
 
 public class LocationService implements LocationListener {
 
+    private long REQUIRED_ACCURACY = 10;
+    private int TIME_VALIDITY = 60*1000; // 1 min
+
+    private LocationManager locationManager;
     private static LocationService _instance;
     Context ctx;
 
@@ -49,7 +57,7 @@ public class LocationService implements LocationListener {
     }
 
     public void updateLocation() {
-        LocationManager locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -61,15 +69,17 @@ public class LocationService implements LocationListener {
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
-
-        Location location = null;
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
         LocationContext locationContext = (LocationContext) MainController.getInstance().getGlobalContext().getContext("location");
-        locationContext.set("location", location);
+
+        if (location.getAccuracy() < REQUIRED_ACCURACY) {
+            locationContext.setLastLocation(location);
+            locationManager.removeUpdates(this);
+        }
+
     }
 
     @Override
@@ -86,4 +96,37 @@ public class LocationService implements LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
+
+
+
+    public static void checkLocationProviderEnabled(final Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+        if (!gps_enabled && !network_enabled) {
+            // notify user
+            new AlertDialog.Builder(context)
+                    .setMessage(R.string.nolocationenabled)
+                    .setPositiveButton(R.string.open_location_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton(R.string.Cancel, null)
+                    .show();
+        }
+    }
+
 }

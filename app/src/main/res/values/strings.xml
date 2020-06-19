@@ -36,6 +36,10 @@
     <string name="projects_of">"Projects of "</string>
     <string name="forms_of">"Forms of "</string>
     <string name="no_current_project">No current project</string>
+    <string name="nolocationenabled">\"No location provider enabled</string>
+    <string name="locationsettings">Review location settings</string>
+    <string name="Cancel">Cancel</string>
+    <string name="open_location_settings">Open Location Settings</string>
 
 
 </resources>
