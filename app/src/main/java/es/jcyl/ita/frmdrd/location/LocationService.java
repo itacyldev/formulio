@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context.impl;
+package es.jcyl.ita.frmdrd.location;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -31,6 +31,7 @@ import android.provider.Settings;
 import androidx.core.app.ActivityCompat;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.context.impl.LocationContext;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

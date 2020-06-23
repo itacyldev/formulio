@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context.impl;
+package es.jcyl.ita.frmdrd.location;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).

@@ -19,6 +19,7 @@ package es.jcyl.ita.frmdrd.context.impl;
 import android.location.Location;
 
 import es.jcyl.ita.crtrepo.context.AbstractMapContext;
+import es.jcyl.ita.frmdrd.location.LocationService;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -41,7 +42,8 @@ public class LocationContext extends AbstractMapContext {
      * The key is the date expression that the DateTimeContext must resolve
      */
     @Override
-    public Object get(Object key) {
+    public Object get(Object key){
+
         return get((String) key);
     }
 

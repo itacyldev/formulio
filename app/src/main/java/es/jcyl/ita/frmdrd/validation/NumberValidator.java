@@ -82,19 +82,12 @@ public class NumberValidator extends AbstractNumberValidator implements Validato
 
         }
 
-
         try {
             method = clazz.getMethod("valueOf", String.class);
-        } catch (NoSuchMethodException e) {
-
-        }
-
-        try {
             result = (Number) method.invoke(null, value.toString());
+        } catch (NoSuchMethodException e) {
         } catch (IllegalAccessException e) {
-
         } catch (InvocationTargetException e) {
-
         }
 
         return result;

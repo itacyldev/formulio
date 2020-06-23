@@ -134,9 +134,6 @@ public class ValidatorBuilderTest {
     }
 
     /**
-     * Tests the automatic creation of inputFields using properties attribute and the merge with already defined properties.
-     * Creates a meta with 5 properties. Two of then has to be included due to "properties" filter and another
-     * two has been defined with tags. Prop3 must have he tag information.
      *
      * @throws Exception
      */
