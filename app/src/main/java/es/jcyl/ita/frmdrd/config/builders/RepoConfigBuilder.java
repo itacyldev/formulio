@@ -51,7 +51,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
         Repository repo = null;
         if (isDbFileSet ^ isTableNameSet) {
             throw new ConfigurationException(error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                    "must be set in tag ${tag} id[%s].", element.getId())));
+                    "must be set in tag ${tag} id [%s].", element.getId())));
         } else if (isDbFileSet && isTableNameSet) {
             // try to create a repository from current configuration
             repo = getFactory().getRepoReader().createFromFile(element.getId(), dbFile, dbTable);
