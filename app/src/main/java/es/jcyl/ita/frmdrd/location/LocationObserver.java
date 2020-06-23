@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context.impl;
+package es.jcyl.ita.frmdrd.location;
 
 import androidx.lifecycle.Observer;
 
