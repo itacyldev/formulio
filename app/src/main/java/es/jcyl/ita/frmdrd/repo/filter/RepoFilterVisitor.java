@@ -45,6 +45,7 @@ public class RepoFilterVisitor {
     }
 
     public static class FilterElement<T extends Expression> {
+
         public Expression accept(ConfigNode node, List<String> mandatoryFields) {
             List<Expression> kids = new ArrayList<>();
 
@@ -61,7 +62,7 @@ public class RepoFilterVisitor {
 
                 Condition condition = null;
 
-                if (value.startsWith("$")) {
+                if (value.startsWith("$")) { //TODO:
                     // Jexl Expression
                     condition = new ConditionBinding(property, operator, value);
                 } else {
