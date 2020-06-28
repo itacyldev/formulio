@@ -19,7 +19,7 @@ import org.mini2Dx.beanutils.converters.AbstractConverter;
 
 import java.util.Date;
 
-import es.jcyl.ita.crtrepo.types.ByteArray;
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

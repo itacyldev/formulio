@@ -1,9 +1,4 @@
-package es.jcyl.ita.frmdrd;
-
-import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.crtrepo.source.EntitySource;
-
+package es.jcyl.ita.frmdrd.view.converters;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -20,23 +15,30 @@ import es.jcyl.ita.crtrepo.source.EntitySource;
  * limitations under the License.
  */
 
+import android.widget.ImageView;
+
 /**
+ * Receives an imagen
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-
-public class DummyEntity extends Entity {
-
-
-    public DummyEntity(EntitySource source, EntityMeta meta, Object id) {
-        super(source, meta, id);
+class ImageViewConverter implements ViewValueConverter<ImageView>  {
+    @Override
+    public String getValueFromViewAsString(ImageView view) {
+        return null;
     }
 
     @Override
-    public void set(String prop, Object value) {
-        this.getProperties().put(prop, value);
+    public <C> C getValueFromView(ImageView view, Class<C> expectedType) {
+        return null;
     }
 
-    public void setId(Object id) {
+    @Override
+    public void setViewValue(ImageView view, Object value) {
+
+    }
+
+    @Override
+    public void setViewValueAsString(ImageView view, String value) {
 
     }
 }

@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context.wrappers;
+package es.jcyl.ita.frmdrd.ui.components;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,33 +15,32 @@ package es.jcyl.ita.frmdrd.context.wrappers;
  * limitations under the License.
  */
 
-import org.apache.commons.jexl3.JexlContext;
+import java.io.File;
 
 import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.frmdrd.el.JexlBindingExpression;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public class MediaFileLocator {
 
-public class JexlContextWrapper implements JexlContext {
-    Context context;
+    public File locate(JexlBindingExpression expr, Context context){
+//        if (expr == null) {
+//            return null;
+//        } else {
+//            Class expected;
+//            if(expr.isLiteral() || expr.isReadOnly()){
+//                expected = String.class;
+//            } else {
+//                expected = expr.getExpectedType();
+//            }
+//            // evaluate expression against context
+//            return JexlUtils.eval(context, expr);
+//        }
 
-    public JexlContextWrapper(Context context) {
-        this.context = context;
-    }
+        return null;
 
-    @Override
-    public Object get(String name) {
-        return context.get(name);
-    }
-
-    @Override
-    public void set(String name, Object value) {
-        context.put(name, value);
-    }
-
-    @Override
-    public boolean has(String name) {
-        return context.containsKey(name);
     }
 }

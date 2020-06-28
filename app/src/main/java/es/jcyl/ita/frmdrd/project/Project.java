@@ -21,15 +21,13 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.source.EntitySource;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
-import static es.jcyl.ita.frmdrd.config.DevConsole.warn;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

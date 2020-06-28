@@ -47,10 +47,8 @@ public class DatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable
 
     @Override
     protected void setupView(RenderingEnv env, DatatableLayout datatableView, UIDatatable component) {
-        component.getRepo().setContext(env.getContext());
-
+//        component.getRepo().setContext(env.getContext()); // the context must be already set by the repository factory
         LinearLayout tableView = datatableView.findViewById(R.id.list_layout);
-
         LinearLayout headerLayout = tableView.findViewById(R.id.list_layout_headers);
         datatableView.setHeaderView(headerLayout);
 

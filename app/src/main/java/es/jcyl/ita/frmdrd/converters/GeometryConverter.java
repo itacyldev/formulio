@@ -18,8 +18,8 @@ package es.jcyl.ita.frmdrd.converters;
 import org.mini2Dx.beanutils.converters.AbstractConverter;
 
 import es.jcyl.ita.crtrepo.db.meta.GeometryType;
-import es.jcyl.ita.crtrepo.types.ByteArray;
-import es.jcyl.ita.crtrepo.types.Geometry;
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
+import es.jcyl.ita.crtrepo.meta.types.Geometry;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

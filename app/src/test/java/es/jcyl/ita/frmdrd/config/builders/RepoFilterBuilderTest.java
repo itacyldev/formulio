@@ -74,7 +74,7 @@ public class RepoFilterBuilderTest {
         Filter filter = form.getFilter();
         Assert.assertNotNull(filter);
 
-        Criteria criteria = filter.getCriteria();
+        Criteria criteria = (Criteria) filter.getExpression();
         Assert.assertEquals(Criteria.CriteriaType.AND, criteria.getType());
         Assert.assertEquals(2, criteria.getChildren().length);
     }
@@ -134,7 +134,7 @@ public class RepoFilterBuilderTest {
         Filter filter = form.getFilter();
         Assert.assertNotNull(filter);
 
-        Criteria criteria = (Criteria) filter.getCriteria().getChildren()[0];
+        Criteria criteria = (Criteria) ((Criteria) filter.getExpression()).getChildren()[0];
         Assert.assertEquals(Criteria.CriteriaType.OR, criteria.getType());
         Assert.assertEquals(2, criteria.getChildren().length);
 

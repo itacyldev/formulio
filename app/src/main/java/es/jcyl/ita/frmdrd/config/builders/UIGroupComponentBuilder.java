@@ -22,8 +22,8 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.crtrepo.types.ByteArray;
-import es.jcyl.ita.crtrepo.types.Geometry;
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
+import es.jcyl.ita.crtrepo.meta.types.Geometry;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
@@ -35,7 +35,6 @@ import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.validation.Validator;
-import es.jcyl.ita.frmdrd.validation.ValidatorFactory;
 
 import static es.jcyl.ita.frmdrd.config.builders.UIBuilderHelper.getElementValue;
 

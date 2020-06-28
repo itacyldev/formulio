@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.context.wrappers;
+package es.jcyl.ita.frmdrd.el.wrappers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,37 +17,31 @@ package es.jcyl.ita.frmdrd.context.wrappers;
 
 import org.apache.commons.jexl3.JexlContext;
 
-import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.context.Context;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class JexlEntityWrapper implements JexlContext {
-    private static final String ID_PROP = "id";
+public class JexlContextWrapper implements JexlContext {
+    Context context;
 
-    Entity entity;
-
-    public JexlEntityWrapper(Entity entity) {
-        this.entity = entity;
+    public JexlContextWrapper(Context context) {
+        this.context = context;
     }
 
     @Override
     public Object get(String name) {
-        Object value = entity.get(name);
-        if (value == null && ID_PROP.equalsIgnoreCase(name)) {
-            value = entity.getId();
-        }
-        return value;
+        return context.get(name);
     }
 
     @Override
     public void set(String name, Object value) {
-        entity.set(name, value);
+        context.put(name, value);
     }
 
     @Override
     public boolean has(String name) {
-        return entity.getProperties().containsKey(name);
+        return context.containsKey(name);
     }
 }

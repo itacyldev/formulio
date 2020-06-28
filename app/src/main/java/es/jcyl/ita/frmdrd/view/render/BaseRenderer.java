@@ -17,6 +17,8 @@ package es.jcyl.ita.frmdrd.view.render;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
@@ -73,12 +75,16 @@ public abstract class BaseRenderer<V extends View, C extends UIComponent> implem
      * @param env
      * @return
      */
-    protected <T> T getValue(C component, RenderingEnv env, Class<T> clazz) {
+    protected <T> T getValue(C component, RenderingEnv env,@Nullable Class<T> clazz) {
         Object value = component.getValue(env.getContext());
         if (value == null) {
             return handleNullValue(component);
         }
-        return (T) ConvertUtils.convert(value, clazz);
+        if (clazz == null) {
+            return (T) value;
+        } else {
+            return (T) ConvertUtils.convert(value, clazz);
+        }
     }
 
     protected <T> T handleNullValue(C component) {

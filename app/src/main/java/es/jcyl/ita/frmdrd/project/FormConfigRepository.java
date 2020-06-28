@@ -23,16 +23,17 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.crtrepo.query.BaseFilter;
+import es.jcyl.ita.crtrepo.source.EntitySource;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormConfigRepository implements EditableRepository<FormConfig, String, BasicFilter> {
+public class FormConfigRepository implements EditableRepository<FormConfig, String, BaseFilter> {
 
     private final Project project;
     private final EntitySource entitySource;
@@ -82,12 +83,12 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
-    public List<FormConfig> find(BasicFilter basicFilter) {
+    public List<FormConfig> find(BaseFilter basicFilter) {
         throw new NotImplementedException("Not implemeted!");
     }
 
     @Override
-    public long count(BasicFilter basicFilter) {
+    public long count(BaseFilter basicFilter) {
         return memoryRepo.size();
     }
 
@@ -107,18 +108,13 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
-    public void setContext(Context context) {
-
-    }
-
-    @Override
     public Object getImplementor() {
         return null;
     }
 
     @Override
-    public Class<BasicFilter> getFilterClass() {
-        return BasicFilter.class;
+    public Class<BaseFilter> getFilterClass() {
+        return BaseFilter.class;
     }
 
 

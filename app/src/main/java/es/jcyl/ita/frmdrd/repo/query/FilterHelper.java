@@ -17,10 +17,11 @@ package es.jcyl.ita.frmdrd.repo.query;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.db.query.RawWhereCondition;
 import es.jcyl.ita.crtrepo.query.Condition;
 import es.jcyl.ita.crtrepo.query.Criteria;
+import es.jcyl.ita.crtrepo.query.Expression;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.crtrepo.query.RawWhereCondition;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
@@ -79,7 +80,7 @@ public class FilterHelper {
                     checkPassed = false;
                     break;
                 }
-                if(value == null){
+                if (value == null) {
                     checkPassed = false;
                     break;
                 }
@@ -91,9 +92,15 @@ public class FilterHelper {
             effectiveCriteria = Criteria.single(RawWhereCondition.fromString("1=2"));
         } else {
             // evaluate filter conditions
-            effectiveCriteria = criteriaVisitor.visit(definition.getCriteria(), context);
+            // different evaluators for different expressions
+            Expression expr = definition.getExpression();
+            if (expr instanceof Criteria) {
+                effectiveCriteria = criteriaVisitor.visit((Criteria) expr, context);
+            } else {
+                throw new IllegalArgumentException("Unexpected expression type: " + definition.getExpression().getClass().getName());
+            }
         }
-        output.setCriteria(effectiveCriteria);
+        output.setExpression(effectiveCriteria);
         output.setSorting(definition.getSorting());
     }
 

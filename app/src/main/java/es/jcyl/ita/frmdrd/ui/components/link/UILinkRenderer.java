@@ -39,7 +39,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * <p>
  * Renders link component using android views
  */
-public class LinkRenderer extends BaseRenderer<TextView, UILink> {
+public class UILinkRenderer extends BaseRenderer<TextView, UILink> {
 
 
     @Override

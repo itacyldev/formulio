@@ -372,7 +372,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         Filter filter = new SQLQueryFilter();
         if (conditions.length > 0) {
             Criteria criteria = Criteria.and(conditions);
-            filter.setCriteria(criteria);
+            filter.setExpression(criteria);
         }
 
         if (sort != null) {

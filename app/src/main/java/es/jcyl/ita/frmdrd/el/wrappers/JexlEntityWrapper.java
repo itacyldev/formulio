@@ -1,9 +1,4 @@
-package es.jcyl.ita.frmdrd;
-
-import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.crtrepo.source.EntitySource;
-
+package es.jcyl.ita.frmdrd.el.wrappers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -20,23 +15,39 @@ import es.jcyl.ita.crtrepo.source.EntitySource;
  * limitations under the License.
  */
 
+import org.apache.commons.jexl3.JexlContext;
+
+import es.jcyl.ita.crtrepo.Entity;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class DummyEntity extends Entity {
+public class JexlEntityWrapper implements JexlContext {
+    private static final String ID_PROP = "id";
 
+    Entity entity;
 
-    public DummyEntity(EntitySource source, EntityMeta meta, Object id) {
-        super(source, meta, id);
+    public JexlEntityWrapper(Entity entity) {
+        this.entity = entity;
     }
 
     @Override
-    public void set(String prop, Object value) {
-        this.getProperties().put(prop, value);
+    public Object get(String name) {
+        Object value = entity.get(name);
+        if (value == null && ID_PROP.equalsIgnoreCase(name)) {
+            value = entity.getId();
+        }
+        return value;
     }
 
-    public void setId(Object id) {
+    @Override
+    public void set(String name, Object value) {
+        entity.set(name, value);
+    }
 
+    @Override
+    public boolean has(String name) {
+        return entity.getProperties().containsKey(name);
     }
 }

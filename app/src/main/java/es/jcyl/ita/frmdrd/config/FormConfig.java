@@ -18,9 +18,9 @@ package es.jcyl.ita.frmdrd.config;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.EntitySource;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.source.EntitySource;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.meta.Identifiable;

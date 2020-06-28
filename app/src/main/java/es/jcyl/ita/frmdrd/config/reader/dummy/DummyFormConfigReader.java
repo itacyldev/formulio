@@ -259,7 +259,7 @@ public class DummyFormConfigReader  {
         Criteria criteria = Criteria.and(
                 ConditionBinding.cond(Condition.eq("prov", null), exprFactory.create("${view.provincia}")),
                 ConditionBinding.cond(Condition.contains("name", null), exprFactory.create("${this.value}")));
-        muniFilter.setCriteria(criteria);
+        muniFilter.setExpression(criteria);
         muniAuto.setFilter(muniFilter);
 
         // agents autocomplete
@@ -279,7 +279,7 @@ public class DummyFormConfigReader  {
         criteria = Criteria.or(
                 ConditionBinding.cond(Condition.eq("first_name", null), exprFactory.create("${this.value}")),
                 ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${this.value}")));
-        agentFilter.setCriteria(criteria);
+        agentFilter.setExpression(criteria);
         agentsAC.setFilter(agentFilter);
         DAGManager.getInstance().generateDags(edit.getView());
 //        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(edit.getView().getId());

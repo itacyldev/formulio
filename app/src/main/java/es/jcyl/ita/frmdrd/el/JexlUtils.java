@@ -18,7 +18,6 @@ package es.jcyl.ita.frmdrd.el;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
-import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
@@ -27,8 +26,8 @@ import org.apache.commons.jexl3.internal.TemplateEngine;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.context.wrappers.JexlContextWrapper;
-import es.jcyl.ita.frmdrd.context.wrappers.JexlEntityWrapper;
+import es.jcyl.ita.frmdrd.el.wrappers.JexlContextWrapper;
+import es.jcyl.ita.frmdrd.el.wrappers.JexlEntityWrapper;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**

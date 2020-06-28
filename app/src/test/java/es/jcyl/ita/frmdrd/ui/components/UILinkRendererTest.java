@@ -45,7 +45,7 @@ import static org.mockito.Mockito.mock;
  * <p>
  */
 @RunWith(RobolectricTestRunner.class)
-public class LinkRendererTest {
+public class UILinkRendererTest {
 
     FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;

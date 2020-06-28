@@ -3,7 +3,6 @@ package es.jcyl.ita.frmdrd.converters;
 import org.mini2Dx.collections.BidiMap;
 import org.mini2Dx.collections.bidimap.DualHashBidiMap;
 
-package groovy;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

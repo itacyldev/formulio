@@ -37,6 +37,7 @@ public class ViewValueConverterFactory {
         map.put("select", new SpinnerValueConverter());
         map.put("autocomplete", new AutoCompleteStaticValueConverter());
         map.put("dynamicAutocomplete", new AutoCompleteDynamicValueConverter());
+        map.put("image", new ImageViewConverter());
     }
 
     public static ViewValueConverterFactory getInstance() {

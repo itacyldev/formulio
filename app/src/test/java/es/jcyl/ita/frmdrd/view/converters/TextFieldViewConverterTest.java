@@ -28,10 +28,10 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
 
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
+import es.jcyl.ita.crtrepo.meta.types.Geometry;
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
-import es.jcyl.ita.crtrepo.types.ByteArray;
-import es.jcyl.ita.crtrepo.types.Geometry;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
@@ -56,7 +56,7 @@ public class TextFieldViewConverterTest {
     @Before
     public void setUp() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        ctx.setTheme( R.style.FormudruidLight);
+        ctx.setTheme(R.style.FormudruidLight);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();

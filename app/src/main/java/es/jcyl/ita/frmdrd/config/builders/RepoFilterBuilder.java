@@ -18,11 +18,11 @@ package es.jcyl.ita.frmdrd.config.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.query.BaseFilter;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.project.BasicFilter;
 import es.jcyl.ita.frmdrd.repo.filter.RepoFilterVisitor;
 import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 
@@ -53,8 +53,8 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
         List<String> mandatoryFields = new ArrayList<>();
         Criteria criteria = (Criteria) visitor.visit(node, mandatoryFields);
 
-        Filter filter = new BasicFilter();
-        filter.setCriteria(criteria);
+        Filter filter = new BaseFilter();
+        filter.setExpression(criteria);
         repofilter.setFilter(filter);
 
         if (mandatoryFields.size() > 0) {

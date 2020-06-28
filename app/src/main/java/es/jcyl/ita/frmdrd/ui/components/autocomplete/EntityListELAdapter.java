@@ -100,7 +100,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(component.getRepo());
         // add default criteria using autocomplete view input
         Criteria criteria = FilterHelper.singleCriteria(component.getOptionLabelFilteringProperty(), THIS_VALUE);
-        f.setCriteria(criteria);
+        f.setExpression(criteria);
         return f;
     }
 
