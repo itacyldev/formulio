@@ -25,36 +25,60 @@ import java.util.Date;
 public class Location {
 
 
-    private double x;
-    private double y;
-    private double accuracy;
-    private double bearing;
+    private float x;
+    private float y;
+    private float accuracy;
+    private float bearing;
     private Date time;
 
-    public Location(double x, double y, double accuracy, double bearing) {
+    public Location() {
+    }
+
+    public Location(float x, float y, float accuracy, float bearing) {
         this.x = x;
         this.y = y;
         this.accuracy = accuracy;
         this.bearing = bearing;
     }
 
-    public double getX() {
+    public float getX() {
         return x;
     }
 
-    public double getY() {
+    public float getY() {
         return y;
     }
 
-    public double getAccuracy() {
+    public float getAccuracy() {
         return accuracy;
     }
 
-    public double getBearing() {
+    public float getBearing() {
         return bearing;
     }
 
     public Date getTime() {
         return time;
     }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public void setAccuracy(float accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public void setBearing(float bearing) {
+        this.bearing = bearing;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
 }
