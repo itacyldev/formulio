@@ -17,19 +17,19 @@ package es.jcyl.ita.frmdrd.config.meta;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Component attribute catalog
  */
 public class AttributeDef {
     // component common attributes
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
-    // TODO: fix this workaround and set option.value as a ValueBindingExpression #204221
-    public static Attribute CODE = new Attribute("code", "value", String.class); // alternative to value with no expression
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
     // common input fields
 //    public static Attribute TYPE = new Attribute("type", true);
     public static Attribute LABEL = new Attribute("label");
     public static Attribute READONLY = new Attribute("readonly", Boolean.class);
-    public static Attribute CONVERTER = new Attribute("converter", false);
+    public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
     public static Attribute NAME = new Attribute("name");
     public static Attribute DESCRIPTION = new Attribute("description");
@@ -72,5 +72,8 @@ public class AttributeDef {
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);
 
+    // style, layout, ...
+    public static Attribute HEIGHT = new Attribute("height", Integer.class);
+    public static Attribute WIDTH = new Attribute("width", Integer.class);
 
 }

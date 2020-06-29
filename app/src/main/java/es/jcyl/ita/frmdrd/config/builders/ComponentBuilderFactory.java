@@ -89,6 +89,7 @@ public class ComponentBuilderFactory {
         registerBuilder("text", inputFieldBuilder);
         registerBuilder("switcher", inputFieldBuilder);
         registerBuilder("date", inputFieldBuilder);
+        registerBuilder("image", newBuilder(UIImageBuilder.class, "image"));
 
         registerBuilder("select", newBuilder(UISelectBuilder.class, "select"));
         registerBuilder("autocomplete", newBuilder(UIAutocompleteBuilder.class, "autocomplete"));

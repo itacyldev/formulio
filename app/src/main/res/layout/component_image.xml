@@ -24,4 +24,18 @@
         android:layout_height="wrap_content"
         android:src="@drawable/no_image" />
 
+<!--
+
+    <ImageView
+        android:id="@+id/input_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginRight="5dip"
+        android:layout_weight="0"
+        android:clickable="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/no_image" />
+    </ImageView>
+-->
 </LinearLayout>

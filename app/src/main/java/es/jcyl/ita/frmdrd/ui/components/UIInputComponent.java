@@ -27,7 +27,7 @@ import es.jcyl.ita.frmdrd.view.converters.ViewValueConverterFactory;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UIInputComponent extends UIComponent {
-    private static final ViewValueConverterFactory converterFactory = ViewValueConverterFactory.getInstance();
+    private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
     protected String label;
     private boolean readOnly;
@@ -122,7 +122,7 @@ public class UIInputComponent extends UIComponent {
     }
 
     public ViewValueConverter getConverter() {
-        return converterFactory.get(this.getValueConverter());
+        return viewConverterFactory.get(this.getValueConverter());
     }
 
     public void setValueConverter(String valueConverter) {

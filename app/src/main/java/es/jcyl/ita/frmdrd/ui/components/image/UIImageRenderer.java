@@ -48,8 +48,18 @@ public class UIImageRenderer extends InputRenderer<ImageView, UIImage> {
 
     }
 
-    protected void setupView(RenderingEnv env, ImageView baseView, UIImage component) {
+    protected void setupInputView(RenderingEnv env, InputFieldView<ImageView> baseView, ImageView inputView, UIImage component) {
+        super.setupInputView(env, baseView, inputView, component);
 
+        inputView.requestLayout();
+        Integer height = component.getHeight();
+        if (height != null) {
+            inputView.getLayoutParams().height = height;
+        }
+        Integer width = component.getWidth();
+        if (width != null) {
+            inputView.getLayoutParams().width = width;
+        }
     }
 
     protected void setValue(RenderingEnv env, InputFieldView baseView, UIImage component, ImageView inputView) {

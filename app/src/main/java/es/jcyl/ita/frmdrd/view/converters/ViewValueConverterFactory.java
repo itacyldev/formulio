@@ -18,8 +18,6 @@ package es.jcyl.ita.frmdrd.view.converters;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -37,7 +35,9 @@ public class ViewValueConverterFactory {
         map.put("select", new SpinnerValueConverter());
         map.put("autocomplete", new AutoCompleteStaticValueConverter());
         map.put("dynamicAutocomplete", new AutoCompleteDynamicValueConverter());
-        map.put("image", new ImageViewConverter());
+        map.put("urlImage", new ImageViewUrlConverter());
+        map.put("b64Image", new ImageView64Converter());
+        map.put("byteArrayImage", new ImageViewByteArrayConverter());
     }
 
     public static ViewValueConverterFactory getInstance() {

@@ -15,30 +15,24 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
-import android.widget.ImageView;
+import java.io.IOException;
+
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
 
 /**
- * Receives an imagen
+ * Receives the image as a B64 string, converts it to bitmap and renders
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class ImageViewConverter implements ViewValueConverter<ImageView>  {
+public class ImageViewByteArrayConverter extends AbstractViewValueConverter<ByteArray> {
+
     @Override
-    public String getValueFromViewAsString(ImageView view) {
-        return null;
+    protected boolean isMissingOrErrorImage(ByteArray bArray) {
+        return bArray == null || bArray.getValue().length == 0;
     }
 
     @Override
-    public <C> C getValueFromView(ImageView view, Class<C> expectedType) {
-        return null;
-    }
-
-    @Override
-    public void setViewValue(ImageView view, Object value) {
-
-    }
-
-    @Override
-    public void setViewValueAsString(ImageView view, String value) {
-
+    protected byte[] readImageBytesFromObject(ByteArray bArray) throws IOException {
+        return bArray.getValue();
     }
 }

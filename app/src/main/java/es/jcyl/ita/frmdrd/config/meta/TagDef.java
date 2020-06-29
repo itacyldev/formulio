@@ -26,6 +26,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FILTERING;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEADER_TEXT;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL;
@@ -46,6 +47,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALIDATOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE_PROPERTY;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.WIDTH;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -78,6 +80,7 @@ public class TagDef {
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
+        register("image", define(baseInput, new Attribute[]{REPO, WIDTH, HEIGHT}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);
@@ -121,6 +124,18 @@ public class TagDef {
         return atts;
     }
 
+    private static Map<String, Attribute> define(Map<String, Attribute> baseAtts, Attribute[]... attributeSets) {
+        Map<String, Attribute> atts = new HashMap();
+        atts.putAll(baseAtts);
+        for (Attribute[] attSet : attributeSets) {
+            for (Attribute att : attSet) {
+                if (!atts.containsKey(att.name)) {
+                    atts.put(att.name, att);
+                }
+            }
+        }
+        return atts;
+    }
 
     public static void register(String name, Map<String, Attribute> atts) {
         registry.put(name, atts);

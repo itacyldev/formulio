@@ -101,6 +101,9 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
                         AttributeResolver resolver = getAttributeResolver(attribute.resolver);
                         value = resolver.resolve(node, attribute.name);
                     }
+                    if(value == null){
+                        value = getDefaultAttributeValue(element, node, attName);
+                    }
                     // set attribute using reflection
                     BeanUtils.setProperty(element, setter, value);
                 } else {
@@ -113,6 +116,10 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
                         "attribute '%s' on element <%s/>.", attName, node.getName()), e), e);
             }
         }
+    }
+
+    protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName){
+        return null;
     }
 
     protected AttributeResolver getAttributeResolver(String resolver) {

@@ -33,7 +33,6 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 public class UISelectBuilder extends BaseUIComponentBuilder<UISelect> {
     private List<UIOption> options;
 
-
     public UISelectBuilder(String tagName) {
         super(tagName, UISelect.class);
     }
@@ -41,7 +40,6 @@ public class UISelectBuilder extends BaseUIComponentBuilder<UISelect> {
     public UISelectBuilder(String tagName, Class<? extends UISelect> clazz) {
         super(tagName, clazz);
     }
-
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UISelect> node) {
@@ -60,34 +58,4 @@ public class UISelectBuilder extends BaseUIComponentBuilder<UISelect> {
             node.getElement().setOptions(options);
         }
     }
-
-
-    //    public SelectBuilder() {
-//        this.options = new ArrayList<UIOption>();
-//    }
-
-//
-//    @Override
-//    protected UISelect emptyModel() {
-//        return new UISelect();
-//    }
-//
-//
-//    public SelectBuilder withId(String id) {
-//        this.baseModel.setId(id);
-//        return this;
-//    }
-//    public SelectBuilder addOption(String label, String value) {
-//        options.add(new UIOption(label, value));
-//        return this;
-//    }
-//
-//    @Override
-//    protected UISelect doBuild(UISelect baseModel) {
-//        if(StringUtils.isBlank(this.baseModel.getId())){
-//            throw new FormBuilderException("The id cannot be null!.");
-//        }
-//        baseModel.setOptions(options.toArray(new UIOption[options.size()]));
-//        return baseModel;
-//    }
 }
