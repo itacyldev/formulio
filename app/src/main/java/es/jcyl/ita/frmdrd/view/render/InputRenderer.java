@@ -84,7 +84,7 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
         setMessages(env, baseView, component);
     }
 
-    private void setValue(RenderingEnv env, InputFieldView baseView, C component, I inputView) {
+    protected void setValue(RenderingEnv env, InputFieldView baseView, C component, I inputView) {
         String value = getValue(component, env, String.class);
         baseView.getConverter().setViewValue(inputView, value);
     }

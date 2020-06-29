@@ -250,7 +250,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
         Condition cond = new Condition(this.component.getOptionValueProperty(),
                 this.component.getValueFilteringOperator(), value);
         es.jcyl.ita.crtrepo.query.Filter f = FilterHelper.createInstance(repo);
-        f.setCriteria(Criteria.single(cond));
+        f.setExpression(Criteria.single(cond));
         List<Entity> lst = repo.find(f);
 
         if (CollectionUtils.isEmpty(lst)) {

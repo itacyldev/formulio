@@ -23,16 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.EntitySource;
-import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
+import es.jcyl.ita.crtrepo.query.BaseFilter;
+import es.jcyl.ita.crtrepo.source.EntitySource;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ProjectRepository implements EditableRepository<Project, String, BasicFilter> {
+public class ProjectRepository implements EditableRepository<Project, String, BaseFilter> {
 
     private final EntityMeta projectMeta;
     private final EntitySource projectSource;
@@ -50,12 +50,12 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     }
 
     @Override
-    public List<Project> find(BasicFilter projectFilter) {
+    public List<Project> find(BaseFilter projectFilter) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
     @Override
-    public long count(BasicFilter projectFilter) {
+    public long count(BaseFilter projectFilter) {
         return find(projectFilter).size();
     }
 
@@ -104,10 +104,6 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
         return this.projectMeta;
     }
 
-    @Override
-    public void setContext(Context context) {
-
-    }
 
     @Override
     public Object getImplementor() {
@@ -115,7 +111,7 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     }
 
     @Override
-    public Class<BasicFilter> getFilterClass() {
+    public Class<BaseFilter> getFilterClass() {
         return null;
     }
 

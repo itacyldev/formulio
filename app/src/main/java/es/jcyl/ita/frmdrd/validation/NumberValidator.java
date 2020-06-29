@@ -19,7 +19,7 @@ package es.jcyl.ita.frmdrd.validation;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  * <p>
- * Gives access to and Android view element and its descendant values using a context interface.
+ * Gives access to an Android view element and its descendant values using a context interface.
  */
 
 import org.apache.commons.validator.routines.AbstractNumberValidator;

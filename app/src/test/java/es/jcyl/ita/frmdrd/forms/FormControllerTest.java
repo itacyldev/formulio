@@ -27,6 +27,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
@@ -64,7 +65,7 @@ public class FormControllerTest {
     @Before
     public void setUp() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        ctx.setTheme( R.style.FormudruidLight);
+        ctx.setTheme(R.style.FormudruidLight);
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
@@ -101,7 +102,9 @@ public class FormControllerTest {
         Map<String, Object> expectedValues = new HashMap<>();
         FormViewContext viewContext = (FormViewContext) form.getContext().getContext("view");
         // modify view using viewContext to mimic user interaction
-        for (Map.Entry<String, Object> prop : entity.getProperties().entrySet()) {
+        Map<String, Object> properties = entity.getProperties();
+        Set<Map.Entry<String, Object>> entries = properties.entrySet();
+        for (Map.Entry<String, Object> prop : entries) {
             // get the related component by id and set a random value
             String propId = prop.getKey();
             PropertyType propertyType = entity.getMetadata().getPropertyByName(propId);
@@ -119,7 +122,9 @@ public class FormControllerTest {
 
         Entity actualEntity = argument.getValue();
 
-        for (Map.Entry<String, Object> prop : actualEntity.getProperties().entrySet()) {
+        properties = entity.getProperties();
+        entries = properties.entrySet();
+        for (Map.Entry<String, Object> prop : entries) {
             // get the related component by id
             String propId = prop.getKey();
             Object expected = expectedValues.get(propId);

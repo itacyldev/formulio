@@ -21,16 +21,12 @@ import org.greenrobot.greendao.database.StandardDatabase;
 
 import java.io.File;
 
-import es.jcyl.ita.crtrepo.EntitySource;
-import es.jcyl.ita.crtrepo.EntitySourceFactory;
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.Source;
 import es.jcyl.ita.crtrepo.builders.EntitySourceBuilder;
 import es.jcyl.ita.crtrepo.builders.RepositoryBuilder;
-import es.jcyl.ita.crtrepo.builders.SQLiteGreenDAORepoBuilder;
 import es.jcyl.ita.crtrepo.config.AbstractRepoConfigurationReader;
-import es.jcyl.ita.crtrepo.db.DBTableEntitySource;
-import es.jcyl.ita.crtrepo.db.NativeSQLEntitySource;
+import es.jcyl.ita.crtrepo.db.builders.SQLiteGreenDAORepoBuilder;
+import es.jcyl.ita.crtrepo.db.source.DBTableEntitySource;
+import es.jcyl.ita.crtrepo.db.source.NativeSQLEntitySource;
 import es.jcyl.ita.crtrepo.db.spatialite.SpatialitePropertyBinder;
 import es.jcyl.ita.crtrepo.db.spatialite.greendao.SpatialTableStatementsProvider;
 import es.jcyl.ita.crtrepo.db.spatialite.greendao.SpatialiteDataBase;
@@ -39,9 +35,9 @@ import es.jcyl.ita.crtrepo.db.sqlite.greendao.EntityDaoConfig;
 import es.jcyl.ita.crtrepo.db.sqlite.meta.SQLiteMetaModeler;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.MetaModeler;
-import es.jcyl.ita.frmdrd.config.ConfigurationException;
-
-import static es.jcyl.ita.frmdrd.config.DevConsole.error;
+import es.jcyl.ita.crtrepo.source.EntitySource;
+import es.jcyl.ita.crtrepo.source.EntitySourceFactory;
+import es.jcyl.ita.crtrepo.source.Source;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

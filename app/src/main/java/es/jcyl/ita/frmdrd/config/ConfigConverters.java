@@ -23,8 +23,8 @@ import org.mini2Dx.beanutils.converters.LongConverter;
 
 import java.util.Date;
 
-import es.jcyl.ita.crtrepo.types.ByteArray;
-import es.jcyl.ita.crtrepo.types.Geometry;
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
+import es.jcyl.ita.crtrepo.meta.types.Geometry;
 import es.jcyl.ita.frmdrd.converters.ByteArrayConverter;
 import es.jcyl.ita.frmdrd.converters.CustomBooleanConverter;
 import es.jcyl.ita.frmdrd.converters.CustomDateConverter;

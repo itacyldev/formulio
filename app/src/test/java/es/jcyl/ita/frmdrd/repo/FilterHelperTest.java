@@ -71,7 +71,7 @@ public class FilterHelperTest {
         bCtx.set("a", 10);
 
         Criteria criteria = Criteria.single(ConditionBinding.cond(propertyName1, Operator.GT, exprFactory.create("${a}", Integer.class)));
-        filterDef.setCriteria(criteria);
+        filterDef.setExpression(criteria);
 
         String[] mandatoryFilters = new String[]{"a"};
         FilterHelper.evaluateFilter(bCtx, filterDef, effFilter, mandatoryFilters);

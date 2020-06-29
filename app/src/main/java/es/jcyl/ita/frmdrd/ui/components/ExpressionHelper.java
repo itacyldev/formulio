@@ -50,7 +50,7 @@ public class ExpressionHelper {
         // add all the expressions included in the filter definition
         Set<ValueBindingExpression> filterExp = new HashSet<>();
         if (filter != null) {
-            findExpressions(filter.getCriteria(), filterExp);
+            findExpressions(filter.getExpression(), filterExp);
         }
         expressions.addAll(filterExp);
         return expressions;

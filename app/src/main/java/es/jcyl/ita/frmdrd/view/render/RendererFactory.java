@@ -21,10 +21,11 @@ import java.util.Map;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteRenderer;
 import es.jcyl.ita.frmdrd.ui.components.datatable.DatatableRenderer;
 import es.jcyl.ita.frmdrd.ui.components.form.UIFormRenderer;
+import es.jcyl.ita.frmdrd.ui.components.image.UIImageRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.TextFieldRenderer;
-import es.jcyl.ita.frmdrd.ui.components.link.LinkRenderer;
+import es.jcyl.ita.frmdrd.ui.components.link.UILinkRenderer;
 import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.ui.components.tab.TabItemRenderer;
 import es.jcyl.ita.frmdrd.ui.components.tab.TabRenderer;
@@ -47,11 +48,12 @@ public class RendererFactory {
         renderInstances.put("date", new DateFieldRenderer());
         renderInstances.put("switcher", new CheckBoxFieldRenderer());
         renderInstances.put("datatable", new DatatableRenderer());
-        renderInstances.put("link", new LinkRenderer());
+        renderInstances.put("link", new UILinkRenderer());
         renderInstances.put("select", new SelectRenderer());
         renderInstances.put("autocomplete", new AutoCompleteRenderer());
         renderInstances.put("tab", new TabRenderer());
         renderInstances.put("tabitem", new TabItemRenderer());
+        renderInstances.put("image", new UIImageRenderer());
     }
 
     public static RendererFactory getInstance() {

@@ -27,6 +27,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
@@ -35,8 +36,8 @@ import es.jcyl.ita.crtrepo.builders.EntityDataBuilder;
 import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
 import es.jcyl.ita.crtrepo.test.utils.AssertUtils;
-import es.jcyl.ita.crtrepo.types.ByteArray;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -105,7 +106,9 @@ public class FormContextTest {
 
         // access entity elements throw context
         // check each entity property is correctly set in the form fields
-        for (Map.Entry<String, Object> prop : entity.getProperties().entrySet()) {
+        Map<String, Object> properties = entity.getProperties();
+        Set<Map.Entry<String, Object>> entries = properties.entrySet();
+        for (Map.Entry<String, Object> prop : entries) {
             // get the related component by id
             String propId = prop.getKey();
             Object expected = prop.getValue();
@@ -152,7 +155,9 @@ public class FormContextTest {
         renderHelper.render(env, form);
 
         // check each entity property is correctly set in the form fields
-        for (Map.Entry<String, Object> prop : entity.getProperties().entrySet()) {
+        Map<String, Object> properties = entity.getProperties();
+        Set<Map.Entry<String, Object>> entries = properties.entrySet();
+        for (Map.Entry<String, Object> prop : entries) {
             // get the related component by id
             String propId = prop.getKey();
             Object expected = prop.getValue();

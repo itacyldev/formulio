@@ -33,14 +33,15 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
 
     private FormContext context;
     private final ViewStateHolder memento;
-    private Repository repo;
     private String entityId = "params.entityId";
     private Entity currentEntity;
-    private Filter filter;
     private String onValidate; // js function to call on validation
     private boolean readOnly;
-
+    /** filterable component **/
+    private Repository repo;
+    private Filter filter;
     private String[] mandatoryFilters;
+
 
     public UIForm() {
         this.setRendererType("form");
