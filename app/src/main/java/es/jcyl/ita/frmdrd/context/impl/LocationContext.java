@@ -18,6 +18,9 @@ package es.jcyl.ita.frmdrd.context.impl;
 
 import android.location.Location;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import es.jcyl.ita.crtrepo.context.AbstractMapContext;
 import es.jcyl.ita.frmdrd.location.LocationService;
 
@@ -25,29 +28,50 @@ import es.jcyl.ita.frmdrd.location.LocationService;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class LocationContext extends AbstractMapContext {
+public class LocationContext extends AbstractMapContext implements Observer {
 
+    private Location lastValidLocation;
 
-
-    private Location lastLocation;
-    private double minAccuracy;
+    private boolean locationUpdated = false;
 
     LocationService locationService;
 
     public LocationContext(String prefix) {
         super(prefix);
+        locationService = LocationService.getInstance();
+    }
+
+
+    @Override
+    public Object get(String key) {
+
+        if ("lastLocation".equalsIgnoreCase(key)) {
+            Location lastValidLocation = locationService.getLastLocation();
+            if (lastValidLocation == null) {
+                locationUpdated = false;
+                locationService.updateLocation(this);
+                waitUpdateLocation();
+            }
+        }
+
+        return lastValidLocation;
+    }
+
+    @Override
+    public void update(Observable o, Object response) {
+        if (response instanceof Location) {
+            lastValidLocation = (Location) response;
+            locationUpdated = true;
+        }
     }
 
     /**
-     * The key is the date expression that the DateTimeContext must resolve
+     * Active waiting until the location service gets a new valid position
      */
-    @Override
-    public Object get(Object key){
-
-        return get((String) key);
+    private void waitUpdateLocation() {
+        while (!locationUpdated) {
+        }
     }
 
-    public void setLastLocation(Location lastLocation) {
-        this.lastLocation = lastLocation;
-    }
+
 }
