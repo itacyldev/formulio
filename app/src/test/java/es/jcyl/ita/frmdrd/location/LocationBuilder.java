@@ -57,28 +57,28 @@ public class LocationBuilder extends AbstractDataBuilder<Location> {
         return this;
     }
 
-    public DataBuilder withLatitude(float latitude) {
+    public LocationBuilder withLatitude(float latitude) {
         this.baseModel.setLatitude(latitude);
         return this;
     }
 
-    public DataBuilder withLongitude(float longitude) {
+    public LocationBuilder withLongitude(float longitude) {
         this.baseModel.setLongitude(longitude);
         return this;
     }
 
-    public DataBuilder withAccuracy(float accuracy) {
+    public LocationBuilder withAccuracy(float accuracy) {
         this.baseModel.setAccuracy(accuracy);
         return this;
     }
 
-    public DataBuilder withBearing(float bearing) {
+    public LocationBuilder withBearing(float bearing) {
         this.baseModel.setBearing(bearing);
         return this;
     }
 
-    public DataBuilder withTime(Date time) {
-        this.baseModel.setTime(time.getTime());
+    public LocationBuilder withTime(long time) {
+        this.baseModel.setTime(time);
         return this;
     }
 

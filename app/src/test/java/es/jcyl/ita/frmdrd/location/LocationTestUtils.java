@@ -4,13 +4,12 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.provider.Settings;
 
 public class LocationTestUtils {
 
     Context ctx;
-    LocationManager _locationManager;
-    private String _providerName;
+    LocationManager locationManager;
+    private String providerName;
 
     public boolean addTestProvider(
             Context ctx,
@@ -18,13 +17,13 @@ public class LocationTestUtils {
             boolean requiresCell, boolean hasMonetaryCost, boolean supportsAltitude,
             boolean supportsSpeed, boolean supportsBearing, int powerRequirement, int accuracy) {
 
-        _providerName = providerName;
+        this.providerName = providerName;
         this.ctx = ctx;
 
-        _locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
 
-        _locationManager.addTestProvider(
-                _providerName,
+        locationManager.addTestProvider(
+                providerName,
                 requiresNetwork,
                 requiresSatellite,
                 requiresCell,
@@ -43,16 +42,8 @@ public class LocationTestUtils {
      * Adds a new mock location
      */
     public void addNewLocation(Location location) {
-        _locationManager.setTestProviderEnabled(_providerName, true);
-        _locationManager.setTestProviderStatus(_providerName, LocationProvider.AVAILABLE, null, System.currentTimeMillis());
-        _locationManager.setTestProviderLocation(_providerName, location);
-    }
-
-    public LocationManager getLocationManager() {
-        return _locationManager;
-    }
-
-    public boolean isLocationProviderEnabled(Context ctx, String provider) {
-        return Settings.Secure.isLocationProviderEnabled(ctx.getContentResolver(), provider);
+        locationManager.setTestProviderEnabled(providerName, true);
+        locationManager.setTestProviderStatus(providerName, LocationProvider.AVAILABLE, null, System.currentTimeMillis());
+        locationManager.setTestProviderLocation(providerName, location);
     }
 }

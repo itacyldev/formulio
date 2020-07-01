@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,28 +32,22 @@ import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import es.jcyl.ita.frmdrd.R;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class LocationService extends Observable implements LocationListener {
+public class LocationService implements LocationListener {
 
     private static int PERMISSION_REQUEST = 1234;
 
     private long REQUIRED_ACCURACY = 10;
-    private int MAX_ELAPSED_TIME = 5 * 1000; // 5 seconds
+    public static int MAX_ELAPSED_TIME = 60 * 1000;
 
     private LocationManager locationManager;
     private static LocationService _instance;
-    Context _ctx;
-
-
-    private Location location;
+    Context ctx;
 
     public static LocationService getInstance() {
         if (_instance == null) {
@@ -62,46 +57,36 @@ public class LocationService extends Observable implements LocationListener {
     }
 
     public LocationService() {
-        locationManager = (LocationManager) _ctx.getSystemService(Context.LOCATION_SERVICE);
+
     }
 
-    public void setContext(Context ctx) {
-        _ctx = ctx;
+    public void init(Context ctx) {
+        this.ctx = ctx;
+        locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
     }
 
-
-    public void updateLocation(Observer observer) {
-        this.addObserver(observer);
-        if (_ctx == null) {
-            //throw
-        } else {
-            if (ActivityCompat.checkSelfPermission(_ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(_ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-
+    public void updateLocation() {
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
+            return;
         }
     }
 
     public Location getLastLocation() {
         Location lastLocation = null;
-        if (ActivityCompat.checkSelfPermission(_ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(_ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (System.currentTimeMillis() - lastLocation.getTime() < MAX_ELAPSED_TIME) {
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Criteria criteria = new Criteria();
+            String provider = locationManager.getBestProvider(criteria, true);
+            lastLocation = locationManager.getLastKnownLocation(provider);
+            //if last location is too old then return null
+            if (lastLocation != null && (System.currentTimeMillis() - lastLocation.getTime() > MAX_ELAPSED_TIME)) {
                 lastLocation = null;
             }
 
         } else {
-            ActivityCompat.requestPermissions((Activity) _ctx, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
+            ActivityCompat.requestPermissions((Activity) ctx, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
         }
 
         return lastLocation;
@@ -111,40 +96,35 @@ public class LocationService extends Observable implements LocationListener {
     public void onLocationChanged(Location location) {
         if (location.getAccuracy() < REQUIRED_ACCURACY) {
             locationManager.removeUpdates(this);
-            this.notifyObservers(location);
-            this.deleteObservers();
         }
 
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-
     }
 
 
     public static void checkLocationProviderEnabled(final Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
         try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         } catch (Exception ex) {
         }
 
         try {
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         } catch (Exception ex) {
         }
 
