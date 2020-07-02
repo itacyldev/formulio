@@ -21,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
+import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
+
 /**
  * Receives the image as a B64 string, converts it to bitmap and renders
  *
@@ -37,5 +39,10 @@ public class ImageView64Converter extends AbstractImageViewValueConverter<String
     protected byte[] readImageBytesFromObject(String value) throws IOException {
         byte[] decodedString = Base64.decode(value, Base64.NO_WRAP);
         return decodedString;
+    }
+
+    @Override
+    protected String readObjectFromImageResource(MediaResource resource) throws IOException {
+        return null;
     }
 }

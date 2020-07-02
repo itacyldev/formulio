@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.view.converters;
 import java.io.IOException;
 
 import es.jcyl.ita.crtrepo.meta.types.ByteArray;
+import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
 
 /**
  * Receives the image as a B64 string, converts it to bitmap and renders
@@ -34,5 +35,10 @@ public class ImageViewByteArrayConverter extends AbstractImageViewValueConverter
     @Override
     protected byte[] readImageBytesFromObject(ByteArray bArray) throws IOException {
         return bArray.getValue();
+    }
+
+    @Override
+    protected ByteArray readObjectFromImageResource(MediaResource resource) throws IOException {
+        return null;
     }
 }

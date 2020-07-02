@@ -46,7 +46,7 @@ public abstract class AbstractImageViewValueConverter<T> implements ViewValueCon
             try {
                 return (C) readObjectFromImageResource(resource);
             }catch(Exception e) {
-                throw new ViewConfigException(DevConsole.error("An error occurred while trying to read image from view." +resource.toString() ,e))
+                throw new ViewConfigException(DevConsole.error("An error occurred while trying to read image from view." +resource.toString() ,e));
             }
         }
 

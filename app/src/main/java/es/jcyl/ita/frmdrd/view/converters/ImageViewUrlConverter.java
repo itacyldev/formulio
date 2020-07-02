@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import es.jcyl.ita.frmdrd.config.DevConsole;
+import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
 
 /**
  * Recives the image path as url and sets it to the image view
@@ -43,6 +44,11 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
             throw new IOException(DevConsole.error(String.format("An error occurred " +
                     "while trying to read the image: [%s]", path), e));
         }
+    }
+
+    @Override
+    protected String readObjectFromImageResource(MediaResource resource) throws IOException {
+        return null;
     }
 
 }
