@@ -18,9 +18,6 @@ package es.jcyl.ita.frmdrd.context.impl;
 
 import android.location.Location;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import es.jcyl.ita.crtrepo.context.AbstractMapContext;
 import es.jcyl.ita.frmdrd.location.LocationService;
 
@@ -28,11 +25,7 @@ import es.jcyl.ita.frmdrd.location.LocationService;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class LocationContext extends AbstractMapContext implements Observer {
-
-    private Location lastValidLocation;
-
-    private boolean locationUpdated = false;
+public class LocationContext extends AbstractMapContext {
 
     LocationService locationService;
 
@@ -44,34 +37,22 @@ public class LocationContext extends AbstractMapContext implements Observer {
 
     @Override
     public Object get(String key) {
-
+        Location lastValidLocation = null;
         if ("lastLocation".equalsIgnoreCase(key)) {
-            Location lastValidLocation = locationService.getLastLocation();
+            lastValidLocation = locationService.getLastLocation();
             if (lastValidLocation == null) {
-                locationUpdated = false;
-                locationService.updateLocation(this);
-                waitUpdateLocation();
+                //locationUpdated = false;
+                //locationService.updateLocation(LocationManager.GPS_PROVIDER);
+
+                //waitUpdateLocation(System.currentTimeMillis());
             }
         }
 
         return lastValidLocation;
     }
 
-    @Override
-    public void update(Observable o, Object response) {
-        if (response instanceof Location) {
-            lastValidLocation = (Location) response;
-            locationUpdated = true;
-        }
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
     }
-
-    /**
-     * Active waiting until the location service gets a new valid position
-     */
-    private void waitUpdateLocation() {
-        while (!locationUpdated) {
-        }
-    }
-
 
 }
