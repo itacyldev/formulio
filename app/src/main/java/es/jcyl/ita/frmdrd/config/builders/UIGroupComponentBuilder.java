@@ -85,7 +85,7 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
     }
 
     /**
-     * Maps the property type to the most suitable Field type
+     * Creates a ConfigNode for the property
      *
      * @param property
      * @return
@@ -100,7 +100,6 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
         node.setAttribute("label", property.name);
 
         ComponentBuilder<UIField> builder = ComponentBuilderFactory.getInstance().getBuilder("input", UIField.class);
-
 
         UIField field = builder.build(node);
         node.setElement(field);
@@ -164,8 +163,6 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
     private ConfigNode<Validator> createValidatorNode(String type) {
         ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
         validatorNode.setAttribute("type", type);
-
-
         return validatorNode;
     }
 }

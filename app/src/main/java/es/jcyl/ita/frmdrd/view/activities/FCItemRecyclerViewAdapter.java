@@ -41,8 +41,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(holder.mItem.getId());
         holder.mContentView.setText(holder.mItem.getName());
-        //holder.mItem.count() : can't call this until the config has been read
-        holder.numEntities.setText(0 + " entities");
+        holder.numEntities.setText(holder.mItem.count() + " entities");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

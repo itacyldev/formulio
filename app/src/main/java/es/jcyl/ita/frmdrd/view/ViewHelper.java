@@ -20,19 +20,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.viewpager2.widget.ViewPager2;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
+import es.jcyl.ita.frmdrd.ui.components.tab.TabFragment;
+import es.jcyl.ita.frmdrd.ui.components.tab.ViewPagerAdapter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -73,7 +74,7 @@ public class ViewHelper {
      * @param text
      * @return
      */
-    public static Set<View> findViewsContainingText(@NonNull View rootView, @NonNull String text){
+    public static Set<View> findViewsContainingText(@NonNull View rootView, @NonNull String text) {
         Set<View> viewSet = new HashSet<>();
         ArrayList<View> viewList = new ArrayList<>();
         rootView.findViewsWithText(viewList, text, View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
@@ -85,11 +86,11 @@ public class ViewHelper {
     }
 
     public static <T> Set<T> findViewsContainingText(@NonNull View rootView, @NonNull String text,
-                                                    @NonNull Class<T> clazz){
+                                                     @NonNull Class<T> clazz) {
         Set<T> viewSet = new HashSet<>();
         for (View view : findViewsContainingText(rootView, text)) {
             if (view.getClass().getName().equals(clazz.getName())) {
-                viewSet.add((T)view);
+                viewSet.add((T) view);
             }
         }
         return viewSet;
@@ -101,7 +102,7 @@ public class ViewHelper {
      * @param rootView
      * @return
      */
-    public static Set<String> getTags(@NonNull  View rootView) {
+    public static Set<String> getTags(@NonNull View rootView) {
         Set<String> tags = new HashSet<>();
 
         for (View view : getViewList(rootView)) {
@@ -136,18 +137,40 @@ public class ViewHelper {
         }
     }
 
-    public static View findLabelView(View rootView, String componentId){
+    public static View findLabelView(View rootView, String componentId) {
         return rootView.findViewWithTag("label_" + componentId);
     }
 
-    public static View findLabelView(View rootView, UIComponent component){
+    public static View findLabelView(View rootView, UIComponent component) {
         return rootView.findViewWithTag("label_" + component.getId());
     }
 
     public static View findComponentView(View rootView, String formId, String componentId) {
         // same name rule followed by FileRenderer to tag the BaseView of
         // the InputFileView: formId:elementId
-        return rootView.findViewWithTag(formId + ":" + componentId);
+        View view = rootView.findViewWithTag(formId + ":" + componentId);
+
+        if (view == null) {
+            if (rootView instanceof ViewPager2) {
+                ViewPagerAdapter adapter = (ViewPagerAdapter) ((ViewPager2) rootView).getAdapter();
+                for (TabFragment fragment : adapter.getTabFragments()) {
+                    view = findComponentView(fragment.getTabView(), formId, componentId);
+                    if (view != null) {
+                        break;
+                    }
+                }
+            } else if (rootView instanceof ViewGroup) {
+                ViewGroup group = (ViewGroup) rootView;
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    View child = group.getChildAt(i);
+                    view = findComponentView(child, formId, componentId);
+                    if (view != null) {
+                        break;
+                    }
+                }
+            }
+        }
+        return view;
     }
 
     public static View findComponentView(View rootView, UIComponent component) {

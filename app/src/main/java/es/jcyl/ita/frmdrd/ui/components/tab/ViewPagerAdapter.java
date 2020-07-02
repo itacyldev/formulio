@@ -56,5 +56,9 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         fragment.setTabView(view);
         this.notifyDataSetChanged();
     }
+
+    public List<TabFragment> getTabFragments() {
+        return tabFragments;
+    }
 }
 

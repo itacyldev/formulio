@@ -148,7 +148,9 @@ public class XmlConfigFileReader {
             // number elements with of current tag
             String tag = node.getName();
             Set<String> tags = this.resolver.getIdsForTag(tag);
-            node.setId(tag + tags.size() + 1); // table1, table2, table3,..
+            String id = tag + (tags.size() + 1);
+            node.setId(id); // table1, table2, table3,..
+            this.resolver.addComponentId(id, tag);
         }
     }
 
