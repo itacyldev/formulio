@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ImageView64Converter extends AbstractViewValueConverter<String> {
+public class ImageView64Converter extends AbstractImageViewValueConverter<String> {
 
     @Override
     protected boolean isMissingOrErrorImage(String value) {

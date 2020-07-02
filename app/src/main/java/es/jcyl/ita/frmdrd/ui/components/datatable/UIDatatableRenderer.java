@@ -31,7 +31,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class DatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable> {
+public class UIDatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable> {
 
     private final static float ROW_HEIGHT_DP = 38.75f;
 

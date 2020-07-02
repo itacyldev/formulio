@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteRenderer;
-import es.jcyl.ita.frmdrd.ui.components.datatable.DatatableRenderer;
+import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatableRenderer;
 import es.jcyl.ita.frmdrd.ui.components.form.UIFormRenderer;
 import es.jcyl.ita.frmdrd.ui.components.image.UIImageRenderer;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.CheckBoxFieldRenderer;
@@ -47,7 +47,7 @@ public class RendererFactory {
         renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("date", new DateFieldRenderer());
         renderInstances.put("switcher", new CheckBoxFieldRenderer());
-        renderInstances.put("datatable", new DatatableRenderer());
+        renderInstances.put("datatable", new UIDatatableRenderer());
         renderInstances.put("link", new UILinkRenderer());
         renderInstances.put("select", new SelectRenderer());
         renderInstances.put("autocomplete", new AutoCompleteRenderer());

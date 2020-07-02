@@ -44,16 +44,15 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
     @Override
     protected InputFieldView createBaseView(RenderingEnv env, C component) {
         ViewGroup baseView = ViewHelper.inflate(env.getViewContext(),
-                getComponentLayout(), LinearLayout.class);
+                getComponentLayoutId(), LinearLayout.class);
 
         baseView.setId(RandomUtils.nextInt());
         return createInputFieldView(env.getViewContext(), baseView, component);
     }
 
-
     protected InputFieldView createInputFieldView(Context viewContext, View baseView, C component) {
         InputFieldView fieldView = (InputFieldView) View.inflate(viewContext,
-                R.layout.input_field_view, null);
+                getInputFieldViewId(), null);
 
         fieldView.setComponent(component);
         fieldView.setConverter(component.getConverter());
@@ -65,6 +64,10 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
         fieldView.setFieldId(component.getId());
 
         return fieldView;
+    }
+
+    private int getInputFieldViewId() {
+        return R.layout.input_field_view;
     }
 
     @Override
@@ -80,11 +83,11 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
         composeView(env, baseView, component);
 
         // set value and error messages
-        setValue(env, baseView, component, inputView);
+        setValue(env, baseView, inputView, component);
         setMessages(env, baseView, component);
     }
 
-    protected void setValue(RenderingEnv env, InputFieldView baseView, C component, I inputView) {
+    protected void setValue(RenderingEnv env, InputFieldView<I> baseView, I inputView, C component) {
         String value = getValue(component, env, String.class);
         baseView.getConverter().setViewValue(inputView, value);
     }
@@ -110,7 +113,7 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
 
     protected void setupLabel(RenderingEnv env, TextView labelView, C component) {
         labelView.setTag("label_" + component.getId());
-        String labelComponent = (component.isMandatory())?
+        String labelComponent = (component.isMandatory()) ?
                 "* " + component.getLabel()
                 : component.getLabel();
         labelView.setText(labelComponent);
@@ -128,7 +131,7 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
     /** Extension points **/
     /************************************/
 
-    protected abstract int getComponentLayout();
+    protected abstract int getComponentLayoutId();
 
     protected abstract void setMessages(RenderingEnv env, InputFieldView<I> baseView, C component);
 

@@ -59,10 +59,16 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
         return IMAGE;
     }
 
+    /**
+     * Returns the key that references the viewvalueConverter set in the component. By default,
+     * the component uses a ImageViewUrlConverter.
+     *
+     * @return
+     */
     @Override
     public String getValueConverter() {
         String converter = super.getValueConverter();
-        return (converter == null) ? "image" : converter;
+        return (converter == null) ? "urlImage" : converter;
     }
 
     /******* Filterable component interface **/
