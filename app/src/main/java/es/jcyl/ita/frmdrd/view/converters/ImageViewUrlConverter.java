@@ -27,7 +27,7 @@ import es.jcyl.ita.frmdrd.config.DevConsole;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ImageViewUrlConverter extends AbstractViewValueConverter<String> {
+public class ImageViewUrlConverter extends AbstractImageViewValueConverter<String> {
 
     @Override
     protected boolean isMissingOrErrorImage(String path) {

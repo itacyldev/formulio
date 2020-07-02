@@ -50,7 +50,7 @@ public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
     }
 
     @Override
-    protected int getComponentLayout() {
+    protected int getComponentLayoutId() {
         return R.layout.component_textfield;
     }
 

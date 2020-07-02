@@ -45,7 +45,7 @@ import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 public class DateFieldRenderer extends InputRenderer<Button, UIField> {
 
     @Override
-    protected int getComponentLayout() {
+    protected int getComponentLayoutId() {
         return R.layout.component_date;
     }
 

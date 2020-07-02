@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.frmdrd.ui.components.media;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,18 +15,36 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.ui.components.image.UIImage;
+import java.io.File;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public class MediaResource {
+    File location;
+    byte[] content;
 
-public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
-    public UIImageBuilder(String tagName) {
-        super(tagName, UIImage.class);
+    MediaResource(File f, byte[] content) {
+        this.location = f;
+        this.content = content;
     }
 
-    // TODO: delete this class and use default builder
+    public File getLocation() {
+        return location;
+    }
 
+    public byte[] getContent() {
+        return content;
+    }
+
+    public static MediaResource fromFile(File f) {
+        if (!f.exists()) {
+            throw new IllegalArgumentException("The file doesn't exists!: " + f.getAbsolutePath());
+        }
+        return new MediaResource(f, null);
+    }
+
+    public static MediaResource fromByteArray(byte[] data) {
+        return new MediaResource(null, data);
+    }
 }

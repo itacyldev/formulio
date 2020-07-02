@@ -39,7 +39,7 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
     private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
 
     @Override
-    protected int getComponentLayout() {
+    protected int getComponentLayoutId() {
         return R.layout.component_select;
     }
 

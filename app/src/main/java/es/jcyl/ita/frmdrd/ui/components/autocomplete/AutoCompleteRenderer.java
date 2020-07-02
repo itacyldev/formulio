@@ -37,7 +37,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAutoComplete> {
 
     @Override
-    protected int getComponentLayout() {
+    protected int getComponentLayoutId() {
         return R.layout.component_autocomplete;
     }
 

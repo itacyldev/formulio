@@ -17,30 +17,44 @@ package es.jcyl.ita.frmdrd.view.converters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.ImageView;
 
 import java.io.IOException;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.DevConsole;
+import es.jcyl.ita.frmdrd.ui.components.image.ImageResourceView;
+import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
+import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public abstract class AbstractViewValueConverter<T> implements ViewValueConverter<ImageView> {
+public abstract class AbstractImageViewValueConverter<T> implements ViewValueConverter<ImageResourceView> {
     @Override
-    public String getValueFromViewAsString(ImageView view) {
+    public String getValueFromViewAsString(ImageResourceView view) {
         return null;
+
     }
 
     @Override
-    public <C> C getValueFromView(ImageView view, Class<C> expectedType) {
-        return null;
+    public <C> C getValueFromView(ImageResourceView view, Class<C> expectedType) {
+        if (view.isEmpty()) {
+            return null;
+        } else {
+            MediaResource resource = view.getResource();
+            try {
+                return (C) readObjectFromImageResource(resource);
+            }catch(Exception e) {
+                throw new ViewConfigException(DevConsole.error("An error occurred while trying to read image from view." +resource.toString() ,e))
+            }
+        }
+
     }
 
+
     @Override
-    public void setViewValue(ImageView view, Object value) {
+    public void setViewValue(ImageResourceView view, Object value) {
         if (value == null) {
             return;
         }
@@ -67,7 +81,7 @@ public abstract class AbstractViewValueConverter<T> implements ViewValueConverte
     }
 
     @Override
-    public void setViewValueAsString(ImageView view, String value) {
+    public void setViewValueAsString(ImageResourceView view, String value) {
 
     }
 
@@ -76,5 +90,7 @@ public abstract class AbstractViewValueConverter<T> implements ViewValueConverte
     protected abstract boolean isMissingOrErrorImage(T value);
 
     protected abstract byte[] readImageBytesFromObject(T value) throws IOException;
+
+    protected abstract T readObjectFromImageResource(MediaResource resource) throws IOException;
 
 }

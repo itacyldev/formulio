@@ -24,7 +24,7 @@ import es.jcyl.ita.crtrepo.meta.types.ByteArray;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ImageViewByteArrayConverter extends AbstractViewValueConverter<ByteArray> {
+public class ImageViewByteArrayConverter extends AbstractImageViewValueConverter<ByteArray> {
 
     @Override
     protected boolean isMissingOrErrorImage(ByteArray bArray) {

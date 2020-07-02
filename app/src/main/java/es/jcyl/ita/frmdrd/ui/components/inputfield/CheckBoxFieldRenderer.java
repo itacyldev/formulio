@@ -48,7 +48,7 @@ public class CheckBoxFieldRenderer extends InputRenderer<Switch, UIField> {
     }
 
     @Override
-    protected int getComponentLayout() {
+    protected int getComponentLayoutId() {
         return R.layout.component_checkbox;
     }
 
