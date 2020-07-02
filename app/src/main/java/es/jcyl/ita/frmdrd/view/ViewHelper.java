@@ -151,6 +151,8 @@ public class ViewHelper {
         View view = rootView.findViewWithTag(formId + ":" + componentId);
 
         if (view == null) {
+            //if rootView is an object of type ViewPager2,
+            // must search in all fragments of the ViewPager2's adapter
             if (rootView instanceof ViewPager2) {
                 ViewPagerAdapter adapter = (ViewPagerAdapter) ((ViewPager2) rootView).getAdapter();
                 for (TabFragment fragment : adapter.getTabFragments()) {
