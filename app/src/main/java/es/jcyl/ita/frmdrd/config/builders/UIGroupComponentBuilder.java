@@ -91,9 +91,6 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
      * @return
      */
     private ConfigNode createNode(PropertyType property) {
-        ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-
-
         ConfigNode node = new ConfigNode("input");
         node.setId(property.name);
         node.setAttribute("type", getType(property).toString());

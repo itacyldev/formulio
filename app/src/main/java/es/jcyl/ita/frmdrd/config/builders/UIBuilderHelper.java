@@ -228,7 +228,13 @@ public class UIBuilderHelper {
         List<ConfigNode> children = root.getChildren();
         if (children != null) {
             for (ConfigNode child : children) {
-                if (child.getId().equals(propertyName)) {
+                String value = child.getAttribute("value");
+                if (value != null) {
+                    if (value.equals("${entity." + propertyName + "}")) {
+                        isIncluded = true;
+                        break;
+                    }
+                } else if (child.getId().equals(propertyName)) {
                     isIncluded = true;
                     break;
                 }
