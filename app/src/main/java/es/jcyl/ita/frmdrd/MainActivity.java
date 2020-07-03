@@ -2,6 +2,7 @@ package es.jcyl.ita.frmdrd;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,13 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.mini2Dx.collections.CollectionUtils;
@@ -27,8 +21,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.config.Config;
+import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.project.Project;
 import es.jcyl.ita.frmdrd.project.ProjectRepository;
@@ -49,7 +50,17 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         getApplication().getFilesDir();
         setContentView(R.layout.activity_main);
         checkPermissions();
+        checkDeviceFeatures();
 
+    }
+
+    private void checkDeviceFeatures() {
+        Context context = getApplicationContext();
+        /** Check if this device has a camera */
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            // TODO: complete
+            DevConsole.error("Camera not available in this device.");
+        }
     }
 
     @Override
@@ -142,16 +153,19 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected void checkPermissions() {
         List<String> permsList = new ArrayList<>();
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            permsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        String[] permissions = new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+        };
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this,
+                    permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permsList.add(permission);
+            }
         }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            permsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
+
 
         if (permsList.size() > 0) {
             ActivityCompat.requestPermissions(this, permsList
@@ -200,6 +214,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_REQUEST: {
                 if (grantResults.length > 0) {

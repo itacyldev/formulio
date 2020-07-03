@@ -19,6 +19,7 @@ package es.jcyl.ita.frmdrd.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -59,6 +60,7 @@ public class RenderingEnv {
     private ViewUserActionInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private View viewRoot;
+    private Activity activity;
     /**
      * User text typing delay controls
      */
@@ -184,5 +186,12 @@ public class RenderingEnv {
         this.inputTypingDelay = inputTypingDelay;
     }
 
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
 }
 
