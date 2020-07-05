@@ -93,7 +93,8 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
     implementation 'org.jgrapht:jgrapht-core:1.1.0'
-
+    implementation "androidx.activity:activity:1.2.0-alpha06"
+    implementation "androidx.fragment:fragment:1.3.0-alpha06"
 
     // Core library
     implementation 'androidx.navigation:navigation-fragment:2.2.2'

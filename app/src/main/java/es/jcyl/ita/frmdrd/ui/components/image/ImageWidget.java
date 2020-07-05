@@ -15,59 +15,39 @@ package es.jcyl.ita.frmdrd.ui.components.image;
  * limitations under the License.
  */
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
-import es.jcyl.ita.crtrepo.query.Criteria;
-import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.crtrepo.query.Sort;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.PermissionChecker;
+import androidx.fragment.app.FragmentManager;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.context.ContextUtils;
-import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
-import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
-import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
-import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
-import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
-import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
-import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
-import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
-import es.jcyl.ita.frmdrd.ui.components.column.UIColumnFilter;
-import es.jcyl.ita.frmdrd.ui.components.datatable.ListEntityAdapter;
-import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
-import es.jcyl.ita.frmdrd.util.DataUtils;
-import es.jcyl.ita.frmdrd.view.converters.TextViewConverter;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class ImageWidget extends LinearLayout  {
+public class ImageWidget extends LinearLayout {
+    private static final int CAMERA_REQUEST = 1888;
+    private ImageResourceView imageView;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    private Activity activity;
+    private FragmentManager fragManager;
 
+    private Context context;
 
     public ImageWidget(Context context) {
         super(context);
@@ -81,5 +61,34 @@ public class ImageWidget extends LinearLayout  {
         super(context, attrs, defStyle);
     }
 
+    private void setup() {
+        Button cameraButton = this.findViewById(R.id.btn_camera);
+
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
+
+//
+//
+//    class TakePicture extends ActivityResultContract<Void, Bitmap> {
+//
+//        @NonNull
+//        @Override
+//        public Intent createIntent(@NonNull Context context, Void input) {
+//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//            return cameraIntent;
+//        }
+//
+//        @Nullable
+//        @Override
+//        public Bitmap parseResult(int resultCode, @Nullable Intent intent) {
+//            if (resultCode != Activity.RESULT_OK) return null;
+//            if (intent == null) return null;
+//            return intent.getParcelableExtra("data");
+//        }
+//    }
 
 }

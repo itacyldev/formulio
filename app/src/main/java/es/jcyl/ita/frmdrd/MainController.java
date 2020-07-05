@@ -166,6 +166,7 @@ public class MainController {
         // set the View elements to controllers
         this.router.registerActivity(formActivity.getActivity());
         this.formController.setContentView(formActivity.getContentView());
+        this.renderingEnv.setActivity(formActivity.getActivity());
     }
 
     /*********************************************/
