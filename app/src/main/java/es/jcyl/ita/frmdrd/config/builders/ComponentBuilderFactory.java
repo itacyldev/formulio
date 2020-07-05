@@ -72,7 +72,7 @@ public class ComponentBuilderFactory {
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
-        registerBuilder("column", newDefaultBuilder(UIColumn.class, "column"));
+        registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
