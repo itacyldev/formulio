@@ -24,11 +24,17 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
+import es.jcyl.ita.crtrepo.db.meta.DBPropertyType;
+import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumnFilter;
+import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
 
@@ -54,33 +60,76 @@ public class UIColumnBuilderTest {
 
     @Test
     public void testBasicColumn() throws Exception {
-        String xml = XmlConfigUtils.createEditForm(XML_TEST_BASIC);
+        String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIColumn> columns = UIComponentHelper.findByClass(formConfig.getList().getView(), UIColumn.class);
-        Assert.assertNotNull(columns);
+        List<UIDatatable> datatables =
+                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                        UIDatatable.class);
+        UIDatatable datatable = datatables.get(0);
+        UIColumn[] columns = datatable.getColumns();
 
-        // repo must be set with parent value "contacts"
-        UIColumn column = columns.get(0);
+        Assert.assertNotNull(columns);
+        Assert.assertEquals(1, columns.length);
+        UIColumn column = columns[0];
         Assert.assertNotNull(column.getId());
     }
 
-    private static final String XML_TEST_REPO = "<column id=\"mycolumn\" />";
+    private static final String XML_TEST_COLUMN_WITH_ATTS = "<datatable>" +
+            "  <column filtering=\"true\" ordering=\"true\"/>" +
+            "</datatable>";
 
     @Test
-    public void testColumnAttributes() throws Exception {
-        RepositoryUtils.registerMock("contacts2");
-
-        String xml = XmlConfigUtils.createMainList(XML_TEST_REPO);
+    public void setXmlTestColumnWithAtts() throws Exception {
+        String xml = XmlConfigUtils.createMainList(XML_TEST_COLUMN_WITH_ATTS);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIColumn> columns = UIComponentHelper.findByClass(formConfig.getList().getView(), UIColumn.class);
+        List<UIDatatable> datatables =
+                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                        UIDatatable.class);
+        UIDatatable datatable = datatables.get(0);
+        UIColumn[] columns = datatable.getColumns();
 
-        // repo must be set with parent value "contacts"
-        UIColumn column = columns.get(0);
-        Assert.assertEquals("mycolumn", column.getId());
+        Assert.assertNotNull(columns);
+        Assert.assertEquals(1, columns.length);
+        UIColumn column = columns[0];
+        Assert.assertNotNull(column.getId());
+        Assert.assertEquals(true, column.isFiltering());
+        Assert.assertEquals(true, column.isOrdering());
     }
 
+    private static final String XML_TEST_COLUMN_WITH_FILTER = "<form repo=\"otherRepo\">" +
+            "  <datatable>" +
+            "    <column id=\"col1\">" +
+            "      <filter property=\"prop1\" matching=\"eq\" valueExpression=\"${this.col1.substring(0,1)}\"/>" +
+            "    </column>" +
+            "  </datatable>" +
+            "</form>";
+
+    @Test
+    public void setXmlTestColumnWithFilter() {
+        EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+        EntityMeta<DBPropertyType> meta = metaBuilder.withNumProps(0)
+                .addProperties(new String[]{"prop1", "prop2"},
+                        new Class[]{String.class, String.class, String.class})
+                .build();
+        Repository otherRepo = RepositoryUtils.registerMock("otherRepo", meta);
+
+
+        String xml = XmlConfigUtils.createMainList(XML_TEST_COLUMN_WITH_FILTER);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UIDatatable> datatables =
+                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                        UIDatatable.class);
+        UIDatatable datatable = datatables.get(0);
+        UIColumn[] columns = datatable.getColumns();
+
+        Assert.assertEquals(1, columns.length);
+        UIColumn column = columns[0];
+        Assert.assertNotNull(column.getId());
+        UIColumnFilter filter = column.getHeaderFilter();
+    }
 
     @AfterClass
     public static void tearDown() {

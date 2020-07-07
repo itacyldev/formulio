@@ -78,7 +78,7 @@ public class UITabBuilderTest {
         EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
         EntityMeta<DBPropertyType> meta = metaBuilder.withNumProps(0)
                 .addProperties(new String[]{"prop1", "prop2"},
-                        new Class[]{String.class, String.class, String.class, String.class, String.class})
+                        new Class[]{String.class, String.class})
                 .build();
         Repository otherRepo = RepositoryUtils.registerMock("otherRepo", meta);
 
