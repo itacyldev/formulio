@@ -129,12 +129,50 @@ public class UIColumnBuilderTest {
         UIColumn column = columns[0];
         Assert.assertNotNull(column.getId());
         UIColumnFilter filter = column.getHeaderFilter();
+        Assert.assertEquals("prop1", filter.getFilterProperty());
+        Assert.assertEquals("EQ", filter.getMatchingOperator().toString());
+        Assert.assertEquals("${this.col1.substring(0,1)}", filter.getFilterValueExpression().getExpression().asString());
+
     }
+
+    private static final String XML_TEST_COLUMN_WITH_ORDERING = "<form repo=\"otherRepo\">" +
+            "  <datatable>" +
+            "    <column id=\"col1\">" +
+            "      <order property=\"prop1\"/>" +
+            "    </column>" +
+            "  </datatable>" +
+            "</form>";
+
+    @Test
+    public void setXmlTestColumnWithOrdering() {
+        EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+        EntityMeta<DBPropertyType> meta = metaBuilder.withNumProps(0)
+                .addProperties(new String[]{"prop1", "prop2"},
+                        new Class[]{String.class, String.class, String.class})
+                .build();
+        Repository otherRepo = RepositoryUtils.registerMock("otherRepo", meta);
+
+
+        String xml = XmlConfigUtils.createMainList(XML_TEST_COLUMN_WITH_ORDERING);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UIDatatable> datatables =
+                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                        UIDatatable.class);
+        UIDatatable datatable = datatables.get(0);
+        UIColumn[] columns = datatable.getColumns();
+
+        Assert.assertEquals(1, columns.length);
+        UIColumn column = columns[0];
+        Assert.assertNotNull(column.getId());
+        UIColumnFilter filter = column.getHeaderFilter();
+        Assert.assertEquals("prop1", filter.getOrderProperty());
+    }
+
 
     @AfterClass
     public static void tearDown() {
         RepositoryUtils.unregisterMock("contacts");
-        RepositoryUtils.unregisterMock("contacts2");
     }
 
 }

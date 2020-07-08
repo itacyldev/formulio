@@ -17,6 +17,7 @@ package es.jcyl.ita.frmdrd.ui.components.column;
  */
 
 import es.jcyl.ita.crtrepo.query.Operator;
+import es.jcyl.ita.crtrepo.query.Sort;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

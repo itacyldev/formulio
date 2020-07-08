@@ -38,16 +38,28 @@ public class UIColumnBuilder extends BaseUIComponentBuilder<UIColumn> {
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UIColumn> node) {
         if (node.hasChildren()) {
-            UIColumnFilter filter = createHeaderFilter(node.getChildren().get(0));
-            node.getElement().setHeaderFilter(filter);
+            for (ConfigNode child : node.getChildren()) {
+                String name = child.getName();
+                UIColumnFilter filter = new UIColumnFilter();
+                if (name.equals("filter")) {
+                    addHeaderFilter(child, filter);
+
+                } else if (name.equals("order")) {
+                    String property = child.getAttribute("property");
+                    filter.setOrderProperty(property);
+                }
+                node.getElement().setHeaderFilter(filter);
+            }
+
         }
     }
 
     /**
+     * Adds values for the column filter
+     *
      * @param filterNode
-     * @return
      */
-    private UIColumnFilter createHeaderFilter(ConfigNode filterNode) {
+    private void addHeaderFilter(ConfigNode filterNode, UIColumnFilter filter) {
         String property = filterNode.getAttribute("property");
 
         String matching = filterNode.getAttribute("matching");
@@ -57,11 +69,9 @@ public class UIColumnBuilder extends BaseUIComponentBuilder<UIColumn> {
         ValueExpressionFactory fact = ValueExpressionFactory.getInstance();
         ValueBindingExpression valueExpression = fact.create(valueExpressionStr);
 
-        UIColumnFilter filter = new UIColumnFilter();
         filter.setFilterProperty(property);
         filter.setFilterValueExpression(valueExpression);
         filter.setMatchingOperator(op);
-        
-        return filter;
     }
 }
+
