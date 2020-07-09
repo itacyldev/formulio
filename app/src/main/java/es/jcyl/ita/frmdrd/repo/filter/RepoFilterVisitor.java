@@ -26,6 +26,8 @@ import es.jcyl.ita.crtrepo.query.Expression;
 import es.jcyl.ita.crtrepo.query.Operator;
 import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 
 /**
@@ -62,9 +64,11 @@ public class RepoFilterVisitor {
 
                 Condition condition = null;
 
-                if (value.startsWith("$")) { //TODO:
+                if (value.startsWith("$")) {
                     // Jexl Expression
                     condition = new ConditionBinding(property, operator, value);
+                    ValueBindingExpression valueExpression = ValueExpressionFactory.getInstance().create(value);
+                    ((ConditionBinding) condition).setBindingExpression(valueExpression);
                 } else {
                     condition = new Condition(property, operator, value);
                 }
