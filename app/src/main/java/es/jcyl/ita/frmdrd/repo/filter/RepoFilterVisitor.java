@@ -61,6 +61,10 @@ public class RepoFilterVisitor {
                 Operator operator = Operator.valueOf(node.getName().toUpperCase());
                 String property = node.getAttribute("property");
                 String value = node.getAttribute("value");
+                boolean isMandatory = false;
+                if ("true".equalsIgnoreCase(node.getAttribute("mandatory"))) {
+                    isMandatory = true;
+                }
 
                 Condition condition = null;
 
@@ -69,17 +73,18 @@ public class RepoFilterVisitor {
                     condition = new ConditionBinding(property, operator, value);
                     ValueBindingExpression valueExpression = ValueExpressionFactory.getInstance().create(value);
                     ((ConditionBinding) condition).setBindingExpression(valueExpression);
+                    if (isMandatory) {
+                        for (String variable : valueExpression.getDependingVariables()) {
+                            mandatoryFields.add(variable);
+                        }
+                    }
                 } else {
                     condition = new Condition(property, operator, value);
-                }
-
-                // add mandatory fields
-                if (node.getAttributes().containsKey("mandatory")) {
-                    String isMandatory = node.getAttribute("mandatory");
-                    if ("true".equalsIgnoreCase(isMandatory)) {
-                        mandatoryFields.add(property);
+                    if (isMandatory) {
+                        mandatoryFields.add(value);
                     }
                 }
+
 
                 return condition;
             } else {

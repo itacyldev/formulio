@@ -25,6 +25,8 @@ public interface FilterableComponent {
 
     void setRepo(Repository repo);
 
+    Repository getRepo();
+
     void setFilter(Filter filter);
 
     Filter getFilter();

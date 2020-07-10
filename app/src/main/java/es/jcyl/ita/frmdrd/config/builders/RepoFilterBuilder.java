@@ -18,12 +18,12 @@ package es.jcyl.ita.frmdrd.config.builders;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.query.BaseFilter;
 import es.jcyl.ita.crtrepo.query.Criteria;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.repo.filter.RepoFilterVisitor;
+import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
 import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 
 /**
@@ -47,36 +47,22 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoFilter> node) {
-        RepoFilter repofilter = node.getElement();
+        ConfigNode<FilterableComponent> parent = node.getParent();
+        FilterableComponent parentComponent = parent.getElement();
 
         RepoFilterVisitor visitor = new RepoFilterVisitor();
         List<String> mandatoryFields = new ArrayList<>();
         Criteria criteria = (Criteria) visitor.visit(node, mandatoryFields);
 
-        Filter filter = new BaseFilter();
+
+        Filter filter = FilterHelper.createInstance(parentComponent.getRepo());
+
         filter.setExpression(criteria);
-        repofilter.setFilter(filter);
+
+        parentComponent.setFilter(filter);
 
         if (mandatoryFields.size() > 0) {
-            repofilter.setMandatoryFields(mandatoryFields.toArray(new String[mandatoryFields.size()]));
+            parentComponent.setMandatoryFilters(mandatoryFields.toArray(new String[mandatoryFields.size()]));
         }
-
-        setupParentRepoFilter(node);
-    }
-
-
-    /**
-     * Set filter and mandatory fields on repofilter's parent component
-     *
-     * @param node
-     */
-    private void setupParentRepoFilter(ConfigNode<RepoFilter> node) {
-        RepoFilter repoFilter = node.getElement();
-
-        ConfigNode<FilterableComponent> parent = node.getParent();
-        FilterableComponent parentComponent = parent.getElement();
-
-        parentComponent.setFilter(repoFilter.getFilter());
-        parentComponent.setMandatoryFilters(repoFilter.getMandatoryFields());
     }
 }

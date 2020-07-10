@@ -28,7 +28,6 @@ import java.util.Map;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
@@ -194,20 +193,14 @@ public class ViewRenderHelper {
                     env.setFormContext(component.getParentForm().getContext());
                 }
 
-                if (view instanceof InputFieldView) {
-                    View inputView = ((InputFieldView) view).getInputView();
-                    if (inputView instanceof DynamicComponent) {
-                        ((DynamicComponent) inputView).load(env);
-                    } else {
-                        // re-render and replace view
-                        View newView = this.render(env, node.getComponent(), false);
-                        replaceView(view, newView);
-                    }
+                if (view instanceof DynamicComponent) {
+                    ((DynamicComponent) view).load(env);
                 } else {
                     // re-render and replace view
                     View newView = this.render(env, node.getComponent(), false);
                     replaceView(view, newView);
                 }
+
             }
         }
     }

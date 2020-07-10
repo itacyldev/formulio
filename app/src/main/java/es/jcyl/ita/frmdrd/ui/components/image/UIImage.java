@@ -78,6 +78,11 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
     }
 
     @Override
+    public Repository getRepo() {
+        return this.repo;
+    }
+
+    @Override
     public void setFilter(Filter filter) {
         this.filter = filter;
     }
