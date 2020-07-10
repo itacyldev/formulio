@@ -34,7 +34,6 @@ import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.view.dag.DAGManager;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -125,9 +124,6 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
         node.getElement().getView().setChildren(uiComponents);
         node.getElement().getView().setRoot(node.getElement().getView());
-
-        //
-        DAGManager.getInstance().generateDags(node.getElement().getView());
 
         setUpActions(node);
         setUpForms(node);
