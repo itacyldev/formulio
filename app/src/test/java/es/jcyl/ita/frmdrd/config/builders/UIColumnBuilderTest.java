@@ -59,6 +59,7 @@ public class UIColumnBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         List<UIColumn> columns = UIComponentHelper.findByClass(formConfig.getList().getView(), UIColumn.class);
         Assert.assertNotNull(columns);
+        Assert.assertTrue(columns.size()==1);
 
         // repo must be set with parent value "contacts"
         UIColumn column = columns.get(0);
@@ -76,6 +77,8 @@ public class UIColumnBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         List<UIColumn> columns = UIComponentHelper.findByClass(formConfig.getList().getView(), UIColumn.class);
 
+        Assert.assertNotNull(columns);
+        Assert.assertTrue(columns.size()==1);
         // repo must be set with parent value "contacts"
         UIColumn column = columns.get(0);
         Assert.assertEquals("mycolumn", column.getId());

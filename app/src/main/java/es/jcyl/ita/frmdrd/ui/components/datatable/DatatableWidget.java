@@ -31,13 +31,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.CompositeContext;
@@ -59,18 +58,20 @@ import es.jcyl.ita.frmdrd.ui.components.column.UIColumnFilter;
 import es.jcyl.ita.frmdrd.util.DataUtils;
 import es.jcyl.ita.frmdrd.view.converters.TextViewConverter;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class DatatableLayout extends LinearLayout implements DynamicComponent, EntitySelector {
+public class DatatableWidget extends Widget<UIDatatable>
+        implements DynamicComponent, EntitySelector {
+
     private final String HEADER_FILTER_SUFIX = "_header_filter";
     private final String HEADER_ORDER_SUFIX = "header_order";
 
     private int offset = 0;
     private int pageSize = 20;
-    private UIDatatable dataTable;
     private Repository repo;
     private RenderingEnv renderingEnv;
     private List<Entity> entities = new ArrayList<>();
@@ -85,18 +86,23 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
     private LinearLayout headerView;
     private ListView bodyView;
 
-    public DatatableLayout(Context context) {
+    public DatatableWidget(Context context) {
         super(context);
     }
 
-    public DatatableLayout(Context context, AttributeSet attrs) {
+    public DatatableWidget(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public DatatableLayout(Context context, AttributeSet attrs, int defStyle) {
+    public DatatableWidget(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
+    @Override
+    public void setup(RenderingEnv env) {
+        super.setup(env);
+        this.repo = component.getRepo();
+    }
 
     public void setBodyView(ListView bodyView) {
         this.bodyView = bodyView;
@@ -144,7 +150,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         this.entities.clear();
 
         CompositeContext ctx = setupThisContext(env);
-        this.filter = setupFilter(ctx, this.getDatatable().getFilter());
+        this.filter = setupFilter(ctx, this.getComponent().getFilter());
         // read first page to render data
         loadNextPage();
     }
@@ -312,13 +318,12 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
      */
     private void resetFilter() {
         sort = null;
-        for (UIColumn column : this.getDatatable().getColumns()) {
+        for (UIColumn column : this.getComponent().getColumns()) {
             EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
             if (StringUtils.isNotEmpty(filterText.getText().toString())) {
                 filterText.setText("");
             }
         }
-
         disableOrderImages(null);
     }
 
@@ -332,7 +337,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
                 .getDrawable(getContext(), R.drawable.
                         order_arrow_noorder);
 
-        for (UIColumn column : this.getDatatable().getColumns()) {
+        for (UIColumn column : this.getComponent().getColumns()) {
             if (!column.getId().equals(columnid)) {
                 ImageView orderImageView = this.findViewWithTag(column.getId() + HEADER_ORDER_SUFIX);
                 if (orderImageView != null) {
@@ -359,9 +364,9 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
      * Updates the filter with the content of the headers of each column of the table
      */
     private void updateFilter() {
-        ConditionBinding[] conditions = new ConditionBinding[this.getDatatable().getColumns().length];
+        ConditionBinding[] conditions = new ConditionBinding[this.getComponent().getColumns().length];
         int i = 0;
-        for (UIColumn c : this.getDatatable().getColumns()) {
+        for (UIColumn c : this.getComponent().getColumns()) {
             String headerTextValue = thisViewCtx.getString(c.getId());
             if (StringUtils.isNotEmpty(headerTextValue)) {
                 conditions[i] = createHeaderCondition(c);
@@ -433,7 +438,7 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         headerView.removeAllViews();
 
         int i = 0;
-        for (UIColumn c : this.getDatatable().getColumns()) {
+        for (UIColumn c : this.getComponent().getColumns()) {
             final View dataHeader = createHeaderView(getContext(),
                     headerView, c);
             headerView.addView(dataHeader);
@@ -441,15 +446,6 @@ public class DatatableLayout extends LinearLayout implements DynamicComponent, E
         }
 
         headerView.setVisibility(View.VISIBLE);
-    }
-
-    public UIDatatable getDatatable() {
-        return dataTable;
-    }
-
-    public void setDatatable(UIDatatable dataTable) {
-        this.dataTable = dataTable;
-        this.repo = dataTable.getRepo();
     }
 
     public RenderingEnv getRenderingEnv() {

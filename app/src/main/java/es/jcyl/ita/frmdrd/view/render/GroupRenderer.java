@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -26,10 +27,10 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public interface GroupRenderer<C extends UIComponent> {
 
-    void initGroup(RenderingEnv env, C component, ViewGroup root);
+    void initGroup(RenderingEnv env, Widget<C> root);
 
-    void addViews(RenderingEnv env, C component, ViewGroup root, View[] views);
+    void addViews(RenderingEnv env, Widget<C> root, View[] views);
 
-    void endGroup(RenderingEnv env, C component, ViewGroup root);
+    void endGroup(RenderingEnv env, Widget<C> root);
 
 }

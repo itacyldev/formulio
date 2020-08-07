@@ -17,19 +17,19 @@ package es.jcyl.ita.frmdrd.view.converters;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.test.platform.app.InstrumentationRegistry;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
@@ -38,7 +38,7 @@ import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
@@ -80,16 +80,18 @@ public class AutocompleteStaticViewConverterTest {
 
         UIAutoComplete field = autoBuilder.withRandomData().withOptionValues(options, options).build();
         field.setForceSelection(true);
-        InputFieldView<AutoCompleteView> baseView = (InputFieldView<AutoCompleteView>) renderHelper.render(env, field);
+        InputWidget<UIAutoComplete, AutoCompleteView> widget =
+                (InputWidget<UIAutoComplete, AutoCompleteView>) renderHelper.render(env, field);
 
         AutoCompleteStaticValueConverter conv = new AutoCompleteStaticValueConverter();
         for (int i = 0; i < lstValues.size(); i++) {
-            AutoCompleteView inputView = baseView.getInputView();
+            AutoCompleteView inputView = widget.getInputView();
 
             // transform the value using the converter and check the result against the original value
             String expected = lstValues.get(i);
             conv.setViewValue(inputView, expected);
-            String actual = conv.getValueFromViewAsString(inputView);
+            Object o = conv.getValueFromView(inputView);
+            String actual = (String) ConvertUtils.convert(o, String.class);
             if (StringUtils.isBlank(expected)) {
                 Assert.assertNull(actual); // is value is blank, expected values is null
             } else {

@@ -63,21 +63,21 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     /**
      * Behaviour attributes
      */
-    private DatatableLayout dtLayout;
+    private DatatableWidget dtLayout;
 
 
-    public ListEntityAdapter(final Context context, DatatableLayout datatableLayout,
+    public ListEntityAdapter(final Context context, DatatableWidget datatableLayout,
                              final int textViewResourceId,
                              final List<Entity> entities) {
         super(context, textViewResourceId, entities);
         this.context = context;
         this.dtLayout = datatableLayout;
 
-        this.fieldLimit = datatableLayout.getDatatable().getNumFieldsToShow();
+        this.fieldLimit = datatableLayout.getComponent().getNumFieldsToShow();
         this.cacheViews = new View[RECORDS_CACHE];
         this.inflater = LayoutInflater.from(getContext());
 
-        this.minColWidths = new Integer[dtLayout.getDatatable().getColumns().length];
+        this.minColWidths = new Integer[dtLayout.getComponent().getColumns().length];
         Arrays.fill(minColWidths, 0);
     }
 
@@ -149,9 +149,9 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             public void onClick(final View v) {
                 ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
-                if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getDatatable().getRoute())) {
-                    UserAction action = UserAction.navigate(context, dtLayout.getDatatable(),
-                            dtLayout.getDatatable().getRoute());
+                if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
+                    UserAction action = UserAction.navigate(context, dtLayout.getComponent(),
+                            dtLayout.getComponent().getRoute());
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
                 }
@@ -160,7 +160,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     }
 
     private void setViewsLayout(final ViewColumnHolder holder, Entity entity) {
-        UIColumn[] columns = dtLayout.getDatatable().getColumns();
+        UIColumn[] columns = dtLayout.getComponent().getColumns();
         Object[] values = JexlUtils.bulkEval(entity, columns);
 
         for (int i = 0; i < columns.length && i < holder.viewList.size(); i++) {
@@ -182,7 +182,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         LinearLayout layout = holder.layout;
 
         int index = 0;
-        UIColumn[] columns = dtLayout.getDatatable().getColumns();
+        UIColumn[] columns = dtLayout.getComponent().getColumns();
         for (UIColumn column : columns) {
             // create context for this entity to evaluate expression
             TextView view = createTextView(parent);

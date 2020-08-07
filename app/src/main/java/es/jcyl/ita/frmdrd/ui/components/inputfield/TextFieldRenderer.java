@@ -7,17 +7,15 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.context.FormContextHelper;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.render.InputRenderer;
+import es.jcyl.ita.frmdrd.view.render.InputTextRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
@@ -40,41 +38,28 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class TextFieldRenderer extends InputRenderer<EditText, UIField> {
+public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     @Override
-    protected InputFieldView createBaseView(RenderingEnv env, UIField component) {
-        LinearLayout baseView = ViewHelper.inflate(env.getViewContext(),
-                R.layout.component_textfield, LinearLayout.class);
-        return createInputFieldView(env.getViewContext(), baseView, component);
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_textfield;
     }
 
     @Override
-    protected int getComponentLayoutId() {
-        return R.layout.component_textfield;
-    }
-
-    @Override
-    protected void setMessages(RenderingEnv env, InputFieldView<EditText> baseView, UIField component) {
-        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
-        if (message != null) {
-            baseView.getInputView().setError(message);
-        }
-    }
-
-    @Override
-    protected void composeView(RenderingEnv env, InputFieldView<EditText> baseView, UIField component) {
+    protected void composeInputView(RenderingEnv env, InputWidget<UIField, EditText> widget) {
         // configure input view elements
-        baseView.getInputView().setInputType(component.getInputType());
+        UIField component = widget.getComponent();
+        EditText inputView = widget.getInputView();
+        inputView.setInputType(component.getInputType());
         // set event
-        addTextChangeListener(env, baseView.getInputView(), component);
+        addTextChangeListener(env, inputView, component);
 
-        ImageView resetButton = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_x,
+        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                baseView.getInputView().setText("");
+                inputView.setText("");
             }
         });
     }

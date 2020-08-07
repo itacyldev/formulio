@@ -19,6 +19,7 @@ import android.content.Context;
 import android.view.View;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -26,6 +27,6 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 public interface Renderer<C extends UIComponent>{
 
-    View render (RenderingEnv env, C component);
+    Widget render (RenderingEnv env, C component);
 
 }

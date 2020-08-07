@@ -18,7 +18,7 @@ package es.jcyl.ita.frmdrd.context.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -27,7 +27,7 @@ import es.jcyl.ita.frmdrd.view.InputFieldView;
  */
 public class ViewStateHolder {
 
-    private Map<String, String> state = new HashMap<String, String>();
+    private Map<String, Object> state = new HashMap<String, Object>();
 
     public void clear() {
         this.state.clear();
@@ -38,9 +38,9 @@ public class ViewStateHolder {
      */
     public void saveState(FormViewContext viewContext) {
         clear();
-        for (InputFieldView fieldView : viewContext.getInputFields()) {
+        for (InputWidget fieldView : viewContext.getInputFields()) {
             if(fieldView.isVisible()){
-                state.put(fieldView.getFieldId(), fieldView.getValueString());
+                state.put(fieldView.getInputId(), fieldView.getValue());
             }
         }
     }
@@ -49,10 +49,10 @@ public class ViewStateHolder {
      * Restore view state form the context
      */
     public void restoreState(FormViewContext viewContext) {
-        for (InputFieldView fieldView : viewContext.getInputFields()) {
+        for (InputWidget fieldView : viewContext.getInputFields()) {
             if(fieldView.isVisible()){
-                String fieldId = fieldView.getFieldId();
-                fieldView.setValueString(state.get(fieldId));
+                String fieldId = fieldView.getInputId();
+                fieldView.setValue(state.get(fieldId));
             }
         }
 

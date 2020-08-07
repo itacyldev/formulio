@@ -24,6 +24,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Date;
@@ -37,7 +38,7 @@ import es.jcyl.ita.frmdrd.builders.FieldDataBuilder;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -82,12 +83,13 @@ public class TextFieldViewConverterTest {
         for (Class clazz : clazzez) {
             Object expected = RandomUtils.randomObject(clazz);
             // retrieve the android view element and set value using the converter
-            InputFieldView baseView = ViewHelper.findInputFieldViewById(view, recipe.field);
-            TextView inputView = (TextView) baseView.getInputView();
+            InputWidget widget = ViewHelper.findInputFieldViewById(view, recipe.field);
+            TextView inputView = (TextView) widget.getInputView();
             conv.setViewValue(inputView, expected);
 
             // get the view and check de value is set
-            Object actual = conv.getValueFromView(inputView, expected.getClass());
+            Object actual = conv.getValueFromView(inputView);
+            actual = ConvertUtils.convert(actual, expected.getClass());
             AssertUtils.assertEquals(expected, actual);
         }
 

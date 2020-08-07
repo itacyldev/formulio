@@ -36,7 +36,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
@@ -115,12 +115,11 @@ public class FormViewContextTest {
             fvContext.put(c.getId(), expected);
 
             // access the value from the view element
-            InputFieldView baseView = fvContext.findInputFieldViewById(c.getId());
+            InputWidget widget = fvContext.findInputFieldViewById(c.getId());
 
             // use a viewConverter to get the value from android view element
-            View v = baseView.getInputView();
             ViewValueConverter<TextView> converter = c.getConverter();
-            String actual = converter.getValueFromView((TextView) v, String.class);
+            Object actual = converter.getValueFromView((TextView) widget.getInputView());
 
             // do they match?
             Assert.assertEquals(expected, actual);

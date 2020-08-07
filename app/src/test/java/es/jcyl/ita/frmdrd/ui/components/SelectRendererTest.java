@@ -29,8 +29,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.Set;
-
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionController;
@@ -41,7 +39,7 @@ import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
@@ -90,7 +88,9 @@ public class SelectRendererTest {
             options[i] = new UIOption(name, name);
         }
         select.setOptions(options);
-        InputFieldView<Spinner> view = (InputFieldView<Spinner>) renderHelper.render(env, select);
+        InputWidget<UISelect, Spinner> view =
+                (InputWidget<UISelect, Spinner>) renderHelper.render(env,
+                select);
         Assert.assertNotNull(view);
 
         // check elements in the view

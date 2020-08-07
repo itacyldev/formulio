@@ -15,39 +15,33 @@ package es.jcyl.ita.frmdrd.ui.components.image;
  * limitations under the License.
  */
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.PermissionChecker;
-import androidx.fragment.app.FragmentManager;
+import androidx.activity.result.contract.ActivityResultContracts;
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
-
-import static androidx.core.content.PermissionChecker.checkSelfPermission;
+import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
+import es.jcyl.ita.frmdrd.view.activities.ActivityResultCallBack;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class ImageWidget extends LinearLayout {
-    private static final int CAMERA_REQUEST = 1888;
-    private ImageResourceView imageView;
-    private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    private Activity activity;
-    private FragmentManager fragManager;
+public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
+        implements ActivityResultCallBack<Void, Bitmap>, ActivityResultCallback<Bitmap> {
 
-    private Context context;
+    private ActivityResultLauncher<Void> launcher;
+    private MediaResource mediaResource;
+    private Repository repo;
 
     public ImageWidget(Context context) {
         super(context);
@@ -61,34 +55,43 @@ public class ImageWidget extends LinearLayout {
         super(context, attrs, defStyle);
     }
 
-    private void setup() {
+    public void setup() {
         Button cameraButton = this.findViewById(R.id.btn_camera);
-
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                launcher.launch(null);
             }
         });
+        this.repo = getComponent().getRepo();
     }
 
-//
-//
-//    class TakePicture extends ActivityResultContract<Void, Bitmap> {
-//
-//        @NonNull
-//        @Override
-//        public Intent createIntent(@NonNull Context context, Void input) {
-//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//            return cameraIntent;
-//        }
-//
-//        @Nullable
-//        @Override
-//        public Bitmap parseResult(int resultCode, @Nullable Intent intent) {
-//            if (resultCode != Activity.RESULT_OK) return null;
-//            if (intent == null) return null;
-//            return intent.getParcelableExtra("data");
-//        }
-//    }
+    @Override
+    public ActivityResultContract<Void, Bitmap> getContract() {
+        return new ActivityResultContracts.TakePicturePreview();
+    }
 
+    @Override
+    public ActivityResultCallback<Bitmap> getCallBack() {
+        return this;
+    }
+
+    @Override
+    public void setResultLauncher(Activity activity, ActivityResultLauncher<Void> launcher) {
+        this.launcher = launcher;
+    }
+
+    @Override
+    public void onActivityResult(Bitmap imageData) {
+        getInputView().setImageBitmap(imageData);
+    }
+
+
+    public MediaResource getMediaResource() {
+        return mediaResource;
+    }
+
+    public void setMediaResource(MediaResource mediaResource) {
+        this.mediaResource = mediaResource;
+    }
 }

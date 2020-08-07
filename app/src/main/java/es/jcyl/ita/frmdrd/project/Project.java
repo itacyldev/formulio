@@ -44,7 +44,7 @@ public class Project extends Entity {
         super(source, meta);
     }
 
-    public void setBaseFolder(String path){
+    public void setBaseFolder(String path) {
         set("baseFolder", path);
     }
 
@@ -61,11 +61,19 @@ public class Project extends Entity {
     }
 
     public String getDataFolder() {
-        return FilenameUtils.concat(this.getBaseFolder(), "data");
+        return getFolderByType("data");
     }
 
     public String getFormsFolder() {
-        return FilenameUtils.concat(this.getBaseFolder(), "forms");
+        return getFolderByType("forms");
+    }
+
+    public String getPicturesFolder() {
+        return getFolderByType("pictures");
+    }
+
+    public String getFolderByType(String type) {
+        return FilenameUtils.concat(this.getBaseFolder(), type);
     }
 
     public boolean isOpened() {
@@ -106,7 +114,7 @@ public class Project extends Entity {
                 }
             });
             if (ArrayUtils.isNotEmpty(xmlFiles)) {
-                for(File confFile: xmlFiles){
+                for (File confFile : xmlFiles) {
                     files.add(new ProjectResource(confFile, type));
                 }
             } else {

@@ -1,7 +1,8 @@
 package es.jcyl.ita.frmdrd.context.impl;
 
 import android.view.View;
-import android.view.ViewGroup;
+
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +18,7 @@ import java.util.Set;
 import es.jcyl.ita.crtrepo.context.AbstractBaseContext;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 
 /*
@@ -58,7 +59,7 @@ public class FormViewContext extends AbstractBaseContext {
      * @param fieldId
      * @return
      */
-    public InputFieldView findInputFieldViewById(String fieldId) {
+    public InputWidget findInputFieldViewById(String fieldId) {
         return ViewHelper.findInputFieldViewById(this.view, this.form.getId(), fieldId);
     }
 
@@ -72,17 +73,19 @@ public class FormViewContext extends AbstractBaseContext {
      */
     @Override
     public String getString(String elementId) {
-        InputFieldView fieldView = findInputFieldViewById(elementId);
+        InputWidget fieldView = findInputFieldViewById(elementId);
         if (fieldView == null) {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
-        return fieldView.getValueString();
+        Object value = fieldView.getValue();
+        String strValue = (String) ConvertUtils.convert(value, String.class);
+        return strValue;
     }
 
     @Override
     public Object getValue(String elementId) {
-        InputFieldView fieldView = findInputFieldViewById(elementId);
+        InputWidget fieldView = findInputFieldViewById(elementId);
         if (fieldView == null) {
             throw new IllegalArgumentException(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
@@ -92,12 +95,13 @@ public class FormViewContext extends AbstractBaseContext {
             throw new IllegalArgumentException(String.format("The component id provided [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
         }
+        Object value = fieldView.getValue();
         if (component.getValueExpression() == null) {
-            return fieldView.getValueString();
+            return value;
         } else {
             // get the expected type from the EntityMeta through the binding expression
             Class expType = component.getValueExpression().getExpectedType();
-            return (expType == null) ? fieldView.getValueString() : fieldView.getValue(expType);
+            return (expType == null) ? value : ConvertUtils.convert(value, expType);
         }
     }
 
@@ -130,7 +134,7 @@ public class FormViewContext extends AbstractBaseContext {
     @Nullable
     @Override
     public Object put(String elementId, Object value) {
-        InputFieldView viewField = findInputFieldViewById(elementId);
+        InputWidget viewField = findInputFieldViewById(elementId);
         viewField.setValue(value);
         return null; // don't return previous value
     }
@@ -151,11 +155,12 @@ public class FormViewContext extends AbstractBaseContext {
         throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
-    public List<InputFieldView> getInputFields() {
+    public List<InputWidget> getInputFields() {
 //        if(this.inputFields == null){
 //            this.inputFields = ViewHelper.findInputFieldViews((ViewGroup) this.view);
 //        } // do not store the view elements, the view can change during re-rendering
-        return ViewHelper.findInputFieldViews((ViewGroup) this.view);
+        throw new UnsupportedOperationException();
+//        return ViewHelper.findInputFieldViews((ViewGroup) this.view);
     }
 
     @NonNull
@@ -163,10 +168,10 @@ public class FormViewContext extends AbstractBaseContext {
     public Set<String> keySet() {
         // get input ids
         Set<String> keys = new HashSet<>();
-        List<InputFieldView> fields = this.getInputFields();
+        List<InputWidget> fields = this.getInputFields();
         if (fields != null) {
-            for (InputFieldView input : fields) {
-                keys.add(input.getFieldId());
+            for (InputWidget input : fields) {
+                keys.add(input.getInputId());
             }
         }
         return keys;

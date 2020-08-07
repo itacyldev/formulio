@@ -30,28 +30,22 @@ import es.jcyl.ita.frmdrd.view.ViewConfigException;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public abstract class AbstractImageViewValueConverter<T> implements ViewValueConverter<ImageResourceView> {
-    @Override
-    public String getValueFromViewAsString(ImageResourceView view) {
-        return null;
-
-    }
+public abstract class AbstractImageViewValueConverter<T>
+        implements ViewValueConverter<ImageResourceView> {
 
     @Override
-    public <C> C getValueFromView(ImageResourceView view, Class<C> expectedType) {
+    public Object getValueFromView(ImageResourceView view) {
         if (view.isEmpty()) {
             return null;
         } else {
             MediaResource resource = view.getResource();
             try {
-                return (C) readObjectFromImageResource(resource);
-            }catch(Exception e) {
-                throw new ViewConfigException(DevConsole.error("An error occurred while trying to read image from view." +resource.toString() ,e));
+                return readObjectFromImageResource(resource);
+            } catch (Exception e) {
+                throw new ViewConfigException(DevConsole.error("An error occurred while trying to read image from view." + resource.toString(), e));
             }
         }
-
     }
-
 
     @Override
     public void setViewValue(ImageResourceView view, Object value) {
@@ -71,7 +65,8 @@ public abstract class AbstractImageViewValueConverter<T> implements ViewValueCon
             view.setImageResource(R.drawable.image_not_found);
         }
         try {
-            byte[] imgBytes = readImageBytesFromObject(typedValue);
+            MediaResource resource = readImageResourceFromObject(typedValue);
+            byte[] imgBytes = resource.getContent();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
             view.setImageBitmap(bitmap);
         } catch (Exception e) {
@@ -80,17 +75,14 @@ public abstract class AbstractImageViewValueConverter<T> implements ViewValueCon
         }
     }
 
-    @Override
-    public void setViewValueAsString(ImageResourceView view, String value) {
-
-    }
-
     /*** EXTENSION POINTS FOR SUBCLASSES **/
 
     protected abstract boolean isMissingOrErrorImage(T value);
 
-    protected abstract byte[] readImageBytesFromObject(T value) throws IOException;
+    protected abstract MediaResource readImageResourceFromObject(T value) throws IOException;
 
     protected abstract T readObjectFromImageResource(MediaResource resource) throws IOException;
+
+    protected abstract String readObjectFromImageResourceAsString(MediaResource resource) throws IOException;
 
 }

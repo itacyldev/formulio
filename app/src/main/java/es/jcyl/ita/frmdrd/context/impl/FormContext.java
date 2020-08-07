@@ -3,11 +3,8 @@ package es.jcyl.ita.frmdrd.context.impl;
 import android.view.View;
 
 import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
-import es.jcyl.ita.crtrepo.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).

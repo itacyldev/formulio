@@ -17,10 +17,10 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.render.InputTextRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
-import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -42,22 +42,17 @@ import es.jcyl.ita.frmdrd.view.render.InputRenderer;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DateFieldRenderer extends InputRenderer<Button, UIField> {
+public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     @Override
-    protected int getComponentLayoutId() {
-        return R.layout.component_date;
-    }
-
-    @Override
-    protected void composeView(RenderingEnv env, InputFieldView<Button> baseView, UIField component) {
+    protected void composeInputView(RenderingEnv env, InputWidget<UIField, Button> widget) {
         // configure input view elements
-        Button today = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_today,
+        Button today = ViewHelper.findViewAndSetId(widget, R.id.field_layout_today,
                 Button.class);
-        ImageView resetButton = ViewHelper.findViewAndSetId(baseView, R.id.field_layout_x,
+        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
 
-        Button input = baseView.getInputView();
+        Button input = widget.getInputView();
 
         final DatePickerDialog.OnDateSetListener listener =
                 new DatePickerDialog.OnDateSetListener() {
@@ -73,7 +68,8 @@ public class DateFieldRenderer extends InputRenderer<Button, UIField> {
 
                         ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                         if (interceptor != null) {
-                            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+                            interceptor.doAction(new UserAction(widget.getComponent(),
+                                    ActionType.INPUT_CHANGE.name()));
                         }
                     }
                 };
@@ -82,7 +78,7 @@ public class DateFieldRenderer extends InputRenderer<Button, UIField> {
             @Override
             public void onClick(final View arg0) {
                 final Calendar c = new GregorianCalendar();
-                final Dialog dateDialog = new DatePickerDialog(baseView.getContext(),
+                final Dialog dateDialog = new DatePickerDialog(widget.getContext(),
                         listener, c.get(Calendar.YEAR), c
                         .get(Calendar.MONTH), c
                         .get(Calendar.DAY_OF_MONTH));
@@ -113,7 +109,7 @@ public class DateFieldRenderer extends InputRenderer<Button, UIField> {
     }
 
     @Override
-    protected void setMessages(RenderingEnv env, InputFieldView<Button> baseView, UIField component) {
-
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_date;
     }
 }

@@ -24,7 +24,7 @@ import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -45,13 +45,13 @@ public class InputChangeActionHandler extends AbstractActionHandler
         }
         UIForm form = component.getParentForm();
         FormViewContext viewContext = form.getContext().getViewContext();
-        InputFieldView fieldView = viewContext.findInputFieldViewById(component.getId());
+        InputWidget fieldView = viewContext.findInputFieldViewById(component.getId());
 
         // if a method is defined in onchange attribute run the script
         // TODO:
 
         // save view state
-        String state = fieldView.getValueString();
+        Object state = fieldView.getValue();
         boolean valid = formController.validate((UIInputComponent) component);
         if (!valid) {
             // update the view to show messages
@@ -59,7 +59,7 @@ public class InputChangeActionHandler extends AbstractActionHandler
             // find the new View and restore state
             fieldView = viewContext.findInputFieldViewById(component.getId());
             mc.getRenderingEnv().disableInterceptors();
-            fieldView.setValueString(state);
+            fieldView.setValue(state);
             // restore focus on the current view element
             fieldView.setFocus(true);
             mc.getRenderingEnv().enableInterceptors();

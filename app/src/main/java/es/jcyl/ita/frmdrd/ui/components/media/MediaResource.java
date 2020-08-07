@@ -15,18 +15,32 @@ package es.jcyl.ita.frmdrd.ui.components.media;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.File;
 
 /**
+ * data interchange
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class MediaResource {
     File location;
     byte[] content;
+    boolean hasChanged = false;
 
     MediaResource(File f, byte[] content) {
         this.location = f;
         this.content = content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+        this.hasChanged = true;
+    }
+
+    public boolean hasChanged() {
+        return hasChanged;
     }
 
     public File getLocation() {
@@ -35,6 +49,14 @@ public class MediaResource {
 
     public byte[] getContent() {
         return content;
+    }
+
+    public boolean hasContent() {
+        return content != null && ArrayUtils.isNotEmpty(content);
+    }
+
+    public boolean hasLocation() {
+        return location != null;
     }
 
     public static MediaResource fromFile(File f) {

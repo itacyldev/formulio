@@ -16,25 +16,30 @@ package es.jcyl.ita.frmdrd.view.render;
  */
 
 import android.view.View;
-import android.view.ViewGroup;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
+ * Base class with default implementations to avoid boiler plate code.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseGroupRenderer<C extends UIComponent> extends BaseRenderer<ViewGroup, C> {
+public abstract class AbstractGroupRenderer<C extends UIComponent, W extends Widget<C>>
+        extends AbstractRenderer<C, W> implements GroupRenderer<C> {
 
-    // default implementations to avoid boilerplate code
-    public void initGroup(RenderingEnv env, C component, ViewGroup root) {
+    @Override
+    public void initGroup(RenderingEnv env, Widget<C> root) {
     }
 
-
-    public void addViews(RenderingEnv env, C component, ViewGroup root, View[] views) {
+    @Override
+    public void addViews(RenderingEnv env, Widget<C> root, View[] views) {
+        for (View view : views) {
+            root.addView(view);
+        }
     }
 
-
-    public void endGroup(RenderingEnv env, C component, ViewGroup root) {
-
+    @Override
+    public void endGroup(RenderingEnv env, Widget<C> root) {
     }
 }

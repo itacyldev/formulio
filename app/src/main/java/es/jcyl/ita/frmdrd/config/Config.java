@@ -16,9 +16,8 @@ package es.jcyl.ita.frmdrd.config;
  */
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -28,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
@@ -52,6 +52,7 @@ public class Config {
 
     private boolean configLoaded = false;
     private String appBaseFolder;
+    private Context andContext;
 
     private RepositoryConfHandler repoConfigReader;
     private ProjectRepository projectRepo;
@@ -64,6 +65,11 @@ public class Config {
 
     private Config(String appBaseFolder) {
         this.appBaseFolder = appBaseFolder;
+    }
+
+    private Config(Context androidContext, String appBaseFolder) {
+        this.appBaseFolder = appBaseFolder;
+        this.andContext = androidContext;
     }
 
     public static Config getInstance() {
@@ -83,6 +89,14 @@ public class Config {
     public static Config init(String appBaseFolder) {
         // TODO: cache??
         _instance = new Config(appBaseFolder);
+        _instance.init();
+        registerReaders();
+        return _instance;
+    }
+
+    public static Config init(Context and, String appBaseFolder) {
+        // TODO: cache??
+        _instance = new Config(and, appBaseFolder);
         _instance.init();
         registerReaders();
         return _instance;
@@ -172,7 +186,7 @@ public class Config {
      * @param context
      * @param project Selected project.
      */
-    public void setCurrentProject(final Context context, @NonNull final Project project){
+    public void setCurrentProject(final Context context, @NonNull final Project project) {
         Toast.makeText(context, DevConsole.info(context.getString(R.string.opening_project) + project.getId()), Toast.LENGTH_LONG).show();
         try {
             readConfig(project);
@@ -194,7 +208,7 @@ public class Config {
         DevConsole.info("Repos registered: " + repoIds);
     }
 
-    public Project getCurrentProject(){
+    public Project getCurrentProject() {
         return this.currentProject;
     }
 
@@ -204,5 +218,9 @@ public class Config {
 
     public FormConfigRepository getFormConfigRepo() {
         return formConfigRepo;
+    }
+
+    public Resources getResources() {
+        return this.andContext.getResources();
     }
 }

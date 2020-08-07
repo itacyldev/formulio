@@ -36,7 +36,7 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.validation.RequiredValidator;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
@@ -91,18 +91,18 @@ public class InputFieldRendererTest {
 
         UIField field = new UIField();
         field.setId(RandomUtils.randomString(4));
-        InputFieldView inputFieldView = (InputFieldView) renderHelper.render(env, field);
+        InputWidget inputFieldView = (InputWidget) renderHelper.render(env, field);
         Set<ImageView> viewSet = ViewHelper.findViewsContainingText(inputFieldView,
                 "Cancel", ImageView.class);
         ImageView eraseImage = viewSet.isEmpty()? null : viewSet.iterator().next();
-        inputFieldView.setValueString("filling");
+        inputFieldView.setValue("filling");
 
         Assert.assertNotNull("Erase image missing.", eraseImage);
         Assert.assertEquals("Incorrectly filled.",
-                "filling", inputFieldView.getValueString());
+                "filling", inputFieldView.getValue());
 
         eraseImage.performClick();
         Assert.assertEquals("The field has not been cleaned.",
-                "", inputFieldView.getValueString());
+                "", inputFieldView.getValue());
     }
 }

@@ -25,7 +25,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
@@ -110,7 +109,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
                     component.hasNullOption(), android.R.layout.select_dialog_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         } else {
-            adapter = new EntityListELAdapter(env, R.layout.component_autocomplete_listitem,
+            adapter = new EntityListELAdapter(env, R.layout.widget_autocomplete_listitem,
                     R.id.autocomplete_item, component);
         }
         this.setAdapter(adapter);

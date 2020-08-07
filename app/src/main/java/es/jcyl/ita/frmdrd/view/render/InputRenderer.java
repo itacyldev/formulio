@@ -15,81 +15,67 @@ package es.jcyl.ita.frmdrd.view.render;
  * limitations under the License.
  */
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
  * Extends base renderer to define a common creation flow form UIInput components.
  * I, represents the AndroidView used as base user input, the component attached to InputFieldView
  * that will be used to get and set data from/to the view.
+ * <p/>
+ *  @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.apache.commons.lang3.RandomUtils;
-
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.config.Config;
+import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 
 
-public abstract class InputRenderer<I extends View, C extends UIInputComponent>
-        extends BaseRenderer<InputFieldView, C> {
-
-    protected static final Object EMPTY_STRING = "";
+public abstract class InputRenderer<C extends UIInputComponent, I extends View>
+        extends AbstractRenderer<C, InputWidget<C, I>> {
 
     @Override
-    protected InputFieldView createBaseView(RenderingEnv env, C component) {
-        ViewGroup baseView = ViewHelper.inflate(env.getViewContext(),
-                getComponentLayoutId(), LinearLayout.class);
-
-        baseView.setId(RandomUtils.nextInt());
-        return createInputFieldView(env.getViewContext(), baseView, component);
-    }
-
-    protected InputFieldView createInputFieldView(Context viewContext, View baseView, C component) {
-        InputFieldView fieldView = (InputFieldView) View.inflate(viewContext,
-                getInputFieldViewId(), null);
-
-        fieldView.setComponent(component);
-        fieldView.setConverter(component.getConverter());
-        fieldView.setTag(getBaseViewTag(component));
-        fieldView.addView(baseView);
+    protected void composeWidget(RenderingEnv env, InputWidget<C, I> widget) {
+        C component = widget.getComponent();
+        // find and attach label and input
+        widget.setConverter(component.getConverter());
         if (component.getParentForm() != null) {
-            fieldView.setFormId(component.getParentForm().getId());
+            widget.setFormId(component.getParentForm().getId());
         }
-        fieldView.setFieldId(component.getId());
+        widget.setInputId(component.getId());
 
-        return fieldView;
-    }
-
-    private int getInputFieldViewId() {
-        return R.layout.input_field_view;
-    }
-
-    @Override
-    protected void setupView(RenderingEnv env, InputFieldView baseView, C component) {
-        // get label and set Tag
-        TextView fieldLabel = ViewHelper.findViewAndSetId(baseView, getLabelViewId(),
+        // find label and setup
+        TextView fieldLabel = ViewHelper.findViewAndSetId(widget, getLabelViewId(),
                 TextView.class);
-        setupLabel(env, fieldLabel, component);
+        setupLabel(env, fieldLabel, widget.getComponent());
 
         // get input view and set Tag and Value
-        I inputView = (I) ViewHelper.findViewAndSetId(baseView, getInputViewId());
-        setupInputView(env, baseView, inputView, component);
-        composeView(env, baseView, component);
+        I inputView = (I) ViewHelper.findViewAndSetId(widget, getInputViewId());
+        if (inputView == null) {
+            Resources res = Config.getInstance().getResources();
+            DevConsole.error(String.format("There's an error in the '%s' class, the method  " +
+                            "getInputViewId() must return an existing component in the widget " +
+                            "layout. Make sure there's a View with the id [%s] in the file [%s].",
+                    this.getClass().getName(), res.getResourceName(getInputViewId()),
+                    res.getResourceName(getWidgetLayoutId())));
+        }
+        widget.setInputView(inputView);
+        setupInputView(env, widget);
+
+        // implement specific component rendering
+        composeInputView(env, widget);
 
         // set value and error messages
-        setValue(env, baseView, inputView, component);
-        setMessages(env, baseView, component);
+        setValueInView(env, widget);
+        setMessages(env, widget);
     }
 
-    protected void setValue(RenderingEnv env, InputFieldView<I> baseView, I inputView, C component) {
-        String value = getValue(component, env, String.class);
-        baseView.getConverter().setViewValue(inputView, value);
+    protected void setValueInView(RenderingEnv env, InputWidget<C, I> widget) {
+        String value = getComponentValue(env, widget.getComponent(), String.class);
+        widget.getConverter().setViewValue(widget.getInputView(), value);
     }
 
     protected int getLabelViewId() {
@@ -108,7 +94,7 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
      * @return
      */
     protected String getInputTag(C c) {
-        return getBaseViewTag(c) + ">input";
+        return getWidgetViewTag(c) + ">input";
     }
 
     protected void setupLabel(RenderingEnv env, TextView labelView, C component) {
@@ -119,22 +105,21 @@ public abstract class InputRenderer<I extends View, C extends UIInputComponent>
         labelView.setText(labelComponent);
     }
 
-    protected void setupInputView(RenderingEnv env, InputFieldView<I> baseView, I inputView, C component) {
+    protected void setupInputView(RenderingEnv env, InputWidget<C, I> widget) {
         // link inputView with baseView
-        baseView.setInputView(inputView);
-        inputView.setTag(getInputTag(component));
-        // set component value using converter
-        inputView.setEnabled(!component.isReadOnly());
+        C component = widget.getComponent();
+        I inputView = widget.getInputView();
+        String inputTag = getInputTag(component);
+        inputView.setTag(inputTag);
+        inputView.setEnabled(!widget.getComponent().isReadOnly());
     }
 
     /************************************/
     /** Extension points **/
     /************************************/
 
-    protected abstract int getComponentLayoutId();
+    protected abstract void setMessages(RenderingEnv env, InputWidget<C, I> widget);
 
-    protected abstract void setMessages(RenderingEnv env, InputFieldView<I> baseView, C component);
-
-    protected abstract void composeView(RenderingEnv env, InputFieldView<I> baseView, C component);
+    protected abstract void composeInputView(RenderingEnv env, InputWidget<C, I> widget);
 
 }

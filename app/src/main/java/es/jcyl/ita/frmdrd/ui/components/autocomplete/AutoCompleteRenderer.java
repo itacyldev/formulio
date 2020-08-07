@@ -15,18 +15,9 @@ package es.jcyl.ita.frmdrd.ui.components.autocomplete;
  * limitations under the License.
  */
 
-import android.view.View;
-import android.widget.AdapterView;
-
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.actions.ActionType;
-import es.jcyl.ita.frmdrd.actions.UserAction;
-import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.context.FormContextHelper;
-import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
-import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.InputRenderer;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
+import es.jcyl.ita.frmdrd.view.render.InputTextRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /**
@@ -34,28 +25,17 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * <p>
  * Creates view elements for autocomplete component
  */
-public class AutoCompleteRenderer extends InputRenderer<AutoCompleteView, UIAutoComplete> {
+public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, AutoCompleteView> {
 
     @Override
-    protected int getComponentLayoutId() {
-        return R.layout.component_autocomplete;
-    }
-
-    @Override
-    protected void composeView(RenderingEnv env, InputFieldView<AutoCompleteView> baseView,
-                               UIAutoComplete component) {
-        AutoCompleteView input = baseView.getInputView();
-        input.initialize(env, component);
+    protected void composeInputView(RenderingEnv env, InputWidget<UIAutoComplete, AutoCompleteView> widget) {
+        AutoCompleteView input = widget.getInputView();
+        input.initialize(env, widget.getComponent());
         input.load(env);
     }
 
     @Override
-    protected void setMessages(RenderingEnv env, InputFieldView<AutoCompleteView> baseView,
-                               UIAutoComplete component) {
-        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
-        if (message != null) {
-            baseView.getInputView().setError(message);
-        }
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_autocomplete;
     }
-
 }

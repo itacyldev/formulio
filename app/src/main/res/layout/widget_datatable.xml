@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<es.jcyl.ita.frmdrd.ui.components.datatable.DatatableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<es.jcyl.ita.frmdrd.ui.components.datatable.DatatableWidget xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/field_layout_layout"
     android:layout_width="fill_parent"
     android:layout_height="200dp"
@@ -44,4 +44,4 @@
         </LinearLayout>
 
     </HorizontalScrollView>
-</es.jcyl.ita.frmdrd.ui.components.datatable.DatatableLayout>
+</es.jcyl.ita.frmdrd.ui.components.datatable.DatatableWidget>

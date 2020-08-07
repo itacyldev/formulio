@@ -42,7 +42,7 @@ import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
@@ -103,7 +103,8 @@ public class AutocompleteDynamicViewConverterTest {
         field.setOptionLabelFilteringProperty(labelFilteringProp);
         field.setOptionLabelExpression(exprFactory.create(String.format("${entity.%s}", labelFilteringProp)));
 
-        InputFieldView<AutoCompleteView> baseView = (InputFieldView<AutoCompleteView>) renderHelper.render(env, field);
+        InputWidget<UIAutoComplete, AutoCompleteView> widget =
+                (InputWidget<UIAutoComplete, AutoCompleteView>) renderHelper.render(env, field);
 
         // user input values, check
         // set empty values and the third property of one o the entities
@@ -113,7 +114,7 @@ public class AutocompleteDynamicViewConverterTest {
         Object[] expectedValues = new Object[]{entity.get(meta.getProperties()[2].name), null, null, null, null};
         int i = 0;
         for (Object value : values) {
-            AutoCompleteView inputView = baseView.getInputView();
+            AutoCompleteView inputView = widget.getInputView();
 
             // change mock
             if (i > 0) {

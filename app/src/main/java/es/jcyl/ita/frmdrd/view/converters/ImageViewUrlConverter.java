@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
+import es.jcyl.ita.frmdrd.ui.components.media.MediaResourceLocator;
 
 /**
  * Recives the image path as url and sets it to the image view
@@ -36,26 +37,43 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
         return !fImage.exists();
     }
 
+
     @Override
-    protected byte[] readImageBytesFromObject(String path) throws IOException {
+    protected MediaResource readImageResourceFromObject(String path) throws IOException {
         try {
-            return FileUtils.readFileToByteArray(new File(path));
+            File photo = MediaResourceLocator.locateImage(path);
+            MediaResource imgResource = MediaResource.fromFile(photo);
+            byte[] imageContent = FileUtils.readFileToByteArray(new File(path));
+            imgResource.setContent(imageContent);
+            return imgResource;
         } catch (IOException e) {
             throw new IOException(DevConsole.error(String.format("An error occurred " +
                     "while trying to read the image: [%s]", path), e));
         }
     }
 
+    /**
+     * If MediaResource encodes a location, converts this location to a project-relative path and
+     * returns it.
+     * If the MediaResource encodes the image in the content attribute, and this image has changed,
+     * the converter stores the image in the original location.
+     *
+     * @param resource
+     * @return
+     * @throws IOException
+     */
     @Override
     protected String readObjectFromImageResource(MediaResource resource) throws IOException {
-        return null;
+        if (resource.hasContent() && resource.hasChanged()) {
+            // write image in the expected location
+            File imageDest = resource.getLocation();
+            FileUtils.writeByteArrayToFile(imageDest, resource.getContent());
+        }
+        return MediaResourceLocator.relativeImagePath(resource.getLocation().getAbsolutePath());
     }
 
+    @Override
+    protected String readObjectFromImageResourceAsString(MediaResource resource) throws IOException {
+        return null;
+    }
 }
-// b64 encoding
-//    ImageView carView = (ImageView) v.findViewById(R.id.car_icon);
-//
-//    byte[] decodedString = Base64.decode(picture, Base64.NO_WRAP);
-//    InputStream input=new ByteArrayInputStream(decodedString);
-//    Bitmap ext_pic = BitmapFactory.decodeStream(input);
-//                            carView.setImageBitmap(ext_pic);

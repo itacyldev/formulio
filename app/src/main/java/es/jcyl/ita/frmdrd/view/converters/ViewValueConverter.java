@@ -20,31 +20,22 @@ import android.view.View;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * Provides an extensible way to get/set values from android View elements.
+
  * <p>
- * Funcionality to get and set value to view components
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public interface ViewValueConverter<T extends View> {
 
-    /**
-     * Used to get value as string to use commons-validation validators and to
-     * save current view state
-     *
-     * @param view
-     * @return
-     */
-    String getValueFromViewAsString(T view);
 
     /**
      * Retrieves the view value conveted as the given expectecType. This method is used during
      * the applyData phase to set the entity values from the view.
      *
      * @param view
-     * @param expectedType
-     * @param <C> returning Type
      * @return
      */
-    <C> C getValueFromView(T view,  Class<C> expectedType);
+    Object getValueFromView(T view);
 
     /**
      * Sets value in the view using directly the entity property value, letting the component
@@ -54,13 +45,5 @@ public interface ViewValueConverter<T extends View> {
      * @param value
      */
     void setViewValue(T view, Object value);
-
-    /**
-     * Method used to restore view from previous state
-     *
-     * @param view
-     * @param value
-     */
-    void setViewValueAsString(T view, String value);
 
 }

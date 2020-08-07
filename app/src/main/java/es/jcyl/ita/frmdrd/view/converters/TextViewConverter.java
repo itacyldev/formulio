@@ -27,23 +27,14 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  * Class to
  */
 public class TextViewConverter implements ViewValueConverter<TextView> {
-    @Override
-    public String getValueFromViewAsString(TextView view) {
+
+//    @Override
+    public Object getValueFromView(TextView view) {
         String viewValue = "";
         if (view.getText() != null) {
             viewValue = view.getText().toString();
         }
         return viewValue;
-    }
-
-    @Override
-    public <C> C getValueFromView(TextView view, Class<C> expectedType) {
-        String viewValue = "";
-        if (view.getText() != null) {
-            viewValue = view.getText().toString();
-        }
-        Object o = ConvertUtils.convert(viewValue, expectedType);
-        return (C) o;
     }
 
 
@@ -53,8 +44,4 @@ public class TextViewConverter implements ViewValueConverter<TextView> {
         view.setText(textValue);
     }
 
-    @Override
-    public void setViewValueAsString(TextView view, String value) {
-        setViewValue(view, value);
-    }
 }

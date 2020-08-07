@@ -11,7 +11,7 @@ import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -35,17 +35,13 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
+public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
     private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
 
     @Override
-    protected int getComponentLayoutId() {
-        return R.layout.component_select;
-    }
-
-    @Override
-    protected void composeView(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
-        Spinner input = baseView.getInputView();
+    protected void composeInputView(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
+        Spinner input = widget.getInputView();
+        UISelect component = widget.getComponent();
 
         // setup adapter and event handler
         ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(),
@@ -70,7 +66,12 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
     }
 
     @Override
-    protected void setMessages(RenderingEnv env, InputFieldView<Spinner> baseView, UISelect component) {
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_select;
+    }
+
+    @Override
+    protected void setMessages(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
 
     }
 
@@ -84,5 +85,6 @@ public class SelectRenderer extends InputRenderer<Spinner, UISelect> {
             return " ";
         }
     }
+
 
 }

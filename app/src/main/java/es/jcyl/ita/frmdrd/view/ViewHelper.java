@@ -34,6 +34,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.tab.TabFragment;
 import es.jcyl.ita.frmdrd.ui.components.tab.ViewPagerAdapter;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -182,8 +183,8 @@ public class ViewHelper {
         return rootView.findViewWithTag(formId + ":" + component.getId());
     }
 
-    public static List<InputFieldView> findInputFieldViews(ViewGroup root) {
-        List<InputFieldView> views = new ArrayList<>();
+    public static List<InputWidget> findInputFieldViews(ViewGroup root) {
+        List<InputWidget> views = new ArrayList<>();
         final int childCount = root.getChildCount();
 
         for (int i = 0; i < childCount; i++) {
@@ -191,27 +192,27 @@ public class ViewHelper {
             if (child instanceof ViewGroup) {
                 views.addAll(findInputFieldViews((ViewGroup) child));
             }
-            if (child instanceof InputFieldView) {
-                views.add((InputFieldView) child);
+            if (child instanceof InputWidget) {
+                views.add((InputWidget) child);
             }
         }
         return views;
     }
 
-    public static InputFieldView findInputFieldViewById(View rootView, UIInputComponent field) {
+    public static InputWidget findInputFieldViewById(View rootView, UIInputComponent field) {
         return findInputFieldViewById(rootView, field.getParentForm().getId(), field.getId());
     }
 
-    public static InputFieldView findInputFieldViewById(View rootView, String formId, String fieldId) {
+    public static InputWidget findInputFieldViewById(View rootView, String formId, String fieldId) {
         View view = ViewHelper.findComponentView(rootView, formId, fieldId);
         if (view == null) {
             return null;
         }
-        if (!(view instanceof InputFieldView)) {
+        if (!(view instanceof InputWidget)) {
             throw new IllegalArgumentException(String.format("The view element referenced by [%s]" +
                     " in the form [%s] is not and InputFieldView", formId, fieldId));
         }
-        return (InputFieldView) view;
+        return (InputWidget) view;
     }
 
     public static <T> T inflate(Context context, int id, Class<T> clazz) {

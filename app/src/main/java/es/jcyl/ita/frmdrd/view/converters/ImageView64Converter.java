@@ -36,13 +36,22 @@ public class ImageView64Converter extends AbstractImageViewValueConverter<String
     }
 
     @Override
-    protected byte[] readImageBytesFromObject(String value) throws IOException {
+    protected MediaResource readImageResourceFromObject(String value) throws IOException {
         byte[] decodedString = Base64.decode(value, Base64.NO_WRAP);
-        return decodedString;
+        return MediaResource.fromByteArray(decodedString);
     }
 
     @Override
     protected String readObjectFromImageResource(MediaResource resource) throws IOException {
-        return null;
+        if (!resource.hasContent()) {
+            return null;
+        } else {
+            return Base64.encodeToString(resource.getContent(), Base64.NO_WRAP);
+        }
+    }
+
+    @Override
+    protected String readObjectFromImageResourceAsString(MediaResource resource) throws IOException {
+        return readObjectFromImageResource(resource);
     }
 }

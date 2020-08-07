@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view;
+package es.jcyl.ita.frmdrd.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -18,44 +18,43 @@ package es.jcyl.ita.frmdrd.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
  * Base class to wrapper Android views that represent input fields to provide feature to access and
  * modify the view component (values, styles, focus, etc).
+ * <p>
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class InputFieldView<V extends View> extends LinearLayout {
+public class InputWidget<C extends UIInputComponent, V extends View> extends Widget<C> {
 
-    private V inputView;
     private ViewValueConverter converter;
-    private UIInputComponent component;
+    private V inputView;
 
     /**
      * related UIComponents
      */
     private String formId;
-    private String fieldId;
+    private String inputId;
 
-    public InputFieldView(Context context) {
+    public InputWidget(Context context) {
         super(context);
     }
 
-    public InputFieldView(Context context, @Nullable AttributeSet attrs) {
+    public InputWidget(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public InputFieldView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public InputWidget(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public InputFieldView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public InputWidget(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -69,38 +68,27 @@ public class InputFieldView<V extends View> extends LinearLayout {
         converter.setViewValue(inputView, value);
     }
 
-    public void setValueString(String value) {
-        if (inputView == null) return;// view hasn't been rendered
-        converter.setViewValueAsString(inputView, value);
+    public Object getValue() {
+        return (inputView == null) ? null : converter.getValueFromView(inputView);
     }
 
-    public <T> T getValue(Class<T> expectedType) {
-        return (inputView == null) ? null : (T) converter.getValueFromView(inputView, expectedType);
-    }
-
-    public String getValueString() {
-        return (inputView == null) ? null : converter.getValueFromViewAsString(inputView);
+    /**
+     * method called after related elements are bound to current InputFieldView.
+     */
+    public void setup() {
     }
 
     public void setFocus(boolean focusable) {
         this.inputView.requestFocus();
     }
 
+    public boolean isVisible() {
+        return this.inputView != null;
+    }
     /*************************************/
     /**** GETTERS/SETTERS ***/
     /*************************************/
 
-    public boolean isVisible() {
-        return this.inputView != null;
-    }
-
-    public V getInputView() {
-        return inputView;
-    }
-
-    public void setInputView(V inputView) {
-        this.inputView = inputView;
-    }
 
     public ViewValueConverter getConverter() {
         return converter;
@@ -114,25 +102,27 @@ public class InputFieldView<V extends View> extends LinearLayout {
         return formId;
     }
 
-    public String getFieldId() {
-        return fieldId;
+    public String getInputId() {
+        return inputId;
     }
 
-    public UIInputComponent getComponent() {
-        return component;
-    }
-
-    public void setComponent(UIInputComponent component) {
-        this.component = component;
-    }
-/*******/
+    /******/
     /** Form and field ids are set during the rendering process */
     /*******/
     public void setFormId(String formId) {
         this.formId = formId;
     }
 
-    public void setFieldId(String fieldId) {
-        this.fieldId = fieldId;
+    public void setInputId(String inputId) {
+        this.inputId = inputId;
+    }
+
+
+    public V getInputView() {
+        return inputView;
+    }
+
+    public void setInputView(V inputView) {
+        this.inputView = inputView;
     }
 }

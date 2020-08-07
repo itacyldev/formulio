@@ -58,7 +58,7 @@ public class AndViewContextTest {
     @Test
     public void testSetValueViewElements() {
         // register elements as alias
-        View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
+        View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
         viewContext.registerViewElement("label", R.id.label_view, converterFactory.get("text"));
         viewContext.registerViewElement("input", R.id.input_view, converterFactory.get("text"));
@@ -79,7 +79,7 @@ public class AndViewContextTest {
     @Test
     public void testGetValueViewElements() {
         // register elements as alias
-        View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
+        View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
         viewContext.registerViewElement("label", R.id.label_view, converterFactory.get("text"));
         viewContext.registerViewElement("input", R.id.input_view, converterFactory.get("text"));
@@ -102,7 +102,7 @@ public class AndViewContextTest {
     @Test
     public void testAccessThroughCompositeContext() {
         // register elements as alias
-        View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
+        View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
 
         viewContext.registerViewElement("label", R.id.label_view, converterFactory.get("text"));
@@ -128,7 +128,7 @@ public class AndViewContextTest {
     @Test
     public void testShowContent(){
         // register elements as alias
-        View baseView = LayoutInflater.from(ctx).inflate(R.layout.component_textfield, null);
+        View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
         System.out.println(viewContext.entrySet());
         System.out.println(viewContext.values());

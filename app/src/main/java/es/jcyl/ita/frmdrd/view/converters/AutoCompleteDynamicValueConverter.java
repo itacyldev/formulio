@@ -15,11 +15,7 @@ package es.jcyl.ita.frmdrd.view.converters;
  * limitations under the License.
  */
 
-import android.widget.Adapter;
-
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
-import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
-import es.jcyl.ita.frmdrd.ui.components.option.UIOptionsAdapterHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -31,7 +27,7 @@ public class AutoCompleteDynamicValueConverter extends AutoCompleteStaticValueCo
         view.setValue(value);
     }
 
-    @Override
+//    @Override
     public void setViewValueAsString(AutoCompleteView view, String value) {
         view.setValue(value);
 //        view.setText(value);

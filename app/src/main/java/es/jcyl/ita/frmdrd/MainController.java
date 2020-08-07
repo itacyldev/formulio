@@ -16,12 +16,8 @@ package es.jcyl.ita.frmdrd;
  */
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,8 +42,7 @@ import es.jcyl.ita.frmdrd.router.Router;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.UserMessagesHelper;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.activities.FormActivity;
 import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.activities.FormListViewHandlerActivity;
@@ -166,7 +161,7 @@ public class MainController {
         // set the View elements to controllers
         this.router.registerActivity(formActivity.getActivity());
         this.formController.setContentView(formActivity.getContentView());
-        this.renderingEnv.setActivity(formActivity.getActivity());
+        this.renderingEnv.setFormActivity(formActivity);
     }
 
     /*********************************************/
@@ -218,7 +213,7 @@ public class MainController {
         // find view using viewContext
         FormViewContext viewContext = form.getContext().getViewContext();
 
-        InputFieldView fieldView = viewContext.findInputFieldViewById(component.getId());
+        InputWidget fieldView = viewContext.findInputFieldViewById(component.getId());
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
         View newView = renderHelper.render(this.renderingEnv, component);

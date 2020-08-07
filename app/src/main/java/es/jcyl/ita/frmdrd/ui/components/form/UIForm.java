@@ -25,7 +25,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIGroupComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.validation.Validator;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
 
@@ -236,7 +236,7 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
     public boolean isVisible(UIInputComponent field) {
         FormViewContext viewContext = context.getViewContext();
 
-        InputFieldView fieldView = viewContext.findInputFieldViewById(field.getId());
+        InputWidget fieldView = viewContext.findInputFieldViewById(field.getId());
         return fieldView.isVisible();
     }
 

@@ -19,16 +19,17 @@ import android.widget.Spinner;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOptionsAdapterHelper;
+import es.jcyl.ita.frmdrd.ui.components.select.SelectRenderer;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 class SpinnerValueConverter implements ViewValueConverter<Spinner> {
+
     @Override
-    public String getValueFromViewAsString(Spinner view) {
+    public Object getValueFromView(Spinner view) {
         if (!isSelected(view)) {
             return null;
         } else {
@@ -38,21 +39,10 @@ class SpinnerValueConverter implements ViewValueConverter<Spinner> {
     }
 
     @Override
-    public <C> C getValueFromView(Spinner view, Class<C> expectedType) {
-        String strValue = getValueFromViewAsString(view);
-        return (C) ConvertUtils.convert(strValue, expectedType);
-    }
-
-    @Override
     public void setViewValue(Spinner view, Object value) {
-        String strValue = (String) ConvertUtils.convert(value, String.class);
-        setViewValueAsString(view, strValue);
-    }
-
-    @Override
-    public void setViewValueAsString(Spinner view, String value) {
         view.setSelected(false);
-        int pos = UIOptionsAdapterHelper.getSelectionOption(view.getAdapter(), value);
+        String strValue = (String) ConvertUtils.convert(value, String.class);
+        int pos = UIOptionsAdapterHelper.getSelectionOption(view.getAdapter(), strValue);
         view.setSelection(pos);
     }
 

@@ -31,6 +31,7 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.dag.DAGNode;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -43,50 +44,50 @@ public class ViewRenderHelper {
         return render(env, root, true);
     }
 
-    private View render(RenderingEnv env, UIComponent root, boolean checkDeferred) {
-        String rendererType = root.getRendererType();
+    private View render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
+        String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
         // enrich the execution environment with current form's context
-        setupFormContext(root, env);
+        setupFormContext(component, env);
 
-        View rootView;
-        if (checkDeferred && hasDeferredExpression(root, env)) {
+        View componentView;
+        if (checkDeferred && hasDeferredExpression(component, env)) {
             // insert a delegated view component as placeholder to render later
-            rootView = createDeferredView(env.getViewContext(), root, env);
+            componentView = createDeferredView(env.getViewContext(), component, env);
         } else {
-            rootView = renderer.render(env, root);
-            if (root instanceof UIForm) {
+            componentView = renderer.render(env, component);
+            if (component instanceof UIForm) {
                 // configure viewContext
-                ((UIForm) root).getContext().setView(rootView);
+                ((UIForm) component).getContext().setView(componentView);
             }
         }
         // if current view is not visible, don't render children
-        if (!ViewHelper.isVisible(rootView)) {
-            return rootView;
+        if (!ViewHelper.isVisible(componentView)) {
+            return componentView;
         }
 
         // render children if needed
         if (renderer instanceof GroupRenderer) {
             GroupRenderer gRenderer = (GroupRenderer) renderer;
-            if (root.isRenderChildren() && root.hasChildren()) {
+            if (component.isRenderChildren() && component.hasChildren()) {
                 // recursively render children components
-                ViewGroup groupView = (ViewGroup) rootView;
-                gRenderer.initGroup(env, root, groupView);
-                UIComponent[] kids = root.getChildren();
+                Widget groupView = (Widget) componentView;
+                gRenderer.initGroup(env, groupView);
+                UIComponent[] kids = component.getChildren();
                 int numKids = kids.length;
                 View[] views = new View[numKids];
                 for (int i = 0; i < numKids; i++) {
                     views[i] = render(env, kids[i]);
                 }
-                gRenderer.addViews(env, root, groupView, views);
-                gRenderer.endGroup(env, root, groupView);
+                gRenderer.addViews(env, groupView, views);
+                gRenderer.endGroup(env, groupView);
             }
         }
-        if (checkDeferred && root.getParent() == null) {
+        if (checkDeferred && component.getParent() == null) {
             // last step in the tree walk, process delegates when we're back on the view root
             processDeferredViews(env);
         }
-        return rootView;
+        return componentView;
     }
 
     private void setupFormContext(UIComponent root, RenderingEnv env) {

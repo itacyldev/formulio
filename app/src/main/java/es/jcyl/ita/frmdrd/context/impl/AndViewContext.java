@@ -2,6 +2,8 @@ package es.jcyl.ita.frmdrd.context.impl;
 
 import android.view.View;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -103,7 +105,8 @@ public class AndViewContext extends AbstractBaseContext {
         }
         View elementView = findElement(alias);
         // use converter to extract value from the view
-        Object value = alias.converter.getValueFromView(elementView, alias.expectedType);
+        Object value = alias.converter.getValueFromView(elementView);
+        value = ConvertUtils.convert(value, alias.expectedType);
         return value;
     }
 

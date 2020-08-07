@@ -16,29 +16,20 @@ package es.jcyl.ita.frmdrd.view.activities;
  */
 
 import android.app.Activity;
-import android.view.ViewGroup;
 
-import es.jcyl.ita.frmdrd.forms.FormController;
-import es.jcyl.ita.frmdrd.router.Router;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 
 /**
- * Interface to provide access to Android Activity from rendering environment and to register
- * current activity in MainController/router.
- *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface FormActivity<F extends FormController> {
 
-    void setFormController(F formController);
+public interface ActivityResultCallBack<I, O> {
 
-    void setRouter(Router router);
+    ActivityResultContract<I, O> getContract();
 
-    void setRenderingEnv(RenderingEnv env);
+    ActivityResultCallback<O> getCallBack();
 
-    Activity getActivity();
-
-    ViewGroup getContentView();
-
-    void registerCallBackForActivity(ActivityResultCallBack callback);
+    void setResultLauncher(Activity activity, ActivityResultLauncher<I> launcher);
 }

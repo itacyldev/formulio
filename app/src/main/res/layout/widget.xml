@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<es.jcyl.ita.frmdrd.view.InputFieldView
+<es.jcyl.ita.frmdrd.view.widget.Widget
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:keepScreenOn="true"
     android:orientation="vertical"
-    android:background="?attr/surfaceColor" />
+    android:background="?attr/surfaceColor"
+    tools:ignore="MissingDefaultResource" />

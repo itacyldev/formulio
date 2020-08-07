@@ -33,7 +33,7 @@ import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.frmdrd.context.ContextUtils;
 import es.jcyl.ita.frmdrd.context.impl.FormContext;
-import es.jcyl.ita.frmdrd.forms.FormController;
+import es.jcyl.ita.frmdrd.view.activities.FormActivity;
 import es.jcyl.ita.frmdrd.view.dag.ViewDAG;
 
 /**
@@ -60,7 +60,7 @@ public class RenderingEnv {
     private ViewUserActionInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private View viewRoot;
-    private Activity activity;
+    private FormActivity formActivity;
     /**
      * User text typing delay controls
      */
@@ -186,12 +186,12 @@ public class RenderingEnv {
         this.inputTypingDelay = inputTypingDelay;
     }
 
-    public void setActivity(Activity activity) {
-        this.activity = activity;
+    public FormActivity getFormActivity() {
+        return formActivity;
     }
 
-    public Activity getActivity() {
-        return activity;
+    public void setFormActivity(FormActivity formActivity) {
+        this.formActivity = formActivity;
     }
 }
 

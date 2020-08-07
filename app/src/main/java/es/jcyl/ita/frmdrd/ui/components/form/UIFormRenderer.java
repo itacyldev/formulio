@@ -1,13 +1,9 @@
 package es.jcyl.ita.frmdrd.ui.components.form;
 
-import android.view.View;
-import android.view.ViewGroup;
-
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
-import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
+import es.jcyl.ita.frmdrd.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -29,23 +25,14 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIFormRenderer extends BaseGroupRenderer<UIForm> implements GroupRenderer<UIForm> {
+public class UIFormRenderer extends AbstractGroupRenderer<UIForm, Widget<UIForm>> {
 
-
-    protected ViewGroup createBaseView(RenderingEnv env, UIForm component) {
-        return ViewHelper.inflate(env.getViewContext(), R.layout.component_form,ViewGroup.class);
+    @Override
+    protected void composeWidget(RenderingEnv env, Widget<UIForm> widget) {
     }
 
     @Override
-    protected void setupView(RenderingEnv env, ViewGroup baseView, UIForm component) {
-
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_form;
     }
-
-    @Override
-    public void addViews(RenderingEnv env, UIForm component, ViewGroup root, View[] views) {
-        for (View view : views) {
-            root.addView(view);
-        }
-    }
-
 }

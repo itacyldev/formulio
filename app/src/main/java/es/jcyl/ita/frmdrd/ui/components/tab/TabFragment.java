@@ -47,7 +47,7 @@ public class TabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_tab, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.widget_tab_fragment, container, false);
         if (tabView != null) {
             view.addView(tabView);
         }

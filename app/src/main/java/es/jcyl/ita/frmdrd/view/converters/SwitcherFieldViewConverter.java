@@ -25,16 +25,9 @@ import org.mini2Dx.beanutils.ConvertUtils;
 class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
 
     @Override
-    public String getValueFromViewAsString(Switch view) {
+    public Object getValueFromView(Switch view) {
         Boolean viewValue = view.isChecked();
-        return viewValue.toString();
-    }
-
-    @Override
-    public <C> C getValueFromView(Switch view, Class<C> expectedType) {
-        Boolean viewValue = view.isChecked();
-        Object o = ConvertUtils.convert(viewValue, expectedType);
-        return (C) o;
+        return viewValue;
     }
 
     @Override
@@ -45,10 +38,5 @@ class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
         } else {
             view.setChecked(boolValue);
         }
-    }
-
-    @Override
-    public void setViewValueAsString(Switch view, String value) {
-        setViewValue(view, value);
     }
 }

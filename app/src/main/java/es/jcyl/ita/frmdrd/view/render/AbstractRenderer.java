@@ -17,31 +17,41 @@ package es.jcyl.ita.frmdrd.view.render;
 
 import android.view.View;
 
-import androidx.annotation.Nullable;
-
+import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import androidx.annotation.Nullable;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
+import es.jcyl.ita.frmdrd.view.ViewHelper;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public abstract class BaseRenderer<V extends View, C extends UIComponent> implements Renderer<C> {
+public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C>>
+        implements Renderer<C> {
 
-
-    public final View render(RenderingEnv env, C component) {
-        V baseView = createBaseView(env, component);
+    public final Widget<C> render(RenderingEnv env, C component) {
+        W widget = createWidget(env, component);
         // check render condition
         boolean isRendered = component.isRendered(env.getContext());
-        baseView.setVisibility(isRendered ? View.VISIBLE : View.GONE);
+        widget.setVisibility(isRendered ? View.VISIBLE : View.GONE);
         if (!isRendered) {
-            return baseView;
+            return widget;
         }
-        setupView(env, baseView, component);
-        return baseView;
+        composeWidget(env, widget);
+        setupWidget(env, widget);
+        return widget;
     }
+
+    /**
+     * Provides the resource id to be inflated to get the widget instance.
+     *
+     * @return
+     */
+    protected abstract int getWidgetLayoutId();
 
     /**
      * Create a base view from context and component information to view used as placeholder in the form view
@@ -50,9 +60,26 @@ public abstract class BaseRenderer<V extends View, C extends UIComponent> implem
      * @param component
      * @return
      */
-    protected abstract V createBaseView(RenderingEnv env, C component);
+    protected W createWidget(RenderingEnv env, C component) {
+        Widget widget = ViewHelper.inflate(env.getViewContext(), getWidgetLayoutId(), Widget.class);
+        // set unique id and tag
+        widget.setId(RandomUtils.nextInt());
+        widget.setTag(getWidgetViewTag(component));
+        widget.setComponent(component);
+        return (W) widget;
+    }
 
-    protected abstract void setupView(RenderingEnv env, V baseView, C component);
+    protected abstract void composeWidget(RenderingEnv env, W widget);
+
+    /**
+     * Configure widget after creation.
+     *
+     * @param env
+     * @param widget
+     */
+    protected void setupWidget(RenderingEnv env, W widget) {
+        widget.setup(env);
+    }
 
     /**
      * Calculates the tag for the GroupView component that contains all the input, so when a partial
@@ -61,7 +88,7 @@ public abstract class BaseRenderer<V extends View, C extends UIComponent> implem
      *
      * @return
      */
-    protected String getBaseViewTag(C c) {
+    protected String getWidgetViewTag(C c) {
         UIForm form = c.getParentForm();
         String formId = (form == null) ? "root" : form.getId();
         return formId + ":" + c.getId();
@@ -75,7 +102,7 @@ public abstract class BaseRenderer<V extends View, C extends UIComponent> implem
      * @param env
      * @return
      */
-    protected <T> T getValue(C component, RenderingEnv env,@Nullable Class<T> clazz) {
+    protected <T> T getComponentValue(RenderingEnv env, C component, @Nullable Class<T> clazz) {
         Object value = component.getValue(env.getContext());
         if (value == null) {
             return handleNullValue(component);

@@ -45,6 +45,7 @@ import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -102,7 +103,7 @@ public class TabRendererTest {
         tab.setId(RandomUtils.randomString(4));
         tab.setChildren(lstTabItem);
 
-        LinearLayout tabView = (LinearLayout) renderHelper.render(env, tab);
+        Widget tabView = (Widget) renderHelper.render(env, tab);
         // check there's a TextView element
         Assert.assertNotNull(tabView);
 

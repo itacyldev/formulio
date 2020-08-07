@@ -1,14 +1,9 @@
 package es.jcyl.ita.frmdrd.ui.components.view;
 
-import android.view.View;
-import android.view.ViewGroup;
-
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
-import es.jcyl.ita.frmdrd.view.ViewHelper;
-import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
-import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
+import es.jcyl.ita.frmdrd.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -29,23 +24,14 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 /**
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class UIViewRenderer extends BaseGroupRenderer<UIView> implements GroupRenderer<UIView> {
-
-    protected ViewGroup createBaseView(RenderingEnv env, UIView component) {
-        return ViewHelper.inflate(env.getViewContext(), R.layout.component_view, ViewGroup.class);
-    }
-
+public class UIViewRenderer extends AbstractGroupRenderer<UIView, Widget<UIView>> {
 
     @Override
-    protected void setupView(RenderingEnv env, ViewGroup baseView, UIView component) {
-
+    protected void composeWidget(RenderingEnv env, Widget<UIView> widget) {
     }
 
-
     @Override
-    public void addViews(RenderingEnv env, UIView component, ViewGroup root, View[] views) {
-        for (View view : views) {
-            root.addView(view);
-        }
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_view;
     }
 }

@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import es.jcyl.ita.frmdrd.builders.SelectDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.ui.components.select.UISelect;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
@@ -90,12 +91,14 @@ public class SpinnerViewConverterTest {
 
         SpinnerValueConverter conv = new SpinnerValueConverter();
         for (int i = 0; i < values.length; i++) {
-            InputFieldView<Spinner> baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
-            Spinner inputView = baseView.getInputView();
+            InputWidget<UISelect, Spinner> widget =
+                    ViewHelper.findInputFieldViewById(env.getViewRoot(),
+                    field);
+            Spinner inputView = widget.getInputView();
 
             // transform the value using the converter and check the result against the original value
             conv.setViewValue(inputView, values[i]);
-            String actual = conv.getValueFromViewAsString(inputView);
+            Object actual = conv.getValueFromView(inputView);
 
             Assert.assertEquals(values[i], actual);
         }
@@ -121,12 +124,14 @@ public class SpinnerViewConverterTest {
         Integer[] expected = new Integer[]{null, 0, 1, 2, 4, null};
         SpinnerValueConverter conv = new SpinnerValueConverter();
         for (int i = 0; i < values.length; i++) {
-            InputFieldView<Spinner> baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
-            Spinner inputView = baseView.getInputView();
+            InputWidget<UISelect, Spinner> widget =
+                    ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+            Spinner inputView = widget.getInputView();
 
             // transform the value using the converter and check the result against the original value
             conv.setViewValue(inputView, values[i]);
-            Integer actual = conv.getValueFromView(inputView, Integer.class);
+            Object o = conv.getValueFromView(inputView);
+            Integer actual = (Integer) ConvertUtils.convert(o, Integer.class);
 
             Assert.assertEquals(expected[i], actual);
         }
@@ -164,13 +169,14 @@ public class SpinnerViewConverterTest {
             Boolean[] expected = new Boolean[]{null, true, false};
             SpinnerValueConverter conv = new SpinnerValueConverter();
             for (int i = 0; i < values.length; i++) {
-                InputFieldView<Spinner> baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
-                Spinner inputView = baseView.getInputView();
+                InputWidget<UISelect,Spinner> widget =
+                        ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+                Spinner inputView = widget.getInputView();
 
                 // transform the value using the converter and check the result against the original value
                 conv.setViewValue(inputView, values[i]);
-                Boolean actual = conv.getValueFromView(inputView, Boolean.class);
-
+                Object o = conv.getValueFromView(inputView);
+                Boolean actual = (Boolean) ConvertUtils.convert(o, Boolean.class);
                 Assert.assertEquals(expected[i], actual);
             }
         }
@@ -217,12 +223,13 @@ public class SpinnerViewConverterTest {
             RenderingEnv env = recipe.env;
             env.disableInterceptors();
 
-            InputFieldView<Spinner> baseView = ViewHelper.findInputFieldViewById(env.getViewRoot(), select);
-            Spinner inputView = baseView.getInputView();
+            InputWidget<UISelect, Spinner> widget =
+                    ViewHelper.findInputFieldViewById(env.getViewRoot(), select);
+            Spinner inputView = widget.getInputView();
             SpinnerValueConverter conv = new SpinnerValueConverter();
             // transform the value using the converter and check the result against the original value
 
-            String actual = conv.getValueFromViewAsString(inputView);
+            Object actual = conv.getValueFromView(inputView);
             Assert.assertEquals(expected[i], actual);
         }
     }

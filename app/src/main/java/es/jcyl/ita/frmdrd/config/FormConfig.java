@@ -23,7 +23,7 @@ import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.source.EntitySource;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
 import es.jcyl.ita.frmdrd.forms.FormListController;
-import es.jcyl.ita.frmdrd.meta.Identifiable;
+import es.jcyl.ita.frmdrd.meta.Identificable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -31,7 +31,7 @@ import es.jcyl.ita.frmdrd.meta.Identifiable;
  * Base class that gathers the information in a form configuration file.
  */
 
-public class FormConfig extends Entity implements Identifiable {
+public class FormConfig extends Entity implements Identificable {
 
     private String id;
     private String name;

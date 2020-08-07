@@ -9,12 +9,12 @@ import java.util.Set;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
-import es.jcyl.ita.frmdrd.meta.Identifiable;
+import es.jcyl.ita.frmdrd.meta.Identificable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
 
-public abstract class UIComponent implements Identifiable {
+public abstract class UIComponent implements Identificable {
 
     protected String id;
     protected String label;

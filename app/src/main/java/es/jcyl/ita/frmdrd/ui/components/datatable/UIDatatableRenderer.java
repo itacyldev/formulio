@@ -1,14 +1,12 @@
 package es.jcyl.ita.frmdrd.ui.components.datatable;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.view.render.BaseRenderer;
+import es.jcyl.ita.frmdrd.view.render.AbstractRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
@@ -31,52 +29,59 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class UIDatatableRenderer extends BaseRenderer<DatatableLayout, UIDatatable> {
+public class UIDatatableRenderer extends AbstractRenderer<UIDatatable, DatatableWidget> {
 
     private final static float ROW_HEIGHT_DP = 38.75f;
 
     @Override
-    protected DatatableLayout createBaseView(RenderingEnv env, UIDatatable component) {
-        UIDatatable dtComponent = component;
-        DatatableLayout datatableView = (DatatableLayout) View.inflate(env.getViewContext(),
-                R.layout.component_datatable_layout, null);
-        datatableView.setDatatable(dtComponent);
-        datatableView.setTag(getBaseViewTag(component));
-        return datatableView;
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_datatable;
     }
 
     @Override
-    protected void setupView(RenderingEnv env, DatatableLayout datatableView, UIDatatable component) {
-//        component.getRepo().setContext(env.getContext()); // the context must be already set by the repository factory
-        LinearLayout tableView = datatableView.findViewById(R.id.list_layout);
+    protected void composeWidget(RenderingEnv env, DatatableWidget widget) {
+    }
+
+    @Override
+    protected DatatableWidget createWidget(RenderingEnv env, UIDatatable component) {
+        DatatableWidget widget = super.createWidget(env, component);
+        widget.setTag(getWidgetViewTag(component));
+        return widget;
+    }
+
+    @Override
+    protected void setupWidget(RenderingEnv env, DatatableWidget widget) {
+        super.setupWidget(env, widget);
+
+        LinearLayout tableView = widget.findViewById(R.id.list_layout);
         LinearLayout headerLayout = tableView.findViewById(R.id.list_layout_headers);
-        datatableView.setHeaderView(headerLayout);
+        widget.setHeaderView(headerLayout);
 
         ListView bodyView = tableView.findViewById(R.id.list_view);
-        setLayoutParams(bodyView, env.getViewContext(), component);
-        datatableView.setBodyView(bodyView);
+        setLayoutParams(bodyView, env.getViewContext(), widget.getComponent());
+        widget.setBodyView(bodyView);
 
-        datatableView.load(env);
+        widget.load(env);
     }
 
     /**
-     * Sets dimension parameters.
-     *
-     * @param tableView DataTable container.
-     * @param context  Context for resources.
-     * @param component
+     * Configure datatable layout setting the dimension parameters.
+     * @param tableView
+     * @param context: android context
+     * @param component: ui component
      */
     private void setLayoutParams(@NonNull ListView tableView,
                                  @NonNull Context context, @NonNull UIDatatable component) {
         final int layout_width = ListView.LayoutParams.WRAP_CONTENT;
         final int layout_height;
-        if (component.getNumVisibleRows() < 0){
+        if (component.getNumVisibleRows() < 0) {
             layout_height = ListView.LayoutParams.MATCH_PARENT;
         } else {
-            layout_height = (int)(context.getResources().getDisplayMetrics().density *
+            layout_height = (int) (context.getResources().getDisplayMetrics().density *
                     ROW_HEIGHT_DP *
                     component.getNumVisibleRows());
         }
         tableView.setLayoutParams(new LinearLayout.LayoutParams(layout_width, layout_height));
     }
+
 }

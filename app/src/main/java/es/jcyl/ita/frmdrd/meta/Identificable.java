@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface Identifiable extends Serializable {
+public interface Identificable extends Serializable {
 
     String getId();
 

@@ -78,6 +78,11 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
     }
 
     @Override
+    public Repository getRepo() {
+        return null;
+    }
+
+    @Override
     public void setFilter(Filter filter) {
         this.filter = filter;
     }
@@ -96,4 +101,5 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
     public void setMandatoryFilters(String[] mandatoryFields) {
         this.mandatoryFilters = mandatoryFilters;
     }
+
 }

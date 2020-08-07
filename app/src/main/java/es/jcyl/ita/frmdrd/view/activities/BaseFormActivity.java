@@ -19,6 +19,8 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import es.jcyl.ita.frmdrd.BaseActivity;
 import es.jcyl.ita.frmdrd.MainController;
 import es.jcyl.ita.frmdrd.R;
@@ -52,9 +54,9 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
         try {
             View viewRoot = mc.renderView(this);
             contentView.addView(viewRoot);
-        }catch(Exception e){
-            DevConsole.error("Error trying to render view " + this.formController.getId(),e);
-            router.back(this, new String[] {"Sorry, there was an error while trying to render the view. " +
+        } catch (Exception e) {
+            DevConsole.error("Error trying to render view " + this.formController.getId(), e);
+            router.back(this, new String[]{"Sorry, there was an error while trying to render the view. " +
                     "See console for details."});
         }
 
@@ -100,5 +102,13 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
     @Override
     public ViewGroup getContentView() {
         return contentView;
+    }
+
+    public void registerCallBackForActivity(ActivityResultCallBack callback) {
+        ActivityResultLauncher<String> mGetContent = registerForActivityResult(callback.getContract(),
+                callback.getCallBack()
+        );
+
+        callback.setResultLauncher(this, mGetContent);
     }
 }

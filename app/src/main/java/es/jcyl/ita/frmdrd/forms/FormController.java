@@ -21,7 +21,7 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.meta.Identifiable;
+import es.jcyl.ita.frmdrd.meta.Identificable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 
@@ -31,7 +31,7 @@ import es.jcyl.ita.frmdrd.ui.components.view.UIView;
  * <p>
  * Stores form configuration, view, permissions, etc. and provides operations to perform CRUD over and entity
  */
-public abstract class FormController implements Identifiable {
+public abstract class FormController implements Identificable {
     protected String id;
     protected String name;
     protected UIView view;

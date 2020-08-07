@@ -33,12 +33,21 @@ public class ImageViewByteArrayConverter extends AbstractImageViewValueConverter
     }
 
     @Override
-    protected byte[] readImageBytesFromObject(ByteArray bArray) throws IOException {
-        return bArray.getValue();
+    protected MediaResource readImageResourceFromObject(ByteArray bArray) throws IOException {
+        return MediaResource.fromByteArray(bArray.getValue()) ;
     }
 
     @Override
     protected ByteArray readObjectFromImageResource(MediaResource resource) throws IOException {
-        return null;
+        if(!resource.hasContent()){
+            return null;
+        } else {
+            return new ByteArray(resource.getContent());
+        }
+    }
+
+    @Override
+    protected String readObjectFromImageResourceAsString(MediaResource resource) throws IOException {
+        return new String(resource.getContent());
     }
 }

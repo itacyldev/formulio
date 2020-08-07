@@ -16,7 +16,7 @@ package es.jcyl.ita.frmdrd.ui.components.image;
  */
 
 import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.render.InputRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
@@ -25,42 +25,31 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * <p>
  * Renders uiImage componentes using Android ImageView
  */
-public class UIImageRenderer extends InputRenderer<ImageResourceView, UIImage> {
-
-//        ImageView image = (ImageView) findViewById(R.id.test_image);
-//        Bitmap bMap = BitmapFactory.decodeFile("/sdcard/test2.png");
-//        image.setImageBitmap(bMap);
+public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
 
     @Override
-    protected int getComponentLayoutId() {
-        return R.layout.component_image_widget;
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_image;
     }
 
     @Override
-    protected void setMessages(RenderingEnv env, InputFieldView<ImageResourceView> baseView, UIImage component) {
-
+    protected int getInputViewId() {
+        return R.layout.widget_image;
     }
 
     @Override
-    protected void composeView(RenderingEnv env, InputFieldView<ImageResourceView> baseView, UIImage component) {
-//        Button button = ViewHelper.findViewAndSetId(baseView, R.id.btn_camera,
-//                Button.class);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//                startActivityForResult(intent, 7);
-//
-//            }
-//        });
+    protected InputWidget<UIImage, ImageResourceView> createWidget(RenderingEnv env, UIImage component) {
+        ImageWidget imageWidget = (ImageWidget) super.createWidget(env, component);
+        env.getFormActivity().registerCallBackForActivity(imageWidget);
+        return imageWidget;
     }
 
 
-    protected void setupInputView(RenderingEnv env, InputFieldView<ImageResourceView> baseView, ImageResourceView inputView, UIImage component) {
-        super.setupInputView(env, baseView, inputView, component);
 
+    @Override
+    protected void composeInputView(RenderingEnv env, InputWidget<UIImage, ImageResourceView> widget) {
+        ImageResourceView inputView = widget.getInputView();
+        UIImage component = widget.getComponent();
         inputView.requestLayout();
         Integer height = component.getHeight();
         if (height != null) {
@@ -73,9 +62,17 @@ public class UIImageRenderer extends InputRenderer<ImageResourceView, UIImage> {
     }
 
     @Override
-    protected void setValue(RenderingEnv env, InputFieldView<ImageResourceView> baseView, ImageResourceView inputView, UIImage component) {
-        Object value = getValue(component, env, null);
-        baseView.getConverter().setViewValue(inputView, value);
+    protected void setValueInView(RenderingEnv env, InputWidget<UIImage, ImageResourceView> widget) {
+        ImageResourceView inputView = widget.getInputView();
+        UIImage component = widget.getComponent();
+        Object value = getComponentValue(env, component, null);
+        widget.getConverter().setViewValue(inputView, value);
+//        imageWidget.setMediaResource();
+    }
+
+    @Override
+    protected void setMessages(RenderingEnv env, InputWidget<UIImage, ImageResourceView> widget) {
+
     }
 
 }

@@ -1,20 +1,18 @@
 package es.jcyl.ita.frmdrd.ui.components.tab;
 
 import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.widget.ViewPager2;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
-import es.jcyl.ita.frmdrd.view.render.BaseGroupRenderer;
-import es.jcyl.ita.frmdrd.view.render.GroupRenderer;
+import es.jcyl.ita.frmdrd.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -35,20 +33,20 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class TabRenderer extends BaseGroupRenderer<UITab> implements GroupRenderer<UITab> {
+public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
-    protected ViewGroup createBaseView(RenderingEnv env, UITab component) {
-        ViewGroup layout = (ViewGroup) View.inflate(env.getViewContext(),
-                R.layout.component_tab, null);
-        return layout;
+    @Override
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_tab;
     }
 
     @Override
-    protected void setupView(RenderingEnv env, ViewGroup baseView, UITab component) {
+    protected void composeWidget(RenderingEnv env, Widget<UITab> widget) {
+        UITab component = widget.getComponent();
         FragmentActivity fragmentActivity = (FragmentActivity) env.getViewContext();
 
-        TabLayout tabLayout = baseView.findViewById(R.id.tab_layout);
-        ViewPager2 viewPager = baseView.findViewById(R.id.viewPager);
+        TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
+        ViewPager2 viewPager = widget.findViewById(R.id.viewPager);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
@@ -67,8 +65,7 @@ public class TabRenderer extends BaseGroupRenderer<UITab> implements GroupRender
     }
 
     @Override
-
-    public void addViews(RenderingEnv env, UITab component, ViewGroup root, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UITab> root, View[] views) {
         ViewPager2 viewPager = root.findViewById(R.id.viewPager);
         ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
 

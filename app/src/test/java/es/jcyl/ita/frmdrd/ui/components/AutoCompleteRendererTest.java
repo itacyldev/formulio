@@ -21,8 +21,6 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,6 +30,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import androidx.test.platform.app.InstrumentationRegistry;
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
@@ -46,7 +45,7 @@ import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteView;
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
 
@@ -92,11 +91,12 @@ public class AutoCompleteRendererTest {
             options[i] = new UIOption(name, name);
         }
         select.setOptions(options);
-        InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, select);
-        Assert.assertNotNull(view);
+        InputWidget<UIAutoComplete, AutoCompleteView> widget =
+                (InputWidget<UIAutoComplete, AutoCompleteView>) renderHelper.render(env, select);
+        Assert.assertNotNull(widget);
 
         // check elements in the view
-        Adapter adapter = view.getInputView().getAdapter();
+        Adapter adapter = widget.getInputView().getAdapter();
         Assert.assertNotNull(adapter);
         Assert.assertEquals(expectedOptions, adapter.getCount() - 1);// empty option was added by renderer
 
@@ -151,17 +151,18 @@ public class AutoCompleteRendererTest {
         // create and expression combining two entity properties
         autoSel.setOptionLabelExpression(exprFactory.create(String.format("${entity.%s}-${entity.%s}", secondPropertyName, thirdPropertyName)));
 
-        InputFieldView<AutoCompleteView> view = (InputFieldView<AutoCompleteView>) renderHelper.render(env, autoSel);
-        Assert.assertNotNull(view);
+        InputWidget<UIAutoComplete, AutoCompleteView> widget =
+                (InputWidget<UIAutoComplete, AutoCompleteView>) renderHelper.render(env, autoSel);
+        Assert.assertNotNull(widget);
 
         // check number of elements in the adapter
-        ArrayAdapter<Entity> adapter = (ArrayAdapter<Entity>) view.getInputView().getAdapter();
+        ArrayAdapter<Entity> adapter = (ArrayAdapter<Entity>) widget.getInputView().getAdapter();
         Assert.assertNotNull(adapter);
         Assert.assertEquals(expectedOptions, adapter.getCount());
 
         // check options value
         for (int i = 0; i < adapter.getCount(); i++) {
-            View itemView = adapter.getView(i, null, view);
+            View itemView = adapter.getView(i, null, widget);
             TextView textView = (TextView) itemView.findViewById(R.id.autocomplete_item);
             Entity entity = entities.get(i);
             String expected = String.format("%s-%s",

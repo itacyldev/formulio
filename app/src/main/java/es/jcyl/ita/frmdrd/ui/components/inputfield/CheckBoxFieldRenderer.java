@@ -7,8 +7,8 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.actions.ActionType;
 import es.jcyl.ita.frmdrd.actions.UserAction;
 import es.jcyl.ita.frmdrd.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.frmdrd.view.InputFieldView;
-import es.jcyl.ita.frmdrd.view.render.InputRenderer;
+import es.jcyl.ita.frmdrd.view.widget.InputWidget;
+import es.jcyl.ita.frmdrd.view.render.InputTextRenderer;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 
 /*
@@ -31,35 +31,33 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class CheckBoxFieldRenderer extends InputRenderer<Switch, UIField> {
+public class CheckBoxFieldRenderer extends InputTextRenderer<UIField, Switch> {
 
     @Override
-    protected void composeView(RenderingEnv env, InputFieldView<Switch> baseView, UIField component) {
-        baseView.getInputView().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    protected void composeInputView(RenderingEnv env, InputWidget<UIField, Switch> widget) {
+        Switch inputView = widget.getInputView();
+        inputView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+                    interceptor.doAction(new UserAction(widget.getComponent(),
+                            ActionType.INPUT_CHANGE.name()));
                 }
             }
         });
     }
 
     @Override
-    protected int getComponentLayoutId() {
-        return R.layout.component_checkbox;
-    }
-
-    @Override
-    protected void setMessages(RenderingEnv env, InputFieldView<Switch> baseView, UIField component) {
-
+    protected int getWidgetLayoutId() {
+        return R.layout.widget_checkbox;
     }
 
     @Override
     protected <T> T handleNullValue(UIField component) {
         return (T) Boolean.FALSE;
     }
+
 
 }

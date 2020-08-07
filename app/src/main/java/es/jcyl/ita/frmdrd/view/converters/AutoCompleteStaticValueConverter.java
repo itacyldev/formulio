@@ -25,31 +25,22 @@ import es.jcyl.ita.frmdrd.ui.components.option.UIOptionsAdapterHelper;
  */
 public class AutoCompleteStaticValueConverter implements ViewValueConverter<AutoCompleteView> {
 
-    @Override
-    public String getValueFromViewAsString(AutoCompleteView view) {
-        return getValueFromView(view, String.class);
-    }
+//    @Override
+//    public String getValueFromViewAsString(AutoCompleteView view) {
+//        return getValueFromView(view, String.class);
+//    }
 
     @Override
-    public <C> C getValueFromView(AutoCompleteView view, Class<C> expectedType) {
-        Object value = view.getValue();
-        if (value == null) {
-            return null;
-        } else {
-            return (C) ConvertUtils.convert(value, expectedType);
-        }
+    public Object getValueFromView(AutoCompleteView view) {
+        return view.getValue();
     }
 
     @Override
     public void setViewValue(AutoCompleteView view, Object value) {
         String strValue = (String) ConvertUtils.convert(value, String.class);
-        setViewValueAsString(view, strValue);
-    }
-
-    @Override
-    public void setViewValueAsString(AutoCompleteView view, String value) {
-        view.setText(value);
-        int pos = UIOptionsAdapterHelper.getSelectionOption(view.getAdapter(), value);
+        view.setText(strValue);
+        int pos = UIOptionsAdapterHelper.getSelectionOption(view.getAdapter(), strValue);
         view.setSelection(pos);
     }
+
 }

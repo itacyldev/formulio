@@ -6,6 +6,7 @@ import android.view.View;
 import org.apache.commons.lang3.RandomUtils;
 
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -26,7 +27,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class DeferredView extends View {
+public class DeferredView extends Widget {
     private  UIComponent component;
 
     public DeferredView(Context context) {
