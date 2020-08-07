@@ -15,18 +15,12 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.meta.PropertyType;
-import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
+import es.jcyl.ita.crtrepo.query.Operator;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
-import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
+import es.jcyl.ita.frmdrd.ui.components.column.UIColumnFilter;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -43,68 +37,41 @@ public class UIColumnBuilder extends BaseUIComponentBuilder<UIColumn> {
 
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UIColumn> node) {
+        if (node.hasChildren()) {
+            for (ConfigNode child : node.getChildren()) {
+                String name = child.getName();
+                UIColumnFilter filter = new UIColumnFilter();
+                if (name.equals("filter")) {
+                    addHeaderFilter(child, filter);
 
-    }
-
-    private void setUpColumns(ConfigNode<UIColumn> node) {
-        List<UIColumn> columns = new ArrayList<>();
-        UIColumn dataTable = node.getElement();
-
-        // get nested defined columns
-        List<ConfigNode> colNodes = ConfigNodeHelper.getDescendantByTag(node, "column");
-
-        for (ConfigNode n : colNodes) {
-            UIColumn col = (UIColumn) n.getElement();
-            columns.add(col);
-        }
-
-        // check if 'properties' attributes is defined to add more columns
-        String propertySelector = node.getAttribute("properties");
-        String[] propertyFilter;
-        List<UIColumn> colsToAdd = null;
-        if (StringUtils.isBlank(propertySelector)) {
-            if (columns.size() == 0) {
-                // no property is selected and no nested column elements, by default add all properties
+                } else if (name.equals("order")) {
+                    String property = child.getAttribute("property");
+                    filter.setOrderProperty(property);
+                }
+                node.getElement().setHeaderFilter(filter);
             }
-        } else {
-            if (propertySelector.equals("*") || propertySelector.equals("all")) {
-                // use all repo properties
-                propertyFilter = new String[0];
-            } else {
-                // comma-separated list of property names
-                propertyFilter = StringUtils.split(propertySelector.replace(" ", ""), ",");
-            }
-            // create columns with property selection
-        }
-        if (colsToAdd != null) {
-            columns.addAll(colsToAdd);
-        }
 
-        // set columns in datatable
-
+        }
     }
 
+    /**
+     * Adds values for the column filter
+     *
+     * @param filterNode
+     */
+    private void addHeaderFilter(ConfigNode filterNode, UIColumnFilter filter) {
+        String property = filterNode.getAttribute("property");
 
-    private List<UIColumn> createDefaultColumns(Repository repo, String[] propertyNames) {
-        List<UIColumn> lstCols = new ArrayList<>();
+        String matching = filterNode.getAttribute("matching");
+        Operator op = Operator.valueOf(matching.toUpperCase());
 
-        PropertyType[] properties;
-        properties = UIBuilderHelper.getPropertiesFromRepo(repo, propertyNames);
-        for (PropertyType property : properties) {
-            UIColumn col = createColumn(property);
-            lstCols.add(col);
-        }
-        return lstCols;
+        String valueExpressionStr = filterNode.getAttribute("valueExpression");
+        ValueExpressionFactory fact = ValueExpressionFactory.getInstance();
+        ValueBindingExpression valueExpression = fact.create(valueExpressionStr);
+
+        filter.setFilterProperty(property);
+        filter.setFilterValueExpression(valueExpression);
+        filter.setMatchingOperator(op);
     }
-
-    private UIColumn createColumn(PropertyType property) {
-        UIColumn col = new UIColumn();
-        col.setId(property.getName());
-        col.setHeaderText(property.getName());
-
-        col.setValueExpression(ValueExpressionFactory.getInstance().create("${entity." + property.getName() + "}"));
-        col.setFiltering(true);
-        return col;
-    }
-
 }
+

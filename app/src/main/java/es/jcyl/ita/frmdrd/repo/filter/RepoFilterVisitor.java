@@ -26,6 +26,8 @@ import es.jcyl.ita.crtrepo.query.Expression;
 import es.jcyl.ita.crtrepo.query.Operator;
 import es.jcyl.ita.frmdrd.config.elements.RepoFilter;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.repo.query.ConditionBinding;
 
 /**
@@ -59,23 +61,30 @@ public class RepoFilterVisitor {
                 Operator operator = Operator.valueOf(node.getName().toUpperCase());
                 String property = node.getAttribute("property");
                 String value = node.getAttribute("value");
+                boolean isMandatory = false;
+                if ("true".equalsIgnoreCase(node.getAttribute("mandatory"))) {
+                    isMandatory = true;
+                }
 
                 Condition condition = null;
 
-                if (value.startsWith("$")) { //TODO:
+                if (value.startsWith("$")) {
                     // Jexl Expression
                     condition = new ConditionBinding(property, operator, value);
+                    ValueBindingExpression valueExpression = ValueExpressionFactory.getInstance().create(value);
+                    ((ConditionBinding) condition).setBindingExpression(valueExpression);
+                    if (isMandatory) {
+                        for (String variable : valueExpression.getDependingVariables()) {
+                            mandatoryFields.add(variable);
+                        }
+                    }
                 } else {
                     condition = new Condition(property, operator, value);
-                }
-
-                // add mandatory fields
-                if (node.getAttributes().containsKey("mandatory")) {
-                    String isMandatory = node.getAttribute("mandatory");
-                    if ("true".equalsIgnoreCase(isMandatory)) {
-                        mandatoryFields.add(property);
+                    if (isMandatory) {
+                        mandatoryFields.add(value);
                     }
                 }
+
 
                 return condition;
             } else {

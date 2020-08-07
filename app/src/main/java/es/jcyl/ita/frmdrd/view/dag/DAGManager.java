@@ -1,9 +1,5 @@
 package es.jcyl.ita.frmdrd.view.dag;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
@@ -140,33 +136,34 @@ public class DAGManager {
 
                 String dependingComponentId;
                 for (String depString : dependingVariables) {
-                    dependingComponentId = createAbsoluteReference(component, depString);
-                    if (!dependingComponentId.equals(componentId)) {
-                        UIComponent dependingComponent = components.get(dependingComponentId);
-                        if (dependingComponent != null) {
-                            DAGNode dependingNode = getComponentNode(dependingComponent);
-
-                            DirectedAcyclicGraph dag = null;
-                            if (dags.containsKey(componentId)) {
-                                dag = dags.get(componentId);
-                                if (!dag.containsVertex(dependingNode)) {
-                                    dag.addVertex(dependingNode);
+                    if (!depString.startsWith("entity")) {
+                        dependingComponentId = createAbsoluteReference(component, depString);
+                        if (!dependingComponentId.equals(componentId)) {
+                            UIComponent dependingComponent = components.get(dependingComponentId);
+                            if (dependingComponent != null) {
+                                DAGNode dependingNode = getComponentNode(dependingComponent);
+                                DirectedAcyclicGraph dag = null;
+                                if (dags.containsKey(componentId)) {
+                                    dag = dags.get(componentId);
+                                    if (!dag.containsVertex(dependingNode)) {
+                                        dag.addVertex(dependingNode);
+                                    }
+                                    if (!dag.containsEdge(dependingNode, componentNode)) {
+                                        dag.addEdge(dependingNode, componentNode);
+                                    }
+                                    dags.put(dependingComponentId, dag);
+                                } else {
+                                    dag = getDagComponent(dependingComponentId, dags);
+                                    if (!dag.containsVertex(componentNode)) {
+                                        dag.addVertex(componentNode);
+                                    }
+                                    if (!dag.containsEdge(dependingNode, componentNode)) {
+                                        dag.addEdge(dependingNode, componentNode);
+                                    }
+                                    dags.put(componentId, dag);
                                 }
-                                if (!dag.containsEdge(dependingNode, componentNode)) {
-                                    dag.addEdge(dependingNode, componentNode);
-                                }
-                                dags.put(dependingComponentId, dag);
-                            } else {
-                                dag = getDagComponent(dependingComponentId, dags);
-                                if (!dag.containsVertex(componentNode)) {
-                                    dag.addVertex(componentNode);
-                                }
-                                if (!dag.containsEdge(dependingNode, componentNode)) {
-                                    dag.addEdge(dependingNode, componentNode);
-                                }
-                                dags.put(componentId, dag);
+                                buildComponentDag(dependingComponentId, dags, components);
                             }
-                            buildComponentDag(dependingComponentId, dags, components);
                         }
                     }
                 }

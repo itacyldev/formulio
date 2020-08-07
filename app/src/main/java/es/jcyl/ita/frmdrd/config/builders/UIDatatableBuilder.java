@@ -88,10 +88,10 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
     private void setUpNumVisibleRows(ConfigNode<UIDatatable> node) {
         int numVisibleRows = 1; // Number of default visible rows
-        if (node.hasAttribute("numVisibleRows")){
+        if (node.hasAttribute("numVisibleRows")) {
             numVisibleRows = Integer.parseInt(node.getAttribute("numVisibleRows"));
         }
-        if (node.getParent().getElement() instanceof FormListController){
+        if (node.getParent().getElement() instanceof FormListController) {
             numVisibleRows = -1; // Fill container with rows
         }
         UIDatatable dataTable = node.getElement();
@@ -138,6 +138,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         dataTable.setColumns(columns.toArray(new UIColumn[columns.size()]));
 
     }
+
 
     public UIDatatable createDataTableFromRepo(Repository repo) {
         // select all entity properties
