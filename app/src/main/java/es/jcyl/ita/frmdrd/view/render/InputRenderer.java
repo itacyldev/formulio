@@ -50,7 +50,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         // find label and setup
         TextView fieldLabel = ViewHelper.findViewAndSetId(widget, getLabelViewId(),
                 TextView.class);
-        setupLabel(env, fieldLabel, widget.getComponent());
+        setLabel(env, fieldLabel, widget.getComponent());
 
         // get input view and set Tag and Value
         I inputView = (I) ViewHelper.findViewAndSetId(widget, getInputViewId());
@@ -63,7 +63,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                     res.getResourceName(getWidgetLayoutId())));
         }
         widget.setInputView(inputView);
-        setupInputView(env, widget);
+        setInputView(env, widget);
 
         // implement specific component rendering
         composeInputView(env, widget);
@@ -97,7 +97,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         return getWidgetViewTag(c) + ">input";
     }
 
-    protected void setupLabel(RenderingEnv env, TextView labelView, C component) {
+    protected void setLabel(RenderingEnv env, TextView labelView, C component) {
         labelView.setTag("label_" + component.getId());
         String labelComponent = (component.isMandatory()) ?
                 "* " + component.getLabel()
@@ -105,7 +105,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         labelView.setText(labelComponent);
     }
 
-    protected void setupInputView(RenderingEnv env, InputWidget<C, I> widget) {
+    protected void setInputView(RenderingEnv env, InputWidget<C, I> widget) {
         // link inputView with baseView
         C component = widget.getComponent();
         I inputView = widget.getInputView();

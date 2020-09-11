@@ -33,17 +33,11 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
     }
 
     @Override
-    protected int getInputViewId() {
-        return R.layout.widget_image;
-    }
-
-    @Override
     protected InputWidget<UIImage, ImageResourceView> createWidget(RenderingEnv env, UIImage component) {
         ImageWidget imageWidget = (ImageWidget) super.createWidget(env, component);
         env.getFormActivity().registerCallBackForActivity(imageWidget);
         return imageWidget;
     }
-
 
 
     @Override
@@ -67,7 +61,6 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
         UIImage component = widget.getComponent();
         Object value = getComponentValue(env, component, null);
         widget.getConverter().setViewValue(inputView, value);
-//        imageWidget.setMediaResource();
     }
 
     @Override
