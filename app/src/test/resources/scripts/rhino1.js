@@ -15,4 +15,6 @@ function hello(java) {
     return { foo: "Hello back from JavaScript, you've sent this: '" + java + "'",
         other: finalText
     };
+
+
 }
