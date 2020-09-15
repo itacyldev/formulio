@@ -136,7 +136,21 @@ public class JexlBindingExpression implements ValueBindingExpression {
                 this.isReadOnly = !accessedProperty.contains("entity")
                         || hasNestedMethodCall(this.expression.asString(), accessedProperty);
             }
+            if(!isReadOnly){
+                this.isReadOnly = isExpressionInString(this.expression.asString());
+            }
         }
+    }
+
+    /**
+     * Checks if the expression is used within a string literal. ex: "${entity.id}.jpg"
+     * @return
+     */
+    private boolean isExpressionInString(String expr){
+        // TODO: this only works if there's just one expression, make sure this
+        // method is called after the one-var check
+        return !expr.startsWith("$") || !expr.endsWith("}");
+
     }
 
     /**

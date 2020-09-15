@@ -29,6 +29,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
+import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.activities.ActivityResultCallBack;
 
@@ -55,7 +56,8 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         super(context, attrs, defStyle);
     }
 
-    public void setup() {
+
+    public void setup(RenderingEnv env) {
         Button cameraButton = this.findViewById(R.id.btn_camera);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override

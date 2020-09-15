@@ -102,4 +102,10 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
         this.mandatoryFilters = mandatoryFilters;
     }
 
+
+    public boolean isBound() {
+        return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
+    }
+
+
 }

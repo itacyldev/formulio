@@ -63,24 +63,6 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
         return this.fields;
     }
 
-    /**
-     * Recursively go over the component tree storing fields in the given array
-     *
-     * @param root
-     * @param fields
-     */
-    private void findFields(UIComponent root, List<UIInputComponent> fields) {
-        if (root instanceof UIInputComponent) {
-            fields.add((UIInputComponent) root);
-        } else {
-            if (root.hasChildren()) {
-                for (UIComponent c : root.getChildren()) {
-                    findFields(c, fields);
-                }
-            }
-        }
-    }
-
     public FormContext getContext() {
         return context;
     }

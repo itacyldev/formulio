@@ -55,12 +55,17 @@ public class FormEditController extends FormController {
             throw new ValidatorException(String.format("A error occurred during form validation " +
                     "on form [%s].", form.getId()));
         }
-        // set changes from view fields to entity properties
+        // transfer changes from view fields to entity properties
         updateEntity(form);
-        // persist changes
+
+        // persist changes in current entity
         Entity entity = form.getCurrentEntity();
         EditableRepository repo = getEditableRepo();
         repo.save(entity);
+
+        // persist changes ni related entities
+
+
         return true;
     }
 
