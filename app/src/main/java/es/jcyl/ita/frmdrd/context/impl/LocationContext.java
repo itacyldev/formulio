@@ -29,8 +29,8 @@ public class LocationContext extends AbstractMapContext {
 
     LocationService locationService;
 
-    public LocationContext(String prefix) {
-        super(prefix);
+    public LocationContext() {
+        super("location");
         locationService = LocationService.getInstance();
     }
 

@@ -83,7 +83,7 @@ public class LocationContextTest {
         locationService.init(ctx);
         ReflectionHelpers.setField(locationService, "locationManager", mockLocationManager);
 
-        LocationContext locationContext = new LocationContext("location");
+        LocationContext locationContext = new LocationContext();
         locationContext.setLocationService(locationService);
         Location location = (Location) locationContext.get("lastLocation");
 
@@ -102,7 +102,7 @@ public class LocationContextTest {
         locationService.init(ctx);
         ReflectionHelpers.setField(locationService, "locationManager", mockLocationManager);
 
-        LocationContext locationContext = new LocationContext("location");
+        LocationContext locationContext = new LocationContext();
         locationContext.setLocationService(locationService);
         Location location = (Location) locationContext.get("lastLocation");
 
