@@ -15,9 +15,11 @@ package es.jcyl.ita.frmdrd.ui.components.media;
  * limitations under the License.
  */
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * data interchange
@@ -59,11 +61,11 @@ public class MediaResource {
         return location != null;
     }
 
-    public static MediaResource fromFile(File f) {
+    public static MediaResource fromFile(File f) throws IOException {
         if (!f.exists()) {
             throw new IllegalArgumentException("The file doesn't exists!: " + f.getAbsolutePath());
         }
-        return new MediaResource(f, null);
+        return new MediaResource(f, FileUtils.readFileToByteArray(f));
     }
 
     public static MediaResource fromByteArray(byte[] data) {

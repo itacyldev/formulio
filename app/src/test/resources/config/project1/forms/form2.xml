@@ -1,7 +1,7 @@
 <main name="Agents form" description="An example of short description" id="form2" repo="agentsRepo">
     <edit>
         <form>
-            <image value="/sdcard/projects/project1/pictures/batman-David-Larrad.jpg" width="300" height="200" />
+            <image value="${entity.id}.jpg" width="300" height="200" />
             <autocomplete converter="integer" forceSelection="true" id="provincia" label="provincia"
                 repo="provRepo" value="${entity.provmuni.substring(0,2)}">
                 <options labelExpression="${entity.name}" labelFilteringProperty="name"

@@ -33,8 +33,8 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
 
     @Override
     protected boolean isMissingOrErrorImage(String path) {
-        File fImage = new File(path);
-        return !fImage.exists();
+        File photo = MediaResourceLocator.locateImage(path);
+        return photo == null ||  !photo.exists();
     }
 
 
@@ -43,8 +43,6 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
         try {
             File photo = MediaResourceLocator.locateImage(path);
             MediaResource imgResource = MediaResource.fromFile(photo);
-            byte[] imageContent = FileUtils.readFileToByteArray(new File(path));
-            imgResource.setContent(imageContent);
             return imgResource;
         } catch (IOException e) {
             throw new IOException(DevConsole.error(String.format("An error occurred " +

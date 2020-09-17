@@ -1,6 +1,7 @@
 package es.jcyl.ita.frmdrd.context.impl;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
@@ -156,11 +157,7 @@ public class FormViewContext extends AbstractBaseContext {
     }
 
     public List<InputWidget> getInputFields() {
-//        if(this.inputFields == null){
-//            this.inputFields = ViewHelper.findInputFieldViews((ViewGroup) this.view);
-//        } // do not store the view elements, the view can change during re-rendering
-        throw new UnsupportedOperationException();
-//        return ViewHelper.findInputFieldViews((ViewGroup) this.view);
+        return ViewHelper.findInputFieldViews((ViewGroup) this.view);
     }
 
     @NonNull

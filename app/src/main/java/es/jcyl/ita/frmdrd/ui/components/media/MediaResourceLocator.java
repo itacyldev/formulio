@@ -33,7 +33,7 @@ public class MediaResourceLocator {
 
     public static File locateImage(String path) {
         File file = new File(path);
-        if (!file.isAbsolute()) {
+        if (file.isAbsolute()) {
             return file;
         }
         return new File(getFolderByType("pictures"), path);
