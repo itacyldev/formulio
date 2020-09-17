@@ -32,6 +32,7 @@ import es.jcyl.ita.crtrepo.context.impl.BasicContext;
 import es.jcyl.ita.frmdrd.actions.ActionController;
 import es.jcyl.ita.frmdrd.context.impl.DateTimeContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.context.impl.LocationContext;
 import es.jcyl.ita.frmdrd.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.frmdrd.forms.FormController;
 import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
@@ -93,6 +94,7 @@ public class MainController {
     private MainController() {
         globalContext = new UnPrefixedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
+        globalContext.addContext(new LocationContext("location"));
         formControllerFactory = FormControllerFactory.getInstance();
         router = new Router(this);
         actionController = new ActionController(this, router);

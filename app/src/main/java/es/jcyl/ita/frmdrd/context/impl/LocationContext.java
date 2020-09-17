@@ -19,21 +19,26 @@ package es.jcyl.ita.frmdrd.context.impl;
 import android.location.Location;
 
 import es.jcyl.ita.crtrepo.context.AbstractMapContext;
+import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.location.LocationService;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class LocationContext extends AbstractMapContext {
+public class LocationContext extends AbstractMapContext implements Context {
 
     LocationService locationService;
 
-    public LocationContext() {
-        super("location");
+    public LocationContext(String prefix) {
+        super(prefix);
         locationService = LocationService.getInstance();
     }
 
+    @Override
+    public Object get(Object key) {
+        return get((String) key);
+    }
 
     @Override
     public Object get(String key) {
@@ -48,7 +53,7 @@ public class LocationContext extends AbstractMapContext {
             }
         }
 
-        return lastValidLocation;
+        return lastValidLocation.toString();
     }
 
     public void setLocationService(LocationService locationService) {
