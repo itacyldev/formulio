@@ -19,12 +19,12 @@ package es.jcyl.ita.frmdrd.el;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-import androidx.annotation.NonNull;
-
 import org.apache.commons.jexl3.JxltEngine;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  * Component expression used to calculate the value of the expression or the binding relation
@@ -136,7 +136,7 @@ public class JexlBindingExpression implements ValueBindingExpression {
                 this.isReadOnly = !accessedProperty.contains("entity")
                         || hasNestedMethodCall(this.expression.asString(), accessedProperty);
             }
-            if(!isReadOnly){
+            if (!isReadOnly) {
                 this.isReadOnly = isExpressionInString(this.expression.asString());
             }
         }
@@ -144,11 +144,13 @@ public class JexlBindingExpression implements ValueBindingExpression {
 
     /**
      * Checks if the expression is used within a string literal. ex: "${entity.id}.jpg"
+     *
      * @return
      */
-    private boolean isExpressionInString(String expr){
+    private boolean isExpressionInString(String expr) {
         // TODO: this only works if there's just one expression, make sure this
         // method is called after the one-var check
+        expr = expr.trim();
         return !expr.startsWith("$") || !expr.endsWith("}");
 
     }

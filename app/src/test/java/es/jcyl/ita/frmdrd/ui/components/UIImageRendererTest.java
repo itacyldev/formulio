@@ -49,6 +49,7 @@ import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.ui.components.image.UIImage;
 import es.jcyl.ita.frmdrd.utils.ContextTestUtils;
 import es.jcyl.ita.frmdrd.utils.WidgetTestUtils;
+import es.jcyl.ita.frmdrd.view.activities.FormActivity;
 import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.render.ViewRenderHelper;
@@ -148,6 +149,8 @@ public class UIImageRendererTest {
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
         env.setViewContext(ctx);
+        FormActivity mockFormActivity = mock(FormActivity.class);
+        env.setFormActivity(mockFormActivity);
         return env;
     }
 

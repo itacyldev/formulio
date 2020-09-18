@@ -95,7 +95,7 @@ public class ProjectConfigIntegrationTest {
         config.readConfig(prj);
         // there must be 4 repos
         Set<String> repoIds = config.getRepoConfigReader().getRepoFactory().getRepoIds();
-        assertEquals(4, repoIds.size());
+        assertEquals(4 + 1, repoIds.size());// 4 repos + 1 default project's image repo
 
         // there must be two form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
@@ -154,7 +154,7 @@ public class ProjectConfigIntegrationTest {
 
         // check all autos have a binding expresions
         List<UIAutoComplete> autos = UIComponentHelper.findByClass(view, UIAutoComplete.class);
-        for(UIAutoComplete atc: autos){
+        for (UIAutoComplete atc : autos) {
             Assert.assertNotNull(atc.getValueExpression());
         }
 

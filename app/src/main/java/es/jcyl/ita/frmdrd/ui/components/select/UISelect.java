@@ -94,4 +94,5 @@ public class UISelect extends UIInputComponent  implements FilterableComponent {
     public void setMandatoryFilters(String[] mandatoryFilters) {
         this.mandatoryFilters = mandatoryFilters;
     }
+
 }

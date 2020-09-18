@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.context.impl.BasicContext;
+import es.jcyl.ita.crtrepo.media.meta.FileMeta;
 import es.jcyl.ita.crtrepo.test.utils.RandomUtils;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -51,6 +52,7 @@ public class UIImageBuilderTest {
         confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
+        RepositoryUtils.registerMock("PROJECT_IMAGES", new FileMeta());
     }
 
     /**

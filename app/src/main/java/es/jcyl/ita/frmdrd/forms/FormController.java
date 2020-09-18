@@ -18,9 +18,11 @@ package es.jcyl.ita.frmdrd.forms;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.query.Filter;
+import es.jcyl.ita.frmdrd.forms.operations.FormEntityLoader;
 import es.jcyl.ita.frmdrd.meta.Identificable;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
@@ -39,27 +41,32 @@ public abstract class FormController implements Identificable {
     protected Filter filter;
     protected ViewGroup contentView; // Android view element where the UIView is rendered
     private FCAction[] actions; // form actions ids
+    private FormEntityLoader entityLoader = new FormEntityLoader();
 
     public FormController(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
-
     /**
      * Loads related entity and sets it in the form contexts
      */
     public void load(Context globalCtx) {
+        Entity entity;
         // load all forms included in the view
         for (UIForm form : this.view.getForms()) {
-            form.load(globalCtx);
+            entity = entityLoader.load(globalCtx, form);
+            form.setCurrentEntity(entity);
         }
     }
-
-
     public EditableRepository getEditableRepo() {
+        return getEditableRepo(this.repo);
+
+    }
+
+    public EditableRepository getEditableRepo(Repository repo) {
         try {
-            return (EditableRepository) this.repo;
+            return (EditableRepository) repo;
         } catch (ClassCastException e) {
             throw new FormException(String.format("You can't use a readonly repository to modify " +
                     "entity data repoId:[%s].", repo.getId()));

@@ -34,8 +34,8 @@ import es.jcyl.ita.crtrepo.source.EntitySource;
  */
 public class ProjectRepository implements EditableRepository<Project, String, BaseFilter> {
 
-    private final EntityMeta projectMeta;
-    private final EntitySource projectSource;
+    private static EntityMeta projectMeta;
+    private static EntitySource projectSource;
     private File baseFolder;
 
     public ProjectRepository(File baseFolder) {
@@ -76,7 +76,7 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
 
     }
 
-    public Project createFromFolder(File folder) {
+    public static Project createFromFolder(File folder) {
         Project prj = new Project(projectSource, projectMeta);
         prj.set("id", folder.getName());
         prj.set("baseFolder", folder.getAbsolutePath());

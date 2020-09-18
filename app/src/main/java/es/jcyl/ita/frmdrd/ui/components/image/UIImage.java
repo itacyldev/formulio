@@ -17,7 +17,6 @@ package es.jcyl.ita.frmdrd.ui.components.image;
 
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 
 /**
@@ -25,7 +24,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
  * <p>
  * Image component
  */
-public class UIImage extends UIInputComponent implements FilterableComponent {
+public class UIImage extends UIInputComponent {
 
     private static final String IMAGE = "image";
     /**
@@ -71,41 +70,24 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
         return (converter == null) ? "urlImage" : converter;
     }
 
-    /******* Filterable component interface **/
-    @Override
+    /******* EntityRelation component interface **/
     public void setRepo(Repository repo) {
         this.repo = repo;
     }
 
-    @Override
     public Repository getRepo() {
         return this.repo;
     }
 
-    @Override
     public void setFilter(Filter filter) {
         this.filter = filter;
     }
 
-    @Override
     public Filter getFilter() {
         return this.filter;
     }
 
-    @Override
-    public String[] getMandatoryFilters() {
-        return this.mandatoryFilters;
-    }
-
-    @Override
-    public void setMandatoryFilters(String[] mandatoryFields) {
-        this.mandatoryFilters = mandatoryFilters;
-    }
-
-
     public boolean isBound() {
         return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
     }
-
-
 }

@@ -35,7 +35,7 @@ public class DeleteActionHandler extends AbstractActionHandler implements Action
 
     @Override
     public void handle(FormEditController formController, UserAction action) {
-        formController.delete();
+        formController.delete(mc.getGlobalContext());
         String msg = "Entity successfully deleted.";
         if (StringUtils.isBlank(action.getRoute())) {
             UserMessagesHelper.toast(action.getViewContext(), msg);

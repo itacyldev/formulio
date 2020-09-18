@@ -115,7 +115,7 @@ public class FormControllerTest {
             viewContext.put(propId, expected);
         }
         // execute save and check the repo has been hit with the new values
-        ((FormEditController) recipe.mc.getFormController()).save();
+        ((FormEditController) recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
 
         ArgumentCaptor<Entity> argument = ArgumentCaptor.forClass(Entity.class);
         verify(mockRepo).save(argument.capture());

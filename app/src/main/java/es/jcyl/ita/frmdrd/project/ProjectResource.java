@@ -21,14 +21,17 @@ import java.io.File;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ProjectResource {
-    public enum ResourceType {DATA, FORM}
+
+    public enum ResourceType {REPO, FORM}
 
     public final File file;
     public final ResourceType type;
+    public final Project project;
 
-    public ProjectResource(File f, ResourceType type) {
+    public ProjectResource(Project project, File f, ResourceType type) {
         this.file = f;
         this.type = type;
+        this.project = project;
     }
 
 }

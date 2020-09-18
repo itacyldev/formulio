@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CAMERA_ACTIVE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBTABLE;
@@ -25,6 +26,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FILTERING;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FORCE_SELECTION;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.GALLERY_ACTIVE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
@@ -80,7 +82,8 @@ public class TagDef {
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
-        register("image", define(baseInput, new Attribute[]{REPO, WIDTH, HEIGHT}));
+        register("image", define(baseInput, new Attribute[]{REPO, WIDTH, HEIGHT, CAMERA_ACTIVE,
+                GALLERY_ACTIVE}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);
@@ -108,8 +111,6 @@ public class TagDef {
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
-
-
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

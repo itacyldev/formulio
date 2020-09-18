@@ -33,7 +33,7 @@ import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
-import es.jcyl.ita.frmdrd.project.handlers.RepositoryConfHandler;
+import es.jcyl.ita.frmdrd.project.handlers.RepoConfigHandler;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -76,11 +76,12 @@ public class RepositoryConfHandlerTest {
         File emptyF = File.createTempFile("empty", ".xml");
         FileUtils.write(emptyF, "", Charset.defaultCharset());
 
-        ProjectResource pr = new ProjectResource(emptyF, ProjectResource.ResourceType.DATA);
+        Project p = ProjectRepository.createFromFolder(new File("."));
+        ProjectResource pr = new ProjectResource(p, emptyF, ProjectResource.ResourceType.REPO);
 
         RepositoryFactory.getInstance().register(REPO_ID, repo);
 
-        RepositoryConfHandler handler = new RepositoryConfHandler();
+        RepoConfigHandler handler = new RepoConfigHandler();
         // make it read an empty f
         try {
             handler.handle(pr);
@@ -109,11 +110,12 @@ public class RepositoryConfHandlerTest {
         File emptyF = File.createTempFile("empty", ".xml");
         FileUtils.write(emptyF, "", Charset.defaultCharset());
 
-        ProjectResource pr = new ProjectResource(emptyF, ProjectResource.ResourceType.DATA);
+        Project p = ProjectRepository.createFromFolder(new File("."));
+        ProjectResource pr = new ProjectResource(p, emptyF, ProjectResource.ResourceType.REPO);
 
         RepositoryFactory.getInstance().register(REPO_ID, repo);
 
-        RepositoryConfHandler handler = new RepositoryConfHandler();
+        RepoConfigHandler handler = new RepoConfigHandler();
         // make it read an empty f
         handler.handle(pr);
 

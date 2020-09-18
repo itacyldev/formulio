@@ -76,4 +76,7 @@ public class AttributeDef {
     public static Attribute HEIGHT = new Attribute("height", Integer.class);
     public static Attribute WIDTH = new Attribute("width", Integer.class);
 
+    // Image specific attributes
+    public static Attribute CAMERA_ACTIVE = new Attribute("cameraActive", Boolean.class);
+    public static Attribute GALLERY_ACTIVE = new Attribute("galleryActive", Boolean.class);
 }
