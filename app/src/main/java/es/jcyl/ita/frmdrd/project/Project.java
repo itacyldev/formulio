@@ -160,4 +160,11 @@ public class Project extends Entity {
         opened = true;
     }
 
+    @Override
+    public String toString() {
+        return "Project{name=" +this.get("name")+
+                ", opened=" + opened +
+                ", configFiles=" + configFiles +
+                '}';
+    }
 }

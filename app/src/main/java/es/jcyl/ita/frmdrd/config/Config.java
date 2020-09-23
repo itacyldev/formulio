@@ -17,7 +17,6 @@ package es.jcyl.ita.frmdrd.config;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.widget.Toast;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -30,7 +29,6 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.crtrepo.source.EntitySourceFactory;
-import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.frmdrd.forms.FormControllerFactory;
@@ -144,6 +142,11 @@ public class Config {
         _handlers.put(ProjectResource.ResourceType.REPO, reader);
     }
 
+    /**
+     * DO NOT USE THIS METHOD, call setCurrentProject instead. Made public just for testing
+     * purposes.
+     * @param project
+     */
     public void readConfig(Project project) {
         if (!project.isOpened()) {
             project.open();
@@ -228,19 +231,15 @@ public class Config {
     /**
      * Read the configuration of the selected project as current. If there are problems do not set it.
      *
-     * @param context
      * @param project Selected project.
      */
-    public void setCurrentProject(final Context context, @NonNull final Project project) {
-        Toast.makeText(context, DevConsole.info(context.getString(R.string.opening_project) + project.getId()), Toast.LENGTH_LONG).show();
+    public void setCurrentProject(@NonNull final Project project) {
         try {
-            readConfig(project);
             currentProject = project;
+            readConfig(project);
             debugConfig();
         } catch (Exception e) {
             DevConsole.error("Error while trying to open project.", e);
-            Toast.makeText(context, "An error occurred while trying to read your projects. See console for details",
-                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -255,6 +254,10 @@ public class Config {
 
     public Project getCurrentProject() {
         return this.currentProject;
+    }
+
+    public String getCurrentBaseFolder() {
+        return this.currentProject.getBaseFolder();
     }
 
     public RepoConfigHandler getRepoConfigReader() {

@@ -232,6 +232,10 @@ public abstract class UIComponent implements Identificable {
         return ExpressionHelper.getExpressions(this);
     }
 
+    public boolean isEntityRelation(){
+        return entityRelation!=null;
+    }
+
     public EntityRelation getEntityRelation() {
         return entityRelation;
     }

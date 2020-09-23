@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.context.Context;
+import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.forms.operations.FormEntityLoader;
 import es.jcyl.ita.frmdrd.meta.Identificable;
@@ -51,12 +51,11 @@ public abstract class FormController implements Identificable {
     /**
      * Loads related entity and sets it in the form contexts
      */
-    public void load(Context globalCtx) {
+    public void load(CompositeContext globalCtx) {
         Entity entity;
         // load all forms included in the view
         for (UIForm form : this.view.getForms()) {
             entity = entityLoader.load(globalCtx, form);
-            form.setCurrentEntity(entity);
         }
     }
     public EditableRepository getEditableRepo() {

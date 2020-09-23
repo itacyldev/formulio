@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.crtrepo.source.EntitySourceFactory;
 import es.jcyl.ita.frmdrd.config.AttributeResolver;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.Config;
@@ -54,6 +55,7 @@ public class ComponentBuilderFactory {
     private ComponentResolver componentResolver;
     private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
     private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+    private EntitySourceFactory sourceFactory = EntitySourceFactory.getInstance();
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -71,6 +73,7 @@ public class ComponentBuilderFactory {
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
+        registerBuilder("fileRepo", newBuilder(FileRepoBuilder.class, "fileRepo"));
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
@@ -208,4 +211,7 @@ public class ComponentBuilderFactory {
         return repoFactory;
     }
 
+    public EntitySourceFactory getSourceFactory() {
+        return sourceFactory;
+    }
 }

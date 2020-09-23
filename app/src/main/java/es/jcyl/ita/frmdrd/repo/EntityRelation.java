@@ -18,6 +18,8 @@ package es.jcyl.ita.frmdrd.repo;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.ui.components.EntityHolder;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * The form's main entity can have additional related entities.
@@ -34,6 +36,7 @@ public class EntityRelation {
      */
     private Repository repo;
     private Filter filter;
+    private EntityHolder entityHolder;
     /**
      * Expression used to obtain the id of the entity to retrieve.
      */
@@ -112,5 +115,13 @@ public class EntityRelation {
 
     public void setDeletable(boolean deletable) {
         this.deletable = deletable;
+    }
+
+    public EntityHolder getEntityHolder() {
+        return entityHolder;
+    }
+
+    public void setEntityHolder(EntityHolder entityHolder) {
+        this.entityHolder = entityHolder;
     }
 }

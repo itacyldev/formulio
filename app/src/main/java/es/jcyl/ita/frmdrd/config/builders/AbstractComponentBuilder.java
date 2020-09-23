@@ -43,6 +43,10 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
         this.attributeDefs = TagDef.getDefinition(tagName);
+        if (attributeDefs == null || this.attributeDefs.isEmpty()) {
+            throw new ConfigurationException(error(String.format("No attribute definition for tag" +
+                    " [%s], review the TagDef class and register the new component.", tagName)));
+        }
         this.elementType = clazz;
     }
 
@@ -101,7 +105,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
                         AttributeResolver resolver = getAttributeResolver(attribute.resolver);
                         value = resolver.resolve(node, attribute.name);
                     }
-                    if(value == null){
+                    if (value == null) {
                         value = getDefaultAttributeValue(element, node, attName);
                     }
                     // set attribute using reflection
@@ -118,7 +122,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
-    protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName){
+    protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName) {
         return null;
     }
 

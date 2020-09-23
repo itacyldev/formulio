@@ -24,8 +24,7 @@ import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.image.UIImage;
 
-import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CAMERA_ACTIVE;
-import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.GALLERY_ACTIVE;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.INPUT_TYPE;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -46,11 +45,9 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
     }
 
     private void setDefaultValues(ConfigNode<UIImage> node) {
-        if (!node.hasAttribute(CAMERA_ACTIVE.name)) {
-            node.setAttribute(CAMERA_ACTIVE.name, "true");
-        }
-        if (!node.hasAttribute(GALLERY_ACTIVE.name)) {
-            node.setAttribute(GALLERY_ACTIVE.name, "true");
+        if (!node.hasAttribute(INPUT_TYPE.name)) {
+            node.setAttribute(INPUT_TYPE.name,
+                    "" + UIImage.ImageInputType.GALLERY_AND_CAMERA.value); // show camera and gallery buttons
         }
     }
 
@@ -140,13 +137,14 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         // replace expression
         String bindingExpression;
         if (converter.equalsIgnoreCase("urlImage")) {
-            bindingExpression = "${entity.%s.fAbsPath}";
+            bindingExpression = "${entity.%s.absolutePath}"; // got it from FileEntityMeta
         } else {
             bindingExpression = "${entity.%s.content}"; // byteArray or StringB64
         }
         String expression = String.format(bindingExpression, img.getId());
         ValueBindingExpression effectiveExpression = this.getFactory().getExpressionFactory().create(expression);
         img.setValueExpression(effectiveExpression);
+        relation.setEntityHolder(img);
         return relation;
     }
 

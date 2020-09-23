@@ -29,7 +29,6 @@ public class MockingUtils {
     public static ActionController mockAC(){
         ActionController mockAC = mock(ActionController.class);
         return mockAC;
-
     }
 
 }

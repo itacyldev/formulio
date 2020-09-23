@@ -41,7 +41,11 @@ public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
         // get input type from "type" attribute or use tagName
         String type = node.getAttribute("type");
         if (StringUtils.isBlank(type)) {
-            type = node.getName();
+            if (node.getName().equalsIgnoreCase("input")) {
+                type = "text";
+            } else {
+                type = node.getName();
+            }
         }
         try {
             node.getElement().setType(UIField.TYPE.valueOf(type.toUpperCase()));

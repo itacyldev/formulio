@@ -22,7 +22,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.view.converters.ViewValueConverter;
-import es.jcyl.ita.frmdrd.view.widget.Widget;
 
 /**
  * Base class to wrapper Android views that represent input fields to provide feature to access and
@@ -70,6 +69,21 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
 
     public Object getValue() {
         return (inputView == null) ? null : converter.getValueFromView(inputView);
+    }
+
+    /**
+     * get/setState are used during saving process to store component state before the validation
+     * takes places, so the view state (user most recent input) can be restored in case one of the
+     * field validation rules is not met.
+     *
+     * @param value
+     */
+    public void setState(Object value) {
+        setValue(value);
+    }
+
+    public Object getState() {
+        return getValue();
     }
 
     /**

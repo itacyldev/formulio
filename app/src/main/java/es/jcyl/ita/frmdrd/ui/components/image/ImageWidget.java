@@ -22,16 +22,20 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.ByteArrayOutputStream;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.crtrepo.EditableRepository;
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.meta.types.ByteArray;
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
+import es.jcyl.ita.frmdrd.view.activities.ActivityResultCallBack;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
 import es.jcyl.ita.frmdrd.view.widget.InputWidget;
-import es.jcyl.ita.frmdrd.view.activities.ActivityResultCallBack;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -41,8 +45,6 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         implements ActivityResultCallBack<Void, Bitmap>, ActivityResultCallback<Bitmap> {
 
     private ActivityResultLauncher<Void> launcher;
-    private MediaResource mediaResource;
-    private Repository repo;
 
     public ImageWidget(Context context) {
         super(context);
@@ -56,16 +58,91 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         super(context, attrs, defStyle);
     }
 
-
     public void setup(RenderingEnv env) {
+        // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launcher.launch(null);
+        if (!component.isCameraActive()) { // TODO: or device has no camera (check throw context.device)
+            cameraButton.setVisibility(View.INVISIBLE);
+        } else {
+            if (this.component.isReadOnly()) {
+                cameraButton.setEnabled(false);
+            } else {
+                cameraButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        launcher.launch(null);
+                    }
+                });
             }
-        });
-        this.repo = getComponent().getRepo();
+        }
+    }
+
+    @Override
+    public void setResultLauncher(Activity activity, ActivityResultLauncher<Void> launcher) {
+        this.launcher = launcher;
+    }
+
+    /****************************************************************/
+    /********* ActivityResultCallback interface implementation   ****/
+    /****************************************************************/
+    @Override
+    public void onActivityResult(Bitmap imageData) {
+        if (imageData == null) {
+            return;// no image captured
+        }
+        // extract image content
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageData.compress(Bitmap.CompressFormat.PNG, 90, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        if (component.isEntityRelation()) {
+            updateRelatedEntity(byteArray);
+        }
+
+        MediaResource imgResource = getInputView().getResource();
+        if (imgResource == null) {
+            // no previous photo
+            imgResource = MediaResource.fromByteArray(byteArray);
+            getInputView().setResource(imgResource);
+        } else {
+            imgResource.setContent(byteArray);
+        }
+        getInputView().setImageBitmap(imageData);
+    }
+
+    /**
+     * When the image content is stored in a related Image Entity (fileEntity), this related
+     * entity has to be created/updated.
+     *
+     * @param byteArray
+     */
+    private void updateRelatedEntity(byte[] byteArray) {
+        Entity entity = component.getEntity();
+        if (entity == null) {
+            // no related entity, create entity and media resource
+            EditableRepository repo = (EditableRepository) component.getRepo();
+            entity = repo.newEntity();
+            component.setEntity(entity);
+
+            // set new entity to parent form entity
+            String mainPropertyName = component.getEntityRelation().getName();
+            Entity mainEntity = component.getParentForm().getEntity();
+            mainEntity.set(mainPropertyName, entity, true);
+
+            MediaResource imgResource = MediaResource.fromByteArray(byteArray);
+            getInputView().setResource(imgResource);
+        }
+        entity.set("content", new ByteArray(byteArray));
+    }
+
+    @Override
+    public Object getState() {
+        return this.getInputView().getResource();
+    }
+
+    @Override
+    public void setState(Object value) {
+        getInputView().setResource((MediaResource) value);
     }
 
     @Override
@@ -78,22 +155,4 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         return this;
     }
 
-    @Override
-    public void setResultLauncher(Activity activity, ActivityResultLauncher<Void> launcher) {
-        this.launcher = launcher;
-    }
-
-    @Override
-    public void onActivityResult(Bitmap imageData) {
-        getInputView().setImageBitmap(imageData);
-    }
-
-
-    public MediaResource getMediaResource() {
-        return mediaResource;
-    }
-
-    public void setMediaResource(MediaResource mediaResource) {
-        this.mediaResource = mediaResource;
-    }
 }

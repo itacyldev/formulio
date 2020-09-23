@@ -20,6 +20,7 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.config.DevConsole;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
@@ -32,23 +33,34 @@ import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 public class FormEntityPersister {
 
     public void save(Context context, UIForm form) {
-        Entity entity = form.getCurrentEntity();
+        Entity entity = form.getEntity();
         EditableRepository repo = getEditableRepo(form);
-        repo.save(entity);
 
         // save related entities
         if (form.getEntityRelations() != null) {
             for (EntityRelation relation : form.getEntityRelations()) {
-                repo = getEditableRepo(relation.getRepo());
+                EditableRepository relatedRepo = getEditableRepo(relation.getRepo());
                 // get related entity
-                Entity relatedEntity = (Entity) entity.get(relation.getName());
-                repo.save(relatedEntity);
+                Object relatedEntity = entity.get(relation.getName());
+                if (relatedEntity != null) {
+                    relatedRepo.save((Entity) relatedEntity);
+                    // it the pointer from main entity to related entity is a double binding
+                    // (ex: ${entity.image}, update the reference to the related entity
+                    ValueBindingExpression entityPropertyExpr = relation.getEntityPropertyExpr();
+                    if (!entityPropertyExpr.isReadOnly()) {
+                        // remove "entity." prefix
+                        String entityProperty = entityPropertyExpr.getBindingProperty().replace(
+                                "entity.", "");
+                        entity.set(entityProperty, ((Entity) relatedEntity).getId());
+                    }
+                }
             }
         }
+        repo.save(entity);
     }
 
     public void delete(Context context, UIForm form) {
-        Entity entity = form.getCurrentEntity();
+        Entity entity = form.getEntity();
         EditableRepository repo = getEditableRepo(form);
         repo.delete(entity);
 

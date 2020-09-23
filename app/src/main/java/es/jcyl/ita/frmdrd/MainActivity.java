@@ -192,8 +192,22 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             Toast.makeText(this, warn("No projects found!!. Create a folder under " + projectsFolder),
                     Toast.LENGTH_LONG).show();
         } else {
-            Project prj = projects.get(0);
-            Config.getInstance().setCurrentProject(this, prj);
+            // TODO: extract Project View Helper to FORMIC-27
+            Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
+            Toast.makeText(this,
+                    DevConsole.info(this.getString(R.string.project_opening_init,
+                            (String) prj.getId())),
+                    Toast.LENGTH_LONG).show();
+            try {
+                Config.getInstance().setCurrentProject(prj);
+                Toast.makeText(this,
+                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
+                        Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(this,
+                        DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
+                        Toast.LENGTH_LONG).show();
+            }
         }
         initialize();
     }

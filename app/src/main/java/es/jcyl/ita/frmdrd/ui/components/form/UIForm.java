@@ -13,6 +13,7 @@ import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
 import es.jcyl.ita.frmdrd.context.impl.ViewStateHolder;
 import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.scripts.ScriptEngine;
+import es.jcyl.ita.frmdrd.ui.components.EntityHolder;
 import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
@@ -23,7 +24,7 @@ import es.jcyl.ita.frmdrd.validation.ValidatorException;
 import es.jcyl.ita.frmdrd.view.widget.InputWidget;
 
 
-public class UIForm extends UIGroupComponent implements FilterableComponent {
+public class UIForm extends UIGroupComponent implements FilterableComponent, EntityHolder {
 
     private FormContext context;
     private final ViewStateHolder memento;
@@ -174,13 +175,12 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
         this.readOnly = readOnly;
     }
 
-
-    public void setCurrentEntity(Entity currentEntity) {
+    public void setEntity(Entity currentEntity) {
         this.currentEntity = currentEntity;
         this.getContext().setEntity(currentEntity);
     }
 
-    public Entity getCurrentEntity() {
+    public Entity getEntity() {
         return currentEntity;
     }
 
@@ -191,4 +191,6 @@ public class UIForm extends UIGroupComponent implements FilterableComponent {
     public void setEntityRelations(List<EntityRelation> entityRelations) {
         this.entityRelations = entityRelations;
     }
+
+
 }

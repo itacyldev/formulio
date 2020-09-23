@@ -69,6 +69,7 @@ public abstract class AbstractImageViewValueConverter<T>
             byte[] imgBytes = resource.getContent();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
             view.setImageBitmap(bitmap);
+            view.setResource(resource);
         } catch (Exception e) {
             DevConsole.error(String.format("Couldn't render the image with value: [%s]", value));
             view.setImageResource(R.drawable.image_not_found);

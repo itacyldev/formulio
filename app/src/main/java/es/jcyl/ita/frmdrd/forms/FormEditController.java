@@ -59,7 +59,7 @@ public class FormEditController extends FormController {
                     "on form [%s].", form.getId()));
         }
         // transfer changes from view fields to entity properties
-        updateEntity(form);
+        updateEntityFromView(form);
 
         // persist changes in current and related entities
         this.entityPersister.save(context, form);
@@ -82,18 +82,18 @@ public class FormEditController extends FormController {
     /**
      * Access form fields looking for value bindings that can be setable
      */
-    private void updateEntity(UIForm form) {
+    private void updateEntityFromView(UIForm form) {
         FormViewContext viewContext = form.getContext().getViewContext();
         EntityContext entityContext = form.getContext().getEntityContext();
         // go over all the form elements looking for bindings that are not readonly
         for (UIInputComponent field : form.getFields()) {
-            updateEntity(viewContext, entityContext, field);
+            updateEntityFromView(viewContext, entityContext, field);
         }
     }
 
-    private void updateEntity(FormViewContext viewContext, EntityContext entityContext,
-                              UIInputComponent field) {
-        if (field.isBound()) {
+    private void updateEntityFromView(FormViewContext viewContext, EntityContext entityContext,
+                                      UIInputComponent field) {
+        if (field.isBound() && !field.isEntityRelation()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();
@@ -130,7 +130,7 @@ public class FormEditController extends FormController {
     }
 
     public Entity getCurrentEntity() {
-        return this.mainForm.getCurrentEntity();
+        return this.mainForm.getEntity();
     }
 
     /****************************/

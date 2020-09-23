@@ -35,8 +35,8 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
      * Checks if given image exists.
      *
      * @param absolutePath: An absolute path must be provided. The ImageBuilder is responsible for
-     *              treating the value attribute and retrieve a FileEntity which will provide the
-     *              absolutePath.
+     *                      treating the value attribute and retrieve a FileEntity which will provide the
+     *                      absolutePath.
      * @return
      */
     @Override
@@ -47,7 +47,6 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
 
 
     /**
-     *
      * @param absolutePath: Absolute path of the imagen
      * @return
      * @throws IOException
@@ -79,6 +78,9 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
         if (resource.hasContent() && resource.hasChanged()) {
             // write image in the expected location
             File imageDest = resource.getLocation();
+            if (imageDest == null) {
+                return null;
+            }
             FileUtils.writeByteArrayToFile(imageDest, resource.getContent());
         }
         return MediaResourceLocator.relativeImagePath(resource.getLocation().getAbsolutePath());

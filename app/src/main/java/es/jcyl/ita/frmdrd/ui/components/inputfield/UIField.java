@@ -12,7 +12,6 @@ public class UIField extends UIInputComponent {
     }
 
     private TYPE type = TEXT;
-    private int inputType = InputType.TYPE_CLASS_TEXT;
 
     @Override
     public String getRendererType() {
@@ -30,14 +29,6 @@ public class UIField extends UIInputComponent {
 
     public void setType(final TYPE type) {
         this.type = type;
-    }
-
-    public int getInputType() {
-        return inputType;
-    }
-
-    public void setInputType(final int inputType) {
-        this.inputType = inputType;
     }
 
     public void setTypeStr(String type) {

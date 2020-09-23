@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.query.BaseFilter;
@@ -66,7 +65,7 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
         File[] folders = getProjectDirectories();
         List<Project> lst = new ArrayList();
         Project prj;
-        if(ArrayUtils.isNotEmpty(folders)){
+        if (ArrayUtils.isNotEmpty(folders)) {
             for (File folder : folders) {
                 prj = createFromFolder(folder);
                 lst.add(prj);
@@ -74,6 +73,12 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
         }
         return lst;
 
+    }
+
+
+    @Override
+    public Project newEntity() {
+        return new Project(projectSource, projectMeta);
     }
 
     public static Project createFromFolder(File folder) {
@@ -114,7 +119,6 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     public Class<BaseFilter> getFilterClass() {
         return null;
     }
-
 
 
     private EntitySource createSource() {
@@ -172,4 +176,5 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     public void deleteAll() {
 
     }
+
 }
