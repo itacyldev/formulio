@@ -69,6 +69,7 @@ public class TagDef {
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
+        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));

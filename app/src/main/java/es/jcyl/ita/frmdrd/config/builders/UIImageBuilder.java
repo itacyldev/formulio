@@ -15,7 +15,6 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.image.UIImage;
 
 /**
