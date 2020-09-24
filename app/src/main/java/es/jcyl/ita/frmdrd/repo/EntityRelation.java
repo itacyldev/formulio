@@ -15,11 +15,12 @@ package es.jcyl.ita.frmdrd.repo;
  * limitations under the License.
  */
 
+import java.util.List;
+
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.ui.components.EntityHolder;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 
 /**
  * The form's main entity can have additional related entities.
@@ -43,7 +44,7 @@ public class EntityRelation {
     private ValueBindingExpression entityPropertyExpr;
     /**
      * The of the transient property created in the main entity to store the related entity.
-      */
+     */
     private String name;
     /**
      * Modification restrictions
@@ -52,10 +53,11 @@ public class EntityRelation {
     private boolean updatable = true;
     private boolean deletable = true;
 
+    private List<CalculatedProperty> calcProps;
 
     // TODO: right now we just need a one2one relation
 
-    public EntityRelation(Repository repo, String name, ValueBindingExpression expr){
+    public EntityRelation(Repository repo, String name, ValueBindingExpression expr) {
         this.repo = repo;
         this.name = name;
         this.entityPropertyExpr = expr;
@@ -123,5 +125,17 @@ public class EntityRelation {
 
     public void setEntityHolder(EntityHolder entityHolder) {
         this.entityHolder = entityHolder;
+    }
+
+    public boolean hasCalcProps() {
+        return this.calcProps != null && this.calcProps.size() > 0;
+    }
+
+    public List<CalculatedProperty> getCalcProps() {
+        return calcProps;
+    }
+
+    public void setCalcProps(List<CalculatedProperty> calcProps) {
+        this.calcProps = calcProps;
     }
 }

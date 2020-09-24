@@ -25,6 +25,10 @@
         android:id="@+id/btn_camera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Click here to capture image using camera" />
-
+        android:text="Capture from camera" />
+    <Button
+        android:id="@+id/btn_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select from gallery" />
 </es.jcyl.ita.frmdrd.ui.components.image.ImageWidget>

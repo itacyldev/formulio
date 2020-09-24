@@ -20,7 +20,9 @@ import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.config.DevConsole;
+import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.repo.CalculatedProperty;
 import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
@@ -35,6 +37,7 @@ public class FormEntityPersister {
     public void save(Context context, UIForm form) {
         Entity entity = form.getEntity();
         EditableRepository repo = getEditableRepo(form);
+        repo.save(entity);
 
         // save related entities
         if (form.getEntityRelations() != null) {
@@ -43,6 +46,10 @@ public class FormEntityPersister {
                 // get related entity
                 Object relatedEntity = entity.get(relation.getName());
                 if (relatedEntity != null) {
+                    // update related entity properties if needed
+                    if (relation.hasCalcProps()) {
+                        updateEntityProps(context, (Entity) relatedEntity, relation);
+                    }
                     relatedRepo.save((Entity) relatedEntity);
                     // it the pointer from main entity to related entity is a double binding
                     // (ex: ${entity.image}, update the reference to the related entity
@@ -55,8 +62,16 @@ public class FormEntityPersister {
                     }
                 }
             }
+            // in case any relation id has been modified
+            repo.save(entity);
         }
-        repo.save(entity);
+    }
+
+
+    private void updateEntityProps(Context context, Entity relatedEntity, EntityRelation relation) {
+        for (CalculatedProperty cp : relation.getCalcProps()) {
+            relatedEntity.set(cp.property, JexlUtils.eval(context, cp.expression));
+        }
     }
 
     public void delete(Context context, UIForm form) {

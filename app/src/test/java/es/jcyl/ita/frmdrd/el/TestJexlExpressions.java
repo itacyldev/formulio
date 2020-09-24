@@ -129,12 +129,12 @@ public class TestJexlExpressions {
                 "   ${  entity.property   }   ",
                 "${entity.property.substring(0,2)}",
                 "${entity.property1 + entity.property2}",
-                "${entity.property1} + ${entity.property2}"
-
+                "${entity.property1} + ${entity.property2}",
+                "superheroes/${entity.property1.toLowerCase().replace('_','')+'.jpg'}"
         };
 
         boolean[] expected = new boolean[]{
-                false, false, false, true, true, true
+                false, false, false, true, true, true, true
         };
         ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
         int i = 0;

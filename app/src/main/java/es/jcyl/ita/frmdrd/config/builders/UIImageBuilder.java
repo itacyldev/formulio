@@ -17,10 +17,13 @@ package es.jcyl.ita.frmdrd.config.builders;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
+
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.repo.CalculatedProperty;
 import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.image.UIImage;
 
@@ -134,6 +137,13 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         relation.setDeletable(!img.isReadOnly());
         relation.setUpdatable(!img.isReadOnly());
 
+        if (img.getValueExpression().isReadOnly()) {
+            // if the expression is a readonly expression that uses entity attributes to
+            // calculate the ID, we need to define a calculated property for the entity that will
+            // be interpreted before the entity is saved: ID = valueExpression
+            CalculatedProperty cp = new CalculatedProperty("id", img.getValueExpression());
+            relation.setCalcProps(Collections.singletonList(cp));
+        }
         // replace expression
         String bindingExpression;
         if (converter.equalsIgnoreCase("urlImage")) {
@@ -145,6 +155,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         ValueBindingExpression effectiveExpression = this.getFactory().getExpressionFactory().create(expression);
         img.setValueExpression(effectiveExpression);
         relation.setEntityHolder(img);
+
         return relation;
     }
 

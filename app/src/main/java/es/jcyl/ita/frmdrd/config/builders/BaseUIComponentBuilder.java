@@ -29,14 +29,12 @@ public class BaseUIComponentBuilder<E extends UIComponent> extends AbstractCompo
         super(tagName, clazz);
     }
 
-
     @Override
     protected void doWithAttribute(E element, String name, String value) {
     }
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<E> node) {
-
     }
 
     @Override

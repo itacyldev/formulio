@@ -32,6 +32,7 @@ import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.meta.types.ByteArray;
 import es.jcyl.ita.frmdrd.R;
+import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
 import es.jcyl.ita.frmdrd.view.activities.ActivityResultCallBack;
 import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
@@ -45,6 +46,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         implements ActivityResultCallBack<Void, Bitmap>, ActivityResultCallback<Bitmap> {
 
     private ActivityResultLauncher<Void> launcher;
+    private GallerySelector gallerySelector;
 
     public ImageWidget(Context context) {
         super(context);
@@ -75,6 +77,28 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
                 });
             }
         }
+        Button galleryButton = this.findViewById(R.id.btn_gallery);
+        if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
+            galleryButton.setVisibility(View.INVISIBLE);
+        } else {
+            if (this.component.isReadOnly()) {
+                cameraButton.setEnabled(false);
+            } else {
+                galleryButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gallerySelector.launch();
+                    }
+                });
+            }
+        }
+    }
+
+    public GallerySelector getGallerySelector(){
+        if (this.gallerySelector == null){
+            this.gallerySelector = new GallerySelector();
+        }
+        return this.gallerySelector;
     }
 
     @Override
@@ -119,8 +143,9 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     private void updateRelatedEntity(byte[] byteArray) {
         Entity entity = component.getEntity();
         if (entity == null) {
+            EntityRelation rel = component.getEntityRelation();
             // no related entity, create entity and media resource
-            EditableRepository repo = (EditableRepository) component.getRepo();
+            EditableRepository repo = (EditableRepository) rel.getRepo();
             entity = repo.newEntity();
             component.setEntity(entity);
 
