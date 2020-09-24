@@ -83,9 +83,9 @@ public class Project extends Entity {
     public List<ProjectResource> getConfigFiles(ProjectResource.ResourceType resourceType) {
         List<ProjectResource> confFiles = getConfigFiles();
         // return just the given type
-        List<ProjectResource> filtered = new ArrayList<ProjectResource> ();
-        for (ProjectResource pr: confFiles){
-            if(pr.type == resourceType){
+        List<ProjectResource> filtered = new ArrayList<ProjectResource>();
+        for (ProjectResource pr : confFiles) {
+            if (pr.type == resourceType) {
                 filtered.add(pr);
             }
         }
@@ -100,6 +100,7 @@ public class Project extends Entity {
         }
         return configFiles;
     }
+
     private List<ProjectResource> readConfigFiles() {
         List<ProjectResource> files = new ArrayList<>();
 
@@ -162,9 +163,7 @@ public class Project extends Entity {
 
     @Override
     public String toString() {
-        return "Project{name=" +this.get("name")+
-                ", opened=" + opened +
-                ", configFiles=" + configFiles +
+        return "Project{name=" + this.get("name") +
                 '}';
     }
 }

@@ -80,7 +80,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
             // repository or the ImageEntity itself. The attribute EMBEDDED is used to determine it.
             if (node.hasAttribute(EMBEDDED.name)) {
                 // the entity is stored as an entity property
-                usesExternalRepo = image.getEmbedded();
+                usesExternalRepo = !image.getEmbedded();
                 if (image.getEmbedded() && image.getRepo() != null) {
                     throw new ConfigurationException(DevConsole.error(String.format("Cannot use " +
                                     "embedded='true' and 'repo' attribute. With embedded='true' you mean " +
