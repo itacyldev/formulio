@@ -43,6 +43,7 @@ public class UIImage extends UIInputComponent implements EntityHolder {
     private Integer width;
     private Integer height;
     private Entity entity;
+    private Boolean embedded;
 
     public Integer getWidth() {
         return width;
@@ -139,5 +140,13 @@ public class UIImage extends UIInputComponent implements EntityHolder {
             throw new IllegalStateException(String.format("Invalid value for Image input type: %s" +
                     " expected one of [0,1,2,3].", value));
         }
+    }
+
+    public Boolean getEmbedded() {
+        return embedded;
+    }
+
+    public void setEmbedded(Boolean embedded) {
+        this.embedded = embedded;
     }
 }

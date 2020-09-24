@@ -18,6 +18,7 @@ package es.jcyl.ita.frmdrd.config.builders;
 import java.util.Collections;
 
 import es.jcyl.ita.crtrepo.Repository;
+import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
@@ -65,22 +66,28 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         boolean usesExternalRepo;
         if (valueExpr.isLiteral()) {
             // If the expression is a literal, the image has to be retrieved using project default
-            // image repository Ej: /images/myfavoriteImage.jpeg. The component is readonly and
-            // the converter is by default urlImage
+            // image repository Ej: /images/myfavoriteImage.jpeg. The component is readonly
             image.setReadOnly(true); // this will disable camera and gallery buttons
             usesExternalRepo = true;
         } else if (valueExpr.isReadOnly()) {
             // if the expression is not an entity attribute binding, by default it is interpreted as
-            // and expression to define the path of the image:
-            // /images/${entity.category}/${entity.id}.jpeg
+            // and expression to define the Id of the entity in the repository. For example in a
+            // FileEntity repository: ${entity.category}/${entity.id}.jpeg
             usesExternalRepo = true;
         } else {
             // If the expression defines an entity attribute binding, the entity property
             // referenced by the expression can contain the Id of the related entity in an external
-            // repository or the ImageEntity itself. The attribute inline is used to determine it.
+            // repository or the ImageEntity itself. The attribute EMBEDDED is used to determine it.
             if (node.hasAttribute(EMBEDDED.name)) {
                 // the entity is stored as an entity property
-                usesExternalRepo = false;
+                usesExternalRepo = image.getEmbedded();
+                if (image.getEmbedded() && image.getRepo() != null) {
+                    throw new ConfigurationException(DevConsole.error(String.format("Cannot use " +
+                                    "embedded='true' and 'repo' attribute. With embedded='true' you mean " +
+                                    "you're retrieving your image as an entity property, so no repository " +
+                                    "is needed. Remove repo attribute from the <image id=[%s]/>.",
+                            node.getId())));
+                }
             } else {
                 usesExternalRepo = true;
             }
