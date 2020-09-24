@@ -15,8 +15,6 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Collections;
 
 import es.jcyl.ita.crtrepo.Repository;
@@ -27,6 +25,9 @@ import es.jcyl.ita.frmdrd.repo.CalculatedProperty;
 import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.image.UIImage;
 
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CONVERTER;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.EMBEDDED;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.INPUT_TYPE;
 
 /**
@@ -62,39 +63,31 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         ValueBindingExpression valueExpr = node.getElement().getValueExpression();
 
         boolean usesExternalRepo;
-        String valueConverter;
         if (valueExpr.isLiteral()) {
             // If the expression is a literal, the image has to be retrieved using project default
             // image repository Ej: /images/myfavoriteImage.jpeg. The component is readonly and
             // the converter is by default urlImage
             image.setReadOnly(true); // this will disable camera and gallery buttons
-            valueConverter = "urlImage";
             usesExternalRepo = true;
         } else if (valueExpr.isReadOnly()) {
             // if the expression is not an entity attribute binding, by default it is interpreted as
             // and expression to define the path of the image:
             // /images/${entity.category}/${entity.id}.jpeg
-            valueConverter = "urlImage";
             usesExternalRepo = true;
         } else {
-            // if the expression is an entity attribute binding, the image or its url is stored
-            // in the entity attribute.
-            // If no converter is set, by the value we interpret the user is using the entity
-            // attribute to store the image path relative to the project's image repository:
-            // /categoryFolder/myentityImage.jpg in this case we have to use the external repo to
-            // load the image entity:
-            String convertedSet = node.getAttribute("converter");
-            if (StringUtils.isBlank(convertedSet) || "urlImage".equalsIgnoreCase(convertedSet)) {
-                usesExternalRepo = true;
-                valueConverter = "urlImage";
-            } else {
-                // if a different converter is set (b64Image or byteArrayImage), no external
-                // repository is needed, the image content is stored in the entity attribute
+            // If the expression defines an entity attribute binding, the entity property
+            // referenced by the expression can contain the Id of the related entity in an external
+            // repository or the ImageEntity itself. The attribute inline is used to determine it.
+            if (node.hasAttribute(EMBEDDED.name)) {
+                // the entity is stored as an entity property
                 usesExternalRepo = false;
-                valueConverter = convertedSet;
+            } else {
+                usesExternalRepo = true;
             }
         }
-        image.setValueConverter(valueConverter);
+        if (!node.hasAttribute(CONVERTER.name)) { // by default treat image content as raw-bytes
+            image.setValueConverter("byteArrayImage");
+        }
         if (usesExternalRepo) {
             // The component uses an external image repository to retrieve/store the related image
             EntityRelation relation = createRelation(node);
@@ -103,7 +96,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
     }
 
     /**
-     * Define one2One relation with related entity using image node values. The
+     * Define one2one relation with related entity using image node values. The
      * valueBindingExpression defines the expression to retrieve the related entity Id from the
      * context.
      * The new entity property will be named after the UIImageComponent id, so the effective value
@@ -141,16 +134,16 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
             // if the expression is a readonly expression that uses entity attributes to
             // calculate the ID, we need to define a calculated property for the entity that will
             // be interpreted before the entity is saved: ID = valueExpression
-            CalculatedProperty cp = new CalculatedProperty("id", img.getValueExpression());
+            CalculatedProperty cp = new CalculatedProperty(ID.name, img.getValueExpression());
             relation.setCalcProps(Collections.singletonList(cp));
         }
         // replace expression
         String bindingExpression;
-        if (converter.equalsIgnoreCase("urlImage")) {
-            bindingExpression = "${entity.%s.absolutePath}"; // got it from FileEntityMeta
-        } else {
-            bindingExpression = "${entity.%s.content}"; // byteArray or StringB64
-        }
+//        if (converter.equalsIgnoreCase("urlImage")) {
+//            bindingExpression = "${entity.%s.absolutePath}"; // got it from FileEntityMeta
+//        } else {
+//        }
+        bindingExpression = "${entity.%s.content}"; // byteArray or StringB64
         String expression = String.format(bindingExpression, img.getId());
         ValueBindingExpression effectiveExpression = this.getFactory().getExpressionFactory().create(expression);
         img.setValueExpression(effectiveExpression);

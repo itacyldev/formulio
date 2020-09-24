@@ -4,7 +4,8 @@
             <input label="Name" value="${entity.name}" />
             <image repo="superHImages" value="${entity.image}" />
             <image value="superheroes/${entity.name.toLowerCase().replace(' ','_')+'.jpg'}" />
-            <image converter="b64Image" repo="superHImages" value="${entity.image_thumb}" />
+            <image converter="b64Image" embedded="true" repo="superHImages"
+                value="${entity.image_thumb}" />
         </form>
     </edit>
     <list>

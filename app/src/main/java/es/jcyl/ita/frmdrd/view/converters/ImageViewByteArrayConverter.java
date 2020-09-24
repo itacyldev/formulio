@@ -29,7 +29,7 @@ public class ImageViewByteArrayConverter extends AbstractImageViewValueConverter
 
     @Override
     protected boolean isMissingOrErrorImage(ByteArray bArray) {
-        return bArray == null || bArray.getValue().length == 0;
+        return bArray == null || bArray.getValue() == null || bArray.getValue().length == 0;
     }
 
     @Override

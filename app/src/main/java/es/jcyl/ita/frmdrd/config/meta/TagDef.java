@@ -30,6 +30,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -83,7 +84,7 @@ public class TagDef {
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
-        register("image", define(baseInput, new Attribute[]{REPO, WIDTH, HEIGHT}));
+        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);
