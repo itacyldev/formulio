@@ -60,7 +60,7 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
 
     private void setUpRoute(ConfigNode<UIDatalist> node) {
         if (node.hasAttribute("route")) {
-            return; // already defined
+            return;
         }
         // get add action from list controller to define default route
         ConfigNode listNode = ConfigNodeHelper.getAscendantByTag(node, "list");
@@ -93,7 +93,7 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         //datalist.setNumVisibleRows(numVisibleRows);
     }
 
-    public UIDatalist createDataTableFromRepo(Repository repo) {
+    public UIDatalist createDatalistFromRepo(Repository repo) {
         // select all entity properties
         EntityMeta meta = repo.getMeta();
         String[] fieldFilter = meta.getPropertyNames();
