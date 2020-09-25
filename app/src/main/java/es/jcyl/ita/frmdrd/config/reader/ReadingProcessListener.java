@@ -15,10 +15,20 @@ package es.jcyl.ita.frmdrd.config.reader;
  * limitations under the License.
  */
 
+import es.jcyl.ita.frmdrd.project.Project;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public interface ReadingProcessListener {
 
     void newElement(String tag);
+
+    Project getProject();
+
+     void setProject(Project project);
+
+     String getCurrentFile();
+
+     void setCurrentFile(String currentFile);
 }

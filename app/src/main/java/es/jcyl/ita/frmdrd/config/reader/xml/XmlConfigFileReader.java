@@ -17,6 +17,7 @@ package es.jcyl.ita.frmdrd.config.reader.xml;
 
 import android.net.Uri;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -36,7 +37,6 @@ import es.jcyl.ita.frmdrd.config.ConfigurationException;
 import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.frmdrd.config.meta.Attribute;
-import es.jcyl.ita.frmdrd.config.meta.TagDef;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.ReadingProcessListener;
 import es.jcyl.ita.frmdrd.config.resolvers.ComponentResolver;
@@ -69,7 +69,6 @@ public class XmlConfigFileReader {
             throw new ConfigurationException(error("Error occurred while trying to instantiate XMLFileFormConfigReader.", e));
         }
     }
-
 
     public ConfigNode read(Uri uri) throws ConfigurationException {
         try {
@@ -147,11 +146,18 @@ public class XmlConfigFileReader {
         if (StringUtils.isBlank(node.getId())) {
             // number elements with of current tag
             String tag = node.getName();
-            Set<String> tags = this.resolver.getIdsForTag(tag);
-            String id = tag + (tags.size() + 1);
-            node.setId(id); // table1, table2, table3,..
-            this.resolver.addComponentId(id, tag);
+            String id = null;
+            if (tag.toLowerCase().equals("main")) {
+                // use filename as id
+                String currentFile = listener.getCurrentFile();
+                id = FilenameUtils.getBaseName(currentFile);
+            } else {
+                Set<String> tags = this.resolver.getIdsForTag(tag);
+                id = tag + (tags.size() + 1);  // table1, table2, table3,..
+            }
+            node.setId(id);
         }
+        this.resolver.addComponentId(node.getName(), node.getId());
     }
 
     public void build(ConfigNode root) {
@@ -179,8 +185,6 @@ public class XmlConfigFileReader {
 
 
     private void setAttributes(XmlPullParser xpp, ConfigNode node, ComponentResolver idResolver) {
-        Map<String, Attribute> attributesDef = TagDef.getDefinition(node.getName());
-
         for (int i = 0; i < xpp.getAttributeCount(); i++) {
             String attName = xpp.getAttributeName(i);
             String value = xpp.getAttributeValue(i);
@@ -188,9 +192,7 @@ public class XmlConfigFileReader {
                 // register current component id
                 idResolver.addComponentId(value, xpp.getName());
             }
-
             node.getAttributes().put(attName, value);
-
         }
     }
 

@@ -47,8 +47,6 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
     private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("add", "update", "cancel", "delete", "nav"));
     private static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable"));
 
-    private static RepositoryAttributeResolver repoResolver = new RepositoryAttributeResolver();
-
     public FormListControllerBuilder(String tagName) {
         super(tagName, FormListController.class);
     }

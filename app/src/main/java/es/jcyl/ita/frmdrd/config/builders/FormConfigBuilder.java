@@ -50,18 +50,23 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         if (list.size() == 0) {
             // if no nested List, create one node and attach to current node
             addDefaultNode(formConfig, node, "list");
+        } else {
+            // setup form id
+            setupChildrenIds(formConfig, "list", list);
         }
         List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(node, "edit");
         if (edits.size() == 0) {
             // if no nested Edit, create one node and attach to current node
             addDefaultNode(formConfig, node, "edit");
+        }else{
+            setupChildrenIds(formConfig, "edit", edits);
         }
         UIBuilderHelper.addDefaultRepoNode(node);
     }
 
     private ConfigNode addDefaultNode(FormConfig formConfig, ConfigNode node, String tag) {
         ConfigNode newNode = node.copy();
-        String id = formConfig.getId() + "#" + tag;
+        String id = formConfig.getId() + "-" + tag;
         newNode.setName(tag);
         newNode.setId(id);
         if(node.hasAttribute("repo")){
@@ -69,6 +74,13 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         }
         node.addChild(newNode);
         return newNode;
+    }
+
+    private void setupChildrenIds(FormConfig formConfig, String tag, List<ConfigNode> nodes){
+        for(ConfigNode n: nodes){
+            String id = formConfig.getId() + "-" + n.getId();
+            n.setId(id);
+        }
     }
 
     @Override

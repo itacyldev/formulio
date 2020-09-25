@@ -34,4 +34,11 @@ public class ProjectResource {
         this.project = project;
     }
 
+    @Override
+    public String toString() {
+        return "ProjectResource{" +
+                "file=" + file +
+                ", type=" + type +
+                '}';
+    }
 }

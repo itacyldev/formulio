@@ -1,4 +1,4 @@
-<main name="Superheroes" description="Simple form with image example." id="form3" repo="superHRepo">
+<main name="Superheroes" description="Simple form with image example." repo="superHRepo">
     <edit>
         <form>
             <input label="Name" value="${entity.name}" />
@@ -7,7 +7,7 @@
             <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
         </form>
     </edit>
-    <list>
+    <list name="Superheroes">
         <datatable properties="name, real_name, age" />
     </list>
 </main>

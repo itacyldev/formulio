@@ -15,14 +15,13 @@ package es.jcyl.ita.frmdrd.config.resolvers;
  * limitations under the License.
  */
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
-import es.jcyl.ita.frmdrd.config.DevConsole;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -33,29 +32,23 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
  */
 public class ComponentResolver {
 
-    private Map<String, String> ids = new HashMap<String, String>();
+    private Map<String, Set<String>> tags = new HashMap<String, Set<String>>();
 
-
-    public void addComponentId(String id, String tagName) {
-        if (ids.containsKey(id)) {
-            throw new ConfigurationException(error("Duplicate id for component {tag}: " + id));
+    public void addComponentId(String tagName, String id) {
+        if (!tags.containsKey(tagName)) {
+            tags.put(tagName, new HashSet<String>());
         }
-        this.ids.put(id, tagName);
+        if (tags.get(tagName).contains(id.toLowerCase())) {
+            throw new ConfigurationException(error("Duplicate id for component {tag} in {form}: " + id));
+        }
+        tags.get(tagName).add(id);
     }
 
     public void clear() {
-        this.ids.clear();
+        this.tags.clear();
     }
 
     public Set<String> getIdsForTag(String tagName) {
-        Set<String> keys = new HashSet<String>();
-        for (Map.Entry<String, String> entry : ids.entrySet()) {
-            if (Objects.equals(tagName, entry.getValue())) {
-                keys.add(entry.getKey());
-            }
-        }
-        return keys;
+        return tags.containsKey(tagName) ? tags.get(tagName) : Collections.EMPTY_SET;
     }
-
-
 }

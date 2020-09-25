@@ -57,13 +57,13 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
-    public void save(FormConfig formConfig) {
-        memoryRepo.put(formConfig.getId(), formConfig);
+    public void delete(FormConfig formConfig) {
+        deleteById(formConfig.getId());
     }
 
     @Override
-    public void delete(FormConfig formConfig) {
-        deleteById(formConfig.getId());
+    public void save(FormConfig formConfig) {
+        memoryRepo.put(formConfig.getId(), formConfig);
     }
 
     @Override
