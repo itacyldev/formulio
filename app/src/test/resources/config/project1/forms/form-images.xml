@@ -1,4 +1,4 @@
-<main name="Superheroes" description="Simple form with image example." repo="superHRepo">
+<main name="Superheroes" description="Simple form with image example." id="form3" repo="superHRepo">
     <edit>
         <form>
             <input label="Name" value="${entity.name}" />

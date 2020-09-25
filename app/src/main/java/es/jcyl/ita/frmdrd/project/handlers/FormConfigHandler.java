@@ -20,6 +20,7 @@ import android.net.Uri;
 import org.mini2Dx.collections.CollectionUtils;
 
 import es.jcyl.ita.frmdrd.config.ConfigurationException;
+import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.config.reader.xml.XmlConfigFileReader;
@@ -66,6 +67,12 @@ public class FormConfigHandler extends AbstractProjectResourceHandler<FormConfig
      * @param formConfig
      */
     private void register(FormConfig formConfig) {
+        FormConfig existingFormConfig = formConfigRepo.findById(formConfig.getId());
+        if (existingFormConfig != null) {
+            throw new ConfigurationException(DevConsole.error(String.format("Duplicate id = [%s]," +
+                    " the id configured in <main/> in file ${file} is already used in the " +
+                    "file: [%s].", formConfig.getId(), existingFormConfig.getFilePath())));
+        }
         formConfigRepo.save(formConfig);
 
         register(formConfig.getList());
