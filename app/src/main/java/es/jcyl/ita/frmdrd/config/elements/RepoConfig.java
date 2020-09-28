@@ -20,10 +20,15 @@ package es.jcyl.ita.frmdrd.config.elements;
  * Class to hold repository configuration during config reading process
  */
 public class RepoConfig {
+    public enum REPO_TYPE {DATATABLE, FILE};
+
     private String id;
+    private REPO_TYPE type;
     private String dbFile;
     private String dbTable;
     private String sql;
+    private String folder;
+    private String defaultExtension;
 
     public String getId() {
         return id;
@@ -55,5 +60,29 @@ public class RepoConfig {
 
     public void setSql(String sql) {
         this.sql = sql;
+    }
+
+    public REPO_TYPE getType() {
+        return type;
+    }
+
+    public void setType(REPO_TYPE type) {
+        this.type = type;
+    }
+
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
+    public String getDefaultExtension() {
+        return defaultExtension;
+    }
+
+    public void setDefaultExtension(String defaultExtension) {
+        this.defaultExtension = defaultExtension;
     }
 }

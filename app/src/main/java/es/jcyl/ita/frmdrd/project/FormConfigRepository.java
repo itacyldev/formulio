@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.crtrepo.EditableRepository;
-import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.meta.PropertyType;
 import es.jcyl.ita.crtrepo.query.BaseFilter;
@@ -36,7 +35,7 @@ import es.jcyl.ita.frmdrd.config.FormConfig;
 public class FormConfigRepository implements EditableRepository<FormConfig, String, BaseFilter> {
 
     private final Project project;
-    private final EntitySource entitySource;
+    private final EntitySource source;
     private final EntityMeta meta;
 
     private Map<String, FormConfig> memoryRepo = new HashMap<String, FormConfig>();
@@ -44,7 +43,7 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     public FormConfigRepository(Project project) {
         this.project = project;
         this.meta = createMeta();
-        this.entitySource = createSource();
+        this.source = createSource();
     }
 
     @Override
@@ -78,6 +77,11 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
+    public FormConfig newEntity() {
+        return new FormConfig(this.source, this.meta);
+    }
+
+    @Override
     public String getId() {
         return "formConfig";
     }
@@ -99,7 +103,7 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
 
     @Override
     public EntitySource getSource() {
-        return this.entitySource;
+        return this.source;
     }
 
     @Override

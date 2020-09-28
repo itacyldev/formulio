@@ -21,13 +21,16 @@ import java.util.Map;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBTABLE;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DEFAULT_EXTENSION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FILTERING;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FOLDER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -71,7 +74,9 @@ public class TagDef {
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
         register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
+
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
+        register("fileRepo", define(new Attribute[]{ID, FOLDER, DEFAULT_EXTENSION}));
         register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
@@ -81,7 +86,8 @@ public class TagDef {
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
-        register("image", define(baseInput, new Attribute[]{REPO, WIDTH, HEIGHT}));
+        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT}));
+
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);
@@ -109,8 +115,6 @@ public class TagDef {
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
-
-
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

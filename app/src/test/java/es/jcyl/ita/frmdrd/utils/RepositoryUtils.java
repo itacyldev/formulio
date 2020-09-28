@@ -24,6 +24,7 @@ import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.RepositoryFactory;
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
 import es.jcyl.ita.crtrepo.db.SQLQueryFilter;
+import es.jcyl.ita.crtrepo.media.meta.FileMeta;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
 import es.jcyl.ita.frmdrd.project.ProjectRepository;

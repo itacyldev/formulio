@@ -59,7 +59,7 @@ public class ProjectTest {
         Project prj = list.get(0);
         prj.open();;
         List<ProjectResource> configFiles = prj.getConfigFiles();
-        Assert.assertEquals(3, configFiles.size());
+        Assert.assertEquals(4, configFiles.size());
 
         // check repositories are loaded
     }
@@ -74,10 +74,9 @@ public class ProjectTest {
         Project prj = list.get(0);
         prj.open();;
 
-
         Config.init(templateFolder.getAbsolutePath());
-        Config.getInstance().readConfig(prj);
-
+        Config.getInstance().setCurrentProject(prj);
+//        Config.getInstance().readConfig(prj);
     }
 
 }

@@ -50,7 +50,6 @@ public class UIColumnBuilder extends BaseUIComponentBuilder<UIColumn> {
                 }
                 node.getElement().setHeaderFilter(filter);
             }
-
         }
     }
 

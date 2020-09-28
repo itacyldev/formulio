@@ -15,10 +15,12 @@ package es.jcyl.ita.frmdrd.view.fragments.projects;
  * limitations under the License.
  */
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +29,7 @@ import java.util.List;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.config.Config;
+import es.jcyl.ita.frmdrd.config.DevConsole;
 import es.jcyl.ita.frmdrd.project.Project;
 
 /**
@@ -46,8 +49,23 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Config.getInstance().setCurrentProject(project_nameTextView.getContext()
-                            , projectList.get(getAdapterPosition()));
+                    Context context = project_nameTextView.getContext();
+                    // TODO: extract Project View Helper to FORMIC-27
+                    Project prj = projectList.get(getAdapterPosition());
+                    Toast.makeText(context,
+                            DevConsole.info(context.getString(R.string.project_opening_init,
+                                    (String) prj.getId())),
+                            Toast.LENGTH_LONG).show();
+                    try {
+                        Config.getInstance().setCurrentProject(prj);
+                        Toast.makeText(context,
+                                DevConsole.info(context.getString(R.string.project_opening_finish, (String) prj.getId())),
+                                Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context,
+                                DevConsole.info(context.getString(R.string.project_opening_error, (String) prj.getId())),
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 

@@ -15,10 +15,11 @@ package es.jcyl.ita.frmdrd.forms;
  * limitations under the License.
  */
 
-import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.crtrepo.context.CompositeContext;
 import es.jcyl.ita.frmdrd.context.impl.EntityContext;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.forms.operations.FormEntityPersister;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.validation.ValidatorException;
@@ -31,6 +32,8 @@ import es.jcyl.ita.frmdrd.validation.ValidatorException;
 public class FormEditController extends FormController {
     private UIForm mainForm;
 
+    private FormEntityPersister entityPersister = new FormEntityPersister();
+
     public FormEditController(String id, String name) {
         super(id, name);
     }
@@ -42,11 +45,11 @@ public class FormEditController extends FormController {
     /**
      * Save current entities
      */
-    public void save() {
-        save(this.mainForm);
+    public void save(CompositeContext context) {
+        save(context, this.mainForm);
     }
 
-    public boolean save(UIForm form) {
+    public boolean save(CompositeContext context, UIForm form) {
         if (form.isReadOnly()) {
             return false;// no changes
         }
@@ -56,50 +59,41 @@ public class FormEditController extends FormController {
                     "on form [%s].", form.getId()));
         }
         // transfer changes from view fields to entity properties
-        updateEntity(form);
+        updateEntityFromView(form);
 
-        // persist changes in current entity
-        Entity entity = form.getCurrentEntity();
-        EditableRepository repo = getEditableRepo();
-        repo.save(entity);
-
-        // persist changes ni related entities
-
-
+        // persist changes in current and related entities
+        this.entityPersister.save(context, form);
         return true;
     }
 
 
-    public void delete() {
-        this.delete(this.mainForm);
+    public void delete(CompositeContext context) {
+        this.delete(context, this.mainForm);
     }
 
-    public boolean delete(UIForm form) {
+    public boolean delete(CompositeContext context, UIForm form) {
         if (form.isReadOnly()) {
             return false;
         }
-        // current form's entity
-        Entity entity = form.getCurrentEntity();
-        EditableRepository repo = getEditableRepo();
-        repo.delete(entity);
+        entityPersister.delete(context, form);
         return true;
     }
 
     /**
      * Access form fields looking for value bindings that can be setable
      */
-    private void updateEntity(UIForm form) {
+    private void updateEntityFromView(UIForm form) {
         FormViewContext viewContext = form.getContext().getViewContext();
         EntityContext entityContext = form.getContext().getEntityContext();
         // go over all the form elements looking for bindings that are not readonly
         for (UIInputComponent field : form.getFields()) {
-            updateEntity(viewContext, entityContext, field);
+            updateEntityFromView(viewContext, entityContext, field);
         }
     }
 
-    private void updateEntity(FormViewContext viewContext, EntityContext entityContext,
-                              UIInputComponent field) {
-        if (field.isBound()) {
+    private void updateEntityFromView(FormViewContext viewContext, EntityContext entityContext,
+                                      UIInputComponent field) {
+        if (field.isBound() && !field.isEntityRelation()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();
@@ -136,7 +130,7 @@ public class FormEditController extends FormController {
     }
 
     public Entity getCurrentEntity() {
-        return this.mainForm.getCurrentEntity();
+        return this.mainForm.getEntity();
     }
 
     /****************************/

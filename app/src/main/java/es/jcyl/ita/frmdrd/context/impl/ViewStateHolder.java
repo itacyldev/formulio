@@ -39,8 +39,8 @@ public class ViewStateHolder {
     public void saveState(FormViewContext viewContext) {
         clear();
         for (InputWidget fieldView : viewContext.getInputFields()) {
-            if(fieldView.isVisible()){
-                state.put(fieldView.getInputId(), fieldView.getValue());
+            if (fieldView.isVisible()) {
+                state.put(fieldView.getInputId(), fieldView.getState());
             }
         }
     }
@@ -50,11 +50,10 @@ public class ViewStateHolder {
      */
     public void restoreState(FormViewContext viewContext) {
         for (InputWidget fieldView : viewContext.getInputFields()) {
-            if(fieldView.isVisible()){
+            if (fieldView.isVisible()) {
                 String fieldId = fieldView.getInputId();
-                fieldView.setValue(state.get(fieldId));
+                fieldView.setState(state.get(fieldId));
             }
         }
-
     }
 }

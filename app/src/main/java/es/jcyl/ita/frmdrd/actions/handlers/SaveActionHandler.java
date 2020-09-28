@@ -48,7 +48,7 @@ public class SaveActionHandler extends AbstractActionHandler implements ActionHa
         formController.saveViewState();
 
         try {
-            formController.save();
+            formController.save(this.mc.getGlobalContext());
             // stay or navigate back to list?
             String msg = "Entity successfully saved."; //TODO: Localization
             if (StringUtils.isBlank(action.getRoute())) {

@@ -17,18 +17,19 @@ package es.jcyl.ita.frmdrd.forms;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.test.platform.app.InstrumentationRegistry;
 import es.jcyl.ita.crtrepo.EditableRepository;
 import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
@@ -42,6 +43,9 @@ import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.builders.FormDataBuilder;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
 import es.jcyl.ita.frmdrd.context.impl.FormViewContext;
+import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
+import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
+import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.utils.DevFormBuilder;
 
@@ -69,6 +73,68 @@ public class FormControllerTest {
 
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
+    }
+
+    @Test
+    public void testLoadEntity() {
+        // create random meta for entity and create entity
+        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        entityBuilder = new EntityDataBuilder(meta);
+        Entity entity = entityBuilder.withRandomData().build();
+        // create repository mock
+        EditableRepository mockRepo = mock(EditableRepository.class);
+        when(mockRepo.getMeta()).thenReturn(meta);
+        when(mockRepo.findById(entity.getId())).thenReturn(entity);
+
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx)
+                .withParam("entityId", entity.getId())
+                .withRepo(mockRepo)
+                .load();
+
+        Assert.assertNotNull(recipe.form.getEntity());
+        Assert.assertEquals(entity.getId(), recipe.form.getEntity().getId());
+    }
+
+    @Test
+    public void testLoadEntityWithRelations() {
+        String REL_PROPERTY = "image1";
+        // create random meta for entity and create entity
+        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        Entity entity = DevDbBuilder.buildEntity(meta);
+        // create repository mock
+        EditableRepository mockRepo = mock(EditableRepository.class);
+        when(mockRepo.getMeta()).thenReturn(meta);
+        when(mockRepo.findById(entity.getId())).thenReturn(entity);
+
+        // define an entity relation with an Entity
+        EditableRepository relRepo = mock(EditableRepository.class);
+        EntityMeta relMeta = DevDbBuilder.createRandomMeta();
+        when(relRepo.getMeta()).thenReturn(relMeta);
+        Entity relEntity = DevDbBuilder.buildEntity(relMeta);
+        when(relRepo.findById(relEntity.getId())).thenReturn(relEntity);
+
+        // prepare data/state
+        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
+                .invoke(ctx)
+                .withParam("entityId", entity.getId())
+                .withRepo(mockRepo);
+
+        // set relation
+        entity.set(REL_PROPERTY, relEntity.getId(), true);
+
+        ValueBindingExpression bindingExpression = ValueExpressionFactory.getInstance().create("$" +
+                "{entity." + REL_PROPERTY + "}");
+        ArrayList<EntityRelation> lst = new ArrayList<>();
+        lst.add(new EntityRelation(relRepo, "relation1", bindingExpression));
+        recipe.form.setEntityRelations(lst);
+        recipe.load();
+
+        Assert.assertNotNull(recipe.form.getEntity());
+        Assert.assertNotNull(recipe.form.getEntity().get("image1")); // property used to
+        // get the related entity Id
+        Assert.assertNotNull(recipe.form.getEntity().get("relation1")); // related entity
     }
 
     /**
@@ -115,7 +181,7 @@ public class FormControllerTest {
             viewContext.put(propId, expected);
         }
         // execute save and check the repo has been hit with the new values
-        ((FormEditController) recipe.mc.getFormController()).save();
+        ((FormEditController) recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
 
         ArgumentCaptor<Entity> argument = ArgumentCaptor.forClass(Entity.class);
         verify(mockRepo).save(argument.capture());

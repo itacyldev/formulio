@@ -34,4 +34,6 @@ public interface FilterableComponent {
     String[] getMandatoryFilters();
 
     void setMandatoryFilters(String[] mandatoryFields);
+
+
 }

@@ -10,6 +10,7 @@ import es.jcyl.ita.crtrepo.context.Context;
 import es.jcyl.ita.frmdrd.el.JexlUtils;
 import es.jcyl.ita.frmdrd.el.ValueBindingExpression;
 import es.jcyl.ita.frmdrd.meta.Identificable;
+import es.jcyl.ita.frmdrd.repo.EntityRelation;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.ui.components.view.UIView;
 import es.jcyl.ita.frmdrd.view.ViewConfigException;
@@ -27,9 +28,13 @@ public abstract class UIComponent implements Identificable {
     protected UIForm parentForm;
     protected UIComponent[] children;
 
-
     private String rendererType;
     private boolean renderChildren;
+
+    /**
+     * Stores information to retrieve an entity related to form's main entity
+     */
+    private EntityRelation entityRelation;
 
     /**
      * if the children of this component have to be rendered individually
@@ -227,4 +232,15 @@ public abstract class UIComponent implements Identificable {
         return ExpressionHelper.getExpressions(this);
     }
 
+    public boolean isEntityRelation(){
+        return entityRelation!=null;
+    }
+
+    public EntityRelation getEntityRelation() {
+        return entityRelation;
+    }
+
+    public void setEntityRelation(EntityRelation entityRelation) {
+        this.entityRelation = entityRelation;
+    }
 }

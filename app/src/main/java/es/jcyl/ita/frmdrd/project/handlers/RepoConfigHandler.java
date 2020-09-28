@@ -47,15 +47,9 @@ import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class RepositoryConfHandler extends AbstractRepoConfigurationReader implements ProjectResourceHandler {
+public class RepoConfigHandler extends AbstractRepoConfigurationReader implements ProjectResourceHandler {
 
     private ReadingProcessListener listener;
-
-    public void clear() {
-        repoFactory.clear();
-        sourceFactory.clear();
-//        converterFactory.clear(); //keep it
-    }
 
     @Override
     public Object handle(ProjectResource resource) {
@@ -79,7 +73,7 @@ public class RepositoryConfHandler extends AbstractRepoConfigurationReader imple
         //  for each repo implementation
         if (repo instanceof EditableRepository) {
             // make sure the repo has a pk
-            if (!repo.getMeta().hasIdProperties()) {
+            if (repo.getMeta() == null || !repo.getMeta().hasIdProperties()) {
                 throw new ConfigurationException(error(String.format("The repository [%s] has no primary key defined. " +
                         "Can't create an editable repository without a proper PK column (And it should be a one-column PK). " +
                         "Check your SQLite database.", repo.getId())));
@@ -98,46 +92,6 @@ public class RepositoryConfHandler extends AbstractRepoConfigurationReader imple
         throw new UnsupportedOperationException();
     }
 
-
-    /**
-     * @param filePath
-     * @param tableName
-     * @return
-     */
-    public Repository createFromFile(String entityId, String filePath, String tableName) {
-        File dbFile = new File(filePath);
-        if (!dbFile.exists()) {
-            throw new ConfigurationException(error(String.format("File doesn't exist [%s] referenced in ${file}", filePath)));
-        }
-        // check if exists another repository against that source
-        String absPath = dbFile.getAbsolutePath();
-        Source source = this.sourceFactory.getSource(absPath);
-        if (source == null) {
-            SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
-            // use absolute path as source Id
-            source = new Source<>(absPath, absPath, new StandardDatabase(sqDb));
-            this.sourceFactory.registerSource(source);
-        }
-
-        // create entity source
-        EntitySource eSource = sourceFactory.getEntitySource(entityId);
-        if (eSource == null) {
-            EntitySourceBuilder builder;
-            builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, source);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, tableName);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, entityId);
-            eSource = builder.build();
-        }
-
-        // create repository
-        MetaModeler metaModeler = new SQLiteMetaModeler();
-        EntityMeta meta = metaModeler.readFromSource(eSource);
-        EntityDaoConfig conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
-        RepositoryBuilder builder = repoFactory.getBuilder(eSource);
-        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
-        return builder.build();
-    }
 
     public RepositoryFactory getRepoFactory() {
         return this.repoFactory;

@@ -15,19 +15,25 @@ package es.jcyl.ita.frmdrd.ui.components.image;
  * limitations under the License.
  */
 
+import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
+import es.jcyl.ita.frmdrd.ui.components.EntityHolder;
 import es.jcyl.ita.frmdrd.ui.components.UIInputComponent;
+
+import static es.jcyl.ita.frmdrd.ui.components.image.UIImage.ImageInputType.CAMERA_ONLY;
+import static es.jcyl.ita.frmdrd.ui.components.image.UIImage.ImageInputType.GALLERY_AND_CAMERA;
+import static es.jcyl.ita.frmdrd.ui.components.image.UIImage.ImageInputType.GALLERY_ONLY;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  * Image component
  */
-public class UIImage extends UIInputComponent implements FilterableComponent {
+public class UIImage extends UIInputComponent implements EntityHolder {
 
     private static final String IMAGE = "image";
+
     /**
      * filterable component
      **/
@@ -36,7 +42,8 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
     private String[] mandatoryFilters;
     private Integer width;
     private Integer height;
-
+    private Entity entity;
+    private boolean embedded;
 
     public Integer getWidth() {
         return width;
@@ -71,41 +78,75 @@ public class UIImage extends UIInputComponent implements FilterableComponent {
         return (converter == null) ? "urlImage" : converter;
     }
 
-    /******* Filterable component interface **/
-    @Override
+    /******* EntityRelation component interface **/
     public void setRepo(Repository repo) {
         this.repo = repo;
     }
 
-    @Override
     public Repository getRepo() {
         return this.repo;
     }
 
-    @Override
     public void setFilter(Filter filter) {
         this.filter = filter;
     }
 
-    @Override
     public Filter getFilter() {
         return this.filter;
     }
-
-    @Override
-    public String[] getMandatoryFilters() {
-        return this.mandatoryFilters;
-    }
-
-    @Override
-    public void setMandatoryFilters(String[] mandatoryFields) {
-        this.mandatoryFilters = mandatoryFilters;
-    }
-
 
     public boolean isBound() {
         return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
     }
 
+    @Override
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
 
+    @Override
+    public Entity getEntity() {
+        return this.entity;
+    }
+
+    public boolean isCameraActive() {
+        return this.getInputType() == CAMERA_ONLY.value
+                || this.getInputType() == GALLERY_AND_CAMERA.value;
+    }
+
+    public boolean isGalleryActive() {
+        return this.getInputType() == GALLERY_ONLY.value
+                || this.getInputType() == GALLERY_AND_CAMERA.value;
+    }
+
+    public enum ImageInputType {
+        NO_CONTROLS(0),
+        CAMERA_ONLY(1),
+        GALLERY_ONLY(2),
+        GALLERY_AND_CAMERA(3);
+
+        public final int value;
+
+        private ImageInputType(int value) {
+            this.value = value;
+        }
+
+        public ImageInputType fromValue(int value) {
+            for (ImageInputType e : values()) {
+                if (e.value == value) {
+                    return e;
+                }
+            }
+            throw new IllegalStateException(String.format("Invalid value for Image input type: %s" +
+                    " expected one of [0,1,2,3].", value));
+        }
+    }
+
+    public boolean getEmbedded() {
+        return embedded;
+    }
+
+    public void setEmbedded(boolean embedded) {
+        this.embedded = embedded;
+    }
 }

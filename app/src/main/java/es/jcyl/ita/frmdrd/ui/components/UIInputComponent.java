@@ -15,6 +15,8 @@ package es.jcyl.ita.frmdrd.ui.components;
  * limitations under the License.
  */
 
+import android.text.InputType;
+
 import java.util.Arrays;
 
 import es.jcyl.ita.frmdrd.ui.components.inputfield.UIField;
@@ -33,7 +35,7 @@ public class UIInputComponent extends UIComponent {
     private boolean readOnly;
     private String defaultValue;
     private String valueConverter;
-
+    private int inputType = InputType.TYPE_CLASS_TEXT;
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
@@ -140,4 +142,14 @@ public class UIInputComponent extends UIComponent {
         }
         return false;
     }
+
+
+    public int getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(final int inputType) {
+        this.inputType = inputType;
+    }
+
 }

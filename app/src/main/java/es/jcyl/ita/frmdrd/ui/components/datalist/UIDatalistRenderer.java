@@ -1,7 +1,6 @@
 package es.jcyl.ita.frmdrd.ui.components.datalist;
 
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import es.jcyl.ita.frmdrd.R;
 import es.jcyl.ita.frmdrd.view.render.AbstractRenderer;
@@ -29,10 +28,10 @@ public class UIDatalistRenderer extends AbstractRenderer<UIDatalist, DatalistWid
     protected void setupWidget(RenderingEnv env, DatalistWidget widget) {
         super.setupWidget(env, widget);
 
-        LinearLayout tableView = widget.findViewById(R.id.list_layout);
+        LinearLayout datalistView = widget.findViewById(R.id.datalist_layout);
 
-        ListView bodyView = tableView.findViewById(R.id.list_view);
-
+        LinearLayout datalistContentLayout = datalistView.findViewById(R.id.datalist_content_layout);
+        widget.setContentLayout(datalistContentLayout);
         widget.load(env);
     }
 }

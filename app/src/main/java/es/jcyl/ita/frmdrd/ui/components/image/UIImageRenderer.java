@@ -36,6 +36,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
     protected InputWidget<UIImage, ImageResourceView> createWidget(RenderingEnv env, UIImage component) {
         ImageWidget imageWidget = (ImageWidget) super.createWidget(env, component);
         env.getFormActivity().registerCallBackForActivity(imageWidget);
+        env.getFormActivity().registerCallBackForActivity(imageWidget.getGallerySelector());
         return imageWidget;
     }
 

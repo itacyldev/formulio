@@ -32,13 +32,14 @@ import java.util.List;
 
 import es.jcyl.ita.crtrepo.test.utils.TestUtils;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.project.FormConfigRepository;
-import es.jcyl.ita.frmdrd.project.handlers.FormConfigHandler;
-import es.jcyl.ita.frmdrd.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.frmdrd.config.reader.dummy.DummyFormConfigReader;
 import es.jcyl.ita.frmdrd.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.frmdrd.forms.FormEditController;
+import es.jcyl.ita.frmdrd.project.FormConfigRepository;
+import es.jcyl.ita.frmdrd.project.Project;
+import es.jcyl.ita.frmdrd.project.ProjectRepository;
 import es.jcyl.ita.frmdrd.project.ProjectResource;
+import es.jcyl.ita.frmdrd.project.handlers.FormConfigHandler;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 
 import static org.mockito.Mockito.mock;
@@ -119,7 +120,8 @@ public class TestXmlConfigReader {
         FormConfigHandler handler = new FormConfigHandler();
         handler.setFormConfigRepo(mock(FormConfigRepository.class));
 
-        ProjectResource resource = new ProjectResource(file, ProjectResource.ResourceType.FORM);
+        Project p = ProjectRepository.createFromFolder(new File("."));
+        ProjectResource resource = new ProjectResource(p, file, ProjectResource.ResourceType.FORM);
         FormConfig formConfig = handler.handle(resource);
 
         Assert.assertNotNull(formConfig);

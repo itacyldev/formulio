@@ -15,8 +15,16 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import org.apache.commons.collections.ListUtils;
+
+import java.util.Collections;
+import java.util.List;
+
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
+import es.jcyl.ita.frmdrd.repo.EntityRelation;
+import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 
 /**
@@ -35,5 +43,17 @@ public class UIFormBuilder extends UIGroupComponentBuilder<UIForm> {
         // Add a child node for all the properties defined in the properties attribute
         Repository repo = node.getElement().getRepo();
         addNodesFromPropertiesAtt(node, repo);
+    }
+
+    @Override
+    protected void setupOnSubtreeEnds(ConfigNode<UIForm> node) {
+        super.setupOnSubtreeEnds(node);
+
+        // get entity relations defined in inner components
+        List<EntityRelation> relations =
+                UIComponentHelper.findEntityRelations(node.getElement());
+        if(relations != null){
+            node.getElement().setEntityRelations(relations);
+        }
     }
 }

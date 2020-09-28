@@ -21,7 +21,6 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-
 import es.jcyl.ita.frmdrd.ui.components.media.MediaResource;
 
 /**
@@ -52,7 +51,11 @@ public class ImageResourceView extends ImageView {
         return this.resource;
     }
 
-    public boolean isEmpty(){
+    public void setResource(MediaResource resource) {
+        this.resource = resource;
+    }
+
+    public boolean isEmpty() {
         return resource == null;
     }
 }

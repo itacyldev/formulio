@@ -20,6 +20,8 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.crtrepo.RepositoryFactory;
+import es.jcyl.ita.crtrepo.source.EntitySourceFactory;
 import es.jcyl.ita.frmdrd.config.AttributeResolver;
 import es.jcyl.ita.frmdrd.config.ComponentBuilder;
 import es.jcyl.ita.frmdrd.config.Config;
@@ -33,8 +35,7 @@ import es.jcyl.ita.frmdrd.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.frmdrd.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FCAction;
-import es.jcyl.ita.frmdrd.project.handlers.RepositoryConfHandler;
-import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
+import es.jcyl.ita.frmdrd.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.frmdrd.ui.components.option.UIOption;
 import es.jcyl.ita.frmdrd.ui.components.tab.UITab;
 
@@ -53,6 +54,8 @@ public class ComponentBuilderFactory {
     private ConfigReadingInfo info;
     private ComponentResolver componentResolver;
     private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
+    private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+    private EntitySourceFactory sourceFactory = EntitySourceFactory.getInstance();
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -70,9 +73,12 @@ public class ComponentBuilderFactory {
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
+        registerBuilder("fileRepo", newBuilder(FileRepoBuilder.class, "fileRepo"));
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
+
+        registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
@@ -199,7 +205,15 @@ public class ComponentBuilderFactory {
         this.info = info;
     }
 
-    public RepositoryConfHandler getRepoReader() {
+    public RepoConfigHandler getRepoReader() {
         return Config.getInstance().getRepoConfigReader();
+    }
+
+    public RepositoryFactory getRepoFactory() {
+        return repoFactory;
+    }
+
+    public EntitySourceFactory getSourceFactory() {
+        return sourceFactory;
     }
 }

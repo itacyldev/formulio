@@ -80,6 +80,18 @@ public class Project extends Entity {
         return opened;
     }
 
+    public List<ProjectResource> getConfigFiles(ProjectResource.ResourceType resourceType) {
+        List<ProjectResource> confFiles = getConfigFiles();
+        // return just the given type
+        List<ProjectResource> filtered = new ArrayList<ProjectResource>();
+        for (ProjectResource pr : confFiles) {
+            if (pr.type == resourceType) {
+                filtered.add(pr);
+            }
+        }
+        return filtered;
+    }
+
     public List<ProjectResource> getConfigFiles() {
         if (!opened) {
             throw new ProjectException(
@@ -93,11 +105,8 @@ public class Project extends Entity {
         List<ProjectResource> files = new ArrayList<>();
 
         File f = new File(getBaseFolder());
-        System.out.println(String.format("%s - %s", f.getAbsolutePath(), f.exists()));
         f = new File(getBaseFolder() + "/data");
-        System.out.println(String.format("%s - %s", f.getAbsolutePath(), f.exists()));
         f = new File(getBaseFolder() + "/forms");
-        System.out.println(String.format("%s - %s", f.getAbsolutePath(), f.exists()));
 
         ProjectResource.ResourceType type;
         for (String folder : CONFIG_FOLDERS) {
@@ -115,7 +124,7 @@ public class Project extends Entity {
             });
             if (ArrayUtils.isNotEmpty(xmlFiles)) {
                 for (File confFile : xmlFiles) {
-                    files.add(new ProjectResource(confFile, type));
+                    files.add(new ProjectResource(this, confFile, type));
                 }
             } else {
                 throw new ProjectException(
@@ -130,7 +139,7 @@ public class Project extends Entity {
         if (folder.equals("forms")) {
             return ProjectResource.ResourceType.FORM;
         } else if (folder.equals("data")) {
-            return ProjectResource.ResourceType.DATA;
+            return ProjectResource.ResourceType.REPO;
         } else {
             throw new IllegalArgumentException("Not supported, unexpected folder name: " + folder);
         }
@@ -152,4 +161,9 @@ public class Project extends Entity {
         opened = true;
     }
 
+    @Override
+    public String toString() {
+        return "Project{name=" + this.get("name") +
+                '}';
+    }
 }
