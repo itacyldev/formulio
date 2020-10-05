@@ -88,6 +88,14 @@ public class FormContext extends UnPrefixedCompositeContext {
         return entityContext;
     }
 
-    public String toString(){return this.getForm().getId();}
+    public void setEntityContext(EntityContext entityContext) {
+        this.entityContext = entityContext;
+    }
+
+    public String toString() {
+        return this.getForm().getId();
+    }
 
 }
+
+

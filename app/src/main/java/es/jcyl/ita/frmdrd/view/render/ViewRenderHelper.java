@@ -23,9 +23,13 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.frmdrd.context.impl.EntityContext;
 import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
+import es.jcyl.ita.frmdrd.ui.components.EntityListProvider;
 import es.jcyl.ita.frmdrd.ui.components.UIComponent;
 import es.jcyl.ita.frmdrd.ui.components.form.UIForm;
 import es.jcyl.ita.frmdrd.view.ViewHelper;
@@ -41,14 +45,15 @@ import es.jcyl.ita.frmdrd.view.widget.Widget;
 public class ViewRenderHelper {
 
     public View render(RenderingEnv env, UIComponent root) {
+        // enrich the execution environment with current form's context
+        setupFormContext(root, env);
         return render(env, root, true);
     }
 
     private View render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
-        // enrich the execution environment with current form's context
-        setupFormContext(component, env);
+
 
         View componentView;
         if (checkDeferred && hasDeferredExpression(component, env)) {
@@ -73,12 +78,35 @@ public class ViewRenderHelper {
                 // recursively render children components
                 Widget groupView = (Widget) componentView;
                 gRenderer.initGroup(env, groupView);
-                UIComponent[] kids = component.getChildren();
-                int numKids = kids.length;
-                View[] views = new View[numKids];
-                for (int i = 0; i < numKids; i++) {
-                    views[i] = render(env, kids[i]);
+
+                View[] views;
+                if (component instanceof EntityListProvider) {
+                    // save the old entityContext
+                    EntityContext entityContextOld = env.getFormContext().getEntityContext();
+
+                    List<Entity> entities = ((EntityListProvider) component).getEntities();
+                    views = new View[entities.size()];
+                    int i = 0;
+                    for (Entity entity : entities) {
+                        // create an EntityContext to render each entity
+                        EntityContext currentEntityContext = new EntityContext(entity);
+                        env.getFormContext().setEntityContext(currentEntityContext);
+                        views[i] = render(env, component.getChildren()[0]);
+                        i++;
+                    }
+
+                    // restore entity context
+                    env.getFormContext().setEntityContext(entityContextOld);
+
+                } else {
+                    UIComponent[] kids = component.getChildren();
+                    int numKids = kids.length;
+                    views = new View[numKids];
+                    for (int i = 0; i < numKids; i++) {
+                        views[i] = render(env, kids[i]);
+                    }
                 }
+
                 gRenderer.addViews(env, groupView, views);
                 gRenderer.endGroup(env, groupView);
             }

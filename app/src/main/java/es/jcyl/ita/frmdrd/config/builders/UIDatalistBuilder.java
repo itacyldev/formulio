@@ -30,6 +30,7 @@ import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
+import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistItem;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -48,13 +49,12 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIDatalist> node) {
-//        UIBuilderHelper.inheritAttribute(node, "repo");
         UIBuilderHelper.setUpRepo(node, true);
     }
 
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UIDatalist> node) {
-        setUpNumVisibleRows(node);
+        setNumItems(node);
         setUpRoute(node);
     }
 
@@ -81,16 +81,21 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         }
     }
 
-    private void setUpNumVisibleRows(ConfigNode<UIDatalist> node) {
-        int numVisibleRows = 1; // Number of default visible rows
-        if (node.hasAttribute("numVisibleRows")) {
-            numVisibleRows = Integer.parseInt(node.getAttribute("numVisibleRows"));
+    private void setNumItems(ConfigNode<UIDatalist> node) {
+        int numItems = 1; // Number of default visible items
+        if (node.hasAttribute("numItems")) {
+            numItems = Integer.parseInt(node.getAttribute("numItems"));
         }
         if (node.getParent().getElement() instanceof FormListController) {
-            numVisibleRows = -1; // Fill container with rows
+            numItems = -1; // Fill container with rows
         }
         UIDatalist datalist = node.getElement();
-        //datalist.setNumVisibleRows(numVisibleRows);
+        datalist.setNumItems(numItems);
+
+        // Add a configNode for each datalist item
+        ConfigNode<UIDatalistItem> childNode = createItemNode();
+        node.addChild(childNode);
+
     }
 
     public UIDatalist createDatalistFromRepo(Repository repo) {
@@ -112,5 +117,10 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         datalist.setRepo(repo);
 
         return datalist;
+    }
+
+    private ConfigNode<UIDatalistItem> createItemNode() {
+        ConfigNode<UIDatalistItem> itemNode = new ConfigNode<>("datalistItem");
+        return itemNode;
     }
 }
