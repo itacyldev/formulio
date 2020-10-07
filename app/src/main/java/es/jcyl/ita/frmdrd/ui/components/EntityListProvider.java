@@ -9,4 +9,5 @@ public interface EntityListProvider {
     public void setEntities(List<Entity> entities);
 
     public List<Entity> getEntities();
+
 }

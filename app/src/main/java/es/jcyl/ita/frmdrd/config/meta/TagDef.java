@@ -23,6 +23,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DBTABLE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DEFAULT_EXTENSION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.DESCRIPTION;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FILTERING;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FOLDER;
@@ -30,7 +31,6 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ID;
-import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -46,6 +46,7 @@ import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.REGISTER_IN_HISTORY;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.ROUTE;
+import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.TEMPLATE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.TYPE;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALIDATOR;
 import static es.jcyl.ita.frmdrd.config.meta.AttributeDef.VALUE;
@@ -72,7 +73,10 @@ public class TagDef {
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
-        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
+
+        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
+        register("datalistitem", define(new Attribute[]{ID}));
+        register("property", define(new Attribute[]{LABEL, VALUE}));
 
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));

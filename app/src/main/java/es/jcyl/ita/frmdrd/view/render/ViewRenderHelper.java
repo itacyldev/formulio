@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -79,20 +80,21 @@ public class ViewRenderHelper {
                 Widget groupView = (Widget) componentView;
                 gRenderer.initGroup(env, groupView);
 
-                View[] views;
+
+
+                List<View> viewList = new ArrayList<>();
                 if (component instanceof EntityListProvider) {
                     // save the old entityContext
                     EntityContext entityContextOld = env.getFormContext().getEntityContext();
 
                     List<Entity> entities = ((EntityListProvider) component).getEntities();
-                    views = new View[entities.size()];
-                    int i = 0;
+
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         EntityContext currentEntityContext = new EntityContext(entity);
                         env.getFormContext().setEntityContext(currentEntityContext);
-                        views[i] = render(env, component.getChildren()[0]);
-                        i++;
+                        View view = render(env, component.getChildren()[0]);
+                        viewList.add(view);
                     }
 
                     // restore entity context
@@ -101,13 +103,13 @@ public class ViewRenderHelper {
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
-                    views = new View[numKids];
                     for (int i = 0; i < numKids; i++) {
-                        views[i] = render(env, kids[i]);
+                        View view = render(env, kids[i]);
+                        viewList.add(view);
                     }
                 }
 
-                gRenderer.addViews(env, groupView, views);
+                gRenderer.addViews(env, groupView, viewList.toArray(new View[viewList.size()]));
                 gRenderer.endGroup(env, groupView);
             }
         }

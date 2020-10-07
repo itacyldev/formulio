@@ -54,6 +54,7 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
 
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UIDatalist> node) {
+        super.setupOnSubtreeEnds(node);
         setNumItems(node);
         setUpRoute(node);
     }
@@ -92,9 +93,6 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         UIDatalist datalist = node.getElement();
         datalist.setNumItems(numItems);
 
-        // Add a configNode for each datalist item
-        ConfigNode<UIDatalistItem> childNode = createItemNode();
-        node.addChild(childNode);
 
     }
 

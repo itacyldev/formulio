@@ -25,7 +25,6 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.List;
 
 import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
-import es.jcyl.ita.crtrepo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.crtrepo.meta.EntityMeta;
 import es.jcyl.ita.frmdrd.config.Config;
 import es.jcyl.ita.frmdrd.config.ConfigConverters;
@@ -33,6 +32,7 @@ import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
+import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistItem;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
@@ -134,45 +134,23 @@ public class UIDatalistBuilderTest {
      *
      * @throws Exception
      */
-    private static final String XML_TEST_PROP_ATT = "<datatable repo=\"defColsRepo\" properties=\"col1,col3\">" +
-            "<column id=\"mycol\"/>" +
-            "</datatable>";
+    private static final String XML_TEST_DATALIST_WITH_ITEMS = "<datalist>" +
+              "<datalistitem>" +
+                "<property name=\"prop1\" label=\"label1\"/>"+
+                "<property name=\"prop2\" label=\"label2\"/>"+
+              "</datalistitem>" +
+            "</datalist>";
 
     @Test
-    public void testPropertiesAttribute() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_PROP_ATT);
-
-        // set properties col1 y col2
-        EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-        EntityMeta meta = metaBuilder.withNumProps(1)
-                .addProperties(new String[]{"col1", "col2", "col3"},
-                        new Class[]{String.class, String.class, String.class})
-                .build();
-
-        RepositoryUtils.registerMock("defColsRepo", meta);
+    public void testDatalistItem() throws Exception {
+        String xml = XmlConfigUtils.createMainList(XML_TEST_DATALIST_WITH_ITEMS);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
-        UIDatatable datatable = datables.get(0);
+        List<UIDatalist> datalists = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatalist.class);
+        UIDatalist datalist = datalists.get(0);
 
-        // check columns
-        String[] expectedColsIds = new String[]{"col1", "col3", "mycol"};
+        UIDatalistItem dataListItem = (UIDatalistItem) datalist.getChildren()[0];
 
-        Assert.assertEquals(expectedColsIds.length, datatable.getColumns().length);
-        boolean found;
-        for (String name : expectedColsIds) {
-            found = false;
-            for (UIColumn col : datatable.getColumns()) {
-                if (col.getId().equals(name)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Assert.fail(String.format("Expected UIColumn with id [%s] for " +
-                        "property [%s] but not found.", name, meta.getPropertyByName(name)));
-            }
-        }
     }
 
     @AfterClass
