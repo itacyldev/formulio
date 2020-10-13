@@ -15,27 +15,52 @@ package es.jcyl.ita.frmdrd.config.builders;
  * limitations under the License.
  */
 
+import java.util.Map;
+
+import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
+import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistItem;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIDatalistItemBuilder extends BaseUIComponentBuilder<UIDatalist> {
+public class UIDatalistItemBuilder extends BaseUIComponentBuilder<UIDatalistItem> {
 
 
     protected UIDatalistItemBuilder(String tagName) {
-        super(tagName, UIDatalist.class);
+        super(tagName, UIDatalistItem.class);
     }
 
     @Override
-    public void setupOnSubtreeStarts(ConfigNode<UIDatalist> node) {
+    public void setupOnSubtreeStarts(ConfigNode<UIDatalistItem> node) {
 
     }
 
+    private void setProperties(ConfigNode<UIDatalistItem> node) {
+
+        String[] labels = new String[node.getChildren().size()];
+        String[] values = new String[node.getChildren().size()];
+        for (ConfigNode child : node.getChildren()) {
+            Map attributes = node.getAttributes();
+
+        }
+    }
+
+    private void setProperties(Repository repo) {
+        String[] repoProps = repo.getMeta().getPropertyNames();
+    }
 
     @Override
-    public void setupOnSubtreeEnds(ConfigNode<UIDatalist> node) {
+    public void setupOnSubtreeEnds(ConfigNode<UIDatalistItem> node) {
+        UIDatalist parent = (UIDatalist) node.getParent().getElement();
+        // if the datalist has a repo
+        if (parent.getRepo() != null) {
+            setProperties(parent.getRepo());
+        }
 
+        if (node.hasChildren()) {
+            setProperties(node);
+        }
     }
 }

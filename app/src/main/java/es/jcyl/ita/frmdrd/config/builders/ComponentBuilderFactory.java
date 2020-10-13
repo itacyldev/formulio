@@ -79,6 +79,7 @@ public class ComponentBuilderFactory {
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
 
         registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
+        registerBuilder("datalistitem", newBuilder(UIDatalistItemBuilder.class, "datalistitem"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");

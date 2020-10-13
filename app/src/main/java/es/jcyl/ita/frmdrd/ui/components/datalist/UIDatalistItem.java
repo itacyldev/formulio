@@ -22,4 +22,23 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  */
 
 public class UIDatalistItem extends UIComponent {
+
+    String[] propertyLabels;
+    String[] propertyValues;
+
+    public String[] getPropertyLabels() {
+        return propertyLabels;
+    }
+
+    public void setPropertyLabels(String[] propertyLabels) {
+        this.propertyLabels = propertyLabels;
+    }
+
+    public String[] getPropertyValues() {
+        return propertyValues;
+    }
+
+    public void setPropertyValues(String[] propertyValues) {
+        this.propertyValues = propertyValues;
+    }
 }
