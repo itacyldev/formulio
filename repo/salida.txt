@@ -1,0 +1,345 @@
+
+> Task :repo:dependencies
+
+------------------------------------------------------------
+Project :repo
+------------------------------------------------------------
+
+annotationProcessor - Annotation processors and their dependencies for source set 'main'.
+No dependencies
+
+apiElements - API elements for main. (n)
+No dependencies
+
+archives - Configuration for archive artifacts.
+No dependencies
+
+compileClasspath - Compile classpath for source set 'main'.
++--- com.google.android:android:4.1.1.4
+|    +--- commons-logging:commons-logging:1.1.1 -> 1.2
+|    +--- org.apache.httpcomponents:httpclient:4.0.1
+|    |    +--- org.apache.httpcomponents:httpcore:4.0.1
+|    |    +--- commons-logging:commons-logging:1.1.1 -> 1.2
+|    |    \--- commons-codec:commons-codec:1.3
+|    +--- org.khronos:opengl-api:gl1.1-android-2.1_r1
+|    +--- xerces:xmlParserAPIs:2.6.2
+|    +--- xpp3:xpp3:1.1.4c
+|    \--- org.json:json:20080701
++--- project :core
++--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
+|    \--- org.greenrobot:greendao-api:3.2.3-patched-SNAPSHOT
++--- org.mini2Dx:android-beans:1.0.0
++--- commons-io:commons-io:2.6
++--- org.apache.commons:commons-jexl3:3.1
+|    \--- commons-logging:commons-logging:1.2
++--- org.apache.commons:commons-lang3:3.6 -> 3.9
+\--- org.apache.commons:commons-text:1.8
+     \--- org.apache.commons:commons-lang3:3.9
+
+compileOnly - Compile only dependencies for source set 'main'. (n)
+\--- com.google.android:android:4.1.1.4 (n)
+
+default - Configuration for default artifacts.
++--- project :core
+|    +--- org.apache.commons:commons-jexl3:3.1
+|    |    \--- commons-logging:commons-logging:1.2
+|    +--- org.apache.commons:commons-lang3:3.6 -> 3.9
+|    \--- org.apache.commons:commons-text:1.8
+|         \--- org.apache.commons:commons-lang3:3.9
++--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
+|    \--- org.greenrobot:greendao-api:3.2.3-patched-SNAPSHOT
++--- org.mini2Dx:android-beans:1.0.0
++--- commons-io:commons-io:2.6
++--- org.apache.commons:commons-jexl3:3.1 (*)
++--- org.apache.commons:commons-lang3:3.6 -> 3.9
+\--- org.apache.commons:commons-text:1.8 (*)
+
+implementation - Implementation only dependencies for source set 'main'. (n)
++--- unspecified (n)
++--- project core (n)
++--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (n)
++--- org.mini2Dx:android-beans:1.0.0 (n)
++--- commons-io:commons-io:2.6 (n)
++--- org.apache.commons:commons-jexl3:3.1 (n)
++--- org.apache.commons:commons-lang3:3.6 (n)
+\--- org.apache.commons:commons-text:1.8 (n)
+
+runtimeClasspath - Runtime classpath of source set 'main'.
++--- project :core
+|    +--- org.apache.commons:commons-jexl3:3.1
+|    |    \--- commons-logging:commons-logging:1.2
+|    +--- org.apache.commons:commons-lang3:3.6 -> 3.9
+|    \--- org.apache.commons:commons-text:1.8
+|         \--- org.apache.commons:commons-lang3:3.9
++--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
+|    \--- org.greenrobot:greendao-api:3.2.3-patched-SNAPSHOT
++--- org.mini2Dx:android-beans:1.0.0
++--- commons-io:commons-io:2.6
++--- org.apache.commons:commons-jexl3:3.1 (*)
++--- org.apache.commons:commons-lang3:3.6 -> 3.9
+\--- org.apache.commons:commons-text:1.8 (*)
+
+runtimeElements - Elements of runtime for main. (n)
+No dependencies
+
+runtimeOnly - Runtime only dependencies for source set 'main'. (n)
+No dependencies
+
+testAnnotationProcessor - Annotation processors and their dependencies for source set 'test'.
+No dependencies
+
+testCompileClasspath - Compile classpath for source set 'test'.
++--- project :core
++--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
+|    \--- org.greenrobot:greendao-api:3.2.3-patched-SNAPSHOT
++--- org.mini2Dx:android-beans:1.0.0
++--- commons-io:commons-io:2.6
++--- org.apache.commons:commons-jexl3:3.1
+|    \--- commons-logging:commons-logging:1.2
++--- org.apache.commons:commons-lang3:3.6 -> 3.9
++--- org.apache.commons:commons-text:1.8
+|    \--- org.apache.commons:commons-lang3:3.9
++--- com.google.android:android:4.1.1.4
+|    +--- commons-logging:commons-logging:1.1.1 -> 1.2
+|    +--- org.apache.httpcomponents:httpclient:4.0.1
+|    |    +--- org.apache.httpcomponents:httpcore:4.0.1
+|    |    +--- commons-logging:commons-logging:1.1.1 -> 1.2
+|    |    \--- commons-codec:commons-codec:1.3
+|    +--- org.khronos:opengl-api:gl1.1-android-2.1_r1
+|    +--- xerces:xmlParserAPIs:2.6.2
+|    +--- xpp3:xpp3:1.1.4c
+|    \--- org.json:json:20080701
++--- junit:junit:4.12
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- org.robolectric:robolectric:4.0.2
+|    +--- org.robolectric:annotations:4.0.2
+|    |    \--- org.robolectric:shadowapi:4.0.2
+|    +--- org.robolectric:junit:4.0.2
+|    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    +--- org.robolectric:sandbox:4.0.2
+|    |    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    |    +--- org.robolectric:utils:4.0.2
+|    |    |    |    \--- org.robolectric:annotations:4.0.2 (*)
+|    |    |    +--- org.robolectric:shadowapi:4.0.2
+|    |    |    +--- org.ow2.asm:asm:7.0
+|    |    |    +--- org.ow2.asm:asm-commons:7.0
+|    |    |    |    +--- org.ow2.asm:asm:7.0
+|    |    |    |    +--- org.ow2.asm:asm-tree:7.0
+|    |    |    |    |    \--- org.ow2.asm:asm:7.0
+|    |    |    |    \--- org.ow2.asm:asm-analysis:7.0
+|    |    |    |         \--- org.ow2.asm:asm-tree:7.0 (*)
+|    |    |    \--- com.google.guava:guava:20.0
+|    |    \--- org.robolectric:shadowapi:4.0.2
+|    +--- org.robolectric:resources:4.0.2
+|    |    +--- org.robolectric:utils:4.0.2 (*)
+|    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    \--- com.google.guava:guava:20.0
+|    +--- org.robolectric:sandbox:4.0.2 (*)
+|    +--- org.robolectric:utils:4.0.2 (*)
+|    +--- org.robolectric:shadows-framework:4.0.2
+|    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    +--- org.robolectric:resources:4.0.2 (*)
+|    |    +--- org.robolectric:utils:4.0.2 (*)
+|    |    +--- com.almworks.sqlite4java:sqlite4java:0.282
+|    |    +--- com.ibm.icu:icu4j:53.1
+|    |    \--- com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:2.1
+|    |         +--- org.hamcrest:hamcrest-core:1.3
+|    |         +--- org.hamcrest:hamcrest-library:1.3
+|    |         |    \--- org.hamcrest:hamcrest-core:1.3
+|    |         \--- com.google.protobuf:protobuf-java:2.6.1
+|    +--- org.bouncycastle:bcprov-jdk15on:1.52
+|    +--- org.apache.ant:ant:1.8.0
+|    |    \--- org.apache.ant:ant-launcher:1.8.0
+|    +--- org.apache.maven:maven-ant-tasks:2.1.3
+|    |    +--- org.apache.ant:ant:1.8.0 (*)
+|    |    +--- classworlds:classworlds:1.1-alpha-2
+|    |    +--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1
+|    |    |    +--- org.codehaus.plexus:plexus-utils:1.0.4 -> 1.5.15
+|    |    |    \--- classworlds:classworlds:1.1-alpha-2
+|    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    +--- org.apache.maven:maven-artifact:2.2.1
+|    |    |    \--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    +--- org.apache.maven:maven-artifact-manager:2.2.1
+|    |    |    +--- org.apache.maven:maven-repository-metadata:2.2.1
+|    |    |    |    \--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    +--- org.apache.maven:maven-artifact:2.2.1 (*)
+|    |    |    +--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6
+|    |    |    |    \--- org.codehaus.plexus:plexus-utils:1.4.2 -> 1.5.15
+|    |    |    \--- backport-util-concurrent:backport-util-concurrent:3.1
+|    |    +--- org.apache.maven:maven-model:2.2.1
+|    |    |    \--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    +--- org.apache.maven:maven-project:2.2.1
+|    |    |    +--- org.apache.maven:maven-settings:2.2.1
+|    |    |    |    +--- org.apache.maven:maven-model:2.2.1 (*)
+|    |    |    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.apache.maven:maven-profile:2.2.1
+|    |    |    |    +--- org.apache.maven:maven-model:2.2.1 (*)
+|    |    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.apache.maven:maven-model:2.2.1 (*)
+|    |    |    +--- org.apache.maven:maven-artifact-manager:2.2.1 (*)
+|    |    |    +--- org.apache.maven:maven-plugin-registry:2.2.1
+|    |    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    +--- org.apache.maven:maven-artifact:2.2.1 (*)
+|    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    +--- org.apache.maven:maven-error-diagnostics:2.2.1
+|    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    +--- org.apache.maven:maven-settings:2.2.1 (*)
+|    |    +--- org.apache.maven.wagon:wagon-file:1.0-beta-6
+|    |    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    |    +--- org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6
+|    |    |    +--- org.apache.maven.wagon:wagon-http-shared:1.0-beta-6
+|    |    |    |    +--- nekohtml:xercesMinimal:1.9.6.2
+|    |    |    |    +--- nekohtml:nekohtml:1.9.6.2
+|    |    |    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    |    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    \--- androidx.test:monitor:1.1.0
+|         \--- androidx.annotation:annotation:1.0.0
+\--- org.hamcrest:hamcrest:2.2
+
+testCompileOnly - Compile only dependencies for source set 'test'. (n)
+\--- com.google.android:android:4.1.1.4 (n)
+
+testImplementation - Implementation only dependencies for source set 'test'. (n)
++--- junit:junit:4.12 (n)
++--- org.robolectric:robolectric:4.0.2 (n)
++--- org.mini2Dx:android-beans:1.0.0 (n)
+\--- org.hamcrest:hamcrest:2.2 (n)
+
+testRuntimeClasspath - Runtime classpath of source set 'test'.
++--- project :core
+|    +--- org.apache.commons:commons-jexl3:3.1
+|    |    \--- commons-logging:commons-logging:1.2
+|    +--- org.apache.commons:commons-lang3:3.6 -> 3.9
+|    \--- org.apache.commons:commons-text:1.8
+|         \--- org.apache.commons:commons-lang3:3.9
++--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
+|    \--- org.greenrobot:greendao-api:3.2.3-patched-SNAPSHOT
++--- org.mini2Dx:android-beans:1.0.0
++--- commons-io:commons-io:2.6
++--- org.apache.commons:commons-jexl3:3.1 (*)
++--- org.apache.commons:commons-lang3:3.6 -> 3.9
++--- org.apache.commons:commons-text:1.8 (*)
++--- junit:junit:4.12
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- org.robolectric:robolectric:4.0.2
+|    +--- org.robolectric:annotations:4.0.2
+|    |    \--- org.robolectric:shadowapi:4.0.2
+|    +--- org.robolectric:junit:4.0.2
+|    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    +--- org.robolectric:sandbox:4.0.2
+|    |    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    |    +--- org.robolectric:utils:4.0.2
+|    |    |    |    \--- org.robolectric:annotations:4.0.2 (*)
+|    |    |    +--- org.robolectric:shadowapi:4.0.2
+|    |    |    +--- org.ow2.asm:asm:7.0
+|    |    |    +--- org.ow2.asm:asm-commons:7.0
+|    |    |    |    +--- org.ow2.asm:asm:7.0
+|    |    |    |    +--- org.ow2.asm:asm-tree:7.0
+|    |    |    |    |    \--- org.ow2.asm:asm:7.0
+|    |    |    |    \--- org.ow2.asm:asm-analysis:7.0
+|    |    |    |         \--- org.ow2.asm:asm-tree:7.0 (*)
+|    |    |    \--- com.google.guava:guava:20.0
+|    |    \--- org.robolectric:shadowapi:4.0.2
+|    +--- org.robolectric:resources:4.0.2
+|    |    +--- org.robolectric:utils:4.0.2 (*)
+|    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    \--- com.google.guava:guava:20.0
+|    +--- org.robolectric:sandbox:4.0.2 (*)
+|    +--- org.robolectric:utils:4.0.2 (*)
+|    +--- org.robolectric:shadows-framework:4.0.2
+|    |    +--- org.robolectric:annotations:4.0.2 (*)
+|    |    +--- org.robolectric:resources:4.0.2 (*)
+|    |    +--- org.robolectric:utils:4.0.2 (*)
+|    |    +--- com.almworks.sqlite4java:sqlite4java:0.282
+|    |    +--- com.ibm.icu:icu4j:53.1
+|    |    \--- com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:2.1
+|    |         +--- org.hamcrest:hamcrest-core:1.3
+|    |         +--- org.hamcrest:hamcrest-library:1.3
+|    |         |    \--- org.hamcrest:hamcrest-core:1.3
+|    |         \--- com.google.protobuf:protobuf-java:2.6.1
+|    +--- org.bouncycastle:bcprov-jdk15on:1.52
+|    +--- org.apache.ant:ant:1.8.0
+|    |    \--- org.apache.ant:ant-launcher:1.8.0
+|    +--- org.apache.maven:maven-ant-tasks:2.1.3
+|    |    +--- org.apache.ant:ant:1.8.0 (*)
+|    |    +--- classworlds:classworlds:1.1-alpha-2
+|    |    +--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1
+|    |    |    +--- org.codehaus.plexus:plexus-utils:1.0.4 -> 1.5.15
+|    |    |    \--- classworlds:classworlds:1.1-alpha-2
+|    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    +--- org.apache.maven:maven-artifact:2.2.1
+|    |    |    \--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    +--- org.apache.maven:maven-artifact-manager:2.2.1
+|    |    |    +--- org.apache.maven:maven-repository-metadata:2.2.1
+|    |    |    |    \--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    +--- org.apache.maven:maven-artifact:2.2.1 (*)
+|    |    |    +--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6
+|    |    |    |    \--- org.codehaus.plexus:plexus-utils:1.4.2 -> 1.5.15
+|    |    |    \--- backport-util-concurrent:backport-util-concurrent:3.1
+|    |    +--- org.apache.maven:maven-model:2.2.1
+|    |    |    \--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    +--- org.apache.maven:maven-project:2.2.1
+|    |    |    +--- org.apache.maven:maven-settings:2.2.1
+|    |    |    |    +--- org.apache.maven:maven-model:2.2.1 (*)
+|    |    |    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.apache.maven:maven-profile:2.2.1
+|    |    |    |    +--- org.apache.maven:maven-model:2.2.1 (*)
+|    |    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.apache.maven:maven-model:2.2.1 (*)
+|    |    |    +--- org.apache.maven:maven-artifact-manager:2.2.1 (*)
+|    |    |    +--- org.apache.maven:maven-plugin-registry:2.2.1
+|    |    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    |    +--- org.codehaus.plexus:plexus-interpolation:1.11
+|    |    |    +--- org.codehaus.plexus:plexus-utils:1.5.15
+|    |    |    +--- org.apache.maven:maven-artifact:2.2.1 (*)
+|    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    +--- org.apache.maven:maven-error-diagnostics:2.2.1
+|    |    |    \--- org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1 (*)
+|    |    +--- org.apache.maven:maven-settings:2.2.1 (*)
+|    |    +--- org.apache.maven.wagon:wagon-file:1.0-beta-6
+|    |    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    |    +--- org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6
+|    |    |    +--- org.apache.maven.wagon:wagon-http-shared:1.0-beta-6
+|    |    |    |    +--- nekohtml:xercesMinimal:1.9.6.2
+|    |    |    |    +--- nekohtml:nekohtml:1.9.6.2
+|    |    |    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    |    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    |    \--- org.apache.maven.wagon:wagon-provider-api:1.0-beta-6 (*)
+|    \--- androidx.test:monitor:1.1.0
+|         \--- androidx.annotation:annotation:1.0.0
+\--- org.hamcrest:hamcrest:2.2
+
+testRuntimeOnly - Runtime only dependencies for source set 'test'. (n)
+No dependencies
+
+(*) - dependencies omitted (listed previously)
+
+(n) - Not resolved (configuration is not meant to be resolved)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 7.0.
+Use '--warning-mode all' to show the individual deprecation warnings.
+See https://docs.gradle.org/6.1.1/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 1s
+1 actionable task: 1 executed

@@ -1,2 +1,7 @@
+include ':core'
+include ':repo'
+include ':repoAndroidTests'
+include ':repoTestUtils'
+include ':forms'
 include ':app'
-rootProject.name = 'FormuDruid'
+rootProject.name = 'Formic'

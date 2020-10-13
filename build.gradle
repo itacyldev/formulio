@@ -1,4 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+version = '0.1.0-SNAPSHOT'
+group = 'es.jcyl.ita.formic'
+
 buildscript {
     repositories {
         flatDir {
@@ -26,6 +29,13 @@ allprojects {
         jcenter()
         maven {
             url 'https://maven.google.com'
+        }
+        gradle.projectsEvaluated {
+            tasks.withType(JavaCompile) {
+                //options.compilerArgs << "-Xlint:deprecation,unchecked"
+                sourceCompatibility = 1.8
+                targetCompatibility = 1.8
+            }
         }
 //        def androidHome = System.getenv("ANDROID_HOME")
 //        maven {
@@ -73,7 +83,7 @@ task clean(type: Delete) {
 ext {
     versionCode = 1
     versionName = '0.1.0'
-    applicationId = "es.jcyl.ita.frmdrd"
+    applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
     targetSdkVersion = 29
     minSdkVersion = 21

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="es.jcyl.ita.formic.forms">
+
+    <activity android:name="es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity" />
+    <activity
+        android:name="es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity"
+        android:label="FormEditView" />
+
+</manifest>

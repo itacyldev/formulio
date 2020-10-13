@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="projects">Proyectos</string>
+    <string name="forms">Formularios</string>
+    <string name="permissions">Permisos</string>
+    <string name="mustacceptallpermits">Debe aceptar todos los permisos.</string>
+    <string name="no_projects">No hay proyectos</string>
+    <string name="project_opening_init">Abriendo proyecto %1$s ...</string>
+    <string name="project_opening_finish">Proyecto %1$s abierto.</string>
+    <string name="project_opening_error">Ocurrió un error al intentar abrir el proyecto %1$s, compruebe la consola de desarrollador.</string>
+    <string name="projects_of">"Proyectos de "</string>
+    <string name="forms_of">"Formularios de "</string>
+    <string name="no_current_project">No hay proyecto activo</string>
+</resources>

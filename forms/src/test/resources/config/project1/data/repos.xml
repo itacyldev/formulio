@@ -1,0 +1,8 @@
+<repos>
+    <repo dbFile="dbTest.sqlite" id="contacts" dbTable="contacts" />
+    <repo dbFile="dbTest.sqlite" id="agentsRepo" dbTable="assigned_agents" />
+    <repo dbFile="dbTest.sqlite" id="provRepo" dbTable="provincia" />
+    <repo dbFile="dbTest.sqlite" id="muniRepo" dbTable="municipio" />
+    <repo dbFile="dbTest.sqlite" id="superHRepo" dbTable="superheroes" />
+    <fileRepo folder="pictures/superheroes" id="superHImages" defaultExtension="jpg" />
+</repos>

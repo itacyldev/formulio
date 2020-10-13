@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="FormudruidLight" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="primaryColorVariant">@color/light_PrimaryColorVariant</item>
+        <item name="primaryColor">@color/light_PrimaryColor</item>
+        <item name="onPrimaryColor">@color/light_OnPrimaryColor</item>
+        <item name="accentColor">@color/light_AccentColor</item>
+
+        <item name="surfaceColor">@color/light_SurfaceColor</item>
+        <item name="onSurfaceColor">@color/light_OnSurfaceColor</item>
+        <item name="errorColor">@color/light_ErrorColor</item>
+
+        <item name="surface2Color">@color/light_Surface2Color</item>
+        <item name="onSurface2Color">@color/light_OnSurface2Color</item>
+
+        <item name="surface3Color">@color/light_OnSurfaceColor</item>
+        <item name="onSurface3Color">@color/light_SurfaceColor</item>
+
+        <item name="AppBackgroundColor">@color/light_BackgroundColor</item>
+        <item name="onAppBackgroundColor">@color/light_OnBackgroundColor</item>
+
+        <!-- Action Bar, Poppup Menu, WindowBackgroud and NavigationBar-->
+        <item name="colorPrimaryDark">?attr/primaryColorVariant</item>
+        <item name="colorPrimary">?attr/primaryColor</item>
+        <item name="android:textColorPrimary">?attr/onPrimaryColor</item>
+        <item name="colorAccent">?attr/accentColor</item>
+        <item name="actionBarPopupTheme">@style/ActionBarPopupStyle</item>
+        <item name="android:windowBackground">?attr/AppBackgroundColor</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+
+        <!-- Default Text View -->
+        <item name="android:textViewStyle">@style/Default_TextView_font</item>
+
+        <!-- Button Style -->
+        <item name="buttonNormalColor">@color/light_PrimaryColorVariant</item>
+        <item name="buttonHighlightColor">@color/light_PrimaryColor</item>
+        <item name="buttonTextColor">@color/buttonText_Light</item>
+
+        <!-- Icon Order -->
+        <item name="iconNoorder">@drawable/order_arrow_noorder</item>
+        <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
+        <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
+
+    </style>
+
+    <style name="FormudruidDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="primaryColorVariant">@color/dark_PrimaryColorVariant</item>
+        <item name="primaryColor">@color/dark_PrimaryColor</item>
+        <item name="onPrimaryColor">@color/dark_OnPrimaryColor</item>
+        <item name="accentColor">@color/dark_AccentColor</item>
+
+        <item name="surfaceColor">@color/dark_SurfaceColor</item>
+        <item name="onSurfaceColor">@color/dark_OnSurfaceColor</item>
+        <item name="errorColor">@color/dark_ErrorColor</item>
+
+        <item name="surface2Color">@color/dark_Surface2Color</item>
+        <item name="onSurface2Color">@color/dark_OnSurface2Color</item>
+
+        <item name="surface3Color">@color/dark_SurfaceColor</item>
+        <item name="onSurface3Color">@color/dark_OnSurfaceColor</item>
+
+        <item name="AppBackgroundColor">@color/dark_BackgroundColor</item>
+        <item name="onAppBackgroundColor">@color/dark_OnBackgroundColor</item>
+
+        <!-- Action Bar, Poppup Menu, WindowBackgroud and NavigationBar-->
+        <item name="colorPrimaryDark">?attr/primaryColorVariant</item>
+        <item name="colorPrimary">?attr/primaryColor</item>
+        <item name="android:textColorPrimary">?attr/onPrimaryColor</item>
+        <item name="colorAccent">?attr/accentColor</item>
+        <item name="actionBarPopupTheme">@style/ActionBarPopupStyle</item>
+        <item name="android:windowBackground">?attr/AppBackgroundColor</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+
+        <!-- Default Text View -->
+        <item name="android:textViewStyle">@style/Default_TextView_font</item>
+
+        <!-- Button Style -->
+        <item name="buttonNormalColor">@color/dark_PrimaryColorVariant</item>
+        <item name="buttonHighlightColor">@color/dark_PrimaryColor</item>
+        <item name="buttonTextColor">@color/buttonText_Dark</item>
+
+        <!-- Icon Order -->
+        <item name="iconNoorder">@drawable/order_arrow_noorder</item>
+        <item name="iconOrderAsc">@drawable/order_arrow_asc</item>
+        <item name="iconOrderDesc">@drawable/order_arrow_desc</item>
+
+    </style>
+
+    <style name="FormudruidLight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="FormudruidDark.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+</resources>

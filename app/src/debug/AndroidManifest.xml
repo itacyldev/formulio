@@ -5,3 +5,4 @@
         android:name="android.permission.ACCESS_MOCK_LOCATION"
         tools:ignore="ProtectedPermissions" />
 </manifest>
+    RobolectricTestRunner

@@ -1,0 +1,46 @@
+//apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+archivesBaseName = 'core'
+group = rootProject.group
+version = rootProject.version
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'org.apache.commons:commons-jexl3:3.1'
+    implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation 'org.apache.commons:commons-text:1.8'
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "http://repo.itacyl.es/archiva/repository/internal/"
+            def snapshotsRepoUrl = "http://repo.itacyl.es/archiva/repository/snapshots/"
+            url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+        }
+    }
+    publications {
+        mavenPublish(MavenPublication) {
+            from components.java
+            artifactId archivesBaseName
+            pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+        }
+    }
+}
