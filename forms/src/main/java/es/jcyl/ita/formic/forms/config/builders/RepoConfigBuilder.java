@@ -22,6 +22,10 @@ import org.greenrobot.greendao.database.StandardDatabase;
 
 import java.io.File;
 
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
+import es.jcyl.ita.formic.forms.config.meta.TagDef;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.builders.EntitySourceBuilder;
 import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
@@ -34,10 +38,6 @@ import es.jcyl.ita.formic.repo.meta.MetaModeler;
 import es.jcyl.ita.formic.repo.source.EntitySource;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
-import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.meta.TagDef;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 

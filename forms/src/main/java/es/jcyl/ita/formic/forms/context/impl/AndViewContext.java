@@ -3,6 +3,7 @@ package es.jcyl.ita.formic.forms.context.impl;
 import android.view.View;
 
 import org.mini2Dx.beanutils.ConvertUtils;
+import org.mini2Dx.collections.keyvalue.DefaultMapEntry;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -219,7 +220,7 @@ public class AndViewContext extends AbstractBaseContext {
         }
         Set<Entry<String, Object>> entries = new HashSet<>();
         for (String key : keySet()) {
-            entries.add(new AbstractMap.SimpleEntry<String, Object>(key, this.getValue(key)));
+            entries.add(new DefaultMapEntry(key, this.getValue(key)));
         }
         return entries;
     }

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.7">
       <module name="core" target="1.7" />
+      <module name="Formic.app" target="1.8" />
+      <module name="Formic.forms" target="1.8" />
+      <module name="Formic.repoAndroidTests" target="1.8" />
       <module name="repo" target="1.7" />
       <module name="repoTestUtils" target="1.7" />
       <module name="test-utils" target="1.7" />

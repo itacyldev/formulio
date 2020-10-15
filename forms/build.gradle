@@ -2,16 +2,18 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
+def globalConf = rootProject.ext
+
 archivesBaseName = 'forms'
-group = rootProject.group
-version = rootProject.version
+group = globalConf.group
+version = globalConf.version
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "30.0.1"
+    compileSdkVersion = rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -29,6 +31,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -66,6 +71,8 @@ dependencies {
     implementation 'org.mozilla:rhino:1.7.12'
 
     implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
+
+//    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
     // rxAndroid
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
@@ -101,16 +108,17 @@ dependencies {
 //    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
     // Dependencies for Unit Test
+    testImplementation project(':repoTestUtils')
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     testImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     testImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
 
-    implementation project(':repoTestUtils')
-
     testImplementation "org.robolectric:robolectric:4.3"
     testImplementation "org.mini2Dx:android-beans:1.0.0"
     testImplementation 'org.mockito:mockito-core:2.7.22'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
 }
 

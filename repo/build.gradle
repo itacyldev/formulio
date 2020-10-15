@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 archivesBaseName = 'repo'
@@ -10,23 +10,12 @@ targetCompatibility = "1.7"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':core')
+    api project(':core')
 
     compileOnly 'com.google.android:android:4.1.1.4'
-    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
-    implementation "org.mini2Dx:android-beans:1.0.0"
-    implementation 'commons-io:commons-io:2.6'
-
-    // TODO: these should be drawn through transitive dependencies
-    implementation 'org.apache.commons:commons-jexl3:3.1'
-    implementation 'org.apache.commons:commons-lang3:3.6'
-    implementation 'org.apache.commons:commons-text:1.8'
-
-    testCompileOnly 'com.google.android:android:4.1.1.4'
-    testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:4.0.2"
-    testImplementation "org.mini2Dx:android-beans:1.0.0"
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    api 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
+    api "org.mini2Dx:android-beans:1.0.0"
+    api 'commons-io:commons-io:2.6'
 }
 
 publishing {

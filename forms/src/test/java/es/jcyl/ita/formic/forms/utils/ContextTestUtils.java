@@ -17,7 +17,7 @@ package es.jcyl.ita.formic.forms.utils;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.forms.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
