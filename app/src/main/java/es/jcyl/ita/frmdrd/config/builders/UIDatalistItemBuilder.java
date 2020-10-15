@@ -38,13 +38,18 @@ public class UIDatalistItemBuilder extends BaseUIComponentBuilder<UIDatalistItem
     }
 
     private void setProperties(ConfigNode<UIDatalistItem> node) {
-
         String[] labels = new String[node.getChildren().size()];
         String[] values = new String[node.getChildren().size()];
+        int i = 0;
         for (ConfigNode child : node.getChildren()) {
-            Map attributes = node.getAttributes();
-
+            Map attributes = child.getAttributes();
+            labels[i] = (String) attributes.get("label");
+            values[i] = (String) attributes.get("value");
+            i++;
         }
+
+        node.getElement().setPropertyLabels(labels);
+        node.getElement().setPropertyValues(values);
     }
 
     private void setProperties(Repository repo) {

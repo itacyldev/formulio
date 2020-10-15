@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/template1_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+android:id="@+id/template1_layout"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="horizontal">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/template1_cv"
-        style="@style/ProjectFormsCardStyle"
+<androidx.cardview.widget.CardView
+    android:id="@+id/template1_cv"
+    style="@style/ProjectFormsCardStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/template1_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-        <LinearLayout
-            android:id="@+id/template1_content"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/template1_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <es.jcyl.ita.frmdrd.ui.components.image.ImageResourceView
+            android:id="@+id/template1_image"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:src="@drawable/no_image" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/template1_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <es.jcyl.ita.frmdrd.ui.components.image.ImageResourceView
-                android:id="@+id/template1_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/no_image" />
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+</androidx.cardview.widget.CardView>
 </LinearLayout>

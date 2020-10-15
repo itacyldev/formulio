@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.frmdrd.ui.components.autocomplete.AutoCompleteRenderer;
+import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistItemRenderer;
 import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistRenderer;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatableRenderer;
 import es.jcyl.ita.frmdrd.ui.components.form.UIFormRenderer;
@@ -56,6 +57,7 @@ public class RendererFactory {
         renderInstances.put("tabitem", new TabItemRenderer());
         renderInstances.put("image", new UIImageRenderer());
         renderInstances.put("datalist", new UIDatalistRenderer());
+        renderInstances.put("datalistitem", new UIDatalistItemRenderer());
     }
 
     public static RendererFactory getInstance() {

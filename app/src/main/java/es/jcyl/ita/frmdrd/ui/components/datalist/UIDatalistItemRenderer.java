@@ -23,7 +23,7 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-class UIDatalistItemRenderer extends AbstractRenderer<UIDatalistItem, DatalistItemWidget> {
+public class UIDatalistItemRenderer extends AbstractRenderer<UIDatalistItem, DatalistItemWidget> {
     @Override
     protected int getWidgetLayoutId() {
         return R.layout.datalist_item_template_1;
