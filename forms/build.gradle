@@ -107,19 +107,13 @@ dependencies {
 //    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
 //    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
-    // Dependencies for Unit Test
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
     testImplementation project(':repoTestUtils')
-
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    testImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    testImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
-
-    testImplementation "org.robolectric:robolectric:4.3"
-    testImplementation "org.mini2Dx:android-beans:1.0.0"
-    testImplementation 'org.mockito:mockito-core:2.7.22'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation unitTestDeps
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
+
 }
 
 

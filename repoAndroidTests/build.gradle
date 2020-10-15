@@ -42,8 +42,8 @@ dependencies {
 
     implementation project(':repo')
     implementation project(':repoTestUtils')
-    compileOnly 'com.google.android:android:4.1.1.4'
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly 'com.google.android:android:4.1.1.4'
 
     /////////////////////////////////////
     // Instrumentation test dependencies
@@ -69,8 +69,5 @@ dependencies {
     /////////////////////////////////////
     // JUnit test dependencies
     /////////////////////////////////////
-    testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:4.0.2"
-    testImplementation 'org.mockito:mockito-core:2.7.22'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation unitTestDeps
 }

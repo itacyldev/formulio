@@ -96,14 +96,15 @@ ext {
             'org.apache.commons:commons-lang3:3.6',
             'org.apache.commons:commons-text:1.8',
     ]
-    testDeps = [
-            'org.apache.commons:commons-jexl3:3.1',
-            'org.apache.commons:commons-lang3:3.6',
-            'org.apache.commons:commons-text:1.8',
-    ]
+    unitTestDeps = [
+            'junit:junit:4.12',
+            'androidx.test.espresso:espresso-core:3.2.0',
+            'androidx.test.espresso:espresso-contrib:3.2.0',
+            'androidx.test.espresso:espresso-accessibility:3.2.0',
+            'org.robolectric:robolectric:4.3',
+            'org.mini2Dx:android-beans:1.0.0',
+            'org.mockito:mockito-core:2.7.22',
+            'org.hamcrest:hamcrest:2.2',
 
-//    platformDeps
-//    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
-//    implementation "org.mini2Dx:android-beans:1.0.0"
-//    implementation 'commons-io:commons-io:2.6'
+    ]
 }
