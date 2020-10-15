@@ -10,15 +10,10 @@ targetCompatibility = 1.7
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':core') // core
-    implementation project(':repo') // core
+    implementation project(':repo')
 
     compileOnly 'com.google.android:android:4.1.1.4'
-    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
-    implementation "org.mini2Dx:android-beans:1.0.0"
     implementation 'junit:junit:4.12'
-    implementation 'org.apache.commons:commons-lang3:3.5'
-    implementation 'commons-io:commons-io:2.6'
 }
 
 

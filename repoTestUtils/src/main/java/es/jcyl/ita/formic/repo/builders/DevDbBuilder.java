@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
@@ -50,6 +49,7 @@ import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.source.EntitySource;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

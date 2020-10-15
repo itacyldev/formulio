@@ -35,65 +35,19 @@ android {
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
-
 }
 
 dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation sharedDeps
-//
-//    implementation project(':repo')
-//    implementation project(':repoTestUtils')
-//
-////    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
-//    implementation 'com.google.android:android:4.1.1.4'
-//    implementation 'androidx.appcompat:appcompat:1.1.0'
-//    implementation "org.mini2Dx:android-beans:1.0.0"
-//
-////    androidTestImplementation project(path: ':repo')
-////    androidTestImplementation project(path: ':repoTestUtils')
-//
-//    // Core library
-//    androidTestImplementation 'androidx.test:core:1.0.0'
-//    // AndroidJUnitRunner and JUnit Rules
-//    androidTestImplementation('androidx.test:runner:1.2.0') {
-//        exclude group: 'net.sf.kxml', module: ''
-//    }
-//    androidTestImplementation('androidx.test:rules:1.2.0') {
-//        exclude group: 'androidx.test', module: ''
-//    }
-//    // Assertions
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-//    androidTestImplementation 'androidx.test.ext:truth:1.0.0'
-//    androidTestImplementation 'com.google.truth:truth:0.46'
-//    // Espresso dependencies
-//    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
-//        exclude group: 'androidx.test', module: 'runner'
-//    }
-////    androidTestImplementation "org.mini2Dx:android-beans:1.0.0"
-//
-//
-////    androidTestImplementation project(path: ':repo')
-////    androidTestImplementation project(path: ':test-utils')
-//
-//    testImplementation 'junit:junit:4.12'
-//    testImplementation "org.robolectric:robolectric:4.0.2"
-////    testImplementation "org.apache.commons:commons-lang3:3.6"
-////    testImplementation 'org.apache.commons:commons-jexl3:3.1'
-////    testImplementation 'org.apache.commons:commons-text:1.8'
-//    testImplementation 'commons-io:commons-io:2.6'
-//    testImplementation 'org.mockito:mockito-core:2.7.22'
-//    testImplementation 'org.hamcrest:hamcrest:2.2'
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(':core')
     implementation project(':repo')
     implementation project(':repoTestUtils')
-
     compileOnly 'com.google.android:android:4.1.1.4'
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
+    /////////////////////////////////////
+    // Instrumentation test dependencies
+    /////////////////////////////////////
     // Core library
     androidTestImplementation 'androidx.test:core:1.0.0'
     // AndroidJUnitRunner and JUnit Rules
@@ -111,16 +65,12 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
         exclude group: 'androidx.test', module: 'runner'
     }
-    androidTestImplementation "org.mini2Dx:android-beans:1.0.0"
 
-
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:4.0.2"
-    testImplementation "org.mini2Dx:android-beans:1.0.0"
-    testImplementation "org.apache.commons:commons-lang3:3.6"
-    testImplementation 'org.apache.commons:commons-jexl3:3.1'
-    testImplementation 'org.apache.commons:commons-text:1.8'
-    testImplementation 'commons-io:commons-io:2.6'
     testImplementation 'org.mockito:mockito-core:2.7.22'
     testImplementation 'org.hamcrest:hamcrest:2.2'
 }
