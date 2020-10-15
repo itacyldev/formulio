@@ -26,16 +26,16 @@ import java.io.File;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.repo.media.meta.FileMeta;
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
+import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.media.meta.FileMeta;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -52,7 +52,7 @@ public class UIImageBuilderTest {
         confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
-        RepositoryUtils.registerMock("PROJECT_IMAGES", new FileMeta());
+        RepositoryUtils.registerMock("DEFAULT_PROJECT_IMAGES", new FileMeta());
     }
 
     /**
@@ -78,7 +78,9 @@ public class UIImageBuilderTest {
         // repo must be set with parent value "contacts"
         UIImage img = imgs.get(0);
         Assert.assertNotNull(img.getId());
-        Object value = img.getValue(new BasicContext("empty"));
+        Assert.assertNotNull(img.getEntityRelation());
+        // an entity relation with a literal expression must be created
+        Object value =  img.getEntityRelation().getEntityPropertyExpr().toString();
         Assert.assertEquals(imgFile.getAbsolutePath(), value);
     }
 

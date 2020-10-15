@@ -92,20 +92,20 @@ public class ProjectConfigIntegrationTest {
         Assert.assertTrue(CollectionUtils.isNotEmpty(prj.getConfigFiles()));
         // read config and check repositories and forms
 
-        config.readConfig(prj);
+        config.setCurrentProject(prj);
         // there must be 4 repos
         Set<String> repoIds = config.getRepoConfigReader().getRepoFactory().getRepoIds();
-        assertEquals(4 + 1, repoIds.size());// 4 repos + 1 default project's image repo
+        assertEquals(6 + 1, repoIds.size());// 4 repos + 1 default project's image repo
 
-        // there must be two form configs
+        // there must be three form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
-        assertEquals(2, formConfigs.size());
+        assertEquals(3, formConfigs.size());
 
-        // there must be two list controllers and two editControllers
+        // Check all list and edit controller have been loaded
         FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
         Collection<FormController> ctlList = fctlFacotry.getList();
-        assertEquals(4, ctlList.size());
-        assertEquals(2, fctlFacotry.getListControllers().size());
+        assertEquals(6, ctlList.size());
+        assertEquals(3, fctlFacotry.getListControllers().size());
 
         // check list controller
         for (FormController ctl : fctlFacotry.getList()) {
@@ -129,7 +129,7 @@ public class ProjectConfigIntegrationTest {
         Project prj = new Project(projectRepo.getSource(), projectRepo.getMeta());
         prj.setBaseFolder(projectFolder.getAbsolutePath());
 
-        config.readConfig(prj);
+        Config.getInstance().setCurrentProject(prj);
 
         FormConfigRepository formConfigRepo = config.getFormConfigRepo();
         FormConfig formConfig = formConfigRepo.findById("form2");

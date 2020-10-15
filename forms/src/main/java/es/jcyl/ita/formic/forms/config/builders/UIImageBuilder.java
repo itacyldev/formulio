@@ -116,7 +116,6 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
     private EntityRelation createRelation(ConfigNode<UIImage> node) {
         UIImage img = node.getElement();
         Repository repo = img.getRepo();
-        String converter = img.getValueConverter();
         if (repo == null) {
             // use project default image repository
             repo = this.getFactory().getRepoFactory().getRepo(PROJECT_IMAGES);
@@ -133,11 +132,12 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         relation.setDeletable(!img.isReadOnly());
         relation.setUpdatable(!img.isReadOnly());
 
-        if (img.getValueExpression().isReadOnly()) {
+        ValueBindingExpression imgBndExpr = img.getValueExpression();
+        if (imgBndExpr.isReadOnly() && !imgBndExpr.isLiteral()) {
             // if the expression is a readonly expression that uses entity attributes to
             // calculate the ID, we need to define a calculated property for the entity that will
             // be interpreted before the entity is saved: ID = valueExpression
-            CalculatedProperty cp = new CalculatedProperty(AttributeDef.ID.name, img.getValueExpression());
+            CalculatedProperty cp = new CalculatedProperty(AttributeDef.ID.name, imgBndExpr);
             relation.setCalcProps(Collections.singletonList(cp));
         }
         // replace expression

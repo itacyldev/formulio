@@ -44,7 +44,7 @@ public class FileRepoBuilderTest {
         Config config = Config.init("");
         String projectPath = "src/test/resources/config/project1";
         Project p = ProjectRepository.createFromFolder(new File(projectPath));
-        config.readConfig(p);
+        config.setCurrentProject(p);
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
 

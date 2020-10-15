@@ -62,23 +62,11 @@ public class LocationContextTest {
 
     @Test
     public void testGetLocation() {
-//        LocationTestUtils utils = new LocationTestUtils();
-//        utils.addTestProvider(ctx, LocationManager.GPS_PROVIDER,
-//                false, false, false, false,
-//                false, false, false, 0,
-//                android.location.Criteria.ACCURACY_FINE);
-//        utils.addNewLocation(mockLocation);
-//        MockLocationProvider provider = new MockLocationProvider(LocationManager.GPS_PROVIDER, ctx);
-//        provider.pushLocation(mockLocation);
-//
-//        LocationService service = LocationService.getInstance();
-//        service.init(ctx, LocationManager.GPS_PROVIDER);//, utils.getLocationManager());
-//        service.updateLocation();
+
         LocationBuilder builder = new LocationBuilder();
         Location mockLocation = builder.withRandomData().build();
         when(mockLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)).thenReturn(mockLocation);
 
-        //
         LocationService locationService = LocationService.getInstance();
         locationService.init(ctx);
         ReflectionHelpers.setField(locationService, "locationManager", mockLocationManager);

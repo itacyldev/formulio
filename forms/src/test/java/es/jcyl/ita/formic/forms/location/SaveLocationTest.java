@@ -32,17 +32,18 @@ import org.robolectric.util.ReflectionHelpers;
 
 import java.util.Arrays;
 
-import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
-import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteStringConverter;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.LocationContext;
 import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
+import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
+import es.jcyl.ita.formic.repo.db.sqlite.SQLiteRepository;
+import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteStringConverter;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD.CONTEXT;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.INSERT;
@@ -86,7 +87,7 @@ public class SaveLocationTest {
         // Create calculated property for the location
         EntityMeta meta = dbBuilder.createRandomMeta();
         DBPropertyType[] props = (DBPropertyType[]) meta.getProperties();
-        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, CONTEXT, "location.lastlocation");
+        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, CONTEXT, "${location.stringLocation}");
 
         // Add location property to meta
         props = Arrays.copyOf(props, props.length + 1);
@@ -109,7 +110,9 @@ public class SaveLocationTest {
         entity.set(locationProperty.getName(), null);
 
         EditableRepository repo = dbBuilder.getSQLiteRepository(dbBuilder.getSource(), dbBuilder.getMeta(), globalCxt);
+        ((SQLiteRepository) repo).setContext(globalCxt);
 
+        // fetch the entity from database and check the property has been calculated
         repo.save(entity);
         Entity e2 = repo.findById(entity.getId());
         Assert.assertEquals(mockLocation.toString(), e2.get(locationProperty.name));
@@ -125,7 +128,7 @@ public class SaveLocationTest {
 
         CompositeContext globalContext = new UnPrefixedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
-        globalContext.addContext(locationContext);
+        globalContext.put("location", locationContext);
 
         return globalContext;
     }

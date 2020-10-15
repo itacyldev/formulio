@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.repo.db.sqlite.greendao;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
+import org.apache.commons.jexl3.JxltEngine;
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.Property;
@@ -37,6 +38,7 @@ import es.jcyl.ita.formic.repo.db.meta.MaxRowIdKeyGenerator;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLitePropertyConverter;
 import es.jcyl.ita.formic.repo.db.sqlite.sql.TableSQLBuilder;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteDBValue;
+import es.jcyl.ita.formic.repo.el.JexlUtils;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 /**
@@ -146,8 +148,9 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
     }
 
     private Object calculateProperty(DBPropertyType p) {
+        // create expression and evaluate
         if (p.isCalculatedByContext()) {
-            return this.context.get(p.getContextExpression());
+            return JexlUtils.eval(context, p.getContextExpression());
         } else {
             throw new UnsupportedOperationException("Not implemented yet!!");
         }

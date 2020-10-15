@@ -70,7 +70,13 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
                     "must be set in tag ${tag} id [%s].", element.getId())));
         } else if (isDbFileSet && isTableNameSet) {
             // try to create a repository from current configuration
-            repo = createFromFile(element.getId(), dbFile, dbTable);
+            try {
+                repo = createFromFile(element.getId(), dbFile, dbTable);
+            } catch (Exception e) {
+                throw new ConfigurationException(error(String.format("An error occurred while trying to create SQLite " +
+                                "repo with table [%s] in dbFile [%s] referenced in configuration file [${file}] with id [%s].",
+                        dbTable, dbFile, element.getId())),e);
+            }
         }
 
         // find first parent that admits "repo" attribute and if doesn't have a repo already defined by

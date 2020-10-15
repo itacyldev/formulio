@@ -84,6 +84,7 @@ public class XmlConfigUtils {
         DevConsole.clear();
         ConfigReadingInfo readingInfo = new ConfigReadingInfo();
         readingInfo.setProject(p);
+        readingInfo.setCurrentFile("testFile");
         DevConsole.setConfigReadingInfo(readingInfo);
         // set current shared into with builder factory
         ComponentBuilderFactory.getInstance().setInfo(readingInfo);

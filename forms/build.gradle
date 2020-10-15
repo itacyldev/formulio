@@ -23,9 +23,14 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.txt'
         }
     }
     compileOptions {
@@ -35,6 +40,22 @@ android {
     lintOptions {
         abortOnError false
     }
+    dexOptions {
+        // http://developer.android.com/intl/es/tools/building/building-studio.html#instant-run
+        //preDexLibraries true
+        maxProcessCount 4
+        javaMaxHeapSize "2g"
+        jumboMode = true
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+//    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
 }
 
 
@@ -64,19 +85,16 @@ dependencies {
     implementation 'commons-lang:commons-lang:20030203.000129'
     implementation 'commons-collections:commons-collections:20040616'
     implementation 'commons-io:commons-io:2.6'
-    implementation 'org.apache.commons:commons-jexl3:3.1'
-    implementation 'org.apache.commons:commons-lang3:3.9'
-    implementation "org.mini2Dx:android-beans:1.0.0"
     implementation "commons-validator:commons-validator:1.6"
     implementation 'org.mozilla:rhino:1.7.12'
-
-    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
-
+//    implementation 'org.apache.commons:commons-jexl3:3.1'
+//    implementation 'org.apache.commons:commons-lang3:3.9'
+//    implementation "org.mini2Dx:android-beans:1.0.0"
 //    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
+
     // rxAndroid
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
-
     implementation 'org.jgrapht:jgrapht-core:1.1.0'
 
     ////////////////////////////////////////
@@ -113,6 +131,7 @@ dependencies {
     testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
+    testImplementation 'androidx.test:core:1.2.0'
 
 }
 

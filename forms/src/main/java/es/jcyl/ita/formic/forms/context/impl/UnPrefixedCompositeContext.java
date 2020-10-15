@@ -49,7 +49,8 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
      */
     public Object getValue(final String key) {
         String[] newKey = splitKey(key);
-        return (newKey == null || this.contexts == null) ? null : this.contexts.get(newKey[0]).get(newKey[1]);
+        return (newKey == null || this.contexts == null) ? super.get(key) :
+                this.contexts.get(newKey[0]).get(newKey[1]);
     }
 
 
@@ -71,8 +72,12 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
      */
     public boolean containsKey(final String key) {
         String[] newKey = splitKey(key);
-        Context ctx = this.contexts.get(newKey[0]);
-        return ctx.containsKey(newKey[0]);
+        if (newKey == null) {
+            return super.containsKey(key);
+        } else {
+            Context ctx = this.contexts.get(newKey[0]);
+            return ctx.containsKey(newKey[0]);
+        }
     }
 
     @Override
@@ -96,6 +101,7 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
             }
             allKeys.addAll(contextKeys);
         }
+        allKeys.addAll(super.keySet());
         return Collections.enumeration(allKeys);
     }
 
@@ -122,8 +128,12 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
     @Override
     public Object put(String key, Object value) {
         String[] newKey = splitKey(key);
-        Context context = this.contexts.get(newKey[0]);
-        return context.put(newKey[1], value);
+        if (newKey == null) { // no context prefix
+            return super.put(key, value);
+        } else {
+            Context context = this.contexts.get(newKey[0]);
+            return context.put(newKey[1], value);
+        }
     }
 
 

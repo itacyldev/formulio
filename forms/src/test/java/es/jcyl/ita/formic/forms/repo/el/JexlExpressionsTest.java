@@ -31,25 +31,32 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.forms.DummyEntity;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
+import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
-import es.jcyl.ita.formic.forms.DummyEntity;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class TestJexlExpressions {
+public class JexlExpressionsTest {
     ValueExpressionFactory factory = ValueExpressionFactory.getInstance();
 
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
@@ -150,6 +157,20 @@ public class TestJexlExpressions {
         }
     }
 
+    /**
+     * Test method and getter calls with JExl
+     */
+    @Test
+    public void methodCalls() {
+        JexlContext context = new MapContext();
+        context.set("myObject", new MyTestClass());
+        Object o = JexlUtils.eval(context, "${myObject.getMethod()}");
+        assertThat((Integer) o, greaterThan(1));
+        o = JexlUtils.eval(context, "${myObject.method}");
+        assertThat((Integer) o, greaterThan(1));
+    }
+
+
     @Test
     public void testFunctions() {
 
@@ -180,4 +201,31 @@ public class TestJexlExpressions {
         }
     }
 
+
+    @Test
+    public void testAccessCompositeContext() {
+        CompositeContext context = createContext();
+        Object o = JexlUtils.eval(context, "${date.now}");
+        assertThat(o, notNullValue());
+        o = JexlUtils.eval(context, "${location.method}");
+        assertThat(o, notNullValue());
+        assertThat((Integer)o, greaterThan(1));
+
+    }
+
+    private CompositeContext createContext() {
+        CompositeContext globalContext = new UnPrefixedCompositeContext();
+        globalContext.addContext(new DateTimeContext("date"));
+        globalContext.put("location", new MyTestClass());
+
+        return globalContext;
+    }
+
+
+    public class MyTestClass {
+
+        public Integer getMethod() {
+            return RandomUtils.randomInt(5, 100);
+        }
+    }
 }

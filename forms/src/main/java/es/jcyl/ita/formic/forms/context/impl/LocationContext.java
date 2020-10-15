@@ -41,8 +41,6 @@ public class LocationContext extends AbstractMapContext implements Context {
     }
 
 
-
-
     @Override
     public Object get(String key) {
         Location lastValidLocation = null;
@@ -56,7 +54,11 @@ public class LocationContext extends AbstractMapContext implements Context {
             }
         }
 
-        return lastValidLocation.toString();
+        return lastValidLocation;
+    }
+
+    public String getStringLocation() {
+        return (locationService.getLastLocation() == null) ? null : locationService.getLastLocation().toString();
     }
 
     public void setLocationService(LocationService locationService) {

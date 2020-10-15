@@ -28,7 +28,6 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -141,7 +140,6 @@ public class UIImageRendererTest {
         WidgetTestUtils.assertEquals(noImage, imageViewBitmap.getBitmap());
     }
 
-    @NotNull
     private RenderingEnv createRenderingEnv() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidDark);

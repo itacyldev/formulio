@@ -147,7 +147,7 @@ public class Config {
      * purposes.
      * @param project
      */
-    public void readConfig(Project project) {
+    private void readConfig(Project project) {
         if (!project.isOpened()) {
             project.open();
         }

@@ -23,7 +23,10 @@ import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
 import org.apache.commons.jexl3.internal.TemplateEngine;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.el.wrappers.JexlContextWrapper;
 import es.jcyl.ita.formic.repo.el.wrappers.JexlEntityWrapper;
 
 /**
@@ -50,16 +53,38 @@ public class JexlUtils {
         }
     }
 
+    public static Object eval(Context context, String expression) {
+        JxltEngine.Expression exl = jxltEngine.createExpression(expression);
+        return eval(context, exl);
+    }
+
+    public static Object eval(Context context, JxltEngine.Expression exl) {
+        JexlContextWrapper jc = new JexlContextWrapper(context);
+        return exl.evaluate(jc);
+    }
+
     public static Object eval(Entity entity, String expression) {
+        JxltEngine.Expression exl = null;
         try {
-            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
+            exl = jxltEngine.createExpression(expression);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format(
+                    "An error occurred while trying to create JEXL expression [%s] for entity[%s].",
+                    expression, entity.toString()
+            ), e);
+        }
+        return eval(entity, exl);
+    }
+
+    public static Object eval(Entity entity, JxltEngine.Expression exl) {
+        try {
             JexlContext jc = new MapContext();
             jc.set("entity", new JexlEntityWrapper(entity));
             return exl.evaluate(jc);
         } catch (Exception e) {
             throw new RuntimeException(String.format(
                     "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
-                    expression, entity.toString()
+                    exl, entity.toString()
             ), e);
         }
     }
@@ -67,5 +92,6 @@ public class JexlUtils {
     public static JxltEngine.Expression createExpression(String expression) {
         return jxltEngine.createExpression(expression);
     }
+
 
 }
