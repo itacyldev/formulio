@@ -27,7 +27,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
+import es.jcyl.ita.formic.app.projects.ProjectListFragment;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.apache.commons.lang3.StringUtils;
 
+import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 
 public class DevConsoleActivity extends AppCompatActivity {
