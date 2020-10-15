@@ -97,13 +97,7 @@ public class BasicGreenDAODBAccessTest {
         Assert.assertEquals(entity.getProperties().size(), e2.getProperties().size());
 
     }
-//
-//    public void useAppContext() {
-//        // Context of the app under test.
-//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-//        assertEquals("es.jcyl.ita.crtrepo", appContext.getPackageName());
-//    }
-//
+
     private Map<String, String> createDefaultMapper(EntityMeta meta) {
         Map<String, String> mapper = new HashMap<String, String>();
         for (PropertyType p : meta.getProperties()) {

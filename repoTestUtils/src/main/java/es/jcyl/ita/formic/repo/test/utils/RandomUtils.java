@@ -127,11 +127,11 @@ public class RandomUtils {
                 return randomFloat(0, 99999);
             case "java.util.Date":
                 return randomDate();
-            case "es.jcyl.ita.crtrepo.meta.types.ByteArray":
+            case "es.jcyl.ita.formic.repo.meta.types.ByteArray":
                 String str = randomString(10);
                 byte[] bs = str.getBytes();
                 return new ByteArray(bs);
-            case "es.jcyl.ita.crtrepo.meta.types.Geometry":
+            case "es.jcyl.ita.formic.repo.meta.types.Geometry":
                 return randomGeometry(25830);
             default:
                 throw new RuntimeException("Unsupported clazzzzzzz!: " + clazz);
