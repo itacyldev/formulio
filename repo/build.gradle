@@ -1,0 +1,48 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+archivesBaseName = 'repo'
+group = rootProject.group
+version = rootProject.version
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':core')
+
+    compileOnly 'com.google.android:android:4.1.1.4'
+    api 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
+    api "org.mini2Dx:android-beans:1.0.0"
+    api 'commons-io:commons-io:2.6'
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "http://repo.itacyl.es/archiva/repository/internal/"
+            def snapshotsRepoUrl = "http://repo.itacyl.es/archiva/repository/snapshots/"
+            url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+        }
+    }
+    publications {
+        repoCore(MavenPublication) {
+            from components.java
+            artifactId archivesBaseName
+            pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+        }
+    }
+}

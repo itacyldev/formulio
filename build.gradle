@@ -1,4 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     repositories {
         flatDir {
@@ -26,6 +27,13 @@ allprojects {
         jcenter()
         maven {
             url 'https://maven.google.com'
+        }
+        gradle.projectsEvaluated {
+            tasks.withType(JavaCompile) {
+                //options.compilerArgs << "-Xlint:deprecation,unchecked"
+                sourceCompatibility = 1.8
+                targetCompatibility = 1.8
+            }
         }
 //        def androidHome = System.getenv("ANDROID_HOME")
 //        maven {
@@ -73,10 +81,30 @@ task clean(type: Delete) {
 ext {
     versionCode = 1
     versionName = '0.1.0'
-    applicationId = "es.jcyl.ita.frmdrd"
+    applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
     targetSdkVersion = 29
     minSdkVersion = 21
     buildToolsVersion = '29.0.1'
     encoding = "UTF-8"
+
+    group = 'es.jcyl.ita.formic'
+    version = '0.1.0-SNAPSHOT'
+
+    sharedDeps = [
+            'org.apache.commons:commons-jexl3:3.1',
+            'org.apache.commons:commons-lang3:3.6',
+            'org.apache.commons:commons-text:1.8',
+    ]
+    unitTestDeps = [
+            'junit:junit:4.12',
+            'androidx.test.espresso:espresso-core:3.2.0',
+            'androidx.test.espresso:espresso-contrib:3.2.0',
+            'androidx.test.espresso:espresso-accessibility:3.2.0',
+            'org.robolectric:robolectric:4.3',
+            'org.mini2Dx:android-beans:1.0.0',
+            'org.mockito:mockito-core:2.7.22',
+            'org.hamcrest:hamcrest:2.2',
+
+    ]
 }

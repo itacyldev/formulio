@@ -1,0 +1,73 @@
+apply plugin: 'com.android.library'
+
+group = rootProject.group
+version = rootProject.version
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.1"
+
+    compileOptions {
+        // cambiando a 1.7 fallan los tests de instrumentación
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        test { resources.srcDirs += 'src/test/resources' }
+        androidTest { resources.srcDirs += 'src/androidTest/resources' }
+    }
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':repo')
+    implementation project(':repoTestUtils')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly 'com.google.android:android:4.1.1.4'
+
+    /////////////////////////////////////
+    // Instrumentation test dependencies
+    /////////////////////////////////////
+    // Core library
+    androidTestImplementation 'androidx.test:core:1.0.0'
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation('androidx.test:runner:1.2.0') {
+        exclude group: 'net.sf.kxml', module: ''
+    }
+    androidTestImplementation('androidx.test:rules:1.2.0') {
+        exclude group: 'androidx.test', module: ''
+    }
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.ext:truth:1.0.0'
+    androidTestImplementation 'com.google.truth:truth:0.46'
+    // Espresso dependencies
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
+        exclude group: 'androidx.test', module: 'runner'
+    }
+
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
+    testImplementation unitTestDeps
+}

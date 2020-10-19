@@ -36,6 +36,7 @@ android {
     }
 
     lintOptions {
+        abortOnError false
         disable 'InvalidPackage'
         // lint sees references in the grooid jar to unavailable java classes
     }
@@ -63,6 +64,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation project(':core')
+    implementation project(':repo')
+    implementation project(':forms')
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
@@ -72,7 +77,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.2.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-
 
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
@@ -90,16 +94,13 @@ dependencies {
     implementation "commons-validator:commons-validator:1.6"
     implementation 'org.mozilla:rhino:1.7.12'
 
-    //repo
-    implementation('es.jcyl.ita.crtrepo:core:0.1.0-SNAPSHOT') {
-        exclude group: 'com.google.android', module: 'android'
-    }
-    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
+//    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
     // rxAndroid
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
     implementation 'org.jgrapht:jgrapht-core:1.1.0'
+    implementation project(path: ':forms')
 
     ////////////////////////////////////////
     // TEST
@@ -107,24 +108,27 @@ dependencies {
 
     // Core library
     androidTestImplementation 'androidx.test:core:1.2.0'
-
     // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-
+    androidTestImplementation('androidx.test:runner:1.2.0') {
+        exclude group: 'net.sf.kxml', module: ''
+    }
+    androidTestImplementation('androidx.test:rules:1.2.0') {
+        exclude group: 'androidx.test', module: ''
+    }
     // Assertions
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     androidTestImplementation 'com.google.truth:truth:0.46'
-
     // Espresso dependencies
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
-    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
+        exclude group: 'androidx.test', module: 'runner'
+    }
+//    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
+//    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
     // Dependencies for Unit Test
     testImplementation 'junit:junit:4.12'
@@ -132,9 +136,10 @@ dependencies {
     testImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     testImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
 
+    testImplementation project(':repoTestUtils')
+
     testImplementation "org.robolectric:robolectric:4.3"
     testImplementation "org.mini2Dx:android-beans:1.0.0"
-    testImplementation "es.jcyl.ita.crtrepo:test:0.1.0-SNAPSHOT"
     testImplementation 'org.mockito:mockito-core:2.7.22'
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
 }
