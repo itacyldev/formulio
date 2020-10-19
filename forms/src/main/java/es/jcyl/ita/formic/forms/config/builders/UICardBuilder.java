@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.formic.forms.config.builders;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,10 +17,11 @@ package es.jcyl.ita.frmdrd.config.builders;
 
 import java.util.Map;
 
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.ui.components.card.UICard;
-import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.components.card.UICard;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.repo.Repository;
+
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

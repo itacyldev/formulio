@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.meta;
+package es.jcyl.ita.formic.forms.config.meta;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -46,6 +46,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HIST
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TEMPLATE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALIDATOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE;

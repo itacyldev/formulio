@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.render;
+package es.jcyl.ita.formic.forms.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -27,16 +27,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.crtrepo.Entity;
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
+import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.view.ViewHelper;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.frmdrd.context.impl.EntityContext;
-import es.jcyl.ita.frmdrd.ui.components.EntityListProvider;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

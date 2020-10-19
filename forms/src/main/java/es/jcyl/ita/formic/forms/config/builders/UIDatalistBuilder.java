@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.formic.forms.config.builders;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -22,17 +22,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.frmdrd.config.ConfigNodeHelper;
-import es.jcyl.ita.frmdrd.config.ConfigurationException;
-import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
-import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
-import es.jcyl.ita.frmdrd.forms.FormListController;
-import es.jcyl.ita.frmdrd.ui.components.card.UICard;
-import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.components.card.UICard;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
-import static es.jcyl.ita.frmdrd.config.DevConsole.error;
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

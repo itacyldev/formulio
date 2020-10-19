@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.view.render;
+package es.jcyl.ita.formic.forms.view.render;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteRenderer;
+import es.jcyl.ita.formic.forms.components.card.UICardRenderer;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistRenderer;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatableRenderer;
 import es.jcyl.ita.formic.forms.components.form.UIFormRenderer;
 import es.jcyl.ita.formic.forms.components.image.UIImageRenderer;
@@ -55,7 +57,7 @@ public class RendererFactory {
         renderInstances.put("tabitem", new TabItemRenderer());
         renderInstances.put("image", new UIImageRenderer());
         renderInstances.put("datalist", new UIDatalistRenderer());
-        renderInstances.put("datalistitem", new UICardRenderer());
+        renderInstances.put("card", new UICardRenderer());
     }
 
     public static RendererFactory getInstance() {

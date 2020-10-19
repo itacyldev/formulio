@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.card;
+package es.jcyl.ita.formic.forms.components.card;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,7 +17,8 @@ package es.jcyl.ita.frmdrd.ui.components.card;
 
 import android.content.Context;
 
-import es.jcyl.ita.frmdrd.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

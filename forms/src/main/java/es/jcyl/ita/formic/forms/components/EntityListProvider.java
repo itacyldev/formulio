@@ -1,8 +1,9 @@
-package es.jcyl.ita.frmdrd.ui.components;
+package es.jcyl.ita.formic.forms.components;
 
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.Entity;
+import es.jcyl.ita.formic.repo.Entity;
+
 
 public interface EntityListProvider {
 

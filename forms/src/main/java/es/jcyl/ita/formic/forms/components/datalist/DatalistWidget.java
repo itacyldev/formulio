@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.datalist;
+package es.jcyl.ita.formic.forms.components.datalist;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -21,17 +21,18 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.context.CompositeContext;
-import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.context.ContextUtils;
-import es.jcyl.ita.frmdrd.context.impl.AndViewContext;
-import es.jcyl.ita.frmdrd.repo.query.FilterHelper;
-import es.jcyl.ita.frmdrd.ui.components.DynamicComponent;
-import es.jcyl.ita.frmdrd.ui.components.EntitySelector;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
-import es.jcyl.ita.frmdrd.view.widget.Widget;
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.ContextUtils;
+import es.jcyl.ita.formic.forms.components.DynamicComponent;
+import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
+import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.query.Filter;
+
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

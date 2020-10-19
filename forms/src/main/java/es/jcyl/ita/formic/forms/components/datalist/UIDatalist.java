@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.datalist;
+package es.jcyl.ita.formic.forms.components.datalist;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,12 +17,13 @@ package es.jcyl.ita.frmdrd.ui.components.datalist;
 
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.Entity;
-import es.jcyl.ita.crtrepo.Repository;
-import es.jcyl.ita.crtrepo.query.Filter;
-import es.jcyl.ita.frmdrd.ui.components.EntityListProvider;
-import es.jcyl.ita.frmdrd.ui.components.FilterableComponent;
-import es.jcyl.ita.frmdrd.ui.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.EntityListProvider;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.query.Filter;
+
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

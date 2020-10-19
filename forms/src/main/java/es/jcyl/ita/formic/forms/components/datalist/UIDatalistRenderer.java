@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.datalist;
+package es.jcyl.ita.formic.forms.components.datalist;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,9 +17,10 @@ package es.jcyl.ita.frmdrd.ui.components.datalist;
 
 import android.widget.LinearLayout;
 
-import es.jcyl.ita.frmdrd.R;
-import es.jcyl.ita.frmdrd.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
