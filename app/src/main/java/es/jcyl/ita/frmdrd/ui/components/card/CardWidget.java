@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.datalist;
+package es.jcyl.ita.frmdrd.ui.components.card;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -23,8 +23,8 @@ import es.jcyl.ita.frmdrd.view.widget.Widget;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DatalistItemWidget extends Widget<UIDatalistItem> {
-    public DatalistItemWidget(Context context) {
+public class CardWidget extends Widget<UICard> {
+    public CardWidget(Context context) {
         super(context);
     }
 }

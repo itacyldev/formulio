@@ -30,7 +30,7 @@ import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.el.ValueExpressionFactory;
 import es.jcyl.ita.frmdrd.forms.FormListController;
 import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
-import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistItem;
+import es.jcyl.ita.frmdrd.ui.components.card.UICard;
 
 import static es.jcyl.ita.frmdrd.config.DevConsole.error;
 
@@ -117,8 +117,8 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         return datalist;
     }
 
-    private ConfigNode<UIDatalistItem> createItemNode() {
-        ConfigNode<UIDatalistItem> itemNode = new ConfigNode<>("datalistItem");
+    private ConfigNode<UICard> createItemNode() {
+        ConfigNode<UICard> itemNode = new ConfigNode<>("datalistItem");
         return itemNode;
     }
 }

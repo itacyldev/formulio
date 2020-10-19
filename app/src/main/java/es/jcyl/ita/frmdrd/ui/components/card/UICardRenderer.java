@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.datalist;
+package es.jcyl.ita.frmdrd.ui.components.card;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -23,14 +23,14 @@ import es.jcyl.ita.frmdrd.view.render.RenderingEnv;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIDatalistItemRenderer extends AbstractRenderer<UIDatalistItem, DatalistItemWidget> {
+public class UICardRenderer extends AbstractRenderer<UICard, CardWidget> {
     @Override
     protected int getWidgetLayoutId() {
-        return R.layout.datalist_item_template_1;
+        return R.layout.card_template_1;
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, DatalistItemWidget widget) {
+    protected void composeWidget(RenderingEnv env, CardWidget widget) {
 
     }
 }

@@ -20,24 +20,24 @@ import java.util.Map;
 import es.jcyl.ita.crtrepo.Repository;
 import es.jcyl.ita.frmdrd.config.reader.ConfigNode;
 import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
-import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistItem;
+import es.jcyl.ita.frmdrd.ui.components.card.UICard;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIDatalistItemBuilder extends BaseUIComponentBuilder<UIDatalistItem> {
+public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
 
 
-    protected UIDatalistItemBuilder(String tagName) {
-        super(tagName, UIDatalistItem.class);
+    protected UICardBuilder(String tagName) {
+        super(tagName, UICard.class);
     }
 
     @Override
-    public void setupOnSubtreeStarts(ConfigNode<UIDatalistItem> node) {
+    public void setupOnSubtreeStarts(ConfigNode<UICard> node) {
 
     }
 
-    private void setProperties(ConfigNode<UIDatalistItem> node) {
+    private void setProperties(ConfigNode<UICard> node) {
         String[] labels = new String[node.getChildren().size()];
         String[] values = new String[node.getChildren().size()];
         int i = 0;
@@ -57,7 +57,7 @@ public class UIDatalistItemBuilder extends BaseUIComponentBuilder<UIDatalistItem
     }
 
     @Override
-    public void setupOnSubtreeEnds(ConfigNode<UIDatalistItem> node) {
+    public void setupOnSubtreeEnds(ConfigNode<UICard> node) {
         UIDatalist parent = (UIDatalist) node.getParent().getElement();
         // if the datalist has a repo
         if (parent.getRepo() != null) {

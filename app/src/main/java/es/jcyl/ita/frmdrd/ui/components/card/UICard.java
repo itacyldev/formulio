@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.ui.components.datalist;
+package es.jcyl.ita.frmdrd.ui.components.card;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -21,7 +21,7 @@ import es.jcyl.ita.frmdrd.ui.components.UIComponent;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIDatalistItem extends UIComponent {
+public class UICard extends UIComponent {
 
     String[] propertyLabels;
     String[] propertyValues;

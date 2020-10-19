@@ -32,7 +32,7 @@ import es.jcyl.ita.frmdrd.config.FormConfig;
 import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
 import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
 import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
-import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalistItem;
+import es.jcyl.ita.frmdrd.ui.components.card.UICard;
 import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
 import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
 import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
@@ -149,7 +149,7 @@ public class UIDatalistBuilderTest {
         List<UIDatalist> datalists = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatalist.class);
         UIDatalist datalist = datalists.get(0);
 
-        UIDatalistItem dataListItem = (UIDatalistItem) datalist.getChildren()[0];
+        UICard dataListItem = (UICard) datalist.getChildren()[0];
 
     }
 
