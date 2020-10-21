@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.components.card;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.image.UIImage;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -23,22 +24,36 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 
 public class UICard extends UIComponent {
 
-    String[] propertyLabels;
-    String[] propertyValues;
+    String template;
+    UIHeading1 title;
+    UIHeading2 subtitle;
+    UIImage image;
 
-    public String[] getPropertyLabels() {
-        return propertyLabels;
+    public UIHeading1 getTitle() {
+        return title;
     }
 
-    public void setPropertyLabels(String[] propertyLabels) {
-        this.propertyLabels = propertyLabels;
+    public void setTitle(UIHeading1 title) {
+        this.title = title;
     }
 
-    public String[] getPropertyValues() {
-        return propertyValues;
+
+    public UIImage getImage() {
+        return image;
     }
 
-    public void setPropertyValues(String[] propertyValues) {
-        this.propertyValues = propertyValues;
+    public void setImage(UIImage image) {
+        this.image = image;
     }
+
+
+    public UIHeading2 getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(UIHeading2 subtitle) {
+        this.subtitle = subtitle;
+    }
+
+
 }

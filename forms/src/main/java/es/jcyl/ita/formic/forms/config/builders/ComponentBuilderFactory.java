@@ -20,6 +20,8 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.components.card.UIHeading1;
+import es.jcyl.ita.formic.forms.components.card.UIHeading2;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
@@ -80,6 +82,8 @@ public class ComponentBuilderFactory {
 
         registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
         registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
+        registerBuilder("head1", newDefaultBuilder(UIHeading1.class, "head1"));
+        registerBuilder("head2", newDefaultBuilder(UIHeading2.class, "head2"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");

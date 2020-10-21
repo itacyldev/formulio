@@ -68,7 +68,12 @@ public class AttributeDef {
 
     // datatable, datalist
     public static Attribute NUM_VISIBLE_ROWS = new Attribute("numVisibleRows", Integer.class);
+
+    // card
     public static Attribute TEMPLATE = new Attribute("template", true);
+    public static Attribute TITLE = new Attribute("title", true);
+    public static Attribute SUBTITLE = new Attribute("subtitle", true);
+    public static Attribute IMAGE = new Attribute("image", true);
 
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);

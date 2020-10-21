@@ -31,6 +31,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -46,7 +47,9 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HIST
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TEMPLATE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALIDATOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE;
@@ -75,8 +78,10 @@ public class TagDef {
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
         register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
-        register("datalistitem", define(new Attribute[]{ID}));
-        register("property", define(new Attribute[]{LABEL, VALUE}));
+
+        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE}));
+        register("head1", define(new Attribute[]{ID, LABEL, VALUE}));
+        register("head2", define(new Attribute[]{ID, LABEL, VALUE}));
 
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));

@@ -17,8 +17,12 @@ package es.jcyl.ita.formic.forms.config.builders;
 
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.card.UICard;
-import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.components.card.UIHeading1;
+import es.jcyl.ita.formic.forms.components.card.UIHeading2;
+import es.jcyl.ita.formic.forms.components.image.UIImage;
+import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 
@@ -39,18 +43,18 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
     }
 
     private void setProperties(ConfigNode<UICard> node) {
+        String[] names = new String[node.getChildren().size()];
         String[] labels = new String[node.getChildren().size()];
         String[] values = new String[node.getChildren().size()];
         int i = 0;
         for (ConfigNode child : node.getChildren()) {
             Map attributes = child.getAttributes();
+            names[i] = (String) attributes.get("name");
             labels[i] = (String) attributes.get("label");
             values[i] = (String) attributes.get("value");
             i++;
         }
 
-        node.getElement().setPropertyLabels(labels);
-        node.getElement().setPropertyValues(values);
     }
 
     private void setProperties(Repository repo) {
@@ -59,14 +63,17 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
 
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UICard> node) {
-        UIDatalist parent = (UIDatalist) node.getParent().getElement();
-        // if the datalist has a repo
-        if (parent.getRepo() != null) {
-            setProperties(parent.getRepo());
-        }
+        UICard card = node.getElement();
+        UIComponent[] children = ConfigNodeHelper.getUIChildren(node);
+        for (UIComponent child : children) {
+            if (child instanceof UIHeading1) {
+                card.setTitle((UIHeading1) child);
+            } else if (child instanceof UIHeading2) {
+                card.setSubtitle((UIHeading2) child);
+            } else if (child instanceof UIImage) {
+                card.setImage((UIImage) child);
+            }
 
-        if (node.hasChildren()) {
-            setProperties(node);
         }
     }
 }

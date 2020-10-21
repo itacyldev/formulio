@@ -15,22 +15,44 @@ package es.jcyl.ita.formic.forms.components.card;
  * limitations under the License.
  */
 
+import android.content.res.Resources;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.view.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UICardRenderer extends AbstractRenderer<UICard, CardWidget> {
+public class UICardRenderer extends AbstractRenderer<UICard, Widget<UICard>> {
     @Override
     protected int getWidgetLayoutId() {
         return R.layout.card_template_1;
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, CardWidget widget) {
+    protected void composeWidget(RenderingEnv env,  Widget<UICard> widget) {
+        UICard card = widget.getComponent();
+        UIComponent[] properties = card.getChildren();
+
+        for(UIComponent property:properties){
+
+        }
+
+
+    }
+
+    @Override
+    protected void setupWidget(RenderingEnv env,  Widget<UICard> widget) {
+        super.setupWidget(env, widget);
 
     }
 }

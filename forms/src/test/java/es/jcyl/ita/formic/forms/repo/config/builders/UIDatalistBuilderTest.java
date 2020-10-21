@@ -1,4 +1,4 @@
-package es.jcyl.ita.frmdrd.config.builders;
+package es.jcyl.ita.formic.forms.repo.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -24,18 +24,19 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-import es.jcyl.ita.crtrepo.builders.DevDbBuilder;
-import es.jcyl.ita.crtrepo.meta.EntityMeta;
-import es.jcyl.ita.frmdrd.config.Config;
-import es.jcyl.ita.frmdrd.config.ConfigConverters;
-import es.jcyl.ita.frmdrd.config.FormConfig;
-import es.jcyl.ita.frmdrd.ui.components.UIComponentHelper;
-import es.jcyl.ita.frmdrd.ui.components.card.UICard;
-import es.jcyl.ita.frmdrd.ui.components.column.UIColumn;
-import es.jcyl.ita.frmdrd.ui.components.datalist.UIDatalist;
-import es.jcyl.ita.frmdrd.ui.components.datatable.UIDatatable;
-import es.jcyl.ita.frmdrd.utils.RepositoryUtils;
-import es.jcyl.ita.frmdrd.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.card.UICard;
+import es.jcyl.ita.formic.forms.components.column.UIColumn;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
+import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
+import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
+
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
