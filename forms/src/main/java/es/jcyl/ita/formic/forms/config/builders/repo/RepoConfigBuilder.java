@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.repo;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -23,6 +23,8 @@ import org.greenrobot.greendao.database.StandardDatabase;
 import java.io.File;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIBuilderHelper;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;

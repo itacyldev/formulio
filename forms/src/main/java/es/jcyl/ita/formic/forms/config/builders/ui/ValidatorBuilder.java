@@ -1,8 +1,9 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorFactory;

@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.core.context;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ContextAwareRepo {
+public interface ContextAwareComponent {
 
     void setContext(Context ctx);
 }

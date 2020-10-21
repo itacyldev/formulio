@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import es.jcyl.ita.formic.forms.config.ComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;

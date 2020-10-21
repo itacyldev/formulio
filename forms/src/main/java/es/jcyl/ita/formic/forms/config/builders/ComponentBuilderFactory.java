@@ -20,12 +20,28 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.formic.repo.RepositoryFactory;
-import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
+import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
-import es.jcyl.ita.formic.forms.config.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIColumnBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UISelectBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.ValidatorBuilder;
 import es.jcyl.ita.formic.forms.config.elements.OptionsConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver;
@@ -33,15 +49,17 @@ import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
-import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.forms.components.tab.UITab;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
+ * Maps each xml tag with the builder responsible for the component creation.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ComponentBuilderFactory {
@@ -105,6 +123,7 @@ public class ComponentBuilderFactory {
         registerBuilder("tabitem", newBuilder(UITabItemBuilder.class, "tabitem"));
 
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
+        registerBuilder("context", new ContextBuilder());
 
         //registerBuilder("param", newBasicBuilder(ValidatorBuilder.class, "validator"));
 
@@ -112,6 +131,7 @@ public class ComponentBuilderFactory {
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
+
     }
 
 

@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.config;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -27,8 +28,12 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
+
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
+import es.jcyl.ita.formic.forms.project.handlers.ContextConfigHandler;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
@@ -53,6 +58,7 @@ public class Config {
     private boolean configLoaded = false;
     private String appBaseFolder;
     private Context andContext;
+    private CompositeContext globalContext;
 
     private Project currentProject;
     /**
@@ -94,7 +100,6 @@ public class Config {
      * @return
      */
     public static Config init(String appBaseFolder) {
-        // TODO: cache??
         _instance = new Config(appBaseFolder);
         _instance.init();
         return _instance;
@@ -114,7 +119,7 @@ public class Config {
             confConverter.init();
             // project repository
             projectRepo = new ProjectRepository(new File(this.appBaseFolder));
-            registerReaders();
+            registerHandlers();
             configLoaded = true;
         }
     }
@@ -127,24 +132,28 @@ public class Config {
         formControllerFactory.clear();
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
+        this.globalContext.clear();
     }
 
     /**
      * Register instances responsible for reading each XML file type (form/data).
      */
-    private static void registerReaders() {
+    private static void registerHandlers() {
         //TODO: add additional resource handlers (synchronization, security, etc.)
-        ProjectResourceHandler reader = new FormConfigHandler();
-        reader.setListener(readingListener);
-        _handlers.put(ProjectResource.ResourceType.FORM, reader);
-        reader = new RepoConfigHandler();
-        reader.setListener(readingListener);
-        _handlers.put(ProjectResource.ResourceType.REPO, reader);
+        ProjectResourceHandler handler = new FormConfigHandler();
+        handler.setListener(readingListener);
+        _handlers.put(ProjectResource.ResourceType.FORM, handler);
+        handler = new RepoConfigHandler();
+        handler.setListener(readingListener);
+        _handlers.put(ProjectResource.ResourceType.REPO, handler);
+        handler = new ContextConfigHandler();
+        _handlers.put(ProjectResource.ResourceType.CONTEXT, handler);
     }
 
     /**
      * DO NOT USE THIS METHOD, call setCurrentProject instead. Made public just for testing
      * purposes.
+     *
      * @param project
      */
     private void readConfig(Project project) {
@@ -166,11 +175,18 @@ public class Config {
         // share current reading process info using componentBuilderFactory
         ComponentBuilderFactory.getInstance().setInfo(readingListener);
 
+        processDefaultResources()
         processProjectResources(project);
     }
 
+    private void processDefaultResources() {
+        Resources res = this.andContext.getResources();
+        XmlResourceParser xrp = res.getXml(R.xml.context);
+    }
+
     private static final ProjectResource.ResourceType[] RESOURCE_ORDER =
-            {ProjectResource.ResourceType.REPO, ProjectResource.ResourceType.FORM};
+            {ProjectResource.ResourceType.CONTEXT, ProjectResource.ResourceType.REPO,
+                    ProjectResource.ResourceType.FORM};
 
     /**
      * Reads the project config files calling the proper handler for each resource and assuring
@@ -186,7 +202,7 @@ public class Config {
                     DevConsole.error(String.format("Couldn't find any config file in project [%s], " +
                             "check the folder.", project.getBaseFolder())));
         } else {
-            // process files in RESOURCE_ORDER order
+            // process files in RESOURCE_ORDER order (configuration flow)
             for (ProjectResource.ResourceType resType : RESOURCE_ORDER) {
                 configFiles = project.getConfigFiles(resType);
 
@@ -272,4 +288,15 @@ public class Config {
         return this.andContext.getResources();
     }
 
+    public CompositeContext getGlobalContext() {
+        return globalContext;
+    }
+
+    public void setGlobalContext(CompositeContext globalContext) {
+        this.globalContext = globalContext;
+    }
+
+    public Context getAndroidContext() {
+        return this.andContext;
+    }
 }

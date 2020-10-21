@@ -33,12 +33,10 @@ public class DefaultImageRepositoryHandler extends AbstractProjectResourceHandle
     private static final String DEFAULT_PROJECT_IMAGES = "DEFAULT_PROJECT_IMAGES";
     protected RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
-
     @Override
-    public Object handle(ProjectResource resource) {
+    public void handle(ProjectResource resource) {
         Project project = resource.project;
         Repository repo = new FileRepository(new File(project.getPicturesFolder()));
         repoFactory.register(DEFAULT_PROJECT_IMAGES, repo);
-        return null;
     }
 }

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.controllers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIBuilderHelper;
 import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;

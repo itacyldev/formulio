@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.repo;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.config.builders;
 
 import java.io.File;
 
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.repo.media.FileRepository;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;

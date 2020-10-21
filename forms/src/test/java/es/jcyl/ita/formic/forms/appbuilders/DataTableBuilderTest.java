@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.builders.UIDatatableBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 

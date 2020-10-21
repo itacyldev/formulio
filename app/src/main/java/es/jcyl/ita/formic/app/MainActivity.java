@@ -171,7 +171,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         }
 
-
         if (permsList.size() > 0) {
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
@@ -189,7 +188,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         if (!f.exists()) {
             f.mkdir();
         }
-        Config config = Config.init(projectsFolder);
+        Config config = Config.init(this, projectsFolder);
 
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();

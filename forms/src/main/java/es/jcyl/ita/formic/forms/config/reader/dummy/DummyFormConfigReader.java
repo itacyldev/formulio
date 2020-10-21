@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import es.jcyl.ita.formic.forms.config.ComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.FormConfig;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
