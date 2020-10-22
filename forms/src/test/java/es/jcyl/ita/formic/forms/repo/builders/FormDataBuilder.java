@@ -1,7 +1,7 @@
 package es.jcyl.ita.formic.forms.repo.builders;
 
 import org.apache.commons.jexl3.JxltEngine;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.BeanUtils;
 

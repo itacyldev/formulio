@@ -1,23 +1,19 @@
 apply plugin: 'com.android.library'
 
-group = rootProject.group
-version = rootProject.version
+def globalConf = rootProject.ext
+
+group = globalConf.group
+version = globalConf.version
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.1"
+    compileSdkVersion = rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
 
-    compileOptions {
-        // cambiando a 1.7 fallan los tests de instrumentación
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
+        versionCode globalConf.versionCode
+        versionName globalConf.versionName
+        targetSdkVersion globalConf.targetSdkVersion
+        minSdkVersion globalConf.minSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -28,11 +24,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        // cambiando a 1.7 fallan los tests de instrumentación
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     sourceSets {
         test { resources.srcDirs += 'src/test/resources' }
         androidTest { resources.srcDirs += 'src/androidTest/resources' }
     }
-    useLibrary 'android.test.runner'
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+//    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
 }
@@ -43,13 +53,14 @@ dependencies {
     implementation project(':repo')
     implementation project(':repoTestUtils')
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    //noinspection DuplicatePlatformClasses
     compileOnly 'com.google.android:android:4.1.1.4'
 
     /////////////////////////////////////
     // Instrumentation test dependencies
     /////////////////////////////////////
     // Core library
-    androidTestImplementation 'androidx.test:core:1.0.0'
+    androidTestImplementation 'androidx.test:core:1.2.0'
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation('androidx.test:runner:1.2.0') {
         exclude group: 'net.sf.kxml', module: ''
@@ -59,7 +70,7 @@ dependencies {
     }
     // Assertions
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.ext:truth:1.0.0'
+    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     androidTestImplementation 'com.google.truth:truth:0.46'
     // Espresso dependencies
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
@@ -69,5 +80,8 @@ dependencies {
     /////////////////////////////////////
     // JUnit test dependencies
     /////////////////////////////////////
+    testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
+
+
 }

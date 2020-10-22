@@ -1,12 +1,11 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
-archivesBaseName = 'repo'
-group = rootProject.group
-version = rootProject.version
+def globalConf = rootProject.ext
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+archivesBaseName = 'repo'
+group = globalConf.group
+version = globalConf.version
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -31,7 +30,7 @@ publishing {
         }
     }
     publications {
-        repoCore(MavenPublication) {
+        mavenPublish(MavenPublication) {
             from components.java
             artifactId archivesBaseName
             pom.withXml {

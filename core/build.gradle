@@ -1,12 +1,11 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
-archivesBaseName = 'core'
-group = rootProject.group
-version = rootProject.version
+def globalConf = rootProject.ext
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+archivesBaseName = 'core'
+group = globalConf.group
+version = globalConf.version
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

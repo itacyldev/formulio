@@ -1,6 +1,6 @@
 package es.jcyl.ita.formic.forms.repo.builders;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;

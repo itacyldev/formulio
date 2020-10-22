@@ -16,7 +16,7 @@ package es.jcyl.ita.formic.forms.repo.builders;
  * limitations under the License.
  */
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
