@@ -15,16 +15,13 @@ package es.jcyl.ita.formic.forms.components.card;
  * limitations under the License.
  */
 
-import android.content.res.Resources;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
+import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -32,26 +29,30 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UICardRenderer extends AbstractRenderer<UICard, Widget<UICard>> {
+public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>> {
     @Override
     protected int getWidgetLayoutId() {
         return R.layout.card_template_1;
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env,  Widget<UICard> widget) {
+    protected void composeWidget(RenderingEnv env, Widget<UICard> widget) {
         UICard card = widget.getComponent();
-        UIComponent[] properties = card.getChildren();
+        UIHeading1 title = card.getTitle();
 
-        for(UIComponent property:properties){
+        TextView titleView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.template1_title);
+        String value = (String) ConvertUtils.convert(title.getValue(env.getContext()), String.class);
+        titleView.setText(value);
 
-        }
-
-
+        UIHeading2 subtitle = card.getSubtitle();
+        TextView subtitleView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.template1_subtitle);
+        value = (String) ConvertUtils.convert(subtitle.getValue(env.getContext()), String.class);
+        subtitleView.setText(value);
     }
 
+
     @Override
-    protected void setupWidget(RenderingEnv env,  Widget<UICard> widget) {
+    protected void setupWidget(RenderingEnv env, Widget<UICard> widget) {
         super.setupWidget(env, widget);
 
     }

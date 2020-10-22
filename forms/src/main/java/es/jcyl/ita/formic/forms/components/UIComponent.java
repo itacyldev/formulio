@@ -20,7 +20,7 @@ public abstract class UIComponent implements Identificable {
     protected String id;
     protected String label;
 
-    private ValueBindingExpression valueExpression;
+    protected ValueBindingExpression valueExpression;
     private ValueBindingExpression renderExpression;
 
     protected UIView root;
