@@ -82,8 +82,8 @@ ext {
     versionCode = 1
     versionName = '0.1.0'
     applicationId = "es.jcyl.ita.formic"
-    compileSdkVersion = 28
-    targetSdkVersion = 28
+    compileSdkVersion = 29
+    targetSdkVersion = 29
     minSdkVersion = 21
     buildToolsVersion = '29.0.1'
     encoding = "UTF-8"

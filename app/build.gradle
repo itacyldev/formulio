@@ -14,7 +14,7 @@ android {
         applicationId globalConf.applicationId
         versionCode globalConf.versionCode
         versionName globalConf.versionName
-        targetSdkVersion 29
+        targetSdkVersion globalConf.targetSdkVersion
         minSdkVersion globalConf.minSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
