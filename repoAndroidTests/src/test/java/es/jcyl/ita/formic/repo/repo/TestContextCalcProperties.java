@@ -86,7 +86,7 @@ public class TestContextCalcProperties {
 
         // get meta and set one of the properties as calculated from context
         DBPropertyType[] props = (DBPropertyType[]) dbBuilder.getMeta().getProperties();
-        DBPropertyType p2 = setPropertyAsCalculated(props[1], INSERT, CONTEXT, "b1.a");
+        DBPropertyType p2 = setPropertyAsCalculated(props[1], INSERT, CONTEXT, "${b1.a}");
         props[1] = p2;
 
         Object expectedValue = RandomUtils.randomObject(p2.type);
@@ -129,7 +129,7 @@ public class TestContextCalcProperties {
 
         // get meta and set one of the properties as calculated from context on each update
         DBPropertyType[] props = (DBPropertyType[]) dbBuilder.getMeta().getProperties();
-        DBPropertyType p2 = setPropertyAsCalculated(props[1], UPDATE, CONTEXT, "b1.a");
+        DBPropertyType p2 = setPropertyAsCalculated(props[1], UPDATE, CONTEXT, "${b1.a}");
         props[1] = p2;
 
         // create context
