@@ -175,7 +175,7 @@ public class Config {
         // share current reading process info using componentBuilderFactory
         ComponentBuilderFactory.getInstance().setInfo(readingListener);
 
-        processDefaultResources()
+        processDefaultResources();
         processProjectResources(project);
     }
 
