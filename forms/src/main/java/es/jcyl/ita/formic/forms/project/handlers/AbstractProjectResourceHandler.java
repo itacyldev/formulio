@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.project.handlers;
 
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
+import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -22,9 +23,10 @@ import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public abstract class AbstractProjectResourceHandler<T> implements ProjectResourceHandler<T> {
-
+public abstract class AbstractProjectResourceHandler implements ProjectResourceHandler {
     protected ReadingProcessListener listener;
+    protected XmlConfigFileReader reader = new XmlConfigFileReader();
+
 
     public void setListener(ReadingProcessListener listener) {
         this.listener = listener;

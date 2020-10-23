@@ -29,7 +29,7 @@ public class DateTimeContext extends AbstractMapContext implements Context {
     private DateExpressionInterpreter dei = new DateExpressionInterpreter();
 
     public DateTimeContext() {
-        super();
+        super("date");
     }
 
     public DateTimeContext(String prefix) {

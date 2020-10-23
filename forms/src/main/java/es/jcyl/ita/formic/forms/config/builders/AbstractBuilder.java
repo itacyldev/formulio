@@ -23,7 +23,6 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
-import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -33,22 +32,13 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  * <p>
  * Builder that instantiates and element from and specific class and may extend the
  * building process with specific treatment of attributte values or child elements.
- * This abstract class provides common methods for form and repo componentes building.
  */
-public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E> {
+public abstract class AbstractBuilder<E> implements ComponentBuilder<E> {
 
     protected Map<String, Attribute> attributeDefs;
     private Class<? extends E> elementType;
     private ComponentBuilderFactory factory;
 
-    public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
-        this.attributeDefs = TagDef.getDefinition(tagName);
-        if (attributeDefs == null || this.attributeDefs.isEmpty()) {
-            throw new ConfigurationException(error(String.format("No attribute definition for tag" +
-                    " [%s], review the TagDef class and register the new component.", tagName)));
-        }
-        this.elementType = clazz;
-    }
 
     @Override
     public E build(ConfigNode<E> node) {

@@ -46,21 +46,9 @@ public class LocationService implements LocationListener {
     public static int MAX_ELAPSED_TIME = 60 * 1000;
 
     private LocationManager locationManager;
-    private static LocationService _instance;
     Context ctx;
 
-    public static LocationService getInstance() {
-        if (_instance == null) {
-            _instance = new LocationService();
-        }
-        return _instance;
-    }
-
-    public LocationService() {
-
-    }
-
-    public void init(Context ctx) {
+    public LocationService(Context ctx) {
         this.ctx = ctx;
         locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
     }

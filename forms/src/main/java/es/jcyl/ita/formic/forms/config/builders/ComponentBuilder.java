@@ -15,31 +15,16 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Creates a UIComponent from the read xml configuration
  */
-public class BaseUIComponentBuilder<E extends UIComponent> extends AbstractComponentBuilder<E> {
+public interface ComponentBuilder<E> {
 
-    public BaseUIComponentBuilder(String tagName, Class<? extends E> clazz) {
-        super(tagName, clazz);
-    }
+    E build(ConfigNode<E> node);
 
-    @Override
-    protected void doWithAttribute(E element, String name, String value) {
-    }
-
-    @Override
-    protected void setupOnSubtreeStarts(ConfigNode<E> node) {
-    }
-
-    @Override
-    protected void setupOnSubtreeEnds(ConfigNode<E> node) {
-        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
-        node.getElement().setChildren(uiComponents);
-    }
-
+    void processChildren(ConfigNode<E> node);
 }

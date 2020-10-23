@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.core.context.ContextAwareRepo;
+import es.jcyl.ita.formic.core.context.ContextAwareComponent;
 import es.jcyl.ita.formic.repo.builders.AbstractRepositoryBuilder;
 import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
 import es.jcyl.ita.formic.repo.db.builders.RawSQLiteRepoBuilder;
@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.repo.source.EntitySource;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class RepositoryFactory {
+public class RepositoryFactory implements ContextAwareComponent {
 
     private final Map<String, Repository> _instances = new HashMap<String, Repository>();
     private final Map<Class<? extends EntitySource>, Class<? extends RepositoryBuilder>> defaultRepoBuildersMap;
@@ -57,7 +57,6 @@ public class RepositoryFactory {
         readConfig();
     }
 
-    @Deprecated
     /**
      * ("Replace with Dagger dependency injection or use a ContextHolder to access context.")
      */
@@ -93,8 +92,8 @@ public class RepositoryFactory {
      */
     public void register(String entityType, Repository repo) {
         this._instances.put(entityType, repo);
-        if (repo instanceof ContextAwareRepo) {
-            ((ContextAwareRepo) repo).setContext(this.context);
+        if (repo instanceof ContextAwareComponent) {
+            ((ContextAwareComponent) repo).setContext(this.context);
         }
     }
 

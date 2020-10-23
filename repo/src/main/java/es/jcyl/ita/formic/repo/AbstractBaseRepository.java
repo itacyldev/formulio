@@ -16,14 +16,14 @@ package es.jcyl.ita.formic.repo;
  */
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.core.context.ContextAwareRepo;
+import es.jcyl.ita.formic.core.context.ContextAwareComponent;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
-        implements Repository<T, F>, ContextAwareRepo {
+        implements Repository<T, F>, ContextAwareComponent {
     protected String id;
     protected Context context;
 

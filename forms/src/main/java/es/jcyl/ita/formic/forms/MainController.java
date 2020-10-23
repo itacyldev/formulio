@@ -28,22 +28,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.ContextAwareComponent;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
-import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
-import es.jcyl.ita.formic.forms.context.impl.LocationContext;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
@@ -51,6 +49,7 @@ import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -61,7 +60,7 @@ import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
  * to implement user actions.
  */
 
-public class MainController {
+public class MainController implements ContextAwareComponent {
 
     private static MainController _instance;
 
@@ -92,16 +91,18 @@ public class MainController {
     }
 
     private MainController() {
-        globalContext = new UnPrefixedCompositeContext();
-        globalContext.addContext(new DateTimeContext("date"));
-        globalContext.addContext(new LocationContext("location"));
         formControllerFactory = FormControllerFactory.getInstance();
         router = new Router(this);
         actionController = new ActionController(this, router);
-        renderingEnv = new RenderingEnv(globalContext, actionController);
         flowManager = ReactivityFlowManager.getInstance();
         registerFormTypeViews();
     }
+
+    private void init(CompositeContext context) {
+        globalContext = context;
+        renderingEnv = new RenderingEnv(globalContext, actionController);
+    }
+
 
     /*********************************************/
     /***  Navigation control methods */
@@ -165,6 +166,7 @@ public class MainController {
         this.formController.setContentView(formActivity.getContentView());
         this.renderingEnv.setFormActivity(formActivity);
     }
+
 
     /*********************************************/
     /***  View rendering methods */
@@ -256,6 +258,7 @@ public class MainController {
         renderingEnv.enableInterceptors();
     }
 
+
     public class State {
         FormController fc;
         es.jcyl.ita.formic.core.context.Context params;
@@ -293,5 +296,15 @@ public class MainController {
     public void setFormController(FormController fc, UIView view) {
         this.formController = fc;
     }
+
+    @Override
+    public void setContext(es.jcyl.ita.formic.core.context.Context ctx) {
+        if (!(ctx instanceof CompositeContext)) {
+            throw new IllegalArgumentException(DevConsole.error("MainController needs an instance of CompositeContext to use it as GlobalContext."));
+        }
+        this.globalContext = (CompositeContext) ctx; // global context is received
+        this.init(globalContext);
+    }
+
 
 }

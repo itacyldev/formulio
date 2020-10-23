@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.ui;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,24 +16,31 @@ package es.jcyl.ita.formic.forms.config.builders;
  */
 
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.forms.components.tab.UITabItem;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UITabItemBuilder extends UIGroupComponentBuilder<UITabItem> {
+public class BaseUIComponentBuilder<E extends UIComponent> extends AbstractComponentBuilder<E> {
 
-    public UITabItemBuilder() {
-        super("tabitem", UITabItem.class);
+    public BaseUIComponentBuilder(String tagName, Class<? extends E> clazz) {
+        super(tagName, clazz);
     }
 
     @Override
-    protected void setupOnSubtreeStarts(ConfigNode<UITabItem> node) {
-        // Add config node for all the properties defined in the properties attribute
-        ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
-        Repository repo = (Repository) UIBuilderHelper.getElementValue(ascendant.getElement(), "repo");
-        addNodesFromPropertiesAtt(node, repo);
+    protected void doWithAttribute(E element, String name, String value) {
     }
+
+    @Override
+    protected void setupOnSubtreeStarts(ConfigNode<E> node) {
+    }
+
+    @Override
+    protected void setupOnSubtreeEnds(ConfigNode<E> node) {
+        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
+        node.getElement().setChildren(uiComponents);
+    }
+
 }

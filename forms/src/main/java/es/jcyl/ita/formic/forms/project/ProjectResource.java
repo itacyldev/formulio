@@ -22,7 +22,7 @@ import java.io.File;
  */
 public class ProjectResource {
 
-    public enum ResourceType {REPO, FORM}
+    public enum ResourceType {REPO, CONTEXT, FORM}
 
     public final File file;
     public final ResourceType type;

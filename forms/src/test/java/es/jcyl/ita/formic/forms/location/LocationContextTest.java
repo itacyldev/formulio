@@ -67,8 +67,7 @@ public class LocationContextTest {
         Location mockLocation = builder.withRandomData().build();
         when(mockLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)).thenReturn(mockLocation);
 
-        LocationService locationService = LocationService.getInstance();
-        locationService.init(ctx);
+        LocationService locationService = new LocationService(ctx);
         ReflectionHelpers.setField(locationService, "locationManager", mockLocationManager);
 
         LocationContext locationContext = new LocationContext("location");
@@ -86,8 +85,8 @@ public class LocationContextTest {
         when(mockLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)).thenReturn(mockLocation);
 
         //
-        LocationService locationService = LocationService.getInstance();
-        locationService.init(ctx);
+        LocationService locationService = new LocationService(ctx);
+
         ReflectionHelpers.setField(locationService, "locationManager", mockLocationManager);
 
         LocationContext locationContext = new LocationContext("location");
