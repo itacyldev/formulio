@@ -25,7 +25,7 @@ android {
         }
     }
     compileOptions {
-        // cambiando a 1.7 fallan los tests de instrumentación
+        encoding = "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
