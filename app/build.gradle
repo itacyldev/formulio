@@ -114,7 +114,7 @@ dependencies {
     /////////////////////////////////////
     testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
+    testImplementation 'androidx.fragment:fragment-testing:1.2.4'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation('androidx.test:rules:1.2.0') {
         exclude group: 'androidx.test', module: ''
