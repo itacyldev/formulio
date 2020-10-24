@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.repo.config.resolvers;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,11 @@ public class RelativePathAttResolverTest {
         confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
+    }
+
+    @Before
+    public void before(){
+        RepositoryUtils.clearSources();
     }
 
     private static final String XML_TEST_BASIC = "<repo id=\"myRepoTest01\" dbFile=\"dbTest.sqlite\" dbTable=\"contacts\"/>";

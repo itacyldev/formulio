@@ -24,8 +24,12 @@ import es.jcyl.ita.formic.repo.converter.ConverterFactory;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.meta.types.Geometry;
+import es.jcyl.ita.formic.repo.util.TypeUtils;
 
-import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.*;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.BLOB;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.INTEGER;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.REAL;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.TEXT;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -52,14 +56,22 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
         initDefaultConverters();
     }
 
-
     @Override
-    public SQLitePropertyConverter getConverter(String converterId) {
-        SQLitePropertyConverter obj = this.converters.get(converterId);
-        if (obj == null) {
-            throw new RepositoryException(String.format("No converter found for id [%s].", converterId));
+    public SQLitePropertyConverter getConverter(Class javaType, SQLiteType dbType) {
+        String key = String.format("%s-%s".format(javaType.getClass().getCanonicalName(), dbType.name()));
+
+        if (!this.converters.containsKey(key)) {
+            SQLitePropertyConverter converter = defaultDBConverters.get(dbType);
+            try {
+                converter = (SQLitePropertyConverter) converter
+                        .getClass().getDeclaredConstructor(new Class[]{Class.class}).newInstance(javaType);
+            } catch (Exception e) {
+                throw new RepositoryException(String.format("Can't create converter from " +
+                        "javaType: %s to dbType [%s].", javaType, dbType.name(), e));
+            }
+            this.converters.put(key, converter);
         }
-        return obj;
+        return converters.get(key);
     }
 
     @Override

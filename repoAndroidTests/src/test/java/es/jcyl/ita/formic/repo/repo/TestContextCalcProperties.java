@@ -166,7 +166,7 @@ public class TestContextCalcProperties {
         DBPropertyTypeBuilder builder = new DBPropertyTypeBuilder(property);
         switch (how) {
             case CONTEXT:
-                builder.withContextExpression(expression, when);
+                builder.withJexlExpresion(expression, when);
                 break;
             case SQL_EXPRESSION:
                 builder.withSQLExpression(expression, when);

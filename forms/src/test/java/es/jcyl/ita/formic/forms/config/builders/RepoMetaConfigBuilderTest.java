@@ -17,26 +17,32 @@ package es.jcyl.ita.formic.forms.config.builders;
 
 import android.util.Log;
 
+import org.greenrobot.greendao.database.Database;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mini2Dx.collections.CollectionUtils;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.util.ReflectionHelpers;
 
 import java.io.File;
-import java.util.List;
 
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
+import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
+import es.jcyl.ita.formic.repo.db.sqlite.greendao.EntityDao;
+import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
-
-import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
 
 /**
  * <Your description here>
@@ -57,36 +63,83 @@ public class RepoMetaConfigBuilderTest {
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
+
         DevConsole.setLevel(Log.DEBUG);
+        RepositoryUtils.registerMock("contacts");
+
+    }
+
+    @Before
+    public void before() {
+        RepositoryUtils.clearSources();
     }
 
     private static final String XML_TEST_BASIC = "<repo id=\"test1\" dbFile=\"dbTest.sqlite\" " +
-            "id=\"superHRepo\" dbTable=\"superheroes\" properties=\"name,age\"/>";
+            "id=\"superHRepo\" dbTable=\"superheroes\">%s</repo>";
 
     @Test
-    public void test1() throws Exception {
-        File baseFolder = TestUtils.findFile("config");
-        Config.init(baseFolder.getAbsolutePath());
-        Config config = Config.getInstance();
+    public void testAllPropsMeta() {
+        // create basic project
+        ProjectRepository prjRepo = RepositoryUtils.createTestProjectRepo();
+        File dataFolder = TestUtils.findFile("config/project1");
+        Project p = prjRepo.createFromFolder(dataFolder);
 
-        ProjectRepository projectRepo = config.getProjectRepo();
-        Assert.assertNotNull(projectRepo);
-        List<Project> projectList = projectRepo.listAll();
-
-        Assert.assertTrue(CollectionUtils.isNotEmpty(projectList));
-        Project prj = projectList.get(0);
-        prj.open();
-        assertEquals("project1", prj.getName());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(prj.getConfigFiles()));
-        // read config and check repositories and forms
-
-        config.setCurrentProject(prj);
+        // Act: define and read XML
+        String metaTag = "<meta properties=\"*\"/>";
+        String xml = XmlConfigUtils.createMainList(String.format(XML_TEST_BASIC, metaTag));
+        XmlConfigUtils.readFormConfig(p, xml);
 
         Repository repo = repoFactory.getRepo("superHRepo");
         Assert.assertNotNull(repo);
-        Assert.assertEquals(2,repo.getMeta().getProperties().length);
+        Assert.assertEquals(7, repo.getMeta().getProperties().length);
+    }
+
+    @Test
+    public void testFilterProperties() {
+        // create basic project
+        ProjectRepository prjRepo = RepositoryUtils.createTestProjectRepo();
+        File dataFolder = TestUtils.findFile("config/project1");
+        Project p = prjRepo.createFromFolder(dataFolder);
+
+        // Act: define and read XML
+        String metaTag = "<meta properties=\"name,age\"/>";
+        String xml = XmlConfigUtils.createMainList(String.format(XML_TEST_BASIC, metaTag));
+        XmlConfigUtils.readFormConfig(p, xml);
+
+        Repository repo = repoFactory.getRepo("superHRepo");
+        Assert.assertNotNull(repo);
+        Assert.assertEquals(2, repo.getMeta().getProperties().length);
         Assert.assertNotNull(repo.getMeta().getPropertyByName("name"));
         Assert.assertNotNull(repo.getMeta().getPropertyByName("age"));
-
     }
+
+    @Test
+    public void testCustomProperties() {
+        // create basic project
+        ProjectRepository prjRepo = RepositoryUtils.createTestProjectRepo();
+        File dataFolder = TestUtils.findFile("config/project1");
+        Project p = prjRepo.createFromFolder(dataFolder);
+
+        // Act: define and read XML
+        String metaTag = "<meta properties=\"name,age\">" +
+                "<property name=\"age\" columnName=\"age\" converter=\"float\"/>" +
+                "<property name=\"real_identity\" columnName=\"real_name\"/>" +
+                "<property name=\"real_identitie\" columnName=\"real_name\" converter=\"string\"/>" +
+                "</meta>";
+        String xml = XmlConfigUtils.createMainList(String.format(XML_TEST_BASIC, metaTag));
+        XmlConfigUtils.readFormConfig(p, xml);
+
+        Repository repo = repoFactory.getRepo("superHRepo");
+        Assert.assertNotNull(repo);
+        Assert.assertEquals(4, repo.getMeta().getProperties().length);
+        Assert.assertNotNull(repo.getMeta().getPropertyByName("real_identity"));
+        Assert.assertNotNull(repo.getMeta().getPropertyByName("real_identitie"));
+        DBPropertyType p1 = (DBPropertyType) repo.getMeta().getPropertyByName("real_identitie");
+        Assert.assertNotNull(p1.getConverter());
+        Assert.assertNotNull(p1.getConverter().javaType().equals(String.class));
+        p1 = (DBPropertyType) repo.getMeta().getPropertyByName("age");
+        Assert.assertNotNull(p1.getConverter());
+        Assert.assertTrue(p1.getConverter().javaType().equals(Float.class));
+    }
+
 }

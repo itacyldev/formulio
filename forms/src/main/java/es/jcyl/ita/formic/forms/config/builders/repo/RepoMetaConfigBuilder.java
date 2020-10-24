@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.config.builders.repo;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.elements.PropertyConfig;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
@@ -39,13 +41,18 @@ import es.jcyl.ita.formic.repo.meta.PropertyType;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> {
+    private SQLiteMetaModeler modeler = new SQLiteMetaModeler();
 
-    public RepoMetaConfigBuilder() {
-        super("meta", EntityMeta.class);
+    public RepoMetaConfigBuilder(String tagName) {
+        super(tagName, null);
     }
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<EntityMeta> node) {
+    }
+
+    @Override
+    protected void setupOnSubtreeEnds(ConfigNode<EntityMeta> node) {
         // get current repo source
         Object obj = node.getParent().getElement();
         if (!(obj instanceof RepoConfig)) {
@@ -64,14 +71,38 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
         }
         // get nested property definition
         List<ConfigNode> prpList = BuilderHelper.findChildrenByTag(node, "property");
-        DBTableEntitySource source = (DBTableEntitySource) repo.getSource();
         if (prpList != null) {
             // contains final property list
-            List<PropertyType> lstProps = Arrays.asList(properties);
-            SQLiteMetaModeler modeler = new SQLiteMetaModeler();
-            for (ConfigNode propNode : prpList) {
-                DBPropertyType dbProperty = modeler.createPropertyFromColumnDef(propNode.getAttribute("columnName"),
-                        propNode.getAttribute("type"), false, false, source);
+            List<PropertyType> lstProps = new ArrayList(Arrays.asList(properties));
+            for (ConfigNode<PropertyConfig> propNode : prpList) {
+                PropertyConfig propConfig = propNode.getElement();
+                String type = (propConfig.getValueConverter() == null) ? "string" : propConfig.getValueConverter();
+                if (StringUtils.isBlank(propConfig.getName())) {
+                    throw new ConfigurationException(DevConsole.error("Error in tag 'property' nested in " +
+                            "<meta/> element, the 'name' attribute is mandatory. Error in file ${file}"));
+                }
+                // if columnName is not set, use "name" as default columnName
+                String columnName = (propConfig.getColumnName() == null) ?
+                        propConfig.getName() : propConfig.getColumnName();
+
+                // get property original definition to get its persistence type
+                String dbType = null;
+                PropertyType originalProperty = findPropertyByColumnName(meta, columnName);
+                if (originalProperty == null) {
+                    if (!propConfig.isCalculatedOnSelect()) {
+                        throw new ConfigurationException(DevConsole.error(String.format("Invalid definition for " +
+                                        "property [%s], the property doesn't exists in the repo meta, " +
+                                        "check the table column Names. DB source: [%s].", propConfig.getName(),
+                                ((DBTableEntitySource) repo.getSource()).toString())));
+                    } else {
+                        dbType = "TEXT"; // default for calculated properties
+                    }
+                } else {
+                    dbType = originalProperty.persistenceType;
+                }
+                DBPropertyType dbProperty = modeler.createPropertyFromColumnDef(propConfig.getName(), columnName,
+                        type, dbType, propConfig.getExpression(), propConfig.getExpressionType(),
+                        propConfig.getEvaluatedOn());
                 // if exists remove from list, otherwise add
                 addOrUpdate(lstProps, dbProperty);
             }
@@ -80,11 +111,20 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
         }
     }
 
+    private PropertyType findPropertyByColumnName(EntityMeta meta, String columnName) {
+        for (PropertyType pt : meta.getProperties()) {
+            if (((DBPropertyType) pt).getColumnName().equalsIgnoreCase(columnName)) {
+                return pt;
+            }
+        }
+        return null;
+    }
+
     private void addOrUpdate(List<PropertyType> lstProps, DBPropertyType dbProperty) {
         int i = 0;
         for (PropertyType p : lstProps) {
             if (p.name.equalsIgnoreCase(dbProperty.name)) {
-                lstProps.add(i, dbProperty);
+                lstProps.set(i, dbProperty);
                 return;
             }
             i++;
@@ -123,14 +163,11 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
                         " in the repository entity. Error found in file ${file}.", prop)));
             }
             filtered[i] = property;
+            i++;
         }
         return filtered;
     }
 
-    @Override
-    protected void setupOnSubtreeEnds(ConfigNode<EntityMeta> node) {
-
-    }
 
     @Override
     protected void doWithAttribute(EntityMeta element, String name, String value) {

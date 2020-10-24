@@ -30,12 +30,12 @@ import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.meta.types.Geometry;
-import es.jcyl.ita.formic.forms.converters.ConverterMap;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.validation.Validator;
+import es.jcyl.ita.formic.repo.util.TypeUtils;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -99,7 +99,7 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
 
         UIField field = builder.build(node);
         node.setElement(field);
-        node.setAttribute("value", "${entity." + property.name + "}", ConverterMap.getConverter(property.getType()));
+        node.setAttribute("value", "${entity." + property.name + "}", TypeUtils.getType(property.getType()));
 
         if (property.isPrimaryKey()) {
             // if the property is pk, do not show if the value is empty

@@ -19,14 +19,15 @@ import org.mockito.Mockito;
 
 import java.io.File;
 
+import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
+import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
-import es.jcyl.ita.formic.forms.project.ProjectRepository;
 
 import static org.mockito.Mockito.when;
 
@@ -42,13 +43,13 @@ public class RepositoryUtils {
         repoFactory.register(entityId, repo);
     }
 
-    public static ProjectRepository createTestProjectRepo(){
+    public static ProjectRepository createTestProjectRepo() {
         File f = TestUtils.findFile("config/project1");
         return createProjectRepo(f);
     }
 
-    public static ProjectRepository createProjectRepo(File baseFolder){
-        ProjectRepository repo = new  ProjectRepository(baseFolder);
+    public static ProjectRepository createProjectRepo(File baseFolder) {
+        ProjectRepository repo = new ProjectRepository(baseFolder);
         return repo;
     }
 
@@ -73,5 +74,13 @@ public class RepositoryUtils {
         for (String str : repos) {
             repoFactory.unregister(str);
         }
+    }
+
+    public static void clearSources() {
+        // clear sources between tests to avoid problem with robolectric
+        // https://github.com/robolectric/robolectric/issues/1890
+        // https://stackoverflow.com/questions/34695552/robolectric-with-activeandroid-setup-nullpointerexception-on-activeandroidrefle
+        EntitySourceFactory sourceFactory = EntitySourceFactory.getInstance();
+        sourceFactory.clear();
     }
 }

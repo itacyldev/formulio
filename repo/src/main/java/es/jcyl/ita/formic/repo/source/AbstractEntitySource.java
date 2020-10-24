@@ -21,17 +21,26 @@ package es.jcyl.ita.formic.repo.source;
 
 
 public abstract class AbstractEntitySource implements EntitySource {
-    protected String sourceId;
     protected String entityTypeId;
+    protected Source source;
 
 
     @Override
     public String getSourceId() {
-        return this.sourceId;
+        return this.source.getId();
     }
 
     @Override
     public String getEntityTypeId() {
         return this.entityTypeId;
+    }
+
+    @Override
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
     }
 }

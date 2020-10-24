@@ -53,7 +53,9 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     @Override
     public E build(ConfigNode<E> node) {
         E element = instantiate();
-        setAttributes(element, node);
+        if (element != null) {
+            setAttributes(element, node);
+        }
         node.setElement(element);
         setupOnSubtreeStarts(node);
         return element;
@@ -74,6 +76,10 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
 
     protected E instantiate() {
+        if (this.elementType == null) {
+            // no instance needed
+            return null;
+        }
         try {
             return (E) this.elementType.getDeclaredConstructor().newInstance();
         } catch (Exception e) {

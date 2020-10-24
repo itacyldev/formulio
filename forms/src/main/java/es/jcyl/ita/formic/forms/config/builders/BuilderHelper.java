@@ -327,6 +327,9 @@ public class BuilderHelper {
 
 
     private static void _findByTagName(ConfigNode root, String tagName, List<ConfigNode> output) {
+        if (root.getName().equalsIgnoreCase(tagName)) {
+            output.add(root);
+        }
         if (!root.hasChildren()) {
             return;
         } else {

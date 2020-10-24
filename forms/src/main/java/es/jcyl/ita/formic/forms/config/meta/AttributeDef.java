@@ -59,6 +59,10 @@ public class AttributeDef {
     public static Attribute DBFILE = new Attribute("dbFile", "dbFile", "pathResolver");
     public static Attribute DBTABLE = new Attribute("dbTable", true);
     public static Attribute PROPERTIES = new Attribute("properties", true);
+    public static Attribute COLUMN_NAME = new Attribute("columnName", true);
+    public static Attribute EXPRESSION = new Attribute("expression", true);
+    public static Attribute EXPRESSION_TYPE = new Attribute("expressionType", true);
+    public static Attribute CALCULATED_ON = new Attribute("calculatedOn", true);
 
     // autocomplete
     public static Attribute VALUE_PROPERTY = new Attribute("valueProperty");

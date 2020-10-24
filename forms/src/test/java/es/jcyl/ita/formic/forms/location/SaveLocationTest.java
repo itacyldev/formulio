@@ -28,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.util.ReflectionHelpers;
 
 import java.util.Arrays;
 
@@ -132,7 +131,7 @@ public class SaveLocationTest {
         DBPropertyType.DBPropertyTypeBuilder builder = new DBPropertyType.DBPropertyTypeBuilder("location", String.class, "TEXT", false);
         switch (how) {
             case CONTEXT:
-                builder.withContextExpression(expression, when).withConverter(new SQLiteStringConverter(String.class));
+                builder.withJexlExpresion(expression, when).withConverter(new SQLiteStringConverter(String.class));
                 break;
             case SQL_EXPRESSION:
                 builder.withSQLExpression(expression, when);

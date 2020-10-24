@@ -22,12 +22,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
 import es.jcyl.ita.formic.repo.source.EntitySource;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.repo.source.Source;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -123,10 +124,16 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
 
 
     private EntitySource createSource() {
+        String baseFolder = project.getBaseFolder();
         return new EntitySource() {
             @Override
             public String getSourceId() {
-                return project.getBaseFolder();
+                return baseFolder;
+            }
+
+            @Override
+            public Source getSource() {
+                return new Source(baseFolder, baseFolder, baseFolder);
             }
 
             @Override

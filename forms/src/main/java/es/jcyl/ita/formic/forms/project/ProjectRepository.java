@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
 import es.jcyl.ita.formic.repo.source.EntitySource;
+import es.jcyl.ita.formic.repo.source.Source;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -123,9 +124,16 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
 
     private EntitySource createSource() {
         return new EntitySource() {
+            String folderPath = baseFolder.getAbsolutePath();
+
             @Override
             public String getSourceId() {
-                return baseFolder.getAbsolutePath();
+                return folderPath;
+            }
+
+            @Override
+            public Source getSource() {
+                return new Source(folderPath, folderPath, folderPath);
             }
 
             @Override
@@ -150,8 +158,8 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     @Override
     public Project findById(String s) {
         List<Project> projects = this.listAll();
-        for(Project p: projects){
-            if(p.getName().equals(s.trim())){
+        for (Project p : projects) {
+            if (p.getName().equals(s.trim())) {
                 return p;
             }
         }

@@ -128,7 +128,7 @@ public class DBPropertyType extends PropertyType {
             return this;
         }
 
-        public DBPropertyTypeBuilder withContextExpression(String expression, CALC_MOMENT when) {
+        public DBPropertyTypeBuilder withJexlExpresion(String expression, CALC_MOMENT when) {
             this.property.calculated = true;
             this.property.contextExpression = expression;
             this.property.calculateBy = CALC_METHOD.CONTEXT;

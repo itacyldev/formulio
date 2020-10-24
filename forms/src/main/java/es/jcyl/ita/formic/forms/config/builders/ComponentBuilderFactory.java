@@ -32,6 +32,7 @@ import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBu
 import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIColumnBuilder;
@@ -43,6 +44,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UISelectBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.ValidatorBuilder;
 import es.jcyl.ita.formic.forms.config.elements.OptionsConfig;
+import es.jcyl.ita.formic.forms.config.elements.PropertyConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
@@ -92,6 +94,9 @@ public class ComponentBuilderFactory {
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
         registerBuilder("fileRepo", newBuilder(FileRepoBuilder.class, "fileRepo"));
+        registerBuilder("meta", newBuilder(RepoMetaConfigBuilder.class, "meta"));
+        registerBuilder("property", newDefaultBuilder(PropertyConfig.class, "property"));
+
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
