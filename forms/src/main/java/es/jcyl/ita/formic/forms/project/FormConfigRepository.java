@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
 import es.jcyl.ita.formic.repo.source.EntitySource;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

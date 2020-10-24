@@ -35,7 +35,7 @@ import java.util.List;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.dummy.DummyFormConfigReader;
 import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;

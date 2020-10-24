@@ -15,23 +15,28 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
+import android.util.Log;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.collections.CollectionUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
+import java.util.List;
 
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
-import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
-import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+
+import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
 
 /**
  * <Your description here>
@@ -48,23 +53,35 @@ public class RepoMetaConfigBuilderTest {
 
     @BeforeClass
     public static void setUp() {
-        Config config = Config.init("");
-        String projectPath = "src/test/resources/config/project1";
-        mainProject = ProjectRepository.createFromFolder(new File(projectPath));
+        Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
-        config.setCurrentProject(mainProject);
-
+        confConverter.init();
         // register repos
-        RepositoryUtils.registerMock("contacts");
+        DevConsole.setLevel(Log.DEBUG);
     }
 
     private static final String XML_TEST_BASIC = "<repo id=\"test1\" dbFile=\"dbTest.sqlite\" " +
             "id=\"superHRepo\" dbTable=\"superheroes\" properties=\"name,age\"/>";
 
     @Test
-    public void testBasicFileRepo() throws Exception {
-        String xml = XmlConfigUtils.createEditForm(XML_TEST_BASIC);
-        FormConfig formConfig = XmlConfigUtils.readFormConfig(mainProject,xml);
+    public void test1() throws Exception {
+        File baseFolder = TestUtils.findFile("config");
+        Config.init(baseFolder.getAbsolutePath());
+        Config config = Config.getInstance();
+
+        ProjectRepository projectRepo = config.getProjectRepo();
+        Assert.assertNotNull(projectRepo);
+        List<Project> projectList = projectRepo.listAll();
+
+        Assert.assertTrue(CollectionUtils.isNotEmpty(projectList));
+        Project prj = projectList.get(0);
+        prj.open();
+        assertEquals("project1", prj.getName());
+        Assert.assertTrue(CollectionUtils.isNotEmpty(prj.getConfigFiles()));
+        // read config and check repositories and forms
+
+        config.setCurrentProject(prj);
+
         Repository repo = repoFactory.getRepo("superHRepo");
         Assert.assertNotNull(repo);
         Assert.assertEquals(2,repo.getMeta().getProperties().length);

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.repo;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -22,6 +22,8 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
@@ -61,7 +63,7 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
             properties = meta.getProperties();
         }
         // get nested property definition
-        List<ConfigNode> prpList = UIBuilderHelper.findChildrenByTag(node, "property");
+        List<ConfigNode> prpList = BuilderHelper.findChildrenByTag(node, "property");
         DBTableEntitySource source = (DBTableEntitySource) repo.getSource();
         if (prpList != null) {
             // contains final property list

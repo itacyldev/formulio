@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.form.UIForm;

@@ -22,9 +22,9 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.forms.config.builders.ui.UIBuilderHelper;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
@@ -63,7 +63,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         }else{
             setupChildrenIds(formConfig, "edit", edits);
         }
-        UIBuilderHelper.addDefaultRepoNode(node);
+        BuilderHelper.addDefaultRepoNode(node);
     }
 
     private ConfigNode addDefaultNode(FormConfig formConfig, ConfigNode node, String tag) {

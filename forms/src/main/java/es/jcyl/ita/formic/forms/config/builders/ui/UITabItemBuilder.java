@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
  */
 
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.forms.components.tab.UITabItem;
@@ -33,7 +34,7 @@ public class UITabItemBuilder extends UIGroupComponentBuilder<UITabItem> {
     protected void setupOnSubtreeStarts(ConfigNode<UITabItem> node) {
         // Add config node for all the properties defined in the properties attribute
         ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
-        Repository repo = (Repository) UIBuilderHelper.getElementValue(ascendant.getElement(), "repo");
+        Repository repo = (Repository) BuilderHelper.getElementValue(ascendant.getElement(), "repo");
         addNodesFromPropertiesAtt(node, repo);
     }
 }

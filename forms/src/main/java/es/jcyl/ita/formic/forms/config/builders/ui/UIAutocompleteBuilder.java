@@ -19,6 +19,7 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
@@ -42,7 +43,7 @@ public class UIAutocompleteBuilder extends BaseUIComponentBuilder<UIAutoComplete
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIAutoComplete> node) {
-        UIBuilderHelper.setUpValueExpressionType(node);
+        BuilderHelper.setUpValueExpressionType(node);
 
         UIAutoComplete element = node.getElement();
         // attach nested options

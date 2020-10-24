@@ -24,6 +24,7 @@ import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
@@ -50,14 +51,14 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
     protected void setupOnSubtreeStarts(ConfigNode<E> node) {
         Repository repo = null;
         if (node.getElement() instanceof UIForm) {
-            UIBuilderHelper.setUpRepo(node, true);
+            BuilderHelper.setUpRepo(node, true);
             // Add a child node for all the properties defined in the properties attribute
             repo = ((UIForm) node.getElement()).getRepo();
         }
 
         if (repo == null) {
             ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
-            repo = (Repository) UIBuilderHelper.getElementValue(ascendant.getElement(), "repo");
+            repo = (Repository) BuilderHelper.getElementValue(ascendant.getElement(), "repo");
         }
 
         addNodesFromPropertiesAtt(node, repo);
@@ -69,12 +70,12 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
      */
     protected void addNodesFromPropertiesAtt(ConfigNode<E> root, Repository repo) {
         // get the existing properties in the repo
-        String[] propertyNames = UIBuilderHelper.getEffectiveAttributeProperties(repo, root);
+        String[] propertyNames = BuilderHelper.getEffectiveAttributeProperties(repo, root);
 
         PropertyType[] properties;
 
         if (CollectionUtils.isEmpty(root.getChildren()) && ArrayUtils.isEmpty(propertyNames) || !ArrayUtils.isEmpty(propertyNames)) {
-            properties = UIBuilderHelper.getPropertiesFromRepo(repo, propertyNames);
+            properties = BuilderHelper.getPropertiesFromRepo(repo, propertyNames);
             for (PropertyType property : properties) {
                 ConfigNode<UIInputComponent> node = createNode(property);
                 root.addChild(node);

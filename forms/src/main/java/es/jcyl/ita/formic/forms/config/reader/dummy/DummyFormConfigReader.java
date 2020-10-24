@@ -9,7 +9,7 @@ import java.util.Random;
 
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.EditableRepository;

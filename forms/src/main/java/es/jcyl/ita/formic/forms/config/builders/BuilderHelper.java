@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders.ui;
+package es.jcyl.ita.formic.forms.config.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -40,7 +40,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * Helper class that sets UIComponent common attributes
  */
-public class UIBuilderHelper {
+public class BuilderHelper {
     private static PropertyUtilsBean propUtils = BeanUtilsBean.getInstance().getPropertyUtils();
 
     public static void setUpRepo(ConfigNode node, boolean mandatory) {

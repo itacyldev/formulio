@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.forms.config.builders.ui.UIBuilderHelper;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
@@ -75,15 +75,15 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
         // if no nested repo defined, inherit attribute from parent
         if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
-            UIBuilderHelper.inheritAttribute(node, "repo");
+            BuilderHelper.inheritAttribute(node, "repo");
         }
         createDefaultSelector(node);
         // setup actions must be configured at start of he subtree, so the can be
         // used by nested elements to configure themselves if needed
         createDefaultActionNodes(node);
-        UIBuilderHelper.addDefaultRepoNode(node);
+        BuilderHelper.addDefaultRepoNode(node);
         // if no repo configuration is defined, use parent
-        UIBuilderHelper.setUpRepo(node, true);
+        BuilderHelper.setUpRepo(node, true);
     }
 
     /**

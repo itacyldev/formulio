@@ -24,7 +24,7 @@ import java.io.File;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.forms.config.builders.ui.UIBuilderHelper;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
@@ -88,14 +88,14 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
             return;
         } else if (!parent.hasAttribute("repo")) {
             parent.setAttribute("repo", repo.getId());
-            UIBuilderHelper.setElementValue(parent.getElement(), "repo", repo);
+            BuilderHelper.setElementValue(parent.getElement(), "repo", repo);
         }
     }
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
         // check if threre's a meta configuration to override the default
-        ConfigNode<Object> meta = UIBuilderHelper.findNodeByTag(node, "meta");
+        ConfigNode<Object> meta = BuilderHelper.findNodeByTag(node, "meta");
         if (meta == null) {
             return;
         }

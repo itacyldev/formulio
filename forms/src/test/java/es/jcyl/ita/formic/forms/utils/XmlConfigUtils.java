@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;

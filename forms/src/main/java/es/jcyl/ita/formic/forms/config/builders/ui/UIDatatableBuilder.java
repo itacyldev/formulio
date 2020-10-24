@@ -27,6 +27,7 @@ import java.util.Set;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
@@ -53,8 +54,8 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIDatatable> node) {
-//        UIBuilderHelper.inheritAttribute(node, "repo");
-        UIBuilderHelper.setUpRepo(node, true);
+//        BuilderHelper.inheritAttribute(node, "repo");
+        BuilderHelper.setUpRepo(node, true);
     }
 
     @Override
@@ -168,7 +169,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         List<UIColumn> lstCols = new ArrayList<>();
 
         PropertyType[] properties;
-        properties = UIBuilderHelper.getPropertiesFromRepo(repo, propertyNames);
+        properties = BuilderHelper.getPropertiesFromRepo(repo, propertyNames);
         for (PropertyType property : properties) {
             UIColumn col = createColumn(property);
             lstCols.add(col);

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config;
+package es.jcyl.ita.formic.forms.config.elements;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

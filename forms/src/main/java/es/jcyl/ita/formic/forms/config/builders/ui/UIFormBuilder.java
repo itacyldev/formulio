@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.forms.repo.EntityRelation;
@@ -34,7 +35,7 @@ public class UIFormBuilder extends UIGroupComponentBuilder<UIForm> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIForm> node) {
-        UIBuilderHelper.setUpRepo(node, true);
+        BuilderHelper.setUpRepo(node, true);
 
         // Add a child node for all the properties defined in the properties attribute
         Repository repo = node.getElement().getRepo();

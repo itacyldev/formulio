@@ -21,9 +21,8 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;

@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.validation.Validator;
@@ -65,7 +66,7 @@ public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIField> node) {
-        UIBuilderHelper.setUpValueExpressionType(node);
+        BuilderHelper.setUpValueExpressionType(node);
 
         Validator[] validators = ConfigNodeHelper.getValidators(node);
         node.getElement().addValidator(validators);
@@ -73,7 +74,7 @@ public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
 
     private void addValidatorNode(ConfigNode<UIField> root, String[] validators) {
         for (String validator : validators) {
-            if (!UIBuilderHelper.isValidatorIncluded(validator, root)) {
+            if (!BuilderHelper.isValidatorIncluded(validator, root)) {
                 ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
                 validatorNode.setAttribute("type", validator);
                 root.addChild(validatorNode);
