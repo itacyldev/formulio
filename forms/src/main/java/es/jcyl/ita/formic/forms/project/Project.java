@@ -131,7 +131,7 @@ public class Project extends Entity {
                     }
                     if (type == null) {
                         DevConsole.warn("Unknown file name while reading configuration, " +
-                                "skipped! : " + confFile.getAbsolutePath())
+                                "skipped! : " + confFile.getAbsolutePath());
                     } else {
                         files.add(new ProjectResource(this, confFile, type));
                     }
