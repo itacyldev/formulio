@@ -73,8 +73,9 @@ public class SelectRendererTest {
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
 
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         UISelect select = new UISelect();
@@ -101,8 +102,9 @@ public class SelectRendererTest {
 
     @Test
     public void testNotVisibleSelect() {
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         UISelect select = new UISelect();
@@ -116,8 +118,9 @@ public class SelectRendererTest {
 
     @Test
     public void fieldLabelRendererTest() {
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         UIField field = new UIField();

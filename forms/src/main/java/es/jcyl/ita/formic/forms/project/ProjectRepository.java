@@ -149,6 +149,12 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
 
     @Override
     public Project findById(String s) {
+        List<Project> projects = this.listAll();
+        for(Project p: projects){
+            if(p.getName().equals(s.trim())){
+                return p;
+            }
+        }
         return null;
     }
 

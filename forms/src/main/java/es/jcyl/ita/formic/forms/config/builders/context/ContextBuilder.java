@@ -32,9 +32,6 @@ public class ContextBuilder implements ComponentBuilder<CompositeContext> {
     public CompositeContext build(ConfigNode<CompositeContext> node) {
         CompositeContext globalContext = Config.getInstance().getGlobalContext();
 
-        if (globalContext == null) {
-            globalContext = new UnPrefixedCompositeContext();
-        }
         // default context creation
         if (!globalContext.containsKey("date")) {
             globalContext.addContext(new DateTimeContext("date"));

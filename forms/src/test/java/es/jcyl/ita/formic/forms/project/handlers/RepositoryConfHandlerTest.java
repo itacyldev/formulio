@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.project;
+package es.jcyl.ita.formic.forms.project.handlers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -26,6 +26,9 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 import java.nio.charset.Charset;
 
+import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.project.ProjectResource;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;

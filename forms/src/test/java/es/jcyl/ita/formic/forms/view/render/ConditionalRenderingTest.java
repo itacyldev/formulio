@@ -93,7 +93,8 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
@@ -134,7 +135,8 @@ public class ConditionalRenderingTest {
         field.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
@@ -178,7 +180,8 @@ public class ConditionalRenderingTest {
         field.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
@@ -226,7 +229,8 @@ public class ConditionalRenderingTest {
         form.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the

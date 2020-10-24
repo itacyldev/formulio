@@ -21,6 +21,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -34,7 +36,6 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.FormConfig;
-import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.dummy.DummyFormConfigReader;
 import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;
@@ -45,6 +46,7 @@ import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
 import es.jcyl.ita.formic.forms.project.handlers.FormConfigHandler;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 import static org.mockito.Mockito.mock;
 
@@ -122,11 +124,19 @@ public class TestXmlConfigReader {
         File file = TestUtils.findFile("config/formConfig.xml");
 
         FormConfigHandler handler = new FormConfigHandler();
-        handler.setFormConfigRepo(mock(FormConfigRepository.class));
+        FormConfigRepository mockFCRepo = mock(FormConfigRepository.class);
+
+        ArgumentCaptor<FormConfig> arg = ArgumentCaptor.forClass(FormConfig.class);
+
+
+        handler.setFormConfigRepo(mockFCRepo);
 
         Project p = ProjectRepository.createFromFolder(new File("."));
         ProjectResource resource = new ProjectResource(p, file, ProjectResource.ResourceType.FORM);
-        FormConfig formConfig = handler.handle(resource);
+        handler.handle(resource);
+        // get configuration
+        Mockito.verify(mockFCRepo).save(arg.capture());
+        FormConfig formConfig = arg.getValue();
 
         Assert.assertNotNull(formConfig);
         Assert.assertNotNull(formConfig.getList());

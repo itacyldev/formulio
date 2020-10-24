@@ -8,7 +8,7 @@ version = globalConf.version
 
 android {
     compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
+ranch    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId globalConf.applicationId

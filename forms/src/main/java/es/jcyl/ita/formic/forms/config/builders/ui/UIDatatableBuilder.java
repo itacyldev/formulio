@@ -47,7 +47,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
-    protected UIDatatableBuilder(String tagName) {
+    public UIDatatableBuilder(String tagName) {
         super(tagName, UIDatatable.class);
     }
 

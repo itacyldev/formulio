@@ -35,7 +35,9 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -94,13 +96,9 @@ public class MainController implements ContextAwareComponent {
         formControllerFactory = FormControllerFactory.getInstance();
         router = new Router(this);
         actionController = new ActionController(this, router);
+        renderingEnv = new RenderingEnv(actionController);
         flowManager = ReactivityFlowManager.getInstance();
         registerFormTypeViews();
-    }
-
-    private void init(CompositeContext context) {
-        globalContext = context;
-        renderingEnv = new RenderingEnv(globalContext, actionController);
     }
 
 
@@ -303,7 +301,7 @@ public class MainController implements ContextAwareComponent {
             throw new IllegalArgumentException(DevConsole.error("MainController needs an instance of CompositeContext to use it as GlobalContext."));
         }
         this.globalContext = (CompositeContext) ctx; // global context is received
-        this.init(globalContext);
+        renderingEnv.setGlobalContext(this.globalContext);
     }
 
 

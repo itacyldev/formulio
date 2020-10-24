@@ -125,10 +125,7 @@ public class ProjectConfigIntegrationTest {
         Config config = Config.init(baseFolder.getAbsolutePath());
         ProjectRepository projectRepo = config.getProjectRepo();
 
-        File projectFolder = TestUtils.findFile("config/project1");
-        Project prj = new Project(projectRepo.getSource(), projectRepo.getMeta());
-        prj.setBaseFolder(projectFolder.getAbsolutePath());
-
+        Project prj = projectRepo.findById("project1");
         Config.getInstance().setCurrentProject(prj);
 
         FormConfigRepository formConfigRepo = config.getFormConfigRepo();

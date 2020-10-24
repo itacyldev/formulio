@@ -29,6 +29,16 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
@@ -37,16 +47,6 @@ import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
-import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -86,7 +86,8 @@ public class FormContextTest {
 
         // configure the context as the MainController would do during navigation
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(gCtx, null);
+        RenderingEnv env = new RenderingEnv(null);
+        env.setGlobalContext(gCtx);
 
         // create form using entity meta to define UIFields
         UIForm form = formBuilder.withMeta(meta).withRandomData().build();
@@ -136,7 +137,8 @@ public class FormContextTest {
 
         // configure the context as the MainController would do
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(gCtx, null);
+        RenderingEnv env = new RenderingEnv(null);
+        env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
         // create a mock repository, set to form and load the entity

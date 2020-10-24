@@ -69,7 +69,8 @@ public class AutocompleteStaticViewConverterTest {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
         ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        RenderingEnv env = new RenderingEnv(mockAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         String[] options = RandomUtils.randomObjectArray(5, String.class);

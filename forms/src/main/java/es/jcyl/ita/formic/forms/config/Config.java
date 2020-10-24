@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.config;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.location.Location;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -30,9 +31,13 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
+import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
+import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.handlers.ContextConfigHandler;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
@@ -47,9 +52,9 @@ import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * Configuration initializer and common point to store and share configuration parameters.
  * <p>
- * Configuration initializer and commons point to store and share configuration parameters.
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class Config {
     private static Config _instance;
@@ -114,6 +119,8 @@ public class Config {
 
     private void init() {
         if (!configLoaded) {
+            // initialize global context and set to ContextAware components
+            initContext();
             // customize data type converters
             ConfigConverters confConverter = new ConfigConverters();
             confConverter.init();
@@ -122,6 +129,16 @@ public class Config {
             registerHandlers();
             configLoaded = true;
         }
+    }
+
+    /**
+     * Create globalContext and set it to all ContextAwareComponents
+     * //TODO: manage with dependency injection
+     */
+    private void initContext() {
+        globalContext = new UnPrefixedCompositeContext();
+        MainController.getInstance().setContext(globalContext);
+        RepositoryFactory.getInstance().setContext(globalContext);
     }
 
     private void clear() {
@@ -180,8 +197,13 @@ public class Config {
     }
 
     private void processDefaultResources() {
-        Resources res = this.andContext.getResources();
-        XmlResourceParser xrp = res.getXml(R.xml.context);
+        if(this.andContext== null){
+            // avoid reading default resources
+            return;
+        }
+        // TODO: configure context and default sync properties in XML in res folder
+        this.globalContext.put("location", new LocationService(this.andContext));
+        this.globalContext.put("date", new DateTimeContext());
     }
 
     private static final ProjectResource.ResourceType[] RESOURCE_ORDER =
@@ -255,7 +277,7 @@ public class Config {
             readConfig(project);
             debugConfig();
         } catch (Exception e) {
-            DevConsole.error("Error while trying to open project.", e);
+            throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e),e);
         }
     }
 

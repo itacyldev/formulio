@@ -35,7 +35,6 @@ import java.util.Arrays;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.LocationContext;
 import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -87,7 +86,7 @@ public class SaveLocationTest {
         // Create calculated property for the location
         EntityMeta meta = dbBuilder.createRandomMeta();
         DBPropertyType[] props = (DBPropertyType[]) meta.getProperties();
-        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, CONTEXT, "${location.stringLocation}");
+        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, CONTEXT, "${location.asString}");
 
         // Add location property to meta
         props = Arrays.copyOf(props, props.length + 1);
@@ -119,16 +118,12 @@ public class SaveLocationTest {
     }
 
     private CompositeContext createContext() {
-        LocationService locationService = LocationService.getInstance();
-        locationService.init(ctx);
-        ReflectionHelpers.setField(locationService, "locationManager", mockLocationManager);
-
-        LocationContext locationContext = new LocationContext("location");
-        locationContext.setLocationService(locationService);
+        LocationService locationService = new LocationService(ctx);
+        locationService.setLocationManager(mockLocationManager);
 
         CompositeContext globalContext = new UnPrefixedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
-        globalContext.put("location", locationContext);
+        globalContext.put("location", locationService);
 
         return globalContext;
     }

@@ -54,10 +54,14 @@ public class ContextConfigHandler extends AbstractProjectResourceHandler {
         return context;
     }
 
-    private void register(CompositeContext globalContext) {
-        Config.getInstance().setGlobalContext(globalContext);
-        MainController.getInstance().setContext(globalContext);
-        RepositoryFactory.getInstance().setContext(globalContext);
+    /**
+     * Register new contexts from config in the global context
+     * @param contextMod
+     */
+    private void register(CompositeContext contextMod) {
+        // put all
+        CompositeContext globalCtx = Config.getInstance().getGlobalContext();
+        globalCtx.addAllContext(contextMod.getContexts());
     }
 
 }

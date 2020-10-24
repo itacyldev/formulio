@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.forms.components.column.UIColumnFilter;
  */
 public class UIColumnBuilder extends BaseUIComponentBuilder<UIColumn> {
 
-    protected UIColumnBuilder(String tagName) {
+    public UIColumnBuilder(String tagName) {
         super(tagName, UIColumn.class);
     }
 
