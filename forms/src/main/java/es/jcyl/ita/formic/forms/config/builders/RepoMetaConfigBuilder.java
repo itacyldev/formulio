@@ -15,152 +15,123 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
-import android.database.sqlite.SQLiteDatabase;
-
 import org.apache.commons.lang3.StringUtils;
-import org.greenrobot.greendao.database.StandardDatabase;
 
-import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
-import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.builders.EntitySourceBuilder;
-import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
-import es.jcyl.ita.formic.repo.db.builders.SQLiteGreenDAORepoBuilder;
+import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
-import es.jcyl.ita.formic.repo.db.sqlite.greendao.EntityDaoConfig;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.SQLiteMetaModeler;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.meta.MetaModeler;
-import es.jcyl.ita.formic.repo.source.EntitySource;
-import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
-import es.jcyl.ita.formic.repo.source.Source;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 
 /**
+ * Creates EntityMeta object from XML configuration
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
+public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> {
 
-    public RepoConfigBuilder(String tagName) {
-        super(tagName, RepoConfig.class);
+    public RepoMetaConfigBuilder() {
+        super("meta", EntityMeta.class);
     }
 
     @Override
-    protected void doWithAttribute(RepoConfig element, String name, String value) {
-
-    }
-
-    @Override
-    protected void setupOnSubtreeStarts(ConfigNode<RepoConfig> node) {
-        // check if there a direct repository definition with dbFile and dbTable attributes
-        RepoConfig element = node.getElement();
-        String dbFile = element.getDbFile();
-        String dbTable = element.getDbTable();
-        boolean isDbFileSet = StringUtils.isNotBlank(dbFile);
-        boolean isTableNameSet = StringUtils.isNotBlank(dbTable);
-
-        Repository repo = null;
-        if (isDbFileSet ^ isTableNameSet) {
-            throw new ConfigurationException(error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                    "must be set in tag ${tag} id [%s].", element.getId())));
-        } else if (isDbFileSet && isTableNameSet) {
-            // try to create a repository from current configuration
-            try {
-                repo = createFromFile(element.getId(), dbFile, dbTable);
-            } catch (Exception e) {
-                throw new ConfigurationException(error(String.format("An error occurred while trying to create SQLite " +
-                                "repo with table [%s] in dbFile [%s] referenced in configuration file [${file}] with id [%s].",
-                        dbTable, dbFile, element.getId())), e);
-            }
+    protected void setupOnSubtreeStarts(ConfigNode<EntityMeta> node) {
+        // get current repo source
+        Object obj = node.getParent().getElement();
+        if (!(obj instanceof RepoConfig)) {
+            throw new ConfigurationException(DevConsole.error("The <meta/> element must be nested" +
+                    " directly under a <repo/> element. Error found in file ${file}."));
         }
+        RepoConfig repoConfig = (RepoConfig) obj;
+        Repository repo = getFactory().getRepoFactory().getRepo(repoConfig.getId());
+        EntityMeta meta = repo.getMeta();
 
-        // find first parent that admits "repo" attribute and if doesn't have a repo already defined by
-        // attribute "repo", set current repo to it
-        ConfigNode parent = findRepoParent(node);
-        if (parent == null) {
-            return;
-        } else if (!parent.hasAttribute("repo")) {
-            parent.setAttribute("repo", repo.getId());
-            UIBuilderHelper.setElementValue(parent.getElement(), "repo", repo);
-        }
-    }
-
-    @Override
-    protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
-        // check if threre's a meta configuration to override the default
-        ConfigNode<Object> meta = UIBuilderHelper.findNodeByTag(node, "meta");
-        if (meta == null) {
-            return;
-        }
-    }
-
-    /**
-     * Finds first parent element that supports "repo" attribute
-     *
-     * @param node
-     * @return
-     */
-    private ConfigNode findRepoParent(ConfigNode<RepoConfig> node) {
-        ConfigNode parent = node.getParent();
-        if (parent == null) {
-            return null;
+        PropertyType[] properties;
+        if (node.hasAttribute("properties")) {
+            properties = filterProperties(meta, node.getAttribute("properties"));
         } else {
-            while (parent != null) {
-                if (TagDef.supportsAttribute(parent.getName(), "repo")) {
-                    return parent;
-                }
-                parent = parent.getParent();
+            properties = meta.getProperties();
+        }
+        // get nested property definition
+        List<ConfigNode> prpList = UIBuilderHelper.findChildrenByTag(node, "property");
+        DBTableEntitySource source = (DBTableEntitySource) repo.getSource();
+        if (prpList != null) {
+            // contains final property list
+            List<PropertyType> lstProps = Arrays.asList(properties);
+            SQLiteMetaModeler modeler = new SQLiteMetaModeler();
+            for (ConfigNode propNode : prpList) {
+                DBPropertyType dbProperty = modeler.createPropertyFromColumnDef(propNode.getAttribute("columnName"),
+                        propNode.getAttribute("type"), false, false, source);
+                // if exists remove from list, otherwise add
+                addOrUpdate(lstProps, dbProperty);
             }
-            return null;
+            // set effective properties to entity-meta
+            meta.setProperties(lstProps.toArray(new PropertyType[lstProps.size()]));
         }
     }
 
+    private void addOrUpdate(List<PropertyType> lstProps, DBPropertyType dbProperty) {
+        int i = 0;
+        for (PropertyType p : lstProps) {
+            if (p.name.equalsIgnoreCase(dbProperty.name)) {
+                lstProps.add(i, dbProperty);
+                return;
+            }
+            i++;
+        }
+        // add
+        lstProps.add(dbProperty);
+    }
 
     /**
-     * @param filePath
-     * @param tableName
+     * Selects the entity properties to be used based on the attribute "properties" of the tag
+     * <meta/>.
+     *
+     * @param meta
+     * @param filter : emtpy, * or all, returs all the properties. Otherwise, the attribute is
+     *               interpreted as a comma-separated list of property names.
      * @return
      */
-    public Repository createFromFile(String entityId, String filePath, String tableName) {
-        EntitySourceFactory sourceFactory = getFactory().getSourceFactory();
-        File dbFile = new File(filePath);
-        if (!dbFile.exists()) {
-            throw new ConfigurationException(error(String.format("File doesn't exists [%s] " +
-                    "referenced in ${file}", filePath)));
+    private PropertyType[] filterProperties(EntityMeta meta, String filter) {
+        if (StringUtils.isBlank(filter) || filter.equalsIgnoreCase("all")
+                || filter.equalsIgnoreCase("*")) {
+            return meta.getProperties();
         }
-        // check if exists another repository against that source
-        String absPath = dbFile.getAbsolutePath();
-        Source source = sourceFactory.getSource(absPath);
-        if (source == null) {
-            SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
-            // use absolute path as source Id
-            source = new Source<>(absPath, absPath, new StandardDatabase(sqDb));
-            sourceFactory.registerSource(source);
+        String[] splits = filter.trim().split(",");
+        if (splits.length == 0) {
+            throw new ConfigurationException(DevConsole.error("The <meta properties=\"\"/> " +
+                    "attribute must contain the property names separated by comma. Found: " + filter
+                    + ". Error found in file ${file}."));
         }
+        PropertyType[] filtered = new PropertyType[splits.length];
+        int i = 0;
+        for (String prop : splits) {
+            PropertyType property = meta.getPropertyByName(prop);
+            if (property == null) {
+                throw new ConfigurationException(DevConsole.error(String.format("The property %s " +
+                        "doesn't exists" +
+                        " in the repository entity. Error found in file ${file}.", prop)));
+            }
+            filtered[i] = property;
+        }
+        return filtered;
+    }
 
-        // create entity source
-        EntitySource eSource = sourceFactory.getEntitySource(entityId);
-        if (eSource == null) {
-            EntitySourceBuilder builder;
-            builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, source);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, tableName);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, entityId);
-            eSource = builder.build();
-        }
+    @Override
+    protected void setupOnSubtreeEnds(ConfigNode<EntityMeta> node) {
 
-        // create repository
-        MetaModeler metaModeler = new SQLiteMetaModeler();
-        EntityMeta meta = metaModeler.readFromSource(eSource);
-        EntityDaoConfig conf = new EntityDaoConfig(meta, (DBTableEntitySource) eSource);
-        RepositoryBuilder builder = getFactory().getRepoFactory().getBuilder(eSource);
-        builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
-        return builder.build();
+    }
+
+    @Override
+    protected void doWithAttribute(EntityMeta element, String name, String value) {
     }
 
 

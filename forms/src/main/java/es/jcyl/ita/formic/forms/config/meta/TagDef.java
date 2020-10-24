@@ -112,6 +112,8 @@ public class TagDef {
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
+
+        register("param", define(base, new Attribute[]{NAME, VALUE}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

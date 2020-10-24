@@ -95,7 +95,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
      * @param source
      * @return
      */
-    protected DBPropertyType createPropertyFromColumnDef(String name, String type,
+    public DBPropertyType createPropertyFromColumnDef(String name, String type,
                                                          boolean isNotNull, boolean isPk,
                                                          DBTableEntitySource source) {
         SQLiteType dbType = SQLiteType.getType(type);
