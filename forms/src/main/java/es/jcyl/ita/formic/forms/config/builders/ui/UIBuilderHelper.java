@@ -24,15 +24,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.meta.PropertyType;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -289,5 +289,52 @@ public class UIBuilderHelper {
         return node;
     }
 
+    /**
+     * Finds a child node of the given tagName
+     *
+     * @param root
+     * @param tagName
+     * @return
+     */
+    public static <T> ConfigNode<T> findNodeByTag(ConfigNode root, String tagName) {
+        ConfigNode<T> node = null;
 
+        List<ConfigNode> children = root.getChildren();
+        if (children != null) {
+            for (ConfigNode child : children) {
+                if (child.getName().equalsIgnoreCase(tagName)) {
+                    node = child;
+                    break;
+                }
+            }
+        }
+        return node;
+    }
+
+
+    /**
+     * Find all nested elements from the given one that has the specified tagName
+     *
+     * @param root
+     * @param tagName
+     * @return
+     */
+    public static List<ConfigNode> findChildrenByTag(ConfigNode root, String tagName) {
+        List<ConfigNode> lst = new ArrayList<>();
+        _findByTagName(root, tagName, lst);
+        return lst;
+    }
+
+
+    private static void _findByTagName(ConfigNode root, String tagName, List<ConfigNode> output) {
+        if (!root.hasChildren()) {
+            return;
+        } else {
+            List<ConfigNode> children = root.getChildren();
+            for (ConfigNode kid : children) {
+                _findByTagName(kid, tagName, output);
+            }
+            return;
+        }
+    }
 }

@@ -36,8 +36,6 @@ public abstract class SQLitePropertyConverter implements PropertyConverter<SQLit
         this.javaType = javaType;
     }
 
-
-
     public SQLiteType persistenceType() {
         return this.dbType;
     }

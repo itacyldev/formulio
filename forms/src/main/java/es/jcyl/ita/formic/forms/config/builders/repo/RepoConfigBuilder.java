@@ -77,7 +77,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
             } catch (Exception e) {
                 throw new ConfigurationException(error(String.format("An error occurred while trying to create SQLite " +
                                 "repo with table [%s] in dbFile [%s] referenced in configuration file [${file}] with id [%s].",
-                        dbTable, dbFile, element.getId())),e);
+                        dbTable, dbFile, element.getId())), e);
             }
         }
 
@@ -94,7 +94,11 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
-
+        // check if threre's a meta configuration to override the default
+        ConfigNode<Object> meta = UIBuilderHelper.findNodeByTag(node, "meta");
+        if (meta == null) {
+            return;
+        }
     }
 
     /**

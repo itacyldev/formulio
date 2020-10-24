@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.repo.config.builders;
+package es.jcyl.ita.formic.forms.config.builders;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -38,6 +38,7 @@ import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
  */
 @RunWith(RobolectricTestRunner.class)
 public class FileRepoBuilderTest {
+    private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
     @BeforeClass
     public static void setUp() {
@@ -51,9 +52,6 @@ public class FileRepoBuilderTest {
         // register repos
         RepositoryUtils.registerMock("contacts");
     }
-
-    private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-
 
     private static final String XML_TEST_BASIC = "<fileRepo id=\"fileRepo1\" folder=\".\"/>";
 
