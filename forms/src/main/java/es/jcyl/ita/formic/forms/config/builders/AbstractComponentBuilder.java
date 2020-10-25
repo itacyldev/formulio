@@ -96,11 +96,11 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         for (Map.Entry<String, String> entry : attributes.entrySet()) {
             String attName = entry.getKey();
             try {
-                Attribute attribute = this.attributeDefs.get(attName);
+                Attribute attribute = this.attributeDefs.get(attName.toUpperCase());
                 if (attribute == null) {
                     error(String.format("Invalid attribute found in tag <%s/>: [%s].", node.getName(), attName));
                 } else if (attribute.assignable) {
-                    String setter = (attribute.setter == null) ? attName : attribute.setter;
+                    String setter = (attribute.setter == null) ? attribute.name : attribute.setter;
                     Object value;
                     if (attribute.resolver == null) {
                         // convert value if needed

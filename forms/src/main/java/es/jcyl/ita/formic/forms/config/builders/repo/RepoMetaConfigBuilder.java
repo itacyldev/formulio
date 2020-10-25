@@ -102,7 +102,7 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
                 }
                 DBPropertyType dbProperty = modeler.createPropertyFromColumnDef(propConfig.getName(), columnName,
                         type, dbType, propConfig.getExpression(), propConfig.getExpressionType(),
-                        propConfig.getEvaluatedOn());
+                        propConfig.getEvalOn());
                 // if exists remove from list, otherwise add
                 addOrUpdate(lstProps, dbProperty);
             }

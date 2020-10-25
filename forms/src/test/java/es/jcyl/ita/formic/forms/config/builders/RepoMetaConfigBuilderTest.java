@@ -91,7 +91,7 @@ public class RepoMetaConfigBuilderTest {
 
         Repository repo = repoFactory.getRepo("superHRepo");
         Assert.assertNotNull(repo);
-        Assert.assertEquals(7, repo.getMeta().getProperties().length);
+        Assert.assertEquals(9, repo.getMeta().getProperties().length);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class RepoMetaConfigBuilderTest {
         Project p = prjRepo.createFromFolder(dataFolder);
 
         // Act: define and read XML
-        String metaTag = "<meta properties=\"name,age\"/>";
+        String metaTag = "<meta properties=\"name,real_name\"/>";
         String xml = XmlConfigUtils.createMainList(String.format(XML_TEST_BASIC, metaTag));
         XmlConfigUtils.readFormConfig(p, xml);
 
@@ -110,7 +110,7 @@ public class RepoMetaConfigBuilderTest {
         Assert.assertNotNull(repo);
         Assert.assertEquals(2, repo.getMeta().getProperties().length);
         Assert.assertNotNull(repo.getMeta().getPropertyByName("name"));
-        Assert.assertNotNull(repo.getMeta().getPropertyByName("age"));
+        Assert.assertNotNull(repo.getMeta().getPropertyByName("real_name"));
     }
 
     @Test
@@ -122,9 +122,9 @@ public class RepoMetaConfigBuilderTest {
 
         // Act: define and read XML
         String metaTag = "<meta properties=\"name,age\">" +
-                "<property name=\"age\" columnName=\"age\" converter=\"float\"/>" +
                 "<property name=\"real_identity\" columnName=\"real_name\"/>" +
                 "<property name=\"real_identitie\" columnName=\"real_name\" converter=\"string\"/>" +
+                "<property name=\"age\" columnName=\"age\" converter=\"float\"/>" +
                 "</meta>";
         String xml = XmlConfigUtils.createMainList(String.format(XML_TEST_BASIC, metaTag));
         XmlConfigUtils.readFormConfig(p, xml);

@@ -61,7 +61,6 @@ public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
             String[] validators = validatorSelector.replace(" ", "").split(",");
             addValidatorNode(node, validators);
         }
-
     }
 
     @Override

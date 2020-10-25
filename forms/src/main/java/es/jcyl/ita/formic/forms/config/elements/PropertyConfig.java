@@ -26,7 +26,7 @@ public class PropertyConfig {
     private String valueConverter;
     private String expression;
     private String expressionType; // jexl/sql
-    private String evaluatedOn;//insert/update/select
+    private String evalOn;//insert/update/select
 
 
     public String getName() {
@@ -61,16 +61,16 @@ public class PropertyConfig {
         this.expressionType = expressionType;
     }
 
-    public String getEvaluatedOn() {
-        return evaluatedOn;
+    public String getEvalOn() {
+        return evalOn;
     }
 
-    public void setEvaluatedOn(String evaluatedOn) {
-        this.evaluatedOn = evaluatedOn;
+    public void setEvalOn(String evalOn) {
+        this.evalOn = evalOn;
     }
 
     public boolean isCalculatedOnSelect() {
-        return StringUtils.isBlank(evaluatedOn) ? false : evaluatedOn.equalsIgnoreCase("select");
+        return StringUtils.isBlank(evalOn) ? false : evalOn.equalsIgnoreCase("select");
     }
 
     public String getValueConverter() {

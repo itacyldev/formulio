@@ -28,7 +28,7 @@ public class AttributeDef {
     // common input fields
 //    public static Attribute TYPE = new Attribute("type", true);
     public static Attribute LABEL = new Attribute("label");
-    public static Attribute READONLY = new Attribute("readonly", Boolean.class);
+    public static Attribute READONLY = new Attribute("readOnly", Boolean.class);
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
     public static Attribute NAME = new Attribute("name");
@@ -48,6 +48,7 @@ public class AttributeDef {
     public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
     public static Attribute VALIDATOR = new Attribute("validator", String.class);
+    public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
 
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
@@ -62,7 +63,7 @@ public class AttributeDef {
     public static Attribute COLUMN_NAME = new Attribute("columnName", true);
     public static Attribute EXPRESSION = new Attribute("expression", true);
     public static Attribute EXPRESSION_TYPE = new Attribute("expressionType", true);
-    public static Attribute CALCULATED_ON = new Attribute("calculatedOn", true);
+    public static Attribute EVAL_ON = new Attribute("evalOn", true);
 
     // autocomplete
     public static Attribute VALUE_PROPERTY = new Attribute("valueProperty");

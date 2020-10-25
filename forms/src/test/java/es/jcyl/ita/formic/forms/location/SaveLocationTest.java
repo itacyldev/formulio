@@ -40,10 +40,10 @@ import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.sqlite.SQLiteRepository;
-import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteStringConverter;
+import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteTextConverter;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
-import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD.CONTEXT;
+import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD.JEXL;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.INSERT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -85,7 +85,7 @@ public class SaveLocationTest {
         // Create calculated property for the location
         EntityMeta meta = dbBuilder.createRandomMeta();
         DBPropertyType[] props = (DBPropertyType[]) meta.getProperties();
-        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, CONTEXT, "${location.asString}");
+        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, JEXL, "${location.asString}");
 
         // Add location property to meta
         props = Arrays.copyOf(props, props.length + 1);
@@ -130,10 +130,10 @@ public class SaveLocationTest {
     private DBPropertyType createLocationProperty(DBPropertyType property, DBPropertyType.CALC_MOMENT when, DBPropertyType.CALC_METHOD how, String expression) {
         DBPropertyType.DBPropertyTypeBuilder builder = new DBPropertyType.DBPropertyTypeBuilder("location", String.class, "TEXT", false);
         switch (how) {
-            case CONTEXT:
-                builder.withJexlExpresion(expression, when).withConverter(new SQLiteStringConverter(String.class));
+            case JEXL:
+                builder.withJexlExpresion(expression, when).withConverter(new SQLiteTextConverter(String.class));
                 break;
-            case SQL_EXPRESSION:
+            case SQL:
                 builder.withSQLExpression(expression, when);
         }
         return builder.build();

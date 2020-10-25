@@ -24,7 +24,6 @@ import es.jcyl.ita.formic.repo.converter.ConverterFactory;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.meta.types.Geometry;
-import es.jcyl.ita.formic.repo.util.TypeUtils;
 
 import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.BLOB;
 import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.INTEGER;
@@ -58,7 +57,7 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
 
     @Override
     public SQLitePropertyConverter getConverter(Class javaType, SQLiteType dbType) {
-        String key = String.format("%s-%s".format(javaType.getClass().getCanonicalName(), dbType.name()));
+        String key = String.format("%s-%s", javaType.getCanonicalName(), dbType.name());
 
         if (!this.converters.containsKey(key)) {
             SQLitePropertyConverter converter = defaultDBConverters.get(dbType);
@@ -99,7 +98,7 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
     private void initDefaultConverters() {
         this.defaultConverters = new HashMap<>();
         //TODO. subclass converters to get more robust java to db transformations
-        this.defaultConverters.put(String.class, new SQLiteStringConverter(String.class));
+        this.defaultConverters.put(String.class, new SQLiteTextConverter(String.class));
         this.defaultConverters.put(Integer.class, new SQLiteIntegerConverter(Integer.class));
         this.defaultConverters.put(Long.class, new SQLiteIntegerConverter(Long.class));
         this.defaultConverters.put(Float.class, new SQLiteRealConverter(Float.class));
@@ -112,7 +111,7 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
 
         // default used when metadata is read from the table directly
         this.defaultDBConverters = new HashMap<>();
-        this.defaultDBConverters.put(TEXT, new SQLiteStringConverter(String.class));
+        this.defaultDBConverters.put(TEXT, new SQLiteTextConverter(String.class));
         this.defaultDBConverters.put(INTEGER, new SQLiteIntegerConverter(Long.class));
         this.defaultDBConverters.put(REAL, new SQLiteRealConverter(Double.class));
         this.defaultDBConverters.put(BLOB, new SQLiteBlobConverter(ByteArray.class));

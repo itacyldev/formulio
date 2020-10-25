@@ -197,13 +197,11 @@ public class Config {
     }
 
     private void processDefaultResources() {
-        if(this.andContext== null){
-            // avoid reading default resources
-            return;
-        }
         // TODO: configure context and default sync properties in XML in res folder
-        this.globalContext.put("location", new LocationService(this.andContext));
         this.globalContext.put("date", new DateTimeContext());
+        if(this.andContext!= null){
+            this.globalContext.put("location", new LocationService(this.andContext));
+        }
     }
 
     private static final ProjectResource.ResourceType[] RESOURCE_ORDER =

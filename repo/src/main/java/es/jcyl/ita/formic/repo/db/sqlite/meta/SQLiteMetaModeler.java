@@ -23,6 +23,8 @@ import org.greenrobot.greendao.database.Database;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.ConfigurationException;
+
 import es.jcyl.ita.formic.repo.RepositoryException;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
@@ -136,6 +138,9 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
 
         // Is it and expression based property?
         if (StringUtils.isNotBlank(expression)) {
+            if(StringUtils.isBlank(evaluateOn)){
+                throw new RepositoryException("evaluateOn attribute must be set!");
+            }
             if (StringUtils.isBlank(expressionType) || expressionType.equalsIgnoreCase("jexl")) {
                 builder.withJexlExpresion(expression,
                         DBPropertyType.CALC_MOMENT.valueOf(evaluateOn.toUpperCase()));
