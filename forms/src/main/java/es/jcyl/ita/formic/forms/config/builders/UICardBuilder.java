@@ -19,18 +19,14 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.card.UICard;
-import es.jcyl.ita.formic.forms.components.card.UIHeading1;
-import es.jcyl.ita.formic.forms.components.card.UIHeading2;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading1;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading2;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.el.JexlBindingExpression;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
-import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
-
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

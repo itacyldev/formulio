@@ -23,12 +23,16 @@ public interface EntitySource {
 
     /**
      * Location of the source used to read the entity information.
+     *
      * @return
      */
     public String getSourceId();
 
+    public Source getSource();
+
     /**
      * Unique identifier of the entity type that this source will provide.
+     *
      * @return
      */
     public String getEntityTypeId();

@@ -28,24 +28,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.util.ReflectionHelpers;
 
 import java.util.Arrays;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.LocationContext;
 import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.sqlite.SQLiteRepository;
-import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteStringConverter;
+import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteTextConverter;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
-import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD.CONTEXT;
+import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD.JEXL;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.INSERT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -87,7 +85,7 @@ public class SaveLocationTest {
         // Create calculated property for the location
         EntityMeta meta = dbBuilder.createRandomMeta();
         DBPropertyType[] props = (DBPropertyType[]) meta.getProperties();
-        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, CONTEXT, "${location.stringLocation}");
+        DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, JEXL, "${location.asString}");
 
         // Add location property to meta
         props = Arrays.copyOf(props, props.length + 1);
@@ -119,16 +117,12 @@ public class SaveLocationTest {
     }
 
     private CompositeContext createContext() {
-        LocationService locationService = LocationService.getInstance();
-        locationService.init(ctx);
-        ReflectionHelpers.setField(locationService, "locationManager", mockLocationManager);
-
-        LocationContext locationContext = new LocationContext("location");
-        locationContext.setLocationService(locationService);
+        LocationService locationService = new LocationService(ctx);
+        locationService.setLocationManager(mockLocationManager);
 
         CompositeContext globalContext = new UnPrefixedCompositeContext();
         globalContext.addContext(new DateTimeContext("date"));
-        globalContext.put("location", locationContext);
+        globalContext.put("location", locationService);
 
         return globalContext;
     }
@@ -136,10 +130,10 @@ public class SaveLocationTest {
     private DBPropertyType createLocationProperty(DBPropertyType property, DBPropertyType.CALC_MOMENT when, DBPropertyType.CALC_METHOD how, String expression) {
         DBPropertyType.DBPropertyTypeBuilder builder = new DBPropertyType.DBPropertyTypeBuilder("location", String.class, "TEXT", false);
         switch (how) {
-            case CONTEXT:
-                builder.withContextExpression(expression, when).withConverter(new SQLiteStringConverter(String.class));
+            case JEXL:
+                builder.withJexlExpresion(expression, when).withConverter(new SQLiteTextConverter(String.class));
                 break;
-            case SQL_EXPRESSION:
+            case SQL:
                 builder.withSQLExpression(expression, when);
         }
         return builder.build();

@@ -27,7 +27,7 @@ import java.util.regex.PatternSyntaxException;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.converters.ConverterMap;
+import es.jcyl.ita.formic.repo.util.TypeUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -98,7 +98,7 @@ public class ValidatorFactory {
 
         Class numberClass = null;
         if (StringUtils.isNotEmpty(numberType)) {
-            numberClass = ConverterMap.getConverter(numberType.toLowerCase());
+            numberClass = TypeUtils.getType(numberType.toLowerCase());
         } else {
             //default class
             numberClass = Integer.class;

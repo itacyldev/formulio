@@ -46,21 +46,9 @@ public class LocationService implements LocationListener {
     public static int MAX_ELAPSED_TIME = 60 * 1000;
 
     private LocationManager locationManager;
-    private static LocationService _instance;
     Context ctx;
 
-    public static LocationService getInstance() {
-        if (_instance == null) {
-            _instance = new LocationService();
-        }
-        return _instance;
-    }
-
-    public LocationService() {
-
-    }
-
-    public void init(Context ctx) {
+    public LocationService(Context ctx) {
         this.ctx = ctx;
         locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
     }
@@ -75,6 +63,7 @@ public class LocationService implements LocationListener {
 
     public Location getLastLocation() {
         Location lastLocation = null;
+        //TODO: mover al inicio
         if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Criteria criteria = new Criteria();
@@ -88,7 +77,6 @@ public class LocationService implements LocationListener {
         } else {
             ActivityCompat.requestPermissions((Activity) ctx, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
         }
-
         return lastLocation;
     }
 
@@ -97,7 +85,6 @@ public class LocationService implements LocationListener {
         if (location.getAccuracy() < REQUIRED_ACCURACY) {
             locationManager.removeUpdates(this);
         }
-
     }
 
     @Override
@@ -110,6 +97,29 @@ public class LocationService implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
+    }
+
+    public String getAsString() {
+        Location lastLocation = getLastLocation();
+        return (lastLocation != null) ? lastLocation.toString() : "";
+    }
+
+    public String getAsWKT() {
+        Location lastLocation = getLastLocation();
+        return (lastLocation == null) ? null : String.format("POINT(%s %s)", lastLocation.getLongitude(),
+                lastLocation.getLatitude());
+    }
+
+    public String getAsWKT3D() {
+        Location lastLocation = getLastLocation();
+        return (lastLocation == null) ? null : String.format("POINT(%s %s %s)", lastLocation.getLongitude(),
+                lastLocation.getLatitude(), lastLocation.getAltitude());
+    }
+
+    public String getAsLatLong() {
+        Location lastLocation = getLastLocation();
+        return (lastLocation == null) ? null : String.format("%s , %s", lastLocation.getLatitude(),
+                lastLocation.getLongitude());
     }
 
 
@@ -143,4 +153,11 @@ public class LocationService implements LocationListener {
         }
     }
 
+    public LocationManager getLocationManager() {
+        return locationManager;
+    }
+
+    public void setLocationManager(LocationManager locationManager) {
+        this.locationManager = locationManager;
+    }
 }

@@ -20,6 +20,7 @@ import android.os.Bundle;
 import androidx.fragment.app.testing.FragmentScenario;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -43,6 +44,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
+@Ignore
 public class ProjectListFragmentTest {
 
     private static String NAME_PROJECT_1 = "project1";

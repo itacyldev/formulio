@@ -13,6 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.mini2Dx.collections.CollectionUtils;
@@ -20,13 +27,6 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
@@ -49,14 +49,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     private static final int PERMISSION_REQUEST = 1234;
 
-
     @Override
     protected void doOnCreate() {
         getApplication().getFilesDir();
         setContentView(R.layout.activity_main);
         checkPermissions();
         checkDeviceFeatures();
-
     }
 
     private void checkDeviceFeatures() {
@@ -171,7 +169,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         }
 
-
         if (permsList.size() > 0) {
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
@@ -189,7 +186,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         if (!f.exists()) {
             f.mkdir();
         }
-        Config config = Config.init(projectsFolder);
+        Config config = Config.init(this, projectsFolder);
 
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();

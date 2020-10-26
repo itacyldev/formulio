@@ -17,19 +17,23 @@ package es.jcyl.ita.formic.repo.db.sqlite.meta;
 
 import android.database.Cursor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.ConfigurationException;
+
 import es.jcyl.ita.formic.repo.RepositoryException;
-import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
+import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteConverterFactory;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLitePropertyConverter;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.MetaModeler;
+import es.jcyl.ita.formic.repo.util.TypeUtils;
 
 /**
  * Reads entities meta description information from an SQLite source
@@ -68,7 +72,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
                 type = cursor.getString(2);
                 isNotNull = ONE.equalsIgnoreCase(cursor.getString(3));
                 isPk = ONE.equalsIgnoreCase(cursor.getString(5));
-                props.add(createPropertyFromColumnDef(name, type, isNotNull, isPk, source));
+                props.add(createPropertyFromColumnDef(name, name, type, isNotNull, isPk));
                 if (isPk) {
                     idProperties.add(name);
                 }
@@ -89,21 +93,67 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
      * Extension point to provide column definitions different from standard ones.
      *
      * @param name
-     * @param type
+     * @param persistenceType
      * @param isNotNull
      * @param isPk
-     * @param source
      * @return
      */
-    protected DBPropertyType createPropertyFromColumnDef(String name, String type,
-                                                         boolean isNotNull, boolean isPk,
-                                                         DBTableEntitySource source) {
-        SQLiteType dbType = SQLiteType.getType(type);
+    public DBPropertyType createPropertyFromColumnDef(String name, String columnName, String persistenceType,
+                                                      boolean isNotNull, boolean isPk) {
+        SQLiteType dbType = SQLiteType.getType(persistenceType);
         SQLitePropertyConverter converter = convFactory.getDefaultConverter(dbType);
         DBPropertyType property = new DBPropertyType.DBPropertyTypeBuilder(name, converter.javaType(), dbType.name(), isPk)
-                .withConverter(converter).build();
+                .withConverter(converter).withColumnName(columnName).build();
         property.setMandatory(isNotNull);
         return property;
     }
+
+
+    /**
+     * Creates column definition based on passed parameters
+     *
+     * @param name
+     * @param columnName
+     * @param javaType
+     * @param expression
+     * @param expressionType
+     * @param evaluateOn
+     * @return
+     */
+    public DBPropertyType createPropertyFromColumnDef(String name, String columnName,
+                                                      String javaType, String persistenceType,
+                                                      String expression, String expressionType,
+                                                      String evaluateOn) {
+        // find proper converter for javaType<-> dbType transformation
+        SQLitePropertyConverter converter;
+        Class clazz = TypeUtils.getType(javaType);
+        SQLiteType dbType;
+        dbType = SQLiteType.getType(persistenceType);
+        converter = convFactory.getConverter(clazz, dbType);
+
+        // create db property
+        DBPropertyType.DBPropertyTypeBuilder builder = new DBPropertyType.DBPropertyTypeBuilder(name, clazz, dbType.name(), false)
+                .withConverter(converter)
+                .withColumnName(columnName);
+
+        // Is it and expression based property?
+        if (StringUtils.isNotBlank(expression)) {
+            if(StringUtils.isBlank(evaluateOn)){
+                throw new RepositoryException("evaluateOn attribute must be set!");
+            }
+            if (StringUtils.isBlank(expressionType) || expressionType.equalsIgnoreCase("jexl")) {
+                builder.withJexlExpresion(expression,
+                        DBPropertyType.CALC_MOMENT.valueOf(evaluateOn.toUpperCase()));
+            } else {
+                builder.withSQLExpression(expression,
+                        DBPropertyType.CALC_MOMENT.valueOf(evaluateOn.toUpperCase()));
+            }
+        }
+        DBPropertyType property = builder.build();
+        property.setMandatory(false);
+
+        return property;
+    }
+
 
 }

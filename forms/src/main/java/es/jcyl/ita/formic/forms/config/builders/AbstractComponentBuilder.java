@@ -21,7 +21,6 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
-import es.jcyl.ita.formic.forms.config.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
@@ -34,6 +33,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  * <p>
  * Builder that instantiates and element from and specific class and may extend the
  * building process with specific treatment of attributte values or child elements.
+ * This abstract class provides common methods for form and repo componentes building.
  */
 public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E> {
 
@@ -53,7 +53,9 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     @Override
     public E build(ConfigNode<E> node) {
         E element = instantiate();
-        setAttributes(element, node);
+        if (element != null) {
+            setAttributes(element, node);
+        }
         node.setElement(element);
         setupOnSubtreeStarts(node);
         return element;
@@ -74,6 +76,10 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
 
     protected E instantiate() {
+        if (this.elementType == null) {
+            // no instance needed
+            return null;
+        }
         try {
             return (E) this.elementType.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
@@ -90,11 +96,11 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         for (Map.Entry<String, String> entry : attributes.entrySet()) {
             String attName = entry.getKey();
             try {
-                Attribute attribute = this.attributeDefs.get(attName);
+                Attribute attribute = this.attributeDefs.get(attName.toUpperCase());
                 if (attribute == null) {
                     error(String.format("Invalid attribute found in tag <%s/>: [%s].", node.getName(), attName));
                 } else if (attribute.assignable) {
-                    String setter = (attribute.setter == null) ? attName : attribute.setter;
+                    String setter = (attribute.setter == null) ? attribute.name : attribute.setter;
                     Object value;
                     if (attribute.resolver == null) {
                         // convert value if needed

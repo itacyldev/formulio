@@ -51,8 +51,7 @@ public class DBTableEntitySource extends AbstractEntitySource implements EntityS
 
     @Override
     public String toString() {
-        // TODO: show db file
-        return String.format("%s@%s", this.db.toString(), this.tableName);
+        return String.format("%s@%s", this.source.getURI(), this.tableName);
     }
 
 
@@ -81,7 +80,7 @@ public class DBTableEntitySource extends AbstractEntitySource implements EntityS
             Database db = (Database) implementor;
             instance.db = db;
             instance.tableName = tableName;
-            instance.sourceId = this.getSource().getId();
+            instance.source = this.getSource();
             instance.entityTypeId = this.getEntityTypeId();
             return instance;
         }

@@ -22,11 +22,10 @@ package es.jcyl.ita.formic.repo.converter;
 public interface ConverterFactory<C, D> {
 
     /**
-     * Returns an object converter reference by the given id.
-     * @param converterId
+     * Returns a converter suitable for conversion from type D to the given javaType.
      * @return
      */
-    C getConverter(String converterId);
+    C getConverter(Class javaType, D dbType);
 
     /**
      * Returns the default converter for a given java Class.

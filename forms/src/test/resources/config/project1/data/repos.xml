@@ -3,6 +3,12 @@
     <repo dbFile="dbTest.sqlite" id="agentsRepo" dbTable="assigned_agents" />
     <repo dbFile="dbTest.sqlite" id="provRepo" dbTable="provincia" />
     <repo dbFile="dbTest.sqlite" id="muniRepo" dbTable="municipio" />
-    <repo dbFile="dbTest.sqlite" id="superHRepo" dbTable="superheroes" />
+    <repo dbFile="dbTest.sqlite" id="superHRepo" dbTable="superheroes">
+        <meta>
+            <property name="creation_date" converter="date"  expression="${date.now}" evalOn="insert"/>
+            <property name="update_date" converter="date" expression="${date.now}" evalOn="update"/>
+            <property name="current_time" converter="date" expression="${date.now}" evalOn="select"/>
+        </meta>
+    </repo>
     <fileRepo folder="pictures/superheroes" id="superHImages" defaultExtension="jpg" />
 </repos>

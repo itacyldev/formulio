@@ -240,6 +240,13 @@ public class ViewHelper {
         return view;
     }
 
+    public static View findViewByTagAndSetId(View baseView, String tag) {
+        View view = baseView.findViewWithTag(tag);
+        // ramdomize id
+        view.setId(RandomUtils.nextInt());
+        return view;
+    }
+
     public static boolean isVisible(View rootView) {
         return rootView.getVisibility() == View.VISIBLE;
     }

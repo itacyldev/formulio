@@ -23,9 +23,9 @@ import es.jcyl.ita.formic.forms.project.ProjectResource;
  * <p>
  * Responsible of read an specific project resource and register the objects found in the resource.
  */
-public interface ProjectResourceHandler<T> {
+public interface ProjectResourceHandler {
 
-    T handle(ProjectResource resource);
+    void handle(ProjectResource resource);
 
     void setListener(ReadingProcessListener listener);
 

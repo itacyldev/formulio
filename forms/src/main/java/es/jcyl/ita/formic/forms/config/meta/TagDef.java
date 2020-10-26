@@ -18,13 +18,18 @@ package es.jcyl.ita.formic.forms.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBTABLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DEFAULT_EXTENSION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DEFAULT_VALUE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ENTITYSELECTOR;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EVAL_ON;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPRESSION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPRESSION_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FILTERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
@@ -32,6 +37,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -76,13 +82,6 @@ public class TagDef {
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
-
-        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
-
-        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE}));
-        register("head1", define(new Attribute[]{ID, LABEL, VALUE}));
-        register("head2", define(new Attribute[]{ID, LABEL, VALUE}));
-
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("fileRepo", define(new Attribute[]{ID, FOLDER, DEFAULT_EXTENSION}));

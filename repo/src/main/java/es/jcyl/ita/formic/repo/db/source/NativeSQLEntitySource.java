@@ -105,7 +105,7 @@ public class NativeSQLEntitySource extends AbstractEntitySource implements Entit
             Database db = (Database) implementor;
             instance.db = db;
             instance.query = query;
-            instance.sourceId = this.getSource().getId();
+            instance.source = this.getSource();
             instance.entityTypeId = this.getEntityTypeId();
             return instance;
         }

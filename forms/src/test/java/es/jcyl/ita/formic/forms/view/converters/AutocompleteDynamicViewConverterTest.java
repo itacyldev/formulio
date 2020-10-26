@@ -78,7 +78,9 @@ public class AutocompleteDynamicViewConverterTest {
         ctx.setTheme(R.style.FormudruidLight);
 
         ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        RenderingEnv env = new RenderingEnv(mockAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
+
         env.setViewContext(ctx);
         env.initialize();
         // meta with one pk column and three string properties

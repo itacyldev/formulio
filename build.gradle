@@ -45,18 +45,18 @@ allprojects {
 //            url "$androidHome/extras/google/m2repository/"
 //        }
 
-//        maven {
-//            name "ITACyL - snapshots"
-//            url "http://repo.itacyl.es/archiva/repository/snapshots/"
-//        }
-//        maven {
-//            name "ITACyL - internal"
-//            url "http://repo.itacyl.es/archiva/repository/internal/"
-//        }
-//        maven {
-//            name "ITACyL - thirdparty"
-//            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
-//        }
+        maven {
+            name "ITACyL - snapshots"
+            url "http://repo.itacyl.es/archiva/repository/snapshots/"
+        }
+        maven {
+            name "ITACyL - internal"
+            url "http://repo.itacyl.es/archiva/repository/internal/"
+        }
+        maven {
+            name "ITACyL - thirdparty"
+            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
+        }
     }
 
     configurations.all {
@@ -85,7 +85,7 @@ ext {
     compileSdkVersion = 29
     targetSdkVersion = 29
     minSdkVersion = 21
-    buildToolsVersion = '29.0.1'
+    buildToolsVersion = '29.0.2'
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
@@ -101,7 +101,7 @@ ext {
             'androidx.test.espresso:espresso-core:3.2.0',
             'androidx.test.espresso:espresso-contrib:3.2.0',
             'androidx.test.espresso:espresso-accessibility:3.2.0',
-            'org.robolectric:robolectric:4.3',
+            'org.robolectric:robolectric:4.2',
             'org.mini2Dx:android-beans:1.0.0',
             'org.mockito:mockito-core:2.7.22',
             'org.hamcrest:hamcrest:2.2',

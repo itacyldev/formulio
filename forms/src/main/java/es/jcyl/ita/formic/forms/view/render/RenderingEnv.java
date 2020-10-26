@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.ContextUtils;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
@@ -66,19 +67,19 @@ public class RenderingEnv {
     private int inputTypingDelay = 450;
     private boolean inputDelayDisabled = false;
 
-    public RenderingEnv(CompositeContext globalContext, ActionController actionController) {
-        this.globalContext = globalContext;
+    public RenderingEnv(ActionController actionController) {
         userActionInterceptor = new ViewUserActionInterceptor(actionController);
         currentFormContexts = new ArrayList<>();
-        if (globalContext == null) {
-            throw new IllegalStateException("Global context cannot be null!.");
-        }
     }
 
     /**
      * Clears composite context before starting the rendering process
      */
     public void initialize() {
+        if (this.globalContext == null) {
+            throw new IllegalStateException(DevConsole.error("Global Context is not set, call " +
+                    "setGlobaContext first!!."));
+        }
         this.combinedContext = null;
         // remove last context from global context
         if (!currentFormContexts.isEmpty()) {
@@ -191,6 +192,10 @@ public class RenderingEnv {
 
     public void setFormActivity(FormActivity formActivity) {
         this.formActivity = formActivity;
+    }
+
+    public void setGlobalContext(CompositeContext globalContext) {
+        this.globalContext = globalContext;
     }
 }
 

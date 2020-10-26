@@ -33,7 +33,6 @@ public class UIInputComponent extends UIComponent {
 
     protected String label;
     private boolean readOnly;
-    private String defaultValue;
     private String valueConverter;
     private int inputType = InputType.TYPE_CLASS_TEXT;
 
@@ -102,15 +101,6 @@ public class UIInputComponent extends UIComponent {
         this.readOnly = readOnly;
     }
 
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(final String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
-
     public String getLabel() {
         return label;
     }
@@ -131,8 +121,8 @@ public class UIInputComponent extends UIComponent {
         this.valueConverter = valueConverter;
     }
 
-    public boolean isMandatory(){
-        if (validators == EMPTY_VALIDATOR){
+    public boolean isMandatory() {
+        if (validators == EMPTY_VALIDATOR) {
             return false;
         }
         for (Validator validator : validators) {

@@ -36,14 +36,12 @@ public class RepoConfigHandler extends AbstractRepoConfigurationReader implement
     private ReadingProcessListener listener;
 
     @Override
-    public Object handle(ProjectResource resource) {
+    public void handle(ProjectResource resource) {
         XmlConfigFileReader reader = new XmlConfigFileReader();
         reader.setListener(this.listener);
         reader.read(Uri.fromFile(resource.file));
         // repos are registered during reading process, just check entities metadata
         checkRepos();
-
-        return null;
     }
 
     private void checkRepos() {

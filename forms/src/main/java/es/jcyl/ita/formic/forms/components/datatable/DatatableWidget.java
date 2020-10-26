@@ -31,35 +31,35 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.ContextUtils;
+import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
+import es.jcyl.ita.formic.repo.query.Criteria;
+import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.Sort;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
-import es.jcyl.ita.formic.forms.components.EntitySelector;
-import es.jcyl.ita.formic.forms.components.column.UIColumn;
-import es.jcyl.ita.formic.forms.components.column.UIColumnFilter;
+import es.jcyl.ita.formic.core.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
+import es.jcyl.ita.formic.forms.components.DynamicComponent;
+import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.components.column.UIColumn;
+import es.jcyl.ita.formic.forms.components.column.UIColumnFilter;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.forms.view.converters.TextViewConverter;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
-import es.jcyl.ita.formic.repo.query.Criteria;
-import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.repo.query.Sort;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

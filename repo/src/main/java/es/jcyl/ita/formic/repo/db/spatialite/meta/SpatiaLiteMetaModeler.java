@@ -19,9 +19,9 @@ import android.database.Cursor;
 
 import org.greenrobot.greendao.database.Database;
 
-import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.meta.GeometryType;
+import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.spatialite.converter.SpatialiteBlobConverter;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.SQLiteMetaModeler;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType;
@@ -77,10 +77,11 @@ public class SpatiaLiteMetaModeler extends SQLiteMetaModeler {
     }
 
 
-    protected DBPropertyType createPropertyFromColumnDef(String name, String type, boolean isNotNull, boolean isPk, DBTableEntitySource source) {
+    public DBPropertyType createPropertyFromColumnDef(String name, String type, boolean isNotNull,
+                                                      boolean isPk, DBTableEntitySource source) {
         // chek if type refers to a geometry column
         if (!isGeometryType(type)) {
-            return super.createPropertyFromColumnDef(name, type, isNotNull, isPk, source);
+            return super.createPropertyFromColumnDef(name, name, type, isNotNull, isPk);
         } else {
             // create geometry data type
             GeometryMetadata geoMeta = readGeometryColumnInfo(source, name);

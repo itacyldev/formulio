@@ -2,23 +2,21 @@ apply plugin: 'com.android.application'
 
 def globalConf = rootProject.ext
 
+archivesBaseName = 'app'
+group = globalConf.group
+version = globalConf.version
+
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.3'
-
-    compileOptions {
-        encoding = "UTF-8"
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
+    compileSdkVersion = rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
+        applicationId globalConf.applicationId
         versionCode globalConf.versionCode
         versionName globalConf.versionName
-        applicationId globalConf.applicationId
         targetSdkVersion globalConf.targetSdkVersion
         minSdkVersion globalConf.minSdkVersion
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //multiDexEnabled true
     }
@@ -27,14 +25,17 @@ android {
         debug {
             minifyEnabled false
         }
-
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.txt'
         }
     }
-
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     lintOptions {
         abortOnError false
         disable 'InvalidPackage'
@@ -56,7 +57,7 @@ android {
             returnDefaultValues = true
         }
     }
-    useLibrary 'android.test.runner'
+//    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
 }
@@ -85,26 +86,10 @@ dependencies {
         exclude group: 'jetified', module: ''
     }
 
-    implementation 'commons-lang:commons-lang:20030203.000129'
-    implementation 'commons-collections:commons-collections:20040616'
-    implementation 'commons-io:commons-io:2.6'
-    implementation 'org.apache.commons:commons-jexl3:3.1'
-    implementation 'org.apache.commons:commons-lang3:3.9'
-    implementation "org.mini2Dx:android-beans:1.0.0"
-    implementation "commons-validator:commons-validator:1.6"
-    implementation 'org.mozilla:rhino:1.7.12'
 
-//    implementation 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
-    // rxAndroid
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
-
-    implementation 'org.jgrapht:jgrapht-core:1.1.0'
-    implementation project(path: ':forms')
-
-    ////////////////////////////////////////
-    // TEST
-    ////////////////////////////////////////
+    /////////////////////////////////////
+    // Instrumentation test dependencies
+    /////////////////////////////////////
 
     // Core library
     androidTestImplementation 'androidx.test:core:1.2.0'
@@ -123,23 +108,16 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
         exclude group: 'androidx.test', module: 'runner'
     }
-//    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
-//    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
-    // Dependencies for Unit Test
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    testImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    testImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
-
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
     testImplementation project(':repoTestUtils')
+    testImplementation unitTestDeps
+    testImplementation 'androidx.fragment:fragment-testing:1.2.4'
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation('androidx.test:rules:1.2.0') {
+        exclude group: 'androidx.test', module: ''
+    }
 
-    testImplementation "org.robolectric:robolectric:4.3"
-    testImplementation "org.mini2Dx:android-beans:1.0.0"
-    testImplementation 'org.mockito:mockito-core:2.7.22'
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
 }

@@ -1,6 +1,6 @@
 package es.jcyl.ita.formic.forms.repo.builders;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;

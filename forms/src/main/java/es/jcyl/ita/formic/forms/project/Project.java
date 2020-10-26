@@ -23,6 +23,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.source.EntitySource;
@@ -114,7 +115,8 @@ public class Project extends Entity {
             type = getFromFolderName(folder);
             if (!folderFile.exists() || !folderFile.isDirectory()) {
                 throw new ProjectException(
-                        error(String.format("Can't find config folder %s, did you delete it?", folderFile.getAbsolutePath())));
+                        error(String.format("Can't find config folder %s, did you delete it?",
+                                folderFile.getAbsolutePath())));
             }
             File[] xmlFiles = folderFile.listFiles(new FilenameFilter() {
                 @Override
@@ -124,7 +126,15 @@ public class Project extends Entity {
             });
             if (ArrayUtils.isNotEmpty(xmlFiles)) {
                 for (File confFile : xmlFiles) {
-                    files.add(new ProjectResource(this, confFile, type));
+                    if (type == null) {
+                        type = getTypeFromFilename(confFile.getName());
+                    }
+                    if (type == null) {
+                        DevConsole.warn("Unknown file name while reading configuration, " +
+                                "skipped! : " + confFile.getAbsolutePath());
+                    } else {
+                        files.add(new ProjectResource(this, confFile, type));
+                    }
                 }
             } else {
                 throw new ProjectException(
@@ -135,14 +145,20 @@ public class Project extends Entity {
         return files;
     }
 
+    private ProjectResource.ResourceType getTypeFromFilename(String name) {
+        if (name.equalsIgnoreCase("context.xml")) {
+            return ProjectResource.ResourceType.CONTEXT;
+        }
+        return null;
+    }
+
     private ProjectResource.ResourceType getFromFolderName(String folder) {
         if (folder.equals("forms")) {
             return ProjectResource.ResourceType.FORM;
         } else if (folder.equals("data")) {
             return ProjectResource.ResourceType.REPO;
-        } else {
-            throw new IllegalArgumentException("Not supported, unexpected folder name: " + folder);
         }
+        return null;
     }
 
     /**

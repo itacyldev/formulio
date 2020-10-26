@@ -86,7 +86,8 @@ public class FormContextTest {
 
         // configure the context as the MainController would do during navigation
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(gCtx, null);
+        RenderingEnv env = new RenderingEnv(null);
+        env.setGlobalContext(gCtx);
 
         // create form using entity meta to define UIFields
         UIForm form = formBuilder.withMeta(meta).withRandomData().build();
@@ -136,7 +137,8 @@ public class FormContextTest {
 
         // configure the context as the MainController would do
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(gCtx, null);
+        RenderingEnv env = new RenderingEnv(null);
+        env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
         // create a mock repository, set to form and load the entity

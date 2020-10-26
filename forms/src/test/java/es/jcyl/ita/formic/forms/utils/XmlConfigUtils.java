@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
@@ -37,14 +37,21 @@ import es.jcyl.ita.formic.forms.project.Project;
 public class XmlConfigUtils {
 
     public static InputStream createStream(String string) {
-        File file = null;
         try {
-            file = File.createTempFile("xml-test", ".xml");
+            File file = createTmpXMLFile(string);
+            return new FileInputStream(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static File createTmpXMLFile(String content){
+        try {
+            File file = File.createTempFile("xml-test", ".xml");
             file.deleteOnExit();
             PrintWriter out = new PrintWriter(file);
-            out.write(string);
+            out.write(content);
             out.close();
-            return new FileInputStream(file);
+            return file;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

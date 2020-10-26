@@ -80,7 +80,8 @@ public class EnvExecutionContextTest {
         // render the view and check de resulting context
         CompositeContext globalContext = new UnPrefixedCompositeContext();
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(globalContext, mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(globalContext);
         env.setViewContext(ctx);
 
         // render the view

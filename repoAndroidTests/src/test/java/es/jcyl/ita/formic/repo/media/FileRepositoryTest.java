@@ -67,7 +67,7 @@ public class FileRepositoryTest {
         // get the existing entity and modify it
         byte[] newContent = FileUtils.readFileToByteArray(RandomUtils.createRandomImageFile());
         entity.set("content", new ByteArray(newContent));
-        Thread.sleep(300);
+        Thread.sleep(1000);
         repo.save(entity);
         // make sure no new entity has been created
         Assert.assertEquals(1, repo.listAll().size());
@@ -89,14 +89,14 @@ public class FileRepositoryTest {
     }
 
     /**
-     * Creates a repository with some entities starting with a prefix and tries to retrive then
+     * Creates a repository with some entities starting with a prefix and tries to retrieve them
      * from the repo using a regular expression filter.
      */
     @Test
     public void testListWithFilter() {
         DevFileBuilder dev = new DevFileBuilder();
         String[] randomNames = RandomUtils.randomObjectArray(15, String.class);
-        // get 5 of then and put a prefix on the name
+        // get 5 of them and put a prefix on the name
         int[] pos = new int[]{1, 4, 6, 8, 11};
         int numExpected = pos.length;
         for (int p : pos) {

@@ -28,15 +28,14 @@ import es.jcyl.ita.formic.repo.meta.PropertyType;
  */
 public class DBPropertyType extends PropertyType {
 
-    public enum CALC_METHOD {CONTEXT, SQL_EXPRESSION}
+    public enum CALC_METHOD {JEXL, SQL}
+
     public enum CALC_MOMENT {SELECT, INSERT, UPDATE}
 
     protected String columnName;
-    protected boolean calculated = false;
     protected CALC_METHOD calculateBy;
     protected CALC_MOMENT calculateOn;
-    protected String contextExpression;
-    protected String sqlExpression;
+    protected String expression;
     protected SQLitePropertyConverter converter;
     protected KeyGeneratorStrategy keyGenerator;
 
@@ -45,32 +44,36 @@ public class DBPropertyType extends PropertyType {
         super(name, type, persistenceType, primaryKey);
     }
 
+    public boolean isCalculated() {
+        return this.expression != null;
+    }
+
     public boolean isCalculatedOnSelect() {
-        return this.calculated && this.calculateOn == CALC_MOMENT.SELECT;
+        return this.calculateOn == CALC_MOMENT.SELECT;
     }
 
     public boolean isCalculatedOnInsert() {
-        return this.calculated && this.calculateOn == CALC_MOMENT.INSERT;
+        return this.calculateOn == CALC_MOMENT.INSERT;
     }
 
     public boolean isCalculatedOnUpdate() {
-        return this.calculated && (this.calculateOn == CALC_MOMENT.INSERT || this.calculateOn == CALC_MOMENT.UPDATE);
+        return (this.calculateOn == CALC_MOMENT.UPDATE);
     }
 
-    public boolean isCalculatedByContext() {
-        return calculateBy == CALC_METHOD.CONTEXT;
+    public boolean isJexlExpression() {
+        return calculateBy == CALC_METHOD.JEXL;
     }
 
-    public String getContextExpression() {
-        return contextExpression;
-    }
-
-    public String getSqlExpression() {
-        return sqlExpression;
+    public String getExpression() {
+        return expression;
     }
 
     public CALC_MOMENT getCalculateOn() {
         return calculateOn;
+    }
+
+    public CALC_METHOD getCalculateBy() {
+        return calculateBy;
     }
 
     public String getColumnName() {
@@ -101,7 +104,7 @@ public class DBPropertyType extends PropertyType {
     public static class DBPropertyTypeBuilder {
         protected final DBPropertyType property;
 
-        protected DBPropertyType createInstance(String name, Class<?> type, String persistenceType, boolean primaryKey){
+        protected DBPropertyType createInstance(String name, Class<?> type, String persistenceType, boolean primaryKey) {
             return new DBPropertyType(name, type, persistenceType, primaryKey);
         }
 
@@ -109,29 +112,32 @@ public class DBPropertyType extends PropertyType {
             property = new DBPropertyType(prop.name, prop.type, prop.persistenceType, prop.primaryKey);
             property.columnName = prop.columnName;
             property.converter = prop.converter;
-            property.calculated = prop.calculated;
             property.calculateBy = prop.calculateBy;
             property.calculateOn = prop.calculateOn;
-            property.sqlExpression = prop.sqlExpression;
-            property.contextExpression = prop.contextExpression;
+            property.expression = prop.expression;
         }
 
         public DBPropertyTypeBuilder(String name, Class<?> type, String persistenceType, boolean primaryKey) {
             property = createInstance(name, type, persistenceType, primaryKey);
         }
 
-        public DBPropertyTypeBuilder withSQLExpression(String expression, CALC_MOMENT when) {
-            this.property.calculated = true;
-            this.property.sqlExpression = expression;
-            this.property.calculateBy = CALC_METHOD.SQL_EXPRESSION;
+        public DBPropertyTypeBuilder withExpression(String expression, CALC_METHOD method, CALC_MOMENT when) {
+            this.property.expression = expression;
+            this.property.calculateBy = method;
             this.property.calculateOn = when;
             return this;
         }
 
-        public DBPropertyTypeBuilder withContextExpression(String expression, CALC_MOMENT when) {
-            this.property.calculated = true;
-            this.property.contextExpression = expression;
-            this.property.calculateBy = CALC_METHOD.CONTEXT;
+        public DBPropertyTypeBuilder withSQLExpression(String expression, CALC_MOMENT when) {
+            this.property.expression = expression;
+            this.property.calculateBy = CALC_METHOD.SQL;
+            this.property.calculateOn = when;
+            return this;
+        }
+
+        public DBPropertyTypeBuilder withJexlExpresion(String expression, CALC_MOMENT when) {
+            this.property.expression = expression;
+            this.property.calculateBy = CALC_METHOD.JEXL;
             this.property.calculateOn = when;
             return this;
         }
@@ -140,6 +146,7 @@ public class DBPropertyType extends PropertyType {
             this.property.converter = converter;
             return this;
         }
+
         public DBPropertyTypeBuilder withColumnName(String name) {
             this.property.columnName = name;
             return this;

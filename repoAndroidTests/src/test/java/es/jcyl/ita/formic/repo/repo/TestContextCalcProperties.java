@@ -35,7 +35,7 @@ import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD;
-import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD.CONTEXT;
+import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_METHOD.JEXL;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.INSERT;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.SELECT;
@@ -59,7 +59,7 @@ public class TestContextCalcProperties {
 
         // get meta and set one of the properties as calculated from context
         DBPropertyType p = (DBPropertyType) dbBuilder.getMeta().getProperties()[1];
-        DBPropertyType p2 = setPropertyAsCalculated(p, SELECT, CONTEXT, "b1.a");
+        DBPropertyType p2 = setPropertyAsCalculated(p, SELECT, JEXL, "${b1.a}");
         dbBuilder.getMeta().getProperties()[1] = p2;
 
         // set random value in context
@@ -84,11 +84,12 @@ public class TestContextCalcProperties {
         DevDbBuilder dbBuilder = new DevDbBuilder();
         dbBuilder.withNumEntities(0).build(ctx, "testDB");
 
-        // get meta and set one of the properties as calculated from context
+        // get meta and set one of the properties as calculated from context with JEXL expression
         DBPropertyType[] props = (DBPropertyType[]) dbBuilder.getMeta().getProperties();
-        DBPropertyType p2 = setPropertyAsCalculated(props[1], INSERT, CONTEXT, "b1.a");
+        DBPropertyType p2 = setPropertyAsCalculated(props[1], INSERT, JEXL, "${b1.a}");
         props[1] = p2;
 
+        // set a random value in context
         Object expectedValue = RandomUtils.randomObject(p2.type);
         CompositeContext globalCxt = createContext(expectedValue);
 
@@ -97,19 +98,18 @@ public class TestContextCalcProperties {
         // the value for the calculated property for the entity must be null simulating and insert
         entity.set(p2.getName(), null);
 
+        // reload the entity and the the inserted value is the same as in context
         EditableRepository repo = dbBuilder.getSQLiteRepository(dbBuilder.getSource(), dbBuilder.getMeta(), globalCxt);
-
         repo.save(entity);
         Entity e2 = repo.findById(entity.getId());
         Assert.assertEquals(expectedValue, e2.get(p2.name));
 
         // now modify the entity, save it and check that the data hasn't been modified.
-        entity.set(p2.getName(), RandomUtils.randomObject(p2.getType()));
         Object modifiedValue = RandomUtils.randomObject(props[2].getType());
         entity.set(props[2].getName(), modifiedValue);
         repo.save(entity);
 
-        e2 = (Entity) repo.listAll().get(0);
+        e2 = repo.findById(entity.getId());
         // modified value has been set, and calculated-on-insert property stays unmodified
         Assert.assertEquals(expectedValue, e2.get(p2.name));
         Assert.assertEquals(modifiedValue, e2.get(props[2].name));
@@ -129,7 +129,7 @@ public class TestContextCalcProperties {
 
         // get meta and set one of the properties as calculated from context on each update
         DBPropertyType[] props = (DBPropertyType[]) dbBuilder.getMeta().getProperties();
-        DBPropertyType p2 = setPropertyAsCalculated(props[1], UPDATE, CONTEXT, "b1.a");
+        DBPropertyType p2 = setPropertyAsCalculated(props[1], UPDATE, JEXL, "${b1.a}");
         props[1] = p2;
 
         // create context
@@ -165,10 +165,10 @@ public class TestContextCalcProperties {
     private DBPropertyType setPropertyAsCalculated(DBPropertyType property, CALC_MOMENT when, CALC_METHOD how, String expression) {
         DBPropertyTypeBuilder builder = new DBPropertyTypeBuilder(property);
         switch (how) {
-            case CONTEXT:
-                builder.withContextExpression(expression, when);
+            case JEXL:
+                builder.withJexlExpresion(expression, when);
                 break;
-            case SQL_EXPRESSION:
+            case SQL:
                 builder.withSQLExpression(expression, when);
         }
         return builder.build();

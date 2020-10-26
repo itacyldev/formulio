@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.StandardDatabase;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,6 +31,8 @@ import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -108,12 +111,14 @@ public class SQLiteRepositoryTest {
         int expectedNumEntities = 150;
         List<Entity> lstEntities = DevDbBuilder.buildEntities(repo.getMeta(), expectedNumEntities, null);
         repo.deleteAll();
+        List list = repo.listAll();
+        Assert.assertThat( list.size(), equalTo(0));
         for (Entity e : lstEntities) {
             repo.save(e);
         }
-        List list = repo.listAll();
+        list = repo.listAll();
         Assert.assertNotNull(list);
-        Assert.assertEquals(expectedNumEntities, list.size());
+        Assert.assertThat( list.size(), equalTo(expectedNumEntities));
     }
 
     /**

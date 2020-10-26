@@ -99,7 +99,8 @@ public class DelegatedExpressionTest {
         // set entity in forms context
         form.getContext().setEntity(entity);
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
         env.setViewDAG(viewDAG);
         // walk the tree executing expressions
