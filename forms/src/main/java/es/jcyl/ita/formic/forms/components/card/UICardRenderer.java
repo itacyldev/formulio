@@ -15,11 +15,15 @@ package es.jcyl.ita.formic.forms.components.card;
  * limitations under the License.
  */
 
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.image.ImageResourceView;
+import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.view.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -38,16 +42,40 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
     @Override
     protected void composeWidget(RenderingEnv env, Widget<UICard> widget) {
         UICard card = widget.getComponent();
-        UIHeading1 title = card.getTitle();
 
-        TextView titleView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.template1_title);
-        String value = (String) ConvertUtils.convert(title.getValue(env.getContext()), String.class);
-        titleView.setText(value);
+        UIHeading1 title = card.getTitle();
+        if (title != null) {
+            TextView titleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_title");
+            String value = (String) ConvertUtils.convert(title.getValue(env.getContext()), String.class);
+            titleView.setText(value);
+        }
 
         UIHeading2 subtitle = card.getSubtitle();
-        TextView subtitleView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.template1_subtitle);
-        value = (String) ConvertUtils.convert(subtitle.getValue(env.getContext()), String.class);
-        subtitleView.setText(value);
+        if (subtitle != null) {
+            TextView subtitleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_subtitle");
+            String value = (String) ConvertUtils.convert(subtitle.getValue(env.getContext()), String.class);
+            subtitleView.setText(value);
+        }
+
+        UIImage image = card.getImage();
+        if (image != null) {
+            ImageResourceView imageView = (ImageResourceView) ViewHelper.findViewByTagAndSetId(widget, "card_image");
+        }
+    }
+
+
+    private void setImageView(Widget<UICard> widget, ImageResourceView imageView) {
+        LinearLayout imageContainer = (LinearLayout) ViewHelper.findViewByTagAndSetId(widget, "card_image_container");
+        imageContainer.addView(imageView);
+    }
+
+    @Override
+    public void addViews(RenderingEnv env, Widget<UICard> root, View[] views) {
+        for (View view : views) {
+            if (view instanceof ImageResourceView) {
+                setImageView(root, (ImageResourceView) view);
+            }
+        }
     }
 
 

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/template1_layout"
+    android:id="@+id/template_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/template1_cv"
+        android:id="@+id/template_cv"
         style="@style/ProjectFormsCardStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/template1_content"
+            android:id="@+id/template_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="5dp">
 
             <LinearLayout
-                android:id="@+id/template1_image_container"
+                android:id="@+id/template_image_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -27,7 +27,7 @@
                 android:tag="card_image_container">
 
                 <ImageResourceView
-                    android:id="@+id/template1_image"
+                    android:id="@+id/template_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/no_image"
@@ -35,18 +35,19 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/template1_title"
+                android:id="@+id/template_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/template1_image_container"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/template_image_container"
                 android:tag="card_title" />
 
             <TextView
-                android:id="@+id/template1_subtitle"
+                android:id="@+id/template_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/template1_title"
-                android:layout_toRightOf="@+id/template1_image_container"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/template_image_container"
                 android:tag="card_subtitle" />
 
         </RelativeLayout>

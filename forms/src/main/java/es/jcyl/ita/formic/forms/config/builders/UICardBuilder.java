@@ -24,7 +24,12 @@ import es.jcyl.ita.formic.forms.components.card.UIHeading2;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.forms.el.JexlBindingExpression;
+import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
 
 
 /**
@@ -39,26 +44,19 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
 
     @Override
     public void setupOnSubtreeStarts(ConfigNode<UICard> node) {
-
+        Map attributes = node.getAttributes();
     }
 
-    private void setProperties(ConfigNode<UICard> node) {
-        String[] names = new String[node.getChildren().size()];
-        String[] labels = new String[node.getChildren().size()];
-        String[] values = new String[node.getChildren().size()];
-        int i = 0;
-        for (ConfigNode child : node.getChildren()) {
-            Map attributes = child.getAttributes();
-            names[i] = (String) attributes.get("name");
-            labels[i] = (String) attributes.get("label");
-            values[i] = (String) attributes.get("value");
-            i++;
+    protected void setAttributes(UICard card, ConfigNode node) {
+        Map<String, String> attributes = node.getAttributes();
+        for (Map.Entry<String, String> entry : attributes.entrySet()) {
+            String attName = entry.getKey();
+            String value = entry.getValue();
+            if (attName.equals(IMAGE)) {
+                UIImage image = new UIImage();
+                image.setValueExpression(ValueExpressionFactory.getInstance().create(value));
+            }
         }
-
-    }
-
-    private void setProperties(Repository repo) {
-        String[] repoProps = repo.getMeta().getPropertyNames();
     }
 
     @Override
@@ -71,7 +69,7 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
             } else if (child instanceof UIHeading2) {
                 card.setSubtitle((UIHeading2) child);
             } else if (child instanceof UIImage) {
-                card.setImage((UIImage) child);
+                card.setChildren(new UIComponent[]{child});
             }
 
         }

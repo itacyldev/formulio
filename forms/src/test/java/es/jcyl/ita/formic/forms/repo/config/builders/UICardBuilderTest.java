@@ -34,6 +34,7 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.FormConfig;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.media.meta.FileMeta;
 
 
 /**
@@ -51,6 +52,7 @@ public class UICardBuilderTest {
         confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
+        RepositoryUtils.registerMock("DEFAULT_PROJECT_IMAGES", new FileMeta());
     }
 
 
@@ -76,8 +78,8 @@ public class UICardBuilderTest {
     private static final String XML_TEST_CARD_WITH_CHILDREN = "<card template=\"template\">" +
             "<head1 id=\"title1\" label=\"title\" value=\"title\"/>" +
             "<head2 id=\"subtitle1\" label=\"subtitle\" value=\"subtitle\"/>" +
-            //"<image id=\"image\" value=\"$entity.image\"/>" +
-          "</card>";
+            "<image id=\"card_image\" value=\"$entity.image\"/>" +
+            "</card>";
 
 
     @Test
@@ -96,8 +98,9 @@ public class UICardBuilderTest {
         UIHeading2 subtitle = card.getSubtitle();
         Assert.assertNotNull(subtitle);
 
-//        UIImage image = card.getImage();
-//        Assert.assertNotNull(image);
+        UIImage image = card.getImage();
+        Assert.assertNotNull(image);
+        Assert.assertEquals("card_image", image.getId());
     }
 
     /**
@@ -105,7 +108,7 @@ public class UICardBuilderTest {
      *
      * @throws Exception
      */
-    private static final String XML_TEST_CARD_WITH_ATTS = "<card template=\"template\" title=\"titleValue\" subtitle=\"subtitleValue \" image=\"$entity.image\">";
+    private static final String XML_TEST_CARD_WITH_ATTS = "<card template=\"template\" title=\"titleValue\" subtitle=\"subtitleValue \" image=\"$entity.image\" />";
 
 
     @Test
