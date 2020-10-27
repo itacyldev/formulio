@@ -16,9 +16,8 @@ package es.jcyl.ita.formic.forms.components.card;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading1;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading2;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -27,15 +26,15 @@ import es.jcyl.ita.formic.forms.components.image.UIImage;
 public class UICard extends UIComponent {
 
     String template;
-    UIHeading1 title;
-    UIHeading2 subtitle;
+    UIHeading title;
+    UIHeading subtitle;
     UIImage image;
 
-    public UIHeading1 getTitle() {
+    public UIHeading getTitle() {
         return title;
     }
 
-    public void setTitle(UIHeading1 title) {
+    public void setTitle(UIHeading title) {
         this.title = title;
     }
 
@@ -49,12 +48,20 @@ public class UICard extends UIComponent {
     }
 
 
-    public UIHeading2 getSubtitle() {
+    public UIHeading getSubtitle() {
         return subtitle;
     }
 
-    public void setSubtitle(UIHeading2 subtitle) {
+    public void setSubtitle(UIHeading subtitle) {
         this.subtitle = subtitle;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
 

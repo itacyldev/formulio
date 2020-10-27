@@ -19,10 +19,10 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.card.UICard;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading1;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading2;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
@@ -60,10 +60,10 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
         UICard card = node.getElement();
         UIComponent[] children = ConfigNodeHelper.getUIChildren(node);
         for (UIComponent child : children) {
-            if (child instanceof UIHeading1) {
-                card.setTitle((UIHeading1) child);
-            } else if (child instanceof UIHeading2) {
-                card.setSubtitle((UIHeading2) child);
+            if (child instanceof UIHeading) {
+                card.setTitle((UIHeading) child);
+            } else if (child instanceof UIHeading) {
+                card.setSubtitle((UIHeading) child);
             } else if (child instanceof UIImage) {
                 card.setChildren(new UIComponent[]{child});
             }

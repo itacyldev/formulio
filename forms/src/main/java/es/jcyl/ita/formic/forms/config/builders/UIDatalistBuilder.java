@@ -26,6 +26,7 @@ import es.jcyl.ita.formic.forms.components.card.UICard;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -50,7 +51,7 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIDatalist> node) {
-        UIBuilderHelper.setUpRepo(node, true);
+        BuilderHelper.setUpRepo(node, true);
     }
 
     @Override

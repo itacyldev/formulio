@@ -19,13 +19,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading1;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading2;
 import es.jcyl.ita.formic.forms.components.image.ImageResourceView;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.view.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -36,23 +36,62 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  */
 
 public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>> {
+
+    public static final String TEMPLATE1 = "card_template_1";
+    public static final String TEMPLATE2 = "card_template_2";
+    public static final String CUSTOM_TEMPLATE = "card_custom_template";
+
     @Override
     protected int getWidgetLayoutId() {
         return R.layout.card_template_1;
+    }
+
+    private int getWidgetLayoutId(UICard card) {
+        int id = R.layout.card_template_1;
+        String template = card.getTemplate();
+
+        switch (template) {
+            case TEMPLATE1: {
+                id = R.layout.card_template_1;
+                break;
+            }
+            case TEMPLATE2: {
+                id = R.layout.card_template_2;
+                break;
+            }
+        }
+        return id;
+    }
+
+    /**
+     * Create a base view from context and component information to view used as placeholder in the form view
+     *
+     * @param env
+     * @param component
+     * @return
+     */
+    @Override
+    protected Widget<UICard> createWidget(RenderingEnv env, UICard component) {
+        Widget<UICard> widget = ViewHelper.inflate(env.getViewContext(), getWidgetLayoutId(component), Widget.class);
+        // set unique id and tag
+        widget.setId(RandomUtils.nextInt());
+        widget.setTag(getWidgetViewTag(component));
+        widget.setComponent(component);
+        return widget;
     }
 
     @Override
     protected void composeWidget(RenderingEnv env, Widget<UICard> widget) {
         UICard card = widget.getComponent();
 
-        UIHeading1 title = card.getTitle();
+        UIHeading title = card.getTitle();
         if (title != null) {
             TextView titleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_title");
             String value = (String) ConvertUtils.convert(title.getValue(env.getContext()), String.class);
             titleView.setText(value);
         }
 
-        UIHeading2 subtitle = card.getSubtitle();
+        UIHeading subtitle = card.getSubtitle();
         if (subtitle != null) {
             TextView subtitleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_subtitle");
             String value = (String) ConvertUtils.convert(subtitle.getValue(env.getContext()), String.class);

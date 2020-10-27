@@ -26,12 +26,11 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.card.UICard;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading1;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading2;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.repo.media.meta.FileMeta;
@@ -92,7 +91,7 @@ public class UICardBuilderTest {
 
         UICard card = cards.get(0);
 
-        UIHeading1 title = card.getTitle();
+        UIHeading title = card.getTitle();
         Assert.assertNotNull(title);
 
         UIHeading2 subtitle = card.getSubtitle();
@@ -121,7 +120,7 @@ public class UICardBuilderTest {
 
         UICard card = cards.get(0);
 
-        UIHeading1 title = card.getTitle();
+        UIHeading title = card.getTitle();
         Assert.assertNotNull(title);
 
         UIHeading2 subtitle = card.getSubtitle();
