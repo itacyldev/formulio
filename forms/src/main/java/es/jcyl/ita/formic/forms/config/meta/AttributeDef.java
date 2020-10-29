@@ -81,6 +81,7 @@ public class AttributeDef {
     public static Attribute HEIGHT = new Attribute("height", Integer.class);
     public static Attribute WIDTH = new Attribute("width", Integer.class);
     public static Attribute EMBEDDED = new Attribute("embedded", Boolean.class);
+    public static Attribute ORIENTATION = new Attribute("orientation", String.class);
 
     public static Attribute FOLDER = new Attribute("folder", String.class);
     public static Attribute DEFAULT_EXTENSION = new Attribute("defaultExtension", String.class);

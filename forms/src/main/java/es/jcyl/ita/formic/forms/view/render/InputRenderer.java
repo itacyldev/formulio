@@ -31,7 +31,7 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
 
 public abstract class InputRenderer<C extends UIInputComponent, I extends View>

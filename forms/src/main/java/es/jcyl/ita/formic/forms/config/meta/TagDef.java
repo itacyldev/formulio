@@ -45,6 +45,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HISTORY;
@@ -96,6 +97,7 @@ public class TagDef {
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);
         register("autocomplete", select);
+        register("radio", define(select, new Attribute[]{ORIENTATION}));
         register("options", define(new Attribute[]{VALUE_PROPERTY, LABEL_EXPRESSION, LABEL_FILTERING_PROP}));
         // attribute value in option element is a fixed value we don't need an expression
         Attribute optionValue = new Attribute("value");
