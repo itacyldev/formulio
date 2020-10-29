@@ -55,29 +55,11 @@ public class UIFieldBuilder extends BaseUIComponentBuilder<UIField> {
             throw new ConfigurationException(DevConsole.error(String.format("Invalid input type: [%s] expected " +
                     "one of: %s", type, UIField.TYPE.values())));
         }
-
-        String validatorSelector = node.getAttribute("validator");
-        if (StringUtils.isNotEmpty(validatorSelector)) {
-            String[] validators = validatorSelector.replace(" ", "").split(",");
-            addValidatorNode(node, validators);
-        }
     }
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIField> node) {
         BuilderHelper.setUpValueExpressionType(node);
-
-        Validator[] validators = ConfigNodeHelper.getValidators(node);
-        node.getElement().addValidator(validators);
     }
 
-    private void addValidatorNode(ConfigNode<UIField> root, String[] validators) {
-        for (String validator : validators) {
-            if (!BuilderHelper.isValidatorIncluded(validator, root)) {
-                ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
-                validatorNode.setAttribute("type", validator);
-                root.addChild(validatorNode);
-            }
-        }
-    }
 }

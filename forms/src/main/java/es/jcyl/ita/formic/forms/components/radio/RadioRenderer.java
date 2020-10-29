@@ -1,13 +1,18 @@
 package es.jcyl.ita.formic.forms.components.radio;
 
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import es.jcyl.ita.formic.core.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
@@ -35,10 +40,6 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
 //    private static final EmptyOption EMPTY_OPTION = new EmptyOption(null, null);
 
-    @Override
-    protected void setMessages(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
-
-    }
 
     @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
@@ -68,11 +69,35 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
                 }
             }
         });
+
+        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
+                ImageView.class);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                // uncheck all options
+                for (int index = 0; index < radioGroup.getChildCount(); index++) {
+                    RadioButtonWidget option = (RadioButtonWidget) radioGroup.getChildAt(index);
+                    option.setChecked(false);
+                }
+            }
+        });
+
     }
 
     @Override
     protected int getWidgetLayoutId() {
         return R.layout.widget_radio;
+    }
+
+    @Override
+    protected void setMessages(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
+        UIInputComponent component = widget.getComponent();
+        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        if (message != null) {
+            RadioButtonWidget button = (RadioButtonWidget) widget.getInputView().getChildAt(0);
+            button.setError(message);
+        }
     }
 
 }

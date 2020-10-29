@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -60,7 +61,7 @@ public class UIRadioBuilderTest {
      *
      * @throws Exception
      */
-    private static final String XML_TEST_BASIC = "<radio orientation=\"horizontal\"/>";
+    private static final String XML_TEST_BASIC = "<radio orientation=\"horizontal\" validator=\"required\"/>";
 
     @Test
     public void testEmptyRadio() throws Exception {
@@ -70,13 +71,15 @@ public class UIRadioBuilderTest {
         FormEditController editCtl = formConfig.getEdits().get(0);
         List<es.jcyl.ita.formic.forms.components.radio.UIRadio> lstRadio = UIComponentHelper.findByClass(editCtl.getView(), es.jcyl.ita.formic.forms.components.radio.UIRadio.class);
         Assert.assertNotNull(lstRadio);
-        Assert.assertTrue("One radio is expected, found: " + lstRadio.size(), lstRadio.size() == 1);
+        assertTrue("One radio is expected, found: " + lstRadio.size(), lstRadio.size() == 1);
 
         // repo must be set with parent value "contacts"
         es.jcyl.ita.formic.forms.components.radio.UIRadio radio = lstRadio.get(0);
         Assert.assertNotNull(radio.getId());
-        Assert.assertTrue(ArrayUtils.isEmpty(radio.getOptions()));
+        assertTrue(ArrayUtils.isEmpty(radio.getOptions()));
         assertThat(radio.getOrientation(),equalTo("horizontal"));
+        assertTrue(radio.isMandatory());
+        assertTrue(radio.getValidators().length > 0);
     }
 
     private static final String XML_OPTIONS = "<radio>" +
@@ -95,7 +98,7 @@ public class UIRadioBuilderTest {
         FormEditController editCtl = formConfig.getEdits().get(0);
         List<UISelect> selects = UIComponentHelper.findByClass(editCtl.getView(), UISelect.class);
         Assert.assertNotNull(selects);
-        Assert.assertTrue("One radio is expected, found: " + selects.size(), selects.size() == 1);
+        assertTrue("One radio is expected, found: " + selects.size(), selects.size() == 1);
 
         // repo must be set with parent value "contacts"
         UISelect select = selects.get(0);

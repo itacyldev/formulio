@@ -80,7 +80,7 @@ public class InputFieldRendererTest {
         view = renderHelper.render(env, field);
 
         Assert.assertEquals("The label must be marked with asterisk.",
-                "* some text",
+                "some text *",
                 ((TextView)ViewHelper.findLabelView(view, field)).getText());
     }
 

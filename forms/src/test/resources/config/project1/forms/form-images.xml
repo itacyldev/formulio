@@ -4,9 +4,8 @@
             <input label="Name" value="${entity.name}">
                 <validator type="required" />
             </input>
-            <radio label="Purpose in live:" orientation="horizontal"
+            <radio label="Purpose in live:" orientation="horizontal" validator="required"
                 value="${entity.character_type}">
-                <validator type="required" />
                 <options>
                     <option label="It's a villain" value="villain" />
                     <option label="He really trusts in justice" value="hero" />

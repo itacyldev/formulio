@@ -47,7 +47,8 @@ public class AttributeDef {
     // input
     public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
-    public static Attribute VALIDATOR = new Attribute("validator", String.class);
+    public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
+
     public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
 
     // common trasversal parameters

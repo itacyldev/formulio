@@ -137,7 +137,7 @@ public class UISelectRendererTest {
         view = renderHelper.render(env, field);
 
         Assert.assertEquals("The label must be marked with asterisk.",
-                "* some text",
+                "some text *",
                 (String) ((TextView)ViewHelper.findLabelView(view, field)).getText());
     }
 }

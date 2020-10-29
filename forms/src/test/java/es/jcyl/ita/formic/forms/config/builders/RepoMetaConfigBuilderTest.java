@@ -91,7 +91,7 @@ public class RepoMetaConfigBuilderTest {
 
         Repository repo = repoFactory.getRepo("superHRepo");
         Assert.assertNotNull(repo);
-        Assert.assertEquals(9, repo.getMeta().getProperties().length);
+        Assert.assertEquals(10, repo.getMeta().getProperties().length);
     }
 
     @Test
