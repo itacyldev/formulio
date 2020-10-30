@@ -87,7 +87,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIRadio component) {
         return R.layout.widget_radio;
     }
 

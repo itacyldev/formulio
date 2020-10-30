@@ -50,7 +50,7 @@ public class CheckBoxFieldRenderer extends InputTextRenderer<UIField, Switch> {
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIField component) {
         return R.layout.widget_switch;
     }
 

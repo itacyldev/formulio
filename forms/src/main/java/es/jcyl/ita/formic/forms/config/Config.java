@@ -17,8 +17,6 @@ package es.jcyl.ita.formic.forms.config;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
-import android.location.Location;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -28,32 +26,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.NonNull;
-
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.forms.location.LocationService;
-import es.jcyl.ita.formic.forms.project.handlers.ContextConfigHandler;
-import es.jcyl.ita.formic.repo.RepositoryFactory;
-import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
+import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
+import es.jcyl.ita.formic.forms.project.handlers.ContextConfigHandler;
 import es.jcyl.ita.formic.forms.project.handlers.DefaultImageRepositoryHandler;
 import es.jcyl.ita.formic.forms.project.handlers.FormConfigHandler;
 import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
 /**
  * Configuration initializer and common point to store and share configuration parameters.
  * <p>
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class Config {
@@ -199,7 +195,7 @@ public class Config {
     private void processDefaultResources() {
         // TODO: configure context and default sync properties in XML in res folder
         this.globalContext.put("date", new DateTimeContext());
-        if(this.andContext!= null){
+        if (this.andContext != null) {
             this.globalContext.put("location", new LocationService(this.andContext));
         }
     }
@@ -269,13 +265,13 @@ public class Config {
      *
      * @param project Selected project.
      */
-    public void setCurrentProject(@NonNull final Project project) {
+    public void setCurrentProject(final Project project) {
         try {
             currentProject = project;
             readConfig(project);
             debugConfig();
         } catch (Exception e) {
-            throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e),e);
+            throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e), e);
         }
     }
 

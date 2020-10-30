@@ -13,10 +13,12 @@ import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXTAREA;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -41,8 +43,12 @@ import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     @Override
-    protected int getWidgetLayoutId() {
-        return R.layout.widget_textfield;
+    protected int getWidgetLayoutId(UIField component) {
+        if (component.getType().equals(TEXTAREA.name())) {
+            return R.layout.widget_textarea;
+        } else {
+            return R.layout.widget_textfield;
+        }
     }
 
     @Override

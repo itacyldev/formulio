@@ -16,16 +16,14 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="15dp"
         android:gravity="center_vertical" />
-
     <EditText
         android:id="@+id/input_view"
         style="@style/Textfield_edittext"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:maxLines="4"
         android:inputType="textMultiLine"
-        android:lines="4"
-        android:maxLines="8"
         android:clickable="true"
         android:focusable="true" />
 

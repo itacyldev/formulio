@@ -26,17 +26,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
-import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
-import es.jcyl.ita.formic.forms.components.link.UILink;
+import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
+import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 import static org.mockito.Mockito.mock;
 
@@ -47,8 +47,6 @@ import static org.mockito.Mockito.mock;
 @RunWith(RobolectricTestRunner.class)
 public class UILinkRendererTest {
 
-    FormDataBuilder formBuilder = new FormDataBuilder();
-    EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
