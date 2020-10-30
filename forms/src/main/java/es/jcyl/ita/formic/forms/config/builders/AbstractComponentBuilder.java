@@ -96,7 +96,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         for (Map.Entry<String, String> entry : attributes.entrySet()) {
             String attName = entry.getKey();
             try {
-                Attribute attribute = this.attributeDefs.get(attName.toUpperCase());
+                Attribute attribute = this.attributeDefs.get(attName);
                 if (attribute == null) {
                     error(String.format("Invalid attribute found in tag <%s/>: [%s].", node.getName(), attName));
                 } else if (attribute.assignable) {

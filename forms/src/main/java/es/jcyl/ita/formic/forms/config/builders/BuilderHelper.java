@@ -24,15 +24,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
+import es.jcyl.ita.formic.repo.util.TypeUtils;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -339,5 +342,26 @@ public class BuilderHelper {
             }
             return;
         }
+    }
+
+    /**
+     * Creates a ConfigNode for the attribute
+     *
+     * @return
+     */
+    public static ConfigNode createNodeFromAttribute(Attribute attribute, String value, String tag) {
+        ConfigNode node = new ConfigNode(tag);
+        node.setId(attribute.name);
+        node.setAttribute("type", attribute.type.toString());
+        node.setAttribute("label", attribute.name);
+
+        ComponentBuilder<UIComponent> builder = ComponentBuilderFactory.getInstance().getBuilder(tag);
+
+        UIComponent component = builder.build(node);
+        node.setElement(component);
+        node.setAttribute("value", value, TypeUtils.getType(attribute.type));
+
+
+        return node;
     }
 }

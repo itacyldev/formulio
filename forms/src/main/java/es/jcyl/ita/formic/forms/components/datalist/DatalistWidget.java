@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.components.datalist;
  */
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -61,6 +62,14 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
 
     public DatalistWidget(Context context) {
         super(context);
+    }
+
+    public DatalistWidget(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public DatalistWidget(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
     }
 
     @Override

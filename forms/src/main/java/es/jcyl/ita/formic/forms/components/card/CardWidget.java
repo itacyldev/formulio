@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.components.card;
  */
 
 import android.content.Context;
+import android.util.AttributeSet;
 
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -28,4 +29,13 @@ public class CardWidget extends Widget<UICard> {
     public CardWidget(Context context) {
         super(context);
     }
+
+    public CardWidget(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public CardWidget(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
 }

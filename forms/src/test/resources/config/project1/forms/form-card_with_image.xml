@@ -1,0 +1,17 @@
+<main name="Superheroes" description="Simple form with image example." id="form4" repo="superHRepo">
+    <edit>
+        <form>
+            <card subtitle="${entity.real_name}" title="${entity.name}">
+                <image repo="superHImages" value="${entity.image}" readOnly="true"/>
+            </card>
+            <card template="card_template_2" title="${entity.name}">
+                <head id="title" label="label_title" value="${entity.name}"/>
+                <head id="subtitle" label="label_subtitle" value="${entity.real_name}"/>"
+                <image repo="superHImages" value="${entity.image}" inputType="0"/>
+            </card>
+        </form>
+    </edit>
+    <list name="Superheroes">
+        <datatable properties="name, real_name, age" />
+    </list>
+</main>

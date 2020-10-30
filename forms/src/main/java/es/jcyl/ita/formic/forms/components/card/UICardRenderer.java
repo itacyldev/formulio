@@ -24,6 +24,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.image.ImageResourceView;
+import es.jcyl.ita.formic.forms.components.image.ImageWidget;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.view.ViewHelper;
@@ -49,6 +50,9 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
     private int getWidgetLayoutId(UICard card) {
         int id = R.layout.card_template_1;
         String template = card.getTemplate();
+        if (template == null) {
+            return id;
+        }
 
         switch (template) {
             case TEMPLATE1: {
@@ -98,31 +102,29 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             subtitleView.setText(value);
         }
 
+        ImageResourceView imageView = (ImageResourceView) ViewHelper.findViewByTagAndSetId(widget, "card_image");
         UIImage image = card.getImage();
         if (image != null) {
-            ImageResourceView imageView = (ImageResourceView) ViewHelper.findViewByTagAndSetId(widget, "card_image");
+
+        } else {
+            //imageView.setVisibility(View.GONE);
         }
     }
 
 
-    private void setImageView(Widget<UICard> widget, ImageResourceView imageView) {
+    private void setImageView(Widget<UICard> widget, ImageWidget imageView) {
         LinearLayout imageContainer = (LinearLayout) ViewHelper.findViewByTagAndSetId(widget, "card_image_container");
+        imageContainer.removeAllViews();
         imageContainer.addView(imageView);
     }
 
     @Override
     public void addViews(RenderingEnv env, Widget<UICard> root, View[] views) {
         for (View view : views) {
-            if (view instanceof ImageResourceView) {
-                setImageView(root, (ImageResourceView) view);
+            if (view instanceof ImageWidget) {
+                setImageView(root, (ImageWidget) view);
             }
         }
     }
 
-
-    @Override
-    protected void setupWidget(RenderingEnv env, Widget<UICard> widget) {
-        super.setupWidget(env, widget);
-
-    }
 }

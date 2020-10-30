@@ -30,6 +30,11 @@ public class UICard extends UIComponent {
     UIHeading subtitle;
     UIImage image;
 
+    public UICard() {
+        setRendererType("card");
+        this.setRenderChildren(true);
+    }
+
     public UIHeading getTitle() {
         return title;
     }
@@ -37,7 +42,6 @@ public class UICard extends UIComponent {
     public void setTitle(UIHeading title) {
         this.title = title;
     }
-
 
     public UIImage getImage() {
         return image;

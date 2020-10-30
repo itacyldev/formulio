@@ -37,7 +37,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -83,12 +82,19 @@ public class TagDef {
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
+        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
+        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE}));
+        register("head", define(new Attribute[]{ID, LABEL, TYPE, VALUE}));
+
+
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("fileRepo", define(new Attribute[]{ID, FOLDER, DEFAULT_EXTENSION}));
         register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));
+        register("meta", define(new Attribute[]{PROPERTIES}));
+        register("property", define(new Attribute[]{NAME, EXPRESSION, COLUMN_NAME, EXPRESSION_TYPE, CONVERTER, EVAL_ON}));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
-        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR};
+        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", baseInput);
         register("checkbox", baseInput);

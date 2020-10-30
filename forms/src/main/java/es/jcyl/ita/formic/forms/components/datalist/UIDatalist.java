@@ -37,6 +37,10 @@ public class UIDatalist extends UIComponent implements FilterableComponent, Enti
 
     private List<Entity> entities;
 
+    public UIDatalist() {
+        setRendererType("datalist");
+    }
+
     public Repository getRepo() {
         return repo;
     }

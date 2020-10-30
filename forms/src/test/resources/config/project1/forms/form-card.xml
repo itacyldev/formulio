@@ -1,0 +1,7 @@
+<main name="form card" description="An example of short description" id="form4" repo="contacts">
+    <edit>
+        <form>        	
+            <card template="card_template_1" title="${entity.first_name}"/>             
+        </form>
+    </edit>
+</main>

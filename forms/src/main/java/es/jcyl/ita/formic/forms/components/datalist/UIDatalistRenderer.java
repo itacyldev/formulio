@@ -48,10 +48,9 @@ public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, Datali
     protected void setupWidget(RenderingEnv env, DatalistWidget widget) {
         super.setupWidget(env, widget);
 
-        LinearLayout datalistView = widget.findViewById(R.id.datalist_layout);
+        LinearLayout datalistView = widget.findViewById(R.id.datalist_content_layout);
 
-        LinearLayout datalistContentLayout = datalistView.findViewById(R.id.datalist_content_layout);
-        widget.setContentLayout(datalistContentLayout);
+        widget.setContentLayout(datalistView);
         widget.load(env);
     }
 }

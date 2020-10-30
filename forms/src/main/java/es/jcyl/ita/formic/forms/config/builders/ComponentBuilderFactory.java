@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -100,6 +101,11 @@ public class ComponentBuilderFactory {
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
+
+        registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
+        registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
+        registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
+
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");

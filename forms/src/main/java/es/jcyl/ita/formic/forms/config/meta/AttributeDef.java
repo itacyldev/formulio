@@ -76,9 +76,9 @@ public class AttributeDef {
 
     // card
     public static Attribute TEMPLATE = new Attribute("template", true);
-    public static Attribute TITLE = new Attribute("title", true);
-    public static Attribute SUBTITLE = new Attribute("subtitle", true);
-    public static Attribute IMAGE = new Attribute("image", true);
+    public static final Attribute TITLE = new Attribute("title", true);
+    public static final Attribute SUBTITLE = new Attribute("subtitle", true);
+    public static final Attribute IMAGE = new Attribute("image", true);
 
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);

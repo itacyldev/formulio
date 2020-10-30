@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.repo.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.ui;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -75,8 +75,8 @@ public class UICardBuilderTest {
      * @throws Exception
      */
     private static final String XML_TEST_CARD_WITH_CHILDREN = "<card template=\"template\">" +
-            "<head1 id=\"title1\" label=\"title\" value=\"title\"/>" +
-            "<head2 id=\"subtitle1\" label=\"subtitle\" value=\"subtitle\"/>" +
+            "<head id=\"title\" label=\"label_title\" value=\"value_title\"/>" +
+            "<head id=\"subtitle\" label=\"label_subtitle\" value=\"value_subtitle\"/>" +
             "<image id=\"card_image\" value=\"$entity.image\"/>" +
             "</card>";
 
@@ -94,10 +94,10 @@ public class UICardBuilderTest {
         UIHeading title = card.getTitle();
         Assert.assertNotNull(title);
 
-        UIHeading2 subtitle = card.getSubtitle();
+        UIHeading subtitle = card.getSubtitle();
         Assert.assertNotNull(subtitle);
 
-        UIImage image = card.getImage();
+        UIImage image = (UIImage) card.getChildren()[0];
         Assert.assertNotNull(image);
         Assert.assertEquals("card_image", image.getId());
     }
@@ -123,10 +123,10 @@ public class UICardBuilderTest {
         UIHeading title = card.getTitle();
         Assert.assertNotNull(title);
 
-        UIHeading2 subtitle = card.getSubtitle();
+        UIHeading subtitle = card.getSubtitle();
         Assert.assertNotNull(subtitle);
 
-        UIImage image = card.getImage();
+        UIImage image = (UIImage) card.getChildren()[0];
         Assert.assertNotNull(image);
     }
 

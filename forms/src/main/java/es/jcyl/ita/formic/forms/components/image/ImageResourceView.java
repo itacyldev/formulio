@@ -21,7 +21,6 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-
 import es.jcyl.ita.formic.forms.components.media.MediaResource;
 
 /**
