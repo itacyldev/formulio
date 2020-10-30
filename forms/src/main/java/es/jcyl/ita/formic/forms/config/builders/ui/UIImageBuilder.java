@@ -17,15 +17,15 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import java.util.Collections;
 
+import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.CalculatedProperty;
 import es.jcyl.ita.formic.forms.repo.EntityRelation;
-import es.jcyl.ita.formic.forms.components.image.UIImage;
+import es.jcyl.ita.formic.repo.Repository;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -47,8 +47,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
 
     private void setDefaultValues(ConfigNode<UIImage> node) {
         if (!node.hasAttribute(AttributeDef.INPUT_TYPE.name)) {
-            node.setAttribute(AttributeDef.INPUT_TYPE.name,
-                    "" + UIImage.ImageInputType.GALLERY_AND_CAMERA.value); // show camera and gallery buttons
+            node.getElement().setInputType(UIImage.ImageInputType.GALLERY_AND_CAMERA.value);
         }
     }
 

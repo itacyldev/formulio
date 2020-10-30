@@ -13,10 +13,10 @@ import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -50,7 +50,9 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         // configure input view elements
         UIField component = widget.getComponent();
         EditText inputView = widget.getInputView();
-        inputView.setInputType(component.getInputType());
+        if (component.getInputType() != null) {
+            inputView.setInputType(component.getInputType());
+        }
         // set event
         addTextChangeListener(env, inputView, component);
 

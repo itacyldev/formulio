@@ -12,7 +12,7 @@
                     <option label="Depending on the day" value="nsnc" />
                 </options>
             </radio>
-            <image repo="superHImages" value="${entity.image}" />
+            <image repo="superHImages" value="${entity.image}" readOnly="true"/>
             <image value="superheroes/${entity.name.toLowerCase().replace(' ','_')+'.jpg'}" />
             <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
             <input type="date" value="${entity.creation_date}" />
