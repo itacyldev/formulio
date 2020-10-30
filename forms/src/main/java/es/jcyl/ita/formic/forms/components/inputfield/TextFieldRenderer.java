@@ -50,7 +50,9 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         // configure input view elements
         UIField component = widget.getComponent();
         EditText inputView = widget.getInputView();
-        inputView.setInputType(component.getInputType());
+        if (component.getInputType() != null) {
+            inputView.setInputType(component.getInputType());
+        }
         // set event
         addTextChangeListener(env, inputView, component);
 

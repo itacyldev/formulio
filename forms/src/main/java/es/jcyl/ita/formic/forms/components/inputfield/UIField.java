@@ -32,6 +32,4 @@ public class UIField extends UIInputComponent {
     public void setTypeStr(String type) {
         this.type = TYPE.valueOf(type.toUpperCase());
     }
-
-
 }

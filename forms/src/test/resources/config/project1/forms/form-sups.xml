@@ -12,6 +12,7 @@
                     <option label="Depending on the day" value="nsnc" />
                 </options>
             </radio>
+            <input label="Bio" inputType="32" value="${entity.bio}"/>
             <image repo="superHImages" value="${entity.image}" />
             <image value="superheroes/${entity.name.toLowerCase().replace(' ','_')+'.jpg'}" />
             <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />

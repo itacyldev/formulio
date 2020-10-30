@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
-import android.text.InputType;
-
 import java.util.Arrays;
 
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
@@ -34,7 +32,7 @@ public class UIInputComponent extends UIComponent {
     protected String label;
     private boolean readOnly;
     private String valueConverter;
-    private int inputType = InputType.TYPE_CLASS_TEXT;
+    private Integer inputType = null;
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
@@ -134,11 +132,11 @@ public class UIInputComponent extends UIComponent {
     }
 
 
-    public int getInputType() {
+    public Integer getInputType() {
         return inputType;
     }
 
-    public void setInputType(final int inputType) {
+    public void setInputType(final Integer inputType) {
         this.inputType = inputType;
     }
 
