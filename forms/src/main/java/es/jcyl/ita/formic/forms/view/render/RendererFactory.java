@@ -28,6 +28,7 @@ import es.jcyl.ita.formic.forms.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.formic.forms.components.link.UILinkRenderer;
+import es.jcyl.ita.formic.forms.components.radio.RadioRenderer;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
 import es.jcyl.ita.formic.forms.components.tab.TabItemRenderer;
 import es.jcyl.ita.formic.forms.components.tab.TabRenderer;
@@ -52,6 +53,7 @@ public class RendererFactory {
         renderInstances.put("datatable", new UIDatatableRenderer());
         renderInstances.put("link", new UILinkRenderer());
         renderInstances.put("select", new SelectRenderer());
+        renderInstances.put("radio", new RadioRenderer());
         renderInstances.put("autocomplete", new AutoCompleteRenderer());
         renderInstances.put("tab", new TabRenderer());
         renderInstances.put("tabitem", new TabItemRenderer());

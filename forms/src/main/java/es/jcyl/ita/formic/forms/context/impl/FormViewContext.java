@@ -3,10 +3,10 @@ package es.jcyl.ita.formic.forms.context.impl;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import java.util.Set;
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).

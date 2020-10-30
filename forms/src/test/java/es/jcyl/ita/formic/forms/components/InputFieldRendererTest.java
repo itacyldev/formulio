@@ -30,16 +30,16 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.Set;
 
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 import static org.mockito.Mockito.mock;
 
@@ -80,7 +80,7 @@ public class InputFieldRendererTest {
         view = renderHelper.render(env, field);
 
         Assert.assertEquals("The label must be marked with asterisk.",
-                "* some text",
+                "some text *",
                 ((TextView)ViewHelper.findLabelView(view, field)).getText());
     }
 

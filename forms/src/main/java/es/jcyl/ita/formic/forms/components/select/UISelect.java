@@ -15,16 +15,17 @@ package es.jcyl.ita.formic.forms.components.select;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.option.MultiOptionComponent;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UISelect extends UIInputComponent  implements FilterableComponent {
+public class UISelect extends UIInputComponent  implements FilterableComponent, MultiOptionComponent {
 
     private static final String SELECT_TYPE = "select";
     protected UIOption[] options;

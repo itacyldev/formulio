@@ -96,6 +96,8 @@ public class ValidatorBuilderTest {
         Assert.assertEquals(RequiredValidator.class, validator.getClass());
     }
 
+
+
     /**
      * Tests the creation of validators using validator attribute
      *

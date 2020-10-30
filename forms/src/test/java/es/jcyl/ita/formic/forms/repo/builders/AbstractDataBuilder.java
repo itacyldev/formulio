@@ -33,6 +33,10 @@ public abstract class AbstractDataBuilder<M> implements DataBuilder<M> {
     protected abstract M getModelInstance();
     public abstract <D extends DataBuilder<M>> D withRandomData();
 
+    public AbstractDataBuilder(Class effectiveClass) {
+        this.baseModel = (M) createEmptyModel(effectiveClass);
+    }
+
     public AbstractDataBuilder(){
         this.baseModel = createEmptyModel();
     }
@@ -64,7 +68,16 @@ public abstract class AbstractDataBuilder<M> implements DataBuilder<M> {
         return model;
     }
 
-
+    protected Object createEmptyModel(Class clzz) {
+        if(clzz == null){
+            return null;
+        }
+        try {
+            return clzz.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while trying to instantiate component class.", e);
+        }
+    }
     protected final M createEmptyModel() {
         M model = getModelInstance();
         if (model == null) {

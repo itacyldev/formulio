@@ -33,6 +33,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.widget.Widget;

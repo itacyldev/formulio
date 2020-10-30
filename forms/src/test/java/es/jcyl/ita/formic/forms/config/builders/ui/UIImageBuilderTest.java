@@ -59,7 +59,7 @@ public class UIImageBuilderTest {
      *
      * @throws Exception
      */
-    private static final String XML_TEST_BASIC = "<image value=\"$$$\"/>";
+    private static final String XML_TEST_BASIC = "<image value=\"$$$\" inputType=\"0\"/>";
 
     @Test
     public void testStaticImageConfig() throws Exception {
@@ -81,6 +81,7 @@ public class UIImageBuilderTest {
         // an entity relation with a literal expression must be created
         Object value =  img.getEntityRelation().getEntityPropertyExpr().toString();
         Assert.assertEquals(imgFile.getAbsolutePath(), value);
+        Assert.assertEquals((int) img.getInputType(), 0);
     }
 
     @AfterClass

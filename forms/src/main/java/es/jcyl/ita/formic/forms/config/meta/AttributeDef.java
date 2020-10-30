@@ -47,7 +47,8 @@ public class AttributeDef {
     // input
     public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
-    public static Attribute VALIDATOR = new Attribute("validator", String.class);
+    public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
+
     public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
 
     // common trasversal parameters
@@ -87,6 +88,7 @@ public class AttributeDef {
     public static Attribute HEIGHT = new Attribute("height", Integer.class);
     public static Attribute WIDTH = new Attribute("width", Integer.class);
     public static Attribute EMBEDDED = new Attribute("embedded", Boolean.class);
+    public static Attribute ORIENTATION = new Attribute("orientation", String.class);
 
     public static Attribute FOLDER = new Attribute("folder", String.class);
     public static Attribute DEFAULT_EXTENSION = new Attribute("defaultExtension", String.class);

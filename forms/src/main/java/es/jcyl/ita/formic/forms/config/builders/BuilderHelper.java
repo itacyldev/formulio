@@ -260,7 +260,8 @@ public class BuilderHelper {
         List<ConfigNode> children = root.getChildren();
         if (children != null) {
             for (ConfigNode child : children) {
-                if (child.getAttribute("type").equals(validatorType)) {
+                if (child.getName().equals("validator")
+                        && child.getAttribute("type").equals(validatorType)) {
                     isIncluded = true;
                     break;
                 }

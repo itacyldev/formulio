@@ -17,10 +17,10 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).

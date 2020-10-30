@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
@@ -41,7 +42,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
-import es.jcyl.ita.formic.forms.config.builders.ui.UISelectBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIMultiOptionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.ValidatorBuilder;
 import es.jcyl.ita.formic.forms.config.elements.OptionsConfig;
@@ -52,6 +53,7 @@ import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
+import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
@@ -124,7 +126,8 @@ public class ComponentBuilderFactory {
         registerBuilder("date", inputFieldBuilder);
         registerBuilder("image", newBuilder(UIImageBuilder.class, "image"));
 
-        registerBuilder("select", newBuilder(UISelectBuilder.class, "select"));
+        registerBuilder("select", newBuilder(UIMultiOptionBuilder.class, "select", UISelect.class));
+        registerBuilder("radio", newBuilder(UIMultiOptionBuilder.class, "radio", es.jcyl.ita.formic.forms.components.radio.UIRadio.class));
         registerBuilder("autocomplete", newBuilder(UIAutocompleteBuilder.class, "autocomplete"));
 
         registerBuilder("option", newDefaultBuilder(UIOption.class, "option"));
@@ -142,6 +145,7 @@ public class ComponentBuilderFactory {
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
+        registerAttResolver("validator", new ValidatorAttResolver());
 
     }
 
@@ -165,6 +169,10 @@ public class ComponentBuilderFactory {
     }
 
     private ComponentBuilder newBuilder(Class clazz, String tagName) {
+        return newBuilder(clazz, tagName, null);
+    }
+
+    private ComponentBuilder newBuilder(Class clazz, String tagName, Class subClazz) {
         ComponentBuilder builder = null;
         // try with no parameter
         try {
@@ -174,7 +182,11 @@ public class ComponentBuilderFactory {
         // try with one String parameter
         if (builder == null) {
             try {
-                builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
+                if(subClazz == null){
+                    builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
+                } else{
+                    builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class, Class.class}).newInstance(tagName, subClazz);
+                }
             } catch (Exception e) {
                 String msg = String.format("Class [%s] couldn't be instantiated, check it has a " +
                         "no-parameter constructor or a constructor with one string parameter " +

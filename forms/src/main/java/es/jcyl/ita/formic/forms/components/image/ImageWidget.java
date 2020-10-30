@@ -64,7 +64,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
         if (!component.isCameraActive()) { // TODO: or device has no camera (check throw context.device)
-            cameraButton.setVisibility(View.INVISIBLE);
+            cameraButton.setVisibility(View.GONE);
         } else {
             if (this.component.isReadOnly()) {
                 cameraButton.setEnabled(false);
@@ -79,7 +79,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         }
         Button galleryButton = this.findViewById(R.id.btn_gallery);
         if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
-            galleryButton.setVisibility(View.INVISIBLE);
+            galleryButton.setVisibility(View.GONE);
         } else {
             if (this.component.isReadOnly()) {
                 cameraButton.setEnabled(false);

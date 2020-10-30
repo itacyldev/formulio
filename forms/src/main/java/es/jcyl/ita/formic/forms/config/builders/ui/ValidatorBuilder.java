@@ -3,6 +3,10 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.validation.Validator;
@@ -24,6 +28,15 @@ public class ValidatorBuilder extends AbstractComponentBuilder<Validator> {
 
         setAttributes(element, node);
         node.setElement(element);
+
+        // attach to parent element
+        UIComponent component = (UIComponent) node.getParent().getElement();
+        if (!(component instanceof UIInputComponent)) {
+            throw new ConfigurationException(DevConsole.error(String.format("The <validator/> tag " +
+                    "must be nested in an UIInputComponent, found: [%s].", node.getName())));
+        }
+        ((UIInputComponent) component).addValidator(element);
+
         return element;
     }
 

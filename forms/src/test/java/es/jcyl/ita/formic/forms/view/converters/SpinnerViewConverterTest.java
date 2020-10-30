@@ -38,12 +38,12 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.repo.builders.SelectDataBuilder;
+import es.jcyl.ita.formic.forms.repo.builders.MultiOptionComponentBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
 
@@ -55,7 +55,7 @@ import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
 public class SpinnerViewConverterTest {
 
     FormDataBuilder formBuilder = new FormDataBuilder();
-    SelectDataBuilder selectBuilder = new SelectDataBuilder();
+    MultiOptionComponentBuilder selectBuilder = new MultiOptionComponentBuilder(UISelect.class);
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ViewRenderHelper renderHelper = new ViewRenderHelper();
 
@@ -79,7 +79,7 @@ public class SpinnerViewConverterTest {
     @Test
     public void testStringValues() {
         String[] values = RandomUtils.randomObjectArray(10, String.class);
-        UISelect field = selectBuilder.withRandomData().withOptionValues(values, values).build();
+        UISelect field = (UISelect) selectBuilder.withRandomData().withOptionValues(values, values).build();
         // create view, form and render
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true)
@@ -111,7 +111,7 @@ public class SpinnerViewConverterTest {
     @Test
     public void testIntegerValues() {
         String[] options = new String[]{"0", "1", "2", "3", "4"};
-        UISelect field = selectBuilder.withRandomData().withOptionValues(options, options).build();
+        UISelect field = (UISelect) selectBuilder.withRandomData().withOptionValues(options, options).build();
         // create view, form and render
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true)
@@ -156,7 +156,7 @@ public class SpinnerViewConverterTest {
 
             System.out.println(String.format("Checking with pair: %s-%s", options[0], options[1]));
 
-            UISelect field = selectBuilder.withRandomData().withOptionValues(options, options).build();
+            UISelect field = (UISelect) selectBuilder.withRandomData().withOptionValues(options, options).build();
             // create view, form and render
             DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                     .invoke(ctx, true)
@@ -196,7 +196,7 @@ public class SpinnerViewConverterTest {
 
         // get one of the values of the option and set to the entity
         // create view, form and render
-        UISelect select = selectBuilder.withRandomData()
+        UISelect select = (UISelect) selectBuilder.withRandomData()
                 .withNumOptions(5)
                 .withValueBindingExpression("${entity.myProperty}")
                 .build();

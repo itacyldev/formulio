@@ -19,7 +19,8 @@ package es.jcyl.ita.formic.forms.view.render;
  * I, represents the AndroidView used as base user input, the component attached to InputFieldView
  * that will be used to get and set data from/to the view.
  * <p/>
- *  @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 import android.content.res.Resources;
@@ -30,7 +31,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 
@@ -100,7 +101,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
     protected void setLabel(RenderingEnv env, TextView labelView, C component) {
         labelView.setTag("label_" + component.getId());
         String labelComponent = (component.isMandatory()) ?
-                "* " + component.getLabel()
+                component.getLabel() + " *"
                 : component.getLabel();
         labelView.setText(labelComponent);
     }
