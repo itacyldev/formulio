@@ -15,16 +15,16 @@ public class UIField extends UIInputComponent {
 
     @Override
     public String getRendererType() {
+        return type.name().toLowerCase();
+    }
+
+    @Override
+    public String getValueConverter() {
         if (type == TEXT || type == TEXTAREA) {
             return "text";
         } else {
             return type.name().toLowerCase();
         }
-    }
-
-    @Override
-    public String getValueConverter() {
-        return getRendererType();
     }
 
     public String getType() {

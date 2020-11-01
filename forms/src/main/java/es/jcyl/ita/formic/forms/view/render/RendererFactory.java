@@ -24,6 +24,7 @@ import es.jcyl.ita.formic.forms.components.form.UIFormRenderer;
 import es.jcyl.ita.formic.forms.components.image.UIImageRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.DateFieldRenderer;
+import es.jcyl.ita.formic.forms.components.inputfield.TextAreaRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.formic.forms.components.link.UILinkRenderer;
 import es.jcyl.ita.formic.forms.components.radio.RadioRenderer;
@@ -46,6 +47,7 @@ public class RendererFactory {
         renderInstances.put("view", new UIViewRenderer());
         renderInstances.put("form", new UIFormRenderer());
         renderInstances.put("text", new TextFieldRenderer());
+        renderInstances.put("textarea", new TextAreaRenderer());
         renderInstances.put("date", new DateFieldRenderer());
         renderInstances.put("switcher", new CheckBoxFieldRenderer());
         renderInstances.put("datatable", new UIDatatableRenderer());

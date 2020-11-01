@@ -18,8 +18,6 @@ import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
-import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXTAREA;
-
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -44,11 +42,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     @Override
     protected int getWidgetLayoutId(UIField component) {
-        if (component.getType().equals(TEXTAREA.name())) {
-            return R.layout.widget_textarea;
-        } else {
-            return R.layout.widget_textfield;
-        }
+        return R.layout.widget_textfield;
     }
 
     @Override
@@ -79,7 +73,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         }
     }
 
-    private void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
+    protected void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
         view.addTextChangedListener(new TextWatcher() {
