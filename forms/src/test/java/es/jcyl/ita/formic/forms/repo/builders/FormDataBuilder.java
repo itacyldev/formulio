@@ -110,7 +110,7 @@ public class FormDataBuilder extends AbstractDataBuilder<UIForm> {
             UIField.TYPE fType;
             if (this.meta == null) {
                 // get input type as randomly
-                fType = values[RandomUtils.nextInt(0, values.length - 1)];
+                fType = values[RandomUtils.nextInt(0, values.length - 2)];
             } else {
                 // get type from given meta
                 PropertyType property = this.meta.getProperties()[i];
