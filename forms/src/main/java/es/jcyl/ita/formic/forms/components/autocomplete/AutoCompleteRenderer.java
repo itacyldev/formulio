@@ -35,7 +35,7 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIAutoComplete component) {
         return R.layout.widget_autocomplete;
     }
 }

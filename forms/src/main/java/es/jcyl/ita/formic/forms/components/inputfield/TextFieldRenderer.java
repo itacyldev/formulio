@@ -41,7 +41,7 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIField component) {
         return R.layout.widget_textfield;
     }
 
@@ -73,7 +73,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         }
     }
 
-    private void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
+    protected void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
         view.addTextChangedListener(new TextWatcher() {

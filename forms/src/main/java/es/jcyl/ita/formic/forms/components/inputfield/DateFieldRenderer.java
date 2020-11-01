@@ -109,7 +109,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIField component) {
         return R.layout.widget_date;
     }
 }

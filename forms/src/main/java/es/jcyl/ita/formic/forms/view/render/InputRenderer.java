@@ -61,7 +61,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                             "getInputViewId() must return an existing component in the widget " +
                             "layout. Make sure there's a View with the id [%s] in the file [%s].",
                     this.getClass().getName(), res.getResourceName(getInputViewId()),
-                    res.getResourceName(getWidgetLayoutId())));
+                    res.getResourceName(getWidgetLayoutId(component))));
         }
         widget.setInputView(inputView);
         setInputView(env, widget);

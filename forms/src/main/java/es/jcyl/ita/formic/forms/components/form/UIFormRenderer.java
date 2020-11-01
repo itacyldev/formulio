@@ -32,7 +32,7 @@ public class UIFormRenderer extends AbstractGroupRenderer<UIForm, Widget<UIForm>
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIForm component) {
         return R.layout.widget_form;
     }
 }

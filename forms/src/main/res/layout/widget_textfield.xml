@@ -16,24 +16,25 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="15dp"
         android:gravity="center_vertical" />
+
     <EditText
         android:id="@+id/input_view"
         style="@style/Textfield_edittext"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:inputType="text"
         android:clickable="true"
-        android:focusable="true"
-        android:inputType="text" />
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/field_layout_x"
         style="@style/Textfield_cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="center_vertical"
         android:background="@drawable/selectablebuttonbackground"
         android:contentDescription="@string/tool_buttons_x"
-        android:padding="5dp"
+        android:padding="3dp"
         android:src="@drawable/ic_tool_x" />
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

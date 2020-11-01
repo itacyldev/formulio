@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIImage component) {
         return R.layout.widget_image;
     }
 

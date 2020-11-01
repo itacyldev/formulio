@@ -15,14 +15,12 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
  * limitations under the License.
  */
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
@@ -63,5 +61,22 @@ public class UIFieldBuilderTest {
 
         assertThat(field.getId(), equalTo("myId"));
         assertThat(field.isReadOnly(), equalTo(true));
+    }
+
+    private static final String XML_TEXT_AREA = "<textarea id=\"myId\" readonly=\"true\" lines=\"5\"/>";
+
+    @Test
+    public void testTextArea() throws Exception {
+//        RepositoryUtils.registerMock("contacts2");
+
+        String xml = XmlConfigUtils.createMainList(XML_TEXT_AREA);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        UIField field = UIComponentHelper.findByClass(formConfig.getList().getView(), UIField.class).get(0);
+
+        assertThat(field.getId(), equalTo("myId"));
+        assertThat(field.isReadOnly(), equalTo(true));
+        assertThat(field.getType(), equalTo("TEXTAREA"));
+        assertThat(field.getLines(), equalTo(5));
     }
 }

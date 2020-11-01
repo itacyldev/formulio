@@ -80,13 +80,14 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
                     RadioButtonWidget option = (RadioButtonWidget) radioGroup.getChildAt(index);
                     option.setChecked(false);
                 }
+                radioGroup.clearCheck();
             }
         });
 
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIRadio component) {
         return R.layout.widget_radio;
     }
 

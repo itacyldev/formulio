@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
-import android.text.InputType;
-
 import java.util.Arrays;
 
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;

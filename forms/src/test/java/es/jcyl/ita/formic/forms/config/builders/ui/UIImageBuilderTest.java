@@ -84,7 +84,7 @@ public class UIImageBuilderTest {
         Assert.assertEquals((int) img.getInputType(), 0);
     }
 
-    @AfterClass
+   @AfterClass
     public static void tearDown() {
         RepositoryUtils.unregisterMock("contacts");
     }

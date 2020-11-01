@@ -2,12 +2,13 @@ package es.jcyl.ita.formic.forms.components.tab;
 
 import android.view.View;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
@@ -36,7 +37,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UITab component) {
         return R.layout.widget_tab;
     }
 

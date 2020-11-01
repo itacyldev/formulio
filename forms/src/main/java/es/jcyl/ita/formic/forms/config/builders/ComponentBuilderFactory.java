@@ -116,6 +116,7 @@ public class ComponentBuilderFactory {
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);
         registerBuilder("text", inputFieldBuilder);
+        registerBuilder("textarea", newBuilder(UIFieldBuilder.class, "textarea"));
         registerBuilder("switcher", inputFieldBuilder);
         registerBuilder("date", inputFieldBuilder);
         registerBuilder("image", newBuilder(UIImageBuilder.class, "image"));

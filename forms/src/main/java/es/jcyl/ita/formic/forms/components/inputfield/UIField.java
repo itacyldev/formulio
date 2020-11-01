@@ -3,13 +3,15 @@ package es.jcyl.ita.formic.forms.components.inputfield;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXT;
+import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXTAREA;
 
 public class UIField extends UIInputComponent {
     public enum TYPE {
-        TEXT, DATE, SWITCHER // SIGN
+        TEXT, DATE, SWITCHER, TEXTAREA
     }
 
     private TYPE type = TEXT;
+    private Integer lines;
 
     @Override
     public String getRendererType() {
@@ -18,7 +20,11 @@ public class UIField extends UIInputComponent {
 
     @Override
     public String getValueConverter() {
-        return type.name().toLowerCase();
+        if (type == TEXT || type == TEXTAREA) {
+            return "text";
+        } else {
+            return type.name().toLowerCase();
+        }
     }
 
     public String getType() {
@@ -33,5 +39,11 @@ public class UIField extends UIInputComponent {
         this.type = TYPE.valueOf(type.toUpperCase());
     }
 
+    public Integer getLines() {
+        return lines;
+    }
 
+    public void setLines(Integer lines) {
+        this.lines = lines;
+    }
 }
