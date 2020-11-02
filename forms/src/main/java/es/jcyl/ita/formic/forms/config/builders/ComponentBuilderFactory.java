@@ -23,6 +23,8 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
+import es.jcyl.ita.formic.forms.components.table.UIRow;
+import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
@@ -42,6 +44,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIMultiOptionBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIRowBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.ValidatorBuilder;
 import es.jcyl.ita.formic.forms.config.elements.OptionsConfig;
@@ -130,6 +133,9 @@ public class ComponentBuilderFactory {
 
         registerBuilder("tab", newBasicBuilder(UITab.class, "tab"));
         registerBuilder("tabitem", newBuilder(UITabItemBuilder.class, "tabitem"));
+
+        registerBuilder("table", newBasicBuilder(UITable.class, "table"));
+        registerBuilder("row", newBuilder(UIRowBuilder.class, "row"));
 
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
         registerBuilder("context", new ContextBuilder());

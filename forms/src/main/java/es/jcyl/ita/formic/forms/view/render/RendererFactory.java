@@ -31,6 +31,8 @@ import es.jcyl.ita.formic.forms.components.radio.RadioRenderer;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
 import es.jcyl.ita.formic.forms.components.tab.TabItemRenderer;
 import es.jcyl.ita.formic.forms.components.tab.TabRenderer;
+import es.jcyl.ita.formic.forms.components.table.UIRowRenderer;
+import es.jcyl.ita.formic.forms.components.table.UITableRenderer;
 import es.jcyl.ita.formic.forms.components.view.UIViewRenderer;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
@@ -57,6 +59,8 @@ public class RendererFactory {
         renderInstances.put("autocomplete", new AutoCompleteRenderer());
         renderInstances.put("tab", new TabRenderer());
         renderInstances.put("tabitem", new TabItemRenderer());
+        renderInstances.put("table", new UITableRenderer());
+        renderInstances.put("row", new UIRowRenderer());
         renderInstances.put("image", new UIImageRenderer());
     }
 

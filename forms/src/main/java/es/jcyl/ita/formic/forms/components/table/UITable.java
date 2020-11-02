@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.repo.builders;
+package es.jcyl.ita.formic.forms.components.table;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,27 @@ package es.jcyl.ita.formic.forms.repo.builders;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.UIGroupComponent;
+
+
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public interface DataBuilder<T> {
+public class UITable extends UIGroupComponent {
+    private String headerText;
 
-    T build();
+    public UITable(){
+        this.setRendererType("table");
+        this.setRenderChildren(true);
+    }
 
-    DataBuilder<T> with(String property, Object value);
+    public String getHeaderText() {
+        return headerText;
+    }
 
-    <M extends DataBuilder<T>> M withRandomData();
+    public void setHeaderText(String headerText) {
+        this.headerText = headerText;
+    }
 
 }

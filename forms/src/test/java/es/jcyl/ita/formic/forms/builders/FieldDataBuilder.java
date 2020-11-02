@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.repo.builders;
+package es.jcyl.ita.formic.forms.builders;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

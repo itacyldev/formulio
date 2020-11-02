@@ -33,7 +33,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.repo.builders.AutoCompleteDataBuilder;
+import es.jcyl.ita.formic.forms.builders.AutoCompleteDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView;
 import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;

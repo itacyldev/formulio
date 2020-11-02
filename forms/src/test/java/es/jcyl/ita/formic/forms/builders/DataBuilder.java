@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.repo.builders;
+package es.jcyl.ita.formic.forms.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -19,12 +19,12 @@ package es.jcyl.ita.formic.forms.repo.builders;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-class DataBuilderException extends RuntimeException {
-    public DataBuilderException(String msg) {
-        super(msg);
-    }
+public interface DataBuilder<T> {
 
-    public DataBuilderException(String msg, Exception e) {
-        super(msg, e);
-    }
+    T build();
+
+    DataBuilder<T> with(String property, Object value);
+
+    <M extends DataBuilder<T>> M withRandomData();
+
 }

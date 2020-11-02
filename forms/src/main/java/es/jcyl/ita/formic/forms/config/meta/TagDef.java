@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBFILE;
@@ -72,7 +73,6 @@ public class TagDef {
     }
 
     private static void initialize() {
-
         Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE};
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
@@ -120,6 +120,9 @@ public class TagDef {
 
         register("tab", define(base, new Attribute[]{ID}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
+
+        register("table", define(base, new Attribute[]{ID, HEADER_TEXT}));
+        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS}));
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
