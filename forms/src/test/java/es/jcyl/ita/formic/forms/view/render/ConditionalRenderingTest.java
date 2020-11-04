@@ -227,7 +227,6 @@ public class ConditionalRenderingTest {
         Boolean[] expectedVisibility = new Boolean[]{false, false, true, true, false, false};
         // set field render expression
         form.setRenderExpression(exprFactory.create(renderExpression));
-
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());

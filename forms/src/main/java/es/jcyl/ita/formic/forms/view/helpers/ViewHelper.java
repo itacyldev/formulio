@@ -182,22 +182,22 @@ public class ViewHelper {
         String formId = (component.getParentForm() != null) ? component.getParentForm().getId() : "root";
         return rootView.findViewWithTag(formId + ":" + component.getId());
     }
-
-    public static List<InputWidget> findInputFieldViews(ViewGroup root) {
-        List<InputWidget> views = new ArrayList<>();
-        final int childCount = root.getChildCount();
-
-        for (int i = 0; i < childCount; i++) {
-            final View child = root.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                views.addAll(findInputFieldViews((ViewGroup) child));
-            }
-            if (child instanceof InputWidget) {
-                views.add((InputWidget) child);
-            }
-        }
-        return views;
-    }
+//
+//    public static List<InputWidget> findInputFieldViews(ViewGroup root) {
+//        List<InputWidget> views = new ArrayList<>();
+//        final int childCount = root.getChildCount();
+//
+//        for (int i = 0; i < childCount; i++) {
+//            final View child = root.getChildAt(i);
+//            if (child instanceof ViewGroup) {
+//                views.addAll(findInputFieldViews((ViewGroup) child));
+//            }
+//            if (child instanceof InputWidget) {
+//                views.add((InputWidget) child);
+//            }
+//        }
+//        return views;
+//    }
 
     public static InputWidget findInputFieldViewById(View rootView, UIInputComponent field) {
         return findInputFieldViewById(rootView, field.getParentForm().getId(), field.getId());

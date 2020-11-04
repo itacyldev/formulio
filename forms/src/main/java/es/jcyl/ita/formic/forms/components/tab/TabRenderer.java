@@ -73,7 +73,6 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         int fragCount = 0;
         for (View view : views) {
             adapter.addView(view, fragCount);
-
             fragCount++;
         }
     }

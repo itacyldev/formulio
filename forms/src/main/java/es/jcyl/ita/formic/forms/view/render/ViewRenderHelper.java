@@ -28,9 +28,9 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -56,10 +56,15 @@ public class ViewRenderHelper {
             componentView = createDeferredView(env.getViewContext(), component, env);
         } else {
             componentView = renderer.render(env, component);
-            if (component instanceof UIForm) {
-                // configure viewContext
-                ((UIForm) component).getContext().setView(componentView);
-            }
+        }
+        if (component instanceof UIForm) {
+            // configure viewContext
+            ((UIForm) component).getContext().setView(componentView);
+            env.setFormContext(((UIForm) component).getContext());
+        } else {
+            if(env.getFormContext() != null){
+                env.getFormContext().getViewContext().registerComponentView(component,componentView);
+           }
         }
         // if current view is not visible, don't render children
         if (!ViewHelper.isVisible(componentView)) {
@@ -93,10 +98,6 @@ public class ViewRenderHelper {
     private void setupFormContext(UIComponent root, RenderingEnv env) {
         if (root instanceof UIForm) {
             env.setFormContext(((UIForm) root).getContext());
-        } else {
-            if (root.getParentForm() != null) {
-                env.setFormContext(((UIForm) root.getParentForm()).getContext());
-            }
         }
     }
 
