@@ -31,7 +31,7 @@ public class UIViewRenderer extends AbstractGroupRenderer<UIView, Widget<UIView>
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIView component) {
         return R.layout.widget_view;
     }
 }

@@ -62,10 +62,15 @@ public class ViewRenderHelper {
             componentView = createDeferredView(env.getViewContext(), component, env);
         } else {
             componentView = renderer.render(env, component);
-            if (component instanceof UIForm) {
-                // configure viewContext
-                ((UIForm) component).getContext().setView(componentView);
-            }
+        }
+        if (component instanceof UIForm) {
+            // configure viewContext
+            ((UIForm) component).getContext().setView(componentView);
+            env.setFormContext(((UIForm) component).getContext());
+        } else {
+            if(env.getFormContext() != null){
+                env.getFormContext().getViewContext().registerComponentView(component,componentView);
+           }
         }
         // if current view is not visible, don't render children
         if (!ViewHelper.isVisible(componentView)) {
@@ -108,8 +113,7 @@ public class ViewRenderHelper {
                         viewList.add(view);
                     }
                 }
-
-                gRenderer.addViews(env, groupView, viewList.toArray(new View[viewList.size()]));
+                gRenderer.addViews(env, groupView, views);
                 gRenderer.endGroup(env, groupView);
             }
         }

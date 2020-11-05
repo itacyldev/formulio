@@ -20,8 +20,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
 
-import es.jcyl.ita.formic.forms.repo.builders.AbstractDataBuilder;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
+import es.jcyl.ita.formic.forms.builders.AbstractDataBuilder;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

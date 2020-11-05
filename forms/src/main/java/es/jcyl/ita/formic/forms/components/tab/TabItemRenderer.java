@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class TabItemRenderer extends AbstractGroupRenderer<UITabItem, Widget<UITabItem>> {
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UITabItem component) {
         return R.layout.widget_tab_fragment;
     }
 

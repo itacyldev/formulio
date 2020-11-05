@@ -52,7 +52,7 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
      *
      * @return
      */
-    protected abstract int getWidgetLayoutId();
+    protected abstract int getWidgetLayoutId(C component);
 
     /**
      * Create a base view from context and component information to view used as placeholder in the form view
@@ -62,7 +62,7 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
      * @return
      */
     protected W createWidget(RenderingEnv env, C component) {
-        Widget widget = ViewHelper.inflate(env.getViewContext(), getWidgetLayoutId(), Widget.class);
+        Widget widget = ViewHelper.inflate(env.getViewContext(), getWidgetLayoutId(component), Widget.class);
         // set unique id and tag
         widget.setId(RandomUtils.nextInt());
         widget.setTag(getWidgetViewTag(component));

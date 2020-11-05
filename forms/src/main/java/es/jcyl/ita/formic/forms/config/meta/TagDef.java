@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBFILE;
@@ -41,6 +42,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
@@ -75,7 +77,6 @@ public class TagDef {
     }
 
     private static void initialize() {
-
         Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE};
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
@@ -101,6 +102,7 @@ public class TagDef {
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
+        register("textarea", define(base, input, new Attribute[]{LINES}));
         register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
@@ -127,6 +129,9 @@ public class TagDef {
 
         register("tab", define(base, new Attribute[]{ID}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
+
+        register("table", define(base, new Attribute[]{ID, HEADER_TEXT}));
+        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS}));
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));

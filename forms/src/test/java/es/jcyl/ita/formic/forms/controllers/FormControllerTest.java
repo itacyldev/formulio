@@ -17,8 +17,6 @@ package es.jcyl.ita.formic.forms.controllers;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,15 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
+import androidx.test.platform.app.InstrumentationRegistry;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
@@ -49,6 +39,15 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.forms.repo.EntityRelation;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

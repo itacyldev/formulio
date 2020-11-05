@@ -26,12 +26,15 @@ import es.jcyl.ita.formic.forms.components.form.UIFormRenderer;
 import es.jcyl.ita.formic.forms.components.image.UIImageRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.DateFieldRenderer;
+import es.jcyl.ita.formic.forms.components.inputfield.TextAreaRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.formic.forms.components.link.UILinkRenderer;
 import es.jcyl.ita.formic.forms.components.radio.RadioRenderer;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
 import es.jcyl.ita.formic.forms.components.tab.TabItemRenderer;
 import es.jcyl.ita.formic.forms.components.tab.TabRenderer;
+import es.jcyl.ita.formic.forms.components.table.UIRowRenderer;
+import es.jcyl.ita.formic.forms.components.table.UITableRenderer;
 import es.jcyl.ita.formic.forms.components.view.UIViewRenderer;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
@@ -48,6 +51,7 @@ public class RendererFactory {
         renderInstances.put("view", new UIViewRenderer());
         renderInstances.put("form", new UIFormRenderer());
         renderInstances.put("text", new TextFieldRenderer());
+        renderInstances.put("textarea", new TextAreaRenderer());
         renderInstances.put("date", new DateFieldRenderer());
         renderInstances.put("switcher", new CheckBoxFieldRenderer());
         renderInstances.put("datatable", new UIDatatableRenderer());
@@ -57,6 +61,8 @@ public class RendererFactory {
         renderInstances.put("autocomplete", new AutoCompleteRenderer());
         renderInstances.put("tab", new TabRenderer());
         renderInstances.put("tabitem", new TabItemRenderer());
+        renderInstances.put("table", new UITableRenderer());
+        renderInstances.put("row", new UIRowRenderer());
         renderInstances.put("image", new UIImageRenderer());
         renderInstances.put("datalist", new UIDatalistRenderer());
         renderInstances.put("card", new UICardRenderer());

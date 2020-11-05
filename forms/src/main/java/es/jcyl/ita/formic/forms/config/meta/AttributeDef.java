@@ -28,6 +28,7 @@ public class AttributeDef {
     // common input fields
 //    public static Attribute TYPE = new Attribute("type", true);
     public static Attribute LABEL = new Attribute("label");
+    public static Attribute LABELS = new Attribute("labels");
     public static Attribute READONLY = new Attribute("readOnly", Boolean.class);
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
@@ -48,6 +49,7 @@ public class AttributeDef {
     public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
     public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
+    public static Attribute LINES = new Attribute("lines", Integer.class);
 
     public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
 
@@ -92,4 +94,7 @@ public class AttributeDef {
 
     public static Attribute FOLDER = new Attribute("folder", String.class);
     public static Attribute DEFAULT_EXTENSION = new Attribute("defaultExtension", String.class);
+
+    public static Attribute COLSPANS = new Attribute("colspans", String.class);
+
 }

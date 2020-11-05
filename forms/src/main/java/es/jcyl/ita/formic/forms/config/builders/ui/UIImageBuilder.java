@@ -47,7 +47,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
 
     private void setDefaultValues(ConfigNode<UIImage> node) {
         if (!node.hasAttribute(AttributeDef.INPUT_TYPE.name)) {
-            node.getElement().setInputType(UIImage.ImageInputType.GALLERY_AND_CAMERA.value);
+            node.getElement().setInputType(UIImage.ImageInputType.GALLERY_AND_CAMERA.value); // show camera and gallery buttons
         }
     }
 

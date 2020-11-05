@@ -41,15 +41,15 @@
 
     <ImageView
         android:id="@+id/field_layout_x"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="5dp"
         android:layout_weight="0"
         android:background="@drawable/selectablebuttonbackground"
         android:clickable="true"
         android:contentDescription="@string/tool_buttons_x"
-        android:padding="5dp"
+        android:padding="3dp"
         android:src="@drawable/ic_tool_x" />
 
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

@@ -66,7 +66,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UISelect component) {
         return R.layout.widget_select;
     }
 

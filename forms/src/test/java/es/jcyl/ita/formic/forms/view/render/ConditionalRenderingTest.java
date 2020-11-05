@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
@@ -227,7 +227,6 @@ public class ConditionalRenderingTest {
         Boolean[] expectedVisibility = new Boolean[]{false, false, true, true, false, false};
         // set field render expression
         form.setRenderExpression(exprFactory.create(renderExpression));
-
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());

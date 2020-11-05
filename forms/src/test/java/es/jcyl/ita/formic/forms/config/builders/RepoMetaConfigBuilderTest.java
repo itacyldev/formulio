@@ -17,16 +17,12 @@ package es.jcyl.ita.formic.forms.config.builders;
 
 import android.util.Log;
 
-import org.greenrobot.greendao.database.Database;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.util.ReflectionHelpers;
 
 import java.io.File;
 
@@ -40,8 +36,6 @@ import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
-import es.jcyl.ita.formic.repo.db.sqlite.greendao.EntityDao;
-import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
@@ -91,7 +85,7 @@ public class RepoMetaConfigBuilderTest {
 
         Repository repo = repoFactory.getRepo("superHRepo");
         Assert.assertNotNull(repo);
-        Assert.assertEquals(10, repo.getMeta().getProperties().length);
+        Assert.assertEquals(11, repo.getMeta().getProperties().length);
     }
 
     @Test

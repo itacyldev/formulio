@@ -35,7 +35,7 @@ public class UIDatatableRenderer extends AbstractRenderer<UIDatatable, Datatable
     private final static float ROW_HEIGHT_DP = 38.75f;
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIDatatable datatable) {
         return R.layout.widget_datatable;
     }
 

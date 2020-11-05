@@ -18,8 +18,6 @@ package es.jcyl.ita.formic.forms.config;
 import android.content.Context;
 import android.content.res.Resources;
 
-import androidx.annotation.NonNull;
-
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
@@ -51,6 +49,7 @@ import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 /**
  * Configuration initializer and common point to store and share configuration parameters.
  * <p>
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class Config {
@@ -196,7 +195,7 @@ public class Config {
     private void processDefaultResources() {
         // TODO: configure context and default sync properties in XML in res folder
         this.globalContext.put("date", new DateTimeContext());
-        if(this.andContext!= null){
+        if (this.andContext != null) {
             this.globalContext.put("location", new LocationService(this.andContext));
         }
     }
@@ -266,13 +265,13 @@ public class Config {
      *
      * @param project Selected project.
      */
-    public void setCurrentProject(@NonNull final Project project) {
+    public void setCurrentProject(final Project project) {
         try {
             currentProject = project;
             readConfig(project);
             debugConfig();
         } catch (Exception e) {
-            throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e),e);
+            throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e), e);
         }
     }
 

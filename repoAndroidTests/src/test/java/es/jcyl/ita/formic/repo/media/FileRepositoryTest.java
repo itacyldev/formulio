@@ -118,7 +118,7 @@ public class FileRepositoryTest {
     @Test
     public void testDelete() {
         DevFileBuilder dev = new DevFileBuilder();
-        int numExpected = RandomUtils.randomInt(0, 15);
+        int numExpected = RandomUtils.randomInt(1, 15);
         dev.withNumEntities(numExpected).build();
 
         FileRepository repo = dev.getRepository();

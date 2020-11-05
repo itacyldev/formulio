@@ -15,26 +15,20 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
  * limitations under the License.
  */
 
-import android.text.InputType;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
-import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
-import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.meta.PropertyType;
-import es.jcyl.ita.formic.repo.meta.types.ByteArray;
-import es.jcyl.ita.formic.repo.meta.types.Geometry;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
-import es.jcyl.ita.formic.forms.validation.Validator;
+import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.util.TypeUtils;
 
 /**
@@ -92,7 +86,7 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
     private ConfigNode createNode(PropertyType property) {
         ConfigNode node = new ConfigNode("input");
         node.setId(property.name);
-        node.setAttribute("type", getType(property).toString());
+        node.setAttribute("type", UIFieldBuilderHelper.getType(property).toString());
         node.setAttribute("label", property.name);
 
         ComponentBuilder<UIField> builder = ComponentBuilderFactory.getInstance().getBuilder("input", UIField.class);
@@ -107,58 +101,8 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
             node.setAttribute("readonly", "true");
         }
 
-        addValidators(node, property);
+        UIFieldBuilderHelper.addValidators(node, property);
 
         return node;
-    }
-
-    private UIField.TYPE getType(PropertyType property) {
-        Class type = property.getType();
-        if (Number.class.isAssignableFrom(type) || ByteArray.class == type || String.class == type) {
-            return UIField.TYPE.TEXT;
-        }
-        if (Boolean.class == type) {
-            return UIField.TYPE.TEXT;
-        }
-        if (Geometry.class == type) {
-            // TODO: by now, lets show the wkt
-            return UIField.TYPE.TEXT;
-        }
-        throw new ConfigurationException(String.format("Unsupported data type in property [%s]: " + type, property.getName()));
-    }
-
-    private void addValidators(ConfigNode node, PropertyType property) {
-        Class type = property.getType();
-
-        UIField baseModel = (UIField) node.getElement();
-        if (property.isMandatory() != null && property.isMandatory()) {
-            node.addChild(createValidatorNode("required"));
-        }
-
-        if (type == Integer.class || type == Short.class || type == Long.class) {
-            node.addChild(createValidatorNode("integer"));
-            node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER));
-        }
-
-        if (type == Float.class || type == Double.class) {
-            node.addChild(createValidatorNode("decimal"));
-            node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
-        }
-
-        // used the label to set a validator email, correo, mail, phone, telefono,...
-        String label = baseModel.getLabel();
-        if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
-            node.addChild(createValidatorNode("email"));
-            baseModel.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        }
-        if (label.toLowerCase().contains("phone") || label.toLowerCase().contains("telefono")) {
-            baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
-        }
-    }
-
-    private ConfigNode<Validator> createValidatorNode(String type) {
-        ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
-        validatorNode.setAttribute("type", type);
-        return validatorNode;
     }
 }

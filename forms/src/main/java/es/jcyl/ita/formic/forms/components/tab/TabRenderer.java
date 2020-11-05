@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UITab component) {
         return R.layout.widget_tab;
     }
 
@@ -73,7 +73,6 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         int fragCount = 0;
         for (View view : views) {
             adapter.addView(view, fragCount);
-
             fragCount++;
         }
     }
