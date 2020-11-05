@@ -1,12 +1,14 @@
-<main name="Agents form tab" description="An example of short description" id="form3" repo="superHRepo">
-    <edit>
+<main name="Datalist form" description="An example of short description" id="form3"
+    repo="superHRepo">
+    <list>
         <form>
             <datalist template="card_template_1">
-                <card subtitle="${entity.real_name}" template="card_template_1"
-                    title="${entity.name}">
-                    <image repo="superHImages" value="${entity.image}" />
+                <card template="card_template_2" title="${entity.name}">
+                    <head id="title" label="label_title" value="${entity.name}" />
+                    <head id="subtitle" label="label_subtitle" value="${entity.real_name}" />"
+                    <image inputType="0" repo="superHImages" value="${entity.image}" />
                 </card>
             </datalist>
         </form>
-    </edit>
+    </list>
 </main>

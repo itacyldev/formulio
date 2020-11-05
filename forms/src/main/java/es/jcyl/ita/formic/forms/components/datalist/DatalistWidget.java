@@ -48,10 +48,12 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
 
     private List<Entity> selectedEntities = new ArrayList<>();
 
+
     // view filtering criteria
     private Filter filter;
 
     private AndViewContext thisViewCtx = new AndViewContext(this);
+    private LinearLayout contentView;
 
     @Override
     public void setup(RenderingEnv env) {
@@ -98,8 +100,12 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
         this.selectedEntities.clear();
     }
 
-    public void setContentLayout(LinearLayout datalistContentLayout) {
+    public void setContentView(LinearLayout contentView) {
+        this.contentView = contentView;
+    }
 
+    public LinearLayout getContentView() {
+        return this.contentView;
     }
 
     private void loadNextPage() {
@@ -115,7 +121,8 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
     }
 
     private void addData() {
-        this.entities.addAll(this.repo.find(this.filter));
+        List list = this.repo.find(this.filter);
+        this.entities.addAll(list);
 
 
     }

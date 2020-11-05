@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.forms.components.image.ImageResourceView;
 import es.jcyl.ita.formic.forms.components.image.ImageWidget;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -54,6 +54,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             return id;
         }
 
+        // select the template
         switch (template) {
             case TEMPLATE1: {
                 id = R.layout.card_template_1;
@@ -91,14 +92,15 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         UIHeading title = card.getTitle();
         if (title != null) {
             TextView titleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_title");
-            String value = (String) ConvertUtils.convert(title.getValue(env.getContext()), String.class);
+            Object titleValue = title.getValue(env.getFormContext());
+            String value = (String) ConvertUtils.convert(titleValue, String.class);
             titleView.setText(value);
         }
 
         UIHeading subtitle = card.getSubtitle();
         if (subtitle != null) {
             TextView subtitleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_subtitle");
-            String value = (String) ConvertUtils.convert(subtitle.getValue(env.getContext()), String.class);
+            String value = (String) ConvertUtils.convert(subtitle.getValue(env.getFormContext()), String.class);
             subtitleView.setText(value);
         }
 
@@ -111,8 +113,12 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         }
     }
 
-
-    private void setImageView(Widget<UICard> widget, ImageWidget imageView) {
+    /**
+     *
+     * @param widget
+     * @param imageView
+     */
+    private void setImageView(Widget<UICard> widget, View imageView) {
         LinearLayout imageContainer = (LinearLayout) ViewHelper.findViewByTagAndSetId(widget, "card_image_container");
         imageContainer.removeAllViews();
         imageContainer.addView(imageView);
@@ -122,9 +128,11 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
     public void addViews(RenderingEnv env, Widget<UICard> root, View[] views) {
         for (View view : views) {
             if (view instanceof ImageWidget) {
-                setImageView(root, (ImageWidget) view);
+                View imageView = ((ImageWidget) view).getInputView();
+                if (imageView != null)
+                    ((ImageWidget) view).removeView(imageView);
+                setImageView(root, imageView);
             }
         }
     }
-
 }

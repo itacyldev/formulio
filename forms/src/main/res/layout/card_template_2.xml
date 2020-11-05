@@ -36,7 +36,6 @@
                 android:id="@+id/template_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/template_image_container"
                 android:tag="card_title" />
 
@@ -44,7 +43,6 @@
                 android:id="@+id/template_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/template_image_container"
                 android:tag="card_subtitle" />
         </RelativeLayout>

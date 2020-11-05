@@ -15,11 +15,14 @@ package es.jcyl.ita.formic.forms.components.datalist;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 
 /**
@@ -48,9 +51,17 @@ public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, Datali
     protected void setupWidget(RenderingEnv env, DatalistWidget widget) {
         super.setupWidget(env, widget);
 
-        LinearLayout datalistView = widget.findViewById(R.id.datalist_content_layout);
+        LinearLayout contentView = widget.findViewById(R.id.datalist_content_layout);
 
-        widget.setContentLayout(datalistView);
+        widget.setContentView(contentView);
         widget.load(env);
+    }
+
+    @SuppressLint("ResourceType")
+    @Override
+    public void addViews(RenderingEnv env, Widget<UIDatalist> root, View[] views) {
+        for (View view : views) {
+            ((DatalistWidget) root).getContentView().addView(view);
+        }
     }
 }

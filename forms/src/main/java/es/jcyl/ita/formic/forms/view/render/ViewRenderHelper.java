@@ -32,10 +32,9 @@ import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
@@ -82,24 +81,24 @@ public class ViewRenderHelper {
                 gRenderer.initGroup(env, groupView);
 
 
-
                 List<View> viewList = new ArrayList<>();
                 if (component instanceof EntityListProvider) {
                     // save the old entityContext
-                    EntityContext entityContextOld = env.getFormContext().getEntityContext();
+                    //EntityContext entityContextOld = env.getFormContext().getEntityContext();
+                    Entity oldEntity= env.getFormContext().getEntity();
 
                     List<Entity> entities = ((EntityListProvider) component).getEntities();
 
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         EntityContext currentEntityContext = new EntityContext(entity);
-                        env.getFormContext().setEntityContext(currentEntityContext);
+                        env.getFormContext().setEntity(entity);
                         View view = render(env, component.getChildren()[0]);
                         viewList.add(view);
                     }
 
                     // restore entity context
-                    env.getFormContext().setEntityContext(entityContextOld);
+                    env.getFormContext().setEntity(oldEntity);
 
                 } else {
                     UIComponent[] kids = component.getChildren();

@@ -36,7 +36,6 @@
                 android:id="@+id/template1_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/template1_image_container"
                 android:tag="card_title" />
 
