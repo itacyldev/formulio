@@ -10,11 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/template1_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:orientation="horizontal"
+            android:tag="card_content_layout">
 
             <LinearLayout
                 android:id="@+id/template1_image_container"
@@ -32,21 +33,24 @@
                     android:tag="card_image" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/template1_title"
+            <LinearLayout
+                android:id="@+id/template1_title_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/template1_image_container"
-                android:tag="card_title" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/template1_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/template1_title"
-                android:layout_toRightOf="@+id/template1_image_container"
-                android:tag="card_subtitle" />
+                <TextView
+                    android:id="@+id/template1_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="card_title" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/template1_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="card_subtitle" />
+            </LinearLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </es.jcyl.ita.formic.forms.components.card.CardWidget>

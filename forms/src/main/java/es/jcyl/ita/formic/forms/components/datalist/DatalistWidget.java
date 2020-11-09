@@ -109,22 +109,15 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
     }
 
     private void loadNextPage() {
-        //this.entities.clear();
+        this.entities.clear();
         addData();
 
         this.component.setEntities(this.entities);
     }
 
-    private void reloadData() {
-        this.entities.clear();
-        addData();
-    }
-
     private void addData() {
         List list = this.repo.find(this.filter);
         this.entities.addAll(list);
-
-
     }
 
     private CompositeContext setupThisContext(RenderingEnv env) {
@@ -134,7 +127,7 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
     }
 
     /**
-     * Get the definition filter from the dataTable and construct an effective filter using the
+     * Get the definition filter from the dataList and construct an effective filter using the
      * context information.
      *
      * @param context

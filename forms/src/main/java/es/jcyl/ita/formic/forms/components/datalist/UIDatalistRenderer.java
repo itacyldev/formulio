@@ -31,13 +31,13 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, DatalistWidget> {
     @Override
-    protected int getWidgetLayoutId() {
-        return R.layout.widget_datalist;
+    protected void composeWidget(RenderingEnv env, DatalistWidget widget) {
+
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, DatalistWidget widget) {
-
+    protected int getWidgetLayoutId(UIDatalist component) {
+        return R.layout.widget_datalist;
     }
 
     @Override

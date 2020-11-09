@@ -19,10 +19,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.image.ImageResourceView;
 import es.jcyl.ita.formic.forms.components.image.ImageWidget;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
@@ -43,11 +45,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
     public static final String CUSTOM_TEMPLATE = "card_custom_template";
 
     @Override
-    protected int getWidgetLayoutId() {
-        return R.layout.card_template_1;
-    }
-
-    private int getWidgetLayoutId(UICard card) {
+    protected int getWidgetLayoutId(UICard card) {
         int id = R.layout.card_template_1;
         String template = card.getTemplate();
         if (template == null) {
@@ -104,17 +102,25 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             subtitleView.setText(value);
         }
 
-        ImageResourceView imageView = (ImageResourceView) ViewHelper.findViewByTagAndSetId(widget, "card_image");
-        UIImage image = card.getImage();
-        if (image != null) {
+        // Check if card has an image configured
+        UIImage image = null;
 
-        } else {
-            //imageView.setVisibility(View.GONE);
+        if (ArrayUtils.isNotEmpty(card.getChildren())) {
+            for (UIComponent child : card.getChildren()) {
+                if (child instanceof UIImage) {
+                    image = (UIImage) child;
+                }
+            }
+        }
+
+        // If card hasn't image don't render the ImageView container
+        if (image == null) {
+            ImageResourceView imageView = (ImageResourceView) ViewHelper.findViewByTagAndSetId(widget, "card_image");
+            imageView.setVisibility(View.GONE);
         }
     }
 
     /**
-     *
      * @param widget
      * @param imageView
      */
@@ -133,6 +139,34 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
                     ((ImageWidget) view).removeView(imageView);
                 setImageView(root, imageView);
             }
+        }
+    }
+
+    @Override
+    public void endGroup(RenderingEnv env, Widget<UICard> root) {
+        try {
+//            RelativeLayout contentLayout = root.findViewWithTag("card_content_layout");
+//
+//            LinearLayout imageContainer = contentLayout.findViewWithTag("card_image_container");
+//            RelativeLayout.LayoutParams lpImageContainer = (RelativeLayout.LayoutParams) imageContainer.getLayoutParams();
+//
+//
+//            LinearLayout titleLayout = contentLayout.findViewWithTag("card_title_layout");
+//            RelativeLayout.LayoutParams lpTitleLayout = new RelativeLayout.LayoutParams(titleLayout.getLayoutParams());
+//            lpTitleLayout.addRule(BELOW, imageContainer.getId());
+//
+//            LinearLayout subtitleLayout = contentLayout.findViewWithTag("card_subtitle_layout");
+//            RelativeLayout.LayoutParams lpSubtitleLayout = new RelativeLayout.LayoutParams(subtitleLayout.getLayoutParams());
+//            lpSubtitleLayout.addRule(BELOW, titleLayout.getId());
+//
+//            contentLayout.removeAllViews();
+//
+//            contentLayout.addView(imageContainer, lpImageContainer);
+//            contentLayout.addView(titleLayout, lpTitleLayout);
+//            contentLayout.addView(subtitleLayout, lpSubtitleLayout);
+
+        } catch (ClassCastException ex) {
+
         }
     }
 }

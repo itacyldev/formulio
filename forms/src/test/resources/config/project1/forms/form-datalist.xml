@@ -2,8 +2,8 @@
     repo="superHRepo">
     <list>
         <form>
-            <datalist template="card_template_1">
-                <card template="card_template_2" title="${entity.name}">
+            <datalist>
+                <card template="card_template_1">
                     <head id="title" label="label_title" value="${entity.name}" />
                     <head id="subtitle" label="label_subtitle" value="${entity.real_name}" />"
                     <image inputType="0" repo="superHImages" value="${entity.image}" />

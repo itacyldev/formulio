@@ -113,7 +113,7 @@ public class ViewRenderHelper {
                         viewList.add(view);
                     }
                 }
-                gRenderer.addViews(env, groupView, views);
+                gRenderer.addViews(env, groupView, viewList.toArray(new View[viewList.size()]));
                 gRenderer.endGroup(env, groupView);
             }
         }
