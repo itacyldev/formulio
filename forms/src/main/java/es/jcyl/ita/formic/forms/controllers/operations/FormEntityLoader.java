@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
 /**
- * Staleless helper to retrieve form's main entity from repository.
+ * Stateless helper to retrieve form's main entity from repository.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
