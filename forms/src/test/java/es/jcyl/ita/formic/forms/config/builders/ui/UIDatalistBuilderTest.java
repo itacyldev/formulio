@@ -25,21 +25,16 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.card.UICard;
-import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
-import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Javier Ramos (javier.ramos@itacyl.es)
  * <p>
  * Tests to check commons-converters functionallity
  */
@@ -89,69 +84,6 @@ public class UIDatalistBuilderTest {
 
         Assert.assertEquals("mydatalist", datalist.getId());
         Assert.assertEquals(RepositoryUtils.getRepo("contacts2"), datalist.getRepo());
-    }
-
-    /**
-     * Create table with default columns and check there's and element UIColumn per each
-     * repository property
-     *
-     * @throws Exception
-     */
-    private static final String XML_TEST_DEFAULT_COLS = "<datatable repo=\"defColsRepo\"/>";
-
-    @Test
-    public void testDefaultColumns() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_DEFAULT_COLS);
-        // register repository mock with a random meta
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
-        RepositoryUtils.registerMock("defColsRepo", meta);
-
-        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
-        UIDatatable datatable = datables.get(0);
-
-        // check columns
-        Assert.assertEquals(meta.getProperties().length, datatable.getColumns().length);
-        String[] propNames = meta.getPropertyNames();
-        boolean found;
-        for (String name : propNames) {
-            found = false;
-            for (UIColumn col : datatable.getColumns()) {
-                if (col.getId().equals(name)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Assert.fail(String.format("Expected UIColumn with id [%s] for " +
-                        "property [%s] but not found.", name, meta.getPropertyByName(name)));
-            }
-        }
-    }
-
-    /**
-     * Tests the evaluation of "properties" attribute to filter the properties selected from repository.
-     * Two columns are selected from the repo and one additional column is manually configured.
-     *
-     * @throws Exception
-     */
-    private static final String XML_TEST_DATALIST_WITH_ITEMS = "<datalist>" +
-              "<datalistitem>" +
-                "<property name=\"prop1\" label=\"label1\"/>"+
-                "<property name=\"prop2\" label=\"label2\"/>"+
-              "</datalistitem>" +
-            "</datalist>";
-
-    @Test
-    public void testDatalistItem() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_DATALIST_WITH_ITEMS);
-
-        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatalist> datalists = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatalist.class);
-        UIDatalist datalist = datalists.get(0);
-
-        UICard dataListItem = (UICard) datalist.getChildren()[0];
-
     }
 
     @AfterClass
