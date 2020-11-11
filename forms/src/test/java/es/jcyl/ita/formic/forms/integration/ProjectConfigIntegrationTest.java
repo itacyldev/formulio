@@ -99,13 +99,13 @@ public class ProjectConfigIntegrationTest {
 
         // there must be three form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
-        assertEquals(3, formConfigs.size());
+        assertEquals(6, formConfigs.size());
 
         // Check all list and edit controller have been loaded
         FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
         Collection<FormController> ctlList = fctlFacotry.getList();
-        assertEquals(6, ctlList.size());
-        assertEquals(3, fctlFacotry.getListControllers().size());
+        assertEquals(12, ctlList.size());
+        assertEquals(6, fctlFacotry.getListControllers().size());
 
         // check list controller
         for (FormController ctl : fctlFacotry.getList()) {

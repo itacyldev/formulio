@@ -17,6 +17,8 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import android.text.InputType;
 
+import java.util.Date;
+
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
@@ -38,6 +40,11 @@ public class UIFieldBuilderHelper {
         if (Number.class.isAssignableFrom(type) || ByteArray.class == type || String.class == type) {
             return UIField.TYPE.TEXT;
         }
+
+        if (Date.class == type) {
+            return UIField.TYPE.TEXT;
+        }
+
         if (Boolean.class == type) {
             return UIField.TYPE.TEXT;
         }
