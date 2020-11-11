@@ -48,7 +48,7 @@ public class UIFieldBuilderTest {
         RepositoryUtils.registerMock("contacts");
     }
 
-    private static final String XML_TEST_BASIC = "<input id=\"myId\" readonly=\"true\"/>";
+    private static final String XML_TEST_BASIC = "<input id=\"myId\" readOnly=\"true\"/>";
 
     @Test
     public void testBasicInput() throws Exception {
@@ -63,7 +63,7 @@ public class UIFieldBuilderTest {
         assertThat(field.isReadOnly(), equalTo(true));
     }
 
-    private static final String XML_TEXT_AREA = "<textarea id=\"myId\" readonly=\"true\" lines=\"5\"/>";
+    private static final String XML_TEXT_AREA = "<textarea id=\"myId\" readOnly=\"true\" lines=\"5\"/>";
 
     @Test
     public void testTextArea() throws Exception {
