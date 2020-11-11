@@ -31,15 +31,18 @@ import androidx.test.filters.LargeTest;
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.MainActivity;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
 
 
 /**
@@ -71,31 +74,11 @@ public class AppStartTest {
                 .perform(click());
         onView(withContentDescription(R.string.forms))
                 .perform(click());
-//        onView(withId(R.string.action_dev_console))
-//                .perform(click());
 
-//        // Type text and then press the button.
-//        onView(Matchers.allOf(ViewMatchers.withId(R.id.drawerItemNameTextView),
-//                hasSibling(ViewMatchers.withText(((NavDrawerItem)item).getItemName())))).perform(ViewActions.click());
-//
-//
-//        onView(withId(R.id.bottom_navigation))
-//                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
-//        onView(withId(R.id.changeTextBt)).perform(click());
-//
-//        // Check that the text was changed.
-//        onView(withId(R.id.textToBeChanged)).check(matches(withText(STRING_TO_BE_TYPED)));
+        // check first element in view
+        onView(RecyclerViewMatcher.withRecyclerView(es.jcyl.ita.formic.forms.R.id.form_list).atPosition(0))
+                .check(matches(hasDescendant(withText("form1-list"))));
+
     }
-//
-//    @Test
-//    public void changeText_newActivity() {
-//        // Type text and then press the button.
-//        onView(withId(R.id.editTextUserInput)).perform(typeText(STRING_TO_BE_TYPED),
-//                closeSoftKeyboard());
-//        onView(withId(R.id.activityChangeTextBtn)).perform(click());
-//
-//        // This view is in a different Activity, no need to tell Espresso.
-//        onView(withId(R.id.show_text_view)).check(matches(withText(STRING_TO_BE_TYPED)));
-//    }
 }
 
