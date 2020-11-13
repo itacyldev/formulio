@@ -69,7 +69,6 @@ public class FilterHelper {
 
     public static void evaluateFilter(Context context, Filter definition, Filter output, String[] mandatory) {
         // check all mandatory values are fulfilled
-        System.out.println("Looking for field: " + mandatory);
         boolean checkPassed = true;
         if (mandatory != null) {
             for (String ctxProperty : mandatory) {

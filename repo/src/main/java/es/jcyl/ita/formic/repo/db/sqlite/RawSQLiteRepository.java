@@ -90,9 +90,8 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
         }
     }
 
-
     @Override
-    public List<Entity> listAll() {
+    protected List<Entity> doListAll() {
         return find(null);
     }
 

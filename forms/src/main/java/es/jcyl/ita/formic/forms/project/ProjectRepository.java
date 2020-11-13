@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
@@ -118,6 +119,16 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
 
     @Override
     public Class<BaseFilter> getFilterClass() {
+        return null;
+    }
+
+    @Override
+    public void setMappings(List<EntityMapping> mappings) {
+
+    }
+
+    @Override
+    public List<EntityMapping> getMappings() {
         return null;
     }
 

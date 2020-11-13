@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.AbstractBaseRepository;
+import es.jcyl.ita.formic.repo.AbstractEditableRepository;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.RepositoryException;
 import es.jcyl.ita.formic.repo.media.meta.FileMeta;
@@ -44,8 +44,7 @@ import es.jcyl.ita.formic.repo.source.EntitySource;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FileRepository extends AbstractBaseRepository<FileEntity, BaseFilter<FileEntityExpression>>
-        implements EditableRepository<FileEntity, String, BaseFilter<FileEntityExpression>> {
+public class FileRepository extends AbstractEditableRepository<FileEntity, String, BaseFilter<FileEntityExpression>> {
 
     private static FileMeta META = new FileMeta();
     private final File baseFolder;
@@ -58,6 +57,26 @@ public class FileRepository extends AbstractBaseRepository<FileEntity, BaseFilte
     @Override
     public String getId() {
         return null;
+    }
+
+    @Override
+    protected void doSave(FileEntity entity) {
+        if (this.hasKey(entity)) {
+            this.update(entity);
+        } else {
+            this.insert(entity);
+        }
+    }
+
+    @Override
+    protected FileEntity doFindById(String key) {
+        File f = new File(baseFolder, key);
+        if (!f.exists()) {
+            return null;
+        }
+        FileEntity entity = newEntity();
+        readEntityData(f, entity);
+        return entity;
     }
 
     @Override
@@ -84,7 +103,7 @@ public class FileRepository extends AbstractBaseRepository<FileEntity, BaseFilte
     }
 
     @Override
-    public List<FileEntity> listAll() {
+    protected List<FileEntity> doListAll() {
         return find(null);
     }
 
@@ -108,31 +127,6 @@ public class FileRepository extends AbstractBaseRepository<FileEntity, BaseFilte
         return null;
     }
 
-    @Override
-    public FileEntity findById(String id) {
-        File f = new File(baseFolder, id);
-        if (!f.exists()) {
-            return null;
-        }
-        FileEntity entity = newEntity();
-        readEntityData(f, entity);
-        return entity;
-    }
-
-    @Override
-    public boolean existsById(String id) {
-        return false;
-    }
-
-
-    @Override
-    public void save(FileEntity entity) {
-        if (this.hasKey(entity)) {
-            this.update(entity);
-        } else {
-            this.insert(entity);
-        }
-    }
 
     /**
      * Inserts the file content in the repository folder and fills the entity id and calculated attributes

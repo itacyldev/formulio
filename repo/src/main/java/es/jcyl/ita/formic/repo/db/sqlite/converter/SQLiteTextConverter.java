@@ -44,6 +44,5 @@ public class SQLiteTextConverter extends SQLitePropertyConverter {
     @Override
     public Object doToJava(SQLiteDBValue dbValue) {
         return ConvertUtils.convert(dbValue.value, this.javaType);
-//        return dbValue.value.toString();
     }
 }

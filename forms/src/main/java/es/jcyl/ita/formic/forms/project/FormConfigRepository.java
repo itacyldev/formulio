@@ -24,6 +24,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
@@ -120,6 +121,16 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     @Override
     public Class<BaseFilter> getFilterClass() {
         return BaseFilter.class;
+    }
+
+    @Override
+    public void setMappings(List<EntityMapping> mappings) {
+
+    }
+
+    @Override
+    public List<EntityMapping> getMappings() {
+        return null;
     }
 
 

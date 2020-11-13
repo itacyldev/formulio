@@ -68,9 +68,9 @@ public class ViewRenderHelper {
             ((UIForm) component).getContext().setView(componentView);
             env.setFormContext(((UIForm) component).getContext());
         } else {
-            if(env.getFormContext() != null){
-                env.getFormContext().getViewContext().registerComponentView(component,componentView);
-           }
+            if (env.getFormContext() != null) {
+                env.getFormContext().getViewContext().registerComponentView(component, componentView);
+            }
         }
         // if current view is not visible, don't render children
         if (!ViewHelper.isVisible(componentView)) {
@@ -89,14 +89,12 @@ public class ViewRenderHelper {
                 List<View> viewList = new ArrayList<>();
                 if (component instanceof EntityListProvider) {
                     // save the old entityContext
-                    //EntityContext entityContextOld = env.getFormContext().getEntityContext();
-                    Entity oldEntity= env.getFormContext().getEntity();
+                    Entity oldEntity = env.getFormContext().getEntity();
 
                     List<Entity> entities = ((EntityListProvider) component).getEntities();
 
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
-                        EntityContext currentEntityContext = new EntityContext(entity);
                         env.getFormContext().setEntity(entity);
                         View view = render(env, component.getChildren()[0]);
                         viewList.add(view);

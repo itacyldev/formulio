@@ -28,6 +28,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
+
+import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
@@ -47,6 +49,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     private ActivityResultLauncher<Void> launcher;
     private GallerySelector gallerySelector;
+    private Entity imgEntity;
 
     public ImageWidget(Context context) {
         super(context);
@@ -63,6 +66,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setup(RenderingEnv env) {
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
+        JexlUtils.eval(env.getContext(), "${myexpression}");
         if (!component.isCameraActive()) { // TODO: or device has no camera (check throw context.device)
             cameraButton.setVisibility(View.GONE);
         } else {
@@ -92,6 +96,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
                 });
             }
         }
+
     }
 
     public GallerySelector getGallerySelector(){

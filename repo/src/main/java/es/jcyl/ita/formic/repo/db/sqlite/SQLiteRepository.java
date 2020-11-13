@@ -20,7 +20,7 @@ import org.greenrobot.greendao.query.Query;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.repo.AbstractBaseRepository;
+import es.jcyl.ita.formic.repo.AbstractEditableRepository;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.repo.source.EntitySource;
  * Repository extension that uses green dao as implementor to access SQLite databases
  * using default Android libraries.
  */
-public class SQLiteRepository extends AbstractBaseRepository<Entity, SQLQueryFilter>
+public class SQLiteRepository extends AbstractEditableRepository<Entity, Object, SQLQueryFilter>
         implements EditableRepository<Entity, Object, SQLQueryFilter> {
 
     private final EntitySource source;
@@ -49,18 +49,13 @@ public class SQLiteRepository extends AbstractBaseRepository<Entity, SQLQueryFil
     }
 
     @Override
-    public void save(Entity entity) {
+    protected void doSave(Entity entity) {
         this.dao.insertOrReplaceInTx(entity);
     }
 
     @Override
-    public Entity findById(Object key) {
+    protected Entity doFindById(Object key) {
         return this.dao.load(key);
-    }
-
-    @Override
-    public boolean existsById(Object key) {
-        return this.dao.load(key) == null;
     }
 
     /**
@@ -71,12 +66,14 @@ public class SQLiteRepository extends AbstractBaseRepository<Entity, SQLQueryFil
      */
     @Override
     public List<Entity> find(SQLQueryFilter filter) {
+        List<Entity> entities = null;
         if (filter == null) {
-            return dao.loadAll();
+            entities = dao.loadAll();
         } else {
             Query<Entity> query = filter.getQuery(this.dao);
-            return query.list();
+            entities = query.list();
         }
+        return entities;
     }
 
     @Override
@@ -89,7 +86,7 @@ public class SQLiteRepository extends AbstractBaseRepository<Entity, SQLQueryFil
     }
 
     @Override
-    public List<Entity> listAll() {
+    protected List<Entity> doListAll() {
         return this.dao.loadAll();
     }
 
@@ -137,5 +134,9 @@ public class SQLiteRepository extends AbstractBaseRepository<Entity, SQLQueryFil
     public void setContext(Context ctx) {
         super.setContext(ctx);
         this.dao.setContext(ctx);
+    }
+
+    public void clearCache() {
+        this.dao.detachAll();
     }
 }

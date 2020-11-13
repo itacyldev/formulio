@@ -16,31 +16,21 @@ package es.jcyl.ita.formic.repo;
  */
 
 
-import es.jcyl.ita.formic.repo.query.Filter;
-
 /**
+ * Defines and expression to be evaluated before the related entity is saved, to calculate
+ * related entity properties using JEXL expressions. Typically to modify the entity Id, name, etc
+ * using the main entity values before it is persisted.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public interface EditableRepository<T extends Entity, ID, F extends Filter> extends Repository<T, F> {
+public class CalculatedProperty {
+    public final String property;
+    public final String expression;
 
-    T findById(ID id);
-
-    boolean existsById(ID id);
-
-    void save(T entity);
-
-    void delete(T entity);
-
-    void deleteById(ID id);
-
-    void deleteAll();
-
-    /**
-     * Creates an empty entity with meta and source parameters set, but won't be persisted until
-     * save() method is call on it.
-     * @return
-     */
-    T newEntity();
+    public CalculatedProperty(String property, String expression){
+        this.property = property;
+        this.expression = expression;
+    }
 
 }

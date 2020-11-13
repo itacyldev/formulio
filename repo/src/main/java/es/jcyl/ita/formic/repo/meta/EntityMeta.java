@@ -116,6 +116,9 @@ public class EntityMeta<P extends PropertyType> {
     public boolean hasIdProperties() {
         return (this.idProperties != null && this.idProperties.length > 0);
     }
+    public boolean hasMulticolumnKey() {
+        return (this.idProperties != null && this.idProperties.length > 1);
+    }
 
     public PropertyType[] getIdProperties() {
         PropertyType[] pk = new PropertyType[this.idIndexes.length];
