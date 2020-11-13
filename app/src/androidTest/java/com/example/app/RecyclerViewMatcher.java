@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.app.projects;
+package com.example.app;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
