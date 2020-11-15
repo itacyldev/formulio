@@ -147,7 +147,7 @@ public class ProjectConfigIntegrationTest {
         Repository repo = form.getRepo();
         EntityMeta meta = repo.getMeta();
         PropertyType[] properties = meta.getProperties();
-        Assert.assertEquals(properties.length + 1, form.getFields().size());
+        Assert.assertEquals(properties.length + 2, form.getFields().size());
 
         // check all autos have a binding expresions
         List<UIAutoComplete> autos = UIComponentHelper.findByClass(view, UIAutoComplete.class);

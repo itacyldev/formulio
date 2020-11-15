@@ -17,14 +17,16 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import java.util.Collections;
 
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.repo.CalculatedProperty;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
+import es.jcyl.ita.formic.repo.CalculatedProperty;
+import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.Repository;
 
 /**
@@ -91,9 +93,19 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
             image.setValueConverter("byteArrayImage");
         }
         if (usesExternalRepo) {
-            // The component uses an external image repository to retrieve/store the related image
-            EntityRelation relation = createRelation(node);
-            node.getElement().setEntityRelation(relation);
+            // The component uses an external image repository to retrieve/store the related image,
+            // find the first parent that can hold a repository and set the mapping
+            ConfigNode parentRepo = BuilderHelper.findParentRepo(node);
+            if (parentRepo == null || parentRepo.getElement() == null) {
+                throw new ConfigurationException(DevConsole.error(String.format("Error defining the " +
+                        "mapping to retrieve the  element <image id=[%s]/>. No parent repository " +
+                        "found, check the image is included in a <form/> and it has the 'repo' " +
+                        "attribute set. [${file}].", node.getId())));
+            }
+            EntityMapping relation = createRelation(node);
+            FilterableComponent ancestor = (FilterableComponent) parentRepo.getElement();
+            ancestor.getRepo().addMapping(relation);
+            image.setEntityMapping(true);
         }
     }
 
@@ -112,7 +124,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
      * @param node
      * @return
      */
-    private EntityRelation createRelation(ConfigNode<UIImage> node) {
+    private EntityMapping createRelation(ConfigNode<UIImage> node) {
         UIImage img = node.getElement();
         Repository repo = img.getRepo();
         if (repo == null) {
@@ -125,7 +137,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
                     "image was found, the default project's image repo (DEFAULT_PROJECT_IMAGES) " +
                     "should be active, check the project configuration.", node.getElement().getId())));
         }
-        EntityRelation relation = new EntityRelation(repo, img.getId(), img.getValueExpression());
+        EntityMapping relation = new EntityMapping(repo, img.getValueExpression().toString(), img.getId());
         relation.setFilter(img.getFilter());
         relation.setInsertable(!img.isReadOnly());
         relation.setDeletable(!img.isReadOnly());
@@ -136,7 +148,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
             // if the expression is a readonly expression that uses entity attributes to
             // calculate the ID, we need to define a calculated property for the entity that will
             // be interpreted before the entity is saved: ID = valueExpression
-            CalculatedProperty cp = new CalculatedProperty(AttributeDef.ID.name, imgBndExpr);
+            CalculatedProperty cp = new CalculatedProperty(AttributeDef.ID.name, imgBndExpr.toString());
             relation.setCalcProps(Collections.singletonList(cp));
         }
         // replace expression
@@ -149,7 +161,6 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         String expression = String.format(bindingExpression, img.getId());
         ValueBindingExpression effectiveExpression = this.getFactory().getExpressionFactory().create(expression);
         img.setValueExpression(effectiveExpression);
-        relation.setEntityHolder(img);
 
         return relation;
     }

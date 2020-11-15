@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.repo;
+package es.jcyl.ita.formic.repo;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,7 +15,6 @@ package es.jcyl.ita.formic.forms.repo;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 
 /**
  * Defines and expression to be evaluated before the related entity is saved, to calculate
@@ -27,11 +26,10 @@ import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 
 public class CalculatedProperty {
     public final String property;
-    public final ValueBindingExpression expression;
+    public final String expression;
 
-    public CalculatedProperty(String property, ValueBindingExpression expression){
+    public CalculatedProperty(String property, String expression){
         this.property = property;
         this.expression = expression;
     }
-
 }

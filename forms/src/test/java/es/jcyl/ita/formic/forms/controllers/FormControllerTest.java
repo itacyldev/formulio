@@ -32,6 +32,8 @@ import java.util.Set;
 import androidx.test.platform.app.InstrumentationRegistry;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.EntityMapping;
+import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
@@ -45,7 +47,6 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 
@@ -95,46 +96,6 @@ public class FormControllerTest {
 
         Assert.assertNotNull(recipe.form.getEntity());
         Assert.assertEquals(entity.getId(), recipe.form.getEntity().getId());
-    }
-
-    @Test
-    public void testLoadEntityWithRelations() {
-        String REL_PROPERTY = "image1";
-        // create random meta for entity and create entity
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
-        Entity entity = DevDbBuilder.buildEntity(meta);
-        // create repository mock
-        EditableRepository mockRepo = mock(EditableRepository.class);
-        when(mockRepo.getMeta()).thenReturn(meta);
-        when(mockRepo.findById(entity.getId())).thenReturn(entity);
-
-        // define an entity relation with an Entity
-        EditableRepository relRepo = mock(EditableRepository.class);
-        EntityMeta relMeta = DevDbBuilder.createRandomMeta();
-        when(relRepo.getMeta()).thenReturn(relMeta);
-        Entity relEntity = DevDbBuilder.buildEntity(relMeta);
-        when(relRepo.findById(relEntity.getId())).thenReturn(relEntity);
-
-        // prepare data/state
-        DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
-                .invoke(ctx)
-                .withParam("entityId", entity.getId())
-                .withRepo(mockRepo);
-
-        // set relation
-        entity.set(REL_PROPERTY, relEntity.getId(), true);
-
-        ValueBindingExpression bindingExpression = ValueExpressionFactory.getInstance().create("$" +
-                "{entity." + REL_PROPERTY + "}");
-        ArrayList<EntityRelation> lst = new ArrayList<>();
-        lst.add(new EntityRelation(relRepo, "relation1", bindingExpression));
-        recipe.form.setEntityRelations(lst);
-        recipe.load();
-
-        Assert.assertNotNull(recipe.form.getEntity());
-        Assert.assertNotNull(recipe.form.getEntity().get("image1")); // property used to
-        // get the related entity Id
-        Assert.assertNotNull(recipe.form.getEntity().get("relation1")); // related entity
     }
 
     /**

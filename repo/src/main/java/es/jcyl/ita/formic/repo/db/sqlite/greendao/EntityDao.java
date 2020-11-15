@@ -23,6 +23,7 @@ import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.internal.SqlUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.core.context.Context;
@@ -140,7 +141,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
         EntityMeta<PropertyType> meta = entity.getMetadata();
         for (PropertyType p : meta.getProperties()) {
             DBPropertyType dp = (DBPropertyType) p;
-            if (dp.isCalculatedOnSelect()){
+            if (dp.isCalculatedOnSelect()) {
                 continue; // the property value is not persisted
             }
             value = entity.get(p.getName());
@@ -184,7 +185,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
         DBPropertyType dp;
         for (PropertyType p : meta.getProperties()) {
             dp = (DBPropertyType) p;
-            if (dp.isCalculatedOnSelect()){
+            if (dp.isCalculatedOnSelect()) {
                 continue; // the property value is not persisted
             }
             value = entity.get(p.getName());
@@ -235,8 +236,20 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
                 }
             }
             entity.setId(pkValue);
+            // persist the key value to db
+            updatePK(entity, rowId, pkValue);
         }
         return entity.getId();
+    }
+
+    private void updatePK(Entity entity, Long rowId, Object pkValue) {
+        EntityMeta meta = entity.getMetadata();
+        String sqlUpdate = SqlUtils.createSqlUpdate(meta.getName(), meta.getIdPropertiesName(), new String[]{"rowid"});
+        Object[] bindingValues = new Object[]{pkValue, rowId}; //TODO: multicolumn support
+        DatabaseStatement stmt = db.compileStatement(sqlUpdate);
+        propertyBinder.bindValue(stmt, (DBPropertyType) meta.getIdProperties()[0], 1, pkValue);
+        stmt.bindLong(2, rowId);
+        stmt.execute();
     }
 
     @Override

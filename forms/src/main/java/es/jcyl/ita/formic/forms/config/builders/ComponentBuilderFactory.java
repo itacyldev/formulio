@@ -33,6 +33,7 @@ import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.EntityMappingBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
@@ -60,6 +61,7 @@ import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
+import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -102,6 +104,7 @@ public class ComponentBuilderFactory {
         registerBuilder("fileRepo", newBuilder(FileRepoBuilder.class, "fileRepo"));
         registerBuilder("meta", newBuilder(RepoMetaConfigBuilder.class, "meta"));
         registerBuilder("property", newDefaultBuilder(PropertyConfig.class, "property"));
+        registerBuilder("mapping", newBuilder(EntityMappingBuilder.class, "mapping"));
 
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
@@ -110,7 +113,6 @@ public class ComponentBuilderFactory {
         registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
         registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
         registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
-
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");

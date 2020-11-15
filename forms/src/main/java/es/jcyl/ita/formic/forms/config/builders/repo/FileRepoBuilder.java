@@ -39,10 +39,6 @@ public class FileRepoBuilder extends AbstractComponentBuilder<RepoConfig> {
     }
 
     @Override
-    protected void doWithAttribute(RepoConfig element, String name, String value) {
-    }
-
-    @Override
     protected void setupOnSubtreeStarts(ConfigNode<RepoConfig> node) {
         if (!node.hasAttribute("folder")) {
             throw new ConfigurationException(error(String.format("Error while trying to create " +

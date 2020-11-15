@@ -67,6 +67,7 @@ public class AttributeDef {
     public static Attribute EXPRESSION = new Attribute("expression", true);
     public static Attribute EXPRESSION_TYPE = new Attribute("expressionType", true);
     public static Attribute EVAL_ON = new Attribute("evalOn", true);
+    public static Attribute PROPERTY = new Attribute("property", true);
 
     // autocomplete
     public static Attribute VALUE_PROPERTY = new Attribute("valueProperty");

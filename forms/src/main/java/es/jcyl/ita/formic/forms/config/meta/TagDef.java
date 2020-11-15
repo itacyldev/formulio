@@ -50,6 +50,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HISTORY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
@@ -94,6 +95,13 @@ public class TagDef {
         register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("meta", define(new Attribute[]{PROPERTIES}));
         register("property", define(new Attribute[]{NAME, EXPRESSION, COLUMN_NAME, EXPRESSION_TYPE, CONVERTER, EVAL_ON}));
+        register("mapping", define(new Attribute[]{REPO, PROPERTY,
+                new Attribute("fk", String.class),
+                new Attribute("insertable", Boolean.class),
+                new Attribute("updatable", Boolean.class),
+                new Attribute("deletable", Boolean.class),
+                new Attribute("retrieveMeta", Boolean.class)
+        }));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
         Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE};

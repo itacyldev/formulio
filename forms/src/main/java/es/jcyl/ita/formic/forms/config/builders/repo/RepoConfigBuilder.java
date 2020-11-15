@@ -26,7 +26,6 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
-import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.builders.EntitySourceBuilder;
@@ -83,7 +82,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
         // find first parent that admits "repo" attribute and if doesn't have a repo already defined by
         // attribute "repo", set current repo to it
-        ConfigNode parent = findRepoParent(node);
+        ConfigNode parent = BuilderHelper.findParentRepo(node);
         if (parent == null) {
             return;
         } else if (!parent.hasAttribute("repo")) {
@@ -94,34 +93,8 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
-        // check if threre's a meta configuration to override the default
-        ConfigNode<Object> meta = BuilderHelper.findNodeByTag(node, "meta");
-        if (meta == null) {
-            return;
-        }
-    }
 
-    /**
-     * Finds first parent element that supports "repo" attribute
-     *
-     * @param node
-     * @return
-     */
-    private ConfigNode findRepoParent(ConfigNode<RepoConfig> node) {
-        ConfigNode parent = node.getParent();
-        if (parent == null) {
-            return null;
-        } else {
-            while (parent != null) {
-                if (TagDef.supportsAttribute(parent.getName(), "repo")) {
-                    return parent;
-                }
-                parent = parent.getParent();
-            }
-            return null;
-        }
     }
-
 
     /**
      * @param filePath

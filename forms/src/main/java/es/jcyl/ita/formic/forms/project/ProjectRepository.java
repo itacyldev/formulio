@@ -22,7 +22,8 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.AbstractEditableRepository;
+import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
@@ -32,7 +33,7 @@ import es.jcyl.ita.formic.repo.source.Source;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ProjectRepository implements EditableRepository<Project, String, BaseFilter> {
+public class ProjectRepository extends AbstractEditableRepository<Project, String, BaseFilter> {
 
     private static EntityMeta projectMeta;
     private static EntitySource projectSource;
@@ -50,7 +51,7 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     }
 
     @Override
-    public List<Project> find(BaseFilter projectFilter) {
+    public List<Project> doFind(BaseFilter projectFilter) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
@@ -60,7 +61,7 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     }
 
     @Override
-    public List<Project> listAll() {
+    public List<Project> doListAll() {
         //TODO: this is just a prototype 204142
         // return all folders as projects using folder names a id,name
         File[] folders = getProjectDirectories();
@@ -73,11 +74,38 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
             }
         }
         return lst;
-
     }
 
+    public Project doFindById(String s) {
+        List<Project> projects = this.listAll();
+        for (Project p : projects) {
+            if (p.getName().equals(s.trim())) {
+                return p;
+            }
+        }
+        return null;
+    }
 
     @Override
+    protected void doSave(Project entity) {
+        // TODO
+    }
+
+    @Override
+    protected void doDelete(Project entity) {
+        // TODO
+    }
+
+    @Override
+    protected void doDeleteById(String key) {
+        // TODO
+    }
+
+    @Override
+    protected void doDeleteAll() {
+        // TODO
+    }
+
     public Project newEntity() {
         return new Project(projectSource, projectMeta);
     }
@@ -106,7 +134,7 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
     }
 
     @Override
-    public EntityMeta getMeta() {
+    public EntityMeta doGetMeta() {
         return this.projectMeta;
     }
 
@@ -121,6 +149,15 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
         return null;
     }
 
+    @Override
+    public void setMappings(List<EntityMapping> mappings) {
+
+    }
+
+    @Override
+    public List<EntityMapping> getMappings() {
+        return null;
+    }
 
     private EntitySource createSource() {
         return new EntitySource() {
@@ -154,41 +191,4 @@ public class ProjectRepository implements EditableRepository<Project, String, Ba
                 propList.toArray(new PropertyType[propList.size()]), new String[]{"id"});
         return meta;
     }
-
-    @Override
-    public Project findById(String s) {
-        List<Project> projects = this.listAll();
-        for (Project p : projects) {
-            if (p.getName().equals(s.trim())) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean existsById(String s) {
-        return false;
-    }
-
-    @Override
-    public void save(Project project) {
-
-    }
-
-    @Override
-    public void delete(Project project) {
-
-    }
-
-    @Override
-    public void deleteById(String s) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
-
 }

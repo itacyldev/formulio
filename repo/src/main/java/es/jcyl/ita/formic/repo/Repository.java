@@ -52,4 +52,10 @@ public interface Repository<T extends Entity, F extends Filter> {
 
     Class<F> getFilterClass();
 
+    void setMappings(List<EntityMapping> mappings);
+
+    List<EntityMapping> getMappings();
+
+    void addMapping(EntityMapping mapping);
+
 }

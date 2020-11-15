@@ -13,7 +13,6 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.context.impl.ViewStateHolder;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
@@ -38,12 +37,6 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     private Repository repo;
     private Filter filter;
     private String[] mandatoryFilters;
-
-    /**
-     * Entities loaded by inner components that create new entities that are related to
-     * current form entity.
-     */
-    private List<EntityRelation> entityRelations;
 
     public UIForm() {
         this.setRendererType("form");
@@ -183,14 +176,5 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     public Entity getEntity() {
         return currentEntity;
     }
-
-    public List<EntityRelation> getEntityRelations() {
-        return entityRelations;
-    }
-
-    public void setEntityRelations(List<EntityRelation> entityRelations) {
-        this.entityRelations = entityRelations;
-    }
-
 
 }

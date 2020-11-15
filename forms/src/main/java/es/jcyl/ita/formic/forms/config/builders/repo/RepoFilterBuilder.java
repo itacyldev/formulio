@@ -32,13 +32,9 @@ import es.jcyl.ita.formic.forms.components.FilterableComponent;
  */
 
 public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
+
     public RepoFilterBuilder() {
         super("repofilter", RepoFilter.class);
-    }
-
-    @Override
-    protected void doWithAttribute(RepoFilter element, String name, String value) {
-
     }
 
     @Override

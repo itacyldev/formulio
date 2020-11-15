@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.repo;
+package es.jcyl.ita.formic.repo;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,9 +17,6 @@ package es.jcyl.ita.formic.forms.repo;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.components.EntityHolder;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
@@ -30,37 +27,41 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class EntityRelation {
+public class EntityMapping {
 
     /**
      * Repo and filter used to retrieve the entity.
      */
     private Repository repo;
     private Filter filter;
-    private EntityHolder entityHolder;
     /**
-     * Expression used to obtain the id of the entity to retrieve.
+     * Property or Expression used to obtain the id of the entity to retrieve.
      */
-    private ValueBindingExpression entityPropertyExpr;
+    private String fk;
     /**
      * The of the transient property created in the main entity to store the related entity.
      */
-    private String name;
+    private String property;
     /**
      * Modification restrictions
      */
     private boolean insertable = true;
     private boolean updatable = true;
-    private boolean deletable = true;
-
+    private boolean deletable = false;
     private List<CalculatedProperty> calcProps;
+    /**
+     * Defines if related metadata has to be read.
+     */
+    private boolean retrieveMeta = true;
+
+    public EntityMapping() {
+    }
 
     // TODO: right now we just need a one2one relation
-
-    public EntityRelation(Repository repo, String name, ValueBindingExpression expr) {
+    public EntityMapping(Repository repo, String fk, String propertyName) {
         this.repo = repo;
-        this.name = name;
-        this.entityPropertyExpr = expr;
+        this.property = propertyName;
+        this.fk = fk;
     }
 
     public Repository getRepo() {
@@ -79,20 +80,12 @@ public class EntityRelation {
         this.filter = filter;
     }
 
-    public ValueBindingExpression getEntityPropertyExpr() {
-        return entityPropertyExpr;
+    public String getProperty() {
+        return property;
     }
 
-    public void setEntityPropertyExpr(ValueBindingExpression entityPropertyExpr) {
-        this.entityPropertyExpr = entityPropertyExpr;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setProperty(String property) {
+        this.property = property;
     }
 
     public boolean isInsertable() {
@@ -119,23 +112,40 @@ public class EntityRelation {
         this.deletable = deletable;
     }
 
-    public EntityHolder getEntityHolder() {
-        return entityHolder;
+    public List<CalculatedProperty> getCalcProps() {
+        return this.calcProps;
     }
 
-    public void setEntityHolder(EntityHolder entityHolder) {
-        this.entityHolder = entityHolder;
+    /**
+     * Returns true if the fk property defined is a JEXL expression
+     *
+     * @return
+     */
+    public boolean isFkExpression() {
+        return fk.contains("$");
+    }
+
+    public void setCalcProps(List<CalculatedProperty> calcProps) {
+        this.calcProps = calcProps;
+    }
+
+    public void setFk(String fk) {
+        this.fk = fk;
+    }
+
+    public String getFk() {
+        return fk;
     }
 
     public boolean hasCalcProps() {
         return this.calcProps != null && this.calcProps.size() > 0;
     }
 
-    public List<CalculatedProperty> getCalcProps() {
-        return calcProps;
+    public boolean isRetrieveMeta() {
+        return retrieveMeta;
     }
 
-    public void setCalcProps(List<CalculatedProperty> calcProps) {
-        this.calcProps = calcProps;
+    public void setRetrieveMeta(boolean retrieveMeta) {
+        this.retrieveMeta = retrieveMeta;
     }
 }

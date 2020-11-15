@@ -22,21 +22,20 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.ByteArrayOutputStream;
-
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.meta.types.ByteArray;
+
+import java.io.ByteArrayOutputStream;
+
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
 import es.jcyl.ita.formic.forms.components.media.MediaResource;
 import es.jcyl.ita.formic.forms.view.activities.ActivityResultCallBack;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -47,6 +46,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     private ActivityResultLauncher<Void> launcher;
     private GallerySelector gallerySelector;
+    private Entity mainEntity;
 
     public ImageWidget(Context context) {
         super(context);
@@ -92,10 +92,11 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
                 });
             }
         }
+        this.mainEntity = env.getFormContext().getEntity();
     }
 
-    public GallerySelector getGallerySelector(){
-        if (this.gallerySelector == null){
+    public GallerySelector getGallerySelector() {
+        if (this.gallerySelector == null) {
             this.gallerySelector = new GallerySelector();
         }
         return this.gallerySelector;
@@ -119,7 +120,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         imageData.compress(Bitmap.CompressFormat.PNG, 90, stream);
         byte[] byteArray = stream.toByteArray();
 
-        if (component.isEntityRelation()) {
+        if (component.isNestedProperty()) {
             updateRelatedEntity(byteArray);
         }
 
@@ -141,19 +142,12 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
      * @param byteArray
      */
     private void updateRelatedEntity(byte[] byteArray) {
-        Entity entity = component.getEntity();
+        // the related entity is stored in the main entity using current component Id as property name
+        Entity entity = (Entity) mainEntity.get(component.getId());
         if (entity == null) {
-            EntityRelation rel = component.getEntityRelation();
-            // no related entity, create entity and media resource
-            EditableRepository repo = (EditableRepository) rel.getRepo();
-            entity = repo.newEntity();
-            component.setEntity(entity);
-
-            // set new entity to parent form entity
-            String mainPropertyName = component.getEntityRelation().getName();
-            Entity mainEntity = component.getParentForm().getEntity();
-            mainEntity.set(mainPropertyName, entity, true);
-
+            // create new entity
+            entity = Entity.newEmpty();
+            mainEntity.set(component.getId(), entity, true);
             MediaResource imgResource = MediaResource.fromByteArray(byteArray);
             getInputView().setResource(imgResource);
         }

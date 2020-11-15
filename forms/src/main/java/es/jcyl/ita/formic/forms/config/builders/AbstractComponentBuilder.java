@@ -68,7 +68,8 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
     /****** Extension points *******/
 
-    protected abstract void doWithAttribute(E element, String name, String value);
+    protected void doWithAttribute(E element, String name, String value) {
+    }//empty implementation
 
     protected abstract void setupOnSubtreeStarts(ConfigNode<E> node);
 

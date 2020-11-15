@@ -29,7 +29,9 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
+import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
@@ -364,5 +366,27 @@ public class BuilderHelper {
 
 
         return node;
+    }
+
+
+    /**
+     * Finds first parent element that supports "repo" attribute
+     *
+     * @param node
+     * @return
+     */
+    public static ConfigNode findParentRepo(ConfigNode node) {
+        ConfigNode parent = node.getParent();
+        if (parent == null) {
+            return null;
+        } else {
+            while (parent != null) {
+                if (TagDef.supportsAttribute(parent.getName(), "repo")) {
+                    return parent;
+                }
+                parent = parent.getParent();
+            }
+            return null;
+        }
     }
 }

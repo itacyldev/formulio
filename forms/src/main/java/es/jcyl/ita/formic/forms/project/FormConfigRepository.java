@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.repo.AbstractEditableRepository;
 import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
@@ -33,7 +35,7 @@ import es.jcyl.ita.formic.repo.source.Source;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormConfigRepository implements EditableRepository<FormConfig, String, BaseFilter> {
+public class FormConfigRepository extends AbstractEditableRepository<FormConfig, String, BaseFilter> {
 
     private final Project project;
     private final EntitySource source;
@@ -48,13 +50,8 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
-    public FormConfig findById(String s) {
+    public FormConfig doFindById(String s) {
         return memoryRepo.get(s);
-    }
-
-    @Override
-    public boolean existsById(String s) {
-        return findById(s) != null;
     }
 
     @Override
@@ -63,8 +60,18 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
+    protected void doDelete(FormConfig entity) {
+
+    }
+
+    @Override
     public void save(FormConfig formConfig) {
         memoryRepo.put(formConfig.getId(), formConfig);
+    }
+
+    @Override
+    protected void doSave(FormConfig entity) {
+
     }
 
     @Override
@@ -73,8 +80,18 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
+    protected void doDeleteById(String key) {
+
+    }
+
+    @Override
     public void deleteAll() {
         this.memoryRepo.clear();
+    }
+
+    @Override
+    protected void doDeleteAll() {
+
     }
 
     @Override
@@ -93,6 +110,11 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
+    protected List<FormConfig> doFind(BaseFilter filter) {
+        return null;
+    }
+
+    @Override
     public long count(BaseFilter basicFilter) {
         return memoryRepo.size();
     }
@@ -103,12 +125,17 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     }
 
     @Override
+    protected List<FormConfig> doListAll() {
+        return null;
+    }
+
+    @Override
     public EntitySource getSource() {
         return this.source;
     }
 
     @Override
-    public EntityMeta getMeta() {
+    public EntityMeta doGetMeta() {
         return this.meta;
     }
 
@@ -120,6 +147,21 @@ public class FormConfigRepository implements EditableRepository<FormConfig, Stri
     @Override
     public Class<BaseFilter> getFilterClass() {
         return BaseFilter.class;
+    }
+
+    @Override
+    public void setMappings(List<EntityMapping> mappings) {
+
+    }
+
+    @Override
+    public List<EntityMapping> getMappings() {
+        return null;
+    }
+
+    @Override
+    public void addMapping(EntityMapping mapping) {
+
     }
 
 

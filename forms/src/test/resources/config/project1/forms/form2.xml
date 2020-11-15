@@ -1,4 +1,7 @@
 <main name="Agents form" description="An example of short description" id="form2" repo="agentsRepo">
+    <list>
+        <datatable properties="id,provmuni,provincia.name,municipio.name" />
+    </list>
     <edit>
         <form>
             <tab>
@@ -18,6 +21,7 @@
                             <contains property="name" value="${this.value}" />
                         </repofilter>
                     </autocomplete>
+                    <text label="zip code" value="${entity.municipio.zip_code}"/>
                 </tabitem>
                 <tabitem label="Tab 2">
                     <autocomplete forceSelection="true" id="contact_id" label="Agent"
@@ -26,7 +30,7 @@
                             labelExpression="${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"
                             labelFilteringProperty="last_name" valueProperty="contact_id" />
                     </autocomplete>
-                    <image height="200" value="${entity.id}.jpg" width="300" validator="required"/>
+                    <image height="200" value="${entity.id}.jpg" width="300" />
                 </tabitem>
             </tab>
         </form>

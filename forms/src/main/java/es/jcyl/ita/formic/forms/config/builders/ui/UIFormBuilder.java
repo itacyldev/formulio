@@ -15,14 +15,10 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
  * limitations under the License.
  */
 
-import java.util.List;
-
+import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -45,12 +41,5 @@ public class UIFormBuilder extends UIGroupComponentBuilder<UIForm> {
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIForm> node) {
         super.setupOnSubtreeEnds(node);
-
-        // get entity relations defined in inner components
-        List<EntityRelation> relations =
-                UIComponentHelper.findEntityRelations(node.getElement());
-        if(relations != null){
-            node.getElement().setEntityRelations(relations);
-        }
     }
 }

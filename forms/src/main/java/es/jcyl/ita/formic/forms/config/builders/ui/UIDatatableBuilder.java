@@ -37,8 +37,6 @@ import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -138,7 +136,6 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
         // set columns in datatable
         dataTable.setColumns(columns.toArray(new UIColumn[columns.size()]));
-
     }
 
 
@@ -170,18 +167,25 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
         PropertyType[] properties;
         properties = BuilderHelper.getPropertiesFromRepo(repo, propertyNames);
+        int i = 0;
+        UIColumn col;
         for (PropertyType property : properties) {
-            UIColumn col = createColumn(property);
+            if (propertyNames.length > 0) {
+                col = createColumn(propertyNames[i], property);
+            } else {
+                col = createColumn(property.getName(), property);
+            }
             lstCols.add(col);
+            i++;
         }
         return lstCols;
     }
 
-    private UIColumn createColumn(PropertyType property) {
+    private UIColumn createColumn(String propertyName, PropertyType property) {
         UIColumn col = new UIColumn();
         col.setId(property.getName());
         col.setHeaderText(property.getName());
-        col.setValueExpression(exprFactory.create("${entity." + property.getName() + "}"));
+        col.setValueExpression(exprFactory.create("${entity." + propertyName + "}"));
         col.setFiltering(true);
         return col;
     }

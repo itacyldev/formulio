@@ -2,6 +2,7 @@ package es.jcyl.ita.formic.repo;
 
 import org.mini2Dx.collections.MapUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
      * Persistence origin used to retrieve/STORE this entity
      */
     private S source;
+    protected boolean validateProperties = true;
     private Map<String, Object> properties;
     // non persistable properties
     private Map<String, Object> transientProps = MapUtils.EMPTY_MAP;
@@ -45,13 +47,14 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
     public void set(String prop, Object value, boolean isTransient) {
         // TODO: include watcher for reactive flow implementation
         if (isTransient) {
-            if(this.transientProps.isEmpty()){
+            if (this.transientProps.isEmpty()) {
                 this.transientProps = new HashMap<>();
             }
             this.transientProps.put(prop, value);
         } else {
-            // TODO: validate property using schema
-            validate(prop, value);
+            if (validateProperties) {
+                validate(prop, value);
+            }
             this.properties.put(prop, value);
         }
     }
@@ -124,7 +127,10 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
     }
 
     public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
+        this.properties.clear();
+        for(Map.Entry<String, Object> entry : properties.entrySet()){
+            set(entry.getKey(), entry.getValue());
+        }
     }
 
 
@@ -139,5 +145,20 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
 
     public void setSource(S source) {
         this.source = source;
+    }
+
+    public static Entity newEmpty() {
+        EntityMeta meta = new EntityMeta("empty", new PropertyType[0], new String[0]);
+        Entity entity = new Entity(null, meta, null);
+        entity.validateProperties = false;
+        return entity;
+    }
+
+    @Override
+    public String toString() {
+        String pk = (!this.metadata.hasIdProperties()) ? "NoPK" :
+                String.format("%s=%s", Arrays.toString(
+                        metadata.getIdPropertiesName()).replaceAll("[\\[\\]]",""), this.getId());
+        return metadata.getName() + "@[" + pk+"]";
     }
 }

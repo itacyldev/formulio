@@ -33,8 +33,15 @@ import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.EntityMapping;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.media.meta.FileMeta;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
+
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -44,13 +51,15 @@ import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 @RunWith(RobolectricTestRunner.class)
 public class UIImageBuilderTest {
 
+    private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+
     @BeforeClass
     public static void setUp() {
         Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
-        RepositoryUtils.registerMock("contacts");
+        Repository mock = RepositoryUtils.registerMock("contacts");
         RepositoryUtils.registerMock("DEFAULT_PROJECT_IMAGES", new FileMeta());
     }
 
@@ -77,10 +86,15 @@ public class UIImageBuilderTest {
         // repo must be set with parent value "contacts"
         UIImage img = imgs.get(0);
         Assert.assertNotNull(img.getId());
-        Assert.assertNotNull(img.getEntityRelation());
+        // check the entityMapping has been added to contact repository
+        Repository contactsRepo = repoFactory.getRepo("contacts");
+        List<EntityMapping> mappings = contactsRepo.getMappings();
+        assertFalse(mappings.isEmpty());
+        EntityMapping mapping = mappings.get(0);
+        assertThat(mapping.getProperty(),equalTo(img.getId()));
+
         // an entity relation with a literal expression must be created
-        Object value =  img.getEntityRelation().getEntityPropertyExpr().toString();
-        Assert.assertEquals(imgFile.getAbsolutePath(), value);
+        Assert.assertEquals(imgFile.getAbsolutePath(), mapping.getFk());
         Assert.assertEquals((int) img.getInputType(), 0);
     }
 
