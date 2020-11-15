@@ -80,7 +80,7 @@ public class FileRepository extends AbstractEditableRepository<FileEntity, Strin
     }
 
     @Override
-    public List<FileEntity> find(BaseFilter<FileEntityExpression> filter) {
+    public List<FileEntity> doFind(BaseFilter<FileEntityExpression> filter) {
         File[] files;
         if (filter == null) {
             files = baseFolder.listFiles();
@@ -202,18 +202,18 @@ public class FileRepository extends AbstractEditableRepository<FileEntity, Strin
 
 
     @Override
-    public void delete(FileEntity entity) {
+    public void doDelete(FileEntity entity) {
         deleteById((String) entity.getId());
     }
 
     @Override
-    public void deleteById(String id) {
+    public void doDeleteById(String id) {
         File f = new File(this.baseFolder, id);
         f.delete();
     }
 
     @Override
-    public void deleteAll() {
+    public void doDeleteAll() {
         try {
             FileUtils.deleteDirectory(baseFolder);
         } catch (IOException e) {

@@ -58,7 +58,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
                         mainEntity.getMetadata().getName(), mainEntity.getId(),
                         mapping.getFk()));
             }
-            EditableRepository repo = (EditableRepository) mapping.getRepo();
+            EditableRepository relRepo = (EditableRepository) mapping.getRepo();
             // eval calculated properties if needed
             if (mapping.hasCalcProps()) {
                 updateEntityProps(mainEntity, (Entity) relEntity, mapping);
@@ -72,8 +72,9 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
                             mapping.getFk()));
                 }
                 // Obtain a new entity from repo to get repo EntityMeta
-                Entity newEntity = repo.newEntity();
+                Entity newEntity = relRepo.newEntity();
                 newEntity.setProperties(relEntity.getProperties());
+                mainEntity.set(mapping.getName(), newEntity, true);
                 relEntity = newEntity;
             } else {
                 if (!mapping.isUpdatable()) {
@@ -85,7 +86,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
                 }
             }
             // insert/update related entity
-            repo.save(relEntity);
+            relRepo.save(relEntity);
             if (!mapping.isFkExpression()) {
                 // if the fk is a mainEntity property and not an expression based on
                 // mainEntity's fields, update the property with the new entity Id
@@ -117,33 +118,56 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
         return entity;
     }
 
-
     protected abstract T doFindById(ID key);
 
     public boolean existsById(ID key) {
-        return findById(key) == null;
+        return doFindById(key) != null;
     }
-//
-//    /**
-//     * Executes the filter on the repository creating a greendao Query object.
-//     *
-//     * @param filter
-//     * @return
-//     */
-//    public List<T> find(SQLQueryFilter filter) {
-//        List<T> entities = doFind(filter);
-//        return entities;
-//    }
-//
-//    protected abstract List<T> doFind(SQLQueryFilter filter);
-//
-//
-//    public List<T> listAll() {
-//        List<T> entities = doListAll();
-//        return entities;
-//    }
-//
-//    protected abstract List<T> doListAll();
 
+
+    @Override
+    public void delete(T entity) {
+        doDelete(entity);
+        if (hasMappings()) {
+            deleteRelated(entity);
+        }
+    }
+
+    protected void deleteRelated(T mainEntity) {
+        boolean mainEntityUpdated = false;
+        for (EntityMapping mapping : mappings) {
+            Entity relEntity = (Entity) mainEntity.get(mapping.getName());
+
+            if (relEntity == null || !mapping.isDeletable()) {
+                // set the related property field a null
+                continue;
+            }
+            if (!(mapping.getRepo() instanceof EditableRepository)) {
+                throw new RepositoryException(String.format("Error while saving entity [%s#%s], " +
+                                "Cannot save the related entity base on mapping for property [%s], " +
+                                "the repository defined is not Editable.",
+                        mainEntity.getMetadata().getName(), mainEntity.getId(),
+                        mapping.getFk()));
+            }
+            EditableRepository relRepo = (EditableRepository) mapping.getRepo();
+            relRepo.delete(relEntity);
+        }
+    }
+
+    protected abstract void doDelete(T entity);
+
+    @Override
+    public void deleteById(ID key) {
+        doDeleteById(key);
+    }
+
+    protected abstract void doDeleteById(ID key);
+
+    @Override
+    public void deleteAll() {
+        doDeleteAll();
+    }
+
+    protected abstract void doDeleteAll();
 
 }

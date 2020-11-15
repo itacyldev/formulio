@@ -66,7 +66,7 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
     }
 
     @Override
-    public List<Entity> find(SQLQueryFilter filter) {
+    public List<Entity> doFind(SQLQueryFilter filter) {
         // TODO: filter is not yet used, pagination and additional filtering must be implemented
         // evaluate Query
         String effQuery = SQLSelectBuilder.paginate(this.query, filter);

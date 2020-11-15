@@ -1,8 +1,13 @@
 package es.jcyl.ita.formic.repo.repo;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.StandardDatabase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mini2Dx.beanutils.ConvertUtils;
@@ -118,7 +123,7 @@ public class EntityMappingTest {
 
         // create relatedEntity repository
         dbDev = new DevDbBuilder();
-        dbDev.withNumEntities(1).build(new StandardDatabase(db));
+        dbDev.withNumEntities(0).build(new StandardDatabase(db));
         SQLiteRepository relRepo = dbDev.getSQLiteRepository();
 
         // define an EntityMapping, dbRepo -> relRepo related through property FK_NAME
@@ -128,7 +133,7 @@ public class EntityMappingTest {
         /////////////////////////////////////
         // 1- create empty entity, and save it
         /////////////////////////////////////
-        Entity relEntity = Entity.newEmpty();
+        Entity relEntity = relRepo.newEntity();
 
         // link with main entity and save
         mainEntity.set(PROPERTY_NAME, relEntity, true); // link related entity as transient
@@ -170,4 +175,65 @@ public class EntityMappingTest {
         assertThat(actualValue, equalTo(expectedValue));
     }
 
+
+    /**
+     * Create a dbEntity with a related dbEntity, at first create the related entity empty to check
+     * the new Entity insertion, get it again and update and modification has been applied.
+     */
+    @Test
+    public void testDeleteRelatedEntity() throws Exception {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        Database db = DevDbBuilder.createDevSQLiteDb(ctx, "test.sqlite");
+
+        String FK_NAME = "relId";
+        String PROPERTY_NAME = "related";
+
+        // create a database with some entities, and add a property to support the FK
+        DevDbBuilder dbDev = new DevDbBuilder();
+
+        EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+        EntityMeta<DBPropertyType> meta = metaBuilder.withBasicTypes(true).withRandomData()
+                .addProperty(FK_NAME, String.class).build();
+        dbDev.withNumEntities(1).withMeta(meta).build(db);
+
+        SQLiteRepository dbRepo = dbDev.getSQLiteRepository();
+        Entity mainEntity = dbRepo.listAll().get(0);
+
+        // create relatedEntity repository
+        dbDev = new DevDbBuilder();
+        dbDev.withNumEntities(0).build(db);
+        SQLiteRepository relRepo = dbDev.getSQLiteRepository();
+
+        // define an EntityMapping, dbRepo -> relRepo related through property FK_NAME
+        EntityMapping mapping = new EntityMapping(relRepo, FK_NAME, PROPERTY_NAME);
+        dbRepo.addMapping(mapping);
+
+        /////////////////////////////////////
+        // 1- create empty entity, and save it
+        /////////////////////////////////////
+        Entity relEntity = Entity.newEmpty();
+        PropertyType propertyRel = relRepo.getMeta().getProperties()[1];
+        relEntity.set(propertyRel.name, ConvertUtils.convert(123, propertyRel.type));
+
+        // link with main entity and save
+        mainEntity.set(PROPERTY_NAME, relEntity, true); // link related entity as transient
+        dbRepo.save(mainEntity);
+        dbRepo.clearCache();
+
+        /////////////////////////////////////
+        // 2- delete entity
+        /////////////////////////////////////
+        List<Entity> entities = relRepo.listAll();
+
+        dbRepo.delete(mainEntity);
+        dbRepo.clearCache();
+        relRepo.clearCache();
+        relEntity = (Entity) mainEntity.get(PROPERTY_NAME);
+
+        entities = relRepo.listAll();
+        relRepo.delete(relEntity);
+        entities = relRepo.listAll();
+        // check related entity has been removed
+        Assert.assertFalse("The related entity should not exists!", relRepo.existsById(relEntity.getId()));
+    }
 }

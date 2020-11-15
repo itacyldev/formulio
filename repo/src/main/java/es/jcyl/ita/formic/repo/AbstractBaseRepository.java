@@ -68,21 +68,26 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
         this.mappings.add(mapping);
     }
 
-    //
-//    /**
-//     * Executes the filter on the repository creating a greendao Query object.
-//     *
-//     * @param filter
-//     * @return
-//     */
-//    public List<T> find(SQLQueryFilter filter) {
-//        List<T> entities = doFind(filter);
-//        return entities;
-//    }
-//
-//    protected abstract List<T> doFind(SQLQueryFilter filter);
-//
-//
+
+    /**
+     * Executes the filter on the repository creating a greendao Query object.
+     *
+     * @param filter
+     * @return
+     */
+    public List<T> find(F filter) {
+        List<T> entities = doFind(filter);
+        if (hasMappings()) {
+            for (T entity : entities) {
+                loadRelated(entity);
+            }
+        }
+        return entities;
+    }
+
+    protected abstract List<T> doFind(F filter);
+
+
     public List<T> listAll() {
         List<T> entities = doListAll();
         if (hasMappings()) {

@@ -29,7 +29,8 @@ import es.jcyl.ita.formic.repo.meta.types.ByteArray;
  * Generates a new key for the entity returning the current System timestamp
  */
 public class TimeStampKeyGenerator extends KeyGeneratorStrategy {
-    private static final Class[] SUPPORTED_TYPES = {Date.class, Integer.class, Long.class, Short.class, Double.class, Float.class};
+    private static final Class[] SUPPORTED_TYPES = {Date.class, Integer.class, Long.class,
+            Short.class, Double.class, Float.class};
 
     public TimeStampKeyGenerator() {
         super(TYPE.TIMESTAMP);

@@ -65,7 +65,7 @@ public class SQLiteRepository extends AbstractEditableRepository<Entity, Object,
      * @return
      */
     @Override
-    public List<Entity> find(SQLQueryFilter filter) {
+    public List<Entity> doFind(SQLQueryFilter filter) {
         List<Entity> entities = null;
         if (filter == null) {
             entities = dao.loadAll();
@@ -96,17 +96,17 @@ public class SQLiteRepository extends AbstractEditableRepository<Entity, Object,
     }
 
     @Override
-    public void delete(Entity entity) {
+    public void doDelete(Entity entity) {
         this.dao.delete(entity);
     }
 
     @Override
-    public void deleteById(Object key) {
+    public void doDeleteById(Object key) {
         this.dao.deleteByKey(key);
     }
 
     @Override
-    public void deleteAll() {
+    public void doDeleteAll() {
         this.dao.deleteAll();
     }
 

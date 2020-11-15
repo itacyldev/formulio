@@ -2,6 +2,7 @@ package es.jcyl.ita.formic.repo;
 
 import org.mini2Dx.collections.MapUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -126,7 +127,10 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
     }
 
     public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
+        this.properties.clear();
+        for(Map.Entry<String, Object> entry : properties.entrySet()){
+            set(entry.getKey(), entry.getValue());
+        }
     }
 
 
@@ -148,5 +152,13 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
         Entity entity = new Entity(null, meta, null);
         entity.validateProperties = false;
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        String pk = (!this.metadata.hasIdProperties()) ? "NoPK" :
+                String.format("%s=%s", Arrays.toString(
+                        metadata.getIdPropertiesName()).replaceAll("[\\[\\]]",""), this.getId());
+        return metadata.getName() + "@[" + pk+"]";
     }
 }
