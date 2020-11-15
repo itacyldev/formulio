@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.components;
  */
 
 import java.util.Arrays;
+import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
@@ -30,7 +31,7 @@ public class UIInputComponent extends UIComponent {
     private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
     protected String label;
-    private boolean readOnly;
+    protected boolean readOnly;
     private String valueConverter;
     private Integer inputType = null;
 
@@ -79,9 +80,14 @@ public class UIInputComponent extends UIComponent {
         if (this.parentForm == null) {
             return readOnly;
         } else {
-            // mon knows best
             return this.parentForm.isReadOnly() || this.readOnly;
         }
+    }
+
+    public boolean isNestedProperty() {
+        List<String> dependingVariables = this.getValueExpression().getDependingVariables();
+        // entity.nestedProperty.prop
+        return (dependingVariables.size() != 1) ? false : dependingVariables.get(0).split("\\.").length > 2;
     }
 
     /**

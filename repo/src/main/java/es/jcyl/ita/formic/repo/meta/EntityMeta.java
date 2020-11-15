@@ -61,8 +61,7 @@ public class EntityMeta<P extends PropertyType> {
         if ("id".equals(name) && ArrayUtils.isNotEmpty(idProperties)) {
             return true; // it has a primaryKey
         }
-        int pos = findPropertyByName(name);
-        return pos >= 0;
+        return getPropertyByName(name) != null;
     }
 
     public int findPropertyByName(String name) {
@@ -116,6 +115,7 @@ public class EntityMeta<P extends PropertyType> {
     public boolean hasIdProperties() {
         return (this.idProperties != null && this.idProperties.length > 0);
     }
+
     public boolean hasMulticolumnKey() {
         return (this.idProperties != null && this.idProperties.length > 1);
     }

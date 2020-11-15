@@ -116,7 +116,7 @@ public class SQLiteRepository extends AbstractEditableRepository<Entity, Object,
     }
 
     @Override
-    public EntityMeta getMeta() {
+    public EntityMeta doGetMeta() {
         return this.dao.entityConfig().getMeta();
     }
 

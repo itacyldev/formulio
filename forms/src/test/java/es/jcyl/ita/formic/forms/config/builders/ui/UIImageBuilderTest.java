@@ -42,7 +42,6 @@ import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -92,7 +91,7 @@ public class UIImageBuilderTest {
         List<EntityMapping> mappings = contactsRepo.getMappings();
         assertFalse(mappings.isEmpty());
         EntityMapping mapping = mappings.get(0);
-        assertThat(mapping.getName(),equalTo(img.getId()));
+        assertThat(mapping.getProperty(),equalTo(img.getId()));
 
         // an entity relation with a literal expression must be created
         Assert.assertEquals(imgFile.getAbsolutePath(), mapping.getFk());

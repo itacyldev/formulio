@@ -134,7 +134,7 @@ public class ProjectRepository extends AbstractEditableRepository<Project, Strin
     }
 
     @Override
-    public EntityMeta getMeta() {
+    public EntityMeta doGetMeta() {
         return this.projectMeta;
     }
 

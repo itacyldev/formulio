@@ -23,6 +23,7 @@ import java.util.List;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
 import es.jcyl.ita.formic.repo.el.JexlUtils;
+import es.jcyl.ita.formic.repo.meta.AggregatedMeta;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.Filter;
@@ -35,6 +36,7 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
     protected String id;
     protected Context context;
     protected List<EntityMapping> mappings;
+    protected AggregatedMeta delegateMeta;
 
     public void setId(String id) {
         this.id = id;
@@ -66,8 +68,25 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
             this.mappings = new ArrayList<EntityMapping>();
         }
         this.mappings.add(mapping);
+        if (mapping.isRetrieveMeta()) {
+            // enrich meta info with the new repo relation
+            if (delegateMeta == null) {
+                delegateMeta = new AggregatedMeta(this.doGetMeta());
+            }
+            delegateMeta.addEntityMappings(mapping.getProperty(), mapping.getRepo().getMeta());
+        }
     }
 
+    public final EntityMeta getMeta() {
+        if (!this.hasMappings()) {
+            return this.doGetMeta();
+        } else {
+            // use delegate to access related Entity metas
+            return this.delegateMeta;
+        }
+    }
+
+    protected abstract EntityMeta doGetMeta();
 
     /**
      * Executes the filter on the repository creating a greendao Query object.
@@ -122,7 +141,7 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
             // TODO: rendering process
 
             // set related entity as transient
-            mainEntity.set(mapping.getName(), relEntity, true);
+            mainEntity.set(mapping.getProperty(), relEntity, true);
         }
     }
 

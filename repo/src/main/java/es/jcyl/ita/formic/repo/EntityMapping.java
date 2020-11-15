@@ -41,26 +41,27 @@ public class EntityMapping {
     /**
      * The of the transient property created in the main entity to store the related entity.
      */
-    private String name;
+    private String property;
     /**
      * Modification restrictions
      */
     private boolean insertable = true;
     private boolean updatable = true;
-    private boolean deletable = true;
-    private boolean isFkExpression = false;
+    private boolean deletable = false;
     private List<CalculatedProperty> calcProps;
+    /**
+     * Defines if related metadata has to be read.
+     */
+    private boolean retrieveMeta = true;
 
-//    private List<CalculatedProperty> calcProps;
+    public EntityMapping() {
+    }
 
     // TODO: right now we just need a one2one relation
     public EntityMapping(Repository repo, String fk, String propertyName) {
         this.repo = repo;
-        this.name = propertyName;
+        this.property = propertyName;
         this.fk = fk;
-        if (fk.contains("$")) {
-            this.isFkExpression = true;
-        }
     }
 
     public Repository getRepo() {
@@ -79,15 +80,12 @@ public class EntityMapping {
         this.filter = filter;
     }
 
-
-
-
-    public String getName() {
-        return name;
+    public String getProperty() {
+        return property;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProperty(String property) {
+        this.property = property;
     }
 
     public boolean isInsertable() {
@@ -118,12 +116,21 @@ public class EntityMapping {
         return this.calcProps;
     }
 
+    /**
+     * Returns true if the fk property defined is a JEXL expression
+     *
+     * @return
+     */
     public boolean isFkExpression() {
-        return isFkExpression;
+        return fk.contains("$");
     }
 
     public void setCalcProps(List<CalculatedProperty> calcProps) {
         this.calcProps = calcProps;
+    }
+
+    public void setFk(String fk) {
+        this.fk = fk;
     }
 
     public String getFk() {
@@ -132,5 +139,13 @@ public class EntityMapping {
 
     public boolean hasCalcProps() {
         return this.calcProps != null && this.calcProps.size() > 0;
+    }
+
+    public boolean isRetrieveMeta() {
+        return retrieveMeta;
+    }
+
+    public void setRetrieveMeta(boolean retrieveMeta) {
+        this.retrieveMeta = retrieveMeta;
     }
 }

@@ -135,7 +135,7 @@ public class FormConfigRepository extends AbstractEditableRepository<FormConfig,
     }
 
     @Override
-    public EntityMeta getMeta() {
+    public EntityMeta doGetMeta() {
         return this.meta;
     }
 

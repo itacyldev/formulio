@@ -26,28 +26,25 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 import java.nio.charset.Charset;
 
+import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
+import es.jcyl.ita.formic.repo.AbstractEditableRepository;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
 public class RepositoryConfHandlerTest {
-
-    EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
 
     @BeforeClass
     public static void setUp() {
@@ -63,30 +60,58 @@ public class RepositoryConfHandlerTest {
 
     }
 
+    @Test
+    public void testOkRepoReading() throws Exception {
+        String REPO_ID = "RepositoryConfHandlerTestValidRepo";
+        try {
+            // create a repo with a meta with no column. Mockup everything and call the handler to make it fail
+            EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+            EntityMeta meta = metaBuilder.withNumProps(3).build();
+            EditableRepository repo = mock(AbstractEditableRepository.class);
+            when(repo.getMeta()).thenReturn(meta);
+
+            when(repo.getId()).thenReturn(REPO_ID);
+
+            File emptyF = File.createTempFile("empty", ".xml");
+            FileUtils.write(emptyF, "", Charset.defaultCharset());
+
+            Project p = ProjectRepository.createFromFolder(new File("."));
+            ProjectResource pr = new ProjectResource(p, emptyF, ProjectResource.ResourceType.REPO);
+
+            RepositoryFactory.getInstance().register(REPO_ID, repo);
+            RepoConfigHandler handler = new RepoConfigHandler();
+            handler.handle(pr);
+        } finally {
+            RepositoryFactory.getInstance().unregister(REPO_ID);
+        }
+
+    }
+
     /**
      * If a repo with no pk columns is defined the config process must fail
      */
     @Test
     public void testErrorWithNoPKRepo() throws Exception {
-        // create a repo with a meta with no column. Mockup everything and call the handler to make it fail
-        EntityMeta meta = metaBuilder.addProperties(new String[]{"one"}, new Class[]{String.class})
-                .withIdProperties(null).build();
-        EditableRepository repo = mock(EditableRepository.class);
-        when(repo.getMeta()).thenReturn(meta);
         String REPO_ID = "RepositoryConfHandlerTestInvalidRepo";
-        when(repo.getId()).thenReturn(REPO_ID);
-
-        File emptyF = File.createTempFile("empty", ".xml");
-        FileUtils.write(emptyF, "", Charset.defaultCharset());
-
-        Project p = ProjectRepository.createFromFolder(new File("."));
-        ProjectResource pr = new ProjectResource(p, emptyF, ProjectResource.ResourceType.REPO);
-
-        RepositoryFactory.getInstance().register(REPO_ID, repo);
-
-        RepoConfigHandler handler = new RepoConfigHandler();
-        // make it read an empty f
         try {
+            // create a repo with a meta with no column. Mockup everything and call the handler to make it fail
+            EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+            EntityMeta meta = metaBuilder.addProperties(new String[]{"one"}, new Class[]{String.class})
+                    .withIdProperties(null).build();
+            EditableRepository repo = mock(EditableRepository.class);
+            when(repo.getMeta()).thenReturn(meta);
+            when(repo.getId()).thenReturn(REPO_ID);
+
+            File emptyF = File.createTempFile("empty", ".xml");
+            FileUtils.write(emptyF, "", Charset.defaultCharset());
+
+            Project p = ProjectRepository.createFromFolder(new File("."));
+            ProjectResource pr = new ProjectResource(p, emptyF, ProjectResource.ResourceType.REPO);
+
+            RepositoryFactory.getInstance().register(REPO_ID, repo);
+
+            RepoConfigHandler handler = new RepoConfigHandler();
+            // make it read an empty f
             handler.handle(pr);
             Assert.fail("The test should've failed!.");
         } catch (ConfigurationException e) {
@@ -95,33 +120,6 @@ public class RepositoryConfHandlerTest {
             // teardown
             RepositoryFactory.getInstance().unregister(REPO_ID);
         }
-    }
-
-    /**
-     * If a repo with no pk columns is defined the config process must fail
-     */
-    @Test
-    public void testOkRepoReading() throws Exception {
-        // create a repo with a meta with no column. Mockup everything and call the handler to make it fail
-        EntityMeta meta = metaBuilder.withNumProps(1).build();
-        EditableRepository repo = mock(EditableRepository.class);
-        when(repo.getMeta()).thenReturn(meta);
-        String REPO_ID = "RepositoryConfHandlerTestValidRepo";
-
-        when(repo.getId()).thenReturn(REPO_ID);
-
-        File emptyF = File.createTempFile("empty", ".xml");
-        FileUtils.write(emptyF, "", Charset.defaultCharset());
-
-        Project p = ProjectRepository.createFromFolder(new File("."));
-        ProjectResource pr = new ProjectResource(p, emptyF, ProjectResource.ResourceType.REPO);
-
-        RepositoryFactory.getInstance().register(REPO_ID, repo);
-
-        RepoConfigHandler handler = new RepoConfigHandler();
-        // make it read an empty f
-        handler.handle(pr);
-
     }
 
 }

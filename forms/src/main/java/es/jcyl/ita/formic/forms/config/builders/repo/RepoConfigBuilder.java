@@ -93,11 +93,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
-        // check if threre's a meta configuration to override the default
-        ConfigNode<Object> meta = BuilderHelper.findNodeByTag(node, "meta");
-        if (meta == null) {
-            return;
-        }
+
     }
 
     /**

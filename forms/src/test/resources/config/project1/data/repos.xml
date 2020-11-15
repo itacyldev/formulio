@@ -1,14 +1,20 @@
 <repos>
-    <repo dbFile="dbTest.sqlite" id="contacts" dbTable="contacts" />
-    <repo dbFile="dbTest.sqlite" id="agentsRepo" dbTable="assigned_agents" />
-    <repo dbFile="dbTest.sqlite" id="provRepo" dbTable="provincia" />
-    <repo dbFile="dbTest.sqlite" id="muniRepo" dbTable="municipio" />
-    <repo dbFile="dbTest.sqlite" id="superHRepo" dbTable="superheroes">
+    <repo dbFile="dbTest.sqlite" dbTable="provincia" id="provRepo" />
+    <repo dbFile="dbTest.sqlite" dbTable="municipio" id="muniRepo" />
+    <repo dbFile="dbTest.sqlite" dbTable="contacts" id="contacts" />
+    <repo dbFile="dbTest.sqlite" dbTable="assigned_agents" id="agentsRepo">
+        <mapping fk="${entity.provmuni.substring(0,2)}" property="provincia" repo="provRepo" />
+        <mapping fk="provmuni" property="municipio" repo="muniRepo" />
+    </repo>
+    <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHRepo">
         <meta>
-            <property name="creation_date" converter="date"  expression="${date.now}" evalOn="insert"/>
-            <property name="update_date" converter="date" expression="${date.now}" evalOn="update"/>
-            <property name="current_time" converter="date" expression="${date.now}" evalOn="select"/>
+            <property name="creation_date" converter="date" evalOn="insert"
+                expression="${date.now}" />
+            <property name="update_date" converter="date" evalOn="update"
+                expression="${date.now}" />
+            <property name="current_time" converter="date" evalOn="select"
+                expression="${date.now}" />
         </meta>
     </repo>
-    <fileRepo folder="pictures/superheroes" id="superHImages" defaultExtension="jpg" />
+    <fileRepo defaultExtension="jpg" folder="pictures/superheroes" id="superHImages" />
 </repos>

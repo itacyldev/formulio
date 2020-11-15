@@ -136,4 +136,17 @@ public class UIImage extends UIInputComponent {
     public void setEmbedded(boolean embedded) {
         this.embedded = embedded;
     }
+
+//
+//    /**
+//     * Overrides default readonly method to allow nested Properties edition
+//     * @return
+//     */
+//    public boolean isReadOnly() {
+//        if (this.parentForm == null) {
+//            return readOnly;
+//        } else {
+//            return this.parentForm.isReadOnly() || this.readOnly;
+//        }
+//    }
 }

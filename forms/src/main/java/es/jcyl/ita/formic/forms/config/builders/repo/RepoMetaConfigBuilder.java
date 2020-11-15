@@ -169,9 +169,4 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
     }
 
 
-    @Override
-    protected void doWithAttribute(EntityMeta element, String name, String value) {
-    }
-
-
 }

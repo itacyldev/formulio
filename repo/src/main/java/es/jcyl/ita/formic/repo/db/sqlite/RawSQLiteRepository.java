@@ -176,7 +176,7 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
     }
 
     @Override
-    public EntityMeta getMeta() {
+    public EntityMeta doGetMeta() {
         if (this.meta == null) {
             // execute a one record query to extract metadata information
             SQLQueryFilter f = new SQLQueryFilter();

@@ -39,7 +39,6 @@ public class JexlBindingExpression implements ValueBindingExpression {
     private Class expectedType;
     private boolean isLiteral;
     private boolean isReadOnly;
-    private Object calculatedValue;
 
     public JexlBindingExpression(JxltEngine.Expression expression) {
         this(expression, null);

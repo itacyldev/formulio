@@ -45,7 +45,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
             return mainEntityUpdated;
         }
         for (EntityMapping mapping : mappings) {
-            Entity relEntity = (Entity) mainEntity.get(mapping.getName());
+            Entity relEntity = (Entity) mainEntity.get(mapping.getProperty());
 
             if (relEntity == null) {
                 // set the related property field a null
@@ -70,7 +70,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
                 // Obtain a new entity from repo to get repo EntityMeta
                 Entity newEntity = relRepo.newEntity();
                 newEntity.setProperties(relEntity.getProperties());
-                mainEntity.set(mapping.getName(), newEntity, true);
+                mainEntity.set(mapping.getProperty(), newEntity, true);
                 relEntity = newEntity;
             } else {
                 if (!mapping.isUpdatable()) {
@@ -128,7 +128,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
     protected void deleteRelated(T mainEntity) {
         boolean mainEntityUpdated = false;
         for (EntityMapping mapping : mappings) {
-            Entity relEntity = (Entity) mainEntity.get(mapping.getName());
+            Entity relEntity = (Entity) mainEntity.get(mapping.getProperty());
 
             if (relEntity == null || !mapping.isDeletable()) {
                 // set the related property field a null

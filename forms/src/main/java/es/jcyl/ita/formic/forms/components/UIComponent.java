@@ -231,10 +231,6 @@ public abstract class UIComponent implements Identificable {
         return ExpressionHelper.getExpressions(this);
     }
 
-    public boolean isEntityMapping() {
-        return isEntityMapping;
-    }
-
     public void setEntityMapping(boolean entityMapping) {
         isEntityMapping = entityMapping;
     }

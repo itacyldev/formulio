@@ -113,7 +113,7 @@ public class FileRepository extends AbstractEditableRepository<FileEntity, Strin
     }
 
     @Override
-    public EntityMeta getMeta() {
+    public EntityMeta doGetMeta() {
         return META;
     }
 
