@@ -93,13 +93,17 @@ public class FormEditController extends FormController {
 
     private void updateEntityFromView(FormViewContext viewContext, EntityContext entityContext,
                                       UIInputComponent field) {
-        if (field.isBound() && !field.isReadOnly() && !field.isEntityRelation()) {
+        if (field.isBound() && !field.isReadOnly() && !field.isEntityMapping()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();
             // remove the "entity" prefix
             entityContext.put(entityProp.substring(entityProp.indexOf(".") + 1), value);
         }
+    }
+
+    private boolean isEntityRelation(UIInputComponent field) {
+        return false;
     }
 
     /**

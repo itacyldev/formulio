@@ -15,9 +15,7 @@ package es.jcyl.ita.formic.forms.components.image;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -30,7 +28,7 @@ import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.G
  * <p>
  * Image component
  */
-public class UIImage extends UIInputComponent implements EntityHolder {
+public class UIImage extends UIInputComponent {
 
     private static final String IMAGE = "image";
 
@@ -42,7 +40,6 @@ public class UIImage extends UIInputComponent implements EntityHolder {
     private String[] mandatoryFilters;
     private Integer width;
     private Integer height;
-    private Entity entity;
     private boolean embedded;
 
     public Integer getWidth() {
@@ -97,16 +94,6 @@ public class UIImage extends UIInputComponent implements EntityHolder {
 
     public boolean isBound() {
         return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
-    }
-
-    @Override
-    public void setEntity(Entity entity) {
-        this.entity = entity;
-    }
-
-    @Override
-    public Entity getEntity() {
-        return this.entity;
     }
 
     public boolean isCameraActive() {

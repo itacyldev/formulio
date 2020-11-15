@@ -26,7 +26,7 @@
                             labelExpression="${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"
                             labelFilteringProperty="last_name" valueProperty="contact_id" />
                     </autocomplete>
-                    <image height="200" value="${entity.id}.jpg" width="300" validator="required"/>
+                    <image height="200" value="${entity.id}.jpg" width="300"/>
                 </tabitem>
             </tab>
         </form>

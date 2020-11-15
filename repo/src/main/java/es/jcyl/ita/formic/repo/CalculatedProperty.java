@@ -32,5 +32,4 @@ public class CalculatedProperty {
         this.property = property;
         this.expression = expression;
     }
-
 }

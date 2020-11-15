@@ -19,6 +19,8 @@ import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
+ * Defines interfaz for components that can have a repository attached to retrieve entities
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public interface FilterableComponent {
@@ -33,7 +35,7 @@ public interface FilterableComponent {
 
     String[] getMandatoryFilters();
 
-    void setMandatoryFilters(String[] mandatoryFields);
+    void setMandatoryFilters(String[] mandatoryFilters);
 
 
 }

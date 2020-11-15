@@ -65,11 +65,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
             }
             if (isNewEntity(relEntity)) {
                 if (!mapping.isInsertable()) {
-                    throw new RepositoryException(String.format("Error while saving entity [%s#%s], " +
-                                    "The defined mapping for property [%s] doesn't allow inserting " +
-                                    "a related entity.",
-                            mainEntity.getMetadata().getName(), mainEntity.getId(),
-                            mapping.getFk()));
+                    continue;
                 }
                 // Obtain a new entity from repo to get repo EntityMeta
                 Entity newEntity = relRepo.newEntity();
@@ -78,11 +74,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
                 relEntity = newEntity;
             } else {
                 if (!mapping.isUpdatable()) {
-                    throw new RepositoryException(String.format("Error while saving entity [%s#%s], " +
-                                    "The defined mapping for property [%s] doesn't allow updating " +
-                                    "the related entity.",
-                            mainEntity.getMetadata().getName(), mainEntity.getId(),
-                            mapping.getFk()));
+                    continue;
                 }
             }
             // insert/update related entity
@@ -159,6 +151,10 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
     @Override
     public void deleteById(ID key) {
         doDeleteById(key);
+        if (hasMappings()) {
+            T entity = findById(key);
+            deleteRelated(entity);
+        }
     }
 
     protected abstract void doDeleteById(ID key);

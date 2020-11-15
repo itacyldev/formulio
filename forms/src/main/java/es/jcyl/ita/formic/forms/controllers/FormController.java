@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.controllers;
 import android.view.ViewGroup;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
@@ -33,7 +34,7 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * <p>
  * Stores form configuration, view, permissions, etc. and provides operations to perform CRUD over and entity
  */
-public abstract class FormController implements Identificable {
+public abstract class FormController implements Identificable, FilterableComponent {
     protected String id;
     protected String name;
     protected UIView view;
@@ -42,6 +43,7 @@ public abstract class FormController implements Identificable {
     protected ViewGroup contentView; // Android view element where the UIView is rendered
     private FCAction[] actions; // form actions ids
     private FormEntityLoader entityLoader = new FormEntityLoader();
+    private String[] mandatoryFilters;
 
     public FormController(String id, String name) {
         this.id = id;
@@ -152,6 +154,16 @@ public abstract class FormController implements Identificable {
 
     public void setFilter(Filter filter) {
         this.filter = filter;
+    }
+
+    @Override
+    public String[] getMandatoryFilters() {
+        return mandatoryFilters;
+    }
+
+    @Override
+    public void setMandatoryFilters(String[] mandatoryFilters) {
+        this.mandatoryFilters = mandatoryFilters;
     }
 
     public boolean hasAction(String name) {

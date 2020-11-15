@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import java.io.File;
 
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.repo.AbstractEditableRepository;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
@@ -29,7 +30,8 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -59,9 +61,13 @@ public class RepositoryUtils {
     }
 
     public static Repository registerMock(String id, EntityMeta meta) {
-        EditableRepository mock = Mockito.mock(EditableRepository.class);
+        AbstractEditableRepository mock = Mockito.mock(AbstractEditableRepository.class);
         when(mock.getMeta()).thenReturn(meta);
         when(mock.getFilterClass()).thenReturn(SQLQueryFilter.class);
+        // force the mock to store entity mappings
+        doCallRealMethod().when(mock).addMapping(any());
+        doCallRealMethod().when(mock).getMappings();
+
         register(id, mock);
         return mock;
     }
