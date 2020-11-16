@@ -229,21 +229,27 @@ public class ViewHelper {
     public static <T> T findViewAndSetId(View baseView, int id, Class<T> clazz) {
         // ramdomize id
         View view = baseView.findViewById(id);
-        view.setId(RandomUtils.nextInt());
+        if (view != null) {
+            view.setId(RandomUtils.nextInt());
+        }
         return (T) view;
     }
 
     public static View findViewAndSetId(View baseView, int id) {
         // ramdomize id
         View view = baseView.findViewById(id);
-        view.setId(RandomUtils.nextInt());
+        if (view != null) {
+            view.setId(RandomUtils.nextInt());
+        }
         return view;
     }
 
     public static View findViewByTagAndSetId(View baseView, String tag) {
         View view = baseView.findViewWithTag(tag);
         // ramdomize id
-        view.setId(RandomUtils.nextInt());
+        if (view != null) {
+            view.setId(RandomUtils.nextInt());
+        }
         return view;
     }
 
