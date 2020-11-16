@@ -24,6 +24,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -60,31 +61,7 @@ public class InputFieldRendererTest {
     }
 
     @Test
-    public void fieldLabelRendererTest() {
-        ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
-        env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
-
-        UIField field = new UIField();
-        field.setId(RandomUtils.randomString(4));
-        field.setLabel("some text");
-        View view = renderHelper.render(env, field);
-
-        Assert.assertEquals("The label is not correct.",
-                "some text",
-                ((TextView)ViewHelper.findLabelView(view, field)).getText());
-
-        RequiredValidator mockRequired = mock(RequiredValidator.class);
-        field.addValidator(mockRequired);
-        view = renderHelper.render(env, field);
-
-        Assert.assertEquals("The label must be marked with asterisk.",
-                "some text *",
-                ((TextView)ViewHelper.findLabelView(view, field)).getText());
-    }
-
-    @Test
+    @Ignore("Erase button is no needed anymore")
     public void clearFieldTest(){
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
@@ -99,7 +76,7 @@ public class InputFieldRendererTest {
         ImageView eraseImage = viewSet.isEmpty()? null : viewSet.iterator().next();
         inputFieldView.setValue("filling");
 
-        Assert.assertNotNull("Erase image missing.", eraseImage);
+        Assert.assertNotNull("Erase image is missing.", eraseImage);
         Assert.assertEquals("Incorrectly filled.",
                 "filling", inputFieldView.getValue());
 

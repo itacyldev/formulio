@@ -59,16 +59,12 @@ public class AndViewContextTest {
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
-        viewContext.registerViewElement("label", R.id.label_view, converterFactory.get("text"));
         viewContext.registerViewElement("input", R.id.input_view, converterFactory.get("text"));
 
-        viewContext.put("label", "valueLabel");
         viewContext.put("input", "valueInput");
 
         // get element from view and check Values
-        TextView txtView = baseView.findViewById(R.id.label_view);
-        Assert.assertEquals("valueLabel", txtView.getText().toString());
-        txtView = baseView.findViewById(R.id.input_view);
+        TextView txtView = baseView.findViewById(R.id.input_view);
         Assert.assertEquals("valueInput", txtView.getText().toString());
     }
 
