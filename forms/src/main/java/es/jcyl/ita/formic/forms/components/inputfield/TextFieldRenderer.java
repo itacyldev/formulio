@@ -6,7 +6,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
@@ -17,6 +18,8 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -53,17 +56,31 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         if (component.getInputType() != null) {
             inputView.setInputType(component.getInputType());
         }
+
+        TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
+        // set floating label
+        setLabel(textInputLayout, component);
+
         // set event
         addTextChangeListener(env, inputView, component);
 
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        resetButton.setOnClickListener(new View.OnClickListener() {
+        // set clear button
+        textInputLayout.setEndIconActivated(true);
+        textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View arg0) {
+            public void onClick(View v) {
                 inputView.setText("");
             }
         });
+    }
+
+    protected void setLabel(TextInputLayout labelView, UIField component) {
+        String labelComponent = (component.isMandatory()) ?
+                component.getLabel() + " *"
+                : component.getLabel();
+        labelView.setHint(labelComponent);
+
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {

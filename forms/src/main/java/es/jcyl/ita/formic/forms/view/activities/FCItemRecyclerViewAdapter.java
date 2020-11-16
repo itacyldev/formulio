@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -33,48 +32,6 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         mValues = items;
         mListener = listener;
         mViews = new ArrayList<>();
-
-
-        registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                // Do nothing
-                int i = 0;
-            }
-
-            @Override
-            public void onItemRangeChanged(int positionStart, int itemCount) {
-                // do nothing
-                int i = 0;
-            }
-
-            @Override
-            public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
-                // fallback to onItemRangeChanged(positionStart, itemCount) if app
-                // does not override this method.
-                onItemRangeChanged(positionStart, itemCount);
-            }
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                // do nothing
-                int i = 0;
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                // do nothing
-                int i = 0;
-            }
-
-            @Override
-            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-                // do nothing
-                int i = 0;
-            }
-        });
-
-        FormListController a = items.get(0);
     }
 
     @Override
@@ -104,7 +61,6 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         });
 
         mViews.add(position, holder);
-
     }
 
     @Override
@@ -128,9 +84,9 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
-            numEntities = (TextView) view.findViewById(R.id.numEntities);
+            mIdView = view.findViewById(R.id.item_number);
+            mContentView = view.findViewById(R.id.content);
+            numEntities = view.findViewById(R.id.numEntities);
         }
 
         @Override
@@ -141,7 +97,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
     }
 
     public void updateViews() {
-        for(ViewHolder holder: mViews){
+        for (ViewHolder holder : mViews) {
             holder.numEntities.setText(holder.mItem.count() + " entities");
         }
     }

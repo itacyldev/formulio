@@ -27,6 +27,8 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -51,7 +53,9 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         // find label and setup
         TextView fieldLabel = ViewHelper.findViewAndSetId(widget, getLabelViewId(),
                 TextView.class);
-        setLabel(env, fieldLabel, widget.getComponent());
+        if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
+            setLabel(fieldLabel, component);
+        }
 
         // get input view and set Tag and Value
         I inputView = (I) ViewHelper.findViewAndSetId(widget, getInputViewId());
@@ -71,6 +75,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
 
         // set value and error messages
         setValueInView(env, widget);
+
         setMessages(env, widget);
     }
 
@@ -98,7 +103,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         return getWidgetViewTag(c) + ">input";
     }
 
-    protected void setLabel(RenderingEnv env, TextView labelView, C component) {
+    protected void setLabel(TextView labelView, C component) {
         labelView.setTag("label_" + component.getId());
         String labelComponent = (component.isMandatory()) ?
                 component.getLabel() + " *"
