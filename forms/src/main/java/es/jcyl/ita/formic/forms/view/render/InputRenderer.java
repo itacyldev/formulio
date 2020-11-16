@@ -27,6 +27,8 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
