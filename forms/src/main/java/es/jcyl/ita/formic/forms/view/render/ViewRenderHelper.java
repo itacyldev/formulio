@@ -31,7 +31,6 @@ import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -87,11 +86,11 @@ public class ViewRenderHelper {
 
 
                 List<View> viewList = new ArrayList<>();
-                if (component instanceof EntityListProvider) {
+                if (groupView instanceof EntityListProvider) {
                     // save the old entityContext
                     Entity oldEntity = env.getFormContext().getEntity();
 
-                    List<Entity> entities = ((EntityListProvider) component).getEntities();
+                    List<Entity> entities = ((EntityListProvider) groupView).getEntities();
 
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity

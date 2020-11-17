@@ -15,12 +15,8 @@ package es.jcyl.ita.formic.forms.components.datalist;
  * limitations under the License.
  */
 
-import java.util.List;
-
-import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -29,13 +25,11 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIDatalist extends UIComponent implements FilterableComponent, EntityListProvider {
+public class UIDatalist extends UIComponent implements FilterableComponent {
 
     private Repository repo;
 
     private int numItems;
-
-    private List<Entity> entities;
 
     public UIDatalist() {
         setRendererType("datalist");
@@ -76,15 +70,5 @@ public class UIDatalist extends UIComponent implements FilterableComponent, Enti
 
     public void setNumItems(int numItems) {
         this.numItems = numItems;
-    }
-
-    @Override
-    public void setEntities(List<Entity> entities) {
-        this.entities = entities;
-    }
-
-    @Override
-    public List<Entity> getEntities() {
-        return entities;
     }
 }
