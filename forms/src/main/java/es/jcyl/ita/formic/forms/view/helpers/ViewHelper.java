@@ -18,9 +18,12 @@ package es.jcyl.ita.formic.forms.view.helpers;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -144,6 +147,19 @@ public class ViewHelper {
 
     public static View findLabelView(View rootView, UIComponent component) {
         return rootView.findViewWithTag("label_" + component.getId());
+    }
+
+    public static String getLabelValue(View rootView, UIComponent component) {
+        String label = null;
+
+        View labelView = findLabelView(rootView, component);
+        if (labelView instanceof TextView) {
+            label = (String) ((TextView) labelView).getText();
+        } else if (labelView instanceof TextInputLayout) {
+            label = (String) ((TextInputLayout) labelView).getHint();
+        }
+
+        return label;
     }
 
     public static View findComponentView(View rootView, String formId, String componentId) {
