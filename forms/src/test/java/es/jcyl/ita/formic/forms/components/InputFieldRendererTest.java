@@ -18,7 +18,6 @@ package es.jcyl.ita.formic.forms.components;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
