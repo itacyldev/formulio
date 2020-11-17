@@ -48,7 +48,7 @@ public class AndViewContextTest {
     @Before
     public void setup() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        ctx.setTheme( R.style.FormudruidLight);
+        ctx.setTheme(R.style.FormudruidLight);
     }
 
     /**
@@ -59,16 +59,12 @@ public class AndViewContextTest {
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
-        viewContext.registerViewElement("label", R.id.label_view, converterFactory.get("text"));
         viewContext.registerViewElement("input", R.id.input_view, converterFactory.get("text"));
 
-        viewContext.put("label", "valueLabel");
         viewContext.put("input", "valueInput");
 
         // get element from view and check Values
-        TextView txtView = baseView.findViewById(R.id.label_view);
-        Assert.assertEquals("valueLabel", txtView.getText().toString());
-        txtView = baseView.findViewById(R.id.input_view);
+        TextView txtView = baseView.findViewById(R.id.input_view);
         Assert.assertEquals("valueInput", txtView.getText().toString());
     }
 
@@ -80,21 +76,15 @@ public class AndViewContextTest {
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
-        viewContext.registerViewElement("label", R.id.label_view, converterFactory.get("text"));
         viewContext.registerViewElement("input", R.id.input_view, converterFactory.get("text"));
 
         // set values directly to the view
-        TextView txtView = baseView.findViewById(R.id.label_view);
-        txtView.setText("labelValue");
-        txtView = baseView.findViewById(R.id.input_view);
+        TextView txtView = baseView.findViewById(R.id.input_view);
         txtView.setText("inputValue");
 
-
-        viewContext.put("label", "valueLabel");
         viewContext.put("input", "valueInput");
 
         // get element from view and check Values
-        Assert.assertEquals("valueLabel", viewContext.get("label"));
         Assert.assertEquals("valueInput", viewContext.get("input"));
     }
 
@@ -104,28 +94,23 @@ public class AndViewContextTest {
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);
 
-        viewContext.registerViewElement("label", R.id.label_view, converterFactory.get("text"));
         viewContext.registerViewElement("input", R.id.input_view, converterFactory.get("text"));
         viewContext.setPrefix("this");
         // set values directly to the view
-        TextView txtView = baseView.findViewById(R.id.label_view);
-        txtView.setText("labelValue");
-        txtView = baseView.findViewById(R.id.input_view);
+        TextView txtView = baseView.findViewById(R.id.input_view);
         txtView.setText("inputValue");
 
         CompositeContext gContext = new UnPrefixedCompositeContext();
         gContext.addContext(viewContext);
 
         // try to access using "this" prefix
-        Assert.assertEquals("labelValue", gContext.get("this.label"));
         Assert.assertEquals("inputValue", gContext.get("this.input"));
 
     }
 
 
-
     @Test
-    public void testShowContent(){
+    public void testShowContent() {
         // register elements as alias
         View baseView = LayoutInflater.from(ctx).inflate(R.layout.widget_textfield, null);
         AndViewContext viewContext = new AndViewContext(baseView);

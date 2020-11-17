@@ -25,6 +25,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -117,6 +118,7 @@ public class UISelectRendererTest {
     }
 
     @Test
+    @Ignore("Labels aren't individual components anymore")
     public void fieldLabelRendererTest() {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);

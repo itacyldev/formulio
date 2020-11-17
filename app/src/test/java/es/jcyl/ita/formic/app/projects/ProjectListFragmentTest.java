@@ -44,6 +44,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
+@Ignore
 public class ProjectListFragmentTest {
 
     private static String NAME_PROJECT_1 = "project1";
@@ -66,6 +67,7 @@ public class ProjectListFragmentTest {
     }
 
     @Test
+    @Ignore
     public void noneProject() {
         ArrayList<Project> projectArrayList = new ArrayList<>();
 
@@ -86,6 +88,7 @@ public class ProjectListFragmentTest {
     }
 
     @Test
+    @Ignore
     public void oneProject() {
         ArrayList<Project> projectArrayList = new ArrayList<>();
         projectArrayList.add(projectList.get(0));
