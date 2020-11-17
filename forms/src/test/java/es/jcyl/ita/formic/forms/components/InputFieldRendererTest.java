@@ -84,8 +84,8 @@ public class InputFieldRendererTest {
                 ViewHelper.getLabelValue(view, field));
     }
 
-    @Ignore //
     @Test
+    @Ignore("Erase button is no needed anymore")
     public void clearFieldTest() {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
