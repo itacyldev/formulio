@@ -76,11 +76,11 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     }
 
     protected void setLabel(TextInputLayout labelView, UIField component) {
+        labelView.setTag("label_" + component.getId());
         String labelComponent = (component.isMandatory()) ?
                 component.getLabel() + " *"
                 : component.getLabel();
         labelView.setHint(labelComponent);
-
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {

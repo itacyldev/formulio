@@ -31,16 +31,16 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.Set;
 
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 import static org.mockito.Mockito.mock;
 
@@ -61,8 +61,33 @@ public class InputFieldRendererTest {
     }
 
     @Test
+    public void fieldLabelRendererTest() {
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
+        env.setViewContext(ctx);
+
+        UIField field = new UIField();
+        field.setId(RandomUtils.randomString(4));
+        field.setLabel("some text");
+        View view = renderHelper.render(env, field);
+
+        Assert.assertEquals("The label is not correct.",
+                "some text",
+                ViewHelper.getLabelValue(view, field));
+
+        RequiredValidator mockRequired = mock(RequiredValidator.class);
+        field.addValidator(mockRequired);
+        view = renderHelper.render(env, field);
+
+        Assert.assertEquals("The label must be marked with asterisk.",
+                "some text *",
+                ViewHelper.getLabelValue(view, field));
+    }
+
+    @Test
     @Ignore("Erase button is no needed anymore")
-    public void clearFieldTest(){
+    public void clearFieldTest() {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
@@ -73,10 +98,10 @@ public class InputFieldRendererTest {
         InputWidget inputFieldView = (InputWidget) renderHelper.render(env, field);
         Set<ImageView> viewSet = ViewHelper.findViewsContainingText(inputFieldView,
                 "Cancel", ImageView.class);
-        ImageView eraseImage = viewSet.isEmpty()? null : viewSet.iterator().next();
+        ImageView eraseImage = viewSet.isEmpty() ? null : viewSet.iterator().next();
         inputFieldView.setValue("filling");
 
-        Assert.assertNotNull("Erase image is missing.", eraseImage);
+        Assert.assertNotNull("Erase image missing.", eraseImage);
         Assert.assertEquals("Incorrectly filled.",
                 "filling", inputFieldView.getValue());
 
