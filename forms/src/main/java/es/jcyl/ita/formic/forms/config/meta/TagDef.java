@@ -29,6 +29,8 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EVAL_ON;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDABLE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPRESSION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPRESSION_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FILTERING;
@@ -87,6 +89,8 @@ public class TagDef {
 
         register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
         register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE}));
+        register("header", define(new Attribute[]{ID, LABEL, EXPANDED, EXPANDABLE}));
+        register("content", define(new Attribute[]{ID}));
         register("head", define(new Attribute[]{ID, LABEL, TYPE, VALUE}));
 
 
@@ -122,6 +126,7 @@ public class TagDef {
         Attribute optionValue = new Attribute("value");
         register("option", define(new Attribute[]{ID, optionValue, LABEL}));
 
+        register("row", define(new Attribute[]{ID}));
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, REGISTER_IN_HISTORY});

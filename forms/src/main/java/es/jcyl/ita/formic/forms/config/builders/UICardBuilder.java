@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
@@ -25,6 +26,8 @@ import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDABLE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TITLE;
@@ -70,6 +73,7 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
     public void setupOnSubtreeEnds(ConfigNode<UICard> node) {
         UICard card = node.getElement();
         UIComponent[] children = ConfigNodeHelper.getUIChildren(node);
+
         for (UIComponent child : children) {
             if (child.getId().equals(TITLE.name)) {
                 card.setTitle((UIHeading) child);
@@ -80,6 +84,40 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
             }
 
         }
+
+    }
+
+    @Override
+    public void setupOnSubtreeStarts(ConfigNode<UICard> node) {
+        List<ConfigNode> children = node.getChildren();
+
+
+
+        ConfigNode contentNode;
+        List<ConfigNode> contentList = BuilderHelper.findChildrenByTag(node, "header");
+        if (!contentList.isEmpty()) {
+            contentNode = contentList.get(0);
+            children.remove(contentNode);
+        } else {
+
+        }
+
+        for (ConfigNode child : children) {
+            if (child.getName().equals("header")) {
+                processHeader(node, child);
+            }
+        }
+    }
+
+    private void processHeader(ConfigNode<UICard> node, ConfigNode child) {
+        if(child.getAttributes().containsKey(EXPANDED.name)){
+
+        }
+
+        if(child.getAttributes().containsKey(EXPANDABLE.name)){
+
+        }
+
     }
 
 

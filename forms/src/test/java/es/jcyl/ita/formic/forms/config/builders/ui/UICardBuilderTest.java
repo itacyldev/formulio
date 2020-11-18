@@ -130,6 +130,42 @@ public class UICardBuilderTest {
         Assert.assertNotNull(image);
     }
 
+
+    /**
+     * Tests the evaluation of "properties" attribute to filter the properties selected from repository.*
+     *
+     * @throws Exception
+     */
+    private static final String XML_TEST_CARD_WITH_HEADER = "<card>" +
+            "<header label=\"card_label\" expandable=\"true\" expanded=\"true\"/>" +
+            "<content>" +
+            "<head id=\"title\" label=\"label_title\" value=\"value_title\"/>" +
+            "<head id=\"subtitle\" label=\"label_subtitle\" value=\"value_subtitle\"/>" +
+            "<image id=\"card_image\" value=\"$entity.image\"/>" +
+            "</content>" +
+            "</card>";
+    @Test
+    public void testCardWithHeader() throws Exception {
+        String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_WITH_HEADER);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        Assert.assertNotNull(cards);
+
+        UICard card = cards.get(0);
+
+//        UIHeading title = card.getTitle();
+//        Assert.assertNotNull(title);
+//
+//        UIHeading subtitle = card.getSubtitle();
+//        Assert.assertNotNull(subtitle);
+//
+//        UIImage image = (UIImage) card.getChildren()[0];
+//        Assert.assertNotNull(image);
+//        Assert.assertEquals("card_image", image.getId());
+    }
+
+
     @AfterClass
     public static void tearDown() {
         RepositoryUtils.unregisterMock("contacts");

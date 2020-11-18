@@ -30,6 +30,10 @@ public class UICard extends UIComponent {
     UIHeading subtitle;
     UIImage image;
 
+    String header_label;
+    boolean expandable;
+    boolean expanded;
+
     public UICard() {
         setRendererType("card");
         this.setRenderChildren(true);
@@ -68,5 +72,29 @@ public class UICard extends UIComponent {
         this.template = template;
     }
 
+
+    public String getHeader_label() {
+        return header_label;
+    }
+
+    public void setHeader_label(String header_label) {
+        this.header_label = header_label;
+    }
+
+    public boolean isExpandable() {
+        return expandable;
+    }
+
+    public void setExpandable(boolean expandable) {
+        this.expandable = expandable;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
 
 }

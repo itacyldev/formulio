@@ -84,6 +84,9 @@ public class AttributeDef {
     public static final Attribute SUBTITLE = new Attribute("subtitle", true);
     public static final Attribute IMAGE = new Attribute("image", true);
 
+    public static final Attribute EXPANDED = new Attribute("expanded", true);
+    public static final Attribute EXPANDABLE = new Attribute("expandable", true);
+
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);
 
