@@ -39,7 +39,7 @@ public class DevConsole {
     private static int level = Log.DEBUG;
 
     private static ConfigReadingInfo configReadingInfo;
-    // TODO: limit this with a pile
+
     private static final int MAX_SIZE = 300;
     private static Queue<String> console = new LinkedList<String>();
 
