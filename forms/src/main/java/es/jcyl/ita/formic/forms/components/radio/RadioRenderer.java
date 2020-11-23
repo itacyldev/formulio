@@ -96,7 +96,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         UIInputComponent component = widget.getComponent();
         String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
         if (message != null) {
-            RadioButtonWidget button = (RadioButtonWidget) widget.getInputView().getChildAt(0);
+            RadioButtonWidget button = (RadioButtonWidget) widget.getInputView().getChildAt(widget.getInputView().getChildCount() - 1);
             button.setError(message);
         }
     }

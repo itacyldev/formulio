@@ -1,7 +1,10 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -17,10 +20,10 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -78,7 +81,11 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             @Override
             public void onClick(final View arg0) {
                 final Calendar c = new GregorianCalendar();
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(widget.getContext());
+                String theme = sharedPreferences.getString("current_theme", "light");
                 final Dialog dateDialog = new DatePickerDialog(widget.getContext(),
+                        theme.equals("light")?AlertDialog.THEME_DEVICE_DEFAULT_LIGHT:AlertDialog.THEME_DEVICE_DEFAULT_DARK,
                         listener, c.get(Calendar.YEAR), c
                         .get(Calendar.MONTH), c
                         .get(Calendar.DAY_OF_MONTH));
