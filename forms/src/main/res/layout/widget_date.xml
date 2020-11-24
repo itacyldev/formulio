@@ -26,7 +26,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="0"
         android:clickable="true"
-        android:textColor="?attr/onSurfaceColor"
+        style="@style/Default_Button_font"
         android:textSize="12sp" />
 
     <Button
@@ -36,7 +36,7 @@
         android:layout_weight="0"
         android:clickable="true"
         android:text="@string/today"
-        android:textColor="?attr/onSurfaceColor"
+        style="@style/Default_Button_font"
         android:textSize="12sp" />
 
     <ImageView

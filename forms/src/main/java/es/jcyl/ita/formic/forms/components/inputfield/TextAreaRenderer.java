@@ -1,6 +1,5 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
-import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -9,8 +8,6 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-
-import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -56,14 +53,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
         addTextChangeListener(env, inputView, component);
 
         // set clear button
-        textInputLayout.setEndIconActivated(true);
-        textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
-        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inputView.setText("");
-            }
-        });
+        setClearButton(env, inputView, textInputLayout);
     }
 
 }
