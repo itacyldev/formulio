@@ -97,5 +97,4 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
         }
     }
 
-
 }

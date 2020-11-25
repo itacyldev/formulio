@@ -25,6 +25,7 @@
         android:clickable="true"
         android:textColor="#fff"
         android:textOff="No"
-        android:textOn="Si" />
+        android:textOn="Si"
+        android:layout_marginRight="10dp"/>
 
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

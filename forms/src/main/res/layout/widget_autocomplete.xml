@@ -27,7 +27,8 @@
             android:background="@drawable/selectablebuttonbackground"
             android:contentDescription="@string/tool_buttons_x"
             android:padding="5dp"
-            android:src="@drawable/ic_tool_x" />
+            android:layout_marginRight="6dp"
+            android:src="@drawable/ic_tool_x_circle_dark" />
     </RelativeLayout>
 
     <es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView

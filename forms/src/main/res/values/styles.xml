@@ -81,6 +81,11 @@
         <item name="tint">?attr/onSurfaceColor</item>
     </style>
 
+    <style name="Spinner_item" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="backgroundTint">?attr/onSurfaceColor</item>
+    </style>
+
+
     <!-- Component Datatable -->
 
     <style name="Datatable_header_container">
