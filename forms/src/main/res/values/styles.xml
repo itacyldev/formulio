@@ -33,6 +33,10 @@
     <style name="HintTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textSize">16sp</item> <!-- floating hint text size -->
         <item name="android:textColorHint">?attr/onSurfaceColor</item>
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+        <item name="colorAccent">?attr/onSurfaceColor</item>
+        <item name="colorControlNormal">?attr/onSurfaceColor</item>
+        <item name="colorControlActivated">?attr/onSurfaceColor</item>
     </style>
 
 
