@@ -13,7 +13,7 @@
         android:id="@+id/text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Default_Label_font">
+        style="@style/TextInputLabel_label">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_view"

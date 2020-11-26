@@ -86,7 +86,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.setText("");
+                view.setText(null);
             }
         });
     }

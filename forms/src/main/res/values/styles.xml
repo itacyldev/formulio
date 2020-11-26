@@ -30,10 +30,20 @@
     </style>
 
     <!-- Components -->
+    <style name="HintTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item> <!-- floating hint text size -->
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
+    </style>
+
+
+    <style name="TextInputLabel_label" parent="TextAppearance.AppCompat">
+        <item name="hintTextAppearance">@style/HintTextAppearance</item>
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
+    </style>
 
     <style name="Default_Label_font">
-        <item name="android:textColor">?attr/onSurfaceColor</item>
         <item name="android:textColorHint">?attr/onSurfaceColor</item>
+        <item name="android:textColor">?attr/onSurfaceColor</item>
         <item name="android:textSize">16sp</item>
     </style>
 
