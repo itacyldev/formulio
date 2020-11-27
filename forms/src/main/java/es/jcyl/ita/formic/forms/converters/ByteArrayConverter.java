@@ -26,6 +26,10 @@ import es.jcyl.ita.formic.repo.meta.types.ByteArray;
  */
 public class ByteArrayConverter extends AbstractConverter {
 
+    public ByteArrayConverter(Object defaultValue){
+        super(defaultValue);
+    }
+
     @Override
     protected <T> T convertToType(Class<T> targetType, Object value) throws Exception {
         if (!targetType.equals(ByteArray.class)) {
