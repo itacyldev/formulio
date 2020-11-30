@@ -40,6 +40,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_POSITION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -88,10 +89,10 @@ public class TagDef {
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
         register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
-        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE}));
-        register("header", define(new Attribute[]{ID, LABEL, EXPANDED, EXPANDABLE}));
-        register("content", define(new Attribute[]{ID}));
-        register("head", define(new Attribute[]{ID, LABEL, TYPE, VALUE}));
+        register("datalistItem", define(new Attribute[]{ID}));
+        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE, IMAGE_POSITION}));
+        register("head", define(new Attribute[]{ID, NAME, LABEL, TYPE, VALUE,}));
+        register("paragraph", define(new Attribute[]{ID, NAME, LABEL, TYPE, VALUE}));
 
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));

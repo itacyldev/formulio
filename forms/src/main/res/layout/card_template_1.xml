@@ -11,64 +11,80 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/card_header"
-            android:layout_width="match_parent"
-            android:layout_height="20px"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/card_header_expand_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right">
-            </Button>
-
-            <TextView
-                android:id="@+id/card_header_label"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="left" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/card_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:tag="card_content_layout">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/card_image_container"
-                android:layout_width="wrap_content"
+                android:id="@+id/card_header"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:tag="card_image_container">
+                android:background="@color/DARKCYAN_SELECTED"
+                android:orientation="horizontal">
 
-                <es.jcyl.ita.formic.forms.components.image.ImageResourceView
-                    android:id="@+id/card_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/no_image"
-                    android:tag="card_image" />
+                <TextView
+                    android:id="@+id/card_header_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/card_title_layout"
-                android:layout_width="wrap_content"
+                android:id="@+id/card_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:tag="card_content_layout">
 
-                <TextView
-                    android:id="@+id/card_title"
+                <LinearLayout
+                    android:id="@+id/card_image_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="card_title" />
+                    android:tag="card_image_container">
 
-                <TextView
-                    android:id="@+id/card_subtitle"
+                    <es.jcyl.ita.formic.forms.components.image.ImageResourceView
+                        android:id="@+id/card_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/no_image"
+                        android:tag="card_image" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/card_text_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="card_subtitle" />
+                    android:orientation="vertical"
+                    android:tag="card_text_container">
+
+                    <TextView
+                        android:id="@+id/card_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="card_title" />
+
+                    <TextView
+                        android:id="@+id/card_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="card_subtitle" />
+
+                    <TextView
+                        android:id="@+id/card_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="2"
+                        android:focusable="true"
+                        android:lines="5"
+                        android:maxLines="8"
+                        android:minLines="3"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:tag="card_text" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

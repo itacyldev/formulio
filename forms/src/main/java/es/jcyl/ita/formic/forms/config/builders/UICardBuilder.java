@@ -15,7 +15,6 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
-import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
@@ -29,6 +28,7 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDABLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TITLE;
 
@@ -82,41 +82,29 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
             } else if (child instanceof UIImage) {
                 card.setChildren(new UIComponent[]{child});
             }
-
         }
 
     }
 
     @Override
     public void setupOnSubtreeStarts(ConfigNode<UICard> node) {
-        List<ConfigNode> children = node.getChildren();
-
-
-
-        ConfigNode contentNode;
-        List<ConfigNode> contentList = BuilderHelper.findChildrenByTag(node, "header");
-        if (!contentList.isEmpty()) {
-            contentNode = contentList.get(0);
-            children.remove(contentNode);
-        } else {
-
-        }
-
-        for (ConfigNode child : children) {
-            if (child.getName().equals("header")) {
-                processHeader(node, child);
-            }
-        }
+        processHeader(node);
     }
 
-    private void processHeader(ConfigNode<UICard> node, ConfigNode child) {
-        if(child.getAttributes().containsKey(EXPANDED.name)){
-
+    private void processHeader(ConfigNode<UICard> node) {
+        UICard card = node.getElement();
+        if (node.getAttributes().containsKey(LABEL.name)) {
+            card.setLabel(node.getAttribute(LABEL.name));
         }
 
-        if(child.getAttributes().containsKey(EXPANDABLE.name)){
-
+        if (node.getAttributes().containsKey(EXPANDED.name)) {
+            card.setExpanded(Boolean.parseBoolean(node.getAttribute(EXPANDED.name)));
         }
+
+        if (node.getAttributes().containsKey(EXPANDABLE.name)) {
+            card.setExpandable(Boolean.parseBoolean(node.getAttribute(EXPANDABLE.name)));
+        }
+
 
     }
 

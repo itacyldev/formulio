@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.components.card;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
+import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -28,11 +29,13 @@ public class UICard extends UIComponent {
     String template;
     UIHeading title;
     UIHeading subtitle;
+    UIParagraph description;
     UIImage image;
 
-    String header_label;
     boolean expandable;
     boolean expanded;
+
+    String imagePosition = ImagePosition.TOP.getPosition();
 
     public UICard() {
         setRendererType("card");
@@ -72,15 +75,6 @@ public class UICard extends UIComponent {
         this.template = template;
     }
 
-
-    public String getHeader_label() {
-        return header_label;
-    }
-
-    public void setHeader_label(String header_label) {
-        this.header_label = header_label;
-    }
-
     public boolean isExpandable() {
         return expandable;
     }
@@ -97,4 +91,34 @@ public class UICard extends UIComponent {
         this.expanded = expanded;
     }
 
+    public String getImagePosition() {
+        return imagePosition;
+    }
+
+    public void setImagePosition(String imagePositionStr) {
+        this.imagePosition = imagePositionStr;
+
+    }
+
+    public UIParagraph getDescription() {
+        return description;
+    }
+
+    public void setDescription(UIParagraph description) {
+        this.description = description;
+    }
+
+    public enum ImagePosition {
+        TOP("top"), BOTTOM("bottom"), RIGHT("right"), LEFT("left"), NONE("none");
+
+        String position;
+
+        ImagePosition(String position) {
+            this.position = position;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+    }
 }

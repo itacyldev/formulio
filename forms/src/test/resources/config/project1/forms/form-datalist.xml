@@ -3,7 +3,7 @@
     <list>
         <form>
             <datalist>
-                <card template="card_template_1">
+                <card label="${entity.name}" expandable="true" expanded="true">
                     <head id="title" label="label_title" value="${entity.name}" />
                     <head id="subtitle" label="label_subtitle" value="${entity.real_name}" />"
                     <image inputType="0" repo="superHImages" value="${entity.image}" />

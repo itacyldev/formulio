@@ -75,8 +75,9 @@ public class UICardBuilderTest {
      * @throws Exception
      */
     private static final String XML_TEST_CARD_WITH_CHILDREN = "<card template=\"template\">" +
-            "<head id=\"title\" label=\"label_title\" value=\"value_title\"/>" +
-            "<head id=\"subtitle\" label=\"label_subtitle\" value=\"value_subtitle\"/>" +
+            "<head name=\"title\" label=\"label_title\" value=\"value_title\"/>" +
+            "<head name=\"subtitle\" label=\"label_subtitle\" value=\"value_subtitle\"/>" +
+            "<paragraph name=\"description\" label=\"label_desc\" value=\"value_description\"/>" +
             "<image id=\"card_image\" value=\"$entity.image\"/>" +
             "</card>";
 
@@ -136,14 +137,9 @@ public class UICardBuilderTest {
      *
      * @throws Exception
      */
-    private static final String XML_TEST_CARD_WITH_HEADER = "<card>" +
-            "<header label=\"card_label\" expandable=\"true\" expanded=\"true\"/>" +
-            "<content>" +
-            "<head id=\"title\" label=\"label_title\" value=\"value_title\"/>" +
-            "<head id=\"subtitle\" label=\"label_subtitle\" value=\"value_subtitle\"/>" +
-            "<image id=\"card_image\" value=\"$entity.image\"/>" +
-            "</content>" +
-            "</card>";
+    private static final String XML_TEST_CARD_WITH_HEADER = "<card label=\"card_label\" expandable=\"true\" expanded=\"true\" />";
+
+
     @Test
     public void testCardWithHeader() throws Exception {
         String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_WITH_HEADER);
@@ -154,15 +150,31 @@ public class UICardBuilderTest {
 
         UICard card = cards.get(0);
 
-//        UIHeading title = card.getTitle();
-//        Assert.assertNotNull(title);
-//
-//        UIHeading subtitle = card.getSubtitle();
-//        Assert.assertNotNull(subtitle);
-//
-//        UIImage image = (UIImage) card.getChildren()[0];
-//        Assert.assertNotNull(image);
-//        Assert.assertEquals("card_image", image.getId());
+        Assert.assertEquals("card_label", card.getLabel());
+        Assert.assertTrue(card.isExpandable());
+        Assert.assertTrue(card.isExpanded());
+    }
+
+    /**
+     * Tests the evaluation of "properties" attribute to filter the properties selected from repository.*
+     *
+     * @throws Exception
+     */
+    private static final String XML_TEST_CARD_IMAGE_POSITION = "<card label=\"card_label\" imagePosition=\"right\" />";
+
+
+    @Test
+    public void testCardImagePosition() throws Exception {
+        String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_IMAGE_POSITION);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        Assert.assertNotNull(cards);
+
+        UICard card = cards.get(0);
+
+        String imagePosition = card.getImagePosition();
+        Assert.assertEquals(UICard.ImagePosition.RIGHT.getPosition(), imagePosition);
     }
 
 

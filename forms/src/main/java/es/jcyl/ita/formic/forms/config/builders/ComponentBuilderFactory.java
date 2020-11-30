@@ -20,11 +20,11 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
+import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
-import es.jcyl.ita.formic.forms.components.table.UIRow;
 import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -61,7 +61,6 @@ import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
-import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -111,6 +110,7 @@ public class ComponentBuilderFactory {
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
 
         registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
+        registerBuilder("datalistItem", newDefaultBuilder(UIDatalistItem.class, "datalistItem"));
         registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
         registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
 

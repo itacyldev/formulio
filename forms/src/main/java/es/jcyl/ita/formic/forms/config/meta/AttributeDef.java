@@ -84,6 +84,7 @@ public class AttributeDef {
     public static final Attribute SUBTITLE = new Attribute("subtitle", true);
     public static final Attribute IMAGE = new Attribute("image", true);
 
+    public static final Attribute IMAGE_POSITION = new Attribute("imagePosition", "imagePosition", String.class);
     public static final Attribute EXPANDED = new Attribute("expanded", true);
     public static final Attribute EXPANDABLE = new Attribute("expandable", true);
 
