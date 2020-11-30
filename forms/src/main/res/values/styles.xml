@@ -128,4 +128,13 @@
         <item name="android:padding">2dp</item>
     </style>
 
+    <!-- Component dialog -->
+    <style name="DialogStyle" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">?attr/primaryColorVariant</item>                   <!--header background-->
+        <item name="android:windowBackground">?attr/surfaceColor</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">?attr/primaryColorVariant</item> <!--selected day-->
+        <item name="android:textColorPrimary">?attr/onSurfaceColor</item> <!--days of the month-->
+        <item name="android:textColorSecondary">?attr/primaryColorVariant</item>    <!--days of the week-->
+    </style>
+
 </resources>
