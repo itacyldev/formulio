@@ -107,7 +107,7 @@ public class SQLiteRepositoryTest {
 
 
         // Action: delete table, insert entities and fetchAll
-        int expectedNumEntities = 150;
+        int expectedNumEntities = RandomUtils.randomInt(3, 23);
         List<Entity> lstEntities = DevDbBuilder.buildEntities(repo.getMeta(), expectedNumEntities, null);
         repo.deleteAll();
         List list = repo.listAll();

@@ -20,6 +20,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  * <p>
  * Stores User project information.
  */
-public class Project extends Entity {
+public class Project extends Entity implements Serializable {
 
     private boolean opened = false;
     private static final String[] CONFIG_FOLDERS = new String[]{"data", "forms"};

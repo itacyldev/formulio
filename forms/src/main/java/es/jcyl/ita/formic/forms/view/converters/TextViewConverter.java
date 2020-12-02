@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.view.converters;
 
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 /**
@@ -26,13 +27,10 @@ import org.mini2Dx.beanutils.ConvertUtils;
  */
 public class TextViewConverter implements ViewValueConverter<TextView> {
 
-//    @Override
+    @Override
     public Object getValueFromView(TextView view) {
-        String viewValue = "";
-        if (view.getText() != null) {
-            viewValue = view.getText().toString();
-        }
-        return viewValue;
+        CharSequence value = view.getText();
+        return (StringUtils.isEmpty(value)) ? null : value.toString();
     }
 
 

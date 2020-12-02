@@ -16,11 +16,12 @@ package es.jcyl.ita.formic.forms.project;
  */
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ProjectResource {
+public class ProjectResource implements Serializable {
 
     public enum ResourceType {REPO, CONTEXT, FORM}
 
