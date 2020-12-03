@@ -23,8 +23,6 @@ import org.greenrobot.greendao.database.Database;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.ConfigurationException;
-
 import es.jcyl.ita.formic.repo.RepositoryException;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
@@ -72,7 +70,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
                 type = cursor.getString(2);
                 isNotNull = ONE.equalsIgnoreCase(cursor.getString(3));
                 isPk = ONE.equalsIgnoreCase(cursor.getString(5));
-                props.add(createPropertyFromColumnDef(name, name, type, isNotNull, isPk));
+                props.add(createPropertyFromColumnDef(name, name, type, isNotNull, isPk, source));
                 if (isPk) {
                     idProperties.add(name);
                 }
@@ -99,7 +97,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
      * @return
      */
     public DBPropertyType createPropertyFromColumnDef(String name, String columnName, String persistenceType,
-                                                      boolean isNotNull, boolean isPk) {
+                                                      boolean isNotNull, boolean isPk, DBTableEntitySource source) {
         SQLiteType dbType = SQLiteType.getType(persistenceType);
         SQLitePropertyConverter converter = convFactory.getDefaultConverter(dbType);
         DBPropertyType property = new DBPropertyType.DBPropertyTypeBuilder(name, converter.javaType(), dbType.name(), isPk)
@@ -138,7 +136,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
 
         // Is it and expression based property?
         if (StringUtils.isNotBlank(expression)) {
-            if(StringUtils.isBlank(evaluateOn)){
+            if (StringUtils.isBlank(evaluateOn)) {
                 throw new RepositoryException("evaluateOn attribute must be set!");
             }
             if (StringUtils.isBlank(expressionType) || expressionType.equalsIgnoreCase("jexl")) {
