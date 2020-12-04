@@ -59,7 +59,7 @@ public class ProjectTest {
         Project prj = list.get(0);
         prj.open();;
         List<ProjectResource> configFiles = prj.getConfigFiles();
-        Assert.assertEquals(7, configFiles.size());
+        Assert.assertEquals(8, configFiles.size());
 
         // check repositories are loaded
     }
