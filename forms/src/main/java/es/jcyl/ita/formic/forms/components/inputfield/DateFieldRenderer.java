@@ -17,10 +17,11 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -46,13 +47,18 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIField, Button> widget) {
+        StyleHolder<Button> styleHolder = new ButtonStyleHolder(env.getViewContext());
+
         // configure input view elements
         Button today = ViewHelper.findViewAndSetId(widget, R.id.field_layout_today,
                 Button.class);
+        styleHolder.applyStyle(today);
+
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
 
         Button input = widget.getInputView();
+        styleHolder.applyStyle(input);
 
         final DatePickerDialog.OnDateSetListener listener =
                 new DatePickerDialog.OnDateSetListener() {
@@ -79,6 +85,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             public void onClick(final View arg0) {
                 final Calendar c = new GregorianCalendar();
                 final Dialog dateDialog = new DatePickerDialog(widget.getContext(),
+                        R.style.DialogStyle,
                         listener, c.get(Calendar.YEAR), c
                         .get(Calendar.MONTH), c
                         .get(Calendar.DAY_OF_MONTH));

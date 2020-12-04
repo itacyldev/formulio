@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
@@ -86,9 +87,16 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
             }
         });
         button.setText(formAction.getLabel());
+        setLayoutParams(button);
         setButtonStyle(button);
         parent.addView(button);
         return button;
+    }
+
+    private void setLayoutParams(Button button) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.weight = (float) 0.5;
+        button.setLayoutParams(layoutParams);
     }
 
     /**

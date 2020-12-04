@@ -26,7 +26,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="0"
         android:clickable="true"
-        android:textColor="?attr/onSurfaceColor"
+        style="@style/Default_Button_font"
         android:textSize="12sp" />
 
     <Button
@@ -36,20 +36,21 @@
         android:layout_weight="0"
         android:clickable="true"
         android:text="@string/today"
-        android:textColor="?attr/onSurfaceColor"
+        style="@style/Default_Button_font"
         android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/field_layout_x"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
         android:layout_marginStart="5dp"
-        android:layout_weight="0"
+        style="@style/Textfield_cancel_button"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/selectablebuttonbackground"
-        android:clickable="true"
         android:contentDescription="@string/tool_buttons_x"
-        android:padding="3dp"
-        android:src="@drawable/ic_tool_x" />
+        android:padding="5dp"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/ic_tool_x_circle_dark" />
 
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

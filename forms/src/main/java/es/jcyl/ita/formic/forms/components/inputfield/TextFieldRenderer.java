@@ -1,5 +1,6 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -65,14 +66,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         addTextChangeListener(env, inputView, component);
 
         // set clear button
-        textInputLayout.setEndIconActivated(true);
-        textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
-        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inputView.setText("");
-            }
-        });
+        setClearButton(env, inputView, textInputLayout);
     }
 
     protected void setLabel(TextInputLayout labelView, UIField component) {
@@ -81,6 +75,20 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 component.getLabel() + " *"
                 : component.getLabel();
         labelView.setHint(labelComponent);
+    }
+
+    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout){
+        // set clear button
+        textInputLayout.setEndIconActivated(true);
+        textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
+        TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
+        textInputLayout.setEndIconTintList(ta.getColorStateList(0));
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view.setText(null);
+            }
+        });
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
