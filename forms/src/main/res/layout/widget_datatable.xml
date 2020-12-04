@@ -18,19 +18,20 @@
 
     <HorizontalScrollView
         android:id="@+id/aslist_scroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
 
         <LinearLayout
             android:id="@+id/list_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/list_layout_headers"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 style="@style/Datatable_header_container"/>
@@ -39,7 +40,6 @@
                 android:id="@+id/list_view"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-
                 android:padding="0dp" />
         </LinearLayout>
 
