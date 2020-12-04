@@ -83,7 +83,7 @@ public class SpatialiteRepositoryTest {
         // get repositories and insert/update data iteratively to the same table
         EditableRepository repo = repoFactory.getEditableRepo(source.getEntityTypeId());
 
-        Long entityId = 11l;
+        Long entityId = 1l; // existing entity
         Entity entity = repo.findById(entityId);
         Assert.assertNotNull(entity);
         // modify entity
