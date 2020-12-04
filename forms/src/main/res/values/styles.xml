@@ -11,7 +11,7 @@
         <item name="itemIconTint">?attr/onPrimaryColor</item>
         <item name="itemTextColor">?attr/onPrimaryColor</item>
     </style>
-    
+
     <style name="ProjectFormsCardStyle">
         <item name="cardElevation">5dp</item>
         <item name="cardCornerRadius">5dp</item>
@@ -137,4 +137,10 @@
         <item name="android:textColorSecondary">?attr/primaryColorVariant</item>    <!--days of the week-->
     </style>
 
+    <!-- Component tab -->
+    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="android:background">?attr/surfaceColor</item>
+        <item name="tabIndicatorColor">?attr/primaryColorVariant</item>
+        <item name="tabTextColor">?attr/onSurfaceColor</item>
+    </style>
 </resources>
