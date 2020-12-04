@@ -76,12 +76,13 @@ public class SpatiaLiteMetaModeler extends SQLiteMetaModeler {
         return version;
     }
 
-
-    public DBPropertyType createPropertyFromColumnDef(String name, String type, boolean isNotNull,
-                                                      boolean isPk, DBTableEntitySource source) {
+    public DBPropertyType createPropertyFromColumnDef(String name, String columnName, String persistenceType,
+                                                      boolean isNotNull, boolean isPk,
+                                                      DBTableEntitySource source) {
         // chek if type refers to a geometry column
-        if (!isGeometryType(type)) {
-            return super.createPropertyFromColumnDef(name, name, type, isNotNull, isPk);
+        if (!isGeometryType(persistenceType)) {
+            return super.createPropertyFromColumnDef(name, columnName, persistenceType,
+                    isNotNull, isPk, source);
         } else {
             // create geometry data type
             GeometryMetadata geoMeta = readGeometryColumnInfo(source, name);

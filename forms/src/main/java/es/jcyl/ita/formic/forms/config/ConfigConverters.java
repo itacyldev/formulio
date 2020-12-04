@@ -39,8 +39,8 @@ public class ConfigConverters {
         // customize data type converters
         ConvertUtils.register(new CustomDateConverter(), Date.class);
 
-        ConvertUtils.register(new ByteArrayConverter(), ByteArray.class);
-        ConvertUtils.register(new GeometryConverter(), Geometry.class);
+        ConvertUtils.register(new ByteArrayConverter(null), ByteArray.class);
+        ConvertUtils.register(new GeometryConverter(null), Geometry.class);
         String[] trueStrings = {"true", "t", "yes", "y", "on", "1", "s", "si", "sí"};
         String[] falseStrings = {"", "false", "no", "n", "off", "0", "f"};
         CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings);
