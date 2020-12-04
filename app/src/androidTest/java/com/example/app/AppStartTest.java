@@ -76,8 +76,8 @@ public class AppStartTest {
                 .perform(click());
 
         // check first element in view
-        onView(RecyclerViewMatcher.withRecyclerView(es.jcyl.ita.formic.forms.R.id.form_list).atPosition(0))
-                .check(matches(hasDescendant(withText("form1-list"))));
+//        onView(RecyclerViewMatcher.withRecyclerView(es.jcyl.ita.formic.forms.R.id.form_list).atPosition(0))
+//                .check(matches(hasDescendant(withText("form1-list"))));
 
     }
 }
