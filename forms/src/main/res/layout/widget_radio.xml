@@ -24,12 +24,14 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
+            android:layout_weight="0"
             style="@style/Textfield_cancel_button"
             android:layout_gravity="center_vertical"
             android:background="@drawable/selectablebuttonbackground"
             android:contentDescription="@string/tool_buttons_x"
             android:padding="5dp"
-            android:src="@drawable/ic_tool_x" />
+            android:layout_marginRight="6dp"
+            android:src="@drawable/ic_tool_x_circle_dark" />
     </RelativeLayout>
 
     <RadioGroup

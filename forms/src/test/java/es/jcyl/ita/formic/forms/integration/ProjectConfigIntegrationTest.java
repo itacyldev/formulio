@@ -95,17 +95,17 @@ public class ProjectConfigIntegrationTest {
         config.setCurrentProject(prj);
         // there must be 4 repos
         Set<String> repoIds = config.getRepoConfigReader().getRepoFactory().getRepoIds();
-        assertEquals(6 + 1, repoIds.size());// 4 repos + 1 default project's image repo
+        assertEquals(8 + 1, repoIds.size());// 4 repos + 1 default project's image repo
 
         // there must be three form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
-        assertEquals(6, formConfigs.size());
+        assertEquals(7, formConfigs.size());
 
         // Check all list and edit controller have been loaded
         FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
         Collection<FormController> ctlList = fctlFacotry.getList();
-        assertEquals(12, ctlList.size());
-        assertEquals(6, fctlFacotry.getListControllers().size());
+        assertEquals(14, ctlList.size());
+        assertEquals(7, fctlFacotry.getListControllers().size());
 
         // check list controller
         for (FormController ctl : fctlFacotry.getList()) {

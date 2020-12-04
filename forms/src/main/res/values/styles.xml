@@ -11,7 +11,7 @@
         <item name="itemIconTint">?attr/onPrimaryColor</item>
         <item name="itemTextColor">?attr/onPrimaryColor</item>
     </style>
-    
+
     <style name="ProjectFormsCardStyle">
         <item name="cardElevation">5dp</item>
         <item name="cardCornerRadius">5dp</item>
@@ -30,11 +30,33 @@
     </style>
 
     <!-- Components -->
+    <style name="HintTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item> <!-- floating hint text size -->
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+        <item name="colorAccent">?attr/onSurfaceColor</item>
+        <item name="colorControlNormal">?attr/onSurfaceColor</item>
+        <item name="colorControlActivated">?attr/onSurfaceColor</item>
+    </style>
+
+
+    <style name="TextInputLabel_label" parent="TextAppearance.AppCompat">
+        <item name="hintTextAppearance">@style/HintTextAppearance</item>
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
+    </style>
 
     <style name="Default_Label_font">
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
         <item name="android:textColor">?attr/onSurfaceColor</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="Default_Button_font">
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
+        <item name="android:buttonTint">?attr/onSurfaceColor</item>
+    </style>
+
 
     <style name="Default_TextView_font">
         <item name="android:textAppearance">?attr/textAppearanceListItem</item>
@@ -73,6 +95,11 @@
         <item name="tint">?attr/onSurfaceColor</item>
     </style>
 
+    <style name="Spinner_item" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="backgroundTint">?attr/onSurfaceColor</item>
+    </style>
+
+
     <!-- Component Datatable -->
 
     <style name="Datatable_header_container">
@@ -101,4 +128,19 @@
         <item name="android:padding">2dp</item>
     </style>
 
+    <!-- Component dialog -->
+    <style name="DialogStyle" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">?attr/primaryColorVariant</item>                   <!--header background-->
+        <item name="android:windowBackground">?attr/surfaceColor</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">?attr/primaryColorVariant</item> <!--selected day-->
+        <item name="android:textColorPrimary">?attr/onSurfaceColor</item> <!--days of the month-->
+        <item name="android:textColorSecondary">?attr/primaryColorVariant</item>    <!--days of the week-->
+    </style>
+
+    <!-- Component tab -->
+    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="android:background">?attr/surfaceColor</item>
+        <item name="tabIndicatorColor">?attr/primaryColorVariant</item>
+        <item name="tabTextColor">?attr/onSurfaceColor</item>
+    </style>
 </resources>

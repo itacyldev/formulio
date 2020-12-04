@@ -16,7 +16,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"
-        android:textColor="#fff"
         android:textSize="16sp" />
 
     <Switch
@@ -26,6 +25,7 @@
         android:clickable="true"
         android:textColor="#fff"
         android:textOff="No"
-        android:textOn="Si" />
+        android:textOn="Si"
+        android:layout_marginRight="10dp"/>
 
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

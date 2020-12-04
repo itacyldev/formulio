@@ -1,8 +1,8 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -44,17 +44,16 @@ public class TextAreaRenderer extends TextFieldRenderer {
         if (component.getInputType() != null) {
             inputView.setInputType(component.getInputType());
         }
+
+        TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
+        // set floating label
+        setLabel(textInputLayout, component);
+
         // set event
         addTextChangeListener(env, inputView, component);
 
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                inputView.setText("");
-            }
-        });
+        // set clear button
+        setClearButton(env, inputView, textInputLayout);
     }
 
 }

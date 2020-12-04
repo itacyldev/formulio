@@ -10,6 +10,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -56,6 +57,10 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
             button = new RadioButtonWidget(env.getViewContext(), option);
             button.setText(option.getLabel());
             button.setId(i);
+
+            StyleHolder<RadioButton> styleHolder = new RadioButtonStyleHolder(env.getViewContext());
+            styleHolder.applyStyle(button);
+
             radioGroup.addView(button);
             i++;
         }
@@ -96,7 +101,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         UIInputComponent component = widget.getComponent();
         String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
         if (message != null) {
-            RadioButtonWidget button = (RadioButtonWidget) widget.getInputView().getChildAt(0);
+            RadioButtonWidget button = (RadioButtonWidget) widget.getInputView().getChildAt(widget.getInputView().getChildCount() - 1);
             button.setError(message);
         }
     }

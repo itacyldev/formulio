@@ -47,6 +47,7 @@ public class CheckBoxFieldRenderer extends InputTextRenderer<UIField, Switch> {
                 }
             }
         });
+
     }
 
     @Override
