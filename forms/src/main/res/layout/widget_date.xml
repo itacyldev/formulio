@@ -7,7 +7,7 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="30dp">
 
     <TextView
         android:id="@+id/label_view"
@@ -18,7 +18,8 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:textColor="?attr/onSurfaceColor"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
     <Button
         android:id="@+id/input_view"

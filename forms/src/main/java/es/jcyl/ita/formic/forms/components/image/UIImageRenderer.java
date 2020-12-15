@@ -16,9 +16,9 @@ package es.jcyl.ita.formic.forms.components.image;
  */
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -54,6 +54,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
         if (width != null) {
             inputView.getLayoutParams().width = width;
         }
+
     }
 
     @Override
