@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -75,6 +76,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 component.getLabel() + " *"
                 : component.getLabel();
         labelView.setHint(labelComponent);
+        labelView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
     }
 
     protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout){

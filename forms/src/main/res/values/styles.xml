@@ -39,7 +39,6 @@
         <item name="colorControlActivated">?attr/onSurfaceColor</item>
     </style>
 
-
     <style name="TextInputLabel_label" parent="TextAppearance.AppCompat">
         <item name="hintTextAppearance">@style/HintTextAppearance</item>
         <item name="android:textColorHint">?attr/onSurfaceColor</item>

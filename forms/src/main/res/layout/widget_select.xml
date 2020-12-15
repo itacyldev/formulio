@@ -4,7 +4,10 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dip">
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="30dp">
            <!-- Text Label -->
         <TextView
             android:id="@+id/label_view"
@@ -12,7 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
             android:layout_marginBottom="5dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textStyle="bold"/>
         <!-- Spinner Element -->
         <Spinner
             android:id="@+id/input_view"
