@@ -75,10 +75,10 @@ public class UICardBuilderTest {
      * @throws Exception
      */
     private static final String XML_TEST_CARD_WITH_CHILDREN = "<card template=\"template\">" +
-            "<head name=\"title\" label=\"label_title\" value=\"value_title\"/>" +
-            "<head name=\"subtitle\" label=\"label_subtitle\" value=\"value_subtitle\"/>" +
-            "<paragraph name=\"description\" label=\"label_desc\" value=\"value_description\"/>" +
-            "<image id=\"card_image\" value=\"$entity.image\"/>" +
+            "<head name=\"title\" value=\"value_title\"/>" +
+            "<head name=\"subtitle\" value=\"value_subtitle\"/>" +
+            "<paragraph name=\"description\" value=\"value_description\"/>" +
+            "<image name=\"image\" id=\"card_image\" value=\"$entity.image\"/>" +
             "</card>";
 
 
