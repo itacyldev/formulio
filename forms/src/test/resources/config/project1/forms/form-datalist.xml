@@ -3,11 +3,13 @@
     <list>
         <form>
             <datalist>
-                <card label="${entity.name}" expandable="true" expanded="true">
-                    <head id="title" label="label_title" value="${entity.name}" />
-                    <head id="subtitle" label="label_subtitle" value="${entity.real_name}" />"
-                    <image inputType="0" repo="superHImages" value="${entity.image}" />
-                </card>
+                <datalistitem>
+                    <card expandable="true" expanded="false" label="${entity.name}">
+                        <head id="title" label="label_title" value="${entity.name}" />
+                        <head id="subtitle" label="label_subtitle" value="${entity.real_name}" />"
+                        <image inputType="0" repo="superHImages" value="${entity.image}" />
+                    </card>
+                </datalistitem>
             </datalist>
         </form>
     </list>
