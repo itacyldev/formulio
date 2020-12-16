@@ -53,6 +53,8 @@ public class AttributeDef {
 
     public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
 
+    public static Attribute HINT = new Attribute("hint");
+
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);

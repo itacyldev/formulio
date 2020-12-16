@@ -1,7 +1,6 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
 import android.content.res.TypedArray;
-import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -61,7 +60,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         // set floating label
-        setLabel(textInputLayout, component);
+        setLabel(inputView, textInputLayout, component);
 
         // set event
         addTextChangeListener(env, inputView, component);
@@ -70,13 +69,29 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         setClearButton(env, inputView, textInputLayout);
     }
 
-    protected void setLabel(TextInputLayout labelView, UIField component) {
+    protected void setLabel(EditText view, TextInputLayout labelView, UIField component) {
         labelView.setTag("label_" + component.getId());
         String labelComponent = (component.isMandatory()) ?
                 component.getLabel() + " *"
                 : component.getLabel();
+
+        String hintComponent = component.getHint()!=null?component.getHint(): labelComponent;
+
+        view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    labelView.setHint(hintComponent);
+                    labelView.setHintTextAppearance(R.style.HintTextAppearance);
+                } else {
+                    labelView.setHint(labelComponent);
+                    labelView.setHintTextAppearance(R.style.TextInputLabel_label);
+                }
+            }
+        });
+
         labelView.setHint(labelComponent);
-        labelView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        labelView.setHintTextAppearance(R.style.TextInputLabel_label);
     }
 
     protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout){

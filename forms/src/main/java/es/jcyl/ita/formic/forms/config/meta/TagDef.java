@@ -43,6 +43,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HINT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
@@ -106,11 +107,11 @@ public class TagDef {
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
         Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE};
         Map<String, Attribute> baseInput = define(base, input);
-        register("input", baseInput);
+        register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
-        register("textarea", define(base, input, new Attribute[]{LINES}));
+        register("textarea", define(base, input, new Attribute[]{LINES, HINT}));
         register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});

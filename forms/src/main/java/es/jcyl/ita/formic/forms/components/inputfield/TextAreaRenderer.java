@@ -47,7 +47,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         // set floating label
-        setLabel(textInputLayout, component);
+        setLabel(inputView, textInputLayout, component);
 
         // set event
         addTextChangeListener(env, inputView, component);
