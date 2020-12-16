@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.ui;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.forms.components.card.UICard;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDABLE;
@@ -38,7 +38,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TITLE;
 public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
 
 
-    protected UICardBuilder(String tagName) {
+    public UICardBuilder(String tagName) {
         super(tagName, UICard.class);
     }
 

@@ -21,6 +21,7 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteRenderer;
 import es.jcyl.ita.formic.forms.components.card.UICardRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistRenderer;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistitemRenderer;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatableRenderer;
 import es.jcyl.ita.formic.forms.components.form.UIFormRenderer;
 import es.jcyl.ita.formic.forms.components.image.UIImageRenderer;
@@ -29,6 +30,9 @@ import es.jcyl.ita.formic.forms.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.TextAreaRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.formic.forms.components.link.UILinkRenderer;
+import es.jcyl.ita.formic.forms.components.placeholders.UIDivisorRenderer;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeadingRenderer;
+import es.jcyl.ita.formic.forms.components.placeholders.UIParagraphRenderer;
 import es.jcyl.ita.formic.forms.components.radio.RadioRenderer;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
 import es.jcyl.ita.formic.forms.components.tab.TabItemRenderer;
@@ -65,7 +69,11 @@ public class RendererFactory {
         renderInstances.put("row", new UIRowRenderer());
         renderInstances.put("image", new UIImageRenderer());
         renderInstances.put("datalist", new UIDatalistRenderer());
+        renderInstances.put("datalistitem", new UIDatalistitemRenderer());
         renderInstances.put("card", new UICardRenderer());
+        renderInstances.put("paragraph", new UIParagraphRenderer());
+        renderInstances.put("head", new UIHeadingRenderer());
+        renderInstances.put("divisor", new UIDivisorRenderer());
     }
 
     public static RendererFactory getInstance() {

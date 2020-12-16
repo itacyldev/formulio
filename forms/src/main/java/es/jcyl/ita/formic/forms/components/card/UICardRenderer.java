@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.components.card;
 
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +37,8 @@ import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static es.jcyl.ita.formic.forms.components.card.UICard.ImagePosition.BOTTOM;
 import static es.jcyl.ita.formic.forms.components.card.UICard.ImagePosition.LEFT;
 import static es.jcyl.ita.formic.forms.components.card.UICard.ImagePosition.TOP;
@@ -124,6 +127,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             LinearLayout contentLayout = (LinearLayout) ViewHelper.findViewByTagAndSetId(widget, "card_content_layout");
             String imagePosition = card.getImagePosition();
             if (imagePosition.equals(TOP.getPosition()) || imagePosition.equals(BOTTOM.getPosition())) {
+                imageLayout.setMinimumWidth(MATCH_PARENT);
                 contentLayout.setOrientation(LinearLayout.VERTICAL);
             } else {
                 contentLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -150,33 +154,39 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
 
         UIHeading title = card.getTitle();
         TextView titleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_title");
+        String titleValue = null;
         if (title != null) {
-            Object titleValue = title.getValue(env.getFormContext());
-            String value = (String) ConvertUtils.convert(titleValue, String.class);
-            titleView.setText(value);
+            titleValue = (String) ConvertUtils.convert(title.getValue(env.getFormContext()), String.class);
+        }
+        if (StringUtils.isNotEmpty(titleValue)) {
+            titleView.setText(titleValue);
         } else {
             titleView.setVisibility(View.GONE);
         }
 
         UIHeading subtitle = card.getSubtitle();
         TextView subtitleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_subtitle");
+        String subtitleValue = null;
         if (subtitle != null) {
-            String value = (String) ConvertUtils.convert(subtitle.getValue(env.getFormContext()), String.class);
-            subtitleView.setText(value);
+            subtitleValue = (String) ConvertUtils.convert(subtitle.getValue(env.getFormContext()), String.class);
+        }
+        if (StringUtils.isNotEmpty(subtitleValue)) {
+            subtitleView.setText(subtitleValue);
         } else {
             subtitleView.setVisibility(View.GONE);
         }
 
         UIParagraph description = card.getDescription();
         TextView descriptionView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_text");
+        String descriptionValue = null;
         if (description != null) {
-            String value = (String) ConvertUtils.convert(description.getValue(env.getFormContext()), String.class);
-            descriptionView.setText(value);
+            descriptionValue = (String) ConvertUtils.convert(description.getValue(env.getFormContext()), String.class);
+        }
+        if (StringUtils.isNotEmpty(descriptionValue)) {
+            descriptionView.setText(descriptionValue);
         } else {
             descriptionView.setVisibility(View.GONE);
         }
-
-
     }
 
     private void setupHeader(View cardView, UICard card) {
@@ -211,9 +221,23 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
      * @param imageView
      */
     private void setImageView(Widget<UICard> widget, View imageView) {
+        UICard card = widget.getComponent();
+        String imagePosition = card.getImagePosition();
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+        if (imagePosition.equals(TOP.getPosition()) || imagePosition.equals(BOTTOM.getPosition())) {
+            params = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        }
+
+        if (imagePosition.equals(LEFT.getPosition())) {
+            params = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+            params.gravity = Gravity.LEFT;
+        }
+
         LinearLayout imageContainer = (LinearLayout) ViewHelper.findViewByTagAndSetId(widget, "card_image_container");
         imageContainer.removeAllViews();
+        imageContainer.setLayoutParams(params);
         imageContainer.addView(imageView);
+        imageView.setLayoutParams(params);
     }
 
     @Override
@@ -231,12 +255,12 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
     @Override
     public void endGroup(RenderingEnv env, Widget<UICard> root) {
         try {
-//            RelativeLayout contentLayout = root.findViewWithTag("card_content_layout");
+            LinearLayout contentLayout = root.findViewWithTag("card_content_layout");
 //
-//            LinearLayout imageContainer = contentLayout.findViewWithTag("card_image_container");
-//            RelativeLayout.LayoutParams lpImageContainer = (RelativeLayout.LayoutParams) imageContainer.getLayoutParams();
-//
-//
+            LinearLayout imageContainer = contentLayout.findViewWithTag("card_image_container");
+            ViewGroup.LayoutParams lpImageContainer = imageContainer.getLayoutParams();
+            int containerWidth = imageContainer.getWidth();
+            //int imageWidth = imageView.getWidth();
 //            LinearLayout titleLayout = contentLayout.findViewWithTag("card_title_layout");
 //            RelativeLayout.LayoutParams lpTitleLayout = new RelativeLayout.LayoutParams(titleLayout.getLayoutParams());
 //            lpTitleLayout.addRule(BELOW, imageContainer.getId());

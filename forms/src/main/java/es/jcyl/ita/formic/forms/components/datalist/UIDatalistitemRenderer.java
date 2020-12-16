@@ -1,4 +1,9 @@
-package es.jcyl.ita.formic.forms.components.placeholders;
+package es.jcyl.ita.formic.forms.components.datalist;
+
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -16,25 +21,19 @@ package es.jcyl.ita.formic.forms.components.placeholders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
-
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIParagraph extends UIComponent {
 
-    int numLines;
+public class UIDatalistitemRenderer extends AbstractGroupRenderer<UIDatalistItem, Widget<UIDatalistItem>> {
 
-    public UIParagraph(){
-        setRendererType("paragraph");
+    @Override
+    protected int getWidgetLayoutId(UIDatalistItem component) {
+        return R.layout.widget_datalistitem;
     }
 
-    public int getNumLines() {
-        return numLines;
-    }
-
-    public void setNumLines(int numLines) {
-        this.numLines = numLines;
+    @Override
+    protected void composeWidget(RenderingEnv env, Widget<UIDatalistItem> widget) {
     }
 
 }

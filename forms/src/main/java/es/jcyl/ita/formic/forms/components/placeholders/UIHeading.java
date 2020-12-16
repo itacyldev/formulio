@@ -16,6 +16,8 @@ package es.jcyl.ita.formic.forms.components.placeholders;
  * limitations under the License.
  */
 
+import android.graphics.Color;
+
 import es.jcyl.ita.formic.forms.components.UIComponent;
 
 /**
@@ -25,8 +27,16 @@ public class UIHeading extends UIComponent {
 
     private String style;
     private int fontSize;
-    private int color;
+    private int fontColor = Color.BLACK;
     private boolean uppercase;
+
+    private boolean bold;
+    private boolean italic;
+    private boolean underlined;
+
+    public UIHeading() {
+        setRendererType("head");
+    }
 
     public String getStyle() {
         return style;
@@ -44,12 +54,12 @@ public class UIHeading extends UIComponent {
         this.fontSize = fontSize;
     }
 
-    public int getColor() {
-        return color;
+    public int getFontColor() {
+        return fontColor;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public void setFontColor(int fontColor) {
+        this.fontColor = fontColor;
     }
 
     public boolean isUppercase() {
@@ -58,5 +68,29 @@ public class UIHeading extends UIComponent {
 
     public void setUppercase(boolean uppercase) {
         this.uppercase = uppercase;
+    }
+
+    public boolean isBold() {
+        return bold;
+    }
+
+    public void setBold(boolean bold) {
+        this.bold = bold;
+    }
+
+    public boolean isItalic() {
+        return italic;
+    }
+
+    public void setItalic(boolean italic) {
+        this.italic = italic;
+    }
+
+    public boolean isUnderlined() {
+        return underlined;
+    }
+
+    public void setUnderlined(boolean underlined) {
+        this.underlined = underlined;
     }
 }

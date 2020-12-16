@@ -38,14 +38,16 @@
 
                 <LinearLayout
                     android:id="@+id/card_image_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="card_image_container">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:tag="card_image_container"
+                    android:padding="2pt">
 
                     <es.jcyl.ita.formic.forms.components.image.ImageResourceView
                         android:id="@+id/card_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:src="@drawable/no_image"
                         android:tag="card_image" />
                 </LinearLayout>

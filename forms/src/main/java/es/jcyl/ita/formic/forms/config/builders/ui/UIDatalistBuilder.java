@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.config.builders.ui;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.forms.components.card.UICard;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -45,13 +45,15 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
-    protected UIDatalistBuilder(String tagName) {
+    public UIDatalistBuilder(String tagName) {
         super(tagName, UIDatalist.class);
     }
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIDatalist> node) {
         BuilderHelper.setUpRepo(node, true);
+        // Add item node if doesn't exist
+        addItemNode(node);
     }
 
     @Override
@@ -94,8 +96,6 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         }
         UIDatalist datalist = node.getElement();
         datalist.setNumItems(numItems);
-
-
     }
 
     public UIDatalist createDatalistFromRepo(Repository repo) {
@@ -119,8 +119,22 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         return datalist;
     }
 
-    private ConfigNode<UICard> createItemNode() {
-        ConfigNode<UICard> itemNode = new ConfigNode<>("datalistItem");
-        return itemNode;
+    /**
+     * Adds the datalistitem node if needed
+     *
+     * @param node
+     */
+    private void addItemNode(ConfigNode<UIDatalist> node) {
+        String tag = "datalistitem";
+        List<ConfigNode> itemNodes = BuilderHelper.findChildrenByTag(node, tag);
+        if (itemNodes.size() == 0) {
+            ConfigNode<UICard> itemNode = new ConfigNode<>(tag);
+            itemNode.setId(node.getId() + "_" + tag);
+            List<ConfigNode> children = node.getChildren();
+            itemNode.setChildren(children);
+
+            itemNodes.add(itemNode);
+            node.setChildren(itemNodes);
+        }
     }
 }
