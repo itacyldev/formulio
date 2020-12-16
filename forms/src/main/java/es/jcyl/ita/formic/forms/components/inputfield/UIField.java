@@ -12,6 +12,7 @@ public class UIField extends UIInputComponent {
 
     private TYPE type = TEXT;
     private Integer lines;
+    protected String hint;
 
     @Override
     public String getRendererType() {
@@ -34,6 +35,10 @@ public class UIField extends UIInputComponent {
     public void setType(final TYPE type) {
         this.type = type;
     }
+
+    public String getHint() { return hint; }
+
+    public void setHint(String hint) { this.hint = hint; }
 
     public void setTypeStr(String type) {
         this.type = TYPE.valueOf(type.toUpperCase());
