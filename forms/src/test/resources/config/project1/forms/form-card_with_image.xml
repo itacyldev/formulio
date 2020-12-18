@@ -11,8 +11,8 @@
                 <image repo="superHImages" value="${entity.image}" readOnly="true"/>
             </card>
             <card label="${entity.name}" expandable="true" expanded="true" imagePosition="left">
-                <head name="title" label="label_title" value="${entity.name}"/>
-                <head name="subtitle" label="label_subtitle" value="subtitle"/>
+                <head name="title" value="${entity.name}"/>
+                <head name="subtitle" value="subtitle"/>
                 <image repo="superHImages" value="${entity.image}" inputType="0"/>
             </card>
 
