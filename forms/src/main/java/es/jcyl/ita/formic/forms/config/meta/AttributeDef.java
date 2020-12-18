@@ -86,6 +86,10 @@ public class AttributeDef {
     public static final Attribute SUBTITLE = new Attribute("subtitle", true);
     public static final Attribute IMAGE = new Attribute("image", true);
 
+    public static final Attribute IMAGE_POSITION = new Attribute("imagePosition", "imagePosition", String.class);
+    public static final Attribute EXPANDED = new Attribute("expanded", true);
+    public static final Attribute EXPANDABLE = new Attribute("expandable", true);
+
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);
 
@@ -99,5 +103,19 @@ public class AttributeDef {
     public static Attribute DEFAULT_EXTENSION = new Attribute("defaultExtension", String.class);
 
     public static Attribute COLSPANS = new Attribute("colspans", String.class);
+
+    // text style
+    public static Attribute FONT_SIZE = new Attribute("fontSize", String.class);
+    public static Attribute FONT_COLOR = new Attribute("fontColor", "fontColor", "color");
+    public static Attribute FONT_FAMILY = new Attribute("fontFamily", String.class);
+    public static Attribute BACKGROUND_COLOR = new Attribute("backGroundColor", String.class);
+    public static Attribute BOLD = new Attribute("bold", Boolean.class);
+    public static Attribute ITALIC = new Attribute("italic", Boolean.class);
+    public static Attribute UPPERCASE = new Attribute("uppercase", Boolean.class);
+    public static Attribute UNDERLINED = new Attribute("underlined", Boolean.class);
+
+    public static Attribute COLOR = new Attribute("color", "color", "color");
+    public static Attribute STROKE_WIDTH = new Attribute("strokeWidth",Integer.class);
+
 
 }

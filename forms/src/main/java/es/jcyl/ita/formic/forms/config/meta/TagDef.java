@@ -18,6 +18,9 @@ package es.jcyl.ita.formic.forms.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BOLD;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
@@ -29,16 +32,23 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ENTITYSELECTOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EVAL_ON;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDABLE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPANDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPRESSION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EXPRESSION_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FILTERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FOLDER;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_COLOR;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_POSITION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ITALIC;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
@@ -57,10 +67,13 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HIST
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.STROKE_WIDTH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TEMPLATE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TYPE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.UNDERLINED;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.UPPERCASE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALIDATOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE_PROPERTY;
@@ -87,8 +100,13 @@ public class TagDef {
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
         register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
-        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE}));
-        register("head", define(new Attribute[]{ID, LABEL, TYPE, VALUE}));
+        register("datalistitem", define(new Attribute[]{ID}));
+        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE, IMAGE_POSITION}));
+
+        Attribute[] text = new Attribute[]{FONT_SIZE, FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, ITALIC, BOLD, UPPERCASE, UNDERLINED};
+        register("head", define(text, new Attribute[]{ID, NAME, VALUE,}));
+        register("paragraph", define(new Attribute[]{ID, NAME, VALUE}));
+        register("divisor", define(new Attribute[]{ID, NAME, COLOR, STROKE_WIDTH}));
 
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
@@ -123,6 +141,7 @@ public class TagDef {
         Attribute optionValue = new Attribute("value");
         register("option", define(new Attribute[]{ID, optionValue, LABEL}));
 
+        register("row", define(new Attribute[]{ID}));
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, REGISTER_IN_HISTORY});

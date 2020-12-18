@@ -1,55 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <es.jcyl.ita.formic.forms.components.card.CardWidget xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/template1_layout"
+    android:id="@+id/card_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/template1_cv"
+        android:id="@+id/card_cv"
         style="@style/ProjectFormsCardStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/template1_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:tag="card_content_layout">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/template1_image_container"
-                android:layout_width="wrap_content"
+                android:id="@+id/card_header"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:tag="card_image_container">
+                android:background="?attr/primaryColorVariant"
+                android:orientation="horizontal"
+                android:padding="2pt">
 
-                <es.jcyl.ita.formic.forms.components.image.ImageResourceView
-                    android:id="@+id/template1_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/no_image"
-                    android:tag="card_image" />
+                <TextView
+                    android:id="@+id/card_header_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:textColor="?attr/onPrimaryColor" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/template1_title_layout"
-                android:layout_width="wrap_content"
+                android:id="@+id/card_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:tag="card_content_layout">
 
-                <TextView
-                    android:id="@+id/template1_title"
+                <LinearLayout
+                    android:id="@+id/card_image_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:padding="2pt"
+                    android:tag="card_image_container">
+
+                    <es.jcyl.ita.formic.forms.components.image.ImageResourceView
+                        android:id="@+id/card_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/no_image"
+                        android:tag="card_image" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/card_text_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="card_title" />
+                    android:orientation="vertical"
+                    android:tag="card_text_container">
 
-                <TextView
-                    android:id="@+id/template1_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="card_subtitle" />
+                    <TextView
+                        android:id="@+id/card_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="card_title" />
+
+                    <TextView
+                        android:id="@+id/card_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="card_subtitle" />
+
+                    <TextView
+                        android:id="@+id/card_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="2"
+                        android:focusable="true"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:tag="card_text" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

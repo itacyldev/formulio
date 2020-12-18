@@ -20,11 +20,13 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.forms.components.select.UISelect;
+import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
+import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
+import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
-import es.jcyl.ita.formic.forms.components.table.UIRow;
 import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -40,7 +42,9 @@ import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UICardBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIColumnBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIDatalistBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
@@ -54,6 +58,7 @@ import es.jcyl.ita.formic.forms.config.elements.PropertyConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
+import es.jcyl.ita.formic.forms.config.resolvers.ColorAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
@@ -61,7 +66,6 @@ import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
-import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -111,8 +115,11 @@ public class ComponentBuilderFactory {
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
 
         registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
+        registerBuilder("datalistitem", newBasicBuilder(UIDatalistItem.class, "datalistitem"));
         registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
         registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
+        registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
+        registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
@@ -156,6 +163,7 @@ public class ComponentBuilderFactory {
         registerAttResolver("pathResolver", new RelativePathAttResolver());
         registerAttResolver("validator", new ValidatorAttResolver());
 
+        registerAttResolver("color", new ColorAttributeResolver());
     }
 
 
@@ -191,9 +199,9 @@ public class ComponentBuilderFactory {
         // try with one String parameter
         if (builder == null) {
             try {
-                if(subClazz == null){
+                if (subClazz == null) {
                     builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
-                } else{
+                } else {
                     builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class, Class.class}).newInstance(tagName, subClazz);
                 }
             } catch (Exception e) {

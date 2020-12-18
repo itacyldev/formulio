@@ -75,9 +75,10 @@ public class UICardBuilderTest {
      * @throws Exception
      */
     private static final String XML_TEST_CARD_WITH_CHILDREN = "<card template=\"template\">" +
-            "<head id=\"title\" label=\"label_title\" value=\"value_title\"/>" +
-            "<head id=\"subtitle\" label=\"label_subtitle\" value=\"value_subtitle\"/>" +
-            "<image id=\"card_image\" value=\"$entity.image\"/>" +
+            "<head name=\"title\" value=\"value_title\"/>" +
+            "<head name=\"subtitle\" value=\"value_subtitle\"/>" +
+            "<paragraph name=\"description\" value=\"value_description\"/>" +
+            "<image name=\"image\" id=\"card_image\" value=\"$entity.image\"/>" +
             "</card>";
 
 
@@ -129,6 +130,53 @@ public class UICardBuilderTest {
         UIImage image = (UIImage) card.getChildren()[0];
         Assert.assertNotNull(image);
     }
+
+
+    /**
+     * Tests the evaluation of "properties" attribute to filter the properties selected from repository.*
+     *
+     * @throws Exception
+     */
+    private static final String XML_TEST_CARD_WITH_HEADER = "<card label=\"card_label\" expandable=\"true\" expanded=\"true\" />";
+
+
+    @Test
+    public void testCardWithHeader() throws Exception {
+        String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_WITH_HEADER);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        Assert.assertNotNull(cards);
+
+        UICard card = cards.get(0);
+
+        Assert.assertEquals("card_label", card.getLabel());
+        Assert.assertTrue(card.isExpandable());
+        Assert.assertTrue(card.isExpanded());
+    }
+
+    /**
+     * Tests the evaluation of "properties" attribute to filter the properties selected from repository.*
+     *
+     * @throws Exception
+     */
+    private static final String XML_TEST_CARD_IMAGE_POSITION = "<card label=\"card_label\" imagePosition=\"right\" />";
+
+
+    @Test
+    public void testCardImagePosition() throws Exception {
+        String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_IMAGE_POSITION);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        Assert.assertNotNull(cards);
+
+        UICard card = cards.get(0);
+
+        String imagePosition = card.getImagePosition();
+        Assert.assertEquals(UICard.ImagePosition.RIGHT.getPosition(), imagePosition);
+    }
+
 
     @AfterClass
     public static void tearDown() {

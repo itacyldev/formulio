@@ -1,14 +1,21 @@
 <main name="form card" description="Card with image example." id="form4" repo="superHRepo">
     <edit>
         <form>
-            <card subtitle="${entity.real_name}" title="${entity.name}">
+            <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}">
                 <image repo="superHImages" value="${entity.image}" readOnly="true"/>
             </card>
-            <card template="card_template_2" title="${entity.name}">
-                <head id="title" label="label_title" value="${entity.name}"/>
-                <head id="subtitle" label="label_subtitle" value="subtitle"/>
+            <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}" imagePosition="bottom">
+                <image repo="superHImages" value="${entity.image}" readOnly="true"/>
+            </card>
+            <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}" imagePosition="right">
+                <image repo="superHImages" value="${entity.image}" readOnly="true"/>
+            </card>
+            <card label="${entity.name}" expandable="true" expanded="true" imagePosition="left">
+                <head name="title" value="${entity.name}"/>
+                <head name="subtitle" value="subtitle"/>
                 <image repo="superHImages" value="${entity.image}" inputType="0"/>
             </card>
+
         </form>
     </edit>
     <list name="Superheroes">

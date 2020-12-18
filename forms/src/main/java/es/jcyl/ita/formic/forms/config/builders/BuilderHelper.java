@@ -29,7 +29,6 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
@@ -356,7 +355,7 @@ public class BuilderHelper {
         ConfigNode node = new ConfigNode(tag);
         node.setId(attribute.name);
         node.setAttribute("type", attribute.type.toString());
-        node.setAttribute("label", attribute.name);
+        node.setAttribute("name", attribute.name);
 
         ComponentBuilder<UIComponent> builder = ComponentBuilderFactory.getInstance().getBuilder(tag);
 
