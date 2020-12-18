@@ -90,6 +90,7 @@ ext {
 
     group = 'es.jcyl.ita.formic'
     version = '0.1.0-SNAPSHOT'
+    artifactId = 'Formic'
 
     sharedDeps = [
             'org.apache.commons:commons-jexl3:3.1',
