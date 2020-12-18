@@ -76,13 +76,13 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
         UICard card = node.getElement();
 
         for (ConfigNode child : node.getChildren()) {
-            if (child.getAttribute(NAME.name).equals(TITLE.name)) {
+            if (TITLE.name.equals(child.getAttribute(NAME.name))) {
                 card.setTitle((UIHeading) child.getElement());
-            } else if (child.getAttribute(NAME.name).equals(SUBTITLE.name)) {
+            } else if (SUBTITLE.name.equals(child.getAttribute(NAME.name))) {
                 card.setSubtitle((UIHeading) child.getElement());
-            } else if (child.getAttribute(NAME.name).equals(DESCRIPTION.name)) {
+            } else if (DESCRIPTION.name.equals(child.getAttribute(NAME.name))) {
                 card.setDescription((UIParagraph) child.getElement());
-            } else if (child.getAttribute(NAME.name).equals(IMAGE.name)) {
+            } else if (child.getElement() instanceof UIImage) {
                 card.setChildren(new UIComponent[]{(UIImage) child.getElement()});
             }
         }

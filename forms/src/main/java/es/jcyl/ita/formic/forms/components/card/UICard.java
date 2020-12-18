@@ -15,10 +15,14 @@ package es.jcyl.ita.formic.forms.components.card;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
+import es.jcyl.ita.formic.forms.el.JexlUtils;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -32,6 +36,7 @@ public class UICard extends UIComponent {
     UIParagraph description;
     UIImage image;
 
+    boolean showHeader = true;
     boolean expandable;
     boolean expanded;
 
@@ -120,5 +125,21 @@ public class UICard extends UIComponent {
         public String getPosition() {
             return position;
         }
+    }
+
+    public boolean isShowHeader() {
+        return showHeader;
+    }
+
+    public void setShowHeader(boolean showHeader) {
+        this.showHeader = showHeader;
+    }
+
+    public String getLabelValue(Context context) {
+        String labelValue = null;
+        if (StringUtils.isNotEmpty(label)) {
+            labelValue = JexlUtils.eval(context, label).toString();
+        }
+        return labelValue;
     }
 }

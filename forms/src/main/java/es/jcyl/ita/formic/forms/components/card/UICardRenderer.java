@@ -97,8 +97,8 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         UICard card = widget.getComponent();
 
         // Set up header if card has a label
-        if (StringUtils.isNotEmpty(card.getLabel())) {
-            setupHeader(widget, card);
+        if (card.isShowHeader()) {
+            setupHeader(widget, card, env);
         } else {
             View headerLayout = widget.findViewById(R.id.card_header);
             headerLayout.setVisibility(View.GONE);
@@ -189,10 +189,13 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         }
     }
 
-    private void setupHeader(View cardView, UICard card) {
+    private void setupHeader(View cardView, UICard card, RenderingEnv env) {
 
-        TextView headerLabel = (TextView) ViewHelper.findViewAndSetId(cardView, R.id.card_header_label);
-        headerLabel.setText(card.getLabel());
+        String headerLabel = card.getLabelValue(env.getContext());
+        if (StringUtils.isNotEmpty(headerLabel)) {
+            TextView headerLabelView = (TextView) ViewHelper.findViewAndSetId(cardView, R.id.card_header_label);
+            headerLabelView.setText(headerLabel);
+        }
 
         LinearLayout headerLayout = (LinearLayout) ViewHelper.findViewAndSetId(cardView, R.id.card_header);
         final View content = ViewHelper.findViewAndSetId(cardView, R.id.card_content);
