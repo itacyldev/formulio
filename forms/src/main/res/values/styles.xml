@@ -40,12 +40,14 @@
         <item name="colorControlActivated">?attr/onSurfaceColor</item>
     </style>
 
-    <style name="TextInputLabel_label" parent="TextAppearance.AppCompat">
+    <style name="TextInputLabel_label" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textSize">16sp</item>
         <item name="hintTextAppearance">@style/HintTextAppearance</item>
         <item name="android:textColorHint">?attr/onSurfaceColor</item>
         <item name="android:textStyle">bold</item>
+        <item name="boxStrokeColor">@color/outline_color</item>
     </style>
+    <!--TextAppearance.AppCompat-->
 
     <style name="Default_Label_font">
         <item name="android:textColorHint">?attr/onSurfaceColor</item>
@@ -145,4 +147,5 @@
         <item name="tabIndicatorColor">?attr/primaryColorVariant</item>
         <item name="tabTextColor">?attr/onSurfaceColor</item>
     </style>
+
 </resources>

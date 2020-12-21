@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="2dp"
-    android:paddingBottom="30dp">
+    android:paddingBottom="20dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

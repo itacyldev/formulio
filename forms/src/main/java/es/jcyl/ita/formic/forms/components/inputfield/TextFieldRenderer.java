@@ -1,5 +1,7 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
@@ -7,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -20,6 +23,7 @@ import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
+import static android.view.View.inflate;
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
 
 /*
@@ -66,7 +70,10 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         addTextChangeListener(env, inputView, component);
 
         // set clear button
-        setClearButton(env, inputView, textInputLayout);
+        setClearButton(env, inputView, textInputLayout, component);
+
+        // set info button
+        setInfoButton(env, textInputLayout, component);
     }
 
     protected void setLabel(EditText view, TextInputLayout labelView, UIField component) {
@@ -75,16 +82,12 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 component.getLabel() + " *"
                 : component.getLabel();
 
-        String hintComponent = component.getHint()!=null?component.getHint(): labelComponent;
-
         view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    labelView.setHint(hintComponent);
                     labelView.setHintTextAppearance(R.style.HintTextAppearance);
                 } else {
-                    labelView.setHint(labelComponent);
                     labelView.setHintTextAppearance(R.style.TextInputLabel_label);
                 }
             }
@@ -94,18 +97,45 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         labelView.setHintTextAppearance(R.style.TextInputLabel_label);
     }
 
-    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout){
+    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout,UIField component){
         // set clear button
-        textInputLayout.setEndIconActivated(true);
-        textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
-        TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
-        textInputLayout.setEndIconTintList(ta.getColorStateList(0));
-        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                view.setText(null);
-            }
-        });
+        if (!component.isReadOnly()) {
+            textInputLayout.setEndIconActivated(true);
+            textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
+            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
+            textInputLayout.setEndIconTintList(ta.getColorStateList(0));
+            textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    view.setText(null);
+                }
+            });
+        }
+    }
+
+    protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component){
+        if (component.getHint() != null) {
+            textInputLayout.setStartIconDrawable(R.drawable.ic_tool_info);
+            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
+            textInputLayout.setStartIconTintList(ta.getColorStateList(0));
+            textInputLayout.setStartIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
+                    final View view = inflate(env.getViewContext(), R.layout.info_dialog, null);
+                    TextView titleView = view.findViewById(R.id.info);
+                    titleView.setText(component.getHint());
+                    builder.setCustomTitle(view)
+                            .setPositiveButton("OK", null);
+                    Dialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+        }
+    }
+
+    protected void adjustBounds(){
+
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {

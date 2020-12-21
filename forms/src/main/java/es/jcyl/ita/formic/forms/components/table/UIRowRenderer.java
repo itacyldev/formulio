@@ -4,6 +4,8 @@ import android.view.View;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
@@ -66,6 +68,8 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
         }
         int i = 0;
         for (View view : views) {
+            view.setBackground(ContextCompat
+                    .getDrawable(root.getContext(), R.drawable.border));
             rowView.addView(view);
             if (colspans != null && i < colspans.length) {
                 TableRow.LayoutParams params = (TableRow.LayoutParams) view.getLayoutParams();

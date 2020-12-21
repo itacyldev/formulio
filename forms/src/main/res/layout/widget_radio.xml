@@ -7,36 +7,36 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
-    android:paddingBottom="30dp">
+    android:paddingBottom="20dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="10">
         <!-- Text Label -->
         <TextView
             android:id="@+id/label_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_marginTop="10dip"
             android:layout_marginBottom="5dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_weight="9.7"/>
 
         <ImageView
             android:id="@+id/field_layout_x"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_alignParentRight="true"
-            android:layout_weight="0"
             style="@style/Textfield_cancel_button"
             android:layout_gravity="center_vertical"
             android:background="@drawable/selectablebuttonbackground"
             android:contentDescription="@string/tool_buttons_x"
             android:padding="5dp"
             android:layout_marginRight="6dp"
+            android:layout_weight="0.3"
             android:src="@drawable/ic_tool_x_circle_dark" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <RadioGroup
         android:id="@+id/input_view"
