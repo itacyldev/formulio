@@ -1,5 +1,7 @@
 -dontobfuscate
 
+-keep public class org.apache.commons.** { *; }
+
 -keep class org.codehaus.groovy.vmplugin.**
 -keep class org.codehaus.groovy.runtime.dgm*
 
@@ -8,6 +10,18 @@
 -keepclassmembers class org.codehaus.groovy.reflection.GroovyClassValue* {*;}
 -keepclassmembers class groovyx.example.** {*;}
 -keepclassmembers class com.arasthel.swissknife.utils.Finder {*;}
+
+
+-keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.AttributeResolver {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.builders.ComponentBuilder {*;}
+
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.converter.PropertyConverter {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.EntitySourceBuilder {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.RepositoryBuilder {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.source.EntitySource {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
+
+-keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
 -dontwarn org.codehaus.groovy.**
 -dontwarn groovy**
