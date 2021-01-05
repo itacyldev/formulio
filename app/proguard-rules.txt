@@ -1,4 +1,4 @@
--dontobfuscate
+#-dontobfuscate
 
 -keep public class org.apache.commons.** { *; }
 
@@ -22,6 +22,8 @@
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
 
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
+
+
 
 -dontwarn org.codehaus.groovy.**
 -dontwarn groovy**
