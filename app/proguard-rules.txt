@@ -1,4 +1,4 @@
-#-dontobfuscate
+-dontobfuscate
 
 -keep public class org.apache.commons.** { *; }
 
@@ -13,13 +13,19 @@
 
 
 -keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.AttributeResolver {*;}
+-keepclassmembers class ** extends es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.builders.ComponentBuilder {*;}
+
+-keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.repo.meta.MetaModeler {*;}
 
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.converter.PropertyConverter {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.EntitySourceBuilder {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.RepositoryBuilder {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.source.EntitySource {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
+
+
 
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
