@@ -1,6 +1,8 @@
 -dontobfuscate
 
 -keep public class org.apache.commons.** { *; }
+-keep class jsqlite.** { *; }
+-keep class org.xmlpull.** { *; }
 
 -keep class org.codehaus.groovy.vmplugin.**
 -keep class org.codehaus.groovy.runtime.dgm*
@@ -29,7 +31,9 @@
 
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
-
+-keepattributes EnclosingMethod, InnerClasses
+-keepattributes *Annotation*
+-keepattributes Signature
 
 -dontwarn org.codehaus.groovy.**
 -dontwarn groovy**
