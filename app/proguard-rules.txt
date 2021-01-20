@@ -1,11 +1,14 @@
 -dontobfuscate
 
 -keep public class org.apache.commons.** { *; }
+
 -keep class jsqlite.** { *; }
 -keep class org.xmlpull.** { *; }
 
 -keep class org.codehaus.groovy.vmplugin.**
 -keep class org.codehaus.groovy.runtime.dgm*
+
+-keepclassmembers class org.greenrobot.greendao.database.** {*;}
 
 -keepclassmembers class org.codehaus.groovy.runtime.dgm* {*;}
 -keepclassmembers class ** implements org.codehaus.groovy.runtime.GeneratedClosure {*;}
@@ -17,15 +20,24 @@
 -keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.AttributeResolver {*;}
 -keepclassmembers class ** extends es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.builders.ComponentBuilder {*;}
+-keepclassmembers class ** extends es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder {*;}
 
 -keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder {*;}
+-keep class es.jcyl.ita.formic.repo.db.source.DBTableEntitySource$DBTableEntitySourceBuilder {*;}
+-keep class es.jcyl.ita.formic.repo.source.** {*;}
+
+-keep class es.jcyl.ita.formic.forms.** {*;}
+
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.meta.MetaModeler {*;}
 
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.converter.PropertyConverter {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.EntitySourceBuilder {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.RepositoryBuilder {*;}
--keepclassmembers class ** implements es.jcyl.ita.formic.repo.source.EntitySource {*;}
+-keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractRepositoryBuilder {*;}
+
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
+
+-keep class es.jcyl.ita.formic.forms.config.elements.** {*;}
 
 
 
