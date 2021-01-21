@@ -79,7 +79,6 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
             resetButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View arg0) {
-
                     Drawable noImage = ContextCompat
                             .getDrawable(env.getViewContext(), R.drawable.
                                     no_image);

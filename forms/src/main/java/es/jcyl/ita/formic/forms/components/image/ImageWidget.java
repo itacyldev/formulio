@@ -63,27 +63,33 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setup(RenderingEnv env) {
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if (!component.isCameraActive() || component.isReadOnly()) { // TODO: or device has no camera (check throw context.device)
+        if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
+            cameraButton.setVisibility(View.INVISIBLE);
+        }
+        if (component.isReadOnly()) {
             cameraButton.setEnabled(false);
         } else {
             cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launcher.launch(null);
-            }});
-        }
-        Button galleryButton = this.findViewById(R.id.btn_gallery);
-        if (!component.isGalleryActive() || component.isReadOnly()) { // TODO: or device has no camera (check throw context.device)
-            galleryButton.setEnabled(false);
-        } else {
-            galleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gallerySelector.launch();
-            }
+                @Override
+                public void onClick(View v) {
+                    launcher.launch(null);
+                }
             });
         }
-
+        Button galleryButton = this.findViewById(R.id.btn_gallery);
+        if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
+            galleryButton.setVisibility(View.INVISIBLE);
+        }
+        if (component.isReadOnly()) {
+            galleryButton.setVisibility(View.INVISIBLE);
+        } else {
+            galleryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gallerySelector.launch();
+                }
+            });
+        }
         this.mainEntity = env.getFormContext().getEntity();
     }
 

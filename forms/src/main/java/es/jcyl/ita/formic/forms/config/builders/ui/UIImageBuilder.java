@@ -65,6 +65,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
             // If the expression is a literal, the image has to be retrieved using project default
             // image repository Ej: /images/myfavoriteImage.jpeg. The component is readonly
             image.setReadOnly(true); // this will disable camera and gallery buttons
+            image.setInputType(UIImage.ImageInputType.NO_CONTROLS.value);
             usesExternalRepo = true;
         } else if (valueExpr.isReadOnly()) {
             // if the expression is not an entity attribute binding, by default it is interpreted as
@@ -137,13 +138,18 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
                     "image was found, the default project's image repo (DEFAULT_PROJECT_IMAGES) " +
                     "should be active, check the project configuration.", node.getElement().getId())));
         }
-        EntityMapping relation = new EntityMapping(repo, img.getValueExpression().toString(), img.getId());
+        ValueBindingExpression imgBndExpr = img.getValueExpression();
+        String fkExpression = imgBndExpr.toString();
+        if(!fkExpression.contains("$")){
+            // its a literal string, convert to literal JEXL expression
+            fkExpression = "${'%s'}".format(fkExpression);
+        }
+        EntityMapping relation = new EntityMapping(repo, fkExpression, img.getId());
         relation.setFilter(img.getFilter());
         relation.setInsertable(!img.isReadOnly());
         relation.setDeletable(!img.isReadOnly());
         relation.setUpdatable(!img.isReadOnly());
 
-        ValueBindingExpression imgBndExpr = img.getValueExpression();
         if (imgBndExpr.isReadOnly() && !imgBndExpr.isLiteral()) {
             // if the expression is a readonly expression that uses entity attributes to
             // calculate the ID, we need to define a calculated property for the entity that will
@@ -151,14 +157,9 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
             CalculatedProperty cp = new CalculatedProperty(AttributeDef.ID.name, imgBndExpr.toString());
             relation.setCalcProps(Collections.singletonList(cp));
         }
-        // replace expression
-        String bindingExpression;
-//        if (converter.equalsIgnoreCase("urlImage")) {
-//            bindingExpression = "${entity.%s.absolutePath}"; // got it from FileEntityMeta
-//        } else {
-//        }
-        bindingExpression = "${entity.%s.content}"; // byteArray or StringB64
-        String expression = String.format(bindingExpression, img.getId());
+
+        // use content property of related entity, it will contain the image as the byteArray or StringB64
+        String expression = String.format("${entity.%s.content}", img.getId());
         ValueBindingExpression effectiveExpression = this.getFactory().getExpressionFactory().create(expression);
         img.setValueExpression(effectiveExpression);
 
