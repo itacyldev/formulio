@@ -86,6 +86,8 @@ public class UIImageBuilderTest {
         // repo must be set with parent value "contacts"
         UIImage img = imgs.get(0);
         Assert.assertNotNull(img.getId());
+        Assert.assertNotNull(img.getValueExpression());
+
         // check the entityMapping has been added to contact repository
         Repository contactsRepo = repoFactory.getRepo("contacts");
         List<EntityMapping> mappings = contactsRepo.getMappings();

@@ -24,6 +24,9 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.utils.ProjectUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
@@ -56,6 +59,13 @@ public class FormConfigBuilderTest {
         RepositoryUtils.registerMock("contacts");
     }
 
+    @Test
+    public void testFileconfig() throws Exception {
+        ProjectUtils.readProjectConfig("src/test/resources/config/project1");
+        Config config = Config.getInstance();
+        config.getFormConfigRepo().findById("formPrueba");
+
+    }
 
     /**
      * Check formEdit and formList are properly created

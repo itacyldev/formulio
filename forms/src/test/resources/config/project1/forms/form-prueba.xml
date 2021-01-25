@@ -3,77 +3,47 @@
         <form>
             <tab>
                 <tabitem label="Tab 1">
+                    <!--
+                                        <input label="1. Input: " value="${entity.input}"  hint="Hint input"/>
 
-                    <input label="1. Input: " value="${entity.input}"  />
+                                            <radio label="2. Radio:" orientation="horizontal"
+                                                value="${entity.radio}" >
+                                                <options>
+                                                    <option label="Radio1" value="Radio1" />
+                                                    <option label="Radio2" value="Radio2" />
+                                                    <option label="Radio3" value="Radio3" />
+                                                </options>
+                                            </radio>
 
-                        <radio label="2. Radio:" orientation="horizontal"
-                            value="${entity.radio}" >
-                            <options>
-                                <option label="Radio1" value="Radio1" />
-                                <option label="Radio2" value="Radio2" />
-                                <option label="Radio3" value="Radio3" />
-                            </options>
-                        </radio>
+                                            <textarea label="3. Textarea: " value="${entity.textarea}"  />
 
-                        <textarea label="3. Textarea: " value="${entity.textarea}"  />
+                                            <switcher label="4. Switcher: " value="${entity.switcher}" />
 
-                        <switcher label="4. Switcher: " value="${entity.switcher}" />
+                                            <date label="5. Date: "  value="${entity.fecha}" converter="string" />
 
-                        <date label="5. Date: "  value="${entity.fecha}" converter="string" />
+                                            <select label="6. Select: "  value="${entity.combo}" >
+                                                <options>
+                                                    <option label="Combo1" value="Combo1" />
+                                                    <option label="Combo2" value="Combo2" />
+                                                    <option label="Combo3" value="Combo3" />
+                                                </options>
+                                            </select>
 
-                        <select label="6. Select: "  value="${entity.combo}" >
-                            <options>
-                                <option label="Combo1" value="Combo1" />
-                                <option label="Combo2" value="Combo2" />
-                                <option label="Combo3" value="Combo3" />
-                            </options>
-                        </select>
+                                            <autocomplete forceSelection="true" id="autocompletado_id" label="7. Autocomplete: "
+                                                repo="autocompletado" value="${entity.autocompletado_id}">
+                                                <options
+                                                    labelExpression="${entity.valor}"
+                                                    labelFilteringProperty="valor"
+                                                    valueProperty="autocompletado_id" />
+                                            </autocomplete>
 
-                        <autocomplete forceSelection="true" id="autocompletado_id" label="7. Autocomplete: "
-                            repo="autocompletado" value="${entity.autocompletado_id}">
-                            <options
-                                labelExpression="${entity.valor}"
-                                labelFilteringProperty="valor"
-                                valueProperty="autocompletado_id" />
-                        </autocomplete>
+                    -->
 
-                        <image repo="superHImages" value="${entity.image}" />
-                </tabitem>
-                <tabitem label="Tab 2">
-                    <image label="Imagen: " height="200" value="${entity.id}.jpg" width="300" />
-                </tabitem>
-                <tabitem label="Tab 3">
-                    <input label="Input: " value="${entity.imput}"  />
-                    <input label="Input2: " value="${entity.imput}"  />
-                    <input label="Input3: " value="${entity.imput}"  />
-                    <input label="Radio: " value="${entity.radio}"  />
-                    <input label="Textarea: " value="${entity.textarea}"  />
-                    <input label="Switcher: " value="${entity.switcher}"  />
-                    <input label="Date: " value="${entity.fecha}"  />
-                    <input label="Select: " value="${entity.combo}"  />
-                    <input label="Autocomplete: " value="${entity.autocompletado_id}"  />
-                </tabitem>
-                <tabitem label="Tab 4">
-                    <input label="Input: " value="${entity.imput}"  />
-                    <input label="Input2: " value="${entity.imput}"  />
-                    <input label="Input3: " value="${entity.imput}"  />
-                    <input label="Radio: " value="${entity.radio}"  />
-                    <input label="Textarea: " value="${entity.textarea}"  />
-                    <input label="Switcher: " value="${entity.switcher}"  />
-                    <input label="Date: " value="${entity.fecha}"  />
-                    <input label="Select: " value="${entity.combo}"  />
-                    <input label="Autocomplete: " value="${entity.autocompletado_id}"  />
-                </tabitem>
-                <tabitem label="Tab 5">
-                    <input label="Input: " value="${entity.imput}"  />
-                    <input label="Input2: " value="${entity.imput}"  />
-                    <input label="Input3: " value="${entity.imput}"  />
-                    <input label="Radio: " value="${entity.radio}"  />
-                    <input label="Textarea: " value="${entity.textarea}"  />
-                    <input label="Switcher: " value="${entity.switcher}"  />
-                    <input label="Date: " value="${entity.fecha}"  />
-                    <input label="Select: " value="${entity.combo}"  />
-                    <input label="Autocomplete: " value="${entity.autocompletado_id}"  />
+                    <image label="8. Imagen: " repo="superHImages" value="${entity.image}" />
+                    <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" />
+                    <image label="10. Imagen: " converter="b64Image" embedded="true" value="${entity.image_thumb}" />
+
+
                 </tabitem>
             </tab>
         </form>
