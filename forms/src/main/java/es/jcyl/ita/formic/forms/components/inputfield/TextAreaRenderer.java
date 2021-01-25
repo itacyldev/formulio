@@ -53,7 +53,11 @@ public class TextAreaRenderer extends TextFieldRenderer {
         addTextChangeListener(env, inputView, component);
 
         // set clear button
-        setClearButton(env, inputView, textInputLayout);
+        setClearButton(env, inputView, textInputLayout, component);
+
+        // set info button
+        setInfoButton(env, textInputLayout, component);
+
     }
 
 }

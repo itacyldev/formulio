@@ -5,7 +5,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.apache.commons.lang3.RandomUtils;
+import androidx.core.content.ContextCompat;
+
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
@@ -87,6 +88,8 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
                         "result in unexpected behaviour. All <table/> children must be nested in <row/>" +
                         "elements. File ${file}.", widget.getId()));
             }
+            row.setBackground(ContextCompat
+                    .getDrawable(widget.getContext(), R.drawable.border));
             tableView.addView(row);
         }
     }

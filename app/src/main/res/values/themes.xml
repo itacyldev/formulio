@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="FormudruidLight" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="FormudruidLight" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="primaryColorVariant">@color/light_PrimaryColorVariant</item>
         <item name="primaryColor">@color/light_PrimaryColor</item>
         <item name="onPrimaryColor">@color/light_OnPrimaryColor</item>

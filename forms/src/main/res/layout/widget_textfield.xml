@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingLeft="4dp"
-    android:paddingTop="10dp"
+    android:paddingTop="4dp"
     android:paddingRight="10dp"
-    android:paddingBottom="30dp">
+    android:paddingBottom="20dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout"
@@ -20,7 +20,6 @@
             style="@style/Textfield_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:clickable="true"
             android:focusable="true"
             android:inputType="text" />
