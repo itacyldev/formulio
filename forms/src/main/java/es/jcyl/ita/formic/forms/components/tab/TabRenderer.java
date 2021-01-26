@@ -65,7 +65,7 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, strategy);
         mediator.attach();
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
+        /*viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -75,7 +75,7 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
                     viewPager.requestLayout();
                 }
             }
-        });
+        });*/
     }
 
     private void updatePagerHeightForChild(View view, ViewPager2 viewPager) {
@@ -98,7 +98,6 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         for (View view : views) {
             adapter.addView(view, fragCount);
             fragCount++;
-
         }
     }
 

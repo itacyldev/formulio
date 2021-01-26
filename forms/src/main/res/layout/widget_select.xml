@@ -7,7 +7,7 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
-    android:paddingBottom="30dp">
+    android:paddingBottom="20dp">
            <!-- Text Label -->
         <TextView
             android:id="@+id/label_view"

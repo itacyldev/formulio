@@ -63,35 +63,34 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setup(RenderingEnv env) {
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if (!component.isCameraActive()) { // TODO: or device has no camera (check throw context.device)
-            cameraButton.setVisibility(View.GONE);
+        if (component.isReadOnly()) {
+            cameraButton.setEnabled(false);
+        } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
+            cameraButton.setVisibility(View.INVISIBLE);
         } else {
-            if (this.component.isReadOnly()) {
-                cameraButton.setEnabled(false);
-            } else {
-                cameraButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        launcher.launch(null);
-                    }
-                });
-            }
+            cameraButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    launcher.launch(null);
+                }
+            });
         }
         Button galleryButton = this.findViewById(R.id.btn_gallery);
-        if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
-            galleryButton.setVisibility(View.GONE);
-        } else {
-            if (this.component.isReadOnly()) {
-                cameraButton.setEnabled(false);
-            } else {
-                galleryButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gallerySelector.launch();
-                    }
-                });
-            }
+        galleryButton.setEnabled(false);
+        // TODO::
+        /*if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
+            galleryButton.setVisibility(View.INVISIBLE);
         }
+        if (component.isReadOnly()) {
+            galleryButton.setEnabled(false);
+        } else {
+            galleryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gallerySelector.launch();
+                }
+            });
+        }*/
         this.mainEntity = env.getFormContext().getEntity();
     }
 
@@ -141,7 +140,8 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
      *
      * @param byteArray
      */
-    private void updateRelatedEntity(byte[] byteArray) {
+    public void updateRelatedEntity(byte[] byteArray) {
+
         // the related entity is stored in the main entity using current component Id as property name
         Entity entity = (Entity) mainEntity.get(component.getId());
         if (entity == null) {

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="2dp"
-    android:paddingBottom="30dp">
+    android:paddingBottom="20dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -39,43 +39,49 @@
                 android:orientation="horizontal"
                 android:weightSum="3">
 
-            <es.jcyl.ita.formic.forms.components.image.ImageResourceView
-                android:id="@+id/input_view"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.3"
-                android:src="@drawable/no_image"
-                android:scaleType="fitStart"
-                />
-
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.3"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:gravity="center"
+                    style="@style/Component_background"
+                    >
+                        <es.jcyl.ita.formic.forms.components.image.ImageResourceView
+                            android:id="@+id/input_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:src="@drawable/no_image"
+                            android:scaleType="fitCenter"
+                            />
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.7"
+                    android:layout_weight="0.7"
                     android:orientation="vertical">
-
                     <Button
                         android:id="@+id/btn_camera"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="15dp"
-                        android:padding="6dp"
+                        android:paddingLeft="12dp"
                         android:drawableLeft="@drawable/ic_action_camera"
-                        android:text="Capture from camera"
-                        android:textSize="9sp"
                         android:background="@drawable/roundbutton"/>
                     <Button
                         android:id="@+id/btn_gallery"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="15dp"
-                        android:padding="6dp"
+                        android:paddingLeft="12dp"
+                        android:gravity="center"
                         android:drawableLeft="@drawable/ic_action_picture"
-                        android:text="Select from gallery"
-                        android:textSize="9sp"
-                        android:background="@drawable/roundbutton"/>
+                        android:background="@drawable/roundbutton"
+                        />
                 </LinearLayout>
             </LinearLayout>
 
