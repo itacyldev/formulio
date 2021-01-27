@@ -56,6 +56,9 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
+        if (widget.getComponent().isReadOnly()) {
+            resetButton.setVisibility(View.INVISIBLE);
+        }
 
         Button input = widget.getInputView();
         styleHolder.applyStyle(input);

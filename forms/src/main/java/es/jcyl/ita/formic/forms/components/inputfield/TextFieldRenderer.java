@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -64,13 +65,24 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         // set floating label
-        setLabel(inputView, textInputLayout, component);
+        //setLabel(inputView, textInputLayout, component);
 
         // set event
         addTextChangeListener(env, inputView, component);
 
         // set clear button
-        setClearButton(env, inputView, textInputLayout, component);
+        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
+                ImageView.class);
+        if (widget.getComponent().isReadOnly()) {
+            resetButton.setVisibility(View.INVISIBLE);
+        }
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                inputView.setText(null);
+            }
+        });
+        //setClearButton(env, inputView, textInputLayout, component);
 
         // set info button
         setInfoButton(env, textInputLayout, component);

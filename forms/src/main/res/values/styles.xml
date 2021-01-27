@@ -45,6 +45,7 @@
         <item name="hintTextAppearance">@style/HintTextAppearance</item>
         <item name="android:textColorHint">?attr/onSurfaceColor</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">start|top</item>
         <item name="boxStrokeColor">@color/outline_color</item>
     </style>
     <!--TextAppearance.AppCompat-->
