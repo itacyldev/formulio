@@ -39,6 +39,9 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
+        if (widget.getComponent().isReadOnly()) {
+            resetButton.setVisibility(View.INVISIBLE);
+        }
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
