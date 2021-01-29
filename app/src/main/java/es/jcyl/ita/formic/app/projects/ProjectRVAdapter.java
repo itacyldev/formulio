@@ -28,9 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.MainActivity;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
 /**
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
@@ -61,6 +63,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                         Toast.makeText(context,
                                 DevConsole.info(context.getString(R.string.project_opening_finish, (String) prj.getId())),
                                 Toast.LENGTH_LONG).show();
+                        ((MainActivity) context).loadFragment(new FormListFragment());
                     } catch (Exception e) {
                         Toast.makeText(context,
                                 DevConsole.info(context.getString(R.string.project_opening_error, (String) prj.getId())),
