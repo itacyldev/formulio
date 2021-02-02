@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -93,7 +94,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
         UIInputComponent component = widget.getComponent();
         String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
         if (message != null) {
-            ((TextView)widget.getChildAt(0)).setError(message);
+            ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
         }
     }
 
