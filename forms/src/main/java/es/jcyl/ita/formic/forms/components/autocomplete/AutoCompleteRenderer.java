@@ -15,10 +15,14 @@ package es.jcyl.ita.formic.forms.components.autocomplete;
  * limitations under the License.
  */
 
+import android.view.View;
+import android.widget.ImageView;
+
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -32,10 +36,22 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
         AutoCompleteView input = widget.getInputView();
         input.initialize(env, widget.getComponent());
         input.load(env);
+
+        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
+                ImageView.class);
+        if (widget.getComponent().isReadOnly()) {
+            resetButton.setVisibility(View.INVISIBLE);
+        }
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                input.setSelection(-1);
+            }
+        });
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIAutoComplete component) {
         return R.layout.widget_autocomplete;
     }
 }

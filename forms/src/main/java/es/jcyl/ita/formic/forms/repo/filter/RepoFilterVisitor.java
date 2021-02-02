@@ -20,15 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.config.elements.RepoFilter;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
 import es.jcyl.ita.formic.repo.query.Condition;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.Operator;
-import es.jcyl.ita.formic.forms.config.elements.RepoFilter;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

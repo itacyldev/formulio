@@ -23,12 +23,12 @@ import org.mini2Dx.beanutils.converters.LongConverter;
 
 import java.util.Date;
 
-import es.jcyl.ita.formic.repo.meta.types.ByteArray;
-import es.jcyl.ita.formic.repo.meta.types.Geometry;
 import es.jcyl.ita.formic.forms.converters.ByteArrayConverter;
 import es.jcyl.ita.formic.forms.converters.CustomBooleanConverter;
 import es.jcyl.ita.formic.forms.converters.CustomDateConverter;
 import es.jcyl.ita.formic.forms.converters.GeometryConverter;
+import es.jcyl.ita.formic.repo.meta.types.ByteArray;
+import es.jcyl.ita.formic.repo.meta.types.Geometry;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -38,8 +38,9 @@ public class ConfigConverters {
     public void init() {
         // customize data type converters
         ConvertUtils.register(new CustomDateConverter(), Date.class);
-        ConvertUtils.register(new ByteArrayConverter(), ByteArray.class);
-        ConvertUtils.register(new GeometryConverter(), Geometry.class);
+
+        ConvertUtils.register(new ByteArrayConverter(null), ByteArray.class);
+        ConvertUtils.register(new GeometryConverter(null), Geometry.class);
         String[] trueStrings = {"true", "t", "yes", "y", "on", "1", "s", "si", "sí"};
         String[] falseStrings = {"", "false", "no", "n", "off", "0", "f"};
         CustomBooleanConverter boolConverter = new CustomBooleanConverter(trueStrings, falseStrings);

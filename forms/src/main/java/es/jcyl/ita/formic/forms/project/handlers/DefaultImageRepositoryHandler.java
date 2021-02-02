@@ -17,11 +17,11 @@ package es.jcyl.ita.formic.forms.project.handlers;
 
 import java.io.File;
 
+import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectResource;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.media.FileRepository;
-import es.jcyl.ita.formic.forms.project.Project;
-import es.jcyl.ita.formic.forms.project.ProjectResource;
 
 /**
  * Handler to create a default image repository for current project
@@ -33,12 +33,10 @@ public class DefaultImageRepositoryHandler extends AbstractProjectResourceHandle
     private static final String DEFAULT_PROJECT_IMAGES = "DEFAULT_PROJECT_IMAGES";
     protected RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
-
     @Override
-    public Object handle(ProjectResource resource) {
+    public void handle(ProjectResource resource) {
         Project project = resource.project;
         Repository repo = new FileRepository(new File(project.getPicturesFolder()));
         repoFactory.register(DEFAULT_PROJECT_IMAGES, repo);
-        return null;
     }
 }

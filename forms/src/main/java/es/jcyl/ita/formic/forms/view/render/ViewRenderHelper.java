@@ -22,16 +22,20 @@ import android.view.ViewGroup;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
+import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -41,14 +45,15 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class ViewRenderHelper {
 
     public View render(RenderingEnv env, UIComponent root) {
+        // enrich the execution environment with current form's context
+        setupFormContext(root, env);
         return render(env, root, true);
     }
 
     private View render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
-        // enrich the execution environment with current form's context
-        setupFormContext(component, env);
+
 
         View componentView;
         if (checkDeferred && hasDeferredExpression(component, env)) {
@@ -56,9 +61,14 @@ public class ViewRenderHelper {
             componentView = createDeferredView(env.getViewContext(), component, env);
         } else {
             componentView = renderer.render(env, component);
-            if (component instanceof UIForm) {
-                // configure viewContext
-                ((UIForm) component).getContext().setView(componentView);
+        }
+        if (component instanceof UIForm) {
+            // configure viewContext
+            ((UIForm) component).getContext().setView(componentView);
+            env.setFormContext(((UIForm) component).getContext());
+        } else {
+            if (env.getFormContext() != null) {
+                env.getFormContext().getViewContext().registerComponentView(component, componentView);
             }
         }
         // if current view is not visible, don't render children
@@ -73,13 +83,34 @@ public class ViewRenderHelper {
                 // recursively render children components
                 Widget groupView = (Widget) componentView;
                 gRenderer.initGroup(env, groupView);
-                UIComponent[] kids = component.getChildren();
-                int numKids = kids.length;
-                View[] views = new View[numKids];
-                for (int i = 0; i < numKids; i++) {
-                    views[i] = render(env, kids[i]);
+
+
+                List<View> viewList = new ArrayList<>();
+                if (groupView instanceof EntityListProvider) {
+                    // save the old entityContext
+                    Entity oldEntity = env.getFormContext().getEntity();
+
+                    List<Entity> entities = ((EntityListProvider) groupView).getEntities();
+
+                    for (Entity entity : entities) {
+                        // create an EntityContext to render each entity
+                        env.getFormContext().setEntity(entity);
+                        View view = render(env, component.getChildren()[0]);
+                        viewList.add(view);
+                    }
+
+                    // restore entity context
+                    env.getFormContext().setEntity(oldEntity);
+
+                } else {
+                    UIComponent[] kids = component.getChildren();
+                    int numKids = kids.length;
+                    for (int i = 0; i < numKids; i++) {
+                        View view = render(env, kids[i]);
+                        viewList.add(view);
+                    }
                 }
-                gRenderer.addViews(env, groupView, views);
+                gRenderer.addViews(env, groupView, viewList.toArray(new View[viewList.size()]));
                 gRenderer.endGroup(env, groupView);
             }
         }

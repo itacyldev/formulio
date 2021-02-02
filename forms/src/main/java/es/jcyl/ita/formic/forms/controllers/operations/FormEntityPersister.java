@@ -15,15 +15,11 @@ package es.jcyl.ita.formic.forms.controllers.operations;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.repo.CalculatedProperty;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.repo.Repository;
 
 /**
@@ -38,56 +34,12 @@ public class FormEntityPersister {
         Entity entity = form.getEntity();
         EditableRepository repo = getEditableRepo(form);
         repo.save(entity);
-
-        // save related entities
-        if (form.getEntityRelations() != null) {
-            for (EntityRelation relation : form.getEntityRelations()) {
-                EditableRepository relatedRepo = getEditableRepo(relation.getRepo());
-                // get related entity
-                Object relatedEntity = entity.get(relation.getName());
-                if (relatedEntity != null) {
-                    // update related entity properties if needed
-                    if (relation.hasCalcProps()) {
-                        updateEntityProps(context, (Entity) relatedEntity, relation);
-                    }
-                    relatedRepo.save((Entity) relatedEntity);
-                    // it the pointer from main entity to related entity is a double binding
-                    // (ex: ${entity.image}, update the reference to the related entity
-                    ValueBindingExpression entityPropertyExpr = relation.getEntityPropertyExpr();
-                    if (!entityPropertyExpr.isReadOnly()) {
-                        // remove "entity." prefix
-                        String entityProperty = entityPropertyExpr.getBindingProperty().replace(
-                                "entity.", "");
-                        entity.set(entityProperty, ((Entity) relatedEntity).getId());
-                    }
-                }
-            }
-            // in case any relation id has been modified
-            repo.save(entity);
-        }
-    }
-
-
-    private void updateEntityProps(Context context, Entity relatedEntity, EntityRelation relation) {
-        for (CalculatedProperty cp : relation.getCalcProps()) {
-            relatedEntity.set(cp.property, JexlUtils.eval(context, cp.expression));
-        }
     }
 
     public void delete(Context context, UIForm form) {
         Entity entity = form.getEntity();
         EditableRepository repo = getEditableRepo(form);
         repo.delete(entity);
-
-        // delete related entities
-        if (form.getEntityRelations() != null) {
-            for (EntityRelation relation : form.getEntityRelations()) {
-                repo = getEditableRepo(relation.getRepo());
-                // get related entity
-                Entity relatedEntity = (Entity) entity.get(relation.getName());
-                repo.delete(relatedEntity);
-            }
-        }
     }
 
     public EditableRepository getEditableRepo(UIForm form) {
@@ -97,16 +49,6 @@ public class FormEntityPersister {
                             "operation on [%s] repository related to form [%s], the repository " +
                             "must be editable.",
                     repo.getId(), form.getId())));
-        }
-        return (EditableRepository) repo;
-    }
-
-    public EditableRepository getEditableRepo(Repository repo) {
-        if (!(repo instanceof EditableRepository)) {
-            throw new IllegalStateException(DevConsole.error(String.format("Cannot perform save " +
-                            "operation on [%s] repository, the repository " +
-                            "must be editable.",
-                    repo.getId())));
         }
         return (EditableRepository) repo;
     }

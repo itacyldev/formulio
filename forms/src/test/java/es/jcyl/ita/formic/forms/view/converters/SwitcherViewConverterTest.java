@@ -35,13 +35,13 @@ import es.jcyl.ita.formic.repo.meta.types.Geometry;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.repo.builders.FieldDataBuilder;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.builders.FieldDataBuilder;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
 /**

@@ -15,14 +15,14 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityPersister;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -93,13 +93,17 @@ public class FormEditController extends FormController {
 
     private void updateEntityFromView(FormViewContext viewContext, EntityContext entityContext,
                                       UIInputComponent field) {
-        if (field.isBound() && !field.isEntityRelation()) {
+        if (field.isBound() && !field.isReadOnly() && !field.isNestedProperty()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();
             // remove the "entity" prefix
             entityContext.put(entityProp.substring(entityProp.indexOf(".") + 1), value);
         }
+    }
+
+    private boolean isEntityRelation(UIInputComponent field) {
+        return false;
     }
 
     /**

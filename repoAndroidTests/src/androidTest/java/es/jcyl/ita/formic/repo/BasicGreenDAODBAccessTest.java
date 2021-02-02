@@ -62,6 +62,10 @@ public class BasicGreenDAODBAccessTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         File dbFile = new File("/sdcard/test/ribera.sqlite");
+        if(!dbFile.exists()){
+            Assert.fail("Test database not found: " + dbFile.getAbsolutePath());
+        }
+
 
         SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new Database());
         db.open(dbFile.getAbsolutePath(), jsqlite.Constants.SQLITE_OPEN_READWRITE);

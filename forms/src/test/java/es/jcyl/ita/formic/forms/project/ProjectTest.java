@@ -24,9 +24,9 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -59,7 +59,7 @@ public class ProjectTest {
         Project prj = list.get(0);
         prj.open();;
         List<ProjectResource> configFiles = prj.getConfigFiles();
-        Assert.assertEquals(4, configFiles.size());
+        Assert.assertEquals(8, configFiles.size());
 
         // check repositories are loaded
     }

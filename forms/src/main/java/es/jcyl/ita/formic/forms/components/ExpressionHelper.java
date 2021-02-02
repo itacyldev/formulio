@@ -18,11 +18,11 @@ package es.jcyl.ita.formic.forms.components;
 import java.util.HashSet;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

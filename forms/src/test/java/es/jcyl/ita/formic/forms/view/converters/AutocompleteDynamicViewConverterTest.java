@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.repo.builders.AutoCompleteDataBuilder;
+import es.jcyl.ita.formic.forms.builders.AutoCompleteDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView;
@@ -78,7 +78,9 @@ public class AutocompleteDynamicViewConverterTest {
         ctx.setTheme(R.style.FormudruidLight);
 
         ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        RenderingEnv env = new RenderingEnv(mockAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
+
         env.setViewContext(ctx);
         env.initialize();
         // meta with one pk column and three string properties

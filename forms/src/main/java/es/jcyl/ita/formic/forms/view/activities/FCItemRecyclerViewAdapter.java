@@ -5,8 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
@@ -22,17 +24,21 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
 
     private final List<FormListController> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final List<ViewHolder> mViews;
 
     public FCItemRecyclerViewAdapter(List<FormListController> items,
                                      OnListFragmentInteractionListener listener) {
+        super();
         mValues = items;
         mListener = listener;
+        mViews = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.form_list_item, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -53,6 +59,13 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
                 }
             }
         });
+
+        mViews.add(position, holder);
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        holder.numEntities.setText(holder.mItem.count() + " entities");
     }
 
     @Override
@@ -71,9 +84,9 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
-            numEntities = (TextView) view.findViewById(R.id.numEntities);
+            mIdView = view.findViewById(R.id.item_number);
+            mContentView = view.findViewById(R.id.content);
+            numEntities = view.findViewById(R.id.numEntities);
         }
 
         @Override
@@ -81,5 +94,11 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
             return super.toString() + " '" + mContentView.getText() + "'";
         }
 
+    }
+
+    public void updateViews() {
+        for (ViewHolder holder : mViews) {
+            holder.numEntities.setText(holder.mItem.count() + " entities");
+        }
     }
 }

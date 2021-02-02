@@ -19,10 +19,10 @@ import android.util.Log;
 
 import org.apache.commons.jexl3.JexlContext;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
@@ -39,8 +39,9 @@ public class DevConsole {
     private static int level = Log.DEBUG;
 
     private static ConfigReadingInfo configReadingInfo;
-    // TODO: limit this with a pile
-    private static List<String> console = new ArrayList<>();
+
+    private static final int MAX_SIZE = 300;
+    private static Queue<String> console = new LinkedList<String>();
 
 
     public static void setLevel(int l) {
@@ -49,6 +50,13 @@ public class DevConsole {
 
     public static void clear() {
         console.clear();
+    }
+
+    private static void add(String effMsg) {
+        console.add(effMsg);
+        if (console.size() > MAX_SIZE){
+            console.remove();
+        }
     }
 
     public static String error(String msg) {
@@ -77,7 +85,8 @@ public class DevConsole {
             return msg;
         }
         String effMsg = String.valueOf(JexlUtils.eval(devContext, msg));
-        console.add(effMsg);
+        add(effMsg);
+
         if (errorLevel == Log.ERROR) {
             System.err.println(effMsg);
         } else {
@@ -132,7 +141,7 @@ public class DevConsole {
     };
 
 
-    public static List<String> getMessages() {
+    public static Queue<String> getMessages() {
         return console;
     }
 

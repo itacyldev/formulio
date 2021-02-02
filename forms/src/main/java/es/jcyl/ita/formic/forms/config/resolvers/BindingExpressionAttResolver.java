@@ -18,9 +18,9 @@ package es.jcyl.ita.formic.forms.config.resolvers;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.converters.ConverterMap;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.repo.util.TypeUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -39,7 +39,7 @@ public class BindingExpressionAttResolver extends AbstractAttributeResolver<Valu
             } else {
                 // TODO: take in count converters when creating expression #204351
                 String converter = node.getAttribute("converter");
-                expression = factory.create(expStr, ConverterMap.getConverter(converter));
+                expression = factory.create(expStr, TypeUtils.getType(converter));
             }
         }
         return expression;

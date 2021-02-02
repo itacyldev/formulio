@@ -2,12 +2,13 @@ package es.jcyl.ita.formic.forms.components.tab;
 
 import android.view.View;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
@@ -36,7 +37,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UITab component) {
         return R.layout.widget_tab;
     }
 
@@ -50,6 +51,7 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
+        viewPagerAdapter.notifyDataSetChanged();
 
         TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -62,6 +64,29 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
         TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, strategy);
         mediator.attach();
+
+        /*viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if (viewPagerAdapter.getTabFragments().size() > position){
+                    TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
+                    updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
+                    viewPager.requestLayout();
+                }
+            }
+        });*/
+    }
+
+    private void updatePagerHeightForChild(View view, ViewPager2 viewPager) {
+        int wMeasureSpec =
+            View.MeasureSpec.makeMeasureSpec(view.getWidth(), View.MeasureSpec.EXACTLY);
+        int hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        view.measure(wMeasureSpec, hMeasureSpec);
+
+        if (viewPager.getLayoutParams().height != view.getMeasuredHeight()) {
+            viewPager.getLayoutParams().height = view.getMeasuredHeight();
+        }
     }
 
     @Override
@@ -72,7 +97,6 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         int fragCount = 0;
         for (View view : views) {
             adapter.addView(view, fragCount);
-
             fragCount++;
         }
     }

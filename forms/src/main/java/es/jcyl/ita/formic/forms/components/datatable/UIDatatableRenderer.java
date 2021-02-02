@@ -5,8 +5,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
+import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
 /*
@@ -29,12 +30,12 @@ import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class UIDatatableRenderer extends AbstractRenderer<UIDatatable, DatatableWidget> {
+public class UIDatatableRenderer extends AbstractGroupRenderer<UIDatatable, DatatableWidget> {
 
     private final static float ROW_HEIGHT_DP = 38.75f;
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UIDatatable datatable) {
         return R.layout.widget_datatable;
     }
 

@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.controllers.FormController;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

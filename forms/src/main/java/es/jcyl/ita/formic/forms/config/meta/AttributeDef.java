@@ -28,7 +28,8 @@ public class AttributeDef {
     // common input fields
 //    public static Attribute TYPE = new Attribute("type", true);
     public static Attribute LABEL = new Attribute("label");
-    public static Attribute READONLY = new Attribute("readonly", Boolean.class);
+    public static Attribute LABELS = new Attribute("labels");
+    public static Attribute READONLY = new Attribute("readOnly", Boolean.class);
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
     public static Attribute NAME = new Attribute("name");
@@ -47,7 +48,12 @@ public class AttributeDef {
     // input
     public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
-    public static Attribute VALIDATOR = new Attribute("validator", String.class);
+    public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
+    public static Attribute LINES = new Attribute("lines", Integer.class);
+
+    public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
+
+    public static Attribute HINT = new Attribute("hint");
 
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
@@ -59,6 +65,11 @@ public class AttributeDef {
     public static Attribute DBFILE = new Attribute("dbFile", "dbFile", "pathResolver");
     public static Attribute DBTABLE = new Attribute("dbTable", true);
     public static Attribute PROPERTIES = new Attribute("properties", true);
+    public static Attribute COLUMN_NAME = new Attribute("columnName", true);
+    public static Attribute EXPRESSION = new Attribute("expression", true);
+    public static Attribute EXPRESSION_TYPE = new Attribute("expressionType", true);
+    public static Attribute EVAL_ON = new Attribute("evalOn", true);
+    public static Attribute PROPERTY = new Attribute("property", true);
 
     // autocomplete
     public static Attribute VALUE_PROPERTY = new Attribute("valueProperty");
@@ -66,8 +77,18 @@ public class AttributeDef {
     public static Attribute LABEL_FILTERING_PROP = new Attribute("labelFilteringProperty");
     public static Attribute FORCE_SELECTION = new Attribute("forceSelection", Boolean.class);
 
-    // datatable
+    // datatable, datalist
     public static Attribute NUM_VISIBLE_ROWS = new Attribute("numVisibleRows", Integer.class);
+
+    // card
+    public static Attribute TEMPLATE = new Attribute("template", true);
+    public static final Attribute TITLE = new Attribute("title", true);
+    public static final Attribute SUBTITLE = new Attribute("subtitle", true);
+    public static final Attribute IMAGE = new Attribute("image", true);
+
+    public static final Attribute IMAGE_POSITION = new Attribute("imagePosition", "imagePosition", String.class);
+    public static final Attribute EXPANDED = new Attribute("expanded", true);
+    public static final Attribute EXPANDABLE = new Attribute("expandable", true);
 
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);
@@ -76,7 +97,25 @@ public class AttributeDef {
     public static Attribute HEIGHT = new Attribute("height", Integer.class);
     public static Attribute WIDTH = new Attribute("width", Integer.class);
     public static Attribute EMBEDDED = new Attribute("embedded", Boolean.class);
+    public static Attribute ORIENTATION = new Attribute("orientation", String.class);
 
     public static Attribute FOLDER = new Attribute("folder", String.class);
     public static Attribute DEFAULT_EXTENSION = new Attribute("defaultExtension", String.class);
+
+    public static Attribute COLSPANS = new Attribute("colspans", String.class);
+
+    // text style
+    public static Attribute FONT_SIZE = new Attribute("fontSize", String.class);
+    public static Attribute FONT_COLOR = new Attribute("fontColor", "fontColor", "color");
+    public static Attribute FONT_FAMILY = new Attribute("fontFamily", String.class);
+    public static Attribute BACKGROUND_COLOR = new Attribute("backGroundColor", String.class);
+    public static Attribute BOLD = new Attribute("bold", Boolean.class);
+    public static Attribute ITALIC = new Attribute("italic", Boolean.class);
+    public static Attribute UPPERCASE = new Attribute("uppercase", Boolean.class);
+    public static Attribute UNDERLINED = new Attribute("underlined", Boolean.class);
+
+    public static Attribute COLOR = new Attribute("color", "color", "color");
+    public static Attribute STROKE_WIDTH = new Attribute("strokeWidth",Integer.class);
+
+
 }

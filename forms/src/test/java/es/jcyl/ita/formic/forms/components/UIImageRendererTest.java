@@ -39,19 +39,19 @@ import java.io.File;
 import java.io.IOException;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.repo.meta.types.ByteArray;
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
-import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.WidgetTestUtils;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.meta.types.ByteArray;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 import static org.mockito.Mockito.mock;
 
@@ -144,9 +144,11 @@ public class UIImageRendererTest {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidDark);
 
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
+
         FormActivity mockFormActivity = mock(FormActivity.class);
         env.setFormActivity(mockFormActivity);
         return env;

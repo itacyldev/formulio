@@ -15,11 +15,9 @@ package es.jcyl.ita.formic.forms.components.image;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.forms.components.EntityHolder;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
 
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.CAMERA_ONLY;
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.GALLERY_AND_CAMERA;
@@ -30,7 +28,7 @@ import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.G
  * <p>
  * Image component
  */
-public class UIImage extends UIInputComponent implements EntityHolder {
+public class UIImage extends UIInputComponent {
 
     private static final String IMAGE = "image";
 
@@ -42,7 +40,6 @@ public class UIImage extends UIInputComponent implements EntityHolder {
     private String[] mandatoryFilters;
     private Integer width;
     private Integer height;
-    private Entity entity;
     private boolean embedded;
 
     public Integer getWidth() {
@@ -99,16 +96,6 @@ public class UIImage extends UIInputComponent implements EntityHolder {
         return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
     }
 
-    @Override
-    public void setEntity(Entity entity) {
-        this.entity = entity;
-    }
-
-    @Override
-    public Entity getEntity() {
-        return this.entity;
-    }
-
     public boolean isCameraActive() {
         return this.getInputType() == CAMERA_ONLY.value
                 || this.getInputType() == GALLERY_AND_CAMERA.value;
@@ -149,4 +136,17 @@ public class UIImage extends UIInputComponent implements EntityHolder {
     public void setEmbedded(boolean embedded) {
         this.embedded = embedded;
     }
+
+//
+//    /**
+//     * Overrides default readonly method to allow nested Properties edition
+//     * @return
+//     */
+//    public boolean isReadOnly() {
+//        if (this.parentForm == null) {
+//            return readOnly;
+//        } else {
+//            return this.parentForm.isReadOnly() || this.readOnly;
+//        }
+//    }
 }

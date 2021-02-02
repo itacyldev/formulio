@@ -2,12 +2,12 @@ package es.jcyl.ita.formic.forms.context.impl;
 
 import android.view.View;
 
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -91,6 +91,14 @@ public class FormContext extends UnPrefixedCompositeContext {
         return entityContext;
     }
 
-    public String toString(){return this.getForm().getId();}
+    public void setEntityContext(EntityContext entityContext) {
+        this.entityContext = entityContext;
+    }
+
+    public String toString() {
+        return this.getForm().getId();
+    }
 
 }
+
+

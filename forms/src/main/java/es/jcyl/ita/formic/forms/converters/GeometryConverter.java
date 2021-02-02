@@ -26,6 +26,10 @@ import es.jcyl.ita.formic.repo.meta.types.Geometry;
  */
 public class GeometryConverter extends AbstractConverter {
 
+    public GeometryConverter(Object defaultValue){
+        super(defaultValue);
+    }
+
     @Override
     protected <T> T convertToType(Class<T> targetType, Object value) throws Exception {
         if (!targetType.equals(Geometry.class)) {

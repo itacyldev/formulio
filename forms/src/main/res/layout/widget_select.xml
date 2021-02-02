@@ -4,17 +4,47 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dip">
-    <!-- Text Label -->
-    <TextView
-        android:id="@+id/label_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:layout_marginBottom="5dp" />
-    <!-- Spinner Element -->
-    <Spinner
-        android:id="@+id/input_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+    android:paddingLeft="12dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="20dp">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <!-- Text Label -->
+        <TextView
+            android:id="@+id/label_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingTop="5dp"
+            android:layout_weight="9.7"/>
+        <ImageView
+            android:id="@+id/field_layout_x"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            style="@style/Textfield_cancel_button"
+            android:layout_gravity="top"
+            android:background="@drawable/selectablebuttonbackground"
+            android:contentDescription="@string/tool_buttons_x"
+            android:padding="5dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.3"
+            android:src="@drawable/ic_tool_x_circle_dark" />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+         <Spinner
+                android:id="@+id/input_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                style="@style/Spinner_item"/>
+    </LinearLayout>
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

@@ -21,8 +21,6 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -37,12 +35,21 @@ public class RepositoryAttributeResolver extends AbstractAttributeResolver<Repos
         String repoAtt = node.getAttribute(attName);
         Repository repo = repoFactory.getRepo(repoAtt);
         if (repo == null) {
-            throw new ConfigurationException(
-                    DevConsole.error(String.format("Invalid repo Id found: [%s] in file '${file}'. Make sure " +
-                                    "the id is correct and it's defined in repo.xml file. If the <repo/> " +
-                                    "tag is inside current form file, make sure the repo is defined before " +
-                                    "current element <%s/>",
-                            repoAtt, node)));
+            if (node.getName().equalsIgnoreCase("mapping")) {
+                throw new ConfigurationException(
+                        DevConsole.error(String.format("Invalid repo Id found: [%s] in file '${file}' while defining entity mapping. " +
+                                        "Check you're data/repos.xml file and make sure the referenced repo [%s] is defined before " +
+                                        "the main repo [%s].",
+                                node.getAttribute("repo"), node.getAttribute("repo"),
+                                node.getParent().getAttribute("id"))));
+            } else {
+                throw new ConfigurationException(
+                        DevConsole.error(String.format("Invalid repo Id found: [%s] in file '${file}'. Make sure " +
+                                        "the id is correct and it's defined in repo.xml file. If the <repo/> " +
+                                        "tag is inside current form file, make sure the repo is defined before " +
+                                        "current element <%s/>.",
+                                repoAtt, node)));
+            }
         }
         return repo;
     }

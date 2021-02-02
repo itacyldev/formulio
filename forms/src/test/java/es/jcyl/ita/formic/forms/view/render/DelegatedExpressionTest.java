@@ -38,7 +38,7 @@ import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.repo.builders.FieldDataBuilder;
+import es.jcyl.ita.formic.forms.builders.FieldDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
@@ -99,7 +99,8 @@ public class DelegatedExpressionTest {
         // set entity in forms context
         form.getContext().setEntity(entity);
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
         env.setViewDAG(viewDAG);
         // walk the tree executing expressions

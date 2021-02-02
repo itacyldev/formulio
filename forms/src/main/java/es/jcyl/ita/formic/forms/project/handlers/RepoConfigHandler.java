@@ -17,14 +17,14 @@ package es.jcyl.ita.formic.forms.project.handlers;
 
 import android.net.Uri;
 
-import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.RepositoryFactory;
-import es.jcyl.ita.formic.repo.config.AbstractRepoConfigurationReader;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
+import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.config.AbstractRepoConfigurationReader;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -36,14 +36,12 @@ public class RepoConfigHandler extends AbstractRepoConfigurationReader implement
     private ReadingProcessListener listener;
 
     @Override
-    public Object handle(ProjectResource resource) {
+    public void handle(ProjectResource resource) {
         XmlConfigFileReader reader = new XmlConfigFileReader();
         reader.setListener(this.listener);
         reader.read(Uri.fromFile(resource.file));
         // repos are registered during reading process, just check entities metadata
         checkRepos();
-
-        return null;
     }
 
     private void checkRepos() {

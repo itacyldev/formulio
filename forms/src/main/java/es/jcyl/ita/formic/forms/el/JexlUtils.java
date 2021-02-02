@@ -23,12 +23,12 @@ import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
 import org.apache.commons.jexl3.internal.TemplateEngine;
 
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.el.wrappers.JexlContextWrapper;
 import es.jcyl.ita.formic.forms.el.wrappers.JexlEntityWrapper;
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
 public abstract class UIComponent implements Identificable {
@@ -20,7 +19,7 @@ public abstract class UIComponent implements Identificable {
     protected String id;
     protected String label;
 
-    private ValueBindingExpression valueExpression;
+    protected ValueBindingExpression valueExpression;
     private ValueBindingExpression renderExpression;
 
     protected UIView root;
@@ -30,11 +29,11 @@ public abstract class UIComponent implements Identificable {
 
     private String rendererType;
     private boolean renderChildren;
-
     /**
-     * Stores information to retrieve an entity related to form's main entity
+     * Indicates if current component value is referencing the value from a related entity and
+     * not from the mainEntity.
      */
-    private EntityRelation entityRelation;
+    private boolean isEntityMapping = false;
 
     /**
      * if the children of this component have to be rendered individually
@@ -67,7 +66,7 @@ public abstract class UIComponent implements Identificable {
 
     public void setParent(UIComponent parent) {
         this.parent = parent;
-        if(parent!=null){
+        if (parent != null) {
             this.root = parent.getRoot();
         }
     }
@@ -232,15 +231,7 @@ public abstract class UIComponent implements Identificable {
         return ExpressionHelper.getExpressions(this);
     }
 
-    public boolean isEntityRelation(){
-        return entityRelation!=null;
-    }
-
-    public EntityRelation getEntityRelation() {
-        return entityRelation;
-    }
-
-    public void setEntityRelation(EntityRelation entityRelation) {
-        this.entityRelation = entityRelation;
+    public void setEntityMapping(boolean entityMapping) {
+        isEntityMapping = entityMapping;
     }
 }

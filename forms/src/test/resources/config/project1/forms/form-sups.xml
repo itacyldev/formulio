@@ -1,0 +1,33 @@
+<main name="Superheroes" description="Simple form with image example." id="form3" repo="superHRepo">
+    <edit>
+        <form>
+            <table headerText="Name,RealName">
+                <row>
+                    <input validator="required" value="${entity.name}" />
+                    <input validator="required" value="${entity.real_name}" />
+                </row>
+                <row colspans="2">
+                    <head bold="true" italic="true" underlined="true" uppercase="true" value="bio" />
+                    <divisor color="#FFFF0000" strokeWidth="4" />
+                    <paragraph value="${entity.bio}" />
+                </row>
+            </table>
+            <radio label="Purpose in live:" orientation="horizontal" validator="required"
+                value="${entity.character_type}">
+                <options>
+                    <option label="It's a villain" value="villain" />
+                    <option label="He really trusts in justice" value="hero" />
+                    <option label="Depending on the day" value="nsnc" />
+                </options>
+            </radio>
+            <image repo="superHImages" value="${entity.image}" />
+            <image value="superheroes/${entity.name.toLowerCase().replace(' ','_')+'.jpg'}" />
+            <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
+            <input type="date" value="${entity.creation_date}" />
+            <input readonly="true" value="${entity.update_date}" />
+        </form>
+    </edit>
+    <list name="Superheroes">
+        <datatable properties="name, real_name, age" />
+    </list>
+</main>

@@ -39,7 +39,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UILink component) {
         return R.layout.widget_link;
     }
 

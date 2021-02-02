@@ -16,8 +16,8 @@ package es.jcyl.ita.formic.forms.components.column;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.repo.query.Operator;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.repo.query.Operator;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */

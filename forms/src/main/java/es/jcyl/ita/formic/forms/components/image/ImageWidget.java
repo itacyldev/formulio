@@ -22,21 +22,20 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.ByteArrayOutputStream;
-
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.meta.types.ByteArray;
+
+import java.io.ByteArrayOutputStream;
+
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
 import es.jcyl.ita.formic.forms.components.media.MediaResource;
 import es.jcyl.ita.formic.forms.view.activities.ActivityResultCallBack;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -47,6 +46,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     private ActivityResultLauncher<Void> launcher;
     private GallerySelector gallerySelector;
+    private Entity mainEntity;
 
     public ImageWidget(Context context) {
         super(context);
@@ -63,39 +63,39 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setup(RenderingEnv env) {
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if (!component.isCameraActive()) { // TODO: or device has no camera (check throw context.device)
+        if (component.isReadOnly()) {
+            cameraButton.setEnabled(false);
+        } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
             cameraButton.setVisibility(View.INVISIBLE);
         } else {
-            if (this.component.isReadOnly()) {
-                cameraButton.setEnabled(false);
-            } else {
-                cameraButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        launcher.launch(null);
-                    }
-                });
-            }
+            cameraButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    launcher.launch(null);
+                }
+            });
         }
         Button galleryButton = this.findViewById(R.id.btn_gallery);
-        if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
+        galleryButton.setEnabled(false);
+        // TODO::
+        /*if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
             galleryButton.setVisibility(View.INVISIBLE);
-        } else {
-            if (this.component.isReadOnly()) {
-                cameraButton.setEnabled(false);
-            } else {
-                galleryButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gallerySelector.launch();
-                    }
-                });
-            }
         }
+        if (component.isReadOnly()) {
+            galleryButton.setEnabled(false);
+        } else {
+            galleryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gallerySelector.launch();
+                }
+            });
+        }*/
+        this.mainEntity = env.getFormContext().getEntity();
     }
 
-    public GallerySelector getGallerySelector(){
-        if (this.gallerySelector == null){
+    public GallerySelector getGallerySelector() {
+        if (this.gallerySelector == null) {
             this.gallerySelector = new GallerySelector();
         }
         return this.gallerySelector;
@@ -119,7 +119,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         imageData.compress(Bitmap.CompressFormat.PNG, 90, stream);
         byte[] byteArray = stream.toByteArray();
 
-        if (component.isEntityRelation()) {
+        if (component.isNestedProperty()) {
             updateRelatedEntity(byteArray);
         }
 
@@ -140,20 +140,14 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
      *
      * @param byteArray
      */
-    private void updateRelatedEntity(byte[] byteArray) {
-        Entity entity = component.getEntity();
+    public void updateRelatedEntity(byte[] byteArray) {
+
+        // the related entity is stored in the main entity using current component Id as property name
+        Entity entity = (Entity) mainEntity.get(component.getId());
         if (entity == null) {
-            EntityRelation rel = component.getEntityRelation();
-            // no related entity, create entity and media resource
-            EditableRepository repo = (EditableRepository) rel.getRepo();
-            entity = repo.newEntity();
-            component.setEntity(entity);
-
-            // set new entity to parent form entity
-            String mainPropertyName = component.getEntityRelation().getName();
-            Entity mainEntity = component.getParentForm().getEntity();
-            mainEntity.set(mainPropertyName, entity, true);
-
+            // create new entity
+            entity = Entity.newEmpty();
+            mainEntity.set(component.getId(), entity, true);
             MediaResource imgResource = MediaResource.fromByteArray(byteArray);
             getInputView().setResource(imgResource);
         }

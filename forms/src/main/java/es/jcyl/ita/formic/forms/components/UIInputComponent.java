@@ -15,9 +15,8 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
-import android.text.InputType;
-
 import java.util.Arrays;
+import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
@@ -32,10 +31,9 @@ public class UIInputComponent extends UIComponent {
     private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
     protected String label;
-    private boolean readOnly;
-    private String defaultValue;
+    protected boolean readOnly;
     private String valueConverter;
-    private int inputType = InputType.TYPE_CLASS_TEXT;
+    private Integer inputType = null;
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
@@ -82,9 +80,14 @@ public class UIInputComponent extends UIComponent {
         if (this.parentForm == null) {
             return readOnly;
         } else {
-            // mon knows best
             return this.parentForm.isReadOnly() || this.readOnly;
         }
+    }
+
+    public boolean isNestedProperty() {
+        List<String> dependingVariables = this.getValueExpression().getDependingVariables();
+        // entity.nestedProperty.prop
+        return (dependingVariables.size() != 1) ? false : dependingVariables.get(0).split("\\.").length > 2;
     }
 
     /**
@@ -101,15 +104,6 @@ public class UIInputComponent extends UIComponent {
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
-
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(final String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
 
     public String getLabel() {
         return label;
@@ -131,8 +125,8 @@ public class UIInputComponent extends UIComponent {
         this.valueConverter = valueConverter;
     }
 
-    public boolean isMandatory(){
-        if (validators == EMPTY_VALIDATOR){
+    public boolean isMandatory() {
+        if (validators == EMPTY_VALIDATOR) {
             return false;
         }
         for (Validator validator : validators) {
@@ -144,11 +138,11 @@ public class UIInputComponent extends UIComponent {
     }
 
 
-    public int getInputType() {
+    public Integer getInputType() {
         return inputType;
     }
 
-    public void setInputType(final int inputType) {
+    public void setInputType(final Integer inputType) {
         this.inputType = inputType;
     }
 

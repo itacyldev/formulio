@@ -18,7 +18,6 @@ import java.util.List;
 
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -27,9 +26,12 @@ import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.sqlite.SQLiteRepository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
+import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+
+import static org.hamcrest.Matchers.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -75,7 +77,7 @@ public class SQLiteRepositoryTest {
         EditableRepository repo = devBuilder.getSQLiteRepository();
 
         // Action: delete table, insert entities and fetchAll
-        int expectedNumEntities = 150;
+        int expectedNumEntities = 11;
         List<Entity> lstEntities = DevDbBuilder.buildEntities(devBuilder.getMeta(), expectedNumEntities, null);
         repo.deleteAll();
         for (Entity e : lstEntities) {
@@ -105,19 +107,21 @@ public class SQLiteRepositoryTest {
 
 
         // Action: delete table, insert entities and fetchAll
-        int expectedNumEntities = 150;
+        int expectedNumEntities = RandomUtils.randomInt(3, 23);
         List<Entity> lstEntities = DevDbBuilder.buildEntities(repo.getMeta(), expectedNumEntities, null);
         repo.deleteAll();
+        List list = repo.listAll();
+        Assert.assertThat(list.size(), equalTo(0));
         for (Entity e : lstEntities) {
             repo.save(e);
         }
-        List list = repo.listAll();
+        list = repo.listAll();
         Assert.assertNotNull(list);
-        Assert.assertEquals(expectedNumEntities, list.size());
+        Assert.assertThat(list.size(), equalTo(expectedNumEntities));
     }
 
     /**
-     * Users a repository to insert a new entity  with an emtpy id and checks the created entity
+     * Users a repository to insert a new entity  with an empty id and checks the created entity
      * as the pk fields set.
      *
      * @throws Exception
@@ -128,7 +132,7 @@ public class SQLiteRepositoryTest {
 
         Database db = DevDbBuilder.createDevSQLiteDb(ctx, "test");
         DevDbBuilder dbBuilder = new DevDbBuilder();
-        dbBuilder.withNumEntities(10).build(db);
+        dbBuilder.withNumEntities(5).build(db);
         SQLiteRepository repo = dbBuilder.getSQLiteRepository();
 
         // create new entity
@@ -141,10 +145,23 @@ public class SQLiteRepositoryTest {
         repo.save(newEntity);
         Assert.assertNotNull(newEntity.getId());
 
+        repo.clearCache();
+
         // try to find the entity using the give Id and make sure the data match
         Entity dbEntity = repo.findById(newEntity.getId());
         Assert.assertNotNull(dbEntity);
         AssertUtils.assertEquals(newEntity, dbEntity);
+
+        // list all entities and chek the entity is in the list
+        List<Entity> entities = repo.listAll();
+        boolean found = false;
+        for (Entity entity : entities) {
+            if (newEntity.getId().equals(entity.getId())) {
+                found = true;
+                break;
+            }
+        }
+        Assert.assertTrue(found);
     }
 
     /**

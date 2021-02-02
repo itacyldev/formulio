@@ -17,12 +17,15 @@ package es.jcyl.ita.formic.forms.utils;
 
 import android.content.Context;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
+import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.repo.builders.FieldDataBuilder;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.builders.FieldDataBuilder;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -82,15 +85,24 @@ public class DevFormBuilder {
         public RenderingEnv env;
         public EditableRepository repo;
         public MainController mc;
+        public CompositeContext globalContext;
 
         public CreateOneFieldForm invoke(android.content.Context ctx) {
             // disable triggers by default
             return invoke(ctx, true);
         }
 
+        private void createGlobalContext(){
+            globalContext = new UnPrefixedCompositeContext();
+            globalContext.addContext(new DateTimeContext("date"));
+        }
+
         public CreateOneFieldForm invoke(android.content.Context ctx, boolean disableTriggers) {
             this.ctx = ctx;
+            createGlobalContext();
+
             mc = MainController.getInstance();
+            mc.setContext(globalContext);
 
             // configure the context as the MainController would do
             env = mc.getRenderingEnv();

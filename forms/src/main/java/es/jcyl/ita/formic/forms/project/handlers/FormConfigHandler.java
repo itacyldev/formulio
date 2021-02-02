@@ -21,9 +21,8 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.FormConfig;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -35,26 +34,24 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormConfigHandler extends AbstractProjectResourceHandler<FormConfig> {
+public class FormConfigHandler extends AbstractProjectResourceHandler {
     FormControllerFactory formFactory = FormControllerFactory.getInstance();
     FormConfigRepository formConfigRepo;
 
 
     @Override
-    public FormConfig handle(ProjectResource resource) {
-        XmlConfigFileReader reader = new XmlConfigFileReader();
+    public void handle(ProjectResource resource) {
         reader.setListener(this.listener);
         ConfigNode root = reader.read(Uri.fromFile(resource.file));
         FormConfig config;
         try {
             config = (FormConfig) root.getElement();
         } catch (Exception e) {
-            throw new ConfigurationException(error("Invalid XML structure on file '${file}', " +
+            throw new ConfigurationException(error("Invalid XML structure in file '${file}', " +
                     "does it start with <main/>?", e), e);
         }
         // register config in formConfig repo
         register(config);
-        return config;
     }
 
     private void register(FormController form) {

@@ -3,17 +3,22 @@ package es.jcyl.ita.formic.forms.components.select;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import es.jcyl.ita.formic.core.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -47,6 +52,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
         ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(),
                 component.getOptions(), component.hasNullOption(), android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.notifyDataSetChanged();
 
         input.setAdapter(arrayAdapter);
         input.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -63,16 +69,32 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
+                ImageView.class);
+        if (component.isReadOnly()) {
+            resetButton.setVisibility(View.INVISIBLE);
+        }
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                input.setSelection(0);
+            }
+        });
     }
 
     @Override
-    protected int getWidgetLayoutId() {
+    protected int getWidgetLayoutId(UISelect component) {
         return R.layout.widget_select;
     }
 
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
-
+        UIInputComponent component = widget.getComponent();
+        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        if (message != null) {
+            ((TextView)widget.getChildAt(0)).setError(message);
+        }
     }
 
     public static class EmptyOption extends UIOption {
@@ -85,6 +107,5 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             return " ";
         }
     }
-
 
 }

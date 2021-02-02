@@ -42,4 +42,5 @@ public interface EditableRepository<T extends Entity, ID, F extends Filter> exte
      * @return
      */
     T newEntity();
+
 }

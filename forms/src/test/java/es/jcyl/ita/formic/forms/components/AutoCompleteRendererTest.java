@@ -21,6 +21,8 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,24 +32,23 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-import androidx.test.platform.app.InstrumentationRegistry;
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView;
+import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
+import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
-import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
-import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
-import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -77,8 +78,10 @@ public class AutoCompleteRendererTest {
     public void testSimpleAutoComplete() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         UIAutoComplete select = new UIAutoComplete();
@@ -106,8 +109,10 @@ public class AutoCompleteRendererTest {
     public void testNotVisibleSelect() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         UIAutoComplete select = new UIAutoComplete();
@@ -127,9 +132,12 @@ public class AutoCompleteRendererTest {
     public void testGetOptionsFromRepo() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
-        ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mockAC);
+
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
+
         env.initialize();
 
         EntityMeta meta = DevDbBuilder.createRandomMeta();

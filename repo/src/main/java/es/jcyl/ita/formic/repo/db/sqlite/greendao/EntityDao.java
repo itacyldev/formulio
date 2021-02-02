@@ -18,12 +18,12 @@ package es.jcyl.ita.formic.repo.db.sqlite.greendao;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
-import org.apache.commons.jexl3.JxltEngine;
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.internal.SqlUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.core.context.Context;
@@ -31,15 +31,16 @@ import es.jcyl.ita.formic.repo.CursorPropertyBinder;
 import es.jcyl.ita.formic.repo.CursorPropertyReader;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.converter.ConverterUtils;
-import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.meta.KeyGeneratorStrategy;
 import es.jcyl.ita.formic.repo.db.meta.MaxRowIdKeyGenerator;
+import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLitePropertyConverter;
-import es.jcyl.ita.formic.repo.db.sqlite.sql.TableSQLBuilder;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteDBValue;
+import es.jcyl.ita.formic.repo.db.sqlite.sql.TableSQLBuilder;
 import es.jcyl.ita.formic.repo.el.JexlUtils;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -110,23 +111,25 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
     @Override
     protected void readEntity(Cursor cursor, Entity entity, int offset) {
         int i = 0;
-        EntityMeta<DBPropertyType> meta = entity.getMetadata();
-        for (DBPropertyType p : meta.getProperties()) {
+        DBPropertyType dp;
+        EntityMeta<PropertyType> meta = entity.getMetadata();
+        for (PropertyType p : meta.getProperties()) {
             // read db value according to defined persistence type
+            dp = (DBPropertyType) p;
             Object value;
-            if (p.isCalculatedOnSelect() && p.isCalculatedByContext()) {
+            if (dp.isCalculatedOnSelect() && dp.isJexlExpression()) {
                 // read calculated properties from context
-                value = readCalculatedContextProperty(p);
+                value = readCalculatedJexlProperty(dp);
             } else {
-                value = propertyReader.readPropertyValue(cursor, p, offset + i);
+                value = propertyReader.readPropertyValue(cursor, dp, offset + i);
             }
             entity.set(p.getName(), value);
             i++;
         }
     }
 
-    private Object readCalculatedContextProperty(DBPropertyType p) {
-        return this.context.get(p.getContextExpression());
+    private Object readCalculatedJexlProperty(DBPropertyType p) {
+        return JexlUtils.eval(this.context, p.getExpression());
     }
 
     @Override
@@ -135,22 +138,26 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
         Object value;
         SQLiteDBValue dbValue;
         int i = 1;
-        EntityMeta<DBPropertyType> meta = entity.getMetadata();
-        for (DBPropertyType p : meta.getProperties()) {
+        EntityMeta<PropertyType> meta = entity.getMetadata();
+        for (PropertyType p : meta.getProperties()) {
+            DBPropertyType dp = (DBPropertyType) p;
+            if (dp.isCalculatedOnSelect()) {
+                continue; // the property value is not persisted
+            }
             value = entity.get(p.getName());
-            if (isCalculatedProperty(p, value)) {
-                value = calculateProperty(p);
+            if (hasToBeCalculated(dp, value)) {
+                value = calculateProperty(dp);
                 entity.set(p.getName(), value);
             }
-            propertyBinder.bindValue(stmt, p, i, value);
+            propertyBinder.bindValue(stmt, dp, i, value);
             i++;
         }
     }
 
     private Object calculateProperty(DBPropertyType p) {
         // create expression and evaluate
-        if (p.isCalculatedByContext()) {
-            return JexlUtils.eval(context, p.getContextExpression());
+        if (p.isJexlExpression()) {
+            return JexlUtils.eval(context, p.getExpression());
         } else {
             throw new UnsupportedOperationException("Not implemented yet!!");
         }
@@ -162,7 +169,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
      * @param p
      * @return
      */
-    private boolean isCalculatedProperty(DBPropertyType p, Object currentValue) {
+    private boolean hasToBeCalculated(DBPropertyType p, Object currentValue) {
         return p.isCalculatedOnUpdate() || (p.isCalculatedOnInsert() && currentValue == null);
     }
 
@@ -174,14 +181,19 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
         int i = 1;
         SQLiteDBValue dbValue;
 
-        EntityMeta<DBPropertyType> meta = entity.getMetadata();
-        for (DBPropertyType p : meta.getProperties()) {
+        EntityMeta<PropertyType> meta = entity.getMetadata();
+        DBPropertyType dp;
+        for (PropertyType p : meta.getProperties()) {
+            dp = (DBPropertyType) p;
+            if (dp.isCalculatedOnSelect()) {
+                continue; // the property value is not persisted
+            }
             value = entity.get(p.getName());
-            if (isCalculatedProperty(p, value)) {
-                value = calculateProperty(p);
+            if (hasToBeCalculated(dp, value)) {
+                value = calculateProperty(dp);
                 entity.set(p.getName(), value);
             }
-            propertyBinder.bindValue(stmt, p, i, value);
+            propertyBinder.bindValue(stmt, dp, i, value);
             i++;
         }
     }
@@ -224,8 +236,20 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
                 }
             }
             entity.setId(pkValue);
+            // persist the key value to db
+            updatePK(entity, rowId, pkValue);
         }
         return entity.getId();
+    }
+
+    private void updatePK(Entity entity, Long rowId, Object pkValue) {
+        EntityMeta meta = entity.getMetadata();
+        String sqlUpdate = SqlUtils.createSqlUpdate(meta.getName(), meta.getIdPropertiesName(), new String[]{"rowid"});
+        Object[] bindingValues = new Object[]{pkValue, rowId}; //TODO: multicolumn support
+        DatabaseStatement stmt = db.compileStatement(sqlUpdate);
+        propertyBinder.bindValue(stmt, (DBPropertyType) meta.getIdProperties()[0], 1, pkValue);
+        stmt.bindLong(2, rowId);
+        stmt.execute();
     }
 
     @Override

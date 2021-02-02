@@ -25,7 +25,10 @@ import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.meta.types.Geometry;
 
-import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.*;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.BLOB;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.INTEGER;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.REAL;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.TEXT;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -52,14 +55,22 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
         initDefaultConverters();
     }
 
-
     @Override
-    public SQLitePropertyConverter getConverter(String converterId) {
-        SQLitePropertyConverter obj = this.converters.get(converterId);
-        if (obj == null) {
-            throw new RepositoryException(String.format("No converter found for id [%s].", converterId));
+    public SQLitePropertyConverter getConverter(Class javaType, SQLiteType dbType) {
+        String key = String.format("%s-%s", javaType.getCanonicalName(), dbType.name());
+
+        if (!this.converters.containsKey(key)) {
+            SQLitePropertyConverter converter = defaultDBConverters.get(dbType);
+            try {
+                converter = (SQLitePropertyConverter) converter
+                        .getClass().getDeclaredConstructor(new Class[]{Class.class}).newInstance(javaType);
+            } catch (Exception e) {
+                throw new RepositoryException(String.format("Can't create converter from " +
+                        "javaType: %s to dbType [%s].", javaType, dbType.name(), e));
+            }
+            this.converters.put(key, converter);
         }
-        return obj;
+        return converters.get(key);
     }
 
     @Override
@@ -87,7 +98,7 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
     private void initDefaultConverters() {
         this.defaultConverters = new HashMap<>();
         //TODO. subclass converters to get more robust java to db transformations
-        this.defaultConverters.put(String.class, new SQLiteStringConverter(String.class));
+        this.defaultConverters.put(String.class, new SQLiteTextConverter(String.class));
         this.defaultConverters.put(Integer.class, new SQLiteIntegerConverter(Integer.class));
         this.defaultConverters.put(Long.class, new SQLiteIntegerConverter(Long.class));
         this.defaultConverters.put(Float.class, new SQLiteRealConverter(Float.class));
@@ -100,7 +111,7 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
 
         // default used when metadata is read from the table directly
         this.defaultDBConverters = new HashMap<>();
-        this.defaultDBConverters.put(TEXT, new SQLiteStringConverter(String.class));
+        this.defaultDBConverters.put(TEXT, new SQLiteTextConverter(String.class));
         this.defaultDBConverters.put(INTEGER, new SQLiteIntegerConverter(Long.class));
         this.defaultDBConverters.put(REAL, new SQLiteRealConverter(Double.class));
         this.defaultDBConverters.put(BLOB, new SQLiteBlobConverter(ByteArray.class));

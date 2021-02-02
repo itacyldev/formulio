@@ -15,8 +15,8 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

@@ -17,10 +17,10 @@ package es.jcyl.ita.formic.repo.builders;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLiteConverterFactory;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLitePropertyConverter;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -67,8 +67,7 @@ public class DBPropertyTypeDataBuilder extends AbstractDataBuilder<DBPropertyTyp
         String persistenceType = converter.persistenceType().name();
         this.baseModel = new DBPropertyType.DBPropertyTypeBuilder(baseModel.name, type, persistenceType, baseModel.isPrimaryKey())
                 .withConverter(converter)
-                .withContextExpression(baseModel.getContextExpression(), baseModel.getCalculateOn())
-                .withSQLExpression(baseModel.getSqlExpression(), baseModel.getCalculateOn())
+                .withExpression(baseModel.getExpression(), baseModel.getCalculateBy(), baseModel.getCalculateOn())
                 .build();
         return this;
     }
@@ -76,8 +75,7 @@ public class DBPropertyTypeDataBuilder extends AbstractDataBuilder<DBPropertyTyp
     public DBPropertyTypeDataBuilder withName(String name) {
         this.baseModel = new DBPropertyType.DBPropertyTypeBuilder(name, baseModel.type, baseModel.persistenceType, baseModel.isPrimaryKey())
                 .withConverter(baseModel.getConverter())
-                .withContextExpression(baseModel.getContextExpression(), baseModel.getCalculateOn())
-                .withSQLExpression(baseModel.getSqlExpression(), baseModel.getCalculateOn())
+                .withExpression(baseModel.getExpression(), baseModel.getCalculateBy(), baseModel.getCalculateOn())
                 .build();
         return this;
     }
@@ -85,8 +83,7 @@ public class DBPropertyTypeDataBuilder extends AbstractDataBuilder<DBPropertyTyp
     public DBPropertyTypeDataBuilder withIsPrimaryKey(boolean isPk) {
         this.baseModel = new DBPropertyType.DBPropertyTypeBuilder(baseModel.name, baseModel.type, baseModel.persistenceType, isPk)
                 .withConverter(baseModel.getConverter())
-                .withContextExpression(baseModel.getContextExpression(), baseModel.getCalculateOn())
-                .withSQLExpression(baseModel.getSqlExpression(), baseModel.getCalculateOn())
+                .withExpression(baseModel.getExpression(), baseModel.getCalculateBy(), baseModel.getCalculateOn())
                 .build();
         return this;
     }
@@ -94,7 +91,7 @@ public class DBPropertyTypeDataBuilder extends AbstractDataBuilder<DBPropertyTyp
     public DBPropertyTypeDataBuilder withCalcContext(DBPropertyType.CALC_MOMENT when, String expression) {
         this.baseModel = new DBPropertyType.DBPropertyTypeBuilder(baseModel)
                 .withConverter(baseModel.getConverter())
-                .withContextExpression(expression, when)
+                .withJexlExpresion(expression, when)
                 .build();
         return this;
     }
@@ -111,8 +108,7 @@ public class DBPropertyTypeDataBuilder extends AbstractDataBuilder<DBPropertyTyp
         this.basicTypes = false;
         return new DBPropertyType.DBPropertyTypeBuilder(baseModel.name, baseModel.type, baseModel.persistenceType, baseModel.primaryKey)
                 .withConverter(baseModel.getConverter())
-                .withContextExpression(baseModel.getContextExpression(), baseModel.getCalculateOn())
-                .withSQLExpression(baseModel.getSqlExpression(), baseModel.getCalculateOn())
+                .withExpression(baseModel.getExpression(), baseModel.getCalculateBy(), baseModel.getCalculateOn())
                 .build();
     }
 }

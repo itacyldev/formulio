@@ -17,8 +17,8 @@ package es.jcyl.ita.formic.forms.view.converters;
 
 import java.io.IOException;
 
-import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.forms.components.media.MediaResource;
+import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 
 /**
  * Receives the image as a B64 string, converts it to bitmap and renders

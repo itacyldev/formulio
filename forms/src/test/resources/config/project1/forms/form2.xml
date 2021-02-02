@@ -1,27 +1,38 @@
 <main name="Agents form" description="An example of short description" id="form2" repo="agentsRepo">
+    <list>
+        <datatable properties="id,provmuni,provincia.name,municipio.name" />
+    </list>
     <edit>
         <form>
-            <image value="${entity.id}.jpg" width="300" height="200" />
-            <autocomplete converter="integer" forceSelection="true" id="provincia" label="provincia"
-                repo="provRepo" value="${entity.provmuni.substring(0,2)}">
-                <options labelExpression="${entity.name}" labelFilteringProperty="name"
-                    valueProperty="id" />
-            </autocomplete>
-            <autocomplete forceSelection="true" id="provmuni" label="municipio" repo="muniRepo"
-                value="${entity.provmuni}">
-                <options labelExpression="${entity.name}" labelFilteringProperty="name"
-                    valueProperty="provmuni" />
-                <repofilter>
-                    <eq property="prov" value="${view.provincia}" mandatory="true"/>
-                    <contains property="name" value="${this.value}"/>
-                </repofilter>
-            </autocomplete>
-            <autocomplete forceSelection="true" id="contact_id" label="Agent" repo="contacts"
-                value="${entity.contact_id}">
-                <options
-                    labelExpression="${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"
-                    labelFilteringProperty="last_name" valueProperty="contact_id" />
-            </autocomplete>
+            <tab>
+                <tabitem label="Tab 1">
+                    <autocomplete converter="integer" forceSelection="true" id="provincia"
+                        label="provincia" repo="provRepo" validator="required"
+                        value="${entity.provmuni.substring(0,2)}">
+                        <options labelExpression="${entity.name}" labelFilteringProperty="name"
+                            valueProperty="id" />
+                    </autocomplete>
+                    <autocomplete forceSelection="true" id="provmuni" label="municipio"
+                        repo="muniRepo" validator="required" value="${entity.provmuni}">
+                        <options labelExpression="${entity.name}" labelFilteringProperty="name"
+                            valueProperty="provmuni" />
+                        <repofilter>
+                            <eq mandatory="true" property="prov" value="${view.provincia}" />
+                            <contains property="name" value="${this.value}" />
+                        </repofilter>
+                    </autocomplete>
+                    <text label="zip code" value="${entity.municipio.zip_code}"/>
+                </tabitem>
+                <tabitem label="Tab 2">
+                    <autocomplete forceSelection="true" id="contact_id" label="Agent"
+                        repo="contacts" validator="required" value="${entity.contact_id}">
+                        <options
+                            labelExpression="${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"
+                            labelFilteringProperty="last_name" valueProperty="contact_id" />
+                    </autocomplete>
+                    <image height="200" value="${entity.id}.jpg" width="300" />
+                </tabitem>
+            </tab>
         </form>
     </edit>
 </main>

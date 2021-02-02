@@ -20,28 +20,60 @@ import org.xmlpull.v1.XmlPullParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.formic.repo.RepositoryFactory;
-import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
+import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
+import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
+import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
+import es.jcyl.ita.formic.forms.components.select.UISelect;
+import es.jcyl.ita.formic.forms.components.tab.UITab;
+import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
-import es.jcyl.ita.formic.forms.config.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.EntityMappingBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UICardBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIColumnBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIDatalistBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIMultiOptionBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIRowBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.ValidatorBuilder;
 import es.jcyl.ita.formic.forms.config.elements.OptionsConfig;
+import es.jcyl.ita.formic.forms.config.elements.PropertyConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
+import es.jcyl.ita.formic.forms.config.resolvers.ColorAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
-import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.forms.components.tab.UITab;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
+ * Maps each xml tag with the builder responsible for the component creation.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ComponentBuilderFactory {
@@ -74,9 +106,20 @@ public class ComponentBuilderFactory {
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
         registerBuilder("fileRepo", newBuilder(FileRepoBuilder.class, "fileRepo"));
+        registerBuilder("meta", newBuilder(RepoMetaConfigBuilder.class, "meta"));
+        registerBuilder("property", newDefaultBuilder(PropertyConfig.class, "property"));
+        registerBuilder("mapping", newBuilder(EntityMappingBuilder.class, "mapping"));
+
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
+
+        registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
+        registerBuilder("datalistitem", newBasicBuilder(UIDatalistItem.class, "datalistitem"));
+        registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
+        registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
+        registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
+        registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
@@ -91,11 +134,13 @@ public class ComponentBuilderFactory {
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);
         registerBuilder("text", inputFieldBuilder);
+        registerBuilder("textarea", newBuilder(UIFieldBuilder.class, "textarea"));
         registerBuilder("switcher", inputFieldBuilder);
         registerBuilder("date", inputFieldBuilder);
         registerBuilder("image", newBuilder(UIImageBuilder.class, "image"));
 
-        registerBuilder("select", newBuilder(UISelectBuilder.class, "select"));
+        registerBuilder("select", newBuilder(UIMultiOptionBuilder.class, "select", UISelect.class));
+        registerBuilder("radio", newBuilder(UIMultiOptionBuilder.class, "radio", es.jcyl.ita.formic.forms.components.radio.UIRadio.class));
         registerBuilder("autocomplete", newBuilder(UIAutocompleteBuilder.class, "autocomplete"));
 
         registerBuilder("option", newDefaultBuilder(UIOption.class, "option"));
@@ -104,7 +149,11 @@ public class ComponentBuilderFactory {
         registerBuilder("tab", newBasicBuilder(UITab.class, "tab"));
         registerBuilder("tabitem", newBuilder(UITabItemBuilder.class, "tabitem"));
 
+        registerBuilder("table", newBasicBuilder(UITable.class, "table"));
+        registerBuilder("row", newBuilder(UIRowBuilder.class, "row"));
+
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
+        registerBuilder("context", new ContextBuilder());
 
         //registerBuilder("param", newBasicBuilder(ValidatorBuilder.class, "validator"));
 
@@ -112,6 +161,9 @@ public class ComponentBuilderFactory {
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
+        registerAttResolver("validator", new ValidatorAttResolver());
+
+        registerAttResolver("color", new ColorAttributeResolver());
     }
 
 
@@ -134,6 +186,10 @@ public class ComponentBuilderFactory {
     }
 
     private ComponentBuilder newBuilder(Class clazz, String tagName) {
+        return newBuilder(clazz, tagName, null);
+    }
+
+    private ComponentBuilder newBuilder(Class clazz, String tagName, Class subClazz) {
         ComponentBuilder builder = null;
         // try with no parameter
         try {
@@ -143,7 +199,11 @@ public class ComponentBuilderFactory {
         // try with one String parameter
         if (builder == null) {
             try {
-                builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
+                if (subClazz == null) {
+                    builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class}).newInstance(tagName);
+                } else {
+                    builder = (ComponentBuilder) clazz.getDeclaredConstructor(new Class[]{String.class, Class.class}).newInstance(tagName, subClazz);
+                }
             } catch (Exception e) {
                 String msg = String.format("Class [%s] couldn't be instantiated, check it has a " +
                         "no-parameter constructor or a constructor with one string parameter " +

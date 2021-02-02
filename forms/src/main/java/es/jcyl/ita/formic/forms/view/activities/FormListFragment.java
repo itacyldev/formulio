@@ -72,6 +72,12 @@ public class FormListFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView.setRecyclerListener(new RecyclerView.RecyclerListener() {
+                @Override
+                public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+                    int i = 0;
+                }
+            });
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -99,7 +105,6 @@ public class FormListFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -109,12 +114,12 @@ public class FormListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-        if (context instanceof Activity){
+        if (context instanceof Activity) {
             Project selectedProject = Config.getInstance().getCurrentProject();
-            String title = (selectedProject == null)?
+            String title = (selectedProject == null) ?
                     getString(R.string.no_current_project)
                     : getString(R.string.forms_of) + selectedProject.getName();
-            ((Activity)context).setTitle(title);
+            ((Activity) context).setTitle(title);
         }
     }
 
@@ -122,6 +127,14 @@ public class FormListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        FCItemRecyclerViewAdapter adapter = (FCItemRecyclerViewAdapter) ((RecyclerView) this.getView()).getAdapter();
+        adapter.updateViews();
+        super.onResume();
+
     }
 
     /**

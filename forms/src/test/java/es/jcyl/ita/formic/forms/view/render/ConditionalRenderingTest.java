@@ -32,14 +32,14 @@ import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
 import static org.mockito.Mockito.mock;
 
@@ -93,7 +93,8 @@ public class ConditionalRenderingTest {
         // set field render expression
         field.setRenderExpression(exprFactory.create(renderExpression));
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
@@ -134,7 +135,8 @@ public class ConditionalRenderingTest {
         field.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
@@ -178,7 +180,8 @@ public class ConditionalRenderingTest {
         field.setRenderExpression(exprFactory.create(renderExpression));
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
@@ -224,9 +227,9 @@ public class ConditionalRenderingTest {
         Boolean[] expectedVisibility = new Boolean[]{false, false, true, true, false, false};
         // set field render expression
         form.setRenderExpression(exprFactory.create(renderExpression));
-
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(ContextTestUtils.createGlobalContext(), mcAC);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the

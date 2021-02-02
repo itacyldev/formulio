@@ -3,25 +3,24 @@ package es.jcyl.ita.formic.forms.components.form;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.core.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
-import es.jcyl.ita.formic.forms.context.impl.ViewStateHolder;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
-import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewStateHolder;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.query.Filter;
 
 
 public class UIForm extends UIGroupComponent implements FilterableComponent, EntityHolder {
@@ -38,12 +37,6 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     private Repository repo;
     private Filter filter;
     private String[] mandatoryFilters;
-
-    /**
-     * Entities loaded by inner components that create new entities that are related to
-     * current form entity.
-     */
-    private List<EntityRelation> entityRelations;
 
     public UIForm() {
         this.setRendererType("form");
@@ -183,14 +176,5 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     public Entity getEntity() {
         return currentEntity;
     }
-
-    public List<EntityRelation> getEntityRelations() {
-        return entityRelations;
-    }
-
-    public void setEntityRelations(List<EntityRelation> entityRelations) {
-        this.entityRelations = entityRelations;
-    }
-
 
 }

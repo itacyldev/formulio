@@ -19,19 +19,22 @@ package es.jcyl.ita.formic.forms.view.render;
  * I, represents the AndroidView used as base user input, the component attached to InputFieldView
  * that will be used to get and set data from/to the view.
  * <p/>
- *  @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
 
 
 public abstract class InputRenderer<C extends UIInputComponent, I extends View>
@@ -50,7 +53,9 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         // find label and setup
         TextView fieldLabel = ViewHelper.findViewAndSetId(widget, getLabelViewId(),
                 TextView.class);
-        setLabel(env, fieldLabel, widget.getComponent());
+        if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
+            setLabel(fieldLabel, component);
+        }
 
         // get input view and set Tag and Value
         I inputView = (I) ViewHelper.findViewAndSetId(widget, getInputViewId());
@@ -60,7 +65,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                             "getInputViewId() must return an existing component in the widget " +
                             "layout. Make sure there's a View with the id [%s] in the file [%s].",
                     this.getClass().getName(), res.getResourceName(getInputViewId()),
-                    res.getResourceName(getWidgetLayoutId())));
+                    res.getResourceName(getWidgetLayoutId(component))));
         }
         widget.setInputView(inputView);
         setInputView(env, widget);
@@ -70,6 +75,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
 
         // set value and error messages
         setValueInView(env, widget);
+
         setMessages(env, widget);
     }
 
@@ -97,10 +103,10 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         return getWidgetViewTag(c) + ">input";
     }
 
-    protected void setLabel(RenderingEnv env, TextView labelView, C component) {
+    protected void setLabel(TextView labelView, C component) {
         labelView.setTag("label_" + component.getId());
         String labelComponent = (component.isMandatory()) ?
-                "* " + component.getLabel()
+                component.getLabel() + " *"
                 : component.getLabel();
         labelView.setText(labelComponent);
     }

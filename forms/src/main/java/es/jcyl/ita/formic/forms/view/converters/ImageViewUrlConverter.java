@@ -20,9 +20,9 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.components.media.MediaResource;
 import es.jcyl.ita.formic.forms.components.media.MediaResourceLocator;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 
 /**
  * Recives the image path as url and sets it to the image view

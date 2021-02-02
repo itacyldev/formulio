@@ -76,7 +76,7 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
             return super.containsKey(key);
         } else {
             Context ctx = this.contexts.get(newKey[0]);
-            return ctx.containsKey(newKey[0]);
+            return ctx.containsKey(newKey[1]);
         }
     }
 

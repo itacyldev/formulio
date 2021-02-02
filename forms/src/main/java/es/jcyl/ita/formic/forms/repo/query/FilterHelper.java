@@ -16,14 +16,14 @@ package es.jcyl.ita.formic.forms.repo.query;
  */
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.db.query.RawWhereCondition;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.query.Condition;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -69,7 +69,6 @@ public class FilterHelper {
 
     public static void evaluateFilter(Context context, Filter definition, Filter output, String[] mandatory) {
         // check all mandatory values are fulfilled
-        System.out.println("Looking for field: " + mandatory);
         boolean checkPassed = true;
         if (mandatory != null) {
             for (String ctxProperty : mandatory) {

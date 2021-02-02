@@ -18,9 +18,6 @@ package es.jcyl.ita.formic.forms.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -85,29 +82,4 @@ public class UIComponentHelper {
         }
     }
 
-    /**
-     * Iterates over nested elements looking for components with entityRelation definitions.
-     *
-     * @param element
-     * @return
-     */
-    public static List<EntityRelation> findEntityRelations(UIForm element) {
-        List<EntityRelation> rels = new ArrayList<EntityRelation>();
-        _findEntityRelations(element, rels);
-        return rels;
-    }
-
-    private static void _findEntityRelations(UIComponent root, List<EntityRelation> output) {
-        if (root.getEntityRelation() != null) {
-            output.add(root.getEntityRelation());
-        }
-        if (!root.hasChildren()) {
-            return;
-        } else {
-            for (UIComponent kid : root.getChildren()) {
-                _findEntityRelations(kid, output);
-            }
-            return;
-        }
-    }
 }

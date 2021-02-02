@@ -37,8 +37,6 @@ public class GreenDAOIntegrationTest {
 
     // databuilders
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    EntityDataBuilder entityBuilder;
-    SQLiteConverterFactory convFactory = SQLiteConverterFactory.getInstance();
 
     @Test
     public void testCreateTableSimplePk() {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import es.jcyl.ita.formic.forms.R;
 
 public abstract class BaseActivity extends AppCompatActivity  {

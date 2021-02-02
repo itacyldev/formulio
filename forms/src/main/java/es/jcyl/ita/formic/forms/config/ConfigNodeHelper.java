@@ -23,9 +23,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.validation.Validator;
 
 /**
@@ -277,39 +277,4 @@ public class ConfigNodeHelper {
         return null;
     }
 
-    public static void addValidators(ConfigNode node, String... types) {
-
-        UIField baseModel = (UIField) node.getElement();
-
-        for (String type : types) {
-            node.addChild(createValidatorNode(type));
-            if (type.equalsIgnoreCase("integer") || type.equalsIgnoreCase("short") || type.equalsIgnoreCase("long")) {
-                node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER));
-            }
-
-            if (type.equalsIgnoreCase("float") || type.equalsIgnoreCase("double")) {
-                node.setAttribute("inputType", String.valueOf(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
-            }
-        }
-
-
-        // used the label to set a validator email, correo, mail, phone, telefono,...
-        String label = baseModel.getLabel();
-        if (label.toLowerCase().contains("email") || label.toLowerCase().contains("correo")) {
-            node.addChild(createValidatorNode("email"));
-            baseModel.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        }
-        if (label.toLowerCase().contains("phone") || label.toLowerCase().contains("telefono")) {
-            baseModel.setInputType(InputType.TYPE_CLASS_PHONE);
-        }
-    }
-
-    private static ConfigNode<Validator> createValidatorNode(String type) {
-        ConfigNode<Validator> validatorNode = new ConfigNode<>("validator");
-        validatorNode.setAttribute("type", type);
-        //Validator validator = validatorFactory.getValidator(type);
-        //validatorNode.setElement(validator);
-
-        return validatorNode;
-    }
 }

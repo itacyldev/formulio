@@ -20,6 +20,7 @@ import java.io.File;
 import es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder;
 import es.jcyl.ita.formic.repo.source.AbstractEntitySource;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
+import es.jcyl.ita.formic.repo.source.Source;
 
 /**
  * Defines base folder used as reference to retrieve file entities.
@@ -32,8 +33,8 @@ public class FileEntitySource extends AbstractEntitySource {
 
     public FileEntitySource(File baseFolder) {
         this.baseFolder = baseFolder;
-        this.sourceId = baseFolder.getAbsolutePath();
-        this.entityTypeId = "file#" + this.sourceId;
+        this.source = new Source(baseFolder.getAbsolutePath(),baseFolder.getAbsolutePath(),null);
+        this.entityTypeId = "file#" + this.source.getId();
     }
 
     public File getBaseFolder() {

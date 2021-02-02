@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,16 +29,16 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.repo.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -68,7 +68,8 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
-        RenderingEnv env = new RenderingEnv(gCtx, null);
+        RenderingEnv env = new RenderingEnv(null);
+        env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
         // render view to create android view components
@@ -98,7 +99,8 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
-        RenderingEnv env = new RenderingEnv(gCtx, null);
+        RenderingEnv env = new RenderingEnv(null);
+        env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
         // render view to create android view components

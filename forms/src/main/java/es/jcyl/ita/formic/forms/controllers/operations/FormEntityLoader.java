@@ -22,21 +22,18 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.controllers.FormException;
+import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.forms.context.impl.EntityContext;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
-import es.jcyl.ita.formic.forms.repo.EntityRelation;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
 /**
- * Staleless helper to retrieve form's main entity from repository.
+ * Stateless helper to retrieve form's main entity from repository.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -69,46 +66,8 @@ public class FormEntityLoader {
         }
         form.setEntity(entity);
 
-        // create temporal entity context, so expressions "${entity.property} can be used during
-        // related entities loading
-        EntityContext entityContext = new EntityContext(entity);
-        globalCtx.addContext(entityContext);
-        loadRelatedEntities(globalCtx, form, entity);
-        globalCtx.removeContext(entityContext);
-
         return entity;
     }
-
-    /**
-     * Loads related entity to form's main entity using the repository attached to the UIComponent.
-     * Related entities are attached to the main entity using transient properties identificated
-     * by the component "id".
-     *
-     * @param globalCtx
-     * @param form
-     * @param entity
-     */
-    protected void loadRelatedEntities(Context globalCtx, UIForm form, Entity entity) {
-        Entity relEntity = null;
-        if (form.getEntityRelations() != null) {
-            for (EntityRelation relation : form.getEntityRelations()) {
-                // Use relation expression to obtain the entity Id
-                Object relEntityId = JexlUtils.eval(globalCtx, relation.getEntityPropertyExpr());
-                if (relEntityId != null) {
-                    relEntity = findEntity(globalCtx, relation.getRepo(),
-                            relation.getFilter(), relEntityId);
-                } // TODO: else set a proxy to evaluate the expression lazyly during the
-                // TODO: rendering process
-
-                // set related entity as transient
-                entity.set(relation.getName(), relEntity, true);
-                if (relation.getEntityHolder() != null) {
-                    relation.getEntityHolder().setEntity(relEntity);
-                }
-            }
-        }
-    }
-
 
     /**
      * Loads current entity depending on the repository type.

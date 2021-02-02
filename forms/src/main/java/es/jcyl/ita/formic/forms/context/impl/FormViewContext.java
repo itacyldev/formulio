@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,10 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.ViewHelper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -47,6 +49,7 @@ import es.jcyl.ita.formic.forms.view.ViewHelper;
 public class FormViewContext extends AbstractBaseContext {
     private final View view; // Form's Android view root
     private final UIForm form;
+    private Map<String, View> inputViews = new HashMap<String, View>();
 
     public FormViewContext(UIForm form, View formView) {
         this.setPrefix("view");
@@ -63,7 +66,6 @@ public class FormViewContext extends AbstractBaseContext {
     public InputWidget findInputFieldViewById(String fieldId) {
         return ViewHelper.findInputFieldViewById(this.view, this.form.getId(), fieldId);
     }
-
 
     /**
      * Access the component value as string, without applying the conversion using the
@@ -156,8 +158,8 @@ public class FormViewContext extends AbstractBaseContext {
         throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
-    public List<InputWidget> getInputFields() {
-        return ViewHelper.findInputFieldViews((ViewGroup) this.view);
+    public List<InputWidget> getInputViews() {
+        return new ArrayList(inputViews.values());
     }
 
     @NonNull
@@ -165,7 +167,7 @@ public class FormViewContext extends AbstractBaseContext {
     public Set<String> keySet() {
         // get input ids
         Set<String> keys = new HashSet<>();
-        List<InputWidget> fields = this.getInputFields();
+        List<InputWidget> fields = this.getInputViews();
         if (fields != null) {
             for (InputWidget input : fields) {
                 keys.add(input.getInputId());
@@ -192,6 +194,12 @@ public class FormViewContext extends AbstractBaseContext {
             entries.add(new AbstractMap.SimpleEntry<String, Object>(key, this.getValue(key)));
         }
         return entries;
+    }
+
+    public void registerComponentView(UIComponent component, View componentView) {
+        if(component instanceof UIInputComponent){
+            this.inputViews.put(component.getId(), componentView);
+        }
     }
 }
 

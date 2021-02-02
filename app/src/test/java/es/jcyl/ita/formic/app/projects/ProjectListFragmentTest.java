@@ -20,6 +20,7 @@ import android.os.Bundle;
 import androidx.fragment.app.testing.FragmentScenario;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.RecyclerViewMatcher;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 
@@ -44,6 +44,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
+@Ignore
 public class ProjectListFragmentTest {
 
     private static String NAME_PROJECT_1 = "project1";
@@ -66,6 +67,7 @@ public class ProjectListFragmentTest {
     }
 
     @Test
+    @Ignore
     public void noneProject() {
         ArrayList<Project> projectArrayList = new ArrayList<>();
 
@@ -86,6 +88,7 @@ public class ProjectListFragmentTest {
     }
 
     @Test
+    @Ignore
     public void oneProject() {
         ArrayList<Project> projectArrayList = new ArrayList<>();
         projectArrayList.add(projectList.get(0));

@@ -7,9 +7,9 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -47,11 +47,12 @@ public class CheckBoxFieldRenderer extends InputTextRenderer<UIField, Switch> {
                 }
             }
         });
+
     }
 
     @Override
-    protected int getWidgetLayoutId() {
-        return R.layout.widget_checkbox;
+    protected int getWidgetLayoutId(UIField component) {
+        return R.layout.widget_switch;
     }
 
     @Override
