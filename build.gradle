@@ -79,8 +79,8 @@ task clean(type: Delete) {
 }
 
 ext {
-    versionCode = 1
-    versionName = '0.1.0'
+    versionCode = 2
+    versionName = '0.1.1'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
     targetSdkVersion = 29
@@ -89,7 +89,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.1.0-SNAPSHOT'
+    version = '0.1.1'
 
     sharedDeps = [
             'org.apache.commons:commons-jexl3:3.1',
