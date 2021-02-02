@@ -2,8 +2,10 @@ package es.jcyl.ita.formic.forms.components.radio;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import es.jcyl.ita.formic.core.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.R;
@@ -77,7 +79,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly()) {
+        if (component.isReadOnly() || component.isMandatory()) {
             resetButton.setVisibility(View.INVISIBLE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +106,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         UIInputComponent component = widget.getComponent();
         String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
         if (message != null) {
-            RadioButtonWidget button = (RadioButtonWidget) widget.getInputView().getChildAt(widget.getInputView().getChildCount() - 1);
-            button.setError(message);
+            ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
         }
     }
 
