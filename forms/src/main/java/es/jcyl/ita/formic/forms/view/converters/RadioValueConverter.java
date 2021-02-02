@@ -15,7 +15,6 @@ package es.jcyl.ita.formic.forms.view.converters;
  * limitations under the License.
  */
 
-import android.text.InputType;
 import android.widget.RadioGroup;
 
 import es.jcyl.ita.formic.forms.components.radio.RadioButtonWidget;
