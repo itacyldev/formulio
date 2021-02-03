@@ -1,11 +1,13 @@
-<main name="Prueba FORMIC-53" description="Simple form with image example." id="formPrueba" repo="prue">
+<main name="Todos los componentes" description="Simple form with image example." id="formPrueba" repo="prue">
     <edit>
         <form>
             <tab>
                 <tabitem label="Tab 1">
-                    <input label="1. Input: " value="${entity.input}" />
+                    <link route="form1-list" value="Ir a Form Card Image"/>
 
-                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" >
+                    <input label="1. Input: " value="${entity.input}" validator="required" />
+
+                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required">
                         <options>
                             <option label="Radio1" value="Radio1" />
                             <option label="Radio2" value="Radio2" />
@@ -13,13 +15,13 @@
                         </options>
                     </radio>
 
-                    <textarea label="3. Textarea: " value="${entity.textarea}"  />
+                    <textarea label="3. Textarea: " value="${entity.textarea}"  validator="required"/>
 
                     <switcher label="4. Switcher: " value="${entity.switcher}" />
 
-                    <date label="5. Date: "  value="${entity.fecha}" converter="string" />
+                    <date label="5. Date: "  value="${entity.fecha}" converter="string" validator="required"/>
 
-                    <select label="6. Select: "  value="${entity.combo}" >
+                    <select label="6. Select: "  value="${entity.combo}" validator="required">
                         <options>
                             <option label="Combo1" value="Combo1" />
                             <option label="Combo2" value="Combo2" />
@@ -28,9 +30,11 @@
                     </select>
 
                     <autocomplete forceSelection="true" id="autocompletado_id" label="7. Autocomplete: "
-                        repo="autocompletado" value="${entity.autocompletado_id}">
+                        repo="autocompletado" value="${entity.autocompletado_id}" validator="required">
                         <options labelExpression="${entity.valor}" labelFilteringProperty="valor" valueProperty="autocompletado_id" />
                     </autocomplete>
+
+                    <divisor color="#00766C" strokeWidth="4" />
 
                     <image label="8. Imagen: " repo="superHImages" value="${entity.image}" />
 
@@ -39,10 +43,50 @@
                     <image label="10. Imagen: " converter="b64Image" embedded="true" value="${entity.image_thumb}" />
 
                 </tabitem>
+                <tabitem label="Tab 2: Table">
+                    <table headerText="Componente, Valor">
+                        <row colspans="2">
+                            <paragraph value="Descripción de la tabla en un paragraph"/>
+                        </row>
+                        <row>
+                            <textarea readOnly="true" value="Input: " />
+                            <textarea readOnly="true" value="${entity.input}" />
+                        </row>
+                        <row>
+                            <textarea readOnly="true" value="Textarea: " />
+                            <textarea readOnly="true" value="${entity.textarea}" />
+                        </row>
+                    </table>
+                </tabitem>
+                <tabitem label="Tab 3: Card">
+                    <card template="card_template_1" label="Card-${entity.id}" title="${entity.input}" subtitle="${entity.textarea}" />
+                </tabitem>
+                <tabitem label="Tab 4: Datalist">
+                    <datalist>
+                        <card expandable="true" expanded="false" label="Card-${entity.id}">
+                            <head name="title" value="${entity.input}" />
+                            <head name="subtitle" value="${entity.textarea}" />"
+                            <image repo="superHImages" value="${entity.image}" inputType="0"/>
+                        </card>
+                    </datalist>
+                </tabitem>
+                <tabitem label="Tab5: Datatable">
+                    <datatable properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id" numVisibleRows="10">
+                        <repofilter>
+                            <and>
+                                <or>
+                                    <contains property="input" value="1"/>
+                                    <contains property="textarea" value="2"/>
+                                </or>
+                                <eq property="switcher" value="1"/>
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
             </tab>
         </form>
     </edit>
-    <list name="Prueba FORMIC-53">
+    <list name="Todos los componentes">
         <datatable properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id" />
     </list>
 </main>
