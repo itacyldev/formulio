@@ -24,6 +24,7 @@
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+
     <!-- requestLegacyExternalStorage: This attribute is "false" by default on apps targeting
     Android 10 or higher. -->
     <application
@@ -49,6 +50,7 @@
         <activity
             android:name="es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity"
             android:label="FormEditView" />
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
     </application>
 
 </manifest>

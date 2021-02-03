@@ -21,16 +21,30 @@ android {
         //multiDexEnabled true
     }
 
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all { output ->
+                if (outputFileName.endsWith('.apk')) {
+                    outputFileName = "${globalConf.artifactId}_${output.baseName}_${variant.versionName}.apk"
+                }
+            }
+    }
+
     buildTypes {
         debug {
+            resValue "string", "app_name", "Formic Desarrollo"
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            applicationIdSuffix ".debug"
         }
         release {
+            resValue "string", "app_name", "Formic"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.txt'
         }
     }
+
     compileOptions {
         encoding = "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8

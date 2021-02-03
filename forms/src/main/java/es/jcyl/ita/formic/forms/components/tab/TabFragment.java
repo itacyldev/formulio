@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.fragment.app.Fragment;
 
@@ -49,6 +50,10 @@ public class TabFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.widget_tab_fragment, container, false);
         if (tabView != null) {
+            if (tabView.getParent() != null) {
+                ViewParent parent = tabView.getParent();
+                ((ViewGroup) parent).removeView(tabView);
+            }
             view.addView(tabView);
         }
         return view;
