@@ -79,7 +79,7 @@ task clean(type: Delete) {
 }
 
 ext {
-    versionCode = 3
+    versionCode = 4
     versionName = '0.1.1'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
