@@ -1,4 +1,5 @@
-package es.jcyl.ita.formic.app.projects;/*
+package es.jcyl.ita.formic.app.projects;
+/*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

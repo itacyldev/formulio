@@ -16,16 +16,17 @@
 -keepclassmembers class groovyx.example.** {*;}
 -keepclassmembers class com.arasthel.swissknife.utils.Finder {*;}
 
-#Forms
+#forms
 -keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.AttributeResolver {*;}
 -keepclassmembers class ** extends es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.forms.config.builders.ComponentBuilder {*;}
 -keepclassmembers class ** extends es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder {*;}
-
+-keep class es.jcyl.ita.formic.forms.components.** {*;}
+-keepclassmembers class ** implements es.jcyl.ita.formic.forms.repo.meta.Identificable {*;}
 -keep class es.jcyl.ita.formic.forms.config.elements.** {*;}
--keep class es.jcyl.ita.formic.forms.components {*;}
+-keep class es.jcyl.ita.formic.forms.controllers.** {*;}
 
-#Repo
+#repo
 -keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder {*;}
 -keep class es.jcyl.ita.formic.repo.db.source.DBTableEntitySource$DBTableEntitySourceBuilder {*;}
 -keep class es.jcyl.ita.formic.repo.db.source.NativeSQLEntitySource$NativeSQLEntitySourceBuilder {*;}
@@ -33,14 +34,17 @@
 -keep class es.jcyl.ita.formic.repo.source.** {*;}
 
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.meta.MetaModeler {*;}
-
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.converter.PropertyConverter {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.EntitySourceBuilder {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.RepositoryBuilder {*;}
 -keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractRepositoryBuilder {*;}
-
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
 
+
+
+
+
+-keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
 -keepattributes EnclosingMethod, InnerClasses
 -keepattributes *Annotation*
