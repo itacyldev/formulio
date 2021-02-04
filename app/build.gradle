@@ -27,6 +27,10 @@ android {
                 if (outputFileName.endsWith('.apk')) {
                     outputFileName = "${globalConf.artifactId}_${output.baseName}_${variant.versionName}.apk"
                 }
+
+                if (outputFileName.endsWith('.aab')) {
+                    outputFileName = "${globalConf.artifactId}_${output.baseName}_${variant.versionName}.aab"
+                }
             }
     }
 
