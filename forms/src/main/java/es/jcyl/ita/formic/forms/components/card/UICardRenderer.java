@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.components.card;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -248,40 +249,12 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         for (View view : views) {
             if (view instanceof ImageWidget) {
                 View imageView = ((ImageWidget) view).getInputView();
-                if (imageView != null)
-                    ((ImageWidget) view).removeView(imageView);
+                if (imageView != null) {
+                    ViewParent parent = imageView.getParent();
+                    ((ViewGroup) parent).removeView(imageView);
+                }
                 setImageView(root, imageView);
             }
         }
     }
-
-    @Override
-    public void endGroup(RenderingEnv env, Widget<UICard> root) {
-        try {
-            LinearLayout contentLayout = root.findViewWithTag("card_content_layout");
-//
-            LinearLayout imageContainer = contentLayout.findViewWithTag("card_image_container");
-            ViewGroup.LayoutParams lpImageContainer = imageContainer.getLayoutParams();
-            int containerWidth = imageContainer.getWidth();
-            //int imageWidth = imageView.getWidth();
-//            LinearLayout titleLayout = contentLayout.findViewWithTag("card_title_layout");
-//            RelativeLayout.LayoutParams lpTitleLayout = new RelativeLayout.LayoutParams(titleLayout.getLayoutParams());
-//            lpTitleLayout.addRule(BELOW, imageContainer.getId());
-//
-//            LinearLayout subtitleLayout = contentLayout.findViewWithTag("card_subtitle_layout");
-//            RelativeLayout.LayoutParams lpSubtitleLayout = new RelativeLayout.LayoutParams(subtitleLayout.getLayoutParams());
-//            lpSubtitleLayout.addRule(BELOW, titleLayout.getId());
-//
-//            contentLayout.removeAllViews();
-//
-//            contentLayout.addView(imageContainer, lpImageContainer);
-//            contentLayout.addView(titleLayout, lpTitleLayout);
-//            contentLayout.addView(subtitleLayout, lpSubtitleLayout);
-
-        } catch (ClassCastException ex) {
-
-        }
-    }
-
-
 }
