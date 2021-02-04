@@ -90,6 +90,7 @@ ext {
 
     group = 'es.jcyl.ita.formic'
     version = '0.1.1'
+    encoding = "ISO-8859-1"
     artifactId = 'Formic'
 
     sharedDeps = [
