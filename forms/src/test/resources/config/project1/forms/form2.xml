@@ -1,5 +1,5 @@
-<main name="Agents form" description="An example of short description" id="form2" repo="agentsRepo">
-    <list>
+<main name="Form2" description="An example of short description" id="form2" repo="agentsRepo">
+    <list name="Form2">
         <datatable properties="id,provmuni,provincia.name,municipio.name" />
     </list>
     <edit>
