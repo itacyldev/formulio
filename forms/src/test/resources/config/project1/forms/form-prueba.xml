@@ -44,72 +44,17 @@
 
                 </tabitem>
                 <tabitem label="Tab 2: Table">
-                    <table headerText="1. Con bordes">
-                        <row colspans="3" >
+                    <table headerText="Componente, Valor">
+                        <row colspans="2">
                             <paragraph value="Descripción de la tabla en un paragraph"/>
                         </row>
                         <row>
-                            <textarea readOnly="true" value="1. " />
-                            <textarea readOnly="true" value="Input " />
+                            <textarea readOnly="true" value="Input: " />
                             <textarea readOnly="true" value="${entity.input}" />
                         </row>
-                    </table>
-
-                    <table headerText="2. Sin bordes" border="false">
-                        <row colspans="3" border="false">
-                            <paragraph value="Descripción de la tabla en un paragraph"/>
-                        </row>
-                        <row border="false">
-                            <textarea readOnly="true" value="1.  " />
-                            <textarea readOnly="true" value="Input " />
-                            <textarea readOnly="true" value="${entity.input}" />
-                        </row>
-                    </table>
-
-                    <table headerText="3. Pesos">
-                        <row colspans="3" >
-                            <paragraph value="1: 20-30-50, 2: 20-30, 3: 20-30-50-70, 4: 40-40-80, 5: 30-80 6: asdfla"/>
-                        </row>
-                        <row weights="20, 30, 50">
-                            <textarea readOnly="true" value="1.  "  />
-                            <textarea readOnly="true" value="Input " />
-                            <input hasDeleteButton="false" value="${entity.input}"  />
-                        </row>
-                        <row weights="20, 30">
-                            <textarea readOnly="true" value="2.  " />
+                        <row>
                             <textarea readOnly="true" value="Textarea: " />
-                            <textarea hasDeleteButton="false" value="${entity.textarea}" />
-                        </row>
-                        <row weights="20, 30, 50, 70">
-                            <textarea readOnly="true" value="3.  " />
-                            <textarea readOnly="true" value="Date: " />
-                            <date hasDeleteButton="false" value="${entity.fecha}" converter="string"/>
-                        </row>
-                        <row weights="40, 40, 80">
-                            <textarea readOnly="true" value="4.  " />
-                            <textarea readOnly="true" value="Select: " />
-                            <select hasDeleteButton="false" value="${entity.combo}" >
-                                <options>
-                                    <option label="Combo1" value="Combo1" />
-                                    <option label="Combo2" value="Combo2" />
-                                    <option label="Combo3" value="Combo3" />
-                                </options>
-                            </select>
-                        </row>
-                        <row weights="30, 80">
-                            <textarea readOnly="true" value="5.  " />
-                            <textarea readOnly="true" value="Switcher: " />
-                            <switcher value="${entity.switcher}" />
-                        </row>
-                        <row weights="asdfla">
-                            <textarea readOnly="true" value="6.  " />
-                            <textarea readOnly="true" value="Autocomplete: " />
-                            <textarea readOnly="true" value="${entity.autocompletado_id}" />
-                        </row>
-                        <row>
-                            <textarea readOnly="true" value="7.  " />
-                            <textarea readOnly="true" value="Image: " />
-                            <image hasDeleteButton="false" repo="superHImages" value="${entity.image}" />
+                            <textarea readOnly="true" value="${entity.textarea}" />
                         </row>
                     </table>
                 </tabitem>
@@ -121,7 +66,7 @@
                         <card expandable="true" expanded="false" label="Card-${entity.id}">
                             <head name="title" value="${entity.input}" />
                             <head name="subtitle" value="${entity.textarea}" />"
-                            <!--<image repo="superHImages" value="${entity.image}" />-->
+                            <image repo="superHImages" value="${entity.image}" inputType="0"/>
                         </card>
                     </datalist>
                 </tabitem>
