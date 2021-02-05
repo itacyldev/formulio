@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.components.card;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -248,8 +249,10 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         for (View view : views) {
             if (view instanceof ImageWidget) {
                 View imageView = ((ImageWidget) view).getInputView();
-                if (imageView != null)
-                    ((ImageWidget) view).removeView(imageView);
+                if (imageView != null) {
+                    ViewParent parent = imageView.getParent();
+                    ((ViewGroup) parent).removeView(imageView);
+                }
                 setImageView(root, imageView);
             }
         }

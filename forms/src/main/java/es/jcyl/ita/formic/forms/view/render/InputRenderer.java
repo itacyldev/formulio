@@ -25,6 +25,8 @@ package es.jcyl.ita.formic.forms.view.render;
 
 import android.content.res.Resources;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -118,6 +120,13 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         String inputTag = getInputTag(component);
         inputView.setTag(inputTag);
         inputView.setEnabled(!widget.getComponent().isReadOnly());
+    }
+
+    protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton){
+        if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && !hasLabel){
+            ViewGroup layout = (ViewGroup) resetButton.getParent();
+            layout.setVisibility(View.GONE);
+        }
     }
 
     /************************************/
