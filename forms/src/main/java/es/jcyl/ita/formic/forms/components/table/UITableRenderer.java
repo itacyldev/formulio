@@ -74,7 +74,10 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
     @Override
     public void addViews(RenderingEnv env, Widget<UITable> widget, View[] views) {
         TableLayout tableView = widget.findViewById(R.id.table_layout);
+        UITable component = widget.getComponent();
+
         View row = null;
+        int i = 0;
         for (View view : views) {
             // look for nested row widget
             if (view instanceof Widget) {
@@ -88,9 +91,15 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
                         "result in unexpected behaviour. All <table/> children must be nested in <row/>" +
                         "elements. File ${file}.", widget.getId()));
             }
-            row.setBackground(ContextCompat
-                    .getDrawable(widget.getContext(), R.drawable.border));
+            if (component.isBorder()) {
+                row.setBackground(ContextCompat.getDrawable(widget.getContext(), R.drawable.border_row));
+                if (i == views.length -1) {
+                    row.setBackground(ContextCompat.getDrawable(widget.getContext(), R.drawable.border_last_row));
+                }
+            }
             tableView.addView(row);
+            i++;
+
         }
     }
 

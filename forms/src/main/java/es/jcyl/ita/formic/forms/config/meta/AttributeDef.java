@@ -55,6 +55,8 @@ public class AttributeDef {
 
     public static Attribute HINT = new Attribute("hint");
 
+    public static Attribute HAS_DELETE_BUTTON = new Attribute("hasDeleteButton", Boolean.class);
+
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
@@ -103,6 +105,10 @@ public class AttributeDef {
     public static Attribute DEFAULT_EXTENSION = new Attribute("defaultExtension", String.class);
 
     public static Attribute COLSPANS = new Attribute("colspans", String.class);
+
+    public static Attribute WEIGHTS = new Attribute("weights", String.class);
+    public static Attribute BORDER = new Attribute("border", Boolean.class);
+
 
     // text style
     public static Attribute FONT_SIZE = new Attribute("fontSize", String.class);

@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.formic.core.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
@@ -73,7 +75,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly()) {
+        if (component.isReadOnly() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.INVISIBLE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +84,8 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
                 input.setSelection(0);
             }
         });
+
+        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
     }
 
     @Override
