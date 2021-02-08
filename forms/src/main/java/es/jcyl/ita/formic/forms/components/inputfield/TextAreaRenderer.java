@@ -3,8 +3,11 @@ package es.jcyl.ita.formic.forms.components.inputfield;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -56,7 +59,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (widget.getComponent().isReadOnly()) {
+        if (widget.getComponent().isReadOnly() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.INVISIBLE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,11 @@ public class TextAreaRenderer extends TextFieldRenderer {
         // set info button
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         setInfoButton(env, textInputLayout, component);
+
+        TextView label = ViewHelper.findViewAndSetId(widget, R.id.label_view,
+                TextView.class);
+
+        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
 
     }
 

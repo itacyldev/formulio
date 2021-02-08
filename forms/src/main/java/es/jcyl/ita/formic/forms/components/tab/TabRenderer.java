@@ -65,6 +65,8 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, strategy);
         mediator.attach();
 
+        viewPager.getParent().requestChildFocus(viewPager,viewPager);
+
         /*viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
             @Override
             public void onPageSelected(int position) {

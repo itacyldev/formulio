@@ -1,4 +1,4 @@
-<main name="form card" description="Card with image example." id="form4" repo="superHRepo">
+<main name="Form Card Image" description="Card with image example." id="formCardImage" repo="superHRepo">
     <edit>
         <form>
             <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}">
@@ -18,7 +18,7 @@
 
         </form>
     </edit>
-    <list name="Superheroes">
+    <list name="Form Card Image">
         <datatable properties="name, real_name, age" />
     </list>
 </main>

@@ -28,9 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.MainActivity;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
 /**
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
@@ -52,15 +54,12 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                     Context context = project_nameTextView.getContext();
                     // TODO: extract Project View Helper to FORMIC-27
                     Project prj = projectList.get(getAdapterPosition());
-                    Toast.makeText(context,
-                            DevConsole.info(context.getString(R.string.project_opening_init,
-                                    (String) prj.getId())),
-                            Toast.LENGTH_LONG).show();
                     try {
                         Config.getInstance().setCurrentProject(prj);
                         Toast.makeText(context,
                                 DevConsole.info(context.getString(R.string.project_opening_finish, (String) prj.getId())),
                                 Toast.LENGTH_LONG).show();
+                        ((MainActivity) context).loadFragment(new FormListFragment());
                     } catch (Exception e) {
                         Toast.makeText(context,
                                 DevConsole.info(context.getString(R.string.project_opening_error, (String) prj.getId())),

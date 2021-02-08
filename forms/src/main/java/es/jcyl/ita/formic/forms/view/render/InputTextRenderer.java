@@ -21,6 +21,9 @@ package es.jcyl.ita.formic.forms.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.jcyl.ita.formic.core.context.FormContextHelper;
@@ -39,6 +42,13 @@ public abstract class InputTextRenderer<C extends UIInputComponent, I extends Te
         String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
         if (message != null) {
             widget.getInputView().setError(message);
+        }
+    }
+
+    protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton){
+        if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && !hasLabel){
+            LinearLayout linearLayout = (LinearLayout) resetButton.getParent();
+            linearLayout.setVisibility(View.GONE);
         }
     }
 
