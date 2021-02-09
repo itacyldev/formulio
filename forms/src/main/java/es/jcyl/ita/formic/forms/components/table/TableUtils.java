@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.TableRow;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.StringTokenizer;
 
@@ -92,7 +91,6 @@ public class TableUtils {
         return weigthts;
     }
 
-    @NotNull
     public static void setLayoutParams(float[] weigthts, int i, View view) {
         if (weigthts != null && i < weigthts.length) {
             TableRow.LayoutParams lp = new TableRow.LayoutParams();
