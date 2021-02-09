@@ -161,8 +161,8 @@ public class TagDef {
         register("tab", define(base, new Attribute[]{ID}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
 
-        register("table", define(base, new Attribute[]{ID, HEADER_TEXT, BORDER}));
-        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS, WEIGHTS, BORDER}));
+        register("table", define(base, new Attribute[]{ID, HEADER_TEXT, WEIGHTS, BORDER}));
+        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS, WEIGHTS}));
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));

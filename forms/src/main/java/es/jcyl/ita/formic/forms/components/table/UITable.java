@@ -24,6 +24,7 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 
 public class UITable extends UIGroupComponent {
     private String headerText;
+    private String weights;
     private boolean border = true;
 
     public UITable(){
@@ -47,4 +48,11 @@ public class UITable extends UIGroupComponent {
         this.headerText = headerText;
     }
 
+    public String getWeights() {
+        return weights;
+    }
+
+    public void setWeights(String weights) {
+        this.weights = weights;
+    }
 }
