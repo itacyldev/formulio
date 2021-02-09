@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.util.Calendar;
@@ -56,7 +57,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (widget.getComponent().isReadOnly()) {
+        if (widget.getComponent().isReadOnly() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.INVISIBLE);
         }
 
@@ -111,6 +112,8 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
                 input.setText("");
             }
         });
+
+        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
     }
 
     @Override

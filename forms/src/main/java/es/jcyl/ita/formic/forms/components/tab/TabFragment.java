@@ -50,9 +50,8 @@ public class TabFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.widget_tab_fragment, container, false);
         if (tabView != null) {
-            if (tabView.getParent() != null) {
-                ViewParent parent = tabView.getParent();
-                ((ViewGroup) parent).removeView(tabView);
+            if(tabView.getParent() != null) {
+                ((ViewGroup) tabView.getParent()).removeView(tabView);
             }
             view.addView(tabView);
         }

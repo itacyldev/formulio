@@ -1,6 +1,5 @@
-<main name="Datalist form" description="An example of short description" id="form6"
-    repo="superHRepo">
-    <list>
+<main name="Form Datalist" description="An example of short description" id="formDatalist" repo="superHRepo">
+    <list name="Form Datalist">
         <form>
             <datalist>
                 <datalistitem>

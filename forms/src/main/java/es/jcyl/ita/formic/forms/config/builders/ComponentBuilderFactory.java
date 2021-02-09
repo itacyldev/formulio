@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
+import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
@@ -120,6 +121,8 @@ public class ComponentBuilderFactory {
         registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
         registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
+
+        registerBuilder("link", newDefaultBuilder(UILink.class, "link"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");

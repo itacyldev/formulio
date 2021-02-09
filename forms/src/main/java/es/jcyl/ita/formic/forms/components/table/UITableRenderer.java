@@ -39,6 +39,8 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITable>> {
 
+    public static final int NUM_100 = 100;
+
 
     @Override
     protected void composeWidget(RenderingEnv env, Widget<UITable> widget) {
@@ -55,6 +57,11 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
 
             // create header cells
             String[] splits = component.getHeaderText().split(",");
+
+            // handle cell weigthts
+            float[] weigthts = TableUtils.getWeigths(component.getWeights(), splits.length, component.getParent().getId(), component.getId());
+
+            int i=0;
             for (String h : splits) {
                 // inflate header cell from resource
                 Widget headerLayout = ViewHelper.inflate(env.getViewContext(),
@@ -63,18 +70,26 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
                 headerLayout.removeView(headerCell);
                 headerCell.setText(h);
                 row.addView(headerCell, new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT));
-//                TableRow.LayoutParams params = (TableRow.LayoutParams) headerCell.getLayoutParams();
-//                params.height="mat"
 
+                boolean isLastCell= i != splits.length - 1;
+
+                setBorderRow(widget, component, row, false);
+
+                setBorderCell(widget, component, headerCell, isLastCell);
+
+                TableUtils.setLayoutParams(weigthts, i, headerCell);
+                i++;
             }
         }
-
     }
 
     @Override
     public void addViews(RenderingEnv env, Widget<UITable> widget, View[] views) {
         TableLayout tableView = widget.findViewById(R.id.table_layout);
+        UITable component = widget.getComponent();
+
         View row = null;
+        int i = 0;
         for (View view : views) {
             // look for nested row widget
             if (view instanceof Widget) {
@@ -88,9 +103,26 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
                         "result in unexpected behaviour. All <table/> children must be nested in <row/>" +
                         "elements. File ${file}.", widget.getId()));
             }
-            row.setBackground(ContextCompat
-                    .getDrawable(widget.getContext(), R.drawable.border));
+            boolean isLastRow = i == views.length -1;
+            setBorderRow(widget, component, row, isLastRow);
             tableView.addView(row);
+            i++;
+
+        }
+    }
+
+    private void setBorderRow(Widget<UITable> widget, UITable component, View row, boolean isLastRow) {
+        if (component.isBorder()) {
+            row.setBackground(ContextCompat.getDrawable(widget.getContext(), R.drawable.border_row));
+            if (isLastRow) {
+                row.setBackground(ContextCompat.getDrawable(widget.getContext(), R.drawable.border_last_row));
+            }
+        }
+    }
+
+    private void setBorderCell(Widget<UITable> widget, UITable component, TextView headerCell, boolean isLastCell) {
+        if (component.isBorder() && isLastCell) {
+            headerCell.setBackground(ContextCompat.getDrawable(widget.getContext(), R.drawable.border_cell));
         }
     }
 
@@ -98,6 +130,5 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
     protected int getWidgetLayoutId(UITable component) {
         return R.layout.widget_table;
     }
-
 
 }

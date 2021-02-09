@@ -20,6 +20,7 @@ import java.util.Map;
 
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BOLD;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
@@ -42,8 +43,10 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_DELETE_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HINT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_POSITION;
@@ -53,7 +56,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HINT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
@@ -77,6 +79,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.UPPERCASE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALIDATOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE_PROPERTY;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WEIGHTS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WIDTH;
 
 /**
@@ -123,7 +126,7 @@ public class TagDef {
         }));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
-        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE};
+        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);
@@ -158,8 +161,8 @@ public class TagDef {
         register("tab", define(base, new Attribute[]{ID}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
 
-        register("table", define(base, new Attribute[]{ID, HEADER_TEXT}));
-        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS}));
+        register("table", define(base, new Attribute[]{ID, HEADER_TEXT, WEIGHTS, BORDER}));
+        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS, WEIGHTS}));
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));

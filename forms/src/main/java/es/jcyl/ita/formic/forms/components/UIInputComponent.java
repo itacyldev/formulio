@@ -34,6 +34,8 @@ public class UIInputComponent extends UIComponent {
     protected boolean readOnly;
     private String valueConverter;
     private Integer inputType = null;
+    protected boolean hasDeleteButton = true;
+
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
@@ -146,4 +148,11 @@ public class UIInputComponent extends UIComponent {
         this.inputType = inputType;
     }
 
+    public boolean hasDeleteButton() {
+        return hasDeleteButton;
+    }
+
+    public void setHasDeleteButton(boolean hasDeleteButton) {
+        this.hasDeleteButton = hasDeleteButton;
+    }
 }

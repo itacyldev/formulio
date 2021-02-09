@@ -24,10 +24,20 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 
 public class UITable extends UIGroupComponent {
     private String headerText;
+    private String weights;
+    private boolean border = true;
 
     public UITable(){
         this.setRendererType("table");
         this.setRenderChildren(true);
+    }
+
+    public boolean isBorder() {
+        return border;
+    }
+
+    public void setBorder(boolean border) {
+        this.border = border;
     }
 
     public String getHeaderText() {
@@ -38,4 +48,11 @@ public class UITable extends UIGroupComponent {
         this.headerText = headerText;
     }
 
+    public String getWeights() {
+        return weights;
+    }
+
+    public void setWeights(String weights) {
+        this.weights = weights;
+    }
 }

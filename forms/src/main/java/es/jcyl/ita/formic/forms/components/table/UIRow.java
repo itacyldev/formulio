@@ -24,6 +24,7 @@ public class UIRow extends UIGroupComponent {
     private String label;
     private String[] properties;
     private String colspans;
+    private String weights;
 
     public UIRow() {
         this.setRendererType("row");
@@ -56,6 +57,13 @@ public class UIRow extends UIGroupComponent {
         this.colspans = colspans;
     }
 
+    public String getWeights() {
+        return weights;
+    }
+
+    public void setWeights(String weights) {
+        this.weights = weights;
+    }
 
     @Override
     public String toString() {

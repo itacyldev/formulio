@@ -23,6 +23,8 @@ import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -73,7 +75,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly()) {
+        if (component.isReadOnly() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.INVISIBLE);
         } else {
             resetButton.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +100,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
                 }
             });
         }
+        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
     }
 
     @Override

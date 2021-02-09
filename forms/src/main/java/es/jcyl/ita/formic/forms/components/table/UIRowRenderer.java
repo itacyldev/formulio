@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -62,49 +61,38 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
         }
 
         // handle cell colspans
-        Integer[] colspans = null;
-        if (StringUtils.isNotBlank(component.getColspans())) {
-            colspans = getColspanValues(component);
-        }
-        int i = 0;
+        Integer[] colspans = getColspans(component);
+        float[] weigthts = getWeigths(views, component);
 
+        int i = 0;
         for (View view : views) {
-            view.setBackground(ContextCompat
-                    .getDrawable(root.getContext(), R.drawable.border));
-            if (views.length > 1) {
-                TableRow.LayoutParams lp = new TableRow.LayoutParams();
-                lp.weight = 1; //column weight
-                lp = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, (1 / (float) views.length));
-                view.setLayoutParams(lp);
+            if ((((UITable) component.getParent()).isBorder()) && i != views.length - 1) {
+                view.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border_cell));
             }
             rowView.addView(view);
+
             if (colspans != null && i < colspans.length) {
                 TableRow.LayoutParams params = (TableRow.LayoutParams) view.getLayoutParams();
                 params.span = colspans[i];
             }
+
+            TableUtils.setLayoutParams(weigthts, i, view);
+
             i++;
         }
     }
 
-    private Integer[] getColspanValues(UIRow component) {
+    private Integer[] getColspans(UIRow component) {
         Integer[] colspans = null;
-        try {
-
-            String[] splits = component.getColspans().split(",");
-            colspans = new Integer[splits.length];
-            int i = 0;
-            for (String cs : splits) {
-                colspans[i] = Integer.parseInt(cs);
-                i++;
-            }
-        } catch (Exception e) {
-            DevConsole.error(String.format("An error occurred while trying ot apply 'colspans' " +
-                            "attribute in table [%s], row [%s].", component.getParent().getId(),
-                    component.getId()));
-            // ignore error and continue with the rendering without colspans
-            return null;
+        if (StringUtils.isNotBlank(component.getColspans())) {
+            colspans = TableUtils.getColspanValues(component);
         }
         return colspans;
+    }
+
+    private float[] getWeigths(View[] views, UIRow component) {
+        // handle cell weigthts
+        return TableUtils.getWeigths(StringUtils.isNotBlank(component.getWeights())?component.getWeights():((UITable) component.getParent()).getWeights(), views.length, component.getParent().getId(), component.getId());
     }
 
 
