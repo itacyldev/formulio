@@ -25,7 +25,6 @@ public class UIRow extends UIGroupComponent {
     private String[] properties;
     private String colspans;
     private String weights;
-    private boolean border = true;
 
     public UIRow() {
         this.setRendererType("row");
@@ -64,14 +63,6 @@ public class UIRow extends UIGroupComponent {
 
     public void setWeights(String weights) {
         this.weights = weights;
-    }
-
-    public boolean isBorder() {
-        return border;
-    }
-
-    public void setBorder(boolean border) {
-        this.border = border;
     }
 
     @Override
