@@ -1,0 +1,587 @@
+<main id="auditorias" name="Auditorías" repo="auditoriasRepo">
+    <list name="Listado Auditorias">
+        <datatable properties="id,fecha" />
+    </list>
+    <edit>
+        <form>
+            <tab>
+                <tabitem label="Datos de registro">
+                    <autocomplete converter="integer" forceSelection="true" label="1. Bodega" repo="bodegaRepo" value="${entity.bodega_id}" validator="required">
+                        <options labelExpression="${entity.razon_social}" labelFilteringProperty="razon_social" valueProperty="id" />
+                    </autocomplete>
+                    <date label="2. Fecha" value="${entity.fecha}"/>
+                    <input label="3. Alcance" value="${entity.alcance}"/>
+                    <select label="4. Tipo" value="${entity.tipo}">
+                        <options>
+                            <option label="Tipo 1" value="T1"/>
+                            <option label="Tipo 2" value="T2"/>
+                            <option label="Tipo 3" value="T3"/>
+                        </options>
+                    </select>
+                    <input label="5. Num. visita" value="${entity.num_visita}"/>
+                    <textarea label="6. Interlocutores" value="${entity.interlocutores}"/>
+                    <autocomplete converter="integer" forceSelection="true" label="7. Auditor" repo="auditorRepo" value="${entity.auditor1}">
+                        <options labelExpression="${entity.nombre}" labelFilteringProperty="nombre" valueProperty="id" />
+                    </autocomplete>
+                </tabitem>
+				
+				<tabitem label="Datos generales bodega">
+				
+					<radio label="1.1 ¿Coinciden los Registros del C.R. con el alcance solicitado?" orientation="horizontal" validator="required" value="${entity.q1_1}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+
+					<table>
+						<row colspans="5">
+							<paragraph value="Comprobar inscripción en los Registros del C.R."/>
+						</row>
+						<row>
+							<textarea readOnly="true" value="Fecha: " />
+							<textarea value="${entity.q1_1_fecha1}" hasDeleteButton="false"/>
+							<textarea value="${entity.q1_1_fecha2}" hasDeleteButton="false"/>
+							<textarea value="${entity.q1_1_fecha3}" hasDeleteButton="false"/>
+							<textarea value="${entity.q1_1_fecha4}" hasDeleteButton="false"/>
+						</row>
+						<row colspans="5">
+							<textarea value="${entity.q1_1_obs}" hasDeleteButton="false"/>
+						</row>
+					</table>
+					
+                    <radio label="1.2 ¿Posee en vigor el Registro General Sanitario de Empresas Alimentarias para la instalación auditada?" orientation="horizontal" validator="required" value="${entity.q1_2}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+					
+					<table>
+						<row colspans="2">
+							<paragraph value="Comprobar inscripción en el RGSEAA (puede hacerse vía AESAN o IREA) o solicitud de inscripción junto con declaración responsable del solicitante. Comprobar último acta de inspección emitido por la Administración." />
+						</row>
+						<row>
+							<textarea readOnly="true" value="Nº RGSEAA:" />
+							<textarea value="${entity.q1_2_num_rgseaa}" hasDeleteButton="false" />
+						</row>
+						<row>
+							<textarea readOnly="true" value="Fecha:" />
+							<textarea value="${entity.q1_2_fecha}" hasDeleteButton="false" />
+						</row>
+						<row>
+							<textarea readOnly="true" value="Nº Acta:" />
+							<textarea value="${entity.q1_2_num_acta}" hasDeleteButton="false" />
+						</row>
+						<row>
+							<textarea readOnly="true" value="F. últ. insp. san.:" />
+							<textarea value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" />
+						</row>
+						<row colspans="2">
+							<textarea value="${entity.q1_2_obs}" hasDeleteButton="false"/>
+						</row>
+					</table>
+					
+					<radio label="1.3 ¿Conoce la legislación vigente que  aplica a su sector?" orientation="horizontal" validator="required" value="${entity.q1_3}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar registros de documentación recibida y cómo realiza las comunicaciones de la misma y sus cambios al personal." value="${entity.q1_3_obs}"/>
+					
+					<radio label="1.4 ¿Tienen un sistema de APPCC implantado?" orientation="horizontal" validator="required" value="${entity.q1_4}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar su existencia, modificaciones y procesos. Comprobar certificación con otros sistemas de calidad" value="${entity.q1_4_obs}"/>
+					
+					<radio label="1.5 ¿Disponen de un sistema de gestión de No Conformidades, Quejas y/o Reclamaciones?" orientation="horizontal" validator="required" value="${entity.q1_5}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar su existencia, que éste incluya al menos las reclamaciones sobre el producto y comprobar si existe alguna queja y/o reclamación. Indicar responsable de esta gestión." value="${entity.q1_5_obs}"/>
+					
+					<radio label="1.6 ¿Mantiene los datos de declaración de bodega actualizados?" orientation="horizontal" validator="required" value="${entity.q1_6}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar instalaciones según datos declarados al CR. Comprobar actualizaciones en CR y en IIAA." value="${entity.q1_6_obs}"/>
+					
+					<radio label="1.7 Comprobar vigencia de usuarios de aplicación y su responsabilidad (Derechos de Acceso firma)." orientation="horizontal" validator="required" value="${entity.q1_7}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar contra listado extraído en CR  y exigir actualización de usuarios en su caso." value="${entity.q1_7_obs}"/>
+					
+					<textarea label="Datos complementarios a la auditoria." hint="Actividad/es en desarrollo en la bodega durante la auditoría." value="${entity.q1_complementarios}"/>
+					
+                </tabitem>
+				
+                <tabitem label="Entrada de uva">
+				
+					<radio label="2.1 Criterio utilizado en la entrada de materia prima y requisitos establecidos por la bodega para calificar una recepción de uva." orientation="horizontal" validator="required" value="${entity.q2_1}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar existencia de un procedimiento para la diferenciación entre uva calificada y uva no calificada para proceder a la auto calificación de la uva." value="${entity.q2_1_obs}"/>
+					
+					<radio label="2.2 ¿Están correctamente separadas las distintas variedades en la entrada de uva? ¿Cómo procede la bodega  a realizar los registros de las distintas entradas de uva?" orientation="horizontal" validator="required" value="${entity.q2_2}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Variedades de uva: Tempranillo, o Tinto Fino, o Tinta del País, Cabernet Sauvignon, Garnacha tinta, Malbec, Merlot y Albillo Mayor. Variedades excepcionales procedentes de viñedos viejos. Comprobar si realiza los apuntes en tiempo real o si no lo hace. En el segundo caso comprobar registro con todos los puntos de cumplimiento del Pliego de Condiciones." value="${entity.q2_2_obs}"/>
+					
+					<radio label="2.3 Evaluación de los tiques de báscula de entrada de uva." orientation="horizontal" validator="required" value="${entity.q2_3}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Revisión de tiques, comprobación de que los tiques son sin intervención humana en la captación de datos y de que existen. " value="${entity.q2_3_obs}"/>
+					
+					<radio label="2.4 ¿Tienen los proveedores de uva de la bodega sus parcelas vitícolas inscritas en el Registro Vitícola de la Administración?" orientation="horizontal" validator="required" value="${entity.q2_4}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar fichas del Registro Vitícola actualizadas, debería incluirse mantenimiento de estos registros ya que a través de la tarjeta se infiere que en algún momento estuvo inscrita." value="${entity.q2_4_obs}"/>
+					
+					<radio label="2.5 ¿Tienen los proveedores de uva de la bodega sus parcelas vitícolas inscritas en el Registro de Viñas del CRDOP Ribera del Duero?" orientation="horizontal" validator="required" value="${entity.q2_5}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar el  Registro de Viñas del C.R., la tarjeta obligatoria por Normas de Vendimia acredita la inscripción, que no el mantenimiento." value="${entity.q2_5_obs}"/>
+					
+					<radio label="2.6 ¿La bodega recibe uva procedente de parcelas situadas dentro de la zona de producción amparable pero no inscritas en el RV del Consejo Regulador? (S/N)." orientation="horizontal" validator="required" value="${entity.q2_6}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Evaluar tiques de entrada de uva y comprobar la procedencia de las uvas, si es así, presentar Registro de Inscripción en JCyL de las parcelas. Solicitar la comunicación por parte de la bodega de la recepción de uva no inscrita en los RV del Consejo. Comprobar su solicitud a través de la aplicación (Normas Vendimia)." value="${entity.q2_6_obs}"/>
+					
+					<radio label="2.7 ¿Las uvas utilizadas proceden de partidas de uva sana con una graduación natural mínima de 11° para las variedades tintas o de 10,5° para uvas blancas?" orientation="horizontal" validator="required" value="${entity.q2_7}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar existencia de registros." value="${entity.q2_7_obs}"/>
+					
+					<radio label="2.8 ¿Controlan el rendimiento máximo de producción de sus viticultores proveedores de uva previamente a la vendimia?" orientation="horizontal" validator="required" value="${entity.q2_8}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+					
+					<textarea label="Observaciones" hint="Comprobar evidencias previas de esta comprobación. Ver si la bodega comprueba a posteriori que los datos son asimilables. Límites máximos de producción será de 7.000 Kg/ha de uva para todas las variedades, excepto para la variedad Albillo Mayor, que será de 9.500 kg/ha. En caso de que la vendimia se realice de forma mecánica, a la producción obtenida se le aplicará un incremento del 4%. Tener en consideración la posible aprobación, por parte del Consejo Regulador, de excepciones a la aplicación rendimientos máximos establecidos en el Pliego de Condiciones." value="${entity.q2_8_obs}"/>
+					
+					<radio label="2.9 ¿Se han utilizado equipos específicos para realizar alguna medición?" orientation="horizontal" validator="required" value="${entity.q2_9}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar los certificados de calibración de los equipos (p.ej. básculas, refractómetros, ...). Se intentará hacer una medición con medios propios para comprobar refractómetro. Comprobar mediciones, comprobar funcionamiento de refractómetro. Comprobar escala del refractómetro." value="${entity.q2_9_obs}"/>
+					
+					<radio label="2.10 ¿Disponen de la Declaración de Entrega de Uva al Consejo Regulador presentada en tiempo y forma?" orientation="horizontal" validator="required" value="${entity.q2_10}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar si se ha entregado y si se ha hecho como máximo 7 días tras el cierre de la campaña en la instalación." value="${entity.q2_10_obs}"/>
+					
+					<radio label="2.11 ¿Disponen de la Declaración de Entrega de Uva entregada a la Junta de Castilla y León en tiempo y forma?" orientation="horizontal" validator="required" value="${entity.q2_11}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar si se ha entregado y si se ha hecho como máximo el día 10 de diciembre del año de la cosecha. Comprobar coincidencia de datos con la anterior." value="${entity.q2_11_obs}"/>
+					
+					<radio label="2.12 Traslados de uva entre instalaciones. Comprobar los documentos de acompañamiento." orientation="horizontal" validator="required" value="${entity.q2_12}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar documentos, verificar variedades, transporte en caja o granel y destino de la uva en depósito. Comprobación de fechas de realización y de pesadas vs traslados en su caso." value="${entity.q2_12_obs}"/>
+					
+					<radio label="2.13 ¿Recibe la bodega uva de  Parcelas descalificadas en campo o por cambio de nivel de protección? (S/N)." orientation="horizontal" validator="required" value="${entity.q2_13}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar destino-depósito de la uva, separación del resto y su identificación indeleble." value="${entity.q2_13_obs}"/>
+					
+					<radio label="2.14 ¿Las entradas de uva de vendimia mecánica han sido correctamente solicitadas y autorizadas por el C.R.D.O.?" orientation="horizontal" validator="required" value="${entity.q2_14}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar tiques de vendimias mecánicas." value="${entity.q2_14_obs}"/>
+					
+					<radio label="2.15 ¿Las entradas de uva de vehículo rápido han sido correctamente solicitadas y autorizadas por el C.R.D.O.?" orientation="horizontal" validator="required" value="${entity.q2_15}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar tiques de vehículos rápidos." value="${entity.q2_15_obs}"/>
+					
+					<radio label="2.16 Aforar depósitos contrastándolo con las entradas de uva registradas. (en fermentación y/o descubados)." orientation="horizontal" validator="required" value="${entity.q2_16}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Debe calcularse llenado de los depósitos y posibles sangrados, inc fórmula." value="${entity.q2_16_obs}"/>
+					
+                </tabitem>
+				
+				<tabitem label="Elaboración">
+				
+					<radio label="3.1 ¿La extracción del mosto y del vino se realiza empleando sistemas mecánicos que no dañan o dislaceran los componentes sólidos del racimo?" orientation="horizontal" validator="required" value="${entity.q3_1}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Prohibida la utilización de: Máquinas estrujadoras de acción centrífuga de alta velocidad y de prensas continuas." value="${entity.q3_1_obs}"/>
+					
+					<radio label="3.2 ¿Disponen de las Declaraciones de Producción?" orientation="horizontal" validator="required" value="${entity.q3_2}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+					
+					<table headerText="Cosecha, Vino DPO, TOTAL">
+						<row colspans="3">
+							<paragraph value="Comprobar Declaración de Producción de vino del CRDOP. Comprobar coincidencia con Declaración de Producción de la Administración y asiento en libros-registro. Comprobar Rendimiento extracción para vino amparado  ≤ 70 (ó 72) litros de vino / 100 kg de uva."/>
+						</row>
+						<row>
+							<textarea readOnly="true" label="Tinto"/>
+							<textarea value="${entity.q3_2_dpo_tinto}" hasDeleteButton="false"/>
+							<textarea value="${entity.q3_2_total_tinto}" hasDeleteButton="false"/>
+						</row>
+						<row>
+							<textarea readOnly="true" label="Rosado"/>
+							<textarea value="${entity.q3_2_dpo_rosado}" hasDeleteButton="false"/>
+							<textarea value="${entity.q3_2_total_rosado}" hasDeleteButton="false"/>
+						</row>
+						<row>
+							<textarea readOnly="true" label="Blanco"/>
+							<textarea value="${entity.q3_2_dpo_blanco}" hasDeleteButton="false"/>
+							<textarea value="${entity.q3_2_total_blanco}" hasDeleteButton="false"/>
+						</row>
+						<row>
+							<textarea readOnly="true" label="Otros"/>
+							<textarea value="${entity.q3_2_dop_otros}" hasDeleteButton="false"/>
+							<textarea value="${entity.q3_2_total_otros}" hasDeleteButton="false"/>
+						</row>
+						<row colspans="3">
+							<textarea label="Rend. DOP:" value="${entity.q3_2_rend_dpo}" hasDeleteButton="false"/>
+						</row>
+						<row colspans="3">
+							<textarea label="Rend. DOP:" value="${entity.q3_2_rend_total}" hasDeleteButton="false"/>
+						</row>
+						<row colspans="3">
+							<textarea label="Observaciones" value="${entity.q3_2_obs}" hasDeleteButton="false"/>
+						</row>
+					</table>
+					
+					<radio label="3.3 ¿Los porcentajes de variedades de uva empleados  para la elaboración de los vinos respetan lo recogido en el Pliego de Condiciones?" orientation="horizontal" validator="required" value="${entity.q3_3}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Debe evidenciarse que se cumple para los diferentes tipos de vinos. Vino tinto: mínimo de un 75% de variedad Tinta del País, y resto con las variedades Cabernet Sauvignon, Garnacha tinta, Malbec, Merlot y Albillo Mayor. En cualquier caso, la participación en estos vinos de la variedad Tinta del País sola o junto con Cabernet Sauvignon, Merlot y Malbec no deberá ser inferior al 95%. Vino rosado/clarete: al menos, un 50% de variedades tintas autorizadas (Tinta del País, Cabernet Sauvignon, Garnacha tinta, Malbec y Merlot). Vino blanco: mínimo 75% de la variedad Albillo Mayor." value="${entity.q3_3_obs}"/>
+					
+					<textarea label="Datos complementarios a la auditoria." hint="Tipos y Clases de vino elaborados y su coincidencia con lo indicado en Solicitud de certificación." value="${entity.q3_complementarios}"/>
+				
+                </tabitem>
+				<tabitem label="Almacenamiento">
+				
+					<radio label="4.1 ¿Existen Registros adecuados de los movimientos de vino a granel entre las bodegas de procedencia o destino y la Instalación?" orientation="horizontal" validator="required" value="${entity.q4_1}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar movimientos en libros-registro de Administración y documentos de acompañamiento. Comprobar datos registrados con los declarados al CRDOP Ribera del Duero y los consignados en los EMCS." value="${entity.q4_1_obs}"/>
+					
+					<radio label="4.2 ¿Se encuentran los proveedores de vino certificados en el alcance de certificación correspondiente?" orientation="horizontal" validator="required" value="${entity.q4_2}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar la existencia de los certificados de bodega y vino DOP Ribera del Duero." value="${entity.q4_2_obs}"/>
+					
+					<radio label="4.3 ¿Tienen identificados los envases de almacenamiento de manera indeleble?" orientation="horizontal" validator="required" value="${entity.q4_3}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Anotar la forma de identificación de los depósitos, comprobar nomenclatura de partida Bacchus." value="${entity.q4_3_obs}"/>
+					
+					<radio label="4.4 ¿Disponen de la Declaración de Existencias actualizada?" orientation="horizontal" validator="required" value="${entity.q4_4}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar validez y fecha de la Declaración de Existencias (Parte Mensual) al CRDOP Ribera del Duero. Verificar datos declarados en las Declaraciones presentadas contra datos asentados en los libros-registro." value="${entity.q4_4_obs}"/>
+					
+					<radio label="4.5 ¿El aforo realizado sobre las existencias de vino es conforme?" orientation="horizontal" validator="required" value="${entity.q4_5}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Realizar un aforo completo de vino." value="${entity.q4_5_obs}"/>
+					
+                </tabitem>
+				<tabitem label="Crianza">
+					
+					<radio label="5.1 ¿Se identifican las barricas y jaulones de manera indeleble o agrupados por lotes?" orientation="horizontal" validator="required" value="${entity.q5_1}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar la identificación de barricas y jaulones. Anotar la forma de identificación y comprobar si se hace referencia al número de partida de Bacchus." value="${entity.q5_1_obs}"/>
+					
+					<radio label="5.2 ¿Existen Registros adecuados de los tiempos de envejecimiento según cada tipo de vino?" orientation="horizontal" validator="required" value="${entity.q5_2}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar lotes de vino DOP en periodo de envejecimiento (barricas y botellero), se hace en Aforo. Comprobar contra su sistema si lo tienen. El inicio del cómputo de los periodos de envejecimiento establecidos en el presente apartado no podrá contabilizarse antes del 1 de octubre del año de la vendimia (anexo IV)." value="${entity.q5_2_obs}"/>
+					
+					<radio label="5.3 ¿Los métodos de envejecimiento son adecuados?" orientation="horizontal" validator="required" value="${entity.q5_3}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar lotes de vino DOP en periodo de envejecimiento (barricas y botellero) se hace en Aforo (tamaño de barricas…) Comprobar Declaración al CRDOP Ribera del Duero con tipo y tamaño de barricas (anexo IV del cuestionario – punto 3)." value="${entity.q5_3_obs}"/>
+					
+                </tabitem>
+				<tabitem label="Embotellado y etiquetado">
+				
+					<radio label="6.1 ¿Poseen el Registro Embotellador para la instalación y está inscrita como tal en los Registros del CRDO?" orientation="horizontal" validator="required" value="${entity.q6_1}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+					<table weights="35, 65">
+						<row colspans="2">
+							<paragraph value="Comprobar inscripción en el Registro de Envasadores y Embotelladores de Vino y Bebidas Alcohólicas. Se comprobará igualmente su inscripción como instalación embotelladora en los Registros del CRDO." />
+						</row>
+						<row>
+							<textarea readOnly="true" value="Nº RE:" />
+							<textarea value="${entity.q6_1_num_re}" hasDeleteButton="false"/>
+						</row>
+						<row>
+							<textarea readOnly="true" value="Fecha:" />
+							<textarea value="${entity.q6_1_fecha}" hasDeleteButton="false"/>
+						</row>
+						<row colspans="2">
+							<textarea value="${entity.q6_1_obs}" hasDeleteButton="false"/>
+						</row>
+					</table>
+					
+					<radio label="6.2 ¿Poseen registros de control de análisis organolépticos de los lotes/partidas auto calificados?" orientation="horizontal" validator="required" value="${entity.q6_2}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar resultados de análisis organolépticos antes de la comercialización del vino DOP Ribera del Duero. Comprobar existencia de procedimiento de calificación/descalificación adecuado." value="${entity.q6_2_obs}"/>
+					
+					<radio label="6.3 ¿Poseen registros de control de análisis físico-químicos de los lotes/partidas auto calificados?" orientation="horizontal" validator="required" value="${entity.q6_3}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar resultados de análisis físico-químicos antes de la comercialización del vino DOP Ribera del Duero. Anexo IV. Comprobar existencia de procedimiento de calificación/descalificación adecuado." value="${entity.q6_3_obs}"/>
+					
+					<radio label="6.4 ¿Existen Registros adecuados de auto descalificación?" orientation="horizontal" validator="required" value="${entity.q6_4}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar si la bodega dispone de registros internos de auto descalificación de partidas de vino en base a sus protocolos." value="${entity.q6_4_obs}"/>
+					
+					<radio label="6.5 ¿Poseen registros de las Declaraciones de Aptitud de las Partidas auto calificadas emitidas?" orientation="horizontal" validator="required" value="${entity.q6_5}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar si mantienen las declaraciones de aptitud de las partidas que han auto calificado." value="${entity.q6_5_obs}"/>
+					
+					<radio label="6.6 ¿Poseen registros de control de las operaciones de embotellados realizados sobre los lotes/partidas auto calificados?" orientation="horizontal" validator="required" value="${entity.q6_6}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar declaración al CRDOP Ribera del Duero (Parte Mensual), comprobarlo con asientos en libros registro JCyL. Verificar registros de las operaciones de embotellados de vino DOP Ribera del Duero, indicar si las calificaciones se realizan antes o después del embotellado." value="${entity.q6_6_obs}"/>
+					
+					<radio label="6.7 ¿Los envases utilizados son de vidrio? ¿Las capacidades de los envases son las autorizadas por la legislación vigente?" orientation="horizontal" validator="required" value="${entity.q6_7}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar utilización de envases y registrar los tipos de envases utilizados y sus capacidades. En caso de utilizar otro tipo de envases, o cierres especiales, verificar si han sido autorizados por el Consejo Regulador." value="${entity.q6_7_obs}"/>
+					
+					<radio label="6.8 ¿Poseen adecuados registros de control de las operaciones de etiquetados realizados sobre los lotes de embotellado?" orientation="horizontal" validator="required" value="${entity.q6_8}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar declaración al CRDOP Ribera del Duero (Parte Mensual). Verificar registros de las operaciones de etiquetados de vino DOP Ribera del Duero comparados con las declaraciones realizadas al CR." value="${entity.q6_8_obs}"/>
+					
+					<radio label="6.9 ¿Poseen adecuados registros de control de las contraetiquetas utilizadas en cada operación de etiquetado?" orientation="horizontal" validator="required" value="${entity.q6_9}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar declaración al CRDOP Ribera del Duero (partes mensuales) comprobar coincidencia de series y numeraciones. Verificar registros de control de la utilización de las contraetiquetas del CRDOP y comprobar que la entrega por parte del Consejo ha sido a esa instalación." value="${entity.q6_9_obs}"/>
+					
+					<radio label="6.10 ¿Poseen un adecuado Registro de etiquetas?" orientation="horizontal" validator="required" value="${entity.q6_10}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar si las etiquetas evaluadas están autorizadas por el CRDOP. Contrastar etiquetas originales utilizadas por la bodega con el registro de etiquetas autorizadas por el CRDOP. Comprobar leyendas de las etiquetas que puedan parecer inadecuadas o de difícil comprobación." value="${entity.q6_10_obs}"/>
+					
+					<radio label="6.11 ¿En las etiquetas figura de forma destacada el nombre de la DOP Ribera del Duero y los datos que determina la legislación vigente? ¿Han sido comunicadas al CR?" orientation="horizontal" validator="required" value="${entity.q6_11}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar que en las etiquetas utilizadas aparecen las menciones que determina la legislación vigente. Términos permitidos: Crianza, Reserva, Gran Reserva y Roble/Barrica según condiciones establecidas en el Pliego de Condiciones." value="${entity.q6_11_obs}"/>
+					
+					<radio label="6.12 ¿En las etiquetas utiliza como indicación facultativa el nombre geográfico de las unidades menores incluidas en el Pliego de Condiciones?" orientation="horizontal" validator="required" value="${entity.q6_12}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar, en su caso, que el 85% de las variedades utilizadas en la elaboración del vino etiquetado con indicación facultativa procede de parcelas ubicadas en la unión geográfica indicada." value="${entity.q6_12_obs}"/>
+					
+					<radio label="6.13 Comprobar que no se utiliza indebidamente el logotipo de la DOP en marcas que no están amparadas por la DOP o en información comercial y publicitaria." orientation="horizontal" validator="required" value="${entity.q6_13}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar especialmente lo relativo a otros vinos y el empleo del logotipo en productos no amparados o en su publicidad." value="${entity.q6_13_obs}"/>
+					
+					<radio label="6.14 ¿Poseen un adecuado Registro de salida de producto terminado?" orientation="horizontal" validator="required" value="${entity.q6_14}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Verificar sistema de gestión de salida del producto terminado. Verificar si anotan el lote de embotellado en sus albaranes de salida. Comprobar marcas comercializadas de vino DOP. Comprobar declaraciones al CR (Partes Mensuales) y su correspondencia con los libros de JCyL." value="${entity.q6_14_obs}"/>
+					
+					<radio label="6.15 ¿Coincide la duración del envejecimiento declarada con lo indicado en la etiqueta, así como otras características?" orientation="horizontal" validator="required" value="${entity.q6_15}">
+                        <options>
+                            <option label="ok" value="ok" />
+                            <option label="obs" value="obs" />
+                            <option label="nc" value="nc" />
+                        </options>
+                    </radio>
+                    <textarea label="Observaciones" hint="Comprobar partidas en aplicación en cuanto a su envejecimiento, procedencia de viñedos singulares (tipo prefiloxéricos, centenarios….), etc." value="${entity.q6_15_obs}"/>
+				
+					<textarea label="Datos complementarios a la auditoria." hint="Métodos y equipos utilizados en laboratorio para realizar análisis físico-químicos." value="${entity.q6_complementarios}"/>
+				
+                </tabitem>
+            </tab>
+        </form>
+    </edit>
+</main>

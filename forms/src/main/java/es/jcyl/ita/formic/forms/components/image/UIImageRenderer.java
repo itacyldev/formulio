@@ -76,7 +76,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
         if (component.isReadOnly() || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.INVISIBLE);
+            resetButton.setVisibility(View.GONE);
         } else {
             resetButton.setOnClickListener(new View.OnClickListener() {
                 @Override

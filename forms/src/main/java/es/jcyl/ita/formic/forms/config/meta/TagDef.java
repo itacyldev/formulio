@@ -117,7 +117,7 @@ public class TagDef {
         register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("meta", define(new Attribute[]{PROPERTIES}));
         register("property", define(new Attribute[]{NAME, EXPRESSION, COLUMN_NAME, EXPRESSION_TYPE, CONVERTER, EVAL_ON}));
-        register("mapping", define(new Attribute[]{REPO, PROPERTY,
+        register("mapping", define(new Attribute[]{ID, REPO, PROPERTY,
                 new Attribute("fk", String.class),
                 new Attribute("insertable", Boolean.class),
                 new Attribute("updatable", Boolean.class),
