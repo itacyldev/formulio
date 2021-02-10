@@ -76,7 +76,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
         if (component.isReadOnly() || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.INVISIBLE);
+            resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
