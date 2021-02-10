@@ -54,7 +54,6 @@ public class ViewRenderHelper {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
-
         View componentView;
         if (checkDeferred && hasDeferredExpression(component, env)) {
             // insert a delegated view component as placeholder to render later
