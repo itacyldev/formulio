@@ -28,11 +28,11 @@ public class TableUtils {
         Integer[] colspans = null;
         try {
 
-            String[] splits = component.getColspans().split(",");
+            String[] splits = component.getColspans().split(DELIM);
             colspans = new Integer[splits.length];
             int i = 0;
             for (String cs : splits) {
-                colspans[i] = Integer.parseInt(cs);
+                colspans[i] = Integer.parseInt(cs.trim());
                 i++;
             }
         } catch (Exception e) {
@@ -72,6 +72,7 @@ public class TableUtils {
                 i++;
             }
         } catch (Exception e) {
+            if (idRow == null)
             DevConsole.error(String.format("An error occurred while trying ot apply 'weigthts' " +
                             "attribute in table [%s], row [%s].", idTable,
                     idRow));

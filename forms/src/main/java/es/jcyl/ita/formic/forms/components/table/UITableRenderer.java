@@ -59,7 +59,7 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
             String[] splits = component.getHeaderText().split(",");
 
             // handle cell weigthts
-            float[] weigthts = TableUtils.getWeigths(component.getWeights(), splits.length, component.getParent().getId(), component.getId());
+            float[] weigthts = TableUtils.getWeigths(component.getWeights(), splits.length, component.getId(), null);
 
             int i=0;
             for (String h : splits) {

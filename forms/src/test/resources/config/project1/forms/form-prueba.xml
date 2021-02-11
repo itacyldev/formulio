@@ -5,9 +5,7 @@
                 <tabitem label="Tab 1">
                     <link route="form1-list" value="Ir a Form Card Image"/>
 
-                    <input label="1. Input: " value="${entity.input}" validator="required" id="lalala" />
-
-                    <input label="1. Inputx : " value="${view.lalala}" validator="required"  />
+                    <input label="1. Input: " value="${entity.input}" validator="required"  />
 
                     <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required">
                         <options>
@@ -46,6 +44,7 @@
 
                 </tabitem>
                 <tabitem label="Tab 2: Table">
+
                     <table headerText=" 1. Con bordes, Clave, Valor " weights="20, 30, 50">
                         <row colspans="3" >
                             <paragraph value="Descripción de la tabla en un paragraph"/>
