@@ -146,8 +146,8 @@ public class DAGManager {
                     continue;
                 }
                 String dependingComponentId = createAbsoluteReference(component, depString);
-                if (dependingComponentId.equals(componentId)) {
-                    // skip current component or if there's no depending component
+                if (dependingComponentId == null || dependingComponentId.equals(componentId)) {
+                    // skip current component or if depending component is not found
                     continue;
                 }
                 UIComponent dependingComponent = components.get(dependingComponentId);
@@ -198,21 +198,27 @@ public class DAGManager {
         // is form relative reference
         if (varReference.startsWith("view")) {
             // relative reference uses current component form to find the component
-            UIComponent child = UIComponentHelper.findChild(component.getParentForm(),
-                    varReference.replace("view.", ""));
-            return child.getAbsoluteId();
-        } else if (varReference.startsWith("entity")) {
-            // keep reference as entity property link
-            return varReference;
-        } else {
-            // check if the reference starts with the component form name
             UIForm form = component.getParentForm();
             if (form == null) {
                 throw new ViewConfigException(String.format("Invalid variable reference. " +
                         "Relative references can be used just inside a form. " +
                         "Wrap element [%s] inside a form.", component.getId()));
             }
-            return component.getAbsoluteId();
+            UIComponent child = UIComponentHelper.findChild(form,
+                    varReference.replace("view.", ""));
+            return child.getAbsoluteId();
+        } else if (varReference.startsWith("entity")) {
+            // keep reference as entity property link
+            return varReference;
+        } else {
+            // check if the reference is correct
+            UIComponent referenced = UIComponentHelper.findByAbsoluteId(component.getRoot(), varReference);
+            if (referenced == null) {
+                error(String.format("Invalid absolute reference, not children component " +
+                        "found under with absolute reference [%s].", varReference));
+                return null;
+            }
+            return referenced.getAbsoluteId();
         }
     }
 

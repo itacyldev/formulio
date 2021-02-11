@@ -45,7 +45,6 @@ public class DAGManagerTest {
 
     }
 
-
     @Test(expected = IllegalArgumentException.class)
     public void createDagWithCycle() {
         UIView view = createViewWithCycle();
@@ -81,6 +80,7 @@ public class DAGManagerTest {
     private UIView createView(String viewId) {
         UIView view = new UIView(viewId);
         UIForm form = createForm("form");
+        form.setRoot(view);
         view.addChild(form);
 
         return view;
@@ -89,6 +89,7 @@ public class DAGManagerTest {
     private UIView createViewWithCycle() {
         UIView view = new UIView("view2");
         UIForm form = createFormWithCycle("form");
+        form.setRoot(view);
         view.addChild(form);
 
         return view;

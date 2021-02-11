@@ -1,0 +1,166 @@
+<main name="Todos los componentes" description="Simple form with image example." id="formPrueba"
+    repo="prue">
+    <edit>
+        <form>
+            <tab>
+                <tabitem label="Tab 1">
+                    <link route="form1-list" value="Ir a Form Card Image" />
+
+                    <input id="lalala" label="1. Input: " validator="required"
+                        value="${entity.input}" />
+
+                    <input label="1. Inputx : " validator="required" value="${view.lalala}" />
+
+                    <radio label="2. Radio:" orientation="horizontal" validator="required"
+                        value="${entity.radio}">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <textarea label="3. Textarea: " validator="required"
+                        value="${entity.textarea}" />
+
+                    <switcher label="4. Switcher: " value="${entity.switcher}" />
+
+                    <date converter="string" label="5. Date: " validator="required"
+                        value="${entity.fecha}" />
+
+                    <select label="6. Select: " validator="required" value="${entity.combo}">
+                        <options>
+                            <option label="Combo1" value="Combo1" />
+                            <option label="Combo2" value="Combo2" />
+                            <option label="Combo3" value="Combo3" />
+                        </options>
+                    </select>
+
+                    <autocomplete forceSelection="true" id="autocompletado_id"
+                        label="7. Autocomplete: " repo="autocompletado"
+                        validator="required" value="${entity.autocompletado_id}">
+                        <options labelExpression="${entity.valor}" labelFilteringProperty="valor"
+                            valueProperty="autocompletado_id" />
+                    </autocomplete>
+
+                    <divisor color="#00766C" strokeWidth="4" />
+
+                    <image label="8. Imagen: " repo="superHImages" value="${entity.image}" />
+
+                    <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" />
+
+                    <image converter="b64Image" embedded="true" label="10. Imagen: "
+                        value="${entity.image_thumb}" />
+
+                </tabitem>
+                <tabitem label="Tab 2: Table">
+                    <table headerText=" 1. Con bordes, Clave, Valor " weights="20, 30, 50">
+                        <row colspans="3">
+                            <paragraph value="Descripción de la tabla en un paragraph" />
+                        </row>
+                        <row>
+                            <textarea readOnly="true" value="1. " />
+                            <textarea readOnly="true" value="Input " />
+                            <textarea readOnly="true" value="${entity.input}" />
+                        </row>
+                    </table>
+
+                    <table border="false" headerText=" 2. Sin bordes">
+                        <row colspans="3">
+                            <paragraph value="Descripción de la tabla en un paragraph" />
+                        </row>
+                        <row>
+                            <textarea readOnly="true" value="1.  " />
+                            <textarea readOnly="true" value="Input " />
+                            <textarea readOnly="true" value="${entity.input}" />
+                        </row>
+                    </table>
+
+                    <table headerText=" 3. Pesos">
+                        <row colspans="3">
+                            <paragraph
+                                value="1: 20-30-50, 2: 20-30, 3: 20-30-50-70, 4: 40-40-80, 5: 30-80 6: asdfla" />
+                        </row>
+                        <row weights="20, 30, 50">
+                            <textarea readOnly="true" value="1.  " />
+                            <textarea readOnly="true" value="Input " />
+                            <input hasDeleteButton="false" value="${entity.input}" />
+                        </row>
+                        <row weights="20, 30">
+                            <textarea readOnly="true" value="2.  " />
+                            <textarea readOnly="true" value="Textarea: " />
+                            <textarea hasDeleteButton="false" value="${entity.textarea}" />
+                        </row>
+                        <row weights="20, 30, 50, 70">
+                            <textarea readOnly="true" value="3.  " />
+                            <textarea readOnly="true" value="Date: " />
+                            <date converter="string" hasDeleteButton="false"
+                                value="${entity.fecha}" />
+                        </row>
+                        <row weights="40, 40, 80">
+                            <textarea readOnly="true" value="4.  " />
+                            <textarea readOnly="true" value="Select: " />
+                            <select hasDeleteButton="false" value="${entity.combo}">
+                                <options>
+                                    <option label="Combo1" value="Combo1" />
+                                    <option label="Combo2" value="Combo2" />
+                                    <option label="Combo3" value="Combo3" />
+                                </options>
+                            </select>
+                        </row>
+                        <row weights="30, 80">
+                            <textarea readOnly="true" value="5.  " />
+                            <textarea readOnly="true" value="Switcher: " />
+                            <switcher value="${entity.switcher}" />
+                        </row>
+                        <row weights="asdfla">
+                            <textarea readOnly="true" value="6.  " />
+                            <textarea readOnly="true" value="Autocomplete: " />
+                            <textarea readOnly="true" value="${entity.autocompletado_id}" />
+                        </row>
+                        <row>
+                            <textarea readOnly="true" value="7.  " />
+                            <textarea readOnly="true" value="Image: " />
+                            <image hasDeleteButton="false" repo="superHImages"
+                                value="${entity.image}" />
+                        </row>
+                    </table>
+                </tabitem>
+                <tabitem label="Tab 3: Card">
+                    <card label="Card-${entity.id}" subtitle="${entity.textarea}"
+                        template="card_template_1" title="${entity.input}" />
+                </tabitem>
+                <tabitem label="Tab 4: Datalist">
+                    <datalist>
+                        <card expandable="true" expanded="false" label="Card-${entity.id}">
+                            <head name="title" value="${entity.input}" />
+                            <head name="subtitle" value="${entity.textarea}" />"
+                            <image repo="superHImages" value="${entity.image}" />
+                        </card>
+                    </datalist>
+                </tabitem>
+                <tabitem label="Tab5: Datatable">
+                    <input id="inputFilter" label="Input filter: " value="${entity.input}" />
+                    <textarea id="textareaFilter" label="Textarea filter: "
+                        value="${entity.textarea}" />
+                    <datatable
+                        numVisibleRows="10"
+                        properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id">
+                        <repofilter>
+                            <and>
+                                <or>
+                                    <contains property="input" value="${view.inputFilter}" />
+                                    <!--<contains property="textarea" value="${view.textareaFilter}"/>-->
+                                </or>
+                                <eq property="switcher" value="1" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+            </tab>
+        </form>
+    </edit>
+    <list name="Todos los componentes">
+        <datatable properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id" />
+    </list>
+</main>

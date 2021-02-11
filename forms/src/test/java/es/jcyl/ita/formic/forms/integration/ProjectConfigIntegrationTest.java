@@ -99,7 +99,8 @@ public class ProjectConfigIntegrationTest {
 
         // there must be three form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
-        assertEquals(7, formConfigs.size());
+        int expectedNumForms = TestUtils.findFile("config/project1/forms").list().length;
+        assertEquals(expectedNumForms, formConfigs.size());
 
         // Check all list and edit controller have been loaded
         FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
@@ -116,7 +117,6 @@ public class ProjectConfigIntegrationTest {
             }
         }
     }
-
 
     @Test
     public void testForm2Configuration() throws Exception {

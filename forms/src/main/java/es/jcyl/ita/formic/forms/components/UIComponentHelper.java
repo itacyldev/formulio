@@ -23,6 +23,34 @@ import java.util.List;
  */
 public class UIComponentHelper {
 
+    /**
+     * Uses an absolute id like "form1.tab1.tabitem1.field" to find a component nested
+     * to passed root element.
+     *
+     * @param root
+     * @param absoluteId
+     * @return
+     */
+    public static UIComponent findByAbsoluteId(UIComponent root, String absoluteId) {
+        String kidId = absoluteId.split("\\.")[0];
+        if (!root.hasChildren()) {
+            return null;
+        } else {
+            for (UIComponent kid : root.getChildren()) {
+                if (kid.getId().equalsIgnoreCase(kidId)) {
+                    if (absoluteId.contains(".")) {
+                        // go deeper looking for rest of the absoluteId
+                        return findByAbsoluteId(kid, absoluteId.substring(kidId.length() + 1));
+                    } else {
+                        return kid;
+                    }
+                }
+            }
+            // no child found
+            return null;
+        }
+    }
+
 
     public static UIComponent findChild(UIComponent root, String id) {
         if (root.getId().equalsIgnoreCase(id)) {
