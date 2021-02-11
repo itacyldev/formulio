@@ -43,6 +43,7 @@ import es.jcyl.ita.formic.forms.project.handlers.DefaultImageRepositoryHandler;
 import es.jcyl.ita.formic.forms.project.handlers.FormConfigHandler;
 import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
+import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -146,6 +147,7 @@ public class Config {
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
         this.globalContext.clear();
+        DAGManager.getInstance().flush();
     }
 
     /**

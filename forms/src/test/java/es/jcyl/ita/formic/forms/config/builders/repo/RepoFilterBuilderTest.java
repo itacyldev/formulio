@@ -59,8 +59,6 @@ public class RepoFilterBuilderTest {
                     "    <eq property=\"prop2\" value=\"field2\" />" +
                     "  </repofilter>" +
                     "</form>";
-
-
     @Test
     public void testBasicRepoFilter() throws Exception {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_BASIC);

@@ -15,8 +15,12 @@ package es.jcyl.ita.formic.forms.components.datalist;
  * limitations under the License.
  */
 
+import java.util.Set;
+
+import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -28,6 +32,8 @@ import es.jcyl.ita.formic.repo.query.Filter;
 public class UIDatalist extends UIComponent implements FilterableComponent {
 
     private Repository repo;
+    private Filter filter;
+    private String[] mandatoryFilters;
 
     private int numItems;
 
@@ -42,22 +48,22 @@ public class UIDatalist extends UIComponent implements FilterableComponent {
 
     @Override
     public void setFilter(Filter filter) {
-
+        this.filter = filter;
     }
 
     @Override
     public Filter getFilter() {
-        return null;
+        return this.filter;
     }
 
     @Override
     public String[] getMandatoryFilters() {
-        return new String[0];
+        return this.mandatoryFilters;
     }
 
     @Override
     public void setMandatoryFilters(String[] mandatoryFields) {
-
+        this.mandatoryFilters = mandatoryFields;
     }
 
     public void setRepo(Repository repo) {
@@ -70,5 +76,15 @@ public class UIDatalist extends UIComponent implements FilterableComponent {
 
     public void setNumItems(int numItems) {
         this.numItems = numItems;
+    }
+
+    @Override
+    public Set<ValueBindingExpression> getValueBindingExpressions() {
+        Set<ValueBindingExpression> expressions = super.getValueBindingExpressions();
+        // If repo filter is defined, add binding expressions to establish dependencies
+        if (this.filter != null) {
+            expressions.addAll(ExpressionHelper.getExpressions(this.filter.getExpression()));
+        }
+        return expressions;
     }
 }

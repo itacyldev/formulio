@@ -1,9 +1,0 @@
-<main name="Formulario test errores" description="Simple form with image example." id="formTest"
-    repo="prue">
-    <edit>
-        <form>
-            <input id="input1" label="1. Input: " validator="required" value="${entity.input}" />
-            <input label="1. Inputx : " validator="required" value="${view.input1}" />
-        </form>
-    </edit>
-</main>

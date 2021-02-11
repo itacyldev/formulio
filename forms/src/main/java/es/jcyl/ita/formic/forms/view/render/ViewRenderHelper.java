@@ -202,17 +202,14 @@ public class ViewRenderHelper {
         // get current Android view
         View rootView = env.getViewRoot();
         // walk the tree in topological order to follow the dependencies from the current element
-        System.out.println(">>>> DAG ENCONTRADO: " + dag.toString());
         // sets the rendering starting point, when given element is found in the DAG
         boolean found = false;
 
         for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
             DAGNode node = it.next();
-            System.out.println("Renderizando..... " + node.getId() + " " + node.getComponent());
             if (!found) {
                 if (node.getComponent().getId().equals(component.getId())) {
                     found = true; // start rendering in next element
-                    System.out.println("===========EMPEZAMOS=================");
                 }
             } else {
                 // find view element to update
@@ -231,7 +228,6 @@ public class ViewRenderHelper {
                     View newView = this.render(env, node.getComponent(), false);
                     replaceView(view, newView);
                 }
-
             }
         }
     }

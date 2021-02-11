@@ -227,6 +227,12 @@ public abstract class UIComponent implements Identificable {
         }
     }
 
+    /**
+     * Method used to get all the binding expressions defined for this component so dependencies
+     * inter-components can be easily calculated.
+     *
+     * @return
+     */
     public Set<ValueBindingExpression> getValueBindingExpressions() {
         return ExpressionHelper.getExpressions(this);
     }

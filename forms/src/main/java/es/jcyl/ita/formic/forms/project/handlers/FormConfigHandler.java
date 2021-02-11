@@ -62,10 +62,10 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
         info("Registering DAGS...");
         DAGManager dagManager = DAGManager.getInstance();
         FormListController formList = config.getList();
-        if(formList!=null){
+        if (formList != null) {
             dagManager.generateDags(formList.getView());
         }
-        for(FormEditController f: config.getEdits()){
+        for (FormEditController f : config.getEdits()) {
             dagManager.generateDags(f.getView());
         }
     }
