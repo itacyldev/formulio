@@ -1,6 +1,6 @@
-package es.jcyl.ita.formic.repo.query;
+package es.jcyl.ita.formic.forms.repo.filter;
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,20 @@ package es.jcyl.ita.formic.repo.query;
  * limitations under the License.
  */
 
+
+import java.util.Set;
+
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.repo.query.Expression;
+
 /**
- * Empty class to support repository specific expressions.
- *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * <p>
+ * Defines visitor methods to look or ValueBindingExpressions within the Filter implementors
  */
-public abstract class Expression {
+public interface BindingExpressionCollector<E extends Expression> {
+
+    public Set<ValueBindingExpression> collect(E expression);
+
 
 }

@@ -82,8 +82,6 @@ public class DelegatedExpressionTest {
      */
     @Test
     public void testBasicDependencyChain() {
-
-
         Object[] values = createDepsTree(ctx);
         UIForm form = (UIForm) values[0];
         ViewDAG viewDAG = (ViewDAG) values[1];
@@ -103,6 +101,7 @@ public class DelegatedExpressionTest {
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setViewContext(ctx);
         env.setViewDAG(viewDAG);
+
         // walk the tree executing expressions
         View baseFormView = renderHelper.render(env, form.getParent());
 
@@ -133,7 +132,6 @@ public class DelegatedExpressionTest {
         form.addChild(f2, f3, f4);
         UIView view = new UIView("view1");
         view.addChild(form);
-
 
         // create dependency tree
         DAGManager dagManager = DAGManager.getInstance();

@@ -44,4 +44,12 @@ public class DAGNode {
 
     private UIComponent component;
 
+    @Override
+    public String toString() {
+        return "DAGNode{" +
+                "id='" + id + '\'' +
+                ", type=" + type +
+                ", component=" + component +
+                '}';
+    }
 }

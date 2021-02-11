@@ -52,9 +52,9 @@ public class PropertyConditionHelper {
             case CONTAINS:
                 return property.like("%" + c.getValue().toString() + "%");
             case STARTS_WITH:
-                return property.like("%" + c.getValue().toString());
+                return property.like(c.getValue().toString() + "%");
             case ENDS_WITH:
-                return property.like(c.getValue().toString());
+                return property.like("%" + c.getValue().toString());
             default:
                 throw new UnsupportedOperationException("Not implemented yet!");
         }

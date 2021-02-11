@@ -38,12 +38,12 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
     // header/footer templates
     // filters and sorting
     private Filter filter;
+    private String[] mandatoryFilters;
     // behaviour (event handlers)
     private String route;
     // paginator / flow configuration
     // row selection
     private int numFieldsToShow = 20;
-    private String[] mandatoryFilters;
 
     private int numVisibleRows;
 
@@ -112,11 +112,11 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
         return null;
     }
 
-    public int getNumVisibleRows(){
+    public int getNumVisibleRows() {
         return this.numVisibleRows;
     }
 
-    public void setNumVisibleRows(final int numVisibleRows){
+    public void setNumVisibleRows(final int numVisibleRows) {
         this.numVisibleRows = numVisibleRows;
     }
 
@@ -147,7 +147,12 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
 
     @Override
     public Set<ValueBindingExpression> getValueBindingExpressions() {
-        return ExpressionHelper.getExpressions((FilterableComponent) this);
+        Set<ValueBindingExpression> expressions = super.getValueBindingExpressions();
+        // If repo filter is defined, add binding expressions to establish dependencies
+        if (this.filter != null) {
+            expressions.addAll(ExpressionHelper.getExpressions(this.filter.getExpression()));
+        }
+        return expressions;
     }
 
 }

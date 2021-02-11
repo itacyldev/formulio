@@ -15,10 +15,34 @@ package es.jcyl.ita.formic.repo.query;
  * limitations under the License.
  */
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public enum Operator {
-    EQ, LT, GT, LE, GE, IN, NOT_IN, IS_NULL, NOT_NULL, LIKE, CONTAINS,  STARTS_WITH, ENDS_WITH
+
+    EQ("eq"), LT("lt"), GT("gt"), LE("le"), GE("ge"), IN("in"),
+    NOT_IN("notin"), IS_NULL("isnull"), NOT_NULL("notnull"), LIKE("like"),
+    CONTAINS("contains"), STARTS_WITH("startswith"), ENDS_WITH("endswith");
+
+    private Set<String> aliases;
+
+    Operator(String... aliases) {
+        this.aliases = new HashSet<String>(Arrays.asList(aliases));
+    }
+
+    public static Operator getValue(String value) {
+        for (Operator op : Operator.values()) {
+            if (op.aliases.contains(value.toLowerCase())) {
+                return op;
+            }
+        }
+        throw new RuntimeException(value + " is not a proper operator name in  " +
+                "es.jcyl.ita.formic.repo.query.Operator");
+    }
+
 }

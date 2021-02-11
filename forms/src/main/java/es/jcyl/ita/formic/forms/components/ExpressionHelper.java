@@ -15,14 +15,17 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.repo.filter.PredicateBindingExprCollector;
 import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.Predicate;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -71,5 +74,23 @@ public class ExpressionHelper {
                 }
             }
         }
+    }
+
+    /**
+     * Looks for binding expressions in the passed expression
+     *
+     * @param expression
+     * @return
+     */
+    public static Collection<? extends ValueBindingExpression> getExpressions(Expression expression) {
+        Set<ValueBindingExpression> bindingExpressions = new HashSet<>();
+        // TODO: create factory and return a proper collector for each Expression type, right now
+        //  threre's just one Expression with ValueBindingExpressions
+        if (expression instanceof Predicate) {
+            PredicateBindingExprCollector collector = new PredicateBindingExprCollector();
+            return collector.collect((Predicate) expression);
+
+        }
+        return bindingExpressions;
     }
 }

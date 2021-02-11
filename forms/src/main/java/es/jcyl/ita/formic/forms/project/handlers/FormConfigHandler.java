@@ -26,10 +26,13 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
+import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import static es.jcyl.ita.formic.forms.config.DevConsole.info;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -52,6 +55,19 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
         }
         // register config in formConfig repo
         register(config);
+        registerDags(config);
+    }
+
+    private void registerDags(FormConfig config) {
+        info("Registering DAGS...");
+        DAGManager dagManager = DAGManager.getInstance();
+        FormListController formList = config.getList();
+        if (formList != null) {
+            dagManager.generateDags(formList.getView());
+        }
+        for (FormEditController f : config.getEdits()) {
+            dagManager.generateDags(f.getView());
+        }
     }
 
     private void register(FormController form) {

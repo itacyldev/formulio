@@ -106,7 +106,7 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
     protected <T> T getComponentValue(RenderingEnv env, C component, @Nullable Class<T> clazz) {
         Object value = component.getValue(env.getContext());
         if (value == null) {
-            return handleNullValue(component);
+            value = handleNullValue(component);
         }
         if (clazz == null) {
             return (T) value;
