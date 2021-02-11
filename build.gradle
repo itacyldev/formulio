@@ -78,9 +78,10 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+
 ext {
-    versionCode = 3
-    versionName = '0.1.1'
+    versionCode = 8
+    versionName = '0.1.5'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
     targetSdkVersion = 29
@@ -89,7 +90,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.1.1'
+    version = '0.1.5'
     artifactId = 'Formic'
 
     sharedDeps = [
