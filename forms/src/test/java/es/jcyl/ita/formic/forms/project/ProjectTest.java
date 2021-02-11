@@ -54,7 +54,7 @@ public class ProjectTest {
         ProjectRepository projectRepo = new ProjectRepository(templateFolder);
         List<Project> list = projectRepo.listAll();
         Assert.assertNotNull(list);
-        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(2, list.size());
         // open project and assert read values
         Project prj = list.get(0);
         prj.open();;
