@@ -13,7 +13,6 @@ import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -191,17 +190,18 @@ public class DAGManager {
      * returns the absolute id of the referenced element: "form1.f1" if it's nested inside a form or
      * "f1" if it is not.
      *
-     * @param component: dependant component
+     * @param component:    dependant component
      * @param varReference: reference to the component origin of the dependence
      * @return
      */
     private String createAbsoluteReference(UIComponent component, String varReference) {
         // is form relative reference
-        if(varReference.startsWith("view")){
-            // relative referencee use current component form to find the component
-            UIComponent child = UIComponentHelper.findChild(component.getParentForm(), varReference.replace("view.", ""));
+        if (varReference.startsWith("view")) {
+            // relative reference uses current component form to find the component
+            UIComponent child = UIComponentHelper.findChild(component.getParentForm(),
+                    varReference.replace("view.", ""));
             return child.getAbsoluteId();
-        } else if(varReference.startsWith("entity")){
+        } else if (varReference.startsWith("entity")) {
             // keep reference as entity property link
             return varReference;
         } else {
@@ -214,24 +214,6 @@ public class DAGManager {
             }
             return component.getAbsoluteId();
         }
-
-
-
-//        if (!varReference.startsWith("entity") && !varReference.startsWith("view")) {
-//            // absolute reference to context or form nested entity or view, remove "view" or "entity"
-//            // context reference
-//            // TODO: improve this
-//            return varReference.replace("entity.", "").replace("view.", "");
-//        } else {
-//            UIForm form = component.getParentForm();
-//            if (form == null) {
-//                throw new ViewConfigException(String.format("Invalid variable reference. " +
-//                        "Relative references can be used just inside a form. " +
-//                        "Wrap element [%s] inside a form.", component.getId()));
-//            }
-//            varReference = varReference.replace("entity.", "").replace("view.", "");
-//            return form.getId() + "." + varReference;
-//        }
     }
 
     /**
