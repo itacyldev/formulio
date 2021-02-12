@@ -204,8 +204,14 @@ public class DAGManager {
                         "Relative references can be used just inside a form. " +
                         "Wrap element [%s] inside a form.", component.getId()));
             }
-            UIComponent child = UIComponentHelper.findChild(form,
-                    varReference.replace("view.", ""));
+            String childId = varReference.replace("view.", "");
+            UIComponent child = UIComponentHelper.findChild(form, childId);
+            if (child == null) {
+                error(String.format("Invalid relative reference: [%s]. No children component " +
+                                "found within form [%s] with id [%s] in file ${file}.",
+                        varReference, form.getId(), childId));
+                return null;
+            }
             return child.getAbsoluteId();
         } else if (varReference.startsWith("entity")) {
             // keep reference as entity property link
