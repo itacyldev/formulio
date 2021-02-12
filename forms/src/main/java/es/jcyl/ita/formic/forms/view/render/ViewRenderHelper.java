@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -149,10 +150,22 @@ public class ViewRenderHelper {
     }
 
 
+    /**
+     * Checks if the component has a bindingExpression that depends on view components.
+     *
+     * @param root
+     * @param env
+     * @return
+     */
     private boolean hasDeferredExpression(UIComponent root, RenderingEnv env) {
-        // TODO improve this
-        return ((root.getValueExpression() != null && root.getValueExpression().toString().contains("view")) ||
-                (root.getRenderExpression() != null && root.getRenderExpression().toString().contains("view")));
+        if (root.getValueBindingExpressions() != null) {
+            for (ValueBindingExpression expr : root.getValueBindingExpressions()) {
+                if (expr.toString().contains("view.")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
