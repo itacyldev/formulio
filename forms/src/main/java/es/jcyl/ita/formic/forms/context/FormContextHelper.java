@@ -16,6 +16,8 @@ package es.jcyl.ita.formic.forms.context;
  */
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 
 /**
@@ -36,5 +38,27 @@ public class FormContextHelper {
         }
         Context msgCtx = context.getContext("messages");
         return (String) msgCtx.get(elementId);
+    }
+
+    /**
+     * Checks if any of the nested elements of the GroupComponent has an error
+     *
+     * @param context
+     * @param root
+     */
+    public static boolean hasNestedMessages(FormContext context, UIComponent root) {
+        if (!(root instanceof UIGroupComponent)) {
+            return (getMessage(context, root.getId()) != null);
+        } else {
+            boolean hasMessage = (getMessage(context, root.getId()) != null);
+            if(hasMessage){
+                return true;
+            }
+            // check in children
+            for (UIComponent kid : root.getChildren()) {
+                hasMessage |= hasNestedMessages(context, kid);
+            }
+            return hasMessage;
+        }
     }
 }

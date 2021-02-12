@@ -9,8 +9,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -34,7 +37,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
+public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
     @Override
     protected int getWidgetLayoutId(UITab component) {
@@ -65,7 +68,7 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, strategy);
         mediator.attach();
 
-        viewPager.getParent().requestChildFocus(viewPager,viewPager);
+        viewPager.getParent().requestChildFocus(viewPager, viewPager);
 
         /*viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
             @Override
@@ -82,7 +85,7 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
     private void updatePagerHeightForChild(View view, ViewPager2 viewPager) {
         int wMeasureSpec =
-            View.MeasureSpec.makeMeasureSpec(view.getWidth(), View.MeasureSpec.EXACTLY);
+                View.MeasureSpec.makeMeasureSpec(view.getWidth(), View.MeasureSpec.EXACTLY);
         int hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         view.measure(wMeasureSpec, hMeasureSpec);
 
@@ -100,6 +103,25 @@ public class TabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         for (View view : views) {
             adapter.addView(view, fragCount);
             fragCount++;
+        }
+    }
+
+
+    @Override
+    protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {
+        TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
+        // find which tabs has error messages
+        UIComponent[] kids = widget.getComponent().getChildren();
+        if (kids == null) {
+            return;
+        }
+        int pos = 0;
+        for (UIComponent tabItem : kids) {
+            String message = FormContextHelper.getMessage(env.getFormContext(), tabItem.getId());
+            if (!StringUtils.isBlank(message)) {
+                tabLayout.getTabAt(pos).setIcon(R.drawable.ic_input_error);
+            }
+            pos++;
         }
     }
 

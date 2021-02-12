@@ -93,7 +93,6 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
                 radioGroup.clearCheck();
             }
         });
-
     }
 
     @Override
@@ -106,7 +105,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         UIInputComponent component = widget.getComponent();
         String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
         if (message != null) {
-            ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
+            ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
         }
     }
 

@@ -6,8 +6,6 @@
                 <tabitem label="Tab 1">
                     <link route="form1-list" value="Ir a Form Card Image" />
 
-                    <input label="1. Input: " value="${entity.input}" validator="required"  />
-
                     <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required">
                         <options>
                             <option label="Radio1" value="Radio1" />
@@ -124,10 +122,14 @@
                     </table>
                 </tabitem>
                 <tabitem label="Tab 3: Card">
+                    <input label="1. Input: " value="${entity.input}" validator="required"  />
+
                     <card label="Card-${entity.id}" subtitle="${entity.textarea}"
                         template="card_template_1" title="${entity.input}" />
                 </tabitem>
                 <tabitem label="Tab 4: Datalist">
+                    <input label="1. Input: " value="${entity.input}" validator="required"  />
+
                     <datalist>
                         <card expandable="true" expanded="false" label="Card-${entity.id}">
                             <head name="title" value="${entity.input}" />

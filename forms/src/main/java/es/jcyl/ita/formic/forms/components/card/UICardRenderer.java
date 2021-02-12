@@ -22,6 +22,8 @@ import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +35,7 @@ import es.jcyl.ita.formic.forms.components.image.ImageWidget;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -124,7 +127,6 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         if (image == null) {
             imageLayout.setVisibility(View.GONE);
         } else {
-
             LinearLayout contentLayout = (LinearLayout) ViewHelper.findViewByTagAndSetId(widget, "card_content_layout");
             String imagePosition = card.getImagePosition();
             if (imagePosition.equals(TOP.getPosition()) || imagePosition.equals(BOTTOM.getPosition())) {
