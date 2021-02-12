@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class AbstractGroupRenderer<C extends UIComponent, W extends Widget<C>>
+public abstract class   AbstractGroupRenderer<C extends UIComponent, W extends Widget<C>>
         extends AbstractRenderer<C, W> implements GroupRenderer<C> {
 
     @Override
