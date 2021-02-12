@@ -147,7 +147,7 @@
                             <and>
                                 <or>
                                     <contains property="input" value="${view.inputFilter}" />
-                                    <!--<contains property="textarea" value="${view.textareaFilter}"/>-->
+                                    <contains property="textarea" value="${view.textareaFilter}"/>
                                 </or>
                                 <eq property="switcher" value="1" />
                             </and>
