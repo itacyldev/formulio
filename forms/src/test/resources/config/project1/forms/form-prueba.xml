@@ -142,6 +142,7 @@
                     <input id="inputFilter" label="Input filter: " value="${entity.input}" />
                     <textarea id="textareaFilter" label="Textarea filter: "
                         value="${entity.textarea}" />
+                    <switcher id="switcherFilter" label="Switcher filter " value="${entity.switcher}" />
                     <datatable
                         numVisibleRows="10"
                         properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id">
@@ -151,7 +152,7 @@
                                     <contains property="input" value="${view.inputFilter}" />
                                     <contains property="textarea" value="${view.textareaFilter}"/>
                                 </or>
-                                <eq property="switcher" value="1" />
+                                <eq property="switcher" value="${view.switcherFilter}" />
                             </and>
                         </repofilter>
                     </datatable>

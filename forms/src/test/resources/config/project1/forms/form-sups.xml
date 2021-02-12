@@ -3,12 +3,13 @@
         <form>
             <table headerText="Name,RealName">
                 <row>
-                    <input validator="required" value="${entity.name}" />
-                    <input validator="required" value="${entity.real_name}" />
+                    <input validator="required" value="${entity.name}" hasDeleteButton="false" />
+                    <input validator="required" value="${entity.real_name}" hasDeleteButton="false" />
                 </row>
                 <row colspans="2">
                     <head bold="true" italic="true" underlined="true" uppercase="true" value="bio" />
-                    <divisor color="#FFFF0000" strokeWidth="4" />
+                </row>
+                <row colspans="2">
                     <paragraph value="${entity.bio}" />
                 </row>
             </table>
