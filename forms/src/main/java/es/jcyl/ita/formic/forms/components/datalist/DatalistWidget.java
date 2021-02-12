@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.ContextUtils;
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;

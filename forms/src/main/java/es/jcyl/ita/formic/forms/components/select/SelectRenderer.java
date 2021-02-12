@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
-import es.jcyl.ita.formic.core.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
@@ -18,6 +17,7 @@ import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;

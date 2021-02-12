@@ -26,8 +26,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import es.jcyl.ita.formic.core.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 

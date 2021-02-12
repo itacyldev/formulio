@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.ContextUtils;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
