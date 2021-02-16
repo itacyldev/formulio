@@ -5,6 +5,7 @@
     <edit>
         <form>
             <tab>
+
                 <tabitem label="Datos de registro">
                     <autocomplete converter="integer" forceSelection="true" label="1. Bodega" repo="bodegaRepo" value="${entity.bodega_id}" validator="required">
                         <options labelExpression="${entity.razon_social}" labelFilteringProperty="razon_social" valueProperty="id" />
@@ -35,19 +36,19 @@
                         </options>
                     </radio>
 
-					<table>
+					<table weights="24, 19, 19, 19, 19">
 						<row colspans="5">
 							<paragraph value="Comprobar inscripción en los Registros del C.R."/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Fecha: " />
+                            <textarea readOnly="true" value="Fecha"/>
 							<textarea value="${entity.q1_1_fecha1}" hasDeleteButton="false"/>
 							<textarea value="${entity.q1_1_fecha2}" hasDeleteButton="false"/>
 							<textarea value="${entity.q1_1_fecha3}" hasDeleteButton="false"/>
 							<textarea value="${entity.q1_1_fecha4}" hasDeleteButton="false"/>
 						</row>
 						<row colspans="5">
-							<textarea value="${entity.q1_1_obs}" hasDeleteButton="false"/>
+							<textarea value="${entity.q1_1_obs}" hasDeleteButton="false" label="Observaciones"/>
 						</row>
 					</table>
 					
@@ -59,7 +60,7 @@
                         </options>
                     </radio>
 					
-					<table>
+					<table weights="40, 60">
 						<row colspans="2">
 							<paragraph value="Comprobar inscripción en el RGSEAA (puede hacerse vía AESAN o IREA) o solicitud de inscripción junto con declaración responsable del solicitante. Comprobar último acta de inspección emitido por la Administración." />
 						</row>
@@ -80,7 +81,7 @@
 							<textarea value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" />
 						</row>
 						<row colspans="2">
-							<textarea value="${entity.q1_2_obs}" hasDeleteButton="false"/>
+							<textarea value="${entity.q1_2_obs}" hasDeleteButton="false" label="Observaciones"/>
 						</row>
 					</table>
 					
@@ -132,7 +133,7 @@
 					<textarea label="Datos complementarios a la auditoria." hint="Actividad/es en desarrollo en la bodega durante la auditoría." value="${entity.q1_complementarios}"/>
 					
                 </tabitem>
-				
+
                 <tabitem label="Entrada de uva">
 				
 					<radio label="2.1 Criterio utilizado en la entrada de materia prima y requisitos establecidos por la bodega para calificar una recepción de uva." orientation="horizontal" validator="required" value="${entity.q2_1}">
@@ -301,27 +302,27 @@
                         </options>
                     </radio>
 					
-					<table headerText="Cosecha, Vino DPO, TOTAL">
+					<table headerText=" Cosecha, Vino DPO, TOTAL" weights="26, 37, 37">
 						<row colspans="3">
 							<paragraph value="Comprobar Declaración de Producción de vino del CRDOP. Comprobar coincidencia con Declaración de Producción de la Administración y asiento en libros-registro. Comprobar Rendimiento extracción para vino amparado  ≤ 70 (ó 72) litros de vino / 100 kg de uva."/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Tinto"/>
-							<textarea value="${entity.q3_2_dpo_tinto}" hasDeleteButton="false"/>
+							<textarea readOnly="true" value="Tinto"/>
+                            <textarea value="${entity.q3_2_dpo_tinto}" hasDeleteButton="false"/>
 							<textarea value="${entity.q3_2_total_tinto}" hasDeleteButton="false"/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Rosado"/>
+							<textarea readOnly="true" value="Rosado"/>
 							<textarea value="${entity.q3_2_dpo_rosado}" hasDeleteButton="false"/>
 							<textarea value="${entity.q3_2_total_rosado}" hasDeleteButton="false"/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Blanco"/>
+							<textarea readOnly="true" value="Blanco"/>
 							<textarea value="${entity.q3_2_dpo_blanco}" hasDeleteButton="false"/>
 							<textarea value="${entity.q3_2_total_blanco}" hasDeleteButton="false"/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Otros"/>
+							<textarea readOnly="true" value="Otros"/>
 							<textarea value="${entity.q3_2_dop_otros}" hasDeleteButton="false"/>
 							<textarea value="${entity.q3_2_total_otros}" hasDeleteButton="false"/>
 						</row>
@@ -448,7 +449,7 @@
 							<textarea value="${entity.q6_1_fecha}" hasDeleteButton="false"/>
 						</row>
 						<row colspans="2">
-							<textarea value="${entity.q6_1_obs}" hasDeleteButton="false"/>
+							<textarea value="${entity.q6_1_obs}" hasDeleteButton="false" label="Observaciones"/>
 						</row>
 					</table>
 					

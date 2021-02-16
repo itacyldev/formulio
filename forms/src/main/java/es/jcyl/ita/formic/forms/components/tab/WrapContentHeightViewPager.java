@@ -27,6 +27,15 @@ public class WrapContentHeightViewPager extends ViewPager {
         super(context, attrs);
     }
 
+    private void initPageChangeListener() {
+        addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                requestLayout();
+            }
+        });
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
