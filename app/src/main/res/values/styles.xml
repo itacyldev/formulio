@@ -66,11 +66,18 @@
     </style>
 
     <style name="Textfield_cancel_button">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:background">@drawable/selectablebuttonbackground</item>
         <item name="android:layout_marginStart">5dp</item>
-        <item name="android:layout_weight">0</item>
+        <item name="android:contentDescription">@string/tool_buttons_x</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_weight">0.3</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="tint">?attr/onSurfaceColor</item>
+        <item name="android:src">@drawable/ic_tool_x_circle_dark</item>
     </style>
 
     <!-- Component Datatable -->

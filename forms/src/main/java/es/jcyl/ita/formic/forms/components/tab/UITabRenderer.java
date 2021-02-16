@@ -70,7 +70,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
         viewPager.getParent().requestChildFocus(viewPager, viewPager);
 
-        /*viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -80,7 +80,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
                     viewPager.requestLayout();
                 }
             }
-        });*/
+        });
     }
 
     private void updatePagerHeightForChild(View view, ViewPager2 viewPager) {

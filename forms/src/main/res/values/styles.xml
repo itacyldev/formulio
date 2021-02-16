@@ -48,6 +48,7 @@
         <item name="android:layout_gravity">start|top</item>
         <item name="boxStrokeColor">@color/outline_color</item>
     </style>
+
     <!--TextAppearance.AppCompat-->
 
     <style name="Default_Label_font">
@@ -92,12 +93,34 @@
         <item name="backgroundTint">@color/underline_color_selector</item>
     </style>
 
-    <style name="Textfield_cancel_button">
-        <item name="android:layout_marginStart">5dp</item>
-        <item name="android:layout_weight">0</item>
+    <style name="Textfield_info_button">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:background">@drawable/selectablebuttonbackground</item>
+        <item name="android:contentDescription">@string/tool_buttons_i</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_weight">0.3</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="tint">?attr/onSurfaceColor</item>
+        <item name="android:src">@drawable/ic_tool_info</item>
+    </style>
+
+
+    <style name="Textfield_cancel_button">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:background">@drawable/selectablebuttonbackground</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:contentDescription">@string/tool_buttons_x</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_weight">0.3</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="tint">?attr/onSurfaceColor</item>
+        <item name="android:src">@drawable/ic_tool_x_circle_dark</item>
     </style>
 
     <style name="Spinner_item" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
@@ -147,6 +170,13 @@
         <item name="android:background">?attr/surfaceColor</item>
         <item name="tabIndicatorColor">?attr/primaryColorVariant</item>
         <item name="tabTextColor">?attr/onSurfaceColor</item>
+    </style>
+
+    <style name="Widget_padding">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
     </style>
 
 </resources>

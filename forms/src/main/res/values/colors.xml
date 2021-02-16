@@ -21,6 +21,8 @@
     <color name="light_Surface3Color">#282828</color>
     <color name="light_OnSurface3Color">#D7D7D7</color>
 
+    <color name="light_OnSurface4Color">#B1B1B1</color>
+
     <color name="light_BackgroundColor">#FFFFFF</color>
     <color name="light_OnBackgroundColor">#121212</color>
 
@@ -44,6 +46,8 @@
 
     <color name="dark_Surface3Color">#282828</color>
     <color name="dark_OnSurface3Color">#D7D7D7</color>
+
+    <color name="dark_OnSurface4Color">#B1B1B1</color>
 
     <color name="dark_BackgroundColor">#121212</color>
     <color name="dark_OnBackgroundColor">#EAEAEA</color>
