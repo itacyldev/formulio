@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.components.tab;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -54,7 +55,8 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
-        viewPagerAdapter.notifyDataSetChanged();
+
+        //viewPagerAdapter.notifyDataSetChanged();
 
         TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -73,12 +75,17 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
             @Override
             public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                if (viewPagerAdapter.getTabFragments().size() > position){
-                    TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
-                    updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
-                    viewPager.requestLayout();
-                }
+                viewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(position);
+                        if (viewPagerAdapter.getTabFragments().size() > position){
+                            TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
+                            updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
+                            viewPager.requestLayout();
+                        }
+                    }
+                });
             }
         });
     }
@@ -90,7 +97,8 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         view.measure(wMeasureSpec, hMeasureSpec);
 
         if (viewPager.getLayoutParams().height != view.getMeasuredHeight()) {
-            viewPager.getLayoutParams().height = view.getMeasuredHeight();
+            ViewGroup.LayoutParams lp = viewPager.getLayoutParams();
+            lp.height = view.getMeasuredHeight();
         }
     }
 
