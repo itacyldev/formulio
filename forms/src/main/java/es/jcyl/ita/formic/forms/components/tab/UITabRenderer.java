@@ -56,7 +56,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
 
-        //viewPagerAdapter.notifyDataSetChanged();
+        viewPagerAdapter.notifyDataSetChanged();
 
         TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -132,5 +132,4 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
             pos++;
         }
     }
-
 }
