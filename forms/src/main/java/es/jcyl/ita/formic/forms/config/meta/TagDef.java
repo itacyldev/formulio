@@ -44,6 +44,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_DELETE_BUTTON;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_TODAY_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HINT;
@@ -126,12 +127,12 @@ public class TagDef {
         }));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
-        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON};
+        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);
         register("text", baseInput);
-        register("date", baseInput);
+        register("date", define(baseInput, new Attribute[]{HAS_TODAY_BUTTON}));
         register("textarea", define(base, input, new Attribute[]{LINES, HINT}));
         register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT}));
 
