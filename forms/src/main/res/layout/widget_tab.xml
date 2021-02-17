@@ -15,7 +15,6 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        class="es.jcyl.ita.formic.forms.components.tab.WrapContentHeightViewPager"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 </es.jcyl.ita.formic.forms.view.widget.Widget>
