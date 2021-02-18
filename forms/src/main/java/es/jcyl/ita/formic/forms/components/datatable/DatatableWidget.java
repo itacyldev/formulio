@@ -198,7 +198,14 @@ public class DatatableWidget extends Widget<UIDatatable>
             adapter.notifyDataSetChanged();
         }
 
+        if (this.entities.size() == 0) {
+            addNoResults();
+        }
+    }
 
+    private void addNoResults() {
+        TextView list_no_results =  this.findViewById(R.id.list_no_results);
+        list_no_results.setVisibility(VISIBLE);
     }
 
     private View createHeaderView(final Context viewContext, final ViewGroup parent, final UIColumn column) {
@@ -212,16 +219,19 @@ public class DatatableWidget extends Widget<UIDatatable>
 
         final TextView fieldNameView = output
                 .findViewById(R.id.list_header_textview);
-        fieldNameView.setText(DataUtils.nullFormat(columnName));
+        fieldNameView.setText(DataUtils.nullFormat(StringUtils.isNotBlank(columnName)?StringUtils.capitalize(columnName):columnName));
+
+        final ImageView searchView = output
+                .findViewById(R.id.list_header_img);
 
         if (column.isFiltering()) {
-            addHeaderFilterLayout(column, output, fieldNameView);
+            addHeaderFilterLayout(column, output, fieldNameView, searchView);
         }
 
         return output;
     }
 
-    private void addHeaderFilterLayout(final UIColumn column, View headerLayout, View fieldNameView) {
+    private void addHeaderFilterLayout(final UIColumn column, View headerLayout, View fieldNameView, ImageView searchView) {
         final LinearLayout filterLayout = headerLayout
                 .findViewById(R.id.list_header_filter_layout);
 
@@ -236,6 +246,19 @@ public class DatatableWidget extends Widget<UIDatatable>
 
 
         fieldNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if (filterLayout.getVisibility() == View.VISIBLE) {
+                    setHeaderFilterVisibility(View.GONE);
+                    resetFilter();
+                } else {
+                    setHeaderFilterVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 if (filterLayout.getVisibility() == View.VISIBLE) {

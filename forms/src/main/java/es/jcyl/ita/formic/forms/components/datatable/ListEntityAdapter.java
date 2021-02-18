@@ -1,6 +1,8 @@
 package es.jcyl.ita.formic.forms.components.datatable;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,7 +121,18 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         adjustColumnWidth((LinearLayout) item);
         adjustColumnWidth(this.dtLayout.getHeaderView());
 
+        setAlternateRowColor(position, item);
+
+
         return item;
+    }
+
+    private void setAlternateRowColor(int position, View item) {
+        if (position % 2 == 1) {
+            TypedArray ta = context.obtainStyledAttributes(new int[]{R.attr.onSurface5Color});
+            item.setBackgroundColor(ta.getColor(0, Color.GRAY));
+            //item.setBackgroundColor(R.attr.onSurface5Color);
+        }
     }
 
     /**

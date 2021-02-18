@@ -18,6 +18,8 @@
 
         <item name="onSurface4Color">@color/light_OnSurface4Color</item>
 
+        <item name="onSurface5Color">@color/light_OnSurface5Color</item>
+
         <item name="AppBackgroundColor">@color/light_BackgroundColor</item>
         <item name="onAppBackgroundColor">@color/light_OnBackgroundColor</item>
 
@@ -63,6 +65,8 @@
         <item name="onSurface3Color">@color/dark_OnSurfaceColor</item>
 
         <item name="onSurface4Color">@color/dark_OnSurface4Color</item>
+
+        <item name="onSurface5Color">@color/dark_OnSurface5Color</item>
 
         <item name="AppBackgroundColor">@color/dark_BackgroundColor</item>
         <item name="onAppBackgroundColor">@color/dark_OnBackgroundColor</item>

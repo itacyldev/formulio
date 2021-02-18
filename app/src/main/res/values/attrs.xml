@@ -17,6 +17,8 @@
 
     <attr name="onSurface4Color" format="reference"/>
 
+    <attr name="onSurface5Color" format="reference"/>
+
     <attr name="AppBackgroundColor" format="reference"/>
     <attr name="onAppBackgroundColor" format="reference"/>
 

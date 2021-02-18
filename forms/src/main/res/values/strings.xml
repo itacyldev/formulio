@@ -43,6 +43,6 @@
     <string name="locationsettings">Review location settings</string>
     <string name="Cancel">Cancel</string>
     <string name="open_location_settings">Open Location Settings</string>
-
+    <string name="no_results">No results</string>
 
 </resources>
