@@ -198,14 +198,17 @@ public class DatatableWidget extends Widget<UIDatatable>
             adapter.notifyDataSetChanged();
         }
 
-        if (this.entities.size() == 0) {
-            addNoResults();
-        }
+        addNoResults();
     }
 
     private void addNoResults() {
         TextView list_no_results =  this.findViewById(R.id.list_no_results);
-        list_no_results.setVisibility(VISIBLE);
+        if (this.entities.size() == 0) {
+            list_no_results.setVisibility(VISIBLE);
+        }
+        else{
+            list_no_results.setVisibility(GONE);
+        }
     }
 
     private View createHeaderView(final Context viewContext, final ViewGroup parent, final UIColumn column) {
