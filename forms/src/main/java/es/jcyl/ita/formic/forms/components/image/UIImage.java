@@ -41,6 +41,7 @@ public class UIImage extends UIInputComponent {
     private Integer width;
     private Integer height;
     private boolean embedded;
+    private String repoProperty;
 
     public Integer getWidth() {
         return width;
@@ -137,7 +138,15 @@ public class UIImage extends UIInputComponent {
         this.embedded = embedded;
     }
 
-//
+    public String getRepoProperty() {
+        return repoProperty;
+    }
+
+    public void setRepoProperty(String repoProperty) {
+        this.repoProperty = repoProperty;
+    }
+
+    //
 //    /**
 //     * Overrides default readonly method to allow nested Properties edition
 //     * @return

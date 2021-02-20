@@ -74,6 +74,7 @@ public class AttributeDef {
     public static Attribute EXPRESSION_TYPE = new Attribute("expressionType", true);
     public static Attribute EVAL_ON = new Attribute("evalOn", true);
     public static Attribute PROPERTY = new Attribute("property", true);
+    public static Attribute REPO_PROPERTY = new Attribute("repoProperty", true);
 
     // autocomplete
     public static Attribute VALUE_PROPERTY = new Attribute("valueProperty");
@@ -110,7 +111,6 @@ public class AttributeDef {
 
     public static Attribute WEIGHTS = new Attribute("weights", String.class);
     public static Attribute BORDER = new Attribute("border", Boolean.class);
-
 
     // text style
     public static Attribute FONT_SIZE = new Attribute("fontSize", String.class);

@@ -141,7 +141,6 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
      * @param byteArray
      */
     public void updateRelatedEntity(byte[] byteArray) {
-
         // the related entity is stored in the main entity using current component Id as property name
         Entity entity = (Entity) mainEntity.get(component.getId());
         if (entity == null) {
@@ -151,7 +150,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
             MediaResource imgResource = MediaResource.fromByteArray(byteArray);
             getInputView().setResource(imgResource);
         }
-        entity.set("content", new ByteArray(byteArray));
+        entity.set(component.getRepoProperty(), new ByteArray(byteArray));
     }
 
     @Override
