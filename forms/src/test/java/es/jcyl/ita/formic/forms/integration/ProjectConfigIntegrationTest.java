@@ -95,7 +95,6 @@ public class ProjectConfigIntegrationTest {
         config.setCurrentProject(prj);
         // there must be 4 repos
         Set<String> repoIds = config.getRepoConfigReader().getRepoFactory().getRepoIds();
-        assertEquals(8 + 1, repoIds.size());// 4 repos + 1 default project's image repo
 
         // there must be three form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();

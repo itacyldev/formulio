@@ -1,4 +1,5 @@
 <repos>
+
     <!--
     <repo dbFile="dbTest.sqlite" dbTable="provincia" id="provRepo" />
     <repo dbFile="dbTest.sqlite" dbTable="municipio" id="muniRepo" />
@@ -9,7 +10,8 @@
     </repo>
     <repo dbFile="pruebas.sqlite" dbTable="pruebas" id="prue" />
     <repo dbFile="pruebas.sqlite" dbTable="autocompletado" id="autocompletado" />
--->
+    -->
+
     <!-- sups -->
     <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHRepo">
         <meta>
