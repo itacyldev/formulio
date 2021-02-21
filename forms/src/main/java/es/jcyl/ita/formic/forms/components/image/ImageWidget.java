@@ -34,6 +34,7 @@ import es.jcyl.ita.formic.forms.components.media.MediaResource;
 import es.jcyl.ita.formic.forms.view.activities.ActivityResultCallBack;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 
@@ -145,7 +146,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         Entity entity = (Entity) mainEntity.get(component.getId());
         if (entity == null) {
             // create new entity
-            entity = Entity.newEmpty();
+            entity = ((EditableRepository) component.getRepo()).newEntity();
             mainEntity.set(component.getId(), entity, true);
             MediaResource imgResource = MediaResource.fromByteArray(byteArray);
             getInputView().setResource(imgResource);

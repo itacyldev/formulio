@@ -179,7 +179,6 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
 
         Object value;
         int i = 1;
-        SQLiteDBValue dbValue;
 
         EntityMeta<PropertyType> meta = entity.getMetadata();
         DBPropertyType dp;

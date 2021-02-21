@@ -6,6 +6,10 @@
         <mapping fk="${entity.provmuni.substring(0,2)}" property="provincia" repo="provRepo" />
         <mapping fk="provmuni" property="municipio" repo="muniRepo" />
     </repo>
+    <repo dbFile="pruebas.sqlite" dbTable="pruebas" id="prue" />
+    <repo dbFile="pruebas.sqlite" dbTable="autocompletado" id="autocompletado" />
+
+    <!-- sups -->
     <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHRepo">
         <meta>
             <property name="creation_date" converter="date" evalOn="insert"
@@ -16,7 +20,11 @@
                 expression="${date.now}" />
         </meta>
     </repo>
-    <repo dbFile="pruebas.sqlite" id="prue" dbTable="pruebas" />
-    <repo dbFile="pruebas.sqlite" id="autocompletado" dbTable="autocompletado" />
+    <repo dbFile="dbTest.sqlite" dbTable="super_relation" id="superRelRepo">
+        <!--
+        <mapping fk="other_id" property="other" repo="superHRepo" insertable="false" updatable="false" />
+        -->
+    </repo>
     <fileRepo defaultExtension="jpg" folder="pictures/superheroes" id="superHImages" />
+    <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHImagesDBRepo"/>
 </repos>

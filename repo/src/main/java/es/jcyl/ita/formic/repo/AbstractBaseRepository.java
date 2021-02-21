@@ -135,13 +135,13 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
             }
 
             if (relEntityId != null) {
+                // TODO: else set a proxy to evaluate the expression lazyly during the
+                // TODO: rendering process
+                // set related entity as transient
                 relEntity = findRelatedEntity(mainEntity, mapping.getRepo(),
                         mapping.getFilter(), relEntityId);
-            } // TODO: else set a proxy to evaluate the expression lazyly during the
-            // TODO: rendering process
-
-            // set related entity as transient
-            mainEntity.set(mapping.getProperty(), relEntity, true);
+                mainEntity.set(mapping.getProperty(), relEntity, true);
+            }
         }
     }
 
