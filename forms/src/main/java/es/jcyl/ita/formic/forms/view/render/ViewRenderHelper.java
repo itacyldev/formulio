@@ -233,7 +233,6 @@ public class ViewRenderHelper {
                 } else {
                     env.setFormContext(component.getParentForm().getContext());
                 }
-
                 if (view instanceof DynamicComponent) {
                     ((DynamicComponent) view).load(env);
                 } else {

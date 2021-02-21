@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<es.jcyl.ita.formic.forms.view.widget.InputWidget xmlns:android="http://schemas.android.com/apk/res/android"
+<es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteWidget xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_view"
+    style="@style/Widget_padding"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    style="@style/Widget_padding">
+    android:orientation="vertical">
 
-   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -16,24 +16,25 @@
             android:id="@+id/label_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:layout_weight="9.7"
             android:paddingTop="5dp"
-            android:layout_weight="9.7"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/field_layout_x"
             style="@style/Textfield_cancel_button"
-            android:layout_marginRight="2dp"
-             />
+            android:layout_marginRight="2dp" />
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+
         <es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView
             android:id="@+id/input_view"
+            style="@style/Autocomplete_edittext"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/Autocomplete_edittext"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
-</es.jcyl.ita.formic.forms.view.widget.InputWidget>
+</es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteWidget>

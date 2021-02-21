@@ -198,8 +198,6 @@ public class DatatableWidget extends Widget<UIDatatable>
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-
-
     }
 
     private View createHeaderView(final Context viewContext, final ViewGroup parent, final UIColumn column) {

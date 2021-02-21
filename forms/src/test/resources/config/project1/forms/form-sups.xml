@@ -7,8 +7,7 @@
         <form>
             <tab>
                 <tabitem label="Personal Data">
-
-                    <table headerText="Name,RealName">
+                    <table headerText="Name,Real Name">
                         <row>
                             <input hasDeleteButton="false" validator="required"
                                 value="${entity.name}" />
