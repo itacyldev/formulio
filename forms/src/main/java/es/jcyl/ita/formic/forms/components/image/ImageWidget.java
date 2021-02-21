@@ -155,7 +155,10 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setState(Object value) {
         MediaResource resource = (MediaResource) value;
         getInputView().setResource(resource);
-        this.getInputView().setImageBitmap(resource.toBitMap());
+        Bitmap bitmap = resource.toBitMap();
+        if(bitmap != null){
+            this.getInputView().setImageBitmap(bitmap);
+        }
     }
 
     @Override
