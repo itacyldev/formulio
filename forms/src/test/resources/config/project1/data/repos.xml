@@ -1,4 +1,5 @@
 <repos>
+    <!--
     <repo dbFile="dbTest.sqlite" dbTable="provincia" id="provRepo" />
     <repo dbFile="dbTest.sqlite" dbTable="municipio" id="muniRepo" />
     <repo dbFile="dbTest.sqlite" dbTable="contacts" id="contacts" />
@@ -8,7 +9,7 @@
     </repo>
     <repo dbFile="pruebas.sqlite" dbTable="pruebas" id="prue" />
     <repo dbFile="pruebas.sqlite" dbTable="autocompletado" id="autocompletado" />
-
+-->
     <!-- sups -->
     <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHRepo">
         <meta>
@@ -21,9 +22,7 @@
         </meta>
     </repo>
     <repo dbFile="dbTest.sqlite" dbTable="super_relation" id="superRelRepo">
-        <!--
         <mapping fk="other_id" property="other" repo="superHRepo" insertable="false" updatable="false" />
-        -->
     </repo>
     <fileRepo defaultExtension="jpg" folder="pictures/superheroes" id="superHImages" />
     <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHImagesDBRepo"/>

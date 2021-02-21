@@ -7,8 +7,8 @@
         <form>
             <tab>
                 <!--
-
                 <tabitem label="Personal Data">
+
                     <table headerText="Name,RealName">
                         <row>
                             <input hasDeleteButton="false" validator="required"
@@ -42,7 +42,9 @@
                 -->
                 <tabitem label="Relations">
                     <image repo="superHImages" value="${entity.image}" />
-                    <autocomplete converter="integer" forceSelection="true" label="Sworn enemy"
+                    <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
+                    <!--
+                    <autocomplete converter="integer" forceSelection="true" label="Sworn enemy" id="sworn_enemy_auto"
                         repo="superHRepo" validator="required" value="${entity.sworn_enemy}">
                         <options labelExpression="${entity.name}" labelFilteringProperty="name"
                             valueProperty="id" />
@@ -50,17 +52,16 @@
 
                     <image converter="b64Image" height="200" readonly="true"
                         repo="superHImagesDBRepo" repoProperty="image_thumb"
-                        value="${entity.sworn_enemy}" width="300" />
-
+                        value="${view.sworn_enemy_auto}" width="300" />
 
                     <input readonly="true" value="Relations" />
-                    <!--
-                    <datatable properties="id,other_id,other.name" repo="superRelRepo">
+
+                    <datatable properties="id,super_id,other_id,other.name" repo="superRelRepo">
                         <repofilter>
                             <gt property="super_id" value="${entity.id}" />
                         </repofilter>
                     </datatable>
-                    -->
+-->
                 </tabitem>
             </tab>
         </form>

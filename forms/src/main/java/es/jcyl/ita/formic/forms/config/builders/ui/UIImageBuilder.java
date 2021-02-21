@@ -161,6 +161,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         // use content property of related entity, it will contain the image as the byteArray or StringB64
         String imageContentProperty = node.hasAttribute("repoProperty") ?
                 node.getAttribute("repoProperty") : "content";
+        img.setRepoProperty(imageContentProperty);
         String expression = String.format("${entity.%s.%s}", img.getId(), imageContentProperty);
         ValueBindingExpression effectiveExpression = this.getFactory().getExpressionFactory().create(expression);
         img.setValueExpression(effectiveExpression);

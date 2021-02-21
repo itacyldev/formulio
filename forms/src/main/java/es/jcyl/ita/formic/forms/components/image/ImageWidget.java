@@ -148,8 +148,6 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
             // create new entity
             entity = ((EditableRepository) component.getRepo()).newEntity();
             mainEntity.set(component.getId(), entity, true);
-            MediaResource imgResource = MediaResource.fromByteArray(byteArray);
-            getInputView().setResource(imgResource);
         }
         entity.set(component.getRepoProperty(), new ByteArray(byteArray));
     }
