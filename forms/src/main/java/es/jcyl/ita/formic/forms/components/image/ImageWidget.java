@@ -124,14 +124,16 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
             updateRelatedEntity(byteArray);
         }
 
-        MediaResource imgResource = getInputView().getResource();
-        if (imgResource == null) {
-            // no previous photo
-            imgResource = MediaResource.fromByteArray(byteArray);
-            getInputView().setResource(imgResource);
-        } else {
-            imgResource.setContent(byteArray);
-        }
+        MediaResource imgResource = MediaResource.fromByteArray(byteArray);
+        getInputView().setResource(imgResource);
+//        MediaResource imgResource = getInputView().getResource();
+//        imgResource.setContent(byteArray);
+//        if (imgResource == null) {
+//            // no previous photo
+//            getInputView().setResource(imgResource);
+//        } else {
+//            imgResource.setContent(byteArray);
+//        }
         getInputView().setImageBitmap(imageData);
     }
 
@@ -159,7 +161,9 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     @Override
     public void setState(Object value) {
-        getInputView().setResource((MediaResource) value);
+        MediaResource resource = (MediaResource) value;
+        getInputView().setResource(resource);
+        this.getInputView().setImageBitmap(resource.toBitMap());
     }
 
     @Override

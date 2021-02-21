@@ -43,12 +43,13 @@
                 <tabitem label="Relations">
                     <image repo="superHImages" value="${entity.image}" />
                     <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
-                    <!--
+
                     <autocomplete converter="integer" forceSelection="true" label="Sworn enemy" id="sworn_enemy_auto"
                         repo="superHRepo" validator="required" value="${entity.sworn_enemy}">
                         <options labelExpression="${entity.name}" labelFilteringProperty="name"
                             valueProperty="id" />
                     </autocomplete>
+                    <!--
 
                     <image converter="b64Image" height="200" readonly="true"
                         repo="superHImagesDBRepo" repoProperty="image_thumb"
