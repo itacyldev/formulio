@@ -190,7 +190,8 @@ public class DatatableWidget extends Widget<UIDatatable>
     }
 
     private void addData() {
-        this.entities.addAll(this.repo.find(this.filter));
+        List entities = this.repo.find(this.filter);
+        this.entities.addAll(entities);
 
         //notify that the model changedA
         ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();

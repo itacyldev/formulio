@@ -146,16 +146,4 @@ public class UIImage extends UIInputComponent {
         this.repoProperty = repoProperty;
     }
 
-    //
-//    /**
-//     * Overrides default readonly method to allow nested Properties edition
-//     * @return
-//     */
-//    public boolean isReadOnly() {
-//        if (this.parentForm == null) {
-//            return readOnly;
-//        } else {
-//            return this.parentForm.isReadOnly() || this.readOnly;
-//        }
-//    }
 }

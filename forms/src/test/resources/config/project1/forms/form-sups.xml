@@ -6,7 +6,6 @@
     <edit>
         <form>
             <tab>
-                <!--
                 <tabitem label="Personal Data">
 
                     <table headerText="Name,RealName">
@@ -39,25 +38,25 @@
                     <input type="date" value="${entity.creation_date}" />
                     <input readonly="true" value="${entity.update_date}" />
                 </tabitem>
-                -->
                 <tabitem label="Relations">
+                    <!--
                     <image repo="superHImages" value="${entity.image}" />
                     <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
+                    -->
 
-                    <autocomplete converter="integer" forceSelection="true" label="Sworn enemy" id="sworn_enemy_auto"
+                    <paragraph value="Sworn Emeny" />
+
+                    <autocomplete converter="integer" forceSelection="true" id="sworn_enemy_auto"
                         repo="superHRepo" validator="required" value="${entity.sworn_enemy}">
                         <options labelExpression="${entity.name}" labelFilteringProperty="name"
                             valueProperty="id" />
                     </autocomplete>
-                    <!--
 
-                    <image converter="b64Image" height="200" readonly="true"
+                    <image converter="b64Image" height="200" readOnly="true"
                         repo="superHImagesDBRepo" repoProperty="image_thumb"
-                        value="${view.sworn_enemy_auto}" width="300" />
+                        value="${entity.sworn_enemy}" width="300" />
 
-                    <input readonly="true" value="Relations" />
--->
-
+                    <paragraph value="Super-Heroe relations" />
                     <datatable properties="id,super_id,other_id,other.name" repo="superRelRepo">
                         <repofilter>
                             <eq property="super_id" value="${entity.id}" />

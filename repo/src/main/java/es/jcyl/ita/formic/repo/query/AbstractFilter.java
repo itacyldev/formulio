@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.repo.query;
  * limitations under the License.
  */
 
+import java.util.Arrays;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -59,4 +61,13 @@ public abstract class AbstractFilter<E extends Expression> implements Filter<E> 
         return this.expression;
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getName() + "{" +
+                "pageSize=" + pageSize +
+                ", offset=" + offset +
+                ", expression=" + expression +
+                ", sorting=" + Arrays.toString(sorting) +
+                '}';
+    }
 }

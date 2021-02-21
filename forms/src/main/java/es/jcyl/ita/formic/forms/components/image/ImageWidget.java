@@ -126,14 +126,6 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
         MediaResource imgResource = MediaResource.fromByteArray(byteArray);
         getInputView().setResource(imgResource);
-//        MediaResource imgResource = getInputView().getResource();
-//        imgResource.setContent(byteArray);
-//        if (imgResource == null) {
-//            // no previous photo
-//            getInputView().setResource(imgResource);
-//        } else {
-//            imgResource.setContent(byteArray);
-//        }
         getInputView().setImageBitmap(imageData);
     }
 
