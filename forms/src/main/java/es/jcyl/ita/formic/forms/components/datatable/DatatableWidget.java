@@ -256,6 +256,7 @@ public class DatatableWidget extends Widget<UIDatatable>
                     resetFilter();
                 } else {
                     setHeaderFilterVisibility(View.VISIBLE);
+                    filterText.requestFocus();
                 }
 
             }
@@ -269,6 +270,7 @@ public class DatatableWidget extends Widget<UIDatatable>
                     resetFilter();
                 } else {
                     setHeaderFilterVisibility(View.VISIBLE);
+                    filterText.requestFocus();
                 }
 
             }
