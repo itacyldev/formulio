@@ -5,15 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DevConsoleActivity">
+    <!--<ListView
+        android:id="@+id/console_body"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:padding="0dp"
+        android:gravity="bottom"
+        tools:ignore="MissingConstraints" />-->
     <EditText
         android:id="@+id/console_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
+        android:inputType="textMultiLine|none"
         android:minLines="12"
         android:scrollbars="vertical"
         android:textColor="?attr/onSurfaceColor"
-        android:textSize="12dp"/>
+        android:textSize="12dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:cursorVisible="false"
+        android:gravity="bottom"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

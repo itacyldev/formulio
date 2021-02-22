@@ -15,11 +15,19 @@ package es.jcyl.ita.formic.forms.config;
  * limitations under the License.
  */
 
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
 import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -40,52 +48,83 @@ public class DevConsole {
 
     private static ConfigReadingInfo configReadingInfo;
 
+    public static final int COLOR_ERROR = Color.RED;
+    public static final int COLOR_INFO = Color.GREEN;
+    public static final int COLOR_WARN = Color.YELLOW;
+    public static final int COLOR_DEBUG = Color.BLUE;
+
     private static final int MAX_SIZE = 300;
-    private static Queue<String> console = new LinkedList<String>();
-
-
-    public static void setLevel(int l) {
-        level = l;
-    }
+    private static Queue<SpannableString> console = new LinkedList<SpannableString>();
 
     public static void clear() {
         console.clear();
     }
 
-    private static void add(String effMsg) {
-        console.add(effMsg);
+    private static void add(String effMsg, int level, int color) {
+
+        String msg = StringUtils.join(String.format("%1s [%2s]:%3s", getDateTimeStamp(), formatLevel(level),  effMsg), "\n");
+
+        SpannableString redSpannable= new SpannableString(msg);
+        redSpannable.setSpan(new ForegroundColorSpan(color), 0, msg.length(), 0);
+
+        console.add(redSpannable);
         if (console.size() > MAX_SIZE){
             console.remove();
         }
     }
 
+    private static String getDateTimeStamp(){
+        Date dateNow = Calendar.getInstance().getTime();
+        return (String) ConvertUtils.convert(dateNow, String.class);
+    }
+
+    private static String formatLevel(int level)  {
+        String strLevel = "";
+        try {
+            Class<Log> c = Log.class;
+            for (Field f : Log.class.getDeclaredFields()) {
+                if (f.getInt(c) == level) {
+                    strLevel = f.getName();
+                    break;
+                }
+            }
+        }catch (IllegalAccessException e){}
+
+        return strLevel;
+    }
+
+
     public static String error(String msg) {
         // TODO: link log library
-        return _writeMsg(Log.ERROR, msg, null);
+        return _writeMsg(Log.ERROR, COLOR_ERROR, msg, null);
     }
 
     public static String info(String s) {
-        return _writeMsg(Log.INFO, s, null);
+        return _writeMsg(Log.INFO, COLOR_INFO, s, null);
     }
 
     public static String error(String msg, Throwable t) {
         // TODO: link log library
-        return _writeMsg(Log.ERROR, msg, t);
+        return _writeMsg(Log.ERROR, COLOR_ERROR, msg, t);
     }
 
 
     public static String warn(String msg) {
         // TODO: link log library
-        return _writeMsg(Log.WARN, msg, null);
+        return _writeMsg(Log.WARN, COLOR_WARN, msg, null);
+    }
+
+    public static void debug(String s) {
+        _writeMsg(Log.DEBUG, COLOR_DEBUG, s, null);
     }
 
     //
-    private static String _writeMsg(int errorLevel, String msg, Throwable t) {
+    private static String _writeMsg(int errorLevel, int color, String msg, Throwable t) {
         if (errorLevel < level) {
             return msg;
         }
         String effMsg = String.valueOf(JexlUtils.eval(devContext, msg));
-        add(effMsg);
+        add(effMsg, errorLevel, color);
 
         if (errorLevel == Log.ERROR) {
             System.err.println(effMsg);
@@ -99,14 +138,6 @@ public class DevConsole {
         return effMsg;
     }
 
-
-    public static void debug(String s) {
-        _writeMsg(Log.DEBUG, s, null);
-    }
-
-    public static void setConfigReadingInfo(ConfigReadingInfo info) {
-        configReadingInfo = info;
-    }
 
     private static final Set<String> PROPS = new HashSet<String>(Arrays.asList("project", "file", "line", "tag"));
     private static JexlContext devContext = new JexlContext() {
@@ -140,8 +171,15 @@ public class DevConsole {
         }
     };
 
+    public static void setConfigReadingInfo(ConfigReadingInfo info) {
+        configReadingInfo = info;
+    }
 
-    public static Queue<String> getMessages() {
+    public static void setLevel(int l) {
+        level = l;
+    }
+
+    public static Queue<SpannableString> getMessages() {
         return console;
     }
 

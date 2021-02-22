@@ -3,11 +3,13 @@ package es.jcyl.ita.formic.app.dev;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -21,7 +23,20 @@ public class DevConsoleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dev_console);
         // set messages in edittext
         EditText text = (EditText) this.findViewById(R.id.console_body);
-        text.setText(StringUtils.join(DevConsole.getMessages(), "\n"));
+        text.setMovementMethod(new ScrollingMovementMethod());
+        //text.setText(StringUtils.join(DevConsole.getMessages(), "\n"));
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        for (SpannableString spannable: DevConsole.getMessages()){
+            builder.append(spannable);
+        }
+        text.setText(builder, TextView.BufferType.SPANNABLE);
+
+
+        /*ListView consoleBody = this.findViewById(R.id.console_body);
+        ArrayAdapter<String> itemsAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, (List<String>) DevConsole.getMessages());
+        consoleBody.setAdapter(itemsAdapter);*/
+
     }
 
     protected void setTheme() {
