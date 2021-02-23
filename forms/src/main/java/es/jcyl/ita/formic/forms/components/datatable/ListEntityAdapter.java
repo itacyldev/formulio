@@ -130,7 +130,6 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
         setAlternateRowColor(position, item);
 
-
         return item;
     }
 

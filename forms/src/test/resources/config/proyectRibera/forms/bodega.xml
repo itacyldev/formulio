@@ -6,7 +6,7 @@
         <form>
             <text label="Id: " value="${entity.id}" readonly="true"/>
             <text label="Razón Social: " value="${entity.razon_social}" validator="required"/>
-            <autocomplete converter="integer" forceSelection="true" id="provincia" label="Provincia: " repo="provRepo" value="${entity.prov_id}">
+            <autocomplete forceSelection="true" id="provincia" label="Provincia: " repo="provRepo" value="${entity.prov_id}">
                 <options labelExpression="${entity.name}" labelFilteringProperty="name" valueProperty="id" />
             </autocomplete>
             <autocomplete forceSelection="true" id="provmuni" label="Municipio: " repo="muniRepo" value="${entity.provmuni_id}">

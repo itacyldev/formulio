@@ -153,13 +153,13 @@ public class ViewRenderHelper {
     /**
      * Checks if the component has a bindingExpression that depends on view components.
      *
-     * @param root
+     * @param component
      * @param env
      * @return
      */
-    private boolean hasDeferredExpression(UIComponent root, RenderingEnv env) {
-        if (root.getValueBindingExpressions() != null) {
-            for (ValueBindingExpression expr : root.getValueBindingExpressions()) {
+    private boolean hasDeferredExpression(UIComponent component, RenderingEnv env) {
+        if (component.getValueBindingExpressions() != null) {
+            for (ValueBindingExpression expr : component.getValueBindingExpressions()) {
                 if (expr.toString().contains("view.")) {
                     return true;
                 }
@@ -233,7 +233,6 @@ public class ViewRenderHelper {
                 } else {
                     env.setFormContext(component.getParentForm().getContext());
                 }
-
                 if (view instanceof DynamicComponent) {
                     ((DynamicComponent) view).load(env);
                 } else {

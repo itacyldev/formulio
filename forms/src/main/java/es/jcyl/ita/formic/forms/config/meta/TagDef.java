@@ -69,6 +69,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HISTORY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.STROKE_WIDTH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
@@ -134,7 +135,7 @@ public class TagDef {
         register("text", baseInput);
         register("date", baseInput);
         register("textarea", define(base, input, new Attribute[]{LINES, HINT}));
-        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT}));
+        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);

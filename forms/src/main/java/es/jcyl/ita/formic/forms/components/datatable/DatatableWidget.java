@@ -115,20 +115,6 @@ public class DatatableWidget extends Widget<UIDatatable>
                 R.layout.entity_list_item, entities);
         this.bodyView.setAdapter(dataAdapter);
 
-        /*if (this.getComponent().getRoute() == null){
-            this.bodyView.setBackground(ContextCompat.getDrawable(this.getContext(), R.drawable.unselectablebuttonbackground));
-            this.bodyView.setEnabled(false);
-        }*/
-
-        //this.bodyView.setBackground(ContextCompat.getDrawable(this.getContext(), R.drawable.unselectablebuttonbackground));
-
-        /*this.bodyView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                bodyView.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.unselectablebuttonbackground));
-            }
-        });*/
-
         this.bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(final AbsListView view,
@@ -211,7 +197,6 @@ public class DatatableWidget extends Widget<UIDatatable>
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-
         addNoResults();
 
         this.offset += this.pageSize;

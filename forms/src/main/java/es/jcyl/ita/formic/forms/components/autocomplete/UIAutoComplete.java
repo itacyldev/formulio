@@ -126,6 +126,11 @@ public class UIAutoComplete extends UISelect {
 
     @Override
     public Set<ValueBindingExpression> getValueBindingExpressions() {
-        return ExpressionHelper.getExpressions((FilterableComponent) this);
+        Set<ValueBindingExpression> expressions = super.getValueBindingExpressions();
+        // If repo filter is defined, add binding expressions to establish dependencies
+        if (this.filter != null) {
+            expressions.addAll(ExpressionHelper.getExpressions(this.filter.getExpression()));
+        }
+        return expressions;
     }
 }

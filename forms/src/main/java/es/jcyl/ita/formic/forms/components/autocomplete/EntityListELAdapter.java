@@ -32,6 +32,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
@@ -56,10 +57,11 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
     private Filter listFilter = new ListFilter();
     private es.jcyl.ita.formic.repo.query.Filter defFilter;
 
-    public EntityListELAdapter(RenderingEnv env, int resource, int textViewId, UIAutoComplete component) {
+    public EntityListELAdapter(RenderingEnv env, CompositeContext context, int resource, int textViewId, UIAutoComplete component) {
         super(env.getViewContext(), resource);
         dataList = new ArrayList<>();
         mContext = env.getViewContext();
+        globalContext = context;
         itemLayout = resource;
         this.itemId = textViewId;
         this.component = component;
@@ -71,10 +73,11 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
     }
 
     public void load(CompositeContext context) {
-        this.globalContext = context;
         dataList.clear();
+
         es.jcyl.ita.formic.repo.query.Filter filter = setupFilter(context);
-        dataList.addAll(component.getRepo().find(filter));
+        List entities = component.getRepo().find(filter);
+        dataList.addAll(entities);
     }
 
     /**
@@ -92,9 +95,10 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
             FilterHelper.evaluateFilter(context, defFilter, f, component.getMandatoryFilters());
         }
         f.setOffset(0);
-        f.setPageSize(100);
+        f.setPageSize(10);
         return f;
     }
+
 
     private es.jcyl.ita.formic.repo.query.Filter createDefaultDefinitionFilter() {
         es.jcyl.ita.formic.repo.query.Filter f = FilterHelper.createInstance(component.getRepo());
@@ -141,7 +145,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         protected FilterResults performFiltering(CharSequence constraint) {
             if (constraint != null) {
                 AndViewContext thisContxt = (AndViewContext) globalContext.getContext("this");
-                Object value = thisContxt.getValue("value");
+//                thisContxt.put("value", constraint.toString());
                 load(globalContext);
 
                 FilterResults filterResults = new FilterResults();
@@ -160,9 +164,8 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         }
 
     }
-    
-    class EntityToUIOptionWrapper extends UIOption {
 
+    class EntityToUIOptionWrapper extends UIOption {
         private Entity entity;
         private String cachedValue;
         private String cachedLabel;
@@ -172,13 +175,13 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         }
 
         public EntityToUIOptionWrapper(Entity entity) {
-            super("","");
+            super("", "");
             this.entity = entity;
         }
 
         @Override
         public String getValue() {
-            if(cachedValue == null){
+            if (cachedValue == null) {
                 Object value = entity.get(component.getOptionValueProperty());
                 cachedValue = (String) ConvertUtils.convert(value, String.class);
             }
@@ -187,9 +190,9 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
 
         @Override
         public String getLabel() {
-            if(cachedLabel == null){
+            if (cachedLabel == null) {
                 Object label = JexlUtils.eval(entity, component.getOptionLabelExpression());
-                cachedLabel =(String) ConvertUtils.convert(label, String.class);
+                cachedLabel = (String) ConvertUtils.convert(label, String.class);
             }
             return cachedLabel;
         }

@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.image.ImageResourceView;
+import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -34,10 +36,15 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, AutoCompleteView> {
 
     @Override
+    protected AutoCompleteWidget  createWidget(RenderingEnv env, UIAutoComplete component) {
+        AutoCompleteWidget widget = (AutoCompleteWidget) super.createWidget(env, component);
+        return widget;
+    }
+
+    @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIAutoComplete, AutoCompleteView> widget) {
         AutoCompleteView input = widget.getInputView();
         input.initialize(env, widget.getComponent());
-        input.load(env);
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);

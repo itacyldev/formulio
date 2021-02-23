@@ -15,6 +15,10 @@ package es.jcyl.ita.formic.forms.components.media;
  * limitations under the License.
  */
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -71,4 +75,15 @@ public class MediaResource {
     public static MediaResource fromByteArray(byte[] data) {
         return new MediaResource(null, data);
     }
+
+    public Bitmap toBitMap(){
+        Bitmap bmp = null;
+        if(this.hasContent()){
+            bmp = BitmapFactory.decodeByteArray(content, 0, content.length);
+        } else if (this.location !=null){
+            bmp = BitmapFactory.decodeFile(this.location.getAbsolutePath());
+        }
+        return bmp;
+    }
+
 }

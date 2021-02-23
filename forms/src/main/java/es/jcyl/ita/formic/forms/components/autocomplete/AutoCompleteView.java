@@ -39,7 +39,6 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
@@ -59,8 +58,7 @@ import es.jcyl.ita.formic.repo.query.Criteria;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 @SuppressLint("AppCompatCustomView")
-public class AutoCompleteView extends AppCompatAutoCompleteTextView
-        implements DynamicComponent {
+public class AutoCompleteView extends AppCompatAutoCompleteTextView {
     // TODO:  umm, extract to external class?
     private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);
     private static final ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
@@ -81,7 +79,6 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
         super(context, attrs, defStyle);
     }
 
-    @Override
     public void load(RenderingEnv env) {
         if (this.component.isStatic()) {
             return;
@@ -109,7 +106,8 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
                     component.hasNullOption(), android.R.layout.select_dialog_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         } else {
-            adapter = new EntityListELAdapter(env, R.layout.widget_autocomplete_listitem,
+            CompositeContext ctx = setupThisContext(env);
+            adapter = new EntityListELAdapter(env, ctx, R.layout.widget_autocomplete_listitem,
                     R.id.autocomplete_item, component);
         }
         this.setAdapter(adapter);
