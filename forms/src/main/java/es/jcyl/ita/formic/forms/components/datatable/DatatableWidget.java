@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.components.datatable;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -106,12 +107,27 @@ public class DatatableWidget extends Widget<UIDatatable>
         this.repo = component.getRepo();
     }
 
+    @SuppressLint("ResourceAsColor")
     public void setBodyView(ListView bodyView) {
         this.bodyView = bodyView;
 
         ListEntityAdapter dataAdapter = new ListEntityAdapter(this.getContext(), this,
                 R.layout.entity_list_item, entities);
         this.bodyView.setAdapter(dataAdapter);
+
+        /*if (this.getComponent().getRoute() == null){
+            this.bodyView.setBackground(ContextCompat.getDrawable(this.getContext(), R.drawable.unselectablebuttonbackground));
+            this.bodyView.setEnabled(false);
+        }*/
+
+        //this.bodyView.setBackground(ContextCompat.getDrawable(this.getContext(), R.drawable.unselectablebuttonbackground));
+
+        /*this.bodyView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                bodyView.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.unselectablebuttonbackground));
+            }
+        });*/
 
         this.bodyView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -180,8 +196,6 @@ public class DatatableWidget extends Widget<UIDatatable>
         this.filter.setOffset(this.offset);
         //this.entities.clear();
         addData();
-
-        this.offset += this.pageSize;
     }
 
     private void reloadData() {
@@ -199,6 +213,8 @@ public class DatatableWidget extends Widget<UIDatatable>
         }
 
         addNoResults();
+
+        this.offset += this.pageSize;
     }
 
     private void addNoResults() {
@@ -251,13 +267,7 @@ public class DatatableWidget extends Widget<UIDatatable>
         fieldNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (filterLayout.getVisibility() == View.VISIBLE) {
-                    setHeaderFilterVisibility(View.GONE);
-                    resetFilter();
-                } else {
-                    setHeaderFilterVisibility(View.VISIBLE);
-                    filterText.requestFocus();
-                }
+                setFilterVisibility(filterLayout, filterText);
 
             }
         });
@@ -265,13 +275,7 @@ public class DatatableWidget extends Widget<UIDatatable>
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (filterLayout.getVisibility() == View.VISIBLE) {
-                    setHeaderFilterVisibility(View.GONE);
-                    resetFilter();
-                } else {
-                    setHeaderFilterVisibility(View.VISIBLE);
-                    filterText.requestFocus();
-                }
+                setFilterVisibility(filterLayout, filterText);
 
             }
         });
@@ -319,6 +323,16 @@ public class DatatableWidget extends Widget<UIDatatable>
                 updateFilter();
             }
         });
+    }
+
+    private void setFilterVisibility(LinearLayout filterLayout, EditText filterText) {
+        if (filterLayout.getVisibility() == View.VISIBLE) {
+            setHeaderFilterVisibility(View.GONE);
+            resetFilter();
+        } else {
+            setHeaderFilterVisibility(View.VISIBLE);
+            filterText.requestFocus();
+        }
     }
 
     /**
@@ -394,6 +408,9 @@ public class DatatableWidget extends Widget<UIDatatable>
      * Updates the filter with the content of the headers of each column of the table
      */
     private void updateFilter() {
+        this.entities.clear();
+        this.offset = 0;
+
         ConditionBinding[] conditions = new ConditionBinding[this.getComponent().getColumns().length];
         int i = 0;
         for (UIColumn c : this.getComponent().getColumns()) {
@@ -503,4 +520,5 @@ public class DatatableWidget extends Widget<UIDatatable>
     public List<Entity> getEntities() {
         return this.entities;
     }
+
 }

@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
@@ -120,6 +122,11 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         // Adjust the column width to the content size
         adjustColumnWidth((LinearLayout) item);
         adjustColumnWidth(this.dtLayout.getHeaderView());
+
+        //if there is no route in the table
+        if (this.dtLayout.getComponent().getRoute() == null){
+            item.setBackground(ContextCompat.getDrawable(context, R.drawable.unselectablebuttonbackground));
+        }
 
         setAlternateRowColor(position, item);
 
