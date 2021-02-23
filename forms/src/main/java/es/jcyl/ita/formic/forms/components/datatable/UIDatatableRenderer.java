@@ -73,7 +73,7 @@ public class UIDatatableRenderer extends AbstractGroupRenderer<UIDatatable, Data
      */
     private void setLayoutParams(@NonNull ListView tableView,
                                  @NonNull Context context, @NonNull UIDatatable component) {
-        final int layout_width = ListView.LayoutParams.WRAP_CONTENT;
+        final int layout_width = ListView.LayoutParams.MATCH_PARENT;
         final int layout_height;
         if (component.getNumVisibleRows() < 0) {
             layout_height = ListView.LayoutParams.MATCH_PARENT;

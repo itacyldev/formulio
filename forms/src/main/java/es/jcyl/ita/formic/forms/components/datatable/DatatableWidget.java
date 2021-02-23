@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.components.datatable;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -106,6 +107,7 @@ public class DatatableWidget extends Widget<UIDatatable>
         this.repo = component.getRepo();
     }
 
+    @SuppressLint("ResourceAsColor")
     public void setBodyView(ListView bodyView) {
         this.bodyView = bodyView;
 
@@ -180,8 +182,6 @@ public class DatatableWidget extends Widget<UIDatatable>
         this.filter.setOffset(this.offset);
         //this.entities.clear();
         addData();
-
-        this.offset += this.pageSize;
     }
 
     private void reloadData() {
@@ -190,13 +190,25 @@ public class DatatableWidget extends Widget<UIDatatable>
     }
 
     private void addData() {
-        List entities = this.repo.find(this.filter);
-        this.entities.addAll(entities);
+        this.entities.addAll(this.repo.find(this.filter));
 
         //notify that the model changedA
         ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
+        addNoResults();
+
+        this.offset += this.pageSize;
+    }
+
+    private void addNoResults() {
+        TextView list_no_results =  this.findViewById(R.id.list_no_results);
+        if (this.entities.size() == 0) {
+            list_no_results.setVisibility(VISIBLE);
+        }
+        else{
+            list_no_results.setVisibility(GONE);
         }
     }
 
@@ -211,16 +223,19 @@ public class DatatableWidget extends Widget<UIDatatable>
 
         final TextView fieldNameView = output
                 .findViewById(R.id.list_header_textview);
-        fieldNameView.setText(DataUtils.nullFormat(columnName));
+        fieldNameView.setText(DataUtils.nullFormat(StringUtils.isNotBlank(columnName)?StringUtils.capitalize(columnName):columnName));
+
+        final ImageView searchView = output
+                .findViewById(R.id.list_header_img);
 
         if (column.isFiltering()) {
-            addHeaderFilterLayout(column, output, fieldNameView);
+            addHeaderFilterLayout(column, output, fieldNameView, searchView);
         }
 
         return output;
     }
 
-    private void addHeaderFilterLayout(final UIColumn column, View headerLayout, View fieldNameView) {
+    private void addHeaderFilterLayout(final UIColumn column, View headerLayout, View fieldNameView, ImageView searchView) {
         final LinearLayout filterLayout = headerLayout
                 .findViewById(R.id.list_header_filter_layout);
 
@@ -237,12 +252,15 @@ public class DatatableWidget extends Widget<UIDatatable>
         fieldNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (filterLayout.getVisibility() == View.VISIBLE) {
-                    setHeaderFilterVisibility(View.GONE);
-                    resetFilter();
-                } else {
-                    setHeaderFilterVisibility(View.VISIBLE);
-                }
+                setFilterVisibility(filterLayout, filterText);
+
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                setFilterVisibility(filterLayout, filterText);
 
             }
         });
@@ -290,6 +308,16 @@ public class DatatableWidget extends Widget<UIDatatable>
                 updateFilter();
             }
         });
+    }
+
+    private void setFilterVisibility(LinearLayout filterLayout, EditText filterText) {
+        if (filterLayout.getVisibility() == View.VISIBLE) {
+            setHeaderFilterVisibility(View.GONE);
+            resetFilter();
+        } else {
+            setHeaderFilterVisibility(View.VISIBLE);
+            filterText.requestFocus();
+        }
     }
 
     /**
@@ -365,6 +393,9 @@ public class DatatableWidget extends Widget<UIDatatable>
      * Updates the filter with the content of the headers of each column of the table
      */
     private void updateFilter() {
+        this.entities.clear();
+        this.offset = 0;
+
         ConditionBinding[] conditions = new ConditionBinding[this.getComponent().getColumns().length];
         int i = 0;
         for (UIColumn c : this.getComponent().getColumns()) {
@@ -474,4 +505,5 @@ public class DatatableWidget extends Widget<UIDatatable>
     public List<Entity> getEntities() {
         return this.entities;
     }
+
 }

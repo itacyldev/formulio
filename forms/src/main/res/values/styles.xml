@@ -107,8 +107,7 @@
         <item name="android:src">@drawable/ic_tool_info</item>
     </style>
 
-
-    <style name="Textfield_cancel_button">
+    <style name="Textfield_button">
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_gravity">top</item>
@@ -120,7 +119,14 @@
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="tint">?attr/onSurfaceColor</item>
+    </style>
+
+    <style name="Textfield_cancel_button" parent="Textfield_button">
         <item name="android:src">@drawable/ic_tool_x_circle_dark</item>
+    </style>
+
+    <style name="Textfield_search_button" parent="Textfield_button">
+        <item name="android:src">@drawable/ic_action_search</item>
     </style>
 
     <style name="Spinner_item" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
