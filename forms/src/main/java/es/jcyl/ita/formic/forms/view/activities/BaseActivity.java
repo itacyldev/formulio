@@ -3,15 +3,18 @@ package es.jcyl.ita.formic.forms.view.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 
 public abstract class BaseActivity extends AppCompatActivity  {
 
     protected SharedPreferences sharedPreferences;
     protected String currentTheme;
+    protected int logLevel;
 
 
     @Override
@@ -19,7 +22,9 @@ public abstract class BaseActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
+        logLevel = sharedPreferences.getInt("log_level", Log.DEBUG);
         setTheme();
+        setLogLevel();
         doOnCreate();
     }
 
@@ -32,6 +37,10 @@ public abstract class BaseActivity extends AppCompatActivity  {
         } else {
             setTheme(R.style.FormudruidDark_NoActionBar);
         }
+    }
+
+    protected void setLogLevel() {
+        DevConsole.setLevel(logLevel);
     }
 
 
@@ -62,6 +71,5 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
         invalidateOptionsMenu();
     }
-
 
 }

@@ -44,5 +44,14 @@
     <string name="Cancel">Cancel</string>
     <string name="open_location_settings">Open Location Settings</string>
     <string name="no_results">No results</string>
+    <string name="logLevel">Log level:</string>
+    <string name="debug">DEBUG</string>
+    <string name="info">INFO</string>
+    <string name="warn">WARN</string>
+    <string name="error">ERROR</string>
+
+    <string name="filterBy"><u>Filter by:</u></string>
+
+    <string name="systemLogLevel"><u>Set system log level:</u></string>
 
 </resources>
