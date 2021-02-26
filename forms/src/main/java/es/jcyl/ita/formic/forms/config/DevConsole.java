@@ -44,7 +44,7 @@ import es.jcyl.ita.formic.forms.el.JexlUtils;
  */
 public class DevConsole {
     private static final String DEV_CONSOLE = "devconsole";
-    private static int level = Log.DEBUG;
+    private static int level;
 
     private static ConfigReadingInfo configReadingInfo;
 
@@ -54,23 +54,76 @@ public class DevConsole {
     public static final int COLOR_DEBUG = Color.BLUE;
 
     private static final int MAX_SIZE = 300;
-    private static Queue<SpannableString> console = new LinkedList<SpannableString>();
+    //priority level: Debug > Info > Warn > Error
+    private static Queue<SpannableString> consoleDebug = new LinkedList<SpannableString>();
+    private static Queue<SpannableString> consoleInfo = new LinkedList<SpannableString>();
+
+    private static Queue<SpannableString> consoleWarn = new LinkedList<SpannableString>();
+    private static Queue<SpannableString> consoleError = new LinkedList<SpannableString>();
 
     public static void clear() {
-        console.clear();
+        clearDebug();
+        clearInfo();
+        clearWarn();
+        clearError();
     }
 
-    private static void add(String effMsg, int level, int color) {
+    private static void clearDebug() {
+        consoleDebug.clear();
+    }
 
-        String msg = StringUtils.join(String.format("%1s [%2s]:%3s", getDateTimeStamp(), formatLevel(level),  effMsg), "\n");
+    private static void clearInfo() {
+        consoleInfo.clear();
+    }
 
-        SpannableString redSpannable= new SpannableString(msg);
-        redSpannable.setSpan(new ForegroundColorSpan(color), 0, msg.length(), 0);
+    private static void clearWarn() {
+        consoleWarn.clear();
+    }
 
-        console.add(redSpannable);
-        if (console.size() > MAX_SIZE){
-            console.remove();
+    private static void clearError() {
+        consoleError.clear();
+    }
+
+    private static void addError(SpannableString spannable){
+        add(spannable, consoleError);
+        addWarn(spannable);
+    }
+
+    private static void addWarn(SpannableString spannable){
+        add(spannable, consoleWarn);
+        addInfo(spannable);
+    }
+
+    private static void addInfo(SpannableString spannable){
+        add(spannable, consoleInfo);
+        addDebug(spannable);
+    }
+
+    private static void addDebug(SpannableString spannable){
+        add(spannable, consoleDebug);
+    }
+
+    private static void add(SpannableString spannable, Queue<SpannableString> console){
+            console.add(spannable);
+            if (console.size() > MAX_SIZE){
+                console.remove();
+            }
         }
+
+    private static SpannableString getSpannableString(String effMsg, int level, int color) {
+
+        String strLevel = getStrLevel(level);
+        String msg = StringUtils.join(String.format("%1s [%2s]:%3s", getDateTimeStamp(), strLevel,  effMsg), "\n");
+
+        SpannableString spannable= new SpannableString(msg);
+        int start = 0;
+        int end = msg.length();
+        if (color != COLOR_ERROR) {
+            start = msg.indexOf(strLevel);
+            end = start + strLevel.length();
+        }
+        spannable.setSpan(new ForegroundColorSpan(color), start, end, 0);
+        return spannable;
     }
 
     private static String getDateTimeStamp(){
@@ -78,7 +131,7 @@ public class DevConsole {
         return (String) ConvertUtils.convert(dateNow, String.class);
     }
 
-    private static String formatLevel(int level)  {
+    public static String getStrLevel(int level)  {
         String strLevel = "";
         try {
             Class<Log> c = Log.class;
@@ -96,35 +149,54 @@ public class DevConsole {
 
     public static String error(String msg) {
         // TODO: link log library
-        return _writeMsg(Log.ERROR, COLOR_ERROR, msg, null);
+        String effMsg = getMsg(Log.ERROR, COLOR_ERROR, msg, null);
+        if (Log.ERROR >= level) {
+            addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
+        }
+        return effMsg;
     }
 
     public static String info(String s) {
-        return _writeMsg(Log.INFO, COLOR_INFO, s, null);
+        String effMsg = getMsg(Log.INFO, COLOR_INFO, s, null);
+        if (Log.INFO >= level) {
+            addInfo(getSpannableString(effMsg, Log.INFO, COLOR_INFO));
+        }
+        return effMsg;
     }
 
     public static String error(String msg, Throwable t) {
         // TODO: link log library
-        return _writeMsg(Log.ERROR, COLOR_ERROR, msg, t);
+        String effMsg = getMsg(Log.ERROR, COLOR_ERROR, msg, t);
+        if (Log.ERROR >= level) {
+            addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
+        }
+        return effMsg;
     }
 
 
     public static String warn(String msg) {
         // TODO: link log library
-        return _writeMsg(Log.WARN, COLOR_WARN, msg, null);
+        String effMsg = getMsg(Log.WARN, COLOR_WARN, msg, null);
+        if (Log.WARN >= level) {
+            addWarn(getSpannableString(effMsg, Log.WARN, COLOR_WARN));
+        }
+        return effMsg;
     }
 
-    public static void debug(String s) {
-        _writeMsg(Log.DEBUG, COLOR_DEBUG, s, null);
+    public static String debug(String msg) {
+        String effMsg = getMsg(Log.DEBUG, COLOR_DEBUG, msg, null);
+        if (Log.DEBUG >= level) {
+            addDebug(getSpannableString(effMsg, Log.DEBUG, COLOR_DEBUG));
+        }
+        return effMsg;
     }
 
     //
-    private static String _writeMsg(int errorLevel, int color, String msg, Throwable t) {
+    private static String getMsg(int errorLevel, int color, String msg, Throwable t) {
         if (errorLevel < level) {
             return msg;
         }
         String effMsg = String.valueOf(JexlUtils.eval(devContext, msg));
-        add(effMsg, errorLevel, color);
 
         if (errorLevel == Log.ERROR) {
             System.err.println(effMsg);
@@ -179,8 +251,45 @@ public class DevConsole {
         level = l;
     }
 
-    public static Queue<SpannableString> getMessages() {
-        return console;
+    public static Queue<SpannableString> getMessages(String filterBy, int logLevel) {
+        Queue<SpannableString> console = null;
+        switch (logLevel){
+            case Log.ERROR: {
+                console = consoleError;
+                break;
+            }
+            case Log.WARN: {
+                console = consoleWarn;
+                break;
+            }
+            case Log.INFO: {
+                console = consoleInfo;
+                break;
+            }
+            case Log.DEBUG: {
+                console = consoleDebug;
+                break;
+            }
+            default:{
+                console = consoleDebug;
+                break;
+            }
+        }
+        return filter(console, filterBy);
+    }
+
+    private static Queue<SpannableString> filter(Queue<SpannableString> console, String filterBy){
+        Queue<SpannableString> filteredConsole = new LinkedList<SpannableString>();
+        if (StringUtils.isNotBlank(filterBy)){
+            for (SpannableString spannable : console) {
+                if (StringUtils.containsIgnoreCase(spannable.toString(), filterBy)){
+                    add(spannable, filteredConsole);
+                }
+            }
+        }else{
+            filteredConsole.addAll(console);
+        }
+        return filteredConsole;
     }
 
     public static void debug(ConfigNode root) {
@@ -203,4 +312,7 @@ public class DevConsole {
         return logLevel >= level;
     }
 
+    public static int getLevel() {
+        return level;
+    }
 }

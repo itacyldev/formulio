@@ -108,4 +108,10 @@
         <item name="android:padding">2dp</item>
     </style>
 
+    <style name="DevConsoleTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- border color -->
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+    </style>
+
+
 </resources>
