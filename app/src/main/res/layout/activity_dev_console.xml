@@ -106,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconMode="clear_text"
-                app:startIconDrawable="@drawable/ic_tool_x"
+                app:startIconDrawable="@drawable/ic_action_search"
                 app:boxBackgroundColor="?attr/surfaceColor"
                 android:textColorHint="?attr/onSurfaceColor"
                 app:endIconTint="?attr/onSurfaceColor"
