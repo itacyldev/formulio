@@ -41,10 +41,9 @@
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
 
 
-
-
-
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
+
+-keep class android.util.Log
 
 -keepattributes EnclosingMethod, InnerClasses
 -keepattributes *Annotation*
