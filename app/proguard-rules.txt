@@ -43,8 +43,6 @@
 
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
--keep class android.util.Log
-
 -keepattributes EnclosingMethod, InnerClasses
 -keepattributes *Annotation*
 -keepattributes Signature

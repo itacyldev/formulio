@@ -24,7 +24,6 @@ import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -133,15 +132,20 @@ public class DevConsole {
 
     public static String getStrLevel(int level)  {
         String strLevel = "";
-        try {
-            Class<Log> c = Log.class;
-            for (Field f : Log.class.getDeclaredFields()) {
-                if (f.getInt(c) == level) {
-                    strLevel = f.getName();
-                    break;
-                }
-            }
-        }catch (IllegalAccessException e){}
+        switch (level) {
+            case 3:
+                strLevel = "DEBUG";
+                break;
+            case 4:
+                strLevel = "INFO";
+                break;
+            case 5:
+                strLevel = "WARN";
+                break;
+            case 6:
+                strLevel = "ERROR";
+                break;
+        }
 
         return strLevel;
     }
