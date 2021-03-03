@@ -54,6 +54,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                     Context context = project_nameTextView.getContext();
                     // TODO: extract Project View Helper to FORMIC-27
                     Project prj = projectList.get(getAdapterPosition());
+                    DevConsole.setLogFileName((String)prj.getId());
                     try {
                         Config.getInstance().setCurrentProject(prj);
                         Toast.makeText(context,

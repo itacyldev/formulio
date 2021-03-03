@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.config;
  */
 
 import android.graphics.Color;
+import android.os.Environment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -23,6 +24,9 @@ import android.util.Log;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -32,9 +36,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.util.ContextInitializer;
+import ch.qos.logback.core.joran.spi.JoranException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
+
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -42,6 +50,8 @@ import es.jcyl.ita.formic.forms.el.JexlUtils;
  * with context information ${tag}, ${file} and ${line}
  */
 public class DevConsole {
+
+
     private static final String DEV_CONSOLE = "devconsole";
     private static int level;
 
@@ -59,6 +69,8 @@ public class DevConsole {
 
     private static Queue<SpannableString> consoleWarn = new LinkedList<SpannableString>();
     private static Queue<SpannableString> consoleError = new LinkedList<SpannableString>();
+
+    private static final Logger logger = LoggerFactory.getLogger(DevConsole.class);
 
     public static void clear() {
         clearDebug();
@@ -142,7 +154,7 @@ public class DevConsole {
             case 5:
                 strLevel = "WARN";
                 break;
-            case 6:
+            default:
                 strLevel = "ERROR";
                 break;
         }
@@ -153,26 +165,29 @@ public class DevConsole {
 
     public static String error(String msg) {
         // TODO: link log library
-        String effMsg = getMsg(Log.ERROR, COLOR_ERROR, msg, null);
+        String effMsg = getMsg(Log.ERROR, msg, null);
         if (Log.ERROR >= level) {
             addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
+            logger.error(effMsg);
         }
         return effMsg;
     }
 
     public static String info(String s) {
-        String effMsg = getMsg(Log.INFO, COLOR_INFO, s, null);
+        String effMsg = getMsg(Log.INFO, s, null);
         if (Log.INFO >= level) {
             addInfo(getSpannableString(effMsg, Log.INFO, COLOR_INFO));
+            logger.info(effMsg);
         }
         return effMsg;
     }
 
     public static String error(String msg, Throwable t) {
         // TODO: link log library
-        String effMsg = getMsg(Log.ERROR, COLOR_ERROR, msg, t);
+        String effMsg = getMsg(Log.ERROR, msg, t);
         if (Log.ERROR >= level) {
             addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
+            logger.error(msg, t);
         }
         return effMsg;
     }
@@ -180,23 +195,25 @@ public class DevConsole {
 
     public static String warn(String msg) {
         // TODO: link log library
-        String effMsg = getMsg(Log.WARN, COLOR_WARN, msg, null);
+        String effMsg = getMsg(Log.WARN, msg, null);
         if (Log.WARN >= level) {
             addWarn(getSpannableString(effMsg, Log.WARN, COLOR_WARN));
+            logger.warn(msg);
         }
         return effMsg;
     }
 
     public static String debug(String msg) {
-        String effMsg = getMsg(Log.DEBUG, COLOR_DEBUG, msg, null);
+        String effMsg = getMsg(Log.DEBUG, msg, null);
         if (Log.DEBUG >= level) {
             addDebug(getSpannableString(effMsg, Log.DEBUG, COLOR_DEBUG));
+            logger.debug(msg);
         }
         return effMsg;
     }
 
     //
-    private static String getMsg(int errorLevel, int color, String msg, Throwable t) {
+    private static String getMsg(int errorLevel, String msg, Throwable t) {
         if (errorLevel < level) {
             return msg;
         }
@@ -209,7 +226,7 @@ public class DevConsole {
         }
 //        Log.e(DEV_CONSOLE, effMsg);
         if (t != null) {
-            Log.e(DEV_CONSOLE, Log.getStackTraceString(t));
+            logger.error(DEV_CONSOLE, Log.getStackTraceString(t));
         }
         return effMsg;
     }
@@ -296,6 +313,29 @@ public class DevConsole {
         return filteredConsole;
     }
 
+    public static void setLogFileName(String fileName) {
+
+        String logFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/logs/" + fileName;
+        System.setProperty("FILE_NAME", fileName);
+        System.setProperty("HOME_LOG", logFolder);
+        ILoggerFactory fac = LoggerFactory.getILoggerFactory();
+        if (fac != null && fac instanceof LoggerContext) {
+            LoggerContext lc = (LoggerContext) fac;
+            lc.getStatusManager().clear();
+            lc.reset();
+            lc.putProperty("FILE_NAME", fileName);
+            lc.putProperty("HOME_LOG", logFolder);
+            ContextInitializer ci = new ContextInitializer(lc);
+            try {
+                ci.autoConfig();
+            } catch (JoranException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
     public static void debug(ConfigNode root) {
         // TODO #204330
     }
@@ -319,4 +359,6 @@ public class DevConsole {
     public static int getLevel() {
         return level;
     }
+
+
 }

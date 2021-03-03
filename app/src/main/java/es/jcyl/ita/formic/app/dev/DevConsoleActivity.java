@@ -21,6 +21,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
 
+import ch.qos.logback.classic.Level;
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.radio.RadioButtonStyleHolder;
@@ -58,19 +59,19 @@ public class DevConsoleActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch((String) ((AppCompatCheckedTextView) view).getText()) {
                     case "DEBUG":
-                        setLogLevel(Log.DEBUG);
+                        setLogLevel(Log.DEBUG, Level.DEBUG);
                         break;
                     case "INFO":
-                        setLogLevel(Log.INFO);
+                        setLogLevel(Log.INFO, Level.INFO);
                         break;
                     case "WARN":
-                        setLogLevel(Log.WARN);
+                        setLogLevel(Log.WARN, Level.WARN);
                         break;
                     case "ERROR":
-                        setLogLevel(Log.ERROR);
+                        setLogLevel(Log.ERROR, Level.ERROR);
                         break;
                     default:
-                        setLogLevel(Log.DEBUG);
+                        setLogLevel(Log.DEBUG, Level.DEBUG);
                         break;
                 }
             }
@@ -167,8 +168,14 @@ public class DevConsoleActivity extends AppCompatActivity {
         }
     }
 
-    protected void setLogLevel(int level) {
+    protected void setLogLevel(int level, Level logLevel) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.edit().putInt("log_level", level).apply();
+
+        /*LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        ch.qos.logback.classic.Logger logger = loggerContext.getLogger(getPackageName());
+        logger.setLevel(logLevel);*/
+
+        DevConsole.setLevel(level);
     }
 }
