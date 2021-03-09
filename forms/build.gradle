@@ -78,6 +78,17 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.dagger:dagger:2.26'
 
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'com.github.tony19:logback-android:2.0.0'
+
+    //SLF4J - API
+    //implementation 'org.slf4j:slf4j-api:1.7.30'
+
+    //logback
+    //implementation 'ch.qos.logback:logback-classic:1.2.3'
+    //implementation 'ch.qos.logback:logback-core:1.2.3'
+
+
     api 'commons-collections:commons-collections:20040616'
     api "commons-validator:commons-validator:1.6"
     api 'org.mozilla:rhino:1.7.12'

@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.app.projects;
  */
 
 import android.content.Context;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,8 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                     Context context = project_nameTextView.getContext();
                     // TODO: extract Project View Helper to FORMIC-27
                     Project prj = projectList.get(getAdapterPosition());
+                    String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
+                    DevConsole.setLogFileName(projectsFolder, (String)prj.getId());
                     try {
                         Config.getInstance().setCurrentProject(prj);
                         Toast.makeText(context,
