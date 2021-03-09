@@ -1,6 +1,10 @@
 package es.jcyl.ita.formic.forms.view.activities;
 
+import android.annotation.TargetApi;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -70,6 +74,38 @@ public abstract class BaseActivity extends AppCompatActivity  {
         recreate();
 
         invalidateOptionsMenu();
+    }
+
+    public void lockOrientation() {
+        final int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            lockOrientationJellyBean();
+        } else {
+            lockOrientationAllVersions();
+        }
+    }
+
+    public void unlockOrientation() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    }
+
+    @Override
+    public void setRequestedOrientation(final int requestedOrientation) {
+        super.setRequestedOrientation(requestedOrientation);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void lockOrientationJellyBean() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+    }
+
+    private void lockOrientationAllVersions() {
+        final int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
 }

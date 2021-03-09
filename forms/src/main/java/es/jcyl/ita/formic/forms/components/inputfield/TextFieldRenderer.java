@@ -2,7 +2,6 @@ package es.jcyl.ita.formic.forms.components.inputfield;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.core.view.ViewCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -68,14 +65,15 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
             inputView.setInputType(component.getInputType());
         }
 
-        TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         // set floating label
         //setLabel(inputView, textInputLayout, component);
 
         // set event
         addTextChangeListener(env, inputView, component);
 
-        setUnderlineColor(env, component, inputView);
+        TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
+
+        removeUnderline(env, component, textInputLayout, inputView);
 
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
@@ -208,11 +206,26 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         });
     }
 
-    protected void setUnderlineColor(RenderingEnv env, UIField component, EditText inputView) {
+    protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout, EditText inputView) {
         if (component.isReadOnly()){
-            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.surfaceColor});
+            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
+
+            /*Field field = TextInputLayout.class.getDeclaredField("boxStrokeColor");
+            field.setAccessible(true);
+            field.set(textInputLayout,
+                    ContextCompat.getColor(env.getViewContext(), R.color.TRANSPARENT));
+
+            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
+            }catch (NoSuchFieldException | IllegalAccessException e) {
+                Log.w("TAG", "Failed to change box color, item might look wrong");
+            }*/
+
+            //textInputLayout.getContext().setTheme(R.style.TextInputLayoutOutlinedBox);
+            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
+            /*TextInputLayoutWithoutUnderline
+            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.AppBackgroundColor});
             ColorStateList colorStateList = ta.getColorStateList(0);
-            ViewCompat.setBackgroundTintList(inputView, colorStateList);
+            ViewCompat.setBackgroundTintList(inputView, colorStateList);*/
         }
     }
 
