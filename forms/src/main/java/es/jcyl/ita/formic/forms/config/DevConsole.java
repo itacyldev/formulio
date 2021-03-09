@@ -313,9 +313,9 @@ public class DevConsole {
         return filteredConsole;
     }
 
-    public static void setLogFileName(String fileName) {
+    public static void setLogFileName(String projectsFolder, String fileName) {
 
-        String logFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/logs/" + fileName;
+        String logFolder = projectsFolder + "/"+ fileName + "/logs";
         System.setProperty("FILE_NAME", fileName);
         System.setProperty("HOME_LOG", logFolder);
         ILoggerFactory fac = LoggerFactory.getILoggerFactory();
