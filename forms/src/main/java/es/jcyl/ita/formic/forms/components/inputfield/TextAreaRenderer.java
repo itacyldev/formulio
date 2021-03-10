@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
@@ -52,14 +54,14 @@ public class TextAreaRenderer extends TextFieldRenderer {
         if (component.getInputType() != null) {
             inputView.setInputType(component.getInputType());
         }
-
         // set floating label
        //setLabel(inputView, textInputLayout, component);
 
         // set event
         addTextChangeListener(env, inputView, component);
 
-        setUnderlineColor(env, component, inputView);
+        TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
+        removeUnderline(env, component, textInputLayout, inputView);
 
         TextView label = ViewHelper.findViewAndSetId(widget, R.id.label_view,
                 TextView.class);

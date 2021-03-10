@@ -21,8 +21,6 @@ import android.widget.ImageView;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.image.ImageResourceView;
-import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -59,6 +57,17 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
         });
 
         setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+
+        ImageView arrowDropDown = ViewHelper.findViewAndSetId(widget, R.id.input_view_image,
+                ImageView.class);
+
+        arrowDropDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                input.showDropDown();
+            }
+        });
+
     }
 
     @Override

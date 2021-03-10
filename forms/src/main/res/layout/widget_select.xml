@@ -4,10 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="12dp"
-    android:paddingTop="5dp"
-    android:paddingRight="10dp"
-    android:paddingBottom="5dp">
+    style="@style/Widget_padding">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -34,9 +31,9 @@
         android:orientation="horizontal">
          <Spinner
                 android:id="@+id/input_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                style="@style/Spinner_item"/>
+                android:background="@drawable/botton_line_selector"/>
     </LinearLayout>
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

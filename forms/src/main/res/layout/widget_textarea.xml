@@ -34,38 +34,38 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <!--<com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/TextInputLabel_label">
-
+            style="@style/TextInputLayoutUnderline">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_view"
-                style="@style/Textfield_edittext"
+                style="@style/Default_TextView_font"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_weight="2"
-                android:clickable="true"
-                android:focusable="true"
+                android:paddingTop="4dp"
+                android:layout_marginRight="3dp"
                 android:inputType="textMultiLine"
-                android:lines="4"
-                android:maxLines="8"
+                android:lines="2"
+                android:maxLines="3"
                 android:minLines="1"
                 android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
-                android:layout_below="@+id/label_view"
-                android:scrollbars="vertical" />
-        </com.google.android.material.textfield.TextInputLayout>-->
+                android:scrollbars="vertical"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <!--<com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout"
             style="@style/TextInputLabel_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:boxBackgroundColor="?attr/surfaceColor"
+            app:boxStrokeWidth="2dp"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_view"
@@ -83,7 +83,7 @@
             android:overScrollMode="always"
             android:scrollbarStyle="insideInset"
             android:layout_below="@+id/label_view"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical"/>-->
 
     </LinearLayout>
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

@@ -24,6 +24,7 @@
         android:textColor="#fff"
         android:textOff="No"
         android:textOn="Si"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        style="@style/SwitchStyle"/>
 
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

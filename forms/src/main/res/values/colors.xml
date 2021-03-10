@@ -53,7 +53,8 @@
     <color name="dark_OnSurface4Color">#B1B1B1</color>
 
     <!--<color name="dark_OnSurface5Color">#CECECE</color>-->
-    <color name="dark_OnSurface5Color">#282828</color>
+    <color name="dark_OnSurface5Color">#0D0D0D</color>
+    <!--<color name="dark_OnSurface5Color">#282828</color>-->
 
     <color name="dark_BackgroundColor">#121212</color>
     <color name="dark_OnBackgroundColor">#EAEAEA</color>
@@ -61,5 +62,6 @@
     <color name="buttonNormal_Dark">#76be2f</color>
     <color name="buttonHighlight_Dark">#81c784</color>
     <color name="buttonText_Dark">#FFFFFF</color>
+
 
 </resources>

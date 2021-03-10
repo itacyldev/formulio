@@ -121,5 +121,9 @@
         <item name="boxStrokeColor">@color/box_stroke_color</item>
     </style>
 
+    <style name="SwitchStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">?attr/primaryColor</item>
+    </style>
+
 
 </resources>
