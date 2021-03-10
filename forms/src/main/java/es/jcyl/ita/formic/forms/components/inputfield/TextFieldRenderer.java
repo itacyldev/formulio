@@ -73,7 +73,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
 
-        removeUnderline(env, component, textInputLayout, inputView);
+        removeUnderline(env, component, textInputLayout);
 
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
@@ -206,7 +206,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         });
     }
 
-    protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout, EditText inputView) {
+    protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout) {
         if (component.isReadOnly()){
             textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
 

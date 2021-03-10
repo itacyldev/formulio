@@ -61,7 +61,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
         addTextChangeListener(env, inputView, component);
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
-        removeUnderline(env, component, textInputLayout, inputView);
+        removeUnderline(env, component, textInputLayout);
 
         TextView label = ViewHelper.findViewAndSetId(widget, R.id.label_view,
                 TextView.class);

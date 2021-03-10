@@ -30,13 +30,21 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextInputLayoutUnderline">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_view"
-                style="@style/Textfield_edittext"
+                style="@style/Default_TextView_font"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="4dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>
