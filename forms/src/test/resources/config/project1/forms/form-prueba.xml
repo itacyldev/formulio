@@ -6,6 +6,8 @@
                 <tabitem label="Tab 1">
                     <link route="form1-list" value="Ir a Form Card Image" />
 
+                    <input label="1. Input: " value="${entity.input}" validator="required"  />
+
                     <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required">
                         <options>
                             <option label="Radio1" value="Radio1" />
@@ -121,13 +123,50 @@
                         </row>
                     </table>
                 </tabitem>
-                <tabitem label="Tab 3: Card">
+                <tabitem label="Tab 3: Radio">
+
+                    <radio label="1. Radio sin weigths:" orientation="horizontal" value="${entity.radio}" validator="required">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <radio label="2. Radio con weights weights=20, 30, 50:" orientation="horizontal" value="${entity.radio}" validator="required" weights="20, 30, 50">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <radio label="3. Radio con weights weights=50, 30, 20:" orientation="horizontal" value="${entity.radio}" validator="required" weights="50, 30, 20">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                        </options>
+                    </radio>
+
+                    <radio label="4. Radio con weights weights=20, 20:" orientation="horizontal" value="${entity.radio}" validator="required" weights="20, 20">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                            <option label="Radio4" value="Radio4" />
+                        </options>
+                    </radio>
+
+                </tabitem>
+
+                <tabitem label="Tab 4: Card">
                     <input label="1. Input: " value="${entity.input}" validator="required"  />
 
                     <card label="Card-${entity.id}" subtitle="${entity.textarea}"
                         template="card_template_1" title="${entity.input}" />
                 </tabitem>
-                <tabitem label="Tab 4: Datalist">
+                <tabitem label="Tab 5: Datalist">
                     <input label="1. Input: " value="${entity.input}" validator="required"  />
 
                     <datalist>
@@ -138,7 +177,7 @@
                         </card>
                     </datalist>
                 </tabitem>
-                <tabitem label="Tab5: Datatable">
+                <tabitem label="Tab 6: Datatable">
                     <input id="inputFilter" label="Input filter: " value="${entity.input}" />
                     <textarea id="textareaFilter" label="Textarea filter: "
                         value="${entity.textarea}" />

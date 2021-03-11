@@ -42,7 +42,9 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
     @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIAutoComplete, AutoCompleteView> widget) {
         AutoCompleteView input = widget.getInputView();
-        input.initialize(env, widget.getComponent());
+        ImageView arrowDropDown = ViewHelper.findViewAndSetId(widget, R.id.input_view_image,
+                ImageView.class);
+        input.initialize(env, widget.getComponent(), arrowDropDown);
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
@@ -57,9 +59,6 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
         });
 
         setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
-
-        ImageView arrowDropDown = ViewHelper.findViewAndSetId(widget, R.id.input_view_image,
-                ImageView.class);
 
         arrowDropDown.setOnClickListener(new View.OnClickListener() {
             @Override

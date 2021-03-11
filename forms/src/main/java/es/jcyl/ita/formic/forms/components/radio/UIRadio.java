@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.forms.components.select.UISelect;
 public class UIRadio extends UISelect {
     private final static String RADIO_TYPE = "radio";
     private String orientation = "vertical";
+    private String weights;
 
     @Override
     public String getRendererType() {
@@ -49,5 +50,13 @@ public class UIRadio extends UISelect {
     public int getOrientationType() {
         return (this.orientation.equalsIgnoreCase("horizontal")
                 ? RadioGroup.HORIZONTAL : RadioGroup.VERTICAL);
+    }
+
+    public String getWeights() {
+        return weights;
+    }
+
+    public void setWeights(String weights) {
+        this.weights = weights;
     }
 }

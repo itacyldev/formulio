@@ -35,15 +35,13 @@
             android:id="@+id/input_view"
             style="@style/Autocomplete_edittext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableTint="?attr/onSurfaceColor"
-            android:drawableEnd="@drawable/ic_action_expand"
-            />
+            android:layout_height="wrap_content"/>
+        <!--android:drawableEnd="@drawable/bg_spinner_dropdown"-->
         <ImageView
             android:id="@+id/input_view_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:padding="5dp"
             android:layout_alignParentRight="true"
             android:tint="?attr/onSurfaceColor"
             android:src="@drawable/ic_action_expand"/>

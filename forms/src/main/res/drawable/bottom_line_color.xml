@@ -8,7 +8,7 @@
                 </shape>
             </item>
             <item android:right="5dp">
-                <bitmap android:tint="?attr/onAppBackgroundColor" android:gravity="center|right" android:src="@drawable/ic_action_expand"/>
+                <bitmap android:tint="?attr/onAppBackgroundColor" android:gravity="center|right"  android:src="@drawable/ic_action_expand"/>
             </item>
         </layer-list>
     </item>

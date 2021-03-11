@@ -140,7 +140,7 @@ public class TagDef {
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);
         register("autocomplete", select);
-        register("radio", define(select, new Attribute[]{ORIENTATION}));
+        register("radio", define(select, new Attribute[]{ORIENTATION, WEIGHTS}));
         register("options", define(new Attribute[]{VALUE_PROPERTY, LABEL_EXPRESSION, LABEL_FILTERING_PROP}));
         // attribute value in option element is a fixed value we don't need an expression
         Attribute optionValue = new Attribute("value");
