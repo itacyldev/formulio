@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.components.autocomplete;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -25,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
@@ -97,7 +99,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         return ctx;
     }
 
-    public void initialize(RenderingEnv env, UIAutoComplete component) {
+    public void initialize(RenderingEnv env, UIAutoComplete component, ImageView arrowDropDown) {
         this.component = component;
         ArrayAdapter adapter;
         if (component.isStatic()) {
@@ -114,7 +116,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
 
         addClickOptionListener(env, component);
         addTextChangeListener(env, component);
-        addLostFocusListener(env, component);
+        addLostFocusListener(env, component, arrowDropDown);
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
@@ -136,11 +138,15 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         });
     }
 
-    private void addLostFocusListener(RenderingEnv env, UIAutoComplete component) {
+    private void addLostFocusListener(RenderingEnv env, UIAutoComplete component, ImageView arrowDropDown) {
         this.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 // if current text doesn't match and option, remove if
+                //arrowDropDown.setColorFilter(v.hasFocus()?R.attr.primaryColor:R.attr.onSurface4Color);
+                TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurface4Color, R.attr.primaryColor});
+                arrowDropDown.setImageTintList(ta.getColorStateList(v.hasFocus()?1:0));
+
                 if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {
                     if (value == null) {
                         setText(null);

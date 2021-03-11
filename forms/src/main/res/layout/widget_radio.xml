@@ -31,7 +31,8 @@
         <RadioGroup
             android:id="@+id/input_view"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="1">
         </RadioGroup>
     </LinearLayout>
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

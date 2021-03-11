@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -108,7 +109,7 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
 
     private float[] getWeigths(int length, UIRow component) {
         // handle cell weigthts
-        return TableUtils.getWeigths(StringUtils.isNotBlank(component.getWeights())?component.getWeights():((UITable) component.getParent()).getWeights(), length, component.getParent().getId(), component.getId());
+        return ComponentUtils.getWeigths(StringUtils.isNotBlank(component.getWeights())?component.getWeights():((UITable) component.getParent()).getWeights(), length, component.getParent().getId(), component.getId());
     }
 
     private float[] getWeightsWithColspans(float[] weigthts, Integer[] colspans){

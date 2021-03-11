@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
@@ -59,7 +60,7 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
             String[] splits = component.getHeaderText().split(",");
 
             // handle cell weigthts
-            float[] weigthts = TableUtils.getWeigths(component.getWeights(), splits.length, component.getId(), null);
+            float[] weigthts = ComponentUtils.getWeigths(component.getWeights(), splits.length, component.getId(), null);
 
             int i=0;
             for (String h : splits) {
