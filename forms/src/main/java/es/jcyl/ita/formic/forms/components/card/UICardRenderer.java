@@ -207,15 +207,12 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //View content = cardView.findViewWithTag("card_content_layout");
-                if (card.isExpanded()) {
-                    card.setExpanded(false);
-                    cardHeaderImage.setImageResource(R.drawable.ic_action_expand);
-                    ViewHelper.collapse(content);
-                } else {
-                    card.setExpanded(true);
+                if(content.getVisibility()==View.GONE){
                     cardHeaderImage.setImageResource(R.drawable.ic_action_collapse);
                     ViewHelper.expand(content);
+                }else{
+                    cardHeaderImage.setImageResource(R.drawable.ic_action_expand);
+                    ViewHelper.collapse(content);
                 }
             }
         });
