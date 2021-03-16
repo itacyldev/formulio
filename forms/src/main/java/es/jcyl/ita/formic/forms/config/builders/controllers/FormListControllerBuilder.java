@@ -45,7 +45,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 public class FormListControllerBuilder extends AbstractComponentBuilder<FormListController> {
 
     private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("add", "update", "cancel", "delete", "nav"));
-    private static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable"));
+    private static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable", "datalist"));
 
     public FormListControllerBuilder(String tagName) {
         super(tagName, FormListController.class);
@@ -203,7 +203,9 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
                         " to set the id of the main selector"));
             }
         }
+
         //node.getElement().setEntitySelector((EntitySelector) selector);
+
 
     }
 

@@ -1,7 +1,6 @@
 package es.jcyl.ita.formic.forms.view.activities;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,28 +17,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.opencsv.CSVWriter;
-
-import org.mini2Dx.beanutils.ConvertUtils;
-
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
-import es.jcyl.ita.formic.forms.export.CVSExporter;
+import es.jcyl.ita.formic.forms.export.CSVExporter;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment.OnListFragmentInteractionListener;
-import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link +} and makes a call to the
@@ -110,10 +97,8 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
                         int itemId = item.getItemId();
                         if (itemId == R.id.action_item_export) {//handle menu1 click
                             if (null != mListener) {
-                                //ExportDatabaseCSVTask task=new ExportDatabaseCSVTask();
-                                //task.execute(holder.mItem);
-                                CVSExporter.init(context, holder.mItem.getRepo(), ((UIDatatable) holder.mItem.getView().getChildren()[0]).getFilter(), holder.mItem.getName()).exportCSV();
-                                //((MainActivity) mListener).exportToCSV(holder.mItem);
+                                ExportDatabaseCSVTask task=new ExportDatabaseCSVTask();
+                                task.execute(holder.mItem);
                             }
                         } else if (itemId == R.id.action_item_detail) {//handle menu1 click
                             if (null != mListener) {
@@ -177,59 +162,11 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
     }
 
     private class ExportDatabaseCSVTask extends AsyncTask<FormListController, String, String> {
-        private final ProgressDialog dialog = new ProgressDialog(context);
 
         protected String doInBackground(final FormListController... args) {
-            File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
-
-            if (!exportDir.exists()) {
-                exportDir.mkdirs();
-            }
-
-            File file = new File(exportDir, args[0].getName().concat(".csv"));
-
-            try {
-                file.createNewFile();
-                CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
-
-                UIComponent component = args[0].getView().getChildren()[0];
-                UIColumn[] columns = ((UIDatatable) component).getColumns();
-                int count = columns.length;
-
-                ArrayList<Entity> listData = (ArrayList<Entity>) args[0].getRepo().find(((UIDatatable) component).getFilter());
-
-                //Headers
-                String strHeaders[] = listData.get(0).getMetadata().getPropertyNames();
-                /*String strHeaders[] = new String[count];
-                for (int i = 0; i< count; i++) {
-                    strHeaders[i] = ((UIDatatable) component).getColumns()[i].getHeaderText();
-                }*/
-                csvWrite.writeNext(strHeaders);
-
-                /*EntityMeta meta = args[0].getRepo().getMeta();
-                String[] fieldFilter = meta.getPropertyNames();
-                UIDatatable table = createDataTableFromRepo(args[0].getRepo(), fieldFilter);*/
-
-                //Data
-                for (int i = 0; i< listData.size(); i++) {
-                    //strData[i] = listData
-                    Object[] values = JexlUtils.bulkEval(listData.get(i), columns);
-                    String strData[] = new String[values.length];
-                    for (int j = 0; j< values.length; j++) {
-                        strData[j] = (String) ConvertUtils.convert(values[j], String.class);
-                    }
-                    csvWrite.writeNext(strData);
-                }
-
-                csvWrite.close();
-
-                shareFile(exportDir);
-
-                return "";
-            } catch (IOException e) {
-                DevConsole.error(e.getMessage(), e);
-                return "";
-            }
+            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), args[0].getName());
+            shareFile(file);
+            return "";
         }
 
         private void shareFile(File file) {
