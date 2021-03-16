@@ -166,7 +166,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
 
         protected String doInBackground(final FormListController... args) {
             File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports","");
-            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), exportDir, args[0].getName());
+            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), exportDir, args[0].getId());
             shareFile(file);
             return "";
         }
