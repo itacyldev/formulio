@@ -35,11 +35,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true">
+                android:layout_alignParentTop="true"
+                android:weightSum="1">
                 <TextView
                     android:id="@+id/item_number"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"/>
                 <!--<ImageButton
                     android:id="@+id/item_menu"
                     android:layout_width="wrap_content"
@@ -54,7 +56,8 @@
                     android:text="&#8942;"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:textAppearance="?android:textAppearanceLarge"
-                    android:textColor="?attr/onSurfaceColor"/>
+                    android:textColor="?attr/onSurfaceColor"
+                    android:layout_weight="0.4"/>
             </LinearLayout>
 
 
