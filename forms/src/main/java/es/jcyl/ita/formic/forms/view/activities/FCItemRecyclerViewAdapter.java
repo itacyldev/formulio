@@ -176,9 +176,9 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
             shareIntent.setType(URLConnection.guessContentTypeFromName(file.getName()));
-            shareIntent.putExtra(Intent.EXTRA_STREAM,
-                    Uri.parse("file://"+file.getAbsolutePath()));
-            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            shareIntent.setType("text/csv");
+            //shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             //if you need
             //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);
