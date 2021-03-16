@@ -24,6 +24,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
+import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.export.CSVExporter;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment.OnListFragmentInteractionListener;
@@ -164,24 +165,26 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
     private class ExportDatabaseCSVTask extends AsyncTask<FormListController, String, String> {
 
         protected String doInBackground(final FormListController... args) {
-            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), args[0].getName());
+            File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports","");
+            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), exportDir, args[0].getName());
             shareFile(file);
             return "";
         }
 
         private void shareFile(File file) {
 
-            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-            intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
-            intentShareFile.putExtra(Intent.EXTRA_STREAM,
+            shareIntent.setType(URLConnection.guessContentTypeFromName(file.getName()));
+            shareIntent.putExtra(Intent.EXTRA_STREAM,
                     Uri.parse("file://"+file.getAbsolutePath()));
+            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             //if you need
             //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);
             //intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
 
-            context.startActivity(Intent.createChooser(intentShareFile, "Share File"));
+            context.startActivity(Intent.createChooser(shareIntent, "Share File"));
 
         }
 

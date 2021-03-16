@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.repo.Entity;
@@ -19,7 +18,7 @@ public class CSVExporter {
     private static CSVExporter _instance;
 
     private static final int OFFSET = 0;
-    private static int PAGESIZE = 50;
+    private static int PAGESIZE = 200;
 
     public static CSVExporter getInstance() {
         if (_instance == null) {
@@ -28,8 +27,8 @@ public class CSVExporter {
         return _instance;
     }
 
-    public static File exportCSV(Repository repo, Filter filter, String fileName) {
-        File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
+    public static File exportCSV(Repository repo, Filter filter, File exportDir, String fileName) {
+        //File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
 
         if (!exportDir.exists()) {
             exportDir.mkdirs();
