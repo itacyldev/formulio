@@ -3,7 +3,6 @@ package es.jcyl.ita.formic.forms.view.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
@@ -176,7 +176,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
             shareIntent.setType(URLConnection.guessContentTypeFromName(file.getName()));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()+ ".provider", file));
             shareIntent.setType("text/csv");
             //shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
