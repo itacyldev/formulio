@@ -187,8 +187,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         if (!f.exists()) {
             f.mkdir();
         }
-        Config config = Config.init(projectsFolder);
 
+        Config config = Config.init(projectsFolder);
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {

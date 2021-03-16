@@ -10,4 +10,6 @@
     <string name="projects_of">Projects of </string>
     <string name="forms_of">"Forms of "</string>
     <string name="no_current_project">No current project</string>
+    <string name="export">Export</string>
+    <string name="detail">Detail</string>
 </resources>

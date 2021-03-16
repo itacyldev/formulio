@@ -17,16 +17,11 @@ package es.jcyl.ita.formic.forms.controllers;
 
 import android.view.ViewGroup;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -150,7 +145,9 @@ public abstract class FormController implements Identificable, FilterableCompone
     }
 
     public void setRepo(Repository repo) {
+
         this.repo = repo;
+
     }
 
     public Filter getFilter() {

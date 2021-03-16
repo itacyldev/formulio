@@ -34,7 +34,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:id="@+id/item_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#8942;"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="?attr/onSurfaceColor"/>
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

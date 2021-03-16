@@ -11,4 +11,6 @@
     <string name="projects_of">"Proyectos de "</string>
     <string name="forms_of">"Formularios de "</string>
     <string name="no_current_project">No hay proyecto activo</string>
+    <string name="export">Exportar</string>
+    <string name="detail">detalle</string>
 </resources>

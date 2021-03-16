@@ -54,4 +54,7 @@
 
     <string name="systemLogLevel"><u>Set system log level:</u></string>
 
+    <string name="export">Export</string>
+    <string name="detail">Detail</string>
+
 </resources>
