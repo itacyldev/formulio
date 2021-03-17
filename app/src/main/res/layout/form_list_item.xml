@@ -20,10 +20,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true" />
+                android:layout_alignParentTop="true"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/numEntities"
+                android:id="@+id/item_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -38,24 +40,23 @@
                 android:layout_alignParentEnd="true"
                 android:weightSum="1">
                 <TextView
-                    android:id="@+id/item_number"
+                    android:id="@+id/numEntities"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="bottom"
                     android:layout_weight="0.6"/>
 
                 <ImageButton
                     android:id="@+id/item_options"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="top"
                     style="?android:attr/actionOverflowButtonStyle"
                     android:tint="?attr/onSurfaceColor"
                     android:paddingRight="5dp"
                     android:layout_weight="0.4"/>
 
             </LinearLayout>
-
-
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

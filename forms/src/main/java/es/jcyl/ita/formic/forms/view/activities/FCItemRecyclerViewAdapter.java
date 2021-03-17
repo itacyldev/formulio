@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.export.CSVExporter;
@@ -170,8 +169,10 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
 
         protected String doInBackground(final FormListController... args) {
             File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports","");
-            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), exportDir, args[0].getName());
-            //((UIDatalist)args[0].getView().getChildren()[0].getChildren()[0]).getFilter()
+
+            CSVExporter csvExporter = CSVExporter.getInstance();
+            File file = csvExporter.export(args[0].getEntitySelector().getRepo(), args[0].getEntitySelector().getFilter(), exportDir, args[0].getName(), "csv");
+
             shareFile(file);
             return "";
         }

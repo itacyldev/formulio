@@ -16,8 +16,6 @@ package es.jcyl.ita.formic.forms.controllers;
  */
 
 import es.jcyl.ita.formic.forms.components.EntitySelector;
-import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
@@ -44,15 +42,7 @@ public class FormListController extends FormController {
      * @return
      */
     public long count() {
-        long count;
-        if (this.view.getChildren()[0] instanceof UIDatalist){
-            count = this.repo.count(((UIDatalist) this.view.getChildren()[0]).getFilter());
-        } else if (this.view.getChildren()[0] instanceof UIDatatable) {
-            count = this.repo.count(((UIDatatable) this.view.getChildren()[0]).getFilter());
-        } else {
-            count = this.repo.count(null);
-        }
-        return count;
+        return this.getEntitySelector().getRepo().count(this.getEntitySelector().getFilter());
     }
 
     /****************************/

@@ -2,10 +2,15 @@ package es.jcyl.ita.formic.forms.export;
 
 import com.opencsv.CSVWriter;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
@@ -18,7 +23,7 @@ public class CSVExporter {
     private static CSVExporter _instance;
 
     private static final int OFFSET = 0;
-    private static int PAGESIZE = 2;
+    private static int PAGESIZE = 200;
 
     public static CSVExporter getInstance() {
         if (_instance == null) {
@@ -27,14 +32,14 @@ public class CSVExporter {
         return _instance;
     }
 
-    public static File exportCSV(Repository repo, Filter filter, File exportDir, String fileName) {
+    public File export(Repository repo, Filter filter, File exportDir, String fileName, String extension) {
         //File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
 
         if (!exportDir.exists()) {
             exportDir.mkdirs();
         }
 
-        File file = new File(exportDir, fileName.concat(".csv"));
+        File file = new File(exportDir, getFileName(fileName, extension));
 
         try {
             file.createNewFile();
@@ -77,6 +82,16 @@ public class CSVExporter {
             DevConsole.error(e.getMessage(), e);
         }
         return file;
+    }
+
+    private String getFileName(String fileName, String extension){
+        //Remove Whitespace From String and add date
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date();
+
+        return StringUtils.deleteWhitespace(fileName) + dateFormat.format(date) + "." + extension;
+
+
     }
 
 }

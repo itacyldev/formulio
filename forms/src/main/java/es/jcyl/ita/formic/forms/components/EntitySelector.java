@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.repo.Entity;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface EntitySelector {
+public interface EntitySelector extends FilterableComponent{
 
     List<Entity> getSelectedEntities();
 

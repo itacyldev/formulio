@@ -43,7 +43,6 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
-import es.jcyl.ita.formic.forms.components.EntitySelector;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.column.UIColumnFilter;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
@@ -68,7 +67,7 @@ import es.jcyl.ita.formic.repo.query.Sort;
  */
 
 public class DatatableWidget extends Widget<UIDatatable>
-        implements DynamicComponent, EntitySelector, EntityListProvider {
+        implements DynamicComponent, EntityListProvider {
 
     private final String HEADER_FILTER_SUFIX = "_header_filter";
     private final String HEADER_ORDER_SUFIX = "header_order";
@@ -488,17 +487,8 @@ public class DatatableWidget extends Widget<UIDatatable>
         return this.headerView;
     }
 
-    /*************************************/
-    /** Entity Selector interface **/
-    /*************************************/
-    @Override
-    public List<Entity> getSelectedEntities() {
-        return null;
-    }
-
     @Override
     public void setEntities(List<Entity> entities) {
-
     }
 
     @Override

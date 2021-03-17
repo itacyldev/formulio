@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.EntitySelector;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
@@ -204,7 +205,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
             }
         }
 
-        //node.getElement().setEntitySelector((EntitySelector) selector);
+       node.getElement().setEntitySelector((EntitySelector) selector);
 
 
     }
