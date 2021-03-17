@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +87,8 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
                 popup.inflate(R.menu.menu_item);
 
                 boolean exportable = false;
-                if (holder.mItem.getView().getChildren()[0] instanceof UIDatatable) {
+                //if (holder.mItem.getView().getChildren()[0] instanceof UIDatatable || holder.mItem.getView().getChildren()[0] instanceof UIDatalist){
+                if (holder.mItem.count() > 0){
                     exportable = true;
                 }
                 popup.getMenu().findItem(R.id.action_item_export).setVisible(exportable);
@@ -136,7 +138,8 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         public final TextView mIdView;
         public final TextView mContentView;
         public final TextView numEntities;
-        public final TextView buttonViewOption;
+        //public final TextView buttonViewOption;
+        public final ImageButton buttonViewOption;
 
         public FormListController mItem;
 
@@ -146,6 +149,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
             mIdView = view.findViewById(R.id.item_number);
             mContentView = view.findViewById(R.id.content);
             numEntities = view.findViewById(R.id.numEntities);
+            //buttonViewOption = view.findViewById(R.id.item_options);
             buttonViewOption = view.findViewById(R.id.item_options);
         }
 
@@ -166,7 +170,8 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
 
         protected String doInBackground(final FormListController... args) {
             File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports","");
-            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), exportDir, args[0].getId());
+            File file = CSVExporter.exportCSV(args[0].getRepo(), ((UIDatatable) args[0].getView().getChildren()[0]).getFilter(), exportDir, args[0].getName());
+            //((UIDatalist)args[0].getView().getChildren()[0].getChildren()[0]).getFilter()
             shareFile(file);
             return "";
         }
@@ -178,11 +183,6 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
             shareIntent.setType(URLConnection.guessContentTypeFromName(file.getName()));
             shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()+ ".provider", file));
             shareIntent.setType("text/csv");
-            //shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            //if you need
-            //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);
-            //intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
 
             context.startActivity(Intent.createChooser(shareIntent, "Share File"));
 

@@ -18,7 +18,7 @@ public class CSVExporter {
     private static CSVExporter _instance;
 
     private static final int OFFSET = 0;
-    private static int PAGESIZE = 200;
+    private static int PAGESIZE = 2;
 
     public static CSVExporter getInstance() {
         if (_instance == null) {

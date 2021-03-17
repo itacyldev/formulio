@@ -56,6 +56,7 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
     }
 
     public void setRepo(Repository repo) {
+
         this.repo = repo;
     }
 

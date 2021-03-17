@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
@@ -29,21 +30,31 @@
                 android:layout_alignParentBottom="true"
                 android:layout_below="@+id/content" />
 
-            <TextView
-                android:id="@+id/item_number"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"/>
+                android:orientation="horizontal"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:weightSum="1">
+                <TextView
+                    android:id="@+id/item_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.6"/>
 
-            <TextView
-                android:id="@+id/item_options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="&#8942;"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textColor="?attr/onSurfaceColor"/>
+                <ImageButton
+                    android:id="@+id/item_options"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/actionOverflowButtonStyle"
+                    android:tint="?attr/onSurfaceColor"
+                    android:paddingRight="5dp"
+                    android:layout_weight="0.4"/>
+
+            </LinearLayout>
+
 
         </RelativeLayout>
 
