@@ -89,7 +89,7 @@ public class CSVExporter {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
 
-        return StringUtils.deleteWhitespace(fileName) + dateFormat.format(date) + "." + extension;
+        return StringUtils.deleteWhitespace(fileName) + "." +  dateFormat.format(date) + "." + extension;
 
 
     }
