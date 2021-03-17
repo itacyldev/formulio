@@ -25,7 +25,6 @@ import java.util.List;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
-import es.jcyl.ita.formic.forms.components.EntitySelector;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
@@ -41,7 +40,7 @@ import es.jcyl.ita.formic.repo.query.Filter;
  */
 
 public class DatalistWidget extends Widget<UIDatalist> implements DynamicComponent,
-        EntitySelector, EntityListProvider {
+        EntityListProvider {
 
     private Repository repo;
     private RenderingEnv renderingEnv;
@@ -86,19 +85,6 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
         this.filter = setupFilter(ctx, this.getComponent().getFilter());
         // read first page to render data
         loadNextPage();
-    }
-
-    @Override
-    public List<Entity> getSelectedEntities() {
-        return selectedEntities;
-    }
-
-    public void selectEntity(Entity entity) {
-        this.selectedEntities.add(entity);
-    }
-
-    public void clearSelection() {
-        this.selectedEntities.clear();
     }
 
     public void setContentView(LinearLayout contentView) {
