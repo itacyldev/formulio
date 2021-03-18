@@ -217,23 +217,14 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             }
         });
 
-
         if (!card.isExpanded()) {
+            content.setVisibility(View.GONE);
             cardHeaderImage.setImageResource(R.drawable.ic_action_expand);
-            ViewHelper.collapse(content);
         }else{
+            content.setVisibility(View.VISIBLE);
             cardHeaderImage.setImageResource(R.drawable.ic_action_collapse);
-            ViewHelper.expand(content);
         }
 
-        /*if (!card.isExpanded()) {
-            card.setExpanded(true);
-            ViewHelper.expand(content);
-        }else{
-            card.setExpanded(false);
-            ViewHelper.collapse(content);
-        }
-        headerLayout.callOnClick();*/
     }
 
     /**
