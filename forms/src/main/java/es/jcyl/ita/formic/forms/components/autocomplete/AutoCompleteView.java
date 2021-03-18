@@ -143,8 +143,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 // if current text doesn't match and option, remove if
-                //arrowDropDown.setColorFilter(v.hasFocus()?R.attr.primaryColor:R.attr.onSurface4Color);
-                TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurface4Color, R.attr.primaryColor});
+                TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor, R.attr.primaryColor});
                 arrowDropDown.setImageTintList(ta.getColorStateList(v.hasFocus()?1:0));
 
                 if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {

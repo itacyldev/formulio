@@ -163,6 +163,12 @@
                 <tabitem label="Tab 4: Card">
                     <input label="1. Input: " value="${entity.input}" validator="required"  />
 
+                    <card label="Card-${entity.id} expanded = true" subtitle="${entity.textarea}"
+                        template="card_template_1" title="${entity.input}" expandable="true" expanded="true"/>
+
+                    <card label="Card-${entity.id} expanded= false" subtitle="${entity.textarea}"
+                        template="card_template_1" title="${entity.input}" expandable="true" expanded="false"/>
+
                     <card label="Card-${entity.id}" subtitle="${entity.textarea}"
                         template="card_template_1" title="${entity.input}" />
                 </tabitem>
@@ -170,7 +176,7 @@
                     <input label="1. Input: " value="${entity.input}" validator="required"  />
 
                     <datalist>
-                        <card expandable="true" expanded="false" label="Card-${entity.id}">
+                        <card expandable="true" expanded="false" label="Card-${entity.image}">
                             <head name="title" value="${entity.input}" />
                             <head name="subtitle" value="${entity.textarea}" />"
                             <image repo="superHImages" value="${entity.image}" />

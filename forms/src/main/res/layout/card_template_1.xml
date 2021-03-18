@@ -21,14 +21,25 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/primaryColorVariant"
                 android:orientation="horizontal"
-                android:padding="2pt">
+                android:padding="2pt"
+                android:weightSum="1">
 
                 <TextView
                     android:id="@+id/card_header_label"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.8"
                     android:layout_gravity="left"
+                    android:gravity="center_vertical"
                     android:textColor="?attr/onPrimaryColor" />
+
+                <ImageView
+                    android:id="@+id/card_header_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:tint="?attr/onPrimaryColor"
+                    android:src="@drawable/ic_action_collapse"/>
             </LinearLayout>
 
             <LinearLayout

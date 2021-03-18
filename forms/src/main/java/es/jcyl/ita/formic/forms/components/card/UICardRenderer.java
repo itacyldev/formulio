@@ -19,10 +19,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.google.android.material.tabs.TabLayout;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -35,7 +34,6 @@ import es.jcyl.ita.formic.forms.components.image.ImageWidget;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -200,26 +198,42 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             headerLabelView.setText(headerLabel);
         }
 
+
+        ImageView cardHeaderImage = ViewHelper.findViewAndSetId(cardView, R.id.card_header_image,
+                ImageView.class);
+
         LinearLayout headerLayout = (LinearLayout) ViewHelper.findViewAndSetId(cardView, R.id.card_header);
         final View content = ViewHelper.findViewAndSetId(cardView, R.id.card_content);
         headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //View content = cardView.findViewWithTag("card_content_layout");
-                if (card.isExpanded()) {
-                    card.setExpanded(false);
-                    ViewHelper.collapse(content);
-                } else {
-                    card.setExpanded(true);
+                if(content.getVisibility()==View.GONE){
+                    cardHeaderImage.setImageResource(R.drawable.ic_action_collapse);
                     ViewHelper.expand(content);
+                }else{
+                    cardHeaderImage.setImageResource(R.drawable.ic_action_expand);
+                    ViewHelper.collapse(content);
                 }
             }
         });
 
 
         if (!card.isExpanded()) {
+            cardHeaderImage.setImageResource(R.drawable.ic_action_expand);
+            ViewHelper.collapse(content);
+        }else{
+            cardHeaderImage.setImageResource(R.drawable.ic_action_collapse);
+            ViewHelper.expand(content);
+        }
+
+        /*if (!card.isExpanded()) {
+            card.setExpanded(true);
+            ViewHelper.expand(content);
+        }else{
+            card.setExpanded(false);
             ViewHelper.collapse(content);
         }
+        headerLayout.callOnClick();*/
     }
 
     /**
