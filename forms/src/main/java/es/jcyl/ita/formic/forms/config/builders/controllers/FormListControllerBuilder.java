@@ -23,16 +23,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
-import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -45,7 +46,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 public class FormListControllerBuilder extends AbstractComponentBuilder<FormListController> {
 
     private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("add", "update", "cancel", "delete", "nav"));
-    private static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable"));
+    private static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable", "datalist"));
 
     public FormListControllerBuilder(String tagName) {
         super(tagName, FormListController.class);
@@ -203,7 +204,9 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
                         " to set the id of the main selector"));
             }
         }
-//        node.getElement().setEntitySelector(selector);
+
+       node.getElement().setEntitySelector((EntitySelector) selector);
+
 
     }
 

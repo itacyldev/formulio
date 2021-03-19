@@ -103,4 +103,13 @@ public class FilterHelper {
         output.setSorting(definition.getSorting());
     }
 
+    public static Filter clone(Repository repo, Filter filter){
+        Filter f = createInstance(repo);
+        if (filter != null) {
+            f.setExpression(filter.getExpression());
+            f.setSorting(filter.getSorting());
+        }
+        return f;
+    }
+
 }

@@ -84,7 +84,7 @@ public class FormListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new FCItemRecyclerViewAdapter(formControllerFactory.getListControllers(),
-                    mListener));
+                    mListener, context));
             recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                 @Override
                 public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {

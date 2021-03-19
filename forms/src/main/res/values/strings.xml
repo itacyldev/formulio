@@ -16,6 +16,7 @@
 
     <!-- tool button descriptions -->
     <string name="tool_buttons_x">Cancel</string>
+    <string name="tool_buttons_i">Info</string>
     <string name="title_activity_form_list_view_handler">FormListViewHandlerActivity</string>
     <!-- Strings used for fragments for navigation -->
 
@@ -42,6 +43,18 @@
     <string name="locationsettings">Review location settings</string>
     <string name="Cancel">Cancel</string>
     <string name="open_location_settings">Open Location Settings</string>
+    <string name="no_results">No results</string>
+    <string name="logLevel">Log level:</string>
+    <string name="debug">DEBUG</string>
+    <string name="info">INFO</string>
+    <string name="warn">WARN</string>
+    <string name="error">ERROR</string>
 
+    <string name="filterBy"><u>Filter by:</u></string>
+
+    <string name="systemLogLevel"><u>Set system log level:</u></string>
+
+    <string name="export">Export</string>
+    <string name="detail">Detail</string>
 
 </resources>

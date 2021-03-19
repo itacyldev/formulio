@@ -34,10 +34,17 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, AutoCompleteView> {
 
     @Override
+    protected AutoCompleteWidget  createWidget(RenderingEnv env, UIAutoComplete component) {
+        AutoCompleteWidget widget = (AutoCompleteWidget) super.createWidget(env, component);
+        return widget;
+    }
+
+    @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIAutoComplete, AutoCompleteView> widget) {
         AutoCompleteView input = widget.getInputView();
-        input.initialize(env, widget.getComponent());
-        input.load(env);
+        ImageView arrowDropDown = ViewHelper.findViewAndSetId(widget, R.id.input_view_image,
+                ImageView.class);
+        input.initialize(env, widget.getComponent(), arrowDropDown);
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
@@ -52,6 +59,14 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
         });
 
         setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+
+        arrowDropDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                input.showDropDown();
+            }
+        });
+
     }
 
     @Override

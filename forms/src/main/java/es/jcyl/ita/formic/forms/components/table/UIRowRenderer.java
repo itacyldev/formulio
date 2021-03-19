@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -62,9 +64,19 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
 
         // handle cell colspans
         Integer[] colspans = getColspans(component);
-        float[] weigthts = getWeigths(views, component);
+        float[] weigthts = null;
+        float[] weightsWithColspans = null;
+
+        if (colspans != null) {
+            int maxNumColumns = maxNumColumns(component);
+            weigthts = getWeigths(maxNumColumns, component);
+            weightsWithColspans = getWeightsWithColspans(weigthts, colspans);
+        }else{
+            weigthts = getWeigths(views.length, component);
+        }
 
         int i = 0;
+
         for (View view : views) {
             if ((((UITable) component.getParent()).isBorder()) && i != views.length - 1) {
                 view.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border_cell));
@@ -72,11 +84,16 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
             rowView.addView(view);
 
             if (colspans != null && i < colspans.length) {
+                if (colspans.length > 1) {
+                    TableUtils.setLayoutParams(weightsWithColspans, i, view);
+                }
                 TableRow.LayoutParams params = (TableRow.LayoutParams) view.getLayoutParams();
                 params.span = colspans[i];
-            }
+                view.setLayoutParams(params);
 
-            TableUtils.setLayoutParams(weigthts, i, view);
+            }else {
+                TableUtils.setLayoutParams(weigthts, i, view);
+            }
 
             i++;
         }
@@ -90,10 +107,33 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
         return colspans;
     }
 
-    private float[] getWeigths(View[] views, UIRow component) {
+    private float[] getWeigths(int length, UIRow component) {
         // handle cell weigthts
-        return TableUtils.getWeigths(StringUtils.isNotBlank(component.getWeights())?component.getWeights():((UITable) component.getParent()).getWeights(), views.length, component.getParent().getId(), component.getId());
+        return ComponentUtils.getWeigths(StringUtils.isNotBlank(component.getWeights())?component.getWeights():((UITable) component.getParent()).getWeights(), length, component.getParent().getId(), component.getId());
     }
 
+    private float[] getWeightsWithColspans(float[] weigthts, Integer[] colspans){
+        float[] weightsWithColspans = new float[colspans.length];
+        int j = 0;
+        for (int i = 0; i<colspans.length; i++){
+            int value = colspans[i];
+            float sum = 0;
+            while(value > 0){
+                sum = weigthts[j] + sum;
+                value--;
+                j++;
+            }
+            weightsWithColspans[i] = sum;
+        }
+        return weightsWithColspans;
+    }
+
+    private int maxNumColumns(UIRow component){
+        int max = 0;
+        for (UIComponent row : component.getParent().getChildren()) {
+            max = max < row.getChildren().length?row.getChildren().length:max;
+        }
+        return max;
+    }
 
 }

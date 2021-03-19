@@ -14,6 +14,8 @@ import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 public abstract class UIComponent implements Identificable {
 
     protected String id;
@@ -185,7 +187,12 @@ public abstract class UIComponent implements Identificable {
             return null;
         } else {
             // evaluate expression against context
-            return JexlUtils.eval(context, this.valueExpression);
+            try{
+                return JexlUtils.eval(context, this.valueExpression);
+            }catch(Exception e){
+                error("Error while trying to evaluate JEXL expression: "+this.valueExpression.toString(),e);
+                return null;
+            }
         }
     }
 
@@ -227,6 +234,12 @@ public abstract class UIComponent implements Identificable {
         }
     }
 
+    /**
+     * Method used to get all the binding expressions defined for this component so dependencies
+     * inter-components can be easily calculated.
+     *
+     * @return
+     */
     public Set<ValueBindingExpression> getValueBindingExpressions() {
         return ExpressionHelper.getExpressions(this);
     }

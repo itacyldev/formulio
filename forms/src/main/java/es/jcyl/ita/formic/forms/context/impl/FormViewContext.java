@@ -1,12 +1,11 @@
 package es.jcyl.ita.formic.forms.context.impl;
 
 import android.view.View;
-import android.view.ViewGroup;
-
-import org.mini2Dx.beanutils.ConvertUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -21,8 +20,11 @@ import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -78,8 +80,9 @@ public class FormViewContext extends AbstractBaseContext {
     public String getString(String elementId) {
         InputWidget fieldView = findInputFieldViewById(elementId);
         if (fieldView == null) {
-            throw new IllegalArgumentException(String.format("No view element id [%s] " +
+            warn(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
+            return null;
         }
         Object value = fieldView.getValue();
         String strValue = (String) ConvertUtils.convert(value, String.class);
@@ -90,13 +93,15 @@ public class FormViewContext extends AbstractBaseContext {
     public Object getValue(String elementId) {
         InputWidget fieldView = findInputFieldViewById(elementId);
         if (fieldView == null) {
-            throw new IllegalArgumentException(String.format("No view element id [%s] " +
+            warn(String.format("No view element id [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
+            return null;
         }
         UIComponent component = form.getElement(elementId);
         if (component == null) {
-            throw new IllegalArgumentException(String.format("The component id provided [%s] " +
+            warn(String.format("The component id provided [%s] " +
                     "doesn't exists in the form [%s].", elementId, form.getId()));
+            return null;
         }
         Object value = fieldView.getValue();
         if (component.getValueExpression() == null) {
@@ -167,11 +172,9 @@ public class FormViewContext extends AbstractBaseContext {
     public Set<String> keySet() {
         // get input ids
         Set<String> keys = new HashSet<>();
-        List<InputWidget> fields = this.getInputViews();
-        if (fields != null) {
-            for (InputWidget input : fields) {
-                keys.add(input.getInputId());
-            }
+        inputViews.keySet();
+        if (inputViews != null) {
+            keys.addAll(inputViews.keySet());
         }
         return keys;
     }
@@ -181,7 +184,12 @@ public class FormViewContext extends AbstractBaseContext {
     public Collection<Object> values() {
         List<Object> values = new ArrayList<>();
         for (String key : keySet()) {
-            values.add(this.getValue(key));
+            try {
+                Object value = getValue(key);
+                values.add(value);
+            } catch (Exception e) {
+                // TODO: this shouldn't happen
+            }
         }
         return values;
     }
@@ -197,7 +205,7 @@ public class FormViewContext extends AbstractBaseContext {
     }
 
     public void registerComponentView(UIComponent component, View componentView) {
-        if(component instanceof UIInputComponent){
+        if (component instanceof UIInputComponent) {
             this.inputViews.put(component.getId(), componentView);
         }
     }

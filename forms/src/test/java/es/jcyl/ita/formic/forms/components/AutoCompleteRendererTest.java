@@ -35,6 +35,7 @@ import java.util.List;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView;
+import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteWidget;
 import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
@@ -51,8 +52,7 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -159,8 +159,8 @@ public class AutoCompleteRendererTest {
         // create and expression combining two entity properties
         autoSel.setOptionLabelExpression(exprFactory.create(String.format("${entity.%s}-${entity.%s}", secondPropertyName, thirdPropertyName)));
 
-        InputWidget<UIAutoComplete, AutoCompleteView> widget =
-                (InputWidget<UIAutoComplete, AutoCompleteView>) renderHelper.render(env, autoSel);
+        AutoCompleteWidget widget = (AutoCompleteWidget) renderHelper.render(env, autoSel);
+        widget.load(env);
         Assert.assertNotNull(widget);
 
         // check number of elements in the adapter

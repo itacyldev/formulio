@@ -15,13 +15,15 @@ package es.jcyl.ita.formic.forms.components.datatable;
  * limitations under the License.
  */
 
+import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.EntitySelector;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -29,7 +31,7 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIDatatable extends UIComponent implements FilterableComponent {
+public class UIDatatable extends UIComponent implements EntitySelector {
 
     Repository repo;
 
@@ -38,17 +40,27 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
     // header/footer templates
     // filters and sorting
     private Filter filter;
+    private String[] mandatoryFilters;
     // behaviour (event handlers)
     private String route;
     // paginator / flow configuration
     // row selection
     private int numFieldsToShow = 20;
-    private String[] mandatoryFilters;
 
     private int numVisibleRows;
+    private List<Entity> selectedEntities;
 
     public UIDatatable() {
         setRendererType("datatable");
+    }
+
+    @Override
+    public List<Entity> getSelectedEntities() {
+        return selectedEntities;
+    }
+
+    public void selectEntity(Entity entity) {
+        this.selectedEntities.add(entity);
     }
 
     public Repository getRepo() {
@@ -56,6 +68,7 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
     }
 
     public void setRepo(Repository repo) {
+
         this.repo = repo;
     }
 
@@ -112,11 +125,11 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
         return null;
     }
 
-    public int getNumVisibleRows(){
+    public int getNumVisibleRows() {
         return this.numVisibleRows;
     }
 
-    public void setNumVisibleRows(final int numVisibleRows){
+    public void setNumVisibleRows(final int numVisibleRows) {
         this.numVisibleRows = numVisibleRows;
     }
 
@@ -147,7 +160,12 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
 
     @Override
     public Set<ValueBindingExpression> getValueBindingExpressions() {
-        return ExpressionHelper.getExpressions((FilterableComponent) this);
+        Set<ValueBindingExpression> expressions = super.getValueBindingExpressions();
+        // If repo filter is defined, add binding expressions to establish dependencies
+        if (this.filter != null) {
+            expressions.addAll(ExpressionHelper.getExpressions(this.filter.getExpression()));
+        }
+        return expressions;
     }
 
 }

@@ -2,17 +2,20 @@ package es.jcyl.ita.formic.forms.components.form;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import es.jcyl.ita.formic.core.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.components.EntityHolder;
+import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.context.impl.ViewStateHolder;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
@@ -177,4 +180,13 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
         return currentEntity;
     }
 
+    @Override
+    public Set<ValueBindingExpression> getValueBindingExpressions() {
+        Set<ValueBindingExpression> expressions = super.getValueBindingExpressions();
+        // If repo filter is defined, add binding expressions to establish dependencies
+        if (this.filter != null) {
+            expressions.addAll(ExpressionHelper.getExpressions(this.filter.getExpression()));
+        }
+        return expressions;
+    }
 }

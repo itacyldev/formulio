@@ -187,8 +187,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         if (!f.exists()) {
             f.mkdir();
         }
-        Config config = Config.init(projectsFolder);
 
+        Config config = Config.init(projectsFolder);
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
@@ -197,6 +197,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
+            DevConsole.setLogFileName(projectsFolder, (String)prj.getId());
             Toast.makeText(this,
                     DevConsole.info(this.getString(R.string.project_opening_init,
                             (String) prj.getId())),

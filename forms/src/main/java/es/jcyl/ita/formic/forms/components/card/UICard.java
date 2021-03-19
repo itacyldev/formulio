@@ -38,7 +38,7 @@ public class UICard extends UIComponent {
 
     boolean showHeader = true;
     boolean expandable;
-    boolean expanded;
+    boolean expanded = true;
 
     String imagePosition = ImagePosition.TOP.getPosition();
 

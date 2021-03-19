@@ -21,4 +21,5 @@ package es.jcyl.ita.formic.repo.query;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public abstract class Expression {
+
 }

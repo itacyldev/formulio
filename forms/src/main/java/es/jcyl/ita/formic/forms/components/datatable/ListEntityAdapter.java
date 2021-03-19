@@ -1,12 +1,16 @@
 package es.jcyl.ita.formic.forms.components.datatable;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
@@ -119,7 +123,22 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         adjustColumnWidth((LinearLayout) item);
         adjustColumnWidth(this.dtLayout.getHeaderView());
 
+        //if there is no route in the table
+        if (this.dtLayout.getComponent().getRoute() == null){
+            item.setBackground(ContextCompat.getDrawable(context, R.drawable.unselectablebuttonbackground));
+        }
+
+        setAlternateRowColor(position, item);
+
         return item;
+    }
+
+    private void setAlternateRowColor(int position, View item) {
+        if (position % 2 == 1) {
+            TypedArray ta = context.obtainStyledAttributes(new int[]{R.attr.onSurface5Color});
+            item.setBackgroundColor(ta.getColor(0, Color.GRAY));
+            //item.setBackgroundColor(R.attr.onSurface5Color);
+        }
     }
 
     /**

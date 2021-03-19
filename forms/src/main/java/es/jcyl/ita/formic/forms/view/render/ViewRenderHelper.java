@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -53,7 +54,6 @@ public class ViewRenderHelper {
     private View render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
-
 
         View componentView;
         if (checkDeferred && hasDeferredExpression(component, env)) {
@@ -150,10 +150,22 @@ public class ViewRenderHelper {
     }
 
 
-    private boolean hasDeferredExpression(UIComponent root, RenderingEnv env) {
-        // TODO improve this
-        return ((root.getValueExpression() != null && root.getValueExpression().toString().contains("view")) ||
-                (root.getRenderExpression() != null && root.getRenderExpression().toString().contains("view")));
+    /**
+     * Checks if the component has a bindingExpression that depends on view components.
+     *
+     * @param component
+     * @param env
+     * @return
+     */
+    private boolean hasDeferredExpression(UIComponent component, RenderingEnv env) {
+        if (component.getValueBindingExpressions() != null) {
+            for (ValueBindingExpression expr : component.getValueBindingExpressions()) {
+                if (expr.toString().contains("view.")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -203,17 +215,14 @@ public class ViewRenderHelper {
         // get current Android view
         View rootView = env.getViewRoot();
         // walk the tree in topological order to follow the dependencies from the current element
-        System.out.println(">>>> DAG ENCONTRADO: " + dag.toString());
         // sets the rendering starting point, when given element is found in the DAG
         boolean found = false;
 
         for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
             DAGNode node = it.next();
-            System.out.println("Renderizando..... " + node.getId() + " " + node.getComponent());
             if (!found) {
                 if (node.getComponent().getId().equals(component.getId())) {
                     found = true; // start rendering in next element
-                    System.out.println("===========EMPEZAMOS=================");
                 }
             } else {
                 // find view element to update
@@ -224,7 +233,6 @@ public class ViewRenderHelper {
                 } else {
                     env.setFormContext(component.getParentForm().getContext());
                 }
-
                 if (view instanceof DynamicComponent) {
                     ((DynamicComponent) view).load(env);
                 } else {
@@ -232,7 +240,6 @@ public class ViewRenderHelper {
                     View newView = this.render(env, node.getComponent(), false);
                     replaceView(view, newView);
                 }
-
             }
         }
     }

@@ -5,6 +5,7 @@
     <edit>
         <form>
             <tab>
+
                 <tabitem label="Datos de registro">
                     <autocomplete converter="integer" forceSelection="true" label="1. Bodega" repo="bodegaRepo" value="${entity.bodega_id}" validator="required">
                         <options labelExpression="${entity.razon_social}" labelFilteringProperty="razon_social" valueProperty="id" />
@@ -35,19 +36,35 @@
                         </options>
                     </radio>
 
-					<table>
-						<row colspans="5">
+					<table weights="40, 60">
+						<row colspans="2">
 							<paragraph value="Comprobar inscripción en los Registros del C.R."/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Fecha: " />
-							<textarea value="${entity.q1_1_fecha1}" hasDeleteButton="false"/>
-							<textarea value="${entity.q1_1_fecha2}" hasDeleteButton="false"/>
-							<textarea value="${entity.q1_1_fecha3}" hasDeleteButton="false"/>
-							<textarea value="${entity.q1_1_fecha4}" hasDeleteButton="false"/>
+                            <textarea readOnly="true" value="Fecha 1: "/>
+                            <date converter="string" value="${entity.q1_1_fecha1}" hasDeleteButton="false" hasTodayButton="false" />
+							<!--<textarea value="${entity.q1_1_fecha1}" hasDeleteButton="false"/>-->
 						</row>
-						<row colspans="5">
-							<textarea value="${entity.q1_1_obs}" hasDeleteButton="false"/>
+
+                        <row>
+                            <textarea readOnly="true" value="Fecha 2: "/>
+                            <date converter="string" value="${entity.q1_1_fecha2}" hasDeleteButton="false" hasTodayButton="false"/>
+                            <!--<textarea value="${entity.q1_1_fecha2}" hasDeleteButton="false"/>-->
+                        </row>
+
+                        <row>
+                            <textarea readOnly="true" value="Fecha 3: "/>
+                            <!--<textarea value="${entity.q1_1_fecha3}" hasDeleteButton="false"/>-->
+                            <date converter="string" value="${entity.q1_1_fecha3}" hasDeleteButton="false" hasTodayButton="false"/>
+                        </row>
+
+                        <row>
+                            <textarea readOnly="true" value="Fecha 4: "/>
+                            <date converter="string" value="${entity.q1_1_fecha4}" hasDeleteButton="false" hasTodayButton="false"/>
+                            <!--<textarea value="${entity.q1_1_fecha4}" hasDeleteButton="false"/>-->
+                        </row>
+						<row colspans="2">
+							<textarea value="${entity.q1_1_obs}" hasDeleteButton="false" label="Observaciones"/>
 						</row>
 					</table>
 					
@@ -59,17 +76,18 @@
                         </options>
                     </radio>
 					
-					<table>
+					<table weights="40, 60">
 						<row colspans="2">
 							<paragraph value="Comprobar inscripción en el RGSEAA (puede hacerse vía AESAN o IREA) o solicitud de inscripción junto con declaración responsable del solicitante. Comprobar último acta de inspección emitido por la Administración." />
 						</row>
 						<row>
 							<textarea readOnly="true" value="Nº RGSEAA:" />
-							<textarea value="${entity.q1_2_num_rgseaa}" hasDeleteButton="false" />
+							<textarea value="${entity.q1_2_num_rgseaa}" hasDeleteButton="false" inputType="4" />
 						</row>
 						<row>
 							<textarea readOnly="true" value="Fecha:" />
-							<textarea value="${entity.q1_2_fecha}" hasDeleteButton="false" />
+                            <!--<textarea value="${entity.q1_2_fecha}" hasDeleteButton="false" />-->
+                            <date converter="string" value="${entity.q1_2_fecha}" hasDeleteButton="false" hasTodayButton="false"/>
 						</row>
 						<row>
 							<textarea readOnly="true" value="Nº Acta:" />
@@ -77,10 +95,11 @@
 						</row>
 						<row>
 							<textarea readOnly="true" value="F. últ. insp. san.:" />
-							<textarea value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" />
+							<!--<textarea value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" />-->
+                            <date converter="string" value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" hasTodayButton="false"/>
 						</row>
 						<row colspans="2">
-							<textarea value="${entity.q1_2_obs}" hasDeleteButton="false"/>
+							<textarea value="${entity.q1_2_obs}" hasDeleteButton="false" label="Observaciones"/>
 						</row>
 					</table>
 					
@@ -132,7 +151,7 @@
 					<textarea label="Datos complementarios a la auditoria." hint="Actividad/es en desarrollo en la bodega durante la auditoría." value="${entity.q1_complementarios}"/>
 					
                 </tabitem>
-				
+
                 <tabitem label="Entrada de uva">
 				
 					<radio label="2.1 Criterio utilizado en la entrada de materia prima y requisitos establecidos por la bodega para calificar una recepción de uva." orientation="horizontal" validator="required" value="${entity.q2_1}">
@@ -301,29 +320,29 @@
                         </options>
                     </radio>
 					
-					<table headerText="Cosecha, Vino DPO, TOTAL">
+					<table headerText=" Cosecha, Vino DPO, TOTAL" weights="26, 37, 37">
 						<row colspans="3">
 							<paragraph value="Comprobar Declaración de Producción de vino del CRDOP. Comprobar coincidencia con Declaración de Producción de la Administración y asiento en libros-registro. Comprobar Rendimiento extracción para vino amparado  ≤ 70 (ó 72) litros de vino / 100 kg de uva."/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Tinto"/>
-							<textarea value="${entity.q3_2_dpo_tinto}" hasDeleteButton="false"/>
-							<textarea value="${entity.q3_2_total_tinto}" hasDeleteButton="false"/>
+							<textarea readOnly="true" value="Tinto"/>
+                            <textarea value="${entity.q3_2_dpo_tinto}" hasDeleteButton="false" inputType="4"/>
+							<textarea value="${entity.q3_2_total_tinto}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Rosado"/>
-							<textarea value="${entity.q3_2_dpo_rosado}" hasDeleteButton="false"/>
-							<textarea value="${entity.q3_2_total_rosado}" hasDeleteButton="false"/>
+							<textarea readOnly="true" value="Rosado"/>
+							<textarea value="${entity.q3_2_dpo_rosado}" hasDeleteButton="false" inputType="4"/>
+							<textarea value="${entity.q3_2_total_rosado}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Blanco"/>
-							<textarea value="${entity.q3_2_dpo_blanco}" hasDeleteButton="false"/>
-							<textarea value="${entity.q3_2_total_blanco}" hasDeleteButton="false"/>
+							<textarea readOnly="true" value="Blanco"/>
+							<textarea value="${entity.q3_2_dpo_blanco}" hasDeleteButton="false" inputType="4"/>
+							<textarea value="${entity.q3_2_total_blanco}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
-							<textarea readOnly="true" label="Otros"/>
-							<textarea value="${entity.q3_2_dop_otros}" hasDeleteButton="false"/>
-							<textarea value="${entity.q3_2_total_otros}" hasDeleteButton="false"/>
+							<textarea readOnly="true" value="Otros"/>
+							<textarea value="${entity.q3_2_dop_otros}" hasDeleteButton="false" inputType="4"/>
+							<textarea value="${entity.q3_2_total_otros}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row colspans="3">
 							<textarea label="Rend. DOP:" value="${entity.q3_2_rend_dpo}" hasDeleteButton="false"/>
@@ -435,20 +454,21 @@
                             <option label="nc" value="nc" />
                         </options>
                     </radio>
-					<table weights="35, 65">
+					<table weights="40, 60">
 						<row colspans="2">
 							<paragraph value="Comprobar inscripción en el Registro de Envasadores y Embotelladores de Vino y Bebidas Alcohólicas. Se comprobará igualmente su inscripción como instalación embotelladora en los Registros del CRDO." />
 						</row>
 						<row>
 							<textarea readOnly="true" value="Nº RE:" />
-							<textarea value="${entity.q6_1_num_re}" hasDeleteButton="false"/>
+							<textarea value="${entity.q6_1_num_re}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
 							<textarea readOnly="true" value="Fecha:" />
-							<textarea value="${entity.q6_1_fecha}" hasDeleteButton="false"/>
+							<!--<textarea value="${entity.q6_1_fecha}" hasDeleteButton="false"/>-->
+                            <date converter="string" value="${entity.q6_1_fecha}" hasDeleteButton="false" hasTodayButton="false"/>
 						</row>
 						<row colspans="2">
-							<textarea value="${entity.q6_1_obs}" hasDeleteButton="false"/>
+							<textarea value="${entity.q6_1_obs}" hasDeleteButton="false" label="Observaciones"/>
 						</row>
 					</table>
 					

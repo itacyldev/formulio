@@ -41,9 +41,6 @@
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
 
 
-
-
-
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
 -keepattributes EnclosingMethod, InnerClasses

@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -58,7 +61,6 @@ public class DAGManager {
      */
     public void generateDags(UIView viewRoot) {
         if (viewRoot != null) {
-
             // Gets all the components in the view
             Map<String, UIComponent> components = getViewComponents(viewRoot);
 
@@ -105,6 +107,7 @@ public class DAGManager {
      * @param component
      */
     private void storeComponents(UIComponent component, Map<String, UIComponent> components) {
+        // store absolute and relative references for current component
         components.put(component.getAbsoluteId(), component);
 
         if (component.hasChildren()) {
@@ -130,43 +133,54 @@ public class DAGManager {
             return;
         }
         for (ValueBindingExpression ve : component.getValueBindingExpressions()) {
-            if (ve != null && !ve.isLiteral()) {
-                DAGNode componentNode = getComponentNode(component);
-                List<String> dependingVariables = ve.getDependingVariables();
+            if (ve == null || ve.isLiteral()) {
+                // no expression or the expression doesn't includes dependencies
+                continue;
+            }
+            DAGNode componentNode = getComponentNode(component);
+            List<String> dependingVariables = ve.getDependingVariables();
 
-                String dependingComponentId;
-                for (String depString : dependingVariables) {
-                    if (!depString.startsWith("entity")) {
-                        dependingComponentId = createAbsoluteReference(component, depString);
-                        if (!dependingComponentId.equals(componentId)) {
-                            UIComponent dependingComponent = components.get(dependingComponentId);
-                            if (dependingComponent != null) {
-                                DAGNode dependingNode = getComponentNode(dependingComponent);
-                                DirectedAcyclicGraph dag = null;
-                                if (dags.containsKey(componentId)) {
-                                    dag = dags.get(componentId);
-                                    if (!dag.containsVertex(dependingNode)) {
-                                        dag.addVertex(dependingNode);
-                                    }
-                                    if (!dag.containsEdge(dependingNode, componentNode)) {
-                                        dag.addEdge(dependingNode, componentNode);
-                                    }
-                                    dags.put(dependingComponentId, dag);
-                                } else {
-                                    dag = getDagComponent(dependingComponentId, dags);
-                                    if (!dag.containsVertex(componentNode)) {
-                                        dag.addVertex(componentNode);
-                                    }
-                                    if (!dag.containsEdge(dependingNode, componentNode)) {
-                                        dag.addEdge(dependingNode, componentNode);
-                                    }
-                                    dags.put(componentId, dag);
-                                }
-                                buildComponentDag(dependingComponentId, dags, components);
-                            }
-                        }
-                    }
+            for (String depString : dependingVariables) {
+                if (depString.startsWith("entity")) {
+                    // entity properties mapping are skipped
+                    continue;
                 }
+                String dependingComponentId = createAbsoluteReference(component, depString);
+                if (dependingComponentId == null || dependingComponentId.equals(componentId)) {
+                    // skip current component or if depending component is not found
+                    continue;
+                }
+                UIComponent dependingComponent = components.get(dependingComponentId);
+                if (dependingComponent == null) {
+                    error(String.format("Error found in dependency definition: component [%s] " +
+                                    "depends on component [%s], but the latter is not found, ej: form1.input1 or view.input1" +
+                                    "This dependency won't work!",
+                            component.getId(), dependingComponentId));
+                    error("Available components in this view are: " + components.keySet());
+                    continue;
+                }
+                DAGNode dependingNode = getComponentNode(dependingComponent);
+                DirectedAcyclicGraph dag;
+                if (dags.containsKey(componentId)) {
+                    dag = dags.get(componentId);
+                    if (!dag.containsVertex(dependingNode)) {
+                        dag.addVertex(dependingNode);
+                    }
+                    if (!dag.containsEdge(dependingNode, componentNode)) {
+                        dag.addEdge(dependingNode, componentNode);
+                    }
+                    dags.put(dependingComponentId, dag);
+                } else {
+                    dag = getDagComponent(dependingComponentId, dags);
+                    if (!dag.containsVertex(componentNode)) {
+                        dag.addVertex(componentNode);
+                    }
+                    if (!dag.containsEdge(dependingNode, componentNode)) {
+                        dag.addEdge(dependingNode, componentNode);
+                    }
+                    dags.put(componentId, dag);
+                }
+                buildComponentDag(dependingComponentId, dags, components);
             }
         }
     }
@@ -176,26 +190,41 @@ public class DAGManager {
      * returns the absolute id of the referenced element: "form1.f1" if it's nested inside a form or
      * "f1" if it is not.
      *
-     * @param component
-     * @param varReference
+     * @param component:    dependant component
+     * @param varReference: reference to the component origin of the dependence
      * @return
      */
     private String createAbsoluteReference(UIComponent component, String varReference) {
-        // if it starts with entity of view, is a relative reference, complete with form id
-        if (!varReference.startsWith("entity") && !varReference.startsWith("view")) {
-            // absolute reference to context or form nested entity or view, remove "view" or "entity"
-            // context reference
-            // TODO: improve this
-            return varReference.replace("entity.", "").replace("view.", "");
-        } else {
+        // is form relative reference
+        if (varReference.startsWith("view")) {
+            // relative reference uses current component form to find the component
             UIForm form = component.getParentForm();
             if (form == null) {
                 throw new ViewConfigException(String.format("Invalid variable reference. " +
                         "Relative references can be used just inside a form. " +
                         "Wrap element [%s] inside a form.", component.getId()));
             }
-            varReference = varReference.replace("entity.", "").replace("view.", "");
-            return form.getId() + "." + varReference;
+            String childId = varReference.replace("view.", "");
+            UIComponent child = UIComponentHelper.findChild(form, childId);
+            if (child == null) {
+                error(String.format("Invalid relative reference: [%s]. No children component " +
+                                "found within form [%s] with id [%s] in file ${file}.",
+                        varReference, form.getId(), childId));
+                return null;
+            }
+            return child.getAbsoluteId();
+        } else if (varReference.startsWith("entity")) {
+            // keep reference as entity property link
+            return varReference;
+        } else {
+            // check if the reference is correct
+            UIComponent referenced = UIComponentHelper.findByAbsoluteId(component.getRoot(), varReference);
+            if (referenced == null) {
+                error(String.format("Invalid absolute reference, not children component " +
+                        "found under with absolute reference [%s].", varReference));
+                return null;
+            }
+            return referenced.getAbsoluteId();
         }
     }
 
@@ -263,16 +292,17 @@ public class DAGManager {
 
 
     public void flush() {
-        nodes.clear();
-        nodes = null;
-
-        for (ViewDAG viewDag : viewDags.values()) {
-            viewDag.reset();
+        if (nodes != null) {
+            nodes.clear();
+            nodes = null;
         }
-
-        viewDags.clear();
-        viewDags = null;
-
+        if (viewDags != null) {
+            for (ViewDAG viewDag : viewDags.values()) {
+                viewDag.reset();
+            }
+            viewDags.clear();
+            viewDags = null;
+        }
     }
 }
 

@@ -46,8 +46,34 @@
         <item name="android:textColorHint">?attr/onSurfaceColor</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_gravity">start|top</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxBackgroundColor">?attr/AppBackgroundColor</item>
         <item name="boxStrokeColor">@color/outline_color</item>
     </style>
+
+    <style name="TextInputLayoutUnderline" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:textSize">16sp</item>
+        <item name="hintTextAppearance">@style/HintTextAppearance</item>
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">start|top</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxBackgroundColor">?attr/AppBackgroundColor</item>
+        <item name="backgroundTint">@color/underline_color_selector</item>
+        <item name="boxStrokeColor">@color/underline_color_selector</item>
+    </style>
+
+    <style name="TextInputLayoutOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textSize">16sp</item>
+        <item name="hintTextAppearance">@style/HintTextAppearance</item>
+        <item name="android:textColorHint">?attr/onSurfaceColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">start|top</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxBackgroundColor">?attr/AppBackgroundColor</item>
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+    </style>
+
     <!--TextAppearance.AppCompat-->
 
     <style name="Default_Label_font">
@@ -92,16 +118,44 @@
         <item name="backgroundTint">@color/underline_color_selector</item>
     </style>
 
-    <style name="Textfield_cancel_button">
+    <style name="Textfield_info_button">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:background">@drawable/selectablebuttonbackground</item>
+        <item name="android:contentDescription">@string/tool_buttons_i</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_weight">0.3</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="tint">?attr/onSurfaceColor</item>
+        <item name="android:src">@drawable/ic_tool_info</item>
+    </style>
+
+    <style name="Textfield_button">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:background">@drawable/selectablebuttonbackground</item>
         <item name="android:layout_marginStart">5dp</item>
-        <item name="android:layout_weight">0</item>
+        <item name="android:contentDescription">@string/tool_buttons_x</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_weight">0.3</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="tint">?attr/onSurfaceColor</item>
     </style>
 
+    <style name="Textfield_cancel_button" parent="Textfield_button">
+        <item name="android:src">@drawable/ic_tool_x_circle_dark</item>
+    </style>
+
+    <style name="Textfield_search_button" parent="Textfield_button">
+        <item name="android:src">@drawable/ic_action_search</item>
+    </style>
+
     <style name="Spinner_item" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="backgroundTint">?attr/onSurfaceColor</item>
+        <item name="android:backgroundTint">@drawable/bottom_line_primary_color</item>
     </style>
 
 
@@ -147,6 +201,18 @@
         <item name="android:background">?attr/surfaceColor</item>
         <item name="tabIndicatorColor">?attr/primaryColorVariant</item>
         <item name="tabTextColor">?attr/onSurfaceColor</item>
+    </style>
+
+    <style name="Widget_padding">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="SwitchStyle" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">?attr/primaryColor</item>
     </style>
 
 </resources>

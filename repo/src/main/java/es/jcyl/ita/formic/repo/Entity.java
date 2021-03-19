@@ -128,7 +128,7 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
 
     public void setProperties(Map<String, Object> properties) {
         this.properties.clear();
-        for(Map.Entry<String, Object> entry : properties.entrySet()){
+        for (Map.Entry<String, Object> entry : properties.entrySet()) {
             set(entry.getKey(), entry.getValue());
         }
     }
@@ -156,9 +156,13 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
 
     @Override
     public String toString() {
-        String pk = (!this.metadata.hasIdProperties()) ? "NoPK" :
-                String.format("%s=%s", Arrays.toString(
-                        metadata.getIdPropertiesName()).replaceAll("[\\[\\]]",""), this.getId());
-        return metadata.getName() + "@[" + pk+"]";
+        if (this.metadata == null) {
+            return this.getClass().getName() + "@[" + this.getId() + "]";
+        } else {
+            String pk = (!this.metadata.hasIdProperties()) ? "NoPK" :
+                    String.format("%s=%s", Arrays.toString(
+                            metadata.getIdPropertiesName()).replaceAll("[\\[\\]]", ""), this.getId());
+            return metadata.getName() + "@[" + pk + "]";
+        }
     }
 }

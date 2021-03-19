@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.components.autocomplete;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -25,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
@@ -35,16 +37,15 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.ContextUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
+import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
@@ -59,8 +60,7 @@ import es.jcyl.ita.formic.repo.query.Criteria;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 @SuppressLint("AppCompatCustomView")
-public class AutoCompleteView extends AppCompatAutoCompleteTextView
-        implements DynamicComponent {
+public class AutoCompleteView extends AppCompatAutoCompleteTextView {
     // TODO:  umm, extract to external class?
     private static final SelectRenderer.EmptyOption EMPTY_OPTION = new SelectRenderer.EmptyOption(null, null);
     private static final ViewValueConverterFactory convFactory = ViewValueConverterFactory.getInstance();
@@ -81,7 +81,6 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
         super(context, attrs, defStyle);
     }
 
-    @Override
     public void load(RenderingEnv env) {
         if (this.component.isStatic()) {
             return;
@@ -100,7 +99,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
         return ctx;
     }
 
-    public void initialize(RenderingEnv env, UIAutoComplete component) {
+    public void initialize(RenderingEnv env, UIAutoComplete component, ImageView arrowDropDown) {
         this.component = component;
         ArrayAdapter adapter;
         if (component.isStatic()) {
@@ -109,14 +108,15 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
                     component.hasNullOption(), android.R.layout.select_dialog_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         } else {
-            adapter = new EntityListELAdapter(env, R.layout.widget_autocomplete_listitem,
+            CompositeContext ctx = setupThisContext(env);
+            adapter = new EntityListELAdapter(env, ctx, R.layout.widget_autocomplete_listitem,
                     R.id.autocomplete_item, component);
         }
         this.setAdapter(adapter);
 
         addClickOptionListener(env, component);
         addTextChangeListener(env, component);
-        addLostFocusListener(env, component);
+        addLostFocusListener(env, component, arrowDropDown);
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
@@ -138,11 +138,14 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView
         });
     }
 
-    private void addLostFocusListener(RenderingEnv env, UIAutoComplete component) {
+    private void addLostFocusListener(RenderingEnv env, UIAutoComplete component, ImageView arrowDropDown) {
         this.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 // if current text doesn't match and option, remove if
+                TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor, R.attr.primaryColor});
+                arrowDropDown.setImageTintList(ta.getColorStateList(v.hasFocus()?1:0));
+
                 if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {
                     if (value == null) {
                         setText(null);

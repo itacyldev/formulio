@@ -27,7 +27,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.core.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;

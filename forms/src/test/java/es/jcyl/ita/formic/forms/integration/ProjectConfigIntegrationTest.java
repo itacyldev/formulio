@@ -29,10 +29,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.meta.PropertyType;
-import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -44,11 +45,10 @@ import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
 
@@ -95,11 +95,11 @@ public class ProjectConfigIntegrationTest {
         config.setCurrentProject(prj);
         // there must be 4 repos
         Set<String> repoIds = config.getRepoConfigReader().getRepoFactory().getRepoIds();
-        assertEquals(8 + 1, repoIds.size());// 4 repos + 1 default project's image repo
 
         // there must be three form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
-        assertEquals(7, formConfigs.size());
+        int expectedNumForms = TestUtils.findFile("config/project1/forms").list().length;
+        assertEquals(expectedNumForms, formConfigs.size());
 
         // Check all list and edit controller have been loaded
         FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
@@ -116,7 +116,6 @@ public class ProjectConfigIntegrationTest {
             }
         }
     }
-
 
     @Test
     public void testForm2Configuration() throws Exception {
@@ -167,10 +166,10 @@ public class ProjectConfigIntegrationTest {
 
     private void assertListController(FormController ctl) {
         UIView view = ctl.getView();
-        List<UIDatatable> lst = UIComponentHelper.findByClass(view, UIDatatable.class);
+        List<EntitySelector> lst = UIComponentHelper.findByClass(view, EntitySelector.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
-        UIDatatable datatable = lst.get(0);
-        Assert.assertNotNull(datatable.getRepo());
+        EntitySelector entitySelector = lst.get(0);
+        Assert.assertNotNull(entitySelector.getRepo());
     }
 
 }

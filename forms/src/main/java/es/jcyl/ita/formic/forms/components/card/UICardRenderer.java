@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -124,7 +125,6 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         if (image == null) {
             imageLayout.setVisibility(View.GONE);
         } else {
-
             LinearLayout contentLayout = (LinearLayout) ViewHelper.findViewByTagAndSetId(widget, "card_content_layout");
             String imagePosition = card.getImagePosition();
             if (imagePosition.equals(TOP.getPosition()) || imagePosition.equals(BOTTOM.getPosition())) {
@@ -198,26 +198,33 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             headerLabelView.setText(headerLabel);
         }
 
+
+        ImageView cardHeaderImage = ViewHelper.findViewAndSetId(cardView, R.id.card_header_image,
+                ImageView.class);
+
         LinearLayout headerLayout = (LinearLayout) ViewHelper.findViewAndSetId(cardView, R.id.card_header);
         final View content = ViewHelper.findViewAndSetId(cardView, R.id.card_content);
         headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //View content = cardView.findViewWithTag("card_content_layout");
-                if (card.isExpanded()) {
-                    card.setExpanded(false);
-                    ViewHelper.collapse(content);
-                } else {
-                    card.setExpanded(true);
+                if(content.getVisibility()==View.GONE){
+                    cardHeaderImage.setImageResource(R.drawable.ic_action_collapse);
                     ViewHelper.expand(content);
+                }else{
+                    cardHeaderImage.setImageResource(R.drawable.ic_action_expand);
+                    ViewHelper.collapse(content);
                 }
             }
         });
 
-
         if (!card.isExpanded()) {
-            ViewHelper.collapse(content);
+            content.setVisibility(View.GONE);
+            cardHeaderImage.setImageResource(R.drawable.ic_action_expand);
+        }else{
+            content.setVisibility(View.VISIBLE);
+            cardHeaderImage.setImageResource(R.drawable.ic_action_collapse);
         }
+
     }
 
     /**

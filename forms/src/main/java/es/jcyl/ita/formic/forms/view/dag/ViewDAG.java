@@ -68,15 +68,15 @@ public class ViewDAG {
                     return subDAG;
                 }
             }
-
         }
-
         return null;
     }
 
     public void reset() {
-        dags.clear();
-        dags = null;
+        if(dags!=null){
+            dags.clear();
+            dags = null;
+        }
     }
 
     /**

@@ -145,7 +145,9 @@ public abstract class FormController implements Identificable, FilterableCompone
     }
 
     public void setRepo(Repository repo) {
+
         this.repo = repo;
+
     }
 
     public Filter getFilter() {

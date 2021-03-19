@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.components.datatable;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -39,13 +40,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.ContextUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
-import es.jcyl.ita.formic.forms.components.EntitySelector;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.column.UIColumnFilter;
+import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -67,7 +67,7 @@ import es.jcyl.ita.formic.repo.query.Sort;
  */
 
 public class DatatableWidget extends Widget<UIDatatable>
-        implements DynamicComponent, EntitySelector, EntityListProvider {
+        implements DynamicComponent, EntityListProvider {
 
     private final String HEADER_FILTER_SUFIX = "_header_filter";
     private final String HEADER_ORDER_SUFIX = "header_order";
@@ -106,6 +106,7 @@ public class DatatableWidget extends Widget<UIDatatable>
         this.repo = component.getRepo();
     }
 
+    @SuppressLint("ResourceAsColor")
     public void setBodyView(ListView bodyView) {
         this.bodyView = bodyView;
 
@@ -180,8 +181,6 @@ public class DatatableWidget extends Widget<UIDatatable>
         this.filter.setOffset(this.offset);
         //this.entities.clear();
         addData();
-
-        this.offset += this.pageSize;
     }
 
     private void reloadData() {
@@ -197,8 +196,19 @@ public class DatatableWidget extends Widget<UIDatatable>
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+        addNoResults();
 
+        this.offset += this.pageSize;
+    }
 
+    private void addNoResults() {
+        TextView list_no_results =  this.findViewById(R.id.list_no_results);
+        if (this.entities.size() == 0) {
+            list_no_results.setVisibility(VISIBLE);
+        }
+        else{
+            list_no_results.setVisibility(GONE);
+        }
     }
 
     private View createHeaderView(final Context viewContext, final ViewGroup parent, final UIColumn column) {
@@ -212,16 +222,19 @@ public class DatatableWidget extends Widget<UIDatatable>
 
         final TextView fieldNameView = output
                 .findViewById(R.id.list_header_textview);
-        fieldNameView.setText(DataUtils.nullFormat(columnName));
+        fieldNameView.setText(DataUtils.nullFormat(StringUtils.isNotBlank(columnName)?StringUtils.capitalize(columnName):columnName));
+
+        final ImageView searchView = output
+                .findViewById(R.id.list_header_img);
 
         if (column.isFiltering()) {
-            addHeaderFilterLayout(column, output, fieldNameView);
+            addHeaderFilterLayout(column, output, fieldNameView, searchView);
         }
 
         return output;
     }
 
-    private void addHeaderFilterLayout(final UIColumn column, View headerLayout, View fieldNameView) {
+    private void addHeaderFilterLayout(final UIColumn column, View headerLayout, View fieldNameView, ImageView searchView) {
         final LinearLayout filterLayout = headerLayout
                 .findViewById(R.id.list_header_filter_layout);
 
@@ -238,12 +251,15 @@ public class DatatableWidget extends Widget<UIDatatable>
         fieldNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (filterLayout.getVisibility() == View.VISIBLE) {
-                    setHeaderFilterVisibility(View.GONE);
-                    resetFilter();
-                } else {
-                    setHeaderFilterVisibility(View.VISIBLE);
-                }
+                setFilterVisibility(filterLayout, filterText);
+
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                setFilterVisibility(filterLayout, filterText);
 
             }
         });
@@ -291,6 +307,16 @@ public class DatatableWidget extends Widget<UIDatatable>
                 updateFilter();
             }
         });
+    }
+
+    private void setFilterVisibility(LinearLayout filterLayout, EditText filterText) {
+        if (filterLayout.getVisibility() == View.VISIBLE) {
+            setHeaderFilterVisibility(View.GONE);
+            resetFilter();
+        } else {
+            setHeaderFilterVisibility(View.VISIBLE);
+            filterText.requestFocus();
+        }
     }
 
     /**
@@ -366,6 +392,9 @@ public class DatatableWidget extends Widget<UIDatatable>
      * Updates the filter with the content of the headers of each column of the table
      */
     private void updateFilter() {
+        this.entities.clear();
+        this.offset = 0;
+
         ConditionBinding[] conditions = new ConditionBinding[this.getComponent().getColumns().length];
         int i = 0;
         for (UIColumn c : this.getComponent().getColumns()) {
@@ -458,21 +487,13 @@ public class DatatableWidget extends Widget<UIDatatable>
         return this.headerView;
     }
 
-    /*************************************/
-    /** Entity Selector interface **/
-    /*************************************/
-    @Override
-    public List<Entity> getSelectedEntities() {
-        return null;
-    }
-
     @Override
     public void setEntities(List<Entity> entities) {
-
     }
 
     @Override
     public List<Entity> getEntities() {
         return this.entities;
     }
+
 }

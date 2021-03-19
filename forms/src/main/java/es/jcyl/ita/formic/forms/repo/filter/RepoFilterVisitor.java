@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.elements.RepoFilter;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -29,6 +30,8 @@ import es.jcyl.ita.formic.repo.query.Condition;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.Operator;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -58,7 +61,15 @@ public class RepoFilterVisitor {
                 }
             }
             if (kids.size() == 0) {
-                Operator operator = Operator.valueOf(node.getName().toUpperCase());
+                Operator operator = null;
+                try {
+                    operator = Operator.getValue(node.getName().toUpperCase());
+                } catch (Exception e) {
+                    throw new ConfigurationException(error(
+                            String.format("Invalid operator expression found in repoFilter declaration: [%s], " +
+                                    "valid values are: [%s]", node.getName().toUpperCase(), Operator.values())));
+
+                }
                 String property = node.getAttribute("property");
                 String value = node.getAttribute("value");
                 boolean isMandatory = false;

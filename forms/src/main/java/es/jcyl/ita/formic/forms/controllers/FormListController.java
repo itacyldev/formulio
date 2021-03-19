@@ -42,7 +42,7 @@ public class FormListController extends FormController {
      * @return
      */
     public long count() {
-        return this.repo.count(null);
+        return this.getEntitySelector().getRepo().count(this.getEntitySelector().getFilter());
     }
 
     /****************************/

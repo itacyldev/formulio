@@ -179,7 +179,6 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
 
         Object value;
         int i = 1;
-        SQLiteDBValue dbValue;
 
         EntityMeta<PropertyType> meta = entity.getMetadata();
         DBPropertyType dp;
@@ -337,9 +336,10 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
         // idIndexes contains the position of the pk properties in the properties array
         EntityMeta<DBPropertyType> meta = this.entityConfig().getMeta();
         Integer[] idIndexes = meta.getIdIndexes();
-        DBPropertyType[] props = meta.getProperties();
+        PropertyType[] props = meta.getProperties();
         for (int i = 0; i < idIndexes.length; i++) {
-            convertedKeys[i] = props[idIndexes[i]].getConverter().toPersistence(keysArray[i]).value.toString();
+            DBPropertyType prop = (DBPropertyType) props[idIndexes[i]];
+            convertedKeys[i] = prop.getConverter().toPersistence(keysArray[i]).value.toString();
         }
         return convertedKeys;
     }

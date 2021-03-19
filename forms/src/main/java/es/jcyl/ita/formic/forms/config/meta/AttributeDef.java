@@ -57,6 +57,8 @@ public class AttributeDef {
 
     public static Attribute HAS_DELETE_BUTTON = new Attribute("hasDeleteButton", Boolean.class);
 
+    public static Attribute HAS_TODAY_BUTTON = new Attribute("hasTodayButton", Boolean.class);
+
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", true);
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
@@ -72,6 +74,7 @@ public class AttributeDef {
     public static Attribute EXPRESSION_TYPE = new Attribute("expressionType", true);
     public static Attribute EVAL_ON = new Attribute("evalOn", true);
     public static Attribute PROPERTY = new Attribute("property", true);
+    public static Attribute REPO_PROPERTY = new Attribute("repoProperty", true);
 
     // autocomplete
     public static Attribute VALUE_PROPERTY = new Attribute("valueProperty");
@@ -108,7 +111,6 @@ public class AttributeDef {
 
     public static Attribute WEIGHTS = new Attribute("weights", String.class);
     public static Attribute BORDER = new Attribute("border", Boolean.class);
-
 
     // text style
     public static Attribute FONT_SIZE = new Attribute("fontSize", String.class);

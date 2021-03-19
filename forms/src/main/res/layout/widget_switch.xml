@@ -4,10 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingLeft="12dp"
-    android:paddingTop="10dp"
-    android:paddingRight="10dp"
-    android:paddingBottom="20dp">
+    style="@style/Widget_padding">
 
     <TextView
         android:id="@+id/label_view"
@@ -27,6 +24,7 @@
         android:textColor="#fff"
         android:textOff="No"
         android:textOn="Si"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        style="@style/SwitchStyle"/>
 
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>

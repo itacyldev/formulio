@@ -34,6 +34,7 @@ import es.jcyl.ita.formic.forms.components.media.MediaResource;
 import es.jcyl.ita.formic.forms.view.activities.ActivityResultCallBack;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 
@@ -123,14 +124,8 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
             updateRelatedEntity(byteArray);
         }
 
-        MediaResource imgResource = getInputView().getResource();
-        if (imgResource == null) {
-            // no previous photo
-            imgResource = MediaResource.fromByteArray(byteArray);
-            getInputView().setResource(imgResource);
-        } else {
-            imgResource.setContent(byteArray);
-        }
+        MediaResource imgResource = MediaResource.fromByteArray(byteArray);
+        getInputView().setResource(imgResource);
         getInputView().setImageBitmap(imageData);
     }
 
@@ -141,17 +136,14 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
      * @param byteArray
      */
     public void updateRelatedEntity(byte[] byteArray) {
-
         // the related entity is stored in the main entity using current component Id as property name
         Entity entity = (Entity) mainEntity.get(component.getId());
         if (entity == null) {
             // create new entity
-            entity = Entity.newEmpty();
+            entity = ((EditableRepository) component.getRepo()).newEntity();
             mainEntity.set(component.getId(), entity, true);
-            MediaResource imgResource = MediaResource.fromByteArray(byteArray);
-            getInputView().setResource(imgResource);
         }
-        entity.set("content", new ByteArray(byteArray));
+        entity.set(component.getRepoProperty(), new ByteArray(byteArray));
     }
 
     @Override
@@ -161,7 +153,12 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     @Override
     public void setState(Object value) {
-        getInputView().setResource((MediaResource) value);
+        MediaResource resource = (MediaResource) value;
+        getInputView().setResource(resource);
+        Bitmap bitmap = resource.toBitMap();
+        if(bitmap != null){
+            this.getInputView().setImageBitmap(bitmap);
+        }
     }
 
     @Override

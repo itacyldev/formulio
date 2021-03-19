@@ -15,7 +15,11 @@ package es.jcyl.ita.formic.forms.components.select;
  * limitations under the License.
  */
 
+import java.util.Set;
+
+import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.option.MultiOptionComponent;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
@@ -25,13 +29,13 @@ import es.jcyl.ita.formic.forms.components.option.UIOption;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UISelect extends UIInputComponent  implements FilterableComponent, MultiOptionComponent {
+public class UISelect extends UIInputComponent implements FilterableComponent, MultiOptionComponent {
 
     private static final String SELECT_TYPE = "select";
     protected UIOption[] options;
     protected Repository repo;
-    protected Filter filter;
     private boolean hasNullOption = true;
+    protected Filter filter;
     private String[] mandatoryFilters;
 
     public Repository getRepo() {
@@ -96,4 +100,13 @@ public class UISelect extends UIInputComponent  implements FilterableComponent, 
         this.mandatoryFilters = mandatoryFilters;
     }
 
+    @Override
+    public Set<ValueBindingExpression> getValueBindingExpressions() {
+        Set<ValueBindingExpression> expressions = super.getValueBindingExpressions();
+        // If repo filter is defined, add binding expressions to establish dependencies
+        if (this.filter != null) {
+            expressions.addAll(ExpressionHelper.getExpressions(this.filter.getExpression()));
+        }
+        return expressions;
+    }
 }

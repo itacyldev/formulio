@@ -7,7 +7,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import es.jcyl.ita.formic.core.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
@@ -15,6 +14,8 @@ import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
+import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -55,6 +56,9 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         UIOption[] options = component.getOptions();
         RadioButton button;
         int i = 0;
+
+        float[] weigthts = ComponentUtils.getWeigths(component.getWeights(), options.length, component.getId(), null);
+
         for (UIOption option : options) {
             button = new RadioButtonWidget(env.getViewContext(), option);
             button.setText(option.getLabel());
@@ -64,6 +68,8 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
             styleHolder.applyStyle(button);
 
             radioGroup.addView(button);
+
+            setLayoutParams(weigthts, i, button);
             i++;
         }
         // set listener to handler option clicks
@@ -79,7 +85,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly() || component.isMandatory()) {
+        if (component.isReadOnly() || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +112,13 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         UIInputComponent component = widget.getComponent();
         String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
         if (message != null) {
-            ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
+            ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
+        }
+    }
+
+    private static void setLayoutParams(float[] weigthts, int i, View view) {
+        if (weigthts != null && i < weigthts.length) {
+            view.setLayoutParams(new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT, weigthts[i]));
         }
     }
 

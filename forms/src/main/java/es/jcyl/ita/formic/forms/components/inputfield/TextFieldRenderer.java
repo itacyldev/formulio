@@ -65,12 +65,15 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
             inputView.setInputType(component.getInputType());
         }
 
-        TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         // set floating label
         //setLabel(inputView, textInputLayout, component);
 
         // set event
         addTextChangeListener(env, inputView, component);
+
+        TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
+
+        removeUnderline(env, component, textInputLayout);
 
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
@@ -133,10 +136,10 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component){
         if (component.getHint() != null) {
-            textInputLayout.setStartIconDrawable(R.drawable.ic_tool_info);
+            textInputLayout.setEndIconDrawable(R.drawable.ic_tool_info);
             TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
-            textInputLayout.setStartIconTintList(ta.getColorStateList(0));
-            textInputLayout.setStartIconOnClickListener(new View.OnClickListener() {
+            textInputLayout.setEndIconTintList(ta.getColorStateList(0));
+            textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                    AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
@@ -183,6 +186,11 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 if (!env.isInputDelayDisabled()) {
                     handler.removeCallbacks(workRunnable);
                 }
+                /*if (component.isReadOnly()){
+                    TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.surfaceColor});
+                    ColorStateList  colorStateList = ta.getColorStateList(0);
+                    ViewCompat.setBackgroundTintList(view, colorStateList);
+                }*/
             }
 
             @Override
@@ -196,6 +204,29 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 }
             }
         });
+    }
+
+    protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout) {
+        if (component.isReadOnly()){
+            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
+
+            /*Field field = TextInputLayout.class.getDeclaredField("boxStrokeColor");
+            field.setAccessible(true);
+            field.set(textInputLayout,
+                    ContextCompat.getColor(env.getViewContext(), R.color.TRANSPARENT));
+
+            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
+            }catch (NoSuchFieldException | IllegalAccessException e) {
+                Log.w("TAG", "Failed to change box color, item might look wrong");
+            }*/
+
+            //textInputLayout.getContext().setTheme(R.style.TextInputLayoutOutlinedBox);
+            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
+            /*TextInputLayoutWithoutUnderline
+            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.AppBackgroundColor});
+            ColorStateList colorStateList = ta.getColorStateList(0);
+            ViewCompat.setBackgroundTintList(inputView, colorStateList);*/
+        }
     }
 
 }

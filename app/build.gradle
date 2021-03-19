@@ -100,6 +100,22 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.dagger:dagger:2.26'
+
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'com.github.tony19:logback-android:2.0.0'
+
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.2'
+
+    //implementation 'com.opencsv:opencsv:4.1'
+
+    //SLF4J - API
+    //implementation 'org.slf4j:slf4j-api:1.7.30'
+
+    //logback
+    //implementation 'ch.qos.logback:logback-classic:1.2.3'
+    //implementation 'ch.qos.logback:logback-core:1.2.3'
+
+
 //    implementation('com.google.android.tools:dx:1.7') {
 //        exclude group: 'jetified', module: ''
 //    }
@@ -139,3 +155,4 @@ dependencies {
     }
 
 }
+
