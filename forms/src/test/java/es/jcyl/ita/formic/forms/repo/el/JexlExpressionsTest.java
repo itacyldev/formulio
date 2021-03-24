@@ -48,9 +48,8 @@ import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -177,8 +176,6 @@ public class JexlExpressionsTest {
         String[] funcExpression = new String[]{
                 "var t = 20; var s = function(x, y) {x + y + t}; t = 54; s(#{form1.view.%s}, 7) "
         };
-        JxltEngine engine = new TemplateEngine((Engine) jexl, true, 256, '$', '#');
-
         JexlContext context = new MapContext();
         Map<String, Object> form = new HashMap<>();
         context.set("form1", form);
@@ -189,16 +186,60 @@ public class JexlExpressionsTest {
         view.put("long", RandomUtils.randomLong(0, 10000));
         String[] properties = new String[]{"string", "date", "long"};
 
-
         for (String expr : funcExpression) {
             for (String property : properties) {
                 String effectiveExpression = String.format(expr, property);
-                JxltEngine.Expression e = engine.createExpression(effectiveExpression);
+                JxltEngine.Expression e = JexlUtils.createExpression(effectiveExpression);
                 Object value = e.evaluate(context);
                 System.out.println(">>>> using: " + property);
                 System.out.println(value);
             }
         }
+    }
+
+    @Test
+    public void testBasicScripting1() {
+
+        String[] funcExpression = new String[]{
+                "var t = 20; var s = function(x, y) {x + y + t}; t = 54; s(#{form1.view.%s}, 7) "
+        };
+
+        JexlContext context = new MapContext();
+        Map<String, Object> params = new HashMap<>();
+        params.put("entityId", 123);
+        context.set("params", params);
+
+        Map<String, Object> entity = new HashMap<>();
+        entity.put("string", RandomUtils.randomString(4));
+        entity.put("date", RandomUtils.randomDate());
+        entity.put("long", RandomUtils.randomLong(0, 10000));
+
+        Fixture[] fxts = new Fixture[]{
+                new Fixture("${params.entityId}", 123),
+                new Fixture("${empty params.entityId}", false),
+                new Fixture("${empty (params.entityId)}", false),
+                new Fixture("${not empty (params.entityId)? params.entityId : 44}", 123),
+                new Fixture("${empty (params.MissingParam)? 456 : 'defaultValue'}", 456),
+                new Fixture("${if(empty(params.MissingParam)) {3} else {4}}", 3),
+                new Fixture("${if(empty(params.MissingParam)) {params.MissingParam=99}; params.MissingParam}", 99),
+        };
+
+        for (Fixture fixture : fxts) {
+            JxltEngine.Expression e = JexlUtils.createExpression(fixture.expression);
+            Object value = e.evaluate(context);
+            Assert.assertEquals("Error evaluating expression: " + fixture.expression, fixture.expected, value);
+        }
+    }
+
+
+    class Fixture {
+        public Fixture(String expression, Object expected) {
+            this.expression = expression;
+            this.expected = expected;
+        }
+
+        String expression;
+        Object expected;
     }
 
 
@@ -209,7 +250,7 @@ public class JexlExpressionsTest {
         assertThat(o, notNullValue());
         o = JexlUtils.eval(context, "${location.method}");
         assertThat(o, notNullValue());
-        assertThat((Integer)o, greaterThan(1));
+        assertThat((Integer) o, greaterThan(1));
 
     }
 
