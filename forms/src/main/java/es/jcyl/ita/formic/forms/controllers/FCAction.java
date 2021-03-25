@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.link.UIParam;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -26,6 +28,7 @@ public class FCAction {
     private String type;
     private String route;
     private boolean registerInHistory = true;
+    private UIParam[] params;
 
     public FCAction() {
     }
@@ -66,5 +69,17 @@ public class FCAction {
 
     public void setRegisterInHistory(boolean registerInHistory) {
         this.registerInHistory = registerInHistory;
+    }
+
+    public UIParam[] getParams() {
+        return params;
+    }
+
+    public void setParams(UIParam[] params) {
+        this.params = params;
+    }
+
+    public boolean hasParams() {
+        return this.params != null && this.params.length > 0;
     }
 }
