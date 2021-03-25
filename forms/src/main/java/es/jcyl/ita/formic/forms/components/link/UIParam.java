@@ -25,6 +25,10 @@ public class UIParam {
     private String name;
     private ValueBindingExpression value;
 
+    public UIParam(){
+
+    };
+
     public UIParam (String name, ValueBindingExpression value){
         this.name = name;
         this.value = value;

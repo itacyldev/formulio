@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
-import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
@@ -50,6 +49,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UILinkBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIMultiOptionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIRowBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
@@ -122,7 +122,7 @@ public class ComponentBuilderFactory {
         registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
-        registerBuilder("link", newDefaultBuilder(UILink.class, "link"));
+        registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
 
 
         ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
