@@ -1,6 +1,5 @@
 package es.jcyl.ita.formic.forms.config.builders.ui;
 
-import org.jetbrains.annotations.NotNull;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
@@ -35,7 +34,6 @@ public class UILinkBuilder extends AbstractComponentBuilder<UILink> {
         }
     }
 
-    @NotNull
     private UIParam[] getParams(List<ConfigNode> paramNodes) {
         UIParam[] params = new UIParam[paramNodes.size()];
         for (int i = 0; i < paramNodes.size(); i++) {
