@@ -60,7 +60,7 @@ public class AttributeDef {
     public static Attribute HAS_TODAY_BUTTON = new Attribute("hasTodayButton", Boolean.class);
 
     // common trasversal parameters
-    public static Attribute ROUTE = new Attribute("route", true);
+    public static Attribute ROUTE = new Attribute("route", "route", "binding");
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
 
 

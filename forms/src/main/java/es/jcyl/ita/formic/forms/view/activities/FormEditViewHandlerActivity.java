@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JxltEngine;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.MainController;
@@ -85,12 +89,17 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
             public void onClick(View view) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
+                    JxltEngine.Expression e = JexlUtils.createExpression(formAction.getRoute());
+                    Object route = e.evaluate((JexlContext) env.getContext());
+                    String strRoute = (String) ConvertUtils.convert(route, String.class);
                     UserAction action = new UserAction(formController, context, null, formAction.getType(),
-                            formAction.getRoute(), formAction.isRegisterInHistory());
+                            strRoute, formAction.isRegisterInHistory());
                     if (formAction.hasParams()) {
                         for (UIParam param : formAction.getParams()) {
                             Object value = JexlUtils.eval(env.getContext(), param.getValue());
-                            action.addParam(param.getName(), (Serializable) value);
+                            if (value != null) {
+                                action.addParam(param.getName(), (Serializable) value);
+                            }
                         }
                     }
                     interceptor.doAction(action);
