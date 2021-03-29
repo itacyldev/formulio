@@ -16,7 +16,6 @@ package es.jcyl.ita.formic.forms.config;
  */
 
 import android.graphics.Color;
-import android.os.Environment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -186,7 +185,7 @@ public class DevConsole {
         // TODO: link log library
         String effMsg = getMsg(Log.ERROR, msg, t);
         if (Log.ERROR >= level) {
-            addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
+//            addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
             logger.error(msg, t);
         }
         return effMsg;
@@ -226,7 +225,7 @@ public class DevConsole {
         }
 //        Log.e(DEV_CONSOLE, effMsg);
         if (t != null) {
-            logger.error(DEV_CONSOLE, Log.getStackTraceString(t));
+//            logger.error(DEV_CONSOLE, Log.getStackTraceString(t));
         }
         return effMsg;
     }
