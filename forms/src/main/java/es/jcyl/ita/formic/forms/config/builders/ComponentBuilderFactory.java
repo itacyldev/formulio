@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
-import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
@@ -33,6 +32,7 @@ import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.FCActionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
@@ -50,6 +50,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UILinkBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIMultiOptionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIRowBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
@@ -64,7 +65,6 @@ import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
@@ -122,17 +122,17 @@ public class ComponentBuilderFactory {
         registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
-        registerBuilder("link", newDefaultBuilder(UILink.class, "link"));
+        registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
 
 
-        ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
+        ComponentBuilder actionBuilder = newBuilder(FCActionBuilder.class, "action");
         // same component builder with different alias
-        registerBuilder("nav", defaultActionBuilder);
-        registerBuilder("add", defaultActionBuilder);
-        registerBuilder("update", defaultActionBuilder);
-        registerBuilder("delete", defaultActionBuilder);
-        registerBuilder("save", defaultActionBuilder);
-        registerBuilder("cancel", defaultActionBuilder);
+        registerBuilder("nav", actionBuilder);
+        registerBuilder("add", actionBuilder);
+        registerBuilder("update", actionBuilder);
+        registerBuilder("delete", actionBuilder);
+        registerBuilder("save", actionBuilder);
+        registerBuilder("cancel", actionBuilder);
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);
