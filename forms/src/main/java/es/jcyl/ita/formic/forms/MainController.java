@@ -199,6 +199,7 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.disableInterceptors();
+        renderingEnv.clearSelection();
         View view = renderHelper.render(renderingEnv, uiView);
         renderingEnv.enableInterceptors();
         // set the root View element to renderingEnv for re-renders in the same view

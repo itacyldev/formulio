@@ -60,7 +60,15 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
         }
 
         doRender();
+        renderToolBars(mc.getRenderingEnv());
         showMessages();
+    }
+
+    protected void renderToolBars(RenderingEnv env) {
+        // configurar menu
+
+        // configurar fab
+
     }
 
     protected void attachContentView() {

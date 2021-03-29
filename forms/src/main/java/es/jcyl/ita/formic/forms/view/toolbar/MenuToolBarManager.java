@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.actions.handlers;
+package es.jcyl.ita.formic.forms.view.toolbar;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,28 +15,29 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
-import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.view.selection.SelectionObserver;
 
 /**
+ * Manages visualization of
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class DeleteFromListActionHandler extends AbstractActionHandler implements ActionHandler<FormListController> {
+public class MenuToolBarManager implements SelectionObserver {
 
-    public DeleteFromListActionHandler(MainController mc, Router router) {
-        super(mc, router);
-    }
+    Map<String, List<UserAction>> registry = new HashMap<String, List<UserAction>>();
 
     @Override
-    public void handle(FormListController formController, UserAction action) {
+    public void update(UIComponent component, Object... params) {
+        // si el
 
-        // TODO: remove and replace with ContextualActions
+    }
+
+    private void render(){
+        // mostrar botones en función de acciones
     }
 }

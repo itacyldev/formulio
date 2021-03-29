@@ -28,7 +28,6 @@ public class AttributeDef {
     // common input fields
 //    public static Attribute TYPE = new Attribute("type", true);
     public static Attribute LABEL = new Attribute("label");
-    public static Attribute LABELS = new Attribute("labels");
     public static Attribute READONLY = new Attribute("readOnly", Boolean.class);
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
@@ -38,7 +37,7 @@ public class AttributeDef {
     // edit view
     public static Attribute MAINFORM = new Attribute("mainForm");
     // list view
-    public static Attribute ENTITYSELECTOR = new Attribute("entitySelector");
+    public static Attribute ENTITYSELECTOR = new Attribute("entityList");
 
     // column
     public static Attribute HEADER_TEXT = new Attribute("headerText");
@@ -62,7 +61,6 @@ public class AttributeDef {
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", "route", "binding");
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
-
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");

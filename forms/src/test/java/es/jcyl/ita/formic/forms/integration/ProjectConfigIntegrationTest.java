@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
@@ -166,10 +166,10 @@ public class ProjectConfigIntegrationTest {
 
     private void assertListController(FormController ctl) {
         UIView view = ctl.getView();
-        List<EntitySelector> lst = UIComponentHelper.findByClass(view, EntitySelector.class);
+        List<FilterableComponent> lst = UIComponentHelper.findByClass(view, FilterableComponent.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
-        EntitySelector entitySelector = lst.get(0);
-        Assert.assertNotNull(entitySelector.getRepo());
+        FilterableComponent filterableComponent = lst.get(0);
+        Assert.assertNotNull(filterableComponent.getRepo());
     }
 
 }

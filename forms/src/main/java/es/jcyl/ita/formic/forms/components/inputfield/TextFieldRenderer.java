@@ -186,11 +186,6 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 if (!env.isInputDelayDisabled()) {
                     handler.removeCallbacks(workRunnable);
                 }
-                /*if (component.isReadOnly()){
-                    TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.surfaceColor});
-                    ColorStateList  colorStateList = ta.getColorStateList(0);
-                    ViewCompat.setBackgroundTintList(view, colorStateList);
-                }*/
             }
 
             @Override
@@ -209,23 +204,6 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout) {
         if (component.isReadOnly()){
             textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
-
-            /*Field field = TextInputLayout.class.getDeclaredField("boxStrokeColor");
-            field.setAccessible(true);
-            field.set(textInputLayout,
-                    ContextCompat.getColor(env.getViewContext(), R.color.TRANSPARENT));
-
-            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
-            }catch (NoSuchFieldException | IllegalAccessException e) {
-                Log.w("TAG", "Failed to change box color, item might look wrong");
-            }*/
-
-            //textInputLayout.getContext().setTheme(R.style.TextInputLayoutOutlinedBox);
-            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
-            /*TextInputLayoutWithoutUnderline
-            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.AppBackgroundColor});
-            ColorStateList colorStateList = ta.getColorStateList(0);
-            ViewCompat.setBackgroundTintList(inputView, colorStateList);*/
         }
     }
 

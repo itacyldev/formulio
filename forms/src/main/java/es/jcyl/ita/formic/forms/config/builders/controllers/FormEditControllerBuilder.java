@@ -70,11 +70,9 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
                 ctl.setFilter((Filter) repoFilters.get(0).getElement());
             }
         }
-        // find entitySelector
         UIView view = new UIView(ctl.getId() + ">view");
         view.setFormController(ctl);
         ctl.setView(view);
-
 
         // if no nested repo defined, inherit attribute from parent
         if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {

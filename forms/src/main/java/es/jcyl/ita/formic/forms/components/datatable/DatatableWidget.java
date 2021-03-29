@@ -54,6 +54,8 @@ import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.forms.view.converters.TextViewConverter;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
+import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -67,7 +69,7 @@ import es.jcyl.ita.formic.repo.query.Sort;
  */
 
 public class DatatableWidget extends Widget<UIDatatable>
-        implements DynamicComponent, EntityListProvider {
+        implements DynamicComponent, EntityListProvider, EntitySelector {
 
     private final String HEADER_FILTER_SUFIX = "_header_filter";
     private final String HEADER_ORDER_SUFIX = "header_order";
@@ -87,6 +89,7 @@ public class DatatableWidget extends Widget<UIDatatable>
     // inner view elements
     private LinearLayout headerView;
     private ListView bodyView;
+    private SelectionManager selectionMgr;
 
     public DatatableWidget(Context context) {
         super(context);
@@ -496,4 +499,8 @@ public class DatatableWidget extends Widget<UIDatatable>
         return this.entities;
     }
 
+    @Override
+    public void setSelectionManager(SelectionManager manager) {
+        this.selectionMgr = manager;
+    }
 }

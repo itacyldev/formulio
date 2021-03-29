@@ -25,6 +25,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -36,6 +37,9 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
 
     public final Widget<C> render(RenderingEnv env, C component) {
         W widget = createWidget(env, component);
+        if (widget instanceof EntitySelector) {
+            ((EntitySelector) widget).setSelectionManager(env.getSelectionManager());
+        }
         // check render condition
         boolean isRendered = component.isRendered(env.getContext());
         widget.setVisibility(isRendered ? View.VISIBLE : View.GONE);

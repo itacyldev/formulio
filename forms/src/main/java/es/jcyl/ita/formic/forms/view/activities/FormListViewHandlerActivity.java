@@ -42,7 +42,6 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
                 @Override
                 public void onClick(View view) {
                     // FAB new entity button, navigate to form view without entityId
-
                     ViewUserActionInterceptor userActionInterceptor = env.getUserActionInterceptor();
                     if (userActionInterceptor != null) {
                         UserAction action = UserAction.navigate(context, null,
