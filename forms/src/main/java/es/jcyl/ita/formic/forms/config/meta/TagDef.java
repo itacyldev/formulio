@@ -168,6 +168,8 @@ public class TagDef {
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
+
+        register("button", define(baseInput, new Attribute[]{ROUTE}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

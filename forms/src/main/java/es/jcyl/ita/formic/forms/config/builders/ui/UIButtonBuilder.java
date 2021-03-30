@@ -19,7 +19,7 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.components.link.UILink;
+import es.jcyl.ita.formic.forms.components.button.UIButton;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
@@ -29,21 +29,21 @@ import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 /**
  * @author Rosa María Muñiz (mungarro@itacyl.es)
  */
-public class UILinkBuilder extends AbstractComponentBuilder<UILink> {
+public class UIButtonBuilder extends AbstractComponentBuilder<UIButton> {
 
-    public UILinkBuilder() {
-        super("link", UILink.class);
+    public UIButtonBuilder() {
+        super("button", UIButton.class);
     }
 
     @Override
-    protected void setupOnSubtreeStarts(ConfigNode<UILink> node) {
+    protected void setupOnSubtreeStarts(ConfigNode<UIButton> node) {
     }
 
     @Override
-    protected void setupOnSubtreeEnds(ConfigNode<UILink> node) {
+    protected void setupOnSubtreeEnds(ConfigNode<UIButton> node) {
         //BuilderHelper.setUpValueExpressionType/(node);
 
-        UILink element = node.getElement();
+        UIButton element = node.getElement();
         // attach nested options
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         if (CollectionUtils.isNotEmpty(paramNodes)) {

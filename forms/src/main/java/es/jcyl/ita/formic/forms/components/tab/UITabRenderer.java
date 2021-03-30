@@ -78,7 +78,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
                 viewPager.post(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setCurrentItem(position);
+                        setCurrentItem(env,  viewPager, viewPagerAdapter, position);
                         if (viewPagerAdapter.getTabFragments().size() > position){
                             TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
                             updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
@@ -114,6 +114,21 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         }
     }
 
+    private void setCurrentItem(RenderingEnv env,  ViewPager2 viewPager, ViewPagerAdapter adapter, int position){
+        String idTabItem = (String) env.getContext().get("params.idTabItem");
+        int currentItem = position;
+        if (StringUtils.isNotBlank(idTabItem)) {
+            env.getContext().put("params.idTabItem", null);
+            for (TabFragment tabFragment : adapter.getTabFragments()) {
+                if (((Widget) tabFragment.getTabView()).getComponent().getId().equals(idTabItem)){
+                    break;
+                }
+                currentItem++;
+            }
+        }
+
+        viewPager.setCurrentItem(currentItem);
+    }
 
     @Override
     protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {

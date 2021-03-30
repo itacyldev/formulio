@@ -43,6 +43,7 @@ import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIButtonBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UICardBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIColumnBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatalistBuilder;
@@ -167,6 +168,8 @@ public class ComponentBuilderFactory {
         registerAttResolver("validator", new ValidatorAttResolver());
 
         registerAttResolver("color", new ColorAttributeResolver());
+
+        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
     }
 
 

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteRenderer;
+import es.jcyl.ita.formic.forms.components.button.UIButtonRenderer;
 import es.jcyl.ita.formic.forms.components.card.UICardRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistitemRenderer;
@@ -74,6 +75,7 @@ public class RendererFactory {
         renderInstances.put("paragraph", new UIParagraphRenderer());
         renderInstances.put("head", new UIHeadingRenderer());
         renderInstances.put("divisor", new UIDivisorRenderer());
+        renderInstances.put("button", new UIButtonRenderer());
     }
 
     public static RendererFactory getInstance() {
