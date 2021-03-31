@@ -56,6 +56,14 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
 
+        viewPager.post(new Runnable(){
+            @Override
+            public void run(){
+                int currentItem = getCurrentItem(env, component);
+                viewPager.setCurrentItem(currentItem, false);
+            }
+        });
+
         viewPagerAdapter.notifyDataSetChanged();
 
         TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
@@ -78,7 +86,6 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
                 viewPager.post(new Runnable() {
                     @Override
                     public void run() {
-                        setCurrentItem(env,  viewPager, viewPagerAdapter, position);
                         if (viewPagerAdapter.getTabFragments().size() > position){
                             TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
                             updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
@@ -114,22 +121,6 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         }
     }
 
-    private void setCurrentItem(RenderingEnv env,  ViewPager2 viewPager, ViewPagerAdapter adapter, int position){
-        String idTabItem = (String) env.getContext().get("params.idTabItem");
-        int currentItem = position;
-        if (StringUtils.isNotBlank(idTabItem)) {
-            env.getContext().put("params.idTabItem", null);
-            for (TabFragment tabFragment : adapter.getTabFragments()) {
-                if (((Widget) tabFragment.getTabView()).getComponent().getId().equals(idTabItem)){
-                    break;
-                }
-                currentItem++;
-            }
-        }
-
-        viewPager.setCurrentItem(currentItem);
-    }
-
     @Override
     protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {
         TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
@@ -147,4 +138,16 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
             pos++;
         }
     }
+
+    private int getCurrentItem(RenderingEnv env, UITab component){
+        int currentItem = -1;
+        boolean isSelected = false;
+        for (int i=0; i<component.getChildren().length && !isSelected; i++){
+            UITabItem tabItem = (UITabItem) component.getChildren()[i];
+            isSelected = tabItem.isSelected(env.getContext());
+            currentItem++;
+        }
+        return isSelected?currentItem:0;
+    }
+
 }

@@ -1,6 +1,12 @@
 package es.jcyl.ita.formic.forms.components.tab;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
+import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -24,8 +30,30 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 
 public class UITabItem extends UIGroupComponent {
 
+    private ValueBindingExpression selected;
+
     public UITabItem() {
         this.setRendererType("tabitem");
         this.setRenderChildren(true);
+    }
+
+    public boolean isSelected(Context context) {
+        if (this.selected == null) {
+            return false;
+        } else {
+            // evaluate expression against context
+            Object value = JexlUtils.eval(context, this.selected);
+            try {
+                return (Boolean) ConvertUtils.convert(value, Boolean.class);
+            } catch (Exception e) {
+                throw new ViewConfigException(String.format("Invalid rendering expression in " +
+                                "component [%s] the resulting value couldn't be cast to Boolean.",
+                        this.getId(), this.selected, e));
+            }
+        }
+    }
+
+    public void setSelected(ValueBindingExpression selected) {
+        this.selected = selected;
     }
 }

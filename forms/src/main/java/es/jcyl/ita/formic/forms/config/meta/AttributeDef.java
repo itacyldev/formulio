@@ -95,6 +95,9 @@ public class AttributeDef {
     public static final Attribute EXPANDED = new Attribute("expanded", true);
     public static final Attribute EXPANDABLE = new Attribute("expandable", true);
 
+    // tab
+    public static Attribute SELECTED = new Attribute("selected", "selected", "binding");
+
     // event handling
     public static Attribute ONSAVE = new Attribute("onsave", true);
 
