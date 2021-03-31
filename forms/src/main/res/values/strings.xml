@@ -36,7 +36,7 @@
     <string name="project_opening_init">Opening project %1$s ...</string>
     <string name="project_opening_finish">Project %1$s open.</string>
     <string name="project_opening_error">There was an error trying to open project %1$s, check developer console.</string>
-    <string name="projects_of">Projects of </string>
+    <string name="projects_of">"Projects of "</string>
     <string name="forms_of">"Forms of "</string>
     <string name="no_current_project">No current project</string>
     <string name="nolocationenabled">\"No location provider enabled</string>

@@ -71,6 +71,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SELECTED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.STROKE_WIDTH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TEMPLATE;
@@ -161,13 +162,15 @@ public class TagDef {
         register("link", define(base, new Attribute[]{ROUTE}));
 
         register("tab", define(base, new Attribute[]{ID}));
-        register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES}));
+        register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));
 
         register("table", define(base, new Attribute[]{ID, HEADER_TEXT, WEIGHTS, BORDER}));
         register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS, WEIGHTS}));
 
         register("validator", define(base, new Attribute[]{TYPE}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
+
+        register("button", define(baseInput, new Attribute[]{ROUTE}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

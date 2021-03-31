@@ -56,6 +56,14 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
 
+        viewPager.post(new Runnable(){
+            @Override
+            public void run(){
+                int currentItem = getCurrentItem(env, component);
+                viewPager.setCurrentItem(currentItem, false);
+            }
+        });
+
         viewPagerAdapter.notifyDataSetChanged();
 
         TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
@@ -78,7 +86,6 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
                 viewPager.post(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setCurrentItem(position);
                         if (viewPagerAdapter.getTabFragments().size() > position){
                             TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
                             updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
@@ -114,7 +121,6 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         }
     }
 
-
     @Override
     protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {
         TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
@@ -132,4 +138,16 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
             pos++;
         }
     }
+
+    private int getCurrentItem(RenderingEnv env, UITab component){
+        int currentItem = -1;
+        boolean isSelected = false;
+        for (int i=0; i<component.getChildren().length && !isSelected; i++){
+            UITabItem tabItem = (UITabItem) component.getChildren()[i];
+            isSelected = tabItem.isSelected(env.getContext());
+            currentItem++;
+        }
+        return isSelected?currentItem:0;
+    }
+
 }
