@@ -18,12 +18,11 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
 /*
@@ -204,9 +203,15 @@ public class FormViewContext extends AbstractBaseContext {
         return entries;
     }
 
-    public void registerComponentView(UIComponent component, View componentView) {
-        if (component instanceof UIInputComponent) {
-            this.inputViews.put(component.getId(), componentView);
+    /**
+     * Registers componentes in the view contexto to store/retrieve their state in case of re-rendering (postback)
+     *
+     * @param component
+     * @param widget
+     */
+    public void registerComponentView(UIComponent component, View widget) {
+        if (widget instanceof StatefulWidget) {
+            this.inputViews.put(component.getId(), widget);
         }
     }
 }

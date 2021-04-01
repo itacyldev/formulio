@@ -31,7 +31,7 @@ import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class InputWidget<C extends UIInputComponent, V extends View> extends Widget<C> {
+public class InputWidget<C extends UIInputComponent, V extends View> extends Widget<C> implements StatefulWidget{
 
     private ViewValueConverter converter;
     private V inputView;
