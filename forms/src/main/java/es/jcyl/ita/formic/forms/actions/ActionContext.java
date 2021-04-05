@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.actions.handlers;
+package es.jcyl.ita.formic.forms.actions;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,25 +15,37 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.actions.ActionContext;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
-import es.jcyl.ita.formic.forms.actions.UserAction;
+import android.content.Context;
+
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.router.Router;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler extends AbstractActionHandler
-        implements ActionHandler {
+public class ActionContext {
+    private FormController fc;
+    private android.content.Context viewContext;
 
-    public BackPressedActionHandler(MainController mc, Router router) {
-        super(mc, router);
+    public ActionContext(FormController fc, android.content.Context viewContext) {
+        this.fc = fc;
+        this.viewContext = viewContext;
     }
 
-    @Override
-    public void handle(ActionContext actionContext, UserAction action) {
-        mc.getRouter().back(actionContext.getViewContext());
+    public FormController getFc() {
+        return fc;
     }
+
+    public void setFc(FormController fc) {
+        this.fc = fc;
+    }
+
+    public Context getViewContext() {
+        return viewContext;
+    }
+
+    public void setViewContext(Context viewContext) {
+        this.viewContext = viewContext;
+    }
+
 }

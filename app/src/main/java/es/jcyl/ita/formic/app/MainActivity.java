@@ -32,6 +32,7 @@ import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -150,7 +151,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     @Override
     public void onListFragmentInteraction(FormController form) {
-        MainController.getInstance().getRouter().navigate(UserAction.navigate(this, null, form.getId()));
+        MainController.getInstance().getRouter().navigate(this,
+                UserAction.navigate(form.getId()));
     }
 
     protected void checkPermissions() {
@@ -182,13 +184,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         //String projectsFolder = getApplicationContext().getFilesDir() + "/projects";
         String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
 
-
         File f = new File(projectsFolder);
         if (!f.exists()) {
             f.mkdir();
         }
 
-        Config config = Config.init(projectsFolder);
+        Config config = Config.init(this, projectsFolder);
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
@@ -197,7 +198,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
-            DevConsole.setLogFileName(projectsFolder, (String)prj.getId());
+            DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
             Toast.makeText(this,
                     DevConsole.info(this.getString(R.string.project_opening_init,
                             (String) prj.getId())),

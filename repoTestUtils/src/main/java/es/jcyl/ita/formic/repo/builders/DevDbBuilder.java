@@ -132,6 +132,7 @@ public class DevDbBuilder {
         // create and insert test data
         List<Entity> lstEntities = buildEntities(this.meta, this.numEntities, this.limitedValues);
         for (Entity e : lstEntities) {
+            e.setId(null); // set id to null to make sure entities are inserted
             repo.save(e);
         }
     }

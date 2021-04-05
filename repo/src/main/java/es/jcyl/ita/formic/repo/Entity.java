@@ -1,7 +1,5 @@
 package es.jcyl.ita.formic.repo;
 
-import org.mini2Dx.collections.MapUtils;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +20,9 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
      */
     private S source;
     protected boolean validateProperties = true;
-    private Map<String, Object> properties;
+    private Map<String, Object> properties = new HashMap<>();
     // non persistable properties
-    private Map<String, Object> transientProps = MapUtils.EMPTY_MAP;
+    private Map<String, Object> transientProps = new HashMap<>();
 
 
     public Entity(S source, M meta) {
@@ -34,9 +32,7 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
     public Entity(S source, M meta, Object id) {
         this.source = source;
         this.metadata = meta;
-        if (meta == null) {
-            properties = MapUtils.EMPTY_MAP;
-        } else {
+        if (meta != null) {
             properties = new HashMap<String, Object>(this.metadata.getProperties().length);
         }
         if (id != null) {
@@ -165,4 +161,10 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
             return metadata.getName() + "@[" + pk + "]";
         }
     }
+
+    public void clear() {
+        this.properties.clear();
+        this.transientProps.clear();
+    }
+
 }

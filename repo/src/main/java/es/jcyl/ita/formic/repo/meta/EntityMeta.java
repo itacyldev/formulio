@@ -115,6 +115,18 @@ public class EntityMeta<P extends PropertyType> {
     public boolean hasIdProperties() {
         return (this.idProperties != null && this.idProperties.length > 0);
     }
+    public boolean isIdProperty(String propertyName){
+        if(idProperties == null){
+            return false;
+        }else{
+            for(String p: idProperties){
+                if(p.equals(propertyName)){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     public boolean hasMulticolumnKey() {
         return (this.idProperties != null && this.idProperties.length > 1);

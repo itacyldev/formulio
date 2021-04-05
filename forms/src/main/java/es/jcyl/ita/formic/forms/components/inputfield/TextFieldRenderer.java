@@ -162,7 +162,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     private void executeUserAction(RenderingEnv env, UIComponent component) {
         ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+            interceptor.doAction(UserAction.inputChange(component));
         }
     }
 
@@ -186,11 +186,6 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 if (!env.isInputDelayDisabled()) {
                     handler.removeCallbacks(workRunnable);
                 }
-                /*if (component.isReadOnly()){
-                    TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.surfaceColor});
-                    ColorStateList  colorStateList = ta.getColorStateList(0);
-                    ViewCompat.setBackgroundTintList(view, colorStateList);
-                }*/
             }
 
             @Override

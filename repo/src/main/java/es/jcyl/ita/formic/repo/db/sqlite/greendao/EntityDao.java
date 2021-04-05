@@ -92,6 +92,15 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
         return values;
     }
 
+    public void save(Entity entity) {
+        if (this.hasKey(entity)) {
+            this.insertOrReplace(entity);
+        } else {
+            this.insert(entity);
+        }
+
+    }
+
     @Override
     protected Entity readEntity(Cursor cursor, int offset) {
         DBTableEntitySource source = this.entityConfig().getSource();

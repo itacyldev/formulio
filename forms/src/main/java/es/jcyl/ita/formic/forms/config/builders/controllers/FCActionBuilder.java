@@ -24,8 +24,6 @@ public class FCActionBuilder extends AbstractComponentBuilder<FCAction> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<FCAction> node) {
-        //BuilderHelper.setUpValueExpressionType/(node);
-
         FCAction element = node.getElement();
         // attach nested options
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");

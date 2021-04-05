@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  */
 
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.UIComponent;
@@ -30,14 +31,14 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class InputChangeActionHandler extends AbstractActionHandler
-        implements ActionHandler<FormEditController> {
+        implements ActionHandler {
 
     public InputChangeActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    public void handle(FormEditController formController, UserAction action) {
+    public void handle(ActionContext actionContext, UserAction action) {
 
         UIComponent component = action.getComponent();
         if (!(component instanceof UIInputComponent)) {
@@ -52,6 +53,7 @@ public class InputChangeActionHandler extends AbstractActionHandler
 
         // save view state
         Object state = fieldView.getValue();
+        FormEditController formController = (FormEditController) actionContext.getFc();
         boolean valid = formController.validate((UIInputComponent) component);
         if (!valid) {
             // update the view to show messages
@@ -59,10 +61,13 @@ public class InputChangeActionHandler extends AbstractActionHandler
             // find the new View and restore state
             fieldView = viewContext.findInputFieldViewById(component.getId());
             mc.getRenderingEnv().disableInterceptors();
-            fieldView.setValue(state);
-            // restore focus on the current view element
-            fieldView.setFocus(true);
-            mc.getRenderingEnv().enableInterceptors();
+            try {
+                fieldView.setValue(state);
+                // restore focus on the current view element
+                fieldView.setFocus(true);
+            } finally {
+                mc.getRenderingEnv().enableInterceptors();
+            }
         } else {
             // render depending objects
             mc.updateDependants(component);

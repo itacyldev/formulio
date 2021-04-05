@@ -42,6 +42,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_REFRESH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_DELETE_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_TODAY_BUTTON;
@@ -77,6 +78,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TEMPLATE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TYPE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TYPE_STR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.UNDERLINED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.UPPERCASE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALIDATOR;
@@ -129,7 +131,7 @@ public class TagDef {
         }));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
-        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
+        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);
@@ -150,7 +152,8 @@ public class TagDef {
         register("row", define(new Attribute[]{ID}));
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 
-        Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, REGISTER_IN_HISTORY});
+        Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
+                REGISTER_IN_HISTORY, FORCE_REFRESH});
         register("action", actionAttributes);
         register("add", actionAttributes);
         register("update", actionAttributes);
@@ -167,7 +170,7 @@ public class TagDef {
         register("table", define(base, new Attribute[]{ID, HEADER_TEXT, WEIGHTS, BORDER}));
         register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS, WEIGHTS}));
 
-        register("validator", define(base, new Attribute[]{TYPE}));
+        register("validator", define(base, new Attribute[]{TYPE_STR}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
 
         register("button", define(baseInput, new Attribute[]{ROUTE}));

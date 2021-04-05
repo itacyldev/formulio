@@ -35,9 +35,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -114,7 +112,7 @@ public class MainController implements ContextAwareComponent {
      * @param params
      */
     public void navigate(android.content.Context andContext, String formId,
-                         @Nullable Map<String, Serializable> params) {
+                         Map<String, Serializable> params) {
         saveState();
 
         setupParamsContext(params);
@@ -199,6 +197,9 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.disableInterceptors();
+        if (renderingEnv.getFormContext() != null) {
+            renderingEnv.getFormContext().clearMessages();
+        }
         View view = renderHelper.render(renderingEnv, uiView);
         renderingEnv.enableInterceptors();
         // set the root View element to renderingEnv for re-renders in the same view
@@ -242,18 +243,19 @@ public class MainController implements ContextAwareComponent {
     public void renderBack() {
         // render again the form to show validation error
         renderingEnv.disableInterceptors();
-        View newView = renderHelper.render(renderingEnv, formController.getView());
-        renderingEnv.enableInterceptors();
+        try {
+            View newView = renderHelper.render(renderingEnv, formController.getView());
 
-        // the View elements to replace hang from the content view of the formController
-        ViewGroup contentView = formController.getContentView();
-        contentView.removeAllViews();
-        contentView.addView(newView);
+            // the View elements to replace hang from the content view of the formController
+            ViewGroup contentView = formController.getContentView();
+            contentView.removeAllViews();
+            contentView.addView(newView);
 
-        // disable user events and restore values to the view
-        renderingEnv.disableInterceptors();
-        formController.restoreViewState();
-        renderingEnv.enableInterceptors();
+            // disable user events and restore values to the view
+            formController.restoreViewState();
+        } finally {
+            renderingEnv.enableInterceptors();
+        }
     }
 
 

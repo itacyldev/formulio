@@ -47,6 +47,7 @@ import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
+
 /**
  * Configuration initializer and common point to store and share configuration parameters.
  * <p>
@@ -317,5 +318,9 @@ public class Config {
 
     public Context getAndroidContext() {
         return this.andContext;
+    }
+
+    public String getStringResource(int stringId) {
+        return (this.getAndroidContext() == null) ? null : getResources().getString(stringId);
     }
 }

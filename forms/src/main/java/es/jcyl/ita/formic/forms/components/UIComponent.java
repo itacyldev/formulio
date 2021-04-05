@@ -187,10 +187,10 @@ public abstract class UIComponent implements Identificable {
             return null;
         } else {
             // evaluate expression against context
-            try{
+            try {
                 return JexlUtils.eval(context, this.valueExpression);
-            }catch(Exception e){
-                error("Error while trying to evaluate JEXL expression: "+this.valueExpression.toString(),e);
+            } catch (Exception e) {
+                error("Error while trying to evaluate JEXL expression: " + this.valueExpression.toString(), e);
                 return null;
             }
         }
@@ -222,16 +222,12 @@ public abstract class UIComponent implements Identificable {
 
     @Override
     public String toString() {
-        String output = "";
-
-        if (id != null) {
-            output += id;
-        }
-        if (output.length() > 0) {
-            return output;
-        } else {
-            return super.toString();
-        }
+        return this.getClass().getName() + "{" +
+                "id='" + id + '\'' +
+                ", label='" + label + '\'' +
+                ", valueExpr=" + valueExpression +
+                ", renderExpr=" + renderExpression +
+                '}';
     }
 
     /**

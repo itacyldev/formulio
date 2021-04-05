@@ -122,7 +122,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
     private void executeUserAction(RenderingEnv env, UIComponent component) {
         ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+            interceptor.doAction(UserAction.inputChange(component));
         }
     }
 

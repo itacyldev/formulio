@@ -42,8 +42,7 @@ public class CheckBoxFieldRenderer extends InputTextRenderer<UIField, Switch> {
                                          boolean value) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(widget.getComponent(),
-                            ActionType.INPUT_CHANGE.name()));
+                    interceptor.doAction(UserAction.inputChange(widget.getComponent()));
                 }
             }
         });

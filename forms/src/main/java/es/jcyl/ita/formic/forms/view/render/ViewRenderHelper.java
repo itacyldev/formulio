@@ -125,7 +125,7 @@ public class ViewRenderHelper {
         if (root instanceof UIForm) {
             env.setFormContext(((UIForm) root).getContext());
         } else {
-            if (root.getParentForm() != null) {
+            if (root != null && root.getParentForm() != null) {
                 env.setFormContext(((UIForm) root.getParentForm()).getContext());
             }
         }

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.repo.query.Filter;
@@ -46,7 +47,8 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEditController> {
     private static RepositoryAttributeResolver repoResolver;
 
-    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("add", "update", "save", "cancel", "delete", "nav"));
+    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("action", "add", "update",
+            "save", "cancel", "delete", "nav"));
 
     public FormEditControllerBuilder(String tagName) {
         super(tagName, FormEditController.class);
@@ -103,6 +105,8 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
             // it already has a form
             return;
         }
+        DevConsole.debug("No nested actions found, creating default form actions.");
+
         ConfigNode root = ConfigNodeHelper.getRoot(node);
         List<ConfigNode> listCtls = ConfigNodeHelper.getChildrenByTag(root, "list");
         String listId;
@@ -143,9 +147,13 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         List<ConfigNode> actionList = actions.getChildren();
         FCAction[] lstActions = new FCAction[actionList.size()];
 
+        FCAction action;
         for (int i = 0; i < actionList.size(); i++) {
-            lstActions[i] = (FCAction) actionList.get(i).getElement();
-            lstActions[i].setType(actionList.get(i).getName());
+            action = (FCAction) actionList.get(i).getElement();
+            if (StringUtils.isBlank(action.getType())) {
+                action.setType(actionList.get(i).getName());
+            }
+            lstActions[i] = action;
         }
         node.getElement().setActions(lstActions);
     }
@@ -199,7 +207,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         }
         ConfigNode formNode = new ConfigNode("form");
         formNode.setId("form" + root.getId());
-        if(root.hasAttribute("repo")){
+        if (root.hasAttribute("repo")) {
             formNode.setAttribute("repo", root.getAttribute("repo"));
         }
         List<ConfigNode> rootChildren = new ArrayList<>();

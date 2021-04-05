@@ -21,8 +21,8 @@ import es.jcyl.ita.formic.forms.controllers.FormController;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ActionHandler<F extends FormController> {
+public interface ActionHandler {
 
-    void handle(F formController, UserAction action);
+    void handle(ActionContext actionContext, UserAction action);
 
 }

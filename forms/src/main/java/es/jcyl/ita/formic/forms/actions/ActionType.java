@@ -20,5 +20,5 @@ package es.jcyl.ita.formic.forms.actions;
  */
 public enum ActionType {
 
-    SAVE, DELETE, DELETE_LIST, CANCEL, INPUT_CHANGE, NAVIGATE, BACK
+    SAVE, DELETE, DELETE_LIST, CANCEL, INPUT_CHANGE, NAVIGATE, BACK, CREATE
 }

@@ -35,6 +35,8 @@ public class AttributeDef {
     public static Attribute NAME = new Attribute("name");
     public static Attribute DESCRIPTION = new Attribute("description");
 
+    public static Attribute TYPE = new Attribute("type", "type", String.class);
+
     // edit view
     public static Attribute MAINFORM = new Attribute("mainForm");
     // list view
@@ -46,7 +48,7 @@ public class AttributeDef {
     public static Attribute ORDERING = new Attribute("ordering", Boolean.class);
 
     // input
-    public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
+    public static Attribute TYPE_STR = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
     public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
     public static Attribute LINES = new Attribute("lines", Integer.class);
@@ -62,6 +64,7 @@ public class AttributeDef {
     // common trasversal parameters
     public static Attribute ROUTE = new Attribute("route", "route", "binding");
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
+    public static Attribute FORCE_REFRESH = new Attribute("forceRefresh", Boolean.class);
 
 
     // repository definition
@@ -126,7 +129,7 @@ public class AttributeDef {
     public static Attribute UNDERLINED = new Attribute("underlined", Boolean.class);
 
     public static Attribute COLOR = new Attribute("color", "color", "color");
-    public static Attribute STROKE_WIDTH = new Attribute("strokeWidth",Integer.class);
+    public static Attribute STROKE_WIDTH = new Attribute("strokeWidth", Integer.class);
 
 
 }
