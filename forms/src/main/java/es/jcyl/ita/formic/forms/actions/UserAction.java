@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
-import android.content.Context;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,39 +27,81 @@ import es.jcyl.ita.formic.forms.controllers.FormController;
  */
 public class UserAction {
 
-    private android.content.Context viewContext;
-    private UIComponent component;
     private String type;
     private String name;
     private String route;
-    private String origin;
+    private boolean forceRefresh = false;
     private boolean registerInHistory;
     private Map<String, Serializable> params;
-    private FormController fc;
+    private UIComponent component;
 
-    public UserAction(UIComponent component, String actionType) {
-        this(null, null, component, actionType, null, true);
+    private FormController origin;
+
+    public UserAction(String actionType, UIComponent component) {
+        this(actionType, null, component, null);
     }
 
-    public UserAction(FormController fc, android.content.Context context, String actionType) {
-        this(fc, context, null, actionType, null, true);
+    public UserAction(String actionType, String route, FormController origin) {
+        this(actionType, route, null, origin);
     }
 
-    public UserAction(android.content.Context context, UIComponent component, String actionType, String route) {
-        this(null, context, component, actionType, route, true);
+    public UserAction(String actionType, String route, UIComponent component) {
+        this(actionType, route, component, component.getRoot() == null ? null : component.getRoot().getFormController());
     }
 
-    public UserAction(FormController fc, android.content.Context context, UIComponent component, String actionType, String route, boolean registerInHistory) {
-        if (fc != null) {
-            this.fc = fc;
-        } else if (component != null && component.getRoot() != null) {
-            this.fc = component.getRoot().getFormController();
-        }
-        this.viewContext = context;
-        this.component = component;
+    private UserAction(String actionType, String route, UIComponent component, FormController origin) {
         this.type = actionType;
         this.route = route;
+        this.component = component;
+        this.origin = origin;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
+    }
+
+    public boolean isForceRefresh() {
+        return forceRefresh;
+    }
+
+    public void setForceRefresh(boolean forceRefresh) {
+        this.forceRefresh = forceRefresh;
+    }
+
+    public boolean isRegisterInHistory() {
+        return registerInHistory;
+    }
+
+    public void setRegisterInHistory(boolean registerInHistory) {
         this.registerInHistory = registerInHistory;
+    }
+
+    public Map<String, Serializable> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Serializable> params) {
+        this.params = params;
     }
 
     public void addParam(String param, Serializable value) {
@@ -75,98 +115,50 @@ public class UserAction {
         return component;
     }
 
-    public String getType() {
-        return type;
+    public void setComponent(UIComponent component) {
+        this.component = component;
     }
 
-    public Context getViewContext() {
-        return this.viewContext;
-    }
-
-    public void setParams(Map<String, Serializable> params) {
-        this.params = params;
-    }
-
-    public Map<String, Serializable> getParams() {
-        return params;
-    }
-
-    public String getOrigin() {
+    public FormController getOrigin() {
         return origin;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getRoute() {
-        return route;
-    }
-
-    public FormController getFormController() {
-        return fc;
-    }
 
     /*********************************/
     /** Default action types **/
     /*********************************/
-    public static UserAction navigate(Context context, UIComponent component, String formId) {
-        UserAction action = new UserAction(context, component, ActionType.NAVIGATE.name(), formId);
-        action.name = "Navigate";
+    public static UserAction navigate(String formId) {
+        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, null, null);
         return action;
     }
 
-    public static UserAction back(Context context) {
-        UserAction action = new UserAction(context, null, ActionType.BACK.name(), null);
+    public static UserAction navigate(String formId, UIComponent component) {
+        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, component);
         return action;
     }
 
-    public static UserAction delete(Context context, UIComponent component, String formId) {
-        UserAction action = new UserAction(context, component, ActionType.DELETE.name(), formId);
-        action.name = "Delete";
+    public static UserAction navigate(String formId, FormController origin) {
+        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, origin);
         return action;
     }
 
-    public static UserAction delete(Context context, UIComponent component, String formId, String route) {
-        UserAction action = new UserAction(context, component, ActionType.DELETE.name(), formId);
-        action.name = "Delete";
-        action.route = route;
+    public static UserAction back(FormController origin) {
+        UserAction action = new UserAction(ActionType.BACK.name(), null, origin);
         return action;
     }
 
-    public static UserAction save(Context context, UIComponent component, String formId) {
-        UserAction action = new UserAction(context, component, ActionType.SAVE.name(), formId);
-        action.name = "Save";
+    public static UserAction inputChange(UIComponent component) {
+        UserAction action = new UserAction(ActionType.INPUT_CHANGE.name(), null, component);
         return action;
     }
 
-    public static UserAction save(Context context, UIComponent component, String formId, String route) {
-        UserAction action = new UserAction(context, component, ActionType.SAVE.name(), formId);
-        action.route = route;
-        action.name = "Save";
-        return action;
-    }
-
-    public static UserAction cancel(Context context, UIComponent component, String formId, String route) {
-        UserAction action = new UserAction(context, component, ActionType.SAVE.name(), formId);
-        action.route = route;
-        action.name = "Cancel";
-        return action;
-    }
-
-    public boolean isRegisterInHistory() {
-        return registerInHistory;
-    }
-
-    public void setRegisterInHistory(boolean registerInHistory) {
-        this.registerInHistory = registerInHistory;
+    @Override
+    public String toString() {
+        return "UserAction{" +
+                "type='" + type + '\'' +
+                ", route='" + route + '\'' +
+                ", component='" + component + '\'' +
+                ", params=" + params +
+                '}';
     }
 }

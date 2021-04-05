@@ -80,7 +80,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+                    interceptor.doAction(UserAction.inputChange(component));
                 }
             }
         });

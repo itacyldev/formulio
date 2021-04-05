@@ -28,6 +28,7 @@ public class FCAction {
     private String type;
     private String route;
     private boolean registerInHistory = true;
+    private boolean forceRefresh = false;
     private UIParam[] params;
 
     public FCAction() {
@@ -81,5 +82,13 @@ public class FCAction {
 
     public boolean hasParams() {
         return this.params != null && this.params.length > 0;
+    }
+
+    public boolean isForceRefresh() {
+        return forceRefresh;
+    }
+
+    public void setForceRefresh(boolean forceRefresh) {
+        this.forceRefresh = forceRefresh;
     }
 }

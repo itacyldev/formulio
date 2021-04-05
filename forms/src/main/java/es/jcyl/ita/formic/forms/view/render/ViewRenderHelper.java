@@ -55,25 +55,25 @@ public class ViewRenderHelper {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
-        View componentView;
+        Widget widget;
         if (checkDeferred && hasDeferredExpression(component, env)) {
             // insert a delegated view component as placeholder to render later
-            componentView = createDeferredView(env.getViewContext(), component, env);
+            widget = createDeferredView(env.getViewContext(), component, env);
         } else {
-            componentView = renderer.render(env, component);
+            widget = renderer.render(env, component);
         }
         if (component instanceof UIForm) {
             // configure viewContext
-            ((UIForm) component).getContext().setView(componentView);
+            ((UIForm) component).getContext().setView(widget);
             env.setFormContext(((UIForm) component).getContext());
         } else {
             if (env.getFormContext() != null) {
-                env.getFormContext().getViewContext().registerComponentView(component, componentView);
+                env.getFormContext().getViewContext().registerComponentView(component, widget);
             }
         }
         // if current view is not visible, don't render children
-        if (!ViewHelper.isVisible(componentView)) {
-            return componentView;
+        if (!ViewHelper.isVisible(widget)) {
+            return widget;
         }
 
         // render children if needed
@@ -81,7 +81,7 @@ public class ViewRenderHelper {
             GroupRenderer gRenderer = (GroupRenderer) renderer;
             if (component.isRenderChildren() && component.hasChildren()) {
                 // recursively render children components
-                Widget groupView = (Widget) componentView;
+                Widget groupView = (Widget) widget;
                 gRenderer.initGroup(env, groupView);
 
 
@@ -118,20 +118,20 @@ public class ViewRenderHelper {
             // last step in the tree walk, process delegates when we're back on the view root
             processDeferredViews(env);
         }
-        return componentView;
+        return widget;
     }
 
     private void setupFormContext(UIComponent root, RenderingEnv env) {
         if (root instanceof UIForm) {
             env.setFormContext(((UIForm) root).getContext());
         } else {
-            if (root.getParentForm() != null) {
+            if (root != null && root.getParentForm() != null) {
                 env.setFormContext(((UIForm) root.getParentForm()).getContext());
             }
         }
     }
 
-    private View createDeferredView(Context viewContext, UIComponent root, RenderingEnv env) {
+    private Widget createDeferredView(Context viewContext, UIComponent root, RenderingEnv env) {
         DeferredView view = new DeferredView(viewContext, root);
         env.addDeferred(root.getAbsoluteId(), view);
         return view;

@@ -22,6 +22,7 @@ import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -53,7 +54,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     }
 
     @Override
-    protected void doRender() {
+    protected void doRender(RenderingEnv renderingEnv) {
         // add action buttons
         ViewGroup toolBar = findViewById(R.id.form_toolbar);
         renderToolBar(toolBar);
@@ -76,8 +77,8 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = UserAction.back(this);
-        action.setOrigin(formController.getId());
+        UserAction action = UserAction.back(this.formController);
+//        action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
         finish();
     }
@@ -89,11 +90,16 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
             public void onClick(View view) {
                 ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    JxltEngine.Expression e = JexlUtils.createExpression(formAction.getRoute());
-                    Object route = e.evaluate((JexlContext) env.getContext());
-                    String strRoute = (String) ConvertUtils.convert(route, String.class);
-                    UserAction action = new UserAction(formController, context, null, formAction.getType(),
-                            strRoute, formAction.isRegisterInHistory());
+                    // TODO: FORMIC-202 UIButton, UILinkRenderer utilizar método desde UserActionHelper
+                    String strRoute = "";
+                    if (formAction.getRoute() != null) {
+                        JxltEngine.Expression e = JexlUtils.createExpression(formAction.getRoute());
+                        Object route = e.evaluate((JexlContext) env.getContext());
+                        strRoute = (String) ConvertUtils.convert(route, String.class);
+                    }
+                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
+                    action.setRegisterInHistory(formAction.isRegisterInHistory());
+                    action.setForceRefresh(formAction.isForceRefresh());
                     if (formAction.hasParams()) {
                         for (UIParam param : formAction.getParams()) {
                             Object value = JexlUtils.eval(env.getContext(), param.getValue());

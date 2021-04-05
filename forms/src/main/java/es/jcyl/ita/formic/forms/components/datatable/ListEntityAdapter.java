@@ -124,7 +124,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         adjustColumnWidth(this.dtLayout.getHeaderView());
 
         //if there is no route in the table
-        if (this.dtLayout.getComponent().getRoute() == null){
+        if (this.dtLayout.getComponent().getRoute() == null) {
             item.setBackground(ContextCompat.getDrawable(context, R.drawable.unselectablebuttonbackground));
         }
 
@@ -169,8 +169,8 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
                 if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
-                    UserAction action = UserAction.navigate(context, dtLayout.getComponent(),
-                            dtLayout.getComponent().getRoute());
+                    UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
+                            dtLayout.getComponent());
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
                 }

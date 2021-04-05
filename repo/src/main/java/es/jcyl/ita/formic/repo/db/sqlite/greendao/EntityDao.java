@@ -30,6 +30,7 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.repo.CursorPropertyBinder;
 import es.jcyl.ita.formic.repo.CursorPropertyReader;
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.RepositoryException;
 import es.jcyl.ita.formic.repo.converter.ConverterUtils;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.meta.KeyGeneratorStrategy;
@@ -90,6 +91,15 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
             values[i] = propertyReader.readPropertyValue(cursor, props[index], offset + index);
         }
         return values;
+    }
+
+    public void save(Entity entity) {
+        if (this.hasKey(entity)) {
+            this.insertOrReplace(entity);
+        } else {
+            this.insert(entity);
+        }
+
     }
 
     @Override
@@ -157,6 +167,11 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
     private Object calculateProperty(DBPropertyType p) {
         // create expression and evaluate
         if (p.isJexlExpression()) {
+            if (context == null) {
+                throw new RepositoryException("Error while trying to evaluate Entity calculated expression:" +
+                        "The context is null, make sure the RepositoryFactory has a context instance" +
+                        " to se on repos during initialization.");
+            }
             return JexlUtils.eval(context, p.getExpression());
         } else {
             throw new UnsupportedOperationException("Not implemented yet!!");

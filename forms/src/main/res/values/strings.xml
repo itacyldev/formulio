@@ -57,4 +57,14 @@
     <string name="export">Export</string>
     <string name="detail">Detail</string>
 
+    <!-- action handler messages -->
+    <string name="action_save_success">Entity successfully saved.</string>
+    <string name="action_create_success">Entity successfully created.</string>
+
+    <string name="action_delete_success">Entity successfully deleted.</string>
+    <string name="action_delete_error">An error occurred while deleting the entity. Check dev. console for details.</string>
+
+    <string name="action_generic_invalid_form">Form validation error, check entered data.</string>
+    <string name="action_generic_error">Error while trying to perform user action. Check dev. console for details.</string>
+
 </resources>

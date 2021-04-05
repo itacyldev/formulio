@@ -125,9 +125,9 @@ public class ComponentBuilderFactory {
 
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
 
-
         ComponentBuilder actionBuilder = newBuilder(FCActionBuilder.class, "action");
-        // same component builder with different alias
+        // same component builder with different aliases
+        registerBuilder("action", actionBuilder);
         registerBuilder("nav", actionBuilder);
         registerBuilder("add", actionBuilder);
         registerBuilder("update", actionBuilder);

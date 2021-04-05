@@ -214,6 +214,9 @@ public class DevConsole {
 
     //
     private static String getMsg(int errorLevel, String msg, Throwable t) {
+        if(StringUtils.isBlank(msg)){
+            return "";
+        }
         if (errorLevel < level) {
             return msg;
         }

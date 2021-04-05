@@ -63,7 +63,8 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                 } else {
                     ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                     if (interceptor != null) {
-                        UserAction action = UserAction.navigate(env.getViewContext(), component, component.getRoute());
+                        // TODO: FORMIC-202 UIButton utilizar método desde UserActionHelper
+                        UserAction action = UserAction.navigate(component.getRoute(), component);
                         if (component.hasParams()) {
                             for (UIParam param : component.getParams()) {
                                 Object value = JexlUtils.eval(env.getContext(), param.getValue());

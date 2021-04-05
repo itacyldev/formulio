@@ -36,6 +36,8 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
+import static org.mockito.Mockito.*;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -106,6 +108,7 @@ public class DevFormBuilder {
 
             // configure the context as the MainController would do
             env = mc.getRenderingEnv();
+            env.setViewContext(ctx);
             // disable user action handlers during the tests
             env.disableInterceptors();
             // create a one-field form

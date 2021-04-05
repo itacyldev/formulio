@@ -19,6 +19,7 @@ import android.content.Context;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,22 +28,25 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.IOException;
 
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
+import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
+import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
-import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
-import es.jcyl.ita.formic.forms.validation.ValidatorException;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -55,15 +59,20 @@ public class FormScriptingTest {
     FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
 
-    Context ctx;
+    private static Context ctx;
 
     @Before
     public void setUp() {
-        ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        ctx.setTheme( R.style.FormudruidLight);
+        if (ctx == null) {
+            ctx = InstrumentationRegistry.getInstrumentation().getContext();
+            ctx.setTheme(R.style.FormudruidLight);
+        }
 
+        Config.init(ctx, "");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
+        // register repos
+        RepositoryUtils.registerMock("contacts");
     }
 
     /**
@@ -74,7 +83,7 @@ public class FormScriptingTest {
      * Two cases are tested, value less and greater that the limit value 10.
      */
     @Test
-    public void testValidationScriptOk() throws IOException {
+    public void testValidationScriptOk() throws Exception {
         // create random entity meta and use databuilder to populate entity data
         EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
         // entity meta with 1 prop for pk and a second string property
@@ -107,25 +116,23 @@ public class FormScriptingTest {
                 .render();
 
         // set field f1 to a value > 10
-        recipe.env.enableInterceptors();
         recipe.env.disableInputDelay(true);
+        recipe.env.enableInterceptors();
         form.getContext().getViewContext().put("f1", "12345678910111213");
         // call save method to
-        ((FormEditController)recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
+        ((FormEditController) recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
 
         // set a field shorter than 10, the validation has to throw an exception with message
-        boolean hasFailed = false;
-        try{
-            form.getContext().getViewContext().put("f1", "12345");
-        }catch(ValidatorException e){
-            Assert.assertNotNull(e.getMessage());
-            hasFailed = true;
-        }
-        Assert.assertTrue(hasFailed);
+        recipe.env.enableInterceptors();
+        recipe.env.disableInputDelay(true);
+        form.getContext().getViewContext().put("f1", "12345");
 
-         hasFailed = false;
+        String errorMessage = FormContextHelper.getMessage(form.getContext(), form.getId());
+        Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
+
+        boolean hasFailed = false;
         try {
-            ((FormEditController)recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
+            ((FormEditController) recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
         } catch (ValidatorException e) {
             // check the message has been set from the validation function
             Assert.assertNotNull(e.getMessage());

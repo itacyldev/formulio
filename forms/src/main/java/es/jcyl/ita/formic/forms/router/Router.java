@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 
@@ -50,12 +51,23 @@ public class Router {
         this.memento = new ArrayList<>();
     }
 
-    public void navigate(UserAction action, String... messages) {
+    /**
+     * User this method just for inicial navigation, when you'r not coming from a formController
+     *
+     * @param viewContext
+     * @param action
+     * @param messages
+     */
+    public void navigate(android.content.Context viewContext, UserAction action, String... messages) {
+        navigate(new ActionContext(null, viewContext), action, messages);
+    }
+
+    public void navigate(ActionContext actionContext, UserAction action, String... messages) {
         this.currentViewMessages = messages;
         if ("back".equalsIgnoreCase(action.getRoute())) {
-            this.back(action.getViewContext());
+            this.back(actionContext.getViewContext());
         } else {
-            mc.navigate(action.getViewContext(), action.getRoute(), action.getParams());
+            mc.navigate(actionContext.getViewContext(), action.getRoute(), action.getParams());
             if (action.isRegisterInHistory()) {
                 recordHistory(action.getRoute(), action.getParams());
             }
@@ -146,7 +158,7 @@ public class Router {
         if (steps == 0) {
             return;// nothing to do
         }
-        for(int i=0;i<steps;i++){
+        for (int i = 0; i < steps; i++) {
             this.popHistory();
         }
     }
