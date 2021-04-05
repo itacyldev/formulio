@@ -15,7 +15,7 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
@@ -24,8 +24,9 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * Implements entity edition actions using a edit-form.
  */
 public class FormListController extends FormController {
+
     // form used to refer to the repository used to count entities
-    private EntitySelector entitySelector;
+    private FilterableComponent entityList;
 
     public FormListController(String id, String name) {
         super(id, name);
@@ -42,7 +43,7 @@ public class FormListController extends FormController {
      * @return
      */
     public long count() {
-        return this.getEntitySelector().getRepo().count(this.getEntitySelector().getFilter());
+        return this.getEntityList().getRepo().count(this.getEntityList().getFilter());
     }
 
     /****************************/
@@ -57,12 +58,11 @@ public class FormListController extends FormController {
         this.filter = filter;
     }
 
-    public EntitySelector getEntitySelector() {
-        return entitySelector;
+    public FilterableComponent getEntityList() {
+        return entityList;
     }
 
-    public void setEntitySelector(EntitySelector entitySelector) {
-        this.entitySelector = entitySelector;
+    public void setEntityList(FilterableComponent entityList) {
+        this.entityList = entityList;
     }
-
 }

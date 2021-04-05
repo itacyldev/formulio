@@ -200,6 +200,7 @@ public class MainController implements ContextAwareComponent {
         if (renderingEnv.getFormContext() != null) {
             renderingEnv.getFormContext().clearMessages();
         }
+        renderingEnv.clearSelection();
         View view = renderHelper.render(renderingEnv, uiView);
         renderingEnv.enableInterceptors();
         // set the root View element to renderingEnv for re-renders in the same view

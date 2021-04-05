@@ -128,8 +128,6 @@ public class FormConfigBuilderTest {
         // check listAction has a table
         List<UIDatatable> tables = UIComponentHelper.findByClass(ctlList.getView(), UIDatatable.class);
         Assert.assertTrue("No default table found for FormListController", tables.size() == 1);
-
-//        Assert.assertNotNull(ctlList.getEntitySelector()); pending of #203650
     }
 
     /**

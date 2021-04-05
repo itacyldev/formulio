@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components;
+package es.jcyl.ita.formic.forms.view.selection;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,13 +17,15 @@ package es.jcyl.ita.formic.forms.components;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface EntitySelector extends FilterableComponent{
+public interface EntitySelector  {
 
-    List<Entity> getSelectedEntities();
+    void setSelectionManager(SelectionManager manager);
 
 }

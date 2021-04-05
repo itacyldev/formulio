@@ -25,23 +25,23 @@ public class AttributeDef {
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
+
     // common input fields
-//    public static Attribute TYPE = new Attribute("type", true);
+    public static Attribute TYPE = new Attribute("type", "type", String.class);
+    public static Attribute TYPE_STR = new Attribute("type", "typeStr", String.class);
     public static Attribute LABEL = new Attribute("label");
-    public static Attribute LABELS = new Attribute("labels");
     public static Attribute READONLY = new Attribute("readOnly", "readOnly", "binding");
     public static Attribute READONLY_MESSAGE = new Attribute("readOnlyMessage", "readOnlyMessage", String.class);
+
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
     public static Attribute NAME = new Attribute("name");
     public static Attribute DESCRIPTION = new Attribute("description");
 
-    public static Attribute TYPE = new Attribute("type", "type", String.class);
-
     // edit view
     public static Attribute MAINFORM = new Attribute("mainForm");
     // list view
-    public static Attribute ENTITYSELECTOR = new Attribute("entitySelector");
+    public static Attribute ENTITYSELECTOR = new Attribute("entityList");
 
     // column
     public static Attribute HEADER_TEXT = new Attribute("headerText");
@@ -49,7 +49,6 @@ public class AttributeDef {
     public static Attribute ORDERING = new Attribute("ordering", Boolean.class);
 
     // input
-    public static Attribute TYPE_STR = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
     public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
     public static Attribute LINES = new Attribute("lines", Integer.class);
@@ -66,7 +65,6 @@ public class AttributeDef {
     public static Attribute ROUTE = new Attribute("route", "route", "binding");
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
     public static Attribute FORCE_REFRESH = new Attribute("forceRefresh", Boolean.class);
-
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");

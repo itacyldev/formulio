@@ -38,7 +38,7 @@ public class JexlUtils {
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(false).silent(false).create();
 
-    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, true,
+    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, false,
             256, '$', '#');
 
     public static Object eval(Context ctx, String expression) {

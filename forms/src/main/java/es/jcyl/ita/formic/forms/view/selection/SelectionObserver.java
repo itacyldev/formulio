@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.helpers;
+package es.jcyl.ita.formic.forms.view.selection;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,25 +15,15 @@ package es.jcyl.ita.formic.forms.view.helpers;
  * limitations under the License.
  */
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Observable;
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ClipBoard {
+public interface SelectionObserver {
 
-    private Map<String,List<Entity>> clipboard = new HashMap<String, List<Entity>>();
-
-    public void selectEntities(String formId, List<Entity> entities){
-        this.clipboard.put(formId,entities);
-    }
-
-    public void clear(){
-        this.clipboard.clear();
-    }
-
+    void update(UIComponent component, Object...params);
 }

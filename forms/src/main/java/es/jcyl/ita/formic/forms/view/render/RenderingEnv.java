@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 
 /**
  * Context storing object used during the rendering process to give the renderers access to commons objects
@@ -52,6 +53,7 @@ public class RenderingEnv {
     private FormContext formContext;
     private CompositeContext combinedContext;
     private List<FormContext> currentFormContexts;
+    private SelectionManager selectionManager = new SelectionManager();
     /**
      * view rendering
      */
@@ -196,6 +198,16 @@ public class RenderingEnv {
 
     public void setGlobalContext(CompositeContext globalContext) {
         this.globalContext = globalContext;
+    }
+
+    public void clearSelection() {
+        if (this.selectionManager != null) {
+            this.selectionManager.clear();
+        }
+    }
+
+    public SelectionManager getSelectionManager() {
+        return selectionManager;
     }
 }
 
