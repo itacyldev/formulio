@@ -31,7 +31,6 @@ public class UIInputComponent extends UIComponent {
     private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
     protected String label;
-    protected boolean readOnly;
     private String valueConverter;
     private Integer inputType = null;
     protected boolean hasDeleteButton = true;
@@ -79,13 +78,7 @@ public class UIInputComponent extends UIComponent {
         return String.format("[%s]: %s/%s", this.getClass(), this.id, this.getLabel());
     }
 
-    public boolean isReadOnly() {
-        if (this.parentForm == null) {
-            return readOnly;
-        } else {
-            return this.parentForm.isReadOnly() || this.readOnly;
-        }
-    }
+
 
     public boolean isNestedProperty() {
         List<String> dependingVariables = this.getValueExpression().getDependingVariables();
@@ -102,10 +95,6 @@ public class UIInputComponent extends UIComponent {
      */
     public boolean isBound() {
         return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
-    }
-
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
     }
 
     public String getLabel() {

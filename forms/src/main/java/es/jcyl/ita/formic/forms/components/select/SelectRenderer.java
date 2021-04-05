@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
@@ -75,7 +76,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly() || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {

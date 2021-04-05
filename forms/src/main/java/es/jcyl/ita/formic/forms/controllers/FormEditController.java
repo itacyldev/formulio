@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
@@ -50,7 +52,7 @@ public class FormEditController extends FormController {
     }
 
     public boolean save(CompositeContext context, UIForm form) {
-        if (form.isReadOnly()) {
+        if ((Boolean) ConvertUtils.convert(form.isReadOnly(context), Boolean.class)) {
             return false;// no changes
         }
         // validate form date
@@ -72,7 +74,7 @@ public class FormEditController extends FormController {
     }
 
     public boolean delete(CompositeContext context, UIForm form) {
-        if (form.isReadOnly()) {
+        if ((Boolean) ConvertUtils.convert(form.isReadOnly(context), Boolean.class)) {
             return false;
         }
         entityPersister.delete(context, form);
@@ -93,7 +95,7 @@ public class FormEditController extends FormController {
 
     private void updateEntityFromView(FormViewContext viewContext, EntityContext entityContext,
                                       UIInputComponent field) {
-        if (field.isBound() && !field.isReadOnly() && !field.isNestedProperty()) {
+        if (field.isBound() && !(Boolean) ConvertUtils.convert(field.isReadOnly(viewContext), Boolean.class) && !field.isNestedProperty()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();

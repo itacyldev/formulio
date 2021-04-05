@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components.button;
+package es.jcyl.ita.formic.forms.components.link;
 /*
  * Copyright 2020 Rosa María Muñiz (mungarro@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,41 +15,16 @@ package es.jcyl.ita.formic.forms.components.button;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
-
 /**
  * @author Rosa María Muñiz (mungarro@itacyl.es)
         */
-public class UIButton extends UIInputComponent {
+public class UIButton extends UILinkBase {
 
     private static final String BUTTON = "button";
-    private String route;
-    private UIParam[] params;
 
     @Override
     public String getRendererType() {
         return BUTTON;
-    }
-
-    public String getRoute() {
-        return route;
-    }
-
-    public void setRoute(String route) {
-        this.route = route;
-    }
-
-    public UIParam[] getParams() {
-        return params;
-    }
-
-    public void setParams(UIParam[] params) {
-        this.params = params;
-    }
-
-    public boolean hasParams() {
-        return this.params != null && this.params.length > 0;
     }
 
 }

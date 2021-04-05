@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteRenderer;
-import es.jcyl.ita.formic.forms.components.button.UIButtonRenderer;
+import es.jcyl.ita.formic.forms.components.link.UIButtonRenderer;
 import es.jcyl.ita.formic.forms.components.card.UICardRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistitemRenderer;

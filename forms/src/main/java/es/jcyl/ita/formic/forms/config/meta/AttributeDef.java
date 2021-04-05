@@ -29,7 +29,8 @@ public class AttributeDef {
 //    public static Attribute TYPE = new Attribute("type", true);
     public static Attribute LABEL = new Attribute("label");
     public static Attribute LABELS = new Attribute("labels");
-    public static Attribute READONLY = new Attribute("readOnly", Boolean.class);
+    public static Attribute READONLY = new Attribute("readOnly", "readOnly", "binding");
+    public static Attribute READONLY_MESSAGE = new Attribute("readOnlyMessage", "readOnlyMessage", String.class);
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
     public static Attribute NAME = new Attribute("name");

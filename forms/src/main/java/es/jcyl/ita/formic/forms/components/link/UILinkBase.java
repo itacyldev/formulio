@@ -15,17 +15,47 @@ package es.jcyl.ita.formic.forms.components.link;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
+
+import static es.jcyl.ita.formic.forms.components.link.UILinkBase.TYPE.LINK;
+
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  * User navigation component
  */
-public class UILink extends UILinkBase {
+public class UILinkBase extends UIInputComponent {
 
-    private static final String LINK = "link";
+    public enum TYPE {
+        LINK, BUTTON
+    }
+
+    private TYPE type = LINK;
+
+    private String route;
+    private UIParam[] params;
 
     @Override
-    public String getRendererType() {
-        return LINK;
+    public String getRendererType() {return type.name().toLowerCase();}
+
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
+    }
+
+    public UIParam[] getParams() {
+        return params;
+    }
+
+    public void setParams(UIParam[] params) {
+        this.params = params;
+    }
+
+    public boolean hasParams() {
+        return this.params != null && this.params.length > 0;
     }
 }
