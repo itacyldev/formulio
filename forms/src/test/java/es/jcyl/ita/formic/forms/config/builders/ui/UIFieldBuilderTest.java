@@ -18,8 +18,10 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -60,7 +62,7 @@ public class UIFieldBuilderTest {
         UIField field = UIComponentHelper.findByClass(formConfig.getList().getView(), UIField.class).get(0);
 
         assertThat(field.getId(), equalTo("myId"));
-        assertThat(field.isReadOnly(), equalTo(true));
+        assertThat(ConvertUtils.convert(field.isReadOnly(new BasicContext("bc")), Boolean.class), equalTo(true));
     }
 
     private static final String XML_TEXT_AREA = "<textarea id=\"myId\" readOnly=\"true\" lines=\"5\"/>";
@@ -75,7 +77,7 @@ public class UIFieldBuilderTest {
         UIField field = UIComponentHelper.findByClass(formConfig.getList().getView(), UIField.class).get(0);
 
         assertThat(field.getId(), equalTo("myId"));
-        assertThat(field.isReadOnly(), equalTo(true));
+        assertThat(ConvertUtils.convert(field.isReadOnly(new BasicContext("bc")), Boolean.class), equalTo(true));
         assertThat(field.getType(), equalTo("TEXTAREA"));
         assertThat(field.getLines(), equalTo(5));
     }
