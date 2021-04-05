@@ -47,7 +47,7 @@ public class UIDatatable extends UIComponent implements EntitySelector {
     // row selection
     private int numFieldsToShow = 20;
 
-    private int numVisibleRows;
+    private int numVisibleRows = 10;
     private List<Entity> selectedEntities;
 
     public UIDatatable() {

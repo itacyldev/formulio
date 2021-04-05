@@ -2,7 +2,7 @@ package es.jcyl.ita.formic.forms.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (tintegerhe "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,6 +21,7 @@ package es.jcyl.ita.formic.forms.view.widget;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public interface StatefulWidget {
+
     void setState(Object value);
 
     Object getState();
