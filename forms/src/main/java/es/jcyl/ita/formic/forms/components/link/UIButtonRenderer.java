@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components.button;
+package es.jcyl.ita.formic.forms.components.link;
 /*
  * Copyright 2020  Rosa María Muñiz (mungarro@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,15 +17,16 @@ package es.jcyl.ita.formic.forms.components.button;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -53,12 +54,13 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
             addButton.setText(component.getLabel());
         }
 
-        if (component.isReadOnly()) {
-            addButton.setEnabled(false);
-        } else {
-            addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
+                    Toast.makeText(env.getViewContext(), component.getReadOnlyMessage(),
+                            Toast.LENGTH_LONG).show();
+                } else {
                     ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
                     if (interceptor != null) {
                         UserAction action = UserAction.navigate(env.getViewContext(), component, component.getRoute());
@@ -71,8 +73,8 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                         interceptor.doAction(action);
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override

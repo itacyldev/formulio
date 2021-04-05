@@ -7,6 +7,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
@@ -85,7 +87,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly() || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class) || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {

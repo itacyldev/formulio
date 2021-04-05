@@ -31,6 +31,9 @@ public abstract class UIComponent implements Identificable {
 
     private String rendererType;
     private boolean renderChildren;
+
+    protected ValueBindingExpression readOnly;
+    protected String readOnlyMessage;
     /**
      * Indicates if current component value is referencing the value from a related entity and
      * not from the mainEntity.
@@ -247,4 +250,30 @@ public abstract class UIComponent implements Identificable {
     public void setEntityMapping(boolean entityMapping) {
         isEntityMapping = entityMapping;
     }
+
+    public String getReadOnlyMessage() {
+        return readOnlyMessage;
+    }
+
+    public void setReadOnlyMessage(String readOnlyMessage) {
+        this.readOnlyMessage = readOnlyMessage;
+    }
+
+    public Object isReadOnly(Context context) {
+        if (this.readOnly == null) {
+            return false;
+        } else {
+            try {
+                return JexlUtils.eval(context, this.readOnly);
+            } catch (Exception e) {
+                error("Error while trying to evaluate JEXL expression: "+this.readOnly.toString(),e);
+                return null;
+            }
+        }
+    }
+
+    public void setReadOnly(ValueBindingExpression readOnly) {
+        this.readOnly = readOnly;
+    }
+
 }

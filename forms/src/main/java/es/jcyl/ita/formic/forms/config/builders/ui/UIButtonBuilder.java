@@ -19,7 +19,7 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.components.button.UIButton;
+import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;

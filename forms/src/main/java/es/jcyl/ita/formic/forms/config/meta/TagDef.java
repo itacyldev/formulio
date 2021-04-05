@@ -66,6 +66,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY_MESSAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HISTORY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
@@ -128,8 +129,8 @@ public class TagDef {
                 new Attribute("retrieveMeta", Boolean.class)
         }));
 
-        Attribute[] base = new Attribute[]{ID, VALUE, RENDER};
-        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
+        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE};
+        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);
