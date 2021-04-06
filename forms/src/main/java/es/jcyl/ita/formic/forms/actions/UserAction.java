@@ -31,7 +31,7 @@ public class UserAction {
     private String name;
     private String route;
     private boolean forceRefresh = false;
-    private boolean registerInHistory;
+    private boolean registerInHistory = true;
     private Map<String, Serializable> params;
     private UIComponent component;
 

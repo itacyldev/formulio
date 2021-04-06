@@ -25,7 +25,6 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
@@ -55,6 +54,7 @@ public class SaveActionHandler extends AbstractActionHandler implements ActionHa
         } else {
             // don't want to go back to form detail if user presses back button
             router.popHistory(1);
+            action.setRegisterInHistory(false);
             router.navigate(actionContext, action, msg);
         }
     }
