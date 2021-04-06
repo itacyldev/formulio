@@ -15,7 +15,7 @@ package es.jcyl.ita.formic.forms.components.link;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 
 import static es.jcyl.ita.formic.forms.components.link.UILinkBase.TYPE.LINK;
 
@@ -25,7 +25,7 @@ import static es.jcyl.ita.formic.forms.components.link.UILinkBase.TYPE.LINK;
  * <p>
  * User navigation component
  */
-public class UILinkBase extends UIInputComponent {
+public class UILinkBase extends UIComponent {
 
     public enum TYPE {
         LINK, BUTTON
