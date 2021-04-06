@@ -64,6 +64,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PLACEHOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
@@ -131,7 +132,7 @@ public class TagDef {
                 new Attribute("retrieveMeta", Boolean.class)
         }));
 
-        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE};
+        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, PLACEHOLDER};
         Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
