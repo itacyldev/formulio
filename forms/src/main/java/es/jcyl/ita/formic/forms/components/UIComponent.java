@@ -191,21 +191,26 @@ public abstract class UIComponent implements Identificable {
         if (this.valueExpression == null) {
             return null;
         } else {
-            // evaluate expression against context
-            try {
-                Object value = JexlUtils.eval(context, this.valueExpression);
-                if (value == null){
-                    if (this.placeHolder == null) {
-                        return null;
-                    }
-                    value = JexlUtils.eval(context, this.placeHolder);
+            Object value = getValue(context, this.valueExpression);
+            if (value == null){
+                if (this.placeHolder == null) {
+                    return null;
                 }
-                return value;
-            } catch (Exception e) {
-                error("Error while trying to evaluate JEXL expression: " + this.valueExpression.toString(), e);
-                return null;
+                value =  value = getValue(context, this.placeHolder);
             }
+            return value;
         }
+    }
+
+    private Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
+        Object value;
+        try{
+            value = JexlUtils.eval(context, valueBindingExpression);
+        } catch (Exception e) {
+            error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
+            value = null;
+        }
+        return value;
     }
 
     public boolean isRendered(Context context) {
