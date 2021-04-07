@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
-
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
@@ -25,37 +23,27 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.validation.ValidatorException;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
  * s
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class SaveActionHandler extends AbstractActionHandler implements ActionHandler {
+public class SaveActionHandler extends EntityChangeAction implements ActionHandler {
 
     public SaveActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    public void handle(ActionContext actionContext, UserAction action) {
-
-        // save view state for each form
+    protected void doAction(ActionContext actionContext, UserAction action) {
         FormEditController formController = (FormEditController) actionContext.getFc();
-        formController.saveViewState();
-
         formController.save(this.mc.getGlobalContext());
-        // stay or navigate back to list?
-        String msg = Config.getInstance().getStringResource(R.string.action_save_success);
-
-        if (StringUtils.isBlank(action.getRoute())) {
-            UserMessagesHelper.toast(actionContext.getViewContext(), msg);
-        } else {
-            // don't want to go back to form detail if user presses back button
-            router.popHistory(1);
-            router.navigate(actionContext, action, msg);
-        }
     }
+
+    @Override
+    protected String getSuccessMessage() {
+        return Config.getInstance().getStringResource(R.string.action_save_success);
+    }
+
 }

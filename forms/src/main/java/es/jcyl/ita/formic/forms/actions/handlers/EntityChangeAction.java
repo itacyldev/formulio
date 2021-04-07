@@ -18,9 +18,11 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.router.Router;
@@ -86,6 +88,8 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
 
     protected abstract String getSuccessMessage();
 
-    protected abstract String getErrorMessage(Exception e);
+    protected String getErrorMessage(Exception e) {
+        return Config.getInstance().getStringResource(R.string.action_generic_error);
+    }
 
 }

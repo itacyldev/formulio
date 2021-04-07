@@ -66,16 +66,22 @@ public class ActionController {
     }
 
     public synchronized void doUserAction(UserAction action) {
-        // Make sure the formController referred by the action is the current form controller,
-        // in other case dismiss action
-        if ((action.getOrigin() == null)
-                || (action.getOrigin() == mc.getFormController())) {
+        if (action.getOrigin() != null && action.getOrigin() != mc.getFormController()) {
+            // Make sure the formController referred by the action is the current form controller,
+            // in other case dismiss action to prevent executing delayed actions
+            return;
+        }
+
+        try {
             // create context for action execution
             ActionContext actionContext = new ActionContext(mc.getFormController(),
                     mc.getRenderingEnv().getViewContext());
-
-            DevConsole.debug("Executing action: " + action.toString());
             ActionHandler handler = actionMap.get(action.getType().toLowerCase());
+
+            if (DevConsole.isDebugEnabled()) {
+                DevConsole.debug(String.format("Executing action %s with ActionHandler: %s.",
+                        action, handler));
+            }
             try {
                 handler.handle(actionContext, action);
             } catch (ValidatorException e) {
@@ -83,11 +89,11 @@ public class ActionController {
                 mc.renderBack();
                 UserMessagesHelper.toast(actionContext.getViewContext(),
                         Config.getInstance().getStringResource(R.string.action_generic_invalid_form));
-            } catch (Exception e) {
-                String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
-                DevConsole.error(msg, e);
-                UserMessagesHelper.toast(actionContext.getViewContext(), msg);
             }
+        } catch (Exception e) {
+            String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
+            DevConsole.error(msg, e);
+            UserMessagesHelper.toast(mc.getRenderingEnv().getViewContext(), msg);
         }
     }
 }
