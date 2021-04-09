@@ -59,6 +59,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
@@ -155,7 +156,7 @@ public class TagDef {
         register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
-                REGISTER_IN_HISTORY, FORCE_REFRESH});
+                REGISTER_IN_HISTORY, FORCE_REFRESH, MESSAGE});
         register("action", actionAttributes);
         register("add", actionAttributes);
         register("update", actionAttributes);

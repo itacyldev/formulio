@@ -32,6 +32,7 @@ public class UserAction {
     private String route;
     private boolean forceRefresh = false;
     private boolean registerInHistory = true;
+    private String message;
     private Map<String, Serializable> params;
     private UIComponent component;
 
@@ -123,6 +124,13 @@ public class UserAction {
         return origin;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     /*********************************/
     /** Default action types **/

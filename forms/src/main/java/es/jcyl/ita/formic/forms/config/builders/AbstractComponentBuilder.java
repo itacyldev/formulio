@@ -18,13 +18,16 @@ package es.jcyl.ita.formic.forms.config.builders;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -128,6 +131,24 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
             }
         }
     }
+
+    protected UIParam[] getParams(List<ConfigNode> paramNodes) {
+        UIParam[] params = new UIParam[paramNodes.size()];
+        for (int i = 0; i < paramNodes.size(); i++) {
+            UIParam uiParam = new UIParam();
+            ConfigNode paramNode = paramNodes.get(i);
+            if (paramNode.hasAttribute("name")) {
+                uiParam.setName(paramNode.getAttribute("name"));
+            }
+            if (paramNode.hasAttribute("value")) {
+                ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+                uiParam.setValue(exprFactory.create(paramNodes.get(i).getAttribute("value")));
+            }
+            params[i] = uiParam;
+        }
+        return params;
+    }
+
 
     protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName) {
         return null;

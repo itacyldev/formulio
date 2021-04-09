@@ -12,4 +12,6 @@
     <string name="no_current_project">No current project</string>
     <string name="export">Export</string>
     <string name="detail">Detail</string>
+    <string name="action_delete_success">Entity successfully deleted.</string>
+    <string name="action_delete_error">An error occurred while deleting the entity. Check dev. console for details.</string>
 </resources>
