@@ -34,6 +34,8 @@ public abstract class UIComponent implements Identificable {
 
     protected ValueBindingExpression readOnly;
     protected String readOnlyMessage;
+
+    protected ValueBindingExpression placeHolder;
     /**
      * Indicates if current component value is referencing the value from a related entity and
      * not from the mainEntity.
@@ -189,14 +191,26 @@ public abstract class UIComponent implements Identificable {
         if (this.valueExpression == null) {
             return null;
         } else {
-            // evaluate expression against context
-            try {
-                return JexlUtils.eval(context, this.valueExpression);
-            } catch (Exception e) {
-                error("Error while trying to evaluate JEXL expression: " + this.valueExpression.toString(), e);
-                return null;
+            Object value = getValue(context, this.valueExpression);
+            if (value == null){
+                if (this.placeHolder == null) {
+                    return null;
+                }
+                value =  value = getValue(context, this.placeHolder);
             }
+            return value;
         }
+    }
+
+    private Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
+        Object value;
+        try{
+            value = JexlUtils.eval(context, valueBindingExpression);
+        } catch (Exception e) {
+            error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
+            value = null;
+        }
+        return value;
     }
 
     public boolean isRendered(Context context) {
@@ -272,4 +286,11 @@ public abstract class UIComponent implements Identificable {
         this.readOnly = readOnly;
     }
 
+    public ValueBindingExpression getPlaceHolder() {
+        return placeHolder;
+    }
+
+    public void setPlaceHolder(ValueBindingExpression placeHolder) {
+        this.placeHolder = placeHolder;
+    }
 }

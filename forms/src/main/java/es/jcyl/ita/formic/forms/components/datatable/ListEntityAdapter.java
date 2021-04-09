@@ -24,6 +24,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
+import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.repo.Entity;
@@ -171,6 +172,12 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
                     UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
                             dtLayout.getComponent());
+                    if (dtLayout.getComponent().hasParams()) {
+                        for (UIParam param : dtLayout.getComponent().getParams()) {
+                            Object value = JexlUtils.eval(currentEntity, param.getValue());
+                            action.addParam(param.getName(), (Serializable) value);
+                        }
+                    }
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
                 }

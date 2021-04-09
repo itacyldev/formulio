@@ -25,6 +25,8 @@ public class AttributeDef {
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
+    public static Attribute PLACEHOLDER = new Attribute("placeHolder", "placeHolder", "binding");
+
 
     // common input fields
     public static Attribute TYPE = new Attribute("type", "type", String.class);
@@ -65,6 +67,7 @@ public class AttributeDef {
     public static Attribute ROUTE = new Attribute("route", "route", "binding");
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
     public static Attribute FORCE_REFRESH = new Attribute("forceRefresh", Boolean.class);
+    public static Attribute MESSAGE = new Attribute("message", "message", String.class);
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");

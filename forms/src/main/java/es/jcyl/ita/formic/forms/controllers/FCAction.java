@@ -30,6 +30,7 @@ public class FCAction {
     private boolean registerInHistory = true;
     private boolean forceRefresh = false;
     private UIParam[] params;
+    private String message;
 
     public FCAction() {
     }
@@ -90,5 +91,13 @@ public class FCAction {
 
     public void setForceRefresh(boolean forceRefresh) {
         this.forceRefresh = forceRefresh;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
