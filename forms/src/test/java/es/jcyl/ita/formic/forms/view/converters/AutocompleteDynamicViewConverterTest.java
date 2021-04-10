@@ -44,7 +44,7 @@ import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -59,7 +59,7 @@ public class AutocompleteDynamicViewConverterTest {
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     AutoCompleteDataBuilder autoBuilder = new AutoCompleteDataBuilder();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
 
     @BeforeClass

@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +57,6 @@ public abstract class FormController implements Identificable, FilterableCompone
     /**
      * controller initialization actions
      */
-    private String onBeforeLoadAction;
     private String onBeforeRenderAction;
     private String onAfterRenderAction;
 
@@ -209,52 +209,19 @@ public abstract class FormController implements Identificable, FilterableCompone
     /***
      * LIFECYCLE HOOKS
      */
-    public void onBeforeLoad() {
-        // set current form in context
-        UIForm mainForm = getMainForm();
-        ScriptEngine engine = ScriptEngine.getInstance();
-        engine.putProperty("form", mainForm);
-        engine.putProperty("forms", getView().getForms());
-
-        if(StringUtils.isNotBlank(this.onBeforeLoadAction)){
-            engine.callFunction(this.getId(), this.onBeforeLoadAction);
-        }
-    }
 
     public void onBeforeRender() {
-        // set current entity in context
-        UIForm mainForm = getMainForm();
-        Entity entity = mainForm.getEntity();
-        if (entity != null) {
-            ScriptEngine.getInstance().putProperty("entity", entity);
-        }
         ScriptEngine engine = ScriptEngine.getInstance();
         if(StringUtils.isNotBlank(this.onBeforeRenderAction)){
-            engine.callFunction(this.getId(), this.onBeforeRenderAction);
+            engine.callFunction(this.getId(), this.onBeforeRenderAction, this);
         }
     }
 
-    public void onBeforeRenderBack() {
-
-    }
-
-    public void onAfterRender() {
-        UIForm mainForm = getMainForm();
+    public void onAfterRender(View view) {
         ScriptEngine engine = ScriptEngine.getInstance();
-        engine.putProperty("view", mainForm.getContext().getViewContext());
-
         if(StringUtils.isNotBlank(this.onAfterRenderAction)){
-            engine.callFunction(this.getId(), this.onAfterRenderAction);
+            engine.callFunction(this.getId(), this.onAfterRenderAction, view);
         }
-    }
-
-
-    public String getOnBeforeLoadAction() {
-        return onBeforeLoadAction;
-    }
-
-    public void setOnBeforeLoadAction(String onBeforeLoadAction) {
-        this.onBeforeLoadAction = onBeforeLoadAction;
     }
 
     public String getOnBeforeRenderAction() {

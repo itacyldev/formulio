@@ -19,6 +19,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
@@ -31,19 +32,30 @@ import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  * Intermediate class to encapsulate rendering to facilitate testing
  */
-public class ViewRenderHelper {
+public class ViewRenderer {
+
+    private final ScriptEngine engine;
+
+    public ViewRenderer() {
+        this.engine = ScriptEngine.getInstance();
+    }
 
     public View render(RenderingEnv env, UIComponent root) {
         // enrich the execution environment with current form's context
@@ -55,6 +67,7 @@ public class ViewRenderHelper {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
+        execOnBeforeRenderAction(component);
         Widget widget;
         if (checkDeferred && hasDeferredExpression(component, env)) {
             // insert a delegated view component as placeholder to render later
@@ -71,6 +84,7 @@ public class ViewRenderHelper {
                 env.getFormContext().getViewContext().registerComponentView(component, widget);
             }
         }
+        execOnAfterRenderAction(widget);
         // if current view is not visible, don't render children
         if (!ViewHelper.isVisible(widget)) {
             return widget;
@@ -91,14 +105,12 @@ public class ViewRenderHelper {
                     Entity oldEntity = env.getFormContext().getEntity();
 
                     List<Entity> entities = ((EntityListProvider) groupView).getEntities();
-
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         env.getFormContext().setEntity(entity);
                         View view = render(env, component.getChildren()[0]);
                         viewList.add(view);
                     }
-
                     // restore entity context
                     env.getFormContext().setEntity(oldEntity);
 
@@ -119,6 +131,46 @@ public class ViewRenderHelper {
             processDeferredViews(env);
         }
         return widget;
+    }
+
+    private void execOnBeforeRenderAction(UIComponent component) {
+        if (StringUtils.isBlank(component.getOnBeforeRenderAction())) {
+            return;
+        }
+        try {
+            // get current  formContext
+            UIForm form;
+            if(component instanceof UIForm){
+                form = (UIForm) component;
+            } else {
+                form = component.getParentForm();
+            }
+            FormContext fContext = form.getContext();
+            engine.putProperty("form", form);
+            engine.putProperty("entity", fContext.getEntity());
+            engine.callFunction(currentCtrl(form).getId(), component.getOnBeforeRenderAction(), component);
+        } catch (Exception e) {
+            error(String.format("Error while executing onBeforeRenderAction: [%s] in component [%s].",
+                    component.getOnBeforeRenderAction(), component.getId()), e);
+        }
+    }
+
+    private void execOnAfterRenderAction(Widget widget) {
+        UIComponent component = widget.getComponent();
+        if (StringUtils.isBlank(component.getOnBeforeRenderAction())) {
+            return;
+        }
+        try {
+            engine.callFunction(currentCtrl(component).getId(), component.getOnAfterRenderAction(), widget);
+        } catch (Exception e) {
+            error(String.format("Error while executing onAfterRenderAction: [%s] in component [%s].",
+                    component.getOnBeforeRenderAction(), component.getId()), e);
+        }
+    }
+
+
+    private FormController currentCtrl(UIComponent form) {
+        return form.getRoot().getFormController();
     }
 
     private void setupFormContext(UIComponent root, RenderingEnv env) {

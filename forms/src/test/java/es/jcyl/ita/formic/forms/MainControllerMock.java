@@ -18,40 +18,6 @@ package es.jcyl.ita.formic.forms;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.Nullable;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.ContextAwareComponent;
-import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.controllers.FormException;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
-import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
-import es.jcyl.ita.formic.forms.view.activities.FormActivity;
-import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
-import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
-import es.jcyl.ita.formic.forms.view.dag.DAGManager;
-import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 

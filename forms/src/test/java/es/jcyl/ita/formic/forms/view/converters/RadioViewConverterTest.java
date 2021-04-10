@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.forms.builders.MultiOptionComponentBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
@@ -49,7 +49,7 @@ public class RadioViewConverterTest {
     FormDataBuilder formBuilder = new FormDataBuilder();
     MultiOptionComponentBuilder builder = new MultiOptionComponentBuilder(UIRadio.class);
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     Context ctx;
 

@@ -54,7 +54,7 @@ public class ConditionalRenderingTest {
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     Context ctx;
 

@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
@@ -64,7 +64,7 @@ public class FormViewContextTest {
      */
     @Test
     public void testAccessViewValuesFromContext() {
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        ViewRenderer renderHelper = new ViewRenderer();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
@@ -95,7 +95,7 @@ public class FormViewContextTest {
      */
     @Test
     public void setSetViewValuesThroughContext() {
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        ViewRenderer renderHelper = new ViewRenderer();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();

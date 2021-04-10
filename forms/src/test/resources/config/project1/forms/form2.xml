@@ -2,13 +2,21 @@
     <list name="Form2">
         <datatable properties="id,provmuni,provincia.name,municipio.name" />
     </list>
-    <edit onAfterRender="helloWorld">
+    <edit>
         <script>
-            function helloWorld(){
-                console.log("this is the first js in android ever!");
+            function onbefore(component){
+                console.log("This is a " + component.getId());
+            }
+
+            function onafter(widget){
+                console.log("This is a widget" + widget.getId());
+                for(p in widget){
+                console.log(p);
+                }
+                widget.setBackgroundColor(-500136);
             }
         </script>
-        <form>
+        <form onBeforeRender="onbefore"  onAfterRender="onafter">
             <text label="zip code" />
 
         </form>

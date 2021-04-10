@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -85,7 +85,7 @@ public class EnvExecutionContextTest {
         env.setViewContext(ctx);
 
         // render the view
-        ViewRenderHelper viewRenderer = new ViewRenderHelper();
+        ViewRenderer viewRenderer = new ViewRenderer();
 
         View view = viewRenderer.render(env, fc.getView());
         Assert.assertNotNull(env.getFormContext().getViewContext());

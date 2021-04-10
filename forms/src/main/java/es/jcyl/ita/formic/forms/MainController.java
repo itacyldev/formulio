@@ -50,7 +50,7 @@ import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -72,7 +72,7 @@ public class MainController implements ContextAwareComponent {
     private CompositeContext globalContext;
 
     // helper to render the uiView in an Android Context
-    private ViewRenderHelper renderHelper = new ViewRenderHelper();
+    private ViewRenderer renderHelper = new ViewRenderer();
     private RenderingEnv renderingEnv;
 
     // user action management
@@ -137,7 +137,6 @@ public class MainController implements ContextAwareComponent {
                         "check route string.", formId)));
             }
             this.formController = controller;
-            this.formController.onBeforeLoad();
             this.formController.load(globalContext);
         } catch (Exception e) {
             restoreState();
@@ -165,7 +164,6 @@ public class MainController implements ContextAwareComponent {
         if (state != null) {
             this.formController = this.state.fc;
             globalContext.addContext(this.state.params);
-            this.formController.onBeforeLoad();
             this.formController.load(globalContext);
         }
     }
@@ -235,7 +233,7 @@ public class MainController implements ContextAwareComponent {
         // set the root View element to renderingEnv for re-renders in the same view
         renderingEnv.setViewRoot(view);
 
-        formController.onAfterRender();
+        formController.onAfterRender(view);
         return view;
     }
 
