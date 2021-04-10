@@ -20,8 +20,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Script;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.Undefined;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +31,17 @@ import java.util.Map;
  */
 public class ScriptEngine {
     // TODO: just  prototype to test scripting integration with forms
+
+    /**
+     * The Rhino Context object is used to store thread-specific information about the execution
+     * environment. There should be one and only one Context associated with each thread that will
+     * be executing JavaScript.
+     */
+
     private static ScriptEngine _instance;
     Map<String, Script> scripts = new HashMap<>();
+    private ScriptableObject scope;
+    private Context rhino;
 
     public static ScriptEngine getInstance() {
         if (_instance == null) {
@@ -41,27 +50,51 @@ public class ScriptEngine {
         return _instance;
     }
 
+    public ScriptEngine() {
+        initScope();
+    }
+
+    public Script getScript(String formId) {
+        return this.scripts.get(formId);
+    }
+
     public void store(String formId, String source) {
-        Context rhino = Context.enter();
         Script script = rhino.compileString(source, formId, 1, null);
         this.scripts.put(formId, script);
     }
 
-    public Map execute(String formId, es.jcyl.ita.formic.core.context.Context ctx, String method, Object... args) {
-        Script script = scripts.get(formId);
+    public void executeScript(Script source) {
+        source.exec(rhino, scope);
+    }
 
-        Context rhino = Context.enter();
-        rhino.setOptimizationLevel(-1);
-        // initialize scope and load Global context
-        Scriptable scope = rhino.initStandardObjects();
-        ScriptableObject.putProperty(scope, "out", Context.javaToJS(System.out, scope));
-        ScriptableObject.putProperty(scope, "ctx", Context.javaToJS(ctx, scope));
+    public Map callFunction(String formId, String method, Object... args) {
+        Script script = this.scripts.get(formId);
+        if (script == null) {
+            throw new IllegalStateException("No script found for formId: " + formId);
+        }
+        if (method == null) {
+            throw new IllegalArgumentException("Script method is null!");
+        }
+        return (script == null) ? null : callFunction(script, method, args);
+    }
 
+    public Map callFunction(Script script, String method, Object... args) {
         // load script functions in scope
         script.exec(rhino, scope);
         // execute function
         Function function = (Function) scope.get(method, scope);
-        NativeObject result = (NativeObject) function.call(rhino, scope, scope, args);
-        return result;
+        Object call = function.call(rhino, scope, scope, args);
+        return (call instanceof Undefined)? null:(NativeObject) call;
+    }
+
+    public void initScope() {
+        this.rhino = Context.enter();
+        rhino.setOptimizationLevel(-1);
+        // initialize scope and load Global context
+        this.scope = rhino.initStandardObjects();
+    }
+
+    public void putProperty(String name, Object object) {
+        ScriptableObject.putProperty(scope, name, Context.javaToJS(object, scope));
     }
 }

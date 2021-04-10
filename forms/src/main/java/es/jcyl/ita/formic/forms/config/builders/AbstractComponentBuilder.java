@@ -43,7 +43,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
         this.attributeDefs = TagDef.getDefinition(tagName);
-        if (attributeDefs == null || this.attributeDefs.isEmpty()) {
+        if (attributeDefs == null) {
             throw new ConfigurationException(error(String.format("No attribute definition for tag" +
                     " [%s], review the TagDef class and register the new component.", tagName)));
         }

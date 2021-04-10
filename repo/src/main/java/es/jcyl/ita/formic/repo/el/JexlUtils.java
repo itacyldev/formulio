@@ -23,7 +23,6 @@ import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
 import org.apache.commons.jexl3.internal.TemplateEngine;
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.el.wrappers.JexlContextWrapper;

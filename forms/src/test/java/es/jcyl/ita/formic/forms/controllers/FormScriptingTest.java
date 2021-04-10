@@ -26,8 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.io.IOException;
-
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
@@ -45,7 +43,6 @@ import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 /**

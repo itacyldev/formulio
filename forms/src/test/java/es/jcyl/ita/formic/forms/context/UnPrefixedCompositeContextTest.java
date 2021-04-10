@@ -21,8 +21,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.core.context.impl.MapCompositeContext;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 
 /**
@@ -41,7 +42,7 @@ public class UnPrefixedCompositeContextTest {
 
     @Test
     public void testAccessWithPrefixedKeys() {
-        UnPrefixedCompositeContext ctx = new UnPrefixedCompositeContext();
+        CompositeContext ctx = new UnPrefixedCompositeContext();
         Context bc1 = new BasicContext("bc1");
         ctx.addContext(bc1);
         Context bc2 = new BasicContext("bc2");

@@ -64,8 +64,6 @@ public class FormEntityLoader {
                 throw new FormException("No entity found using id=[" + entityId + "]");
             }
         }
-        form.setEntity(entity);
-
         return entity;
     }
 

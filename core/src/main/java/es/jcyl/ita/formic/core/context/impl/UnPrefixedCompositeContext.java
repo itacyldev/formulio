@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.context.impl;
+package es.jcyl.ita.formic.core.context.impl;
 
 import org.apache.commons.jexl3.JexlContext;
 
@@ -36,9 +36,8 @@ import es.jcyl.ita.formic.core.context.Context;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context.impl.MapCompositeContext implements CompositeContext, JexlContext {
+public class UnPrefixedCompositeContext extends MapCompositeContext implements CompositeContext, JexlContext {
     private final Map<String, Context> contexts = new LinkedHashMap();
-
 
     /**
      * Looks up a property in the context, looking in each of the stored context. The key must
@@ -122,7 +121,7 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
 
     @Override
     public boolean isEmpty() {
-        return this.contexts.isEmpty();
+        return size()==0;
     }
 
     @Override
@@ -135,7 +134,6 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
             return context.put(newKey[1], value);
         }
     }
-
 
     @Override
     public Object remove(Object key) {
@@ -171,6 +169,8 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
                         entryCtx.getValue()));
             }
         }
+        // add current map keys
+        globalSet.addAll(super.entrySet());
         return globalSet;
     }
 
@@ -278,4 +278,5 @@ public class UnPrefixedCompositeContext extends es.jcyl.ita.formic.forms.context
     public boolean has(String name) {
         return this.containsKey(name);
     }
+
 }

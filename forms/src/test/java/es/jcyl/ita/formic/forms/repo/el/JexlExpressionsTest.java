@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.DummyEntity;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;

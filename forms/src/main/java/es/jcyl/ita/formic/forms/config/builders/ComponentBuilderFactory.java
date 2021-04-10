@@ -41,6 +41,7 @@ import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.scripts.ScriptSourceBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIButtonBuilder;
@@ -170,6 +171,7 @@ public class ComponentBuilderFactory {
         registerAttResolver("color", new ColorAttributeResolver());
 
         registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
+        registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
     }
 
 

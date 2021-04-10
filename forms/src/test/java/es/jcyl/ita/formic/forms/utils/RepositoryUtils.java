@@ -21,7 +21,6 @@ import java.io.File;
 
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.repo.AbstractEditableRepository;
-import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;

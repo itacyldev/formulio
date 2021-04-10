@@ -289,6 +289,10 @@ public class DevDbBuilder {
     public static List<Entity> buildEntities(EntityMeta meta, int numEntities) {
         return buildEntities(meta, numEntities, null);
     }
+    public static List<Entity> buildEntitiesRandomMeta(int numEntities) {
+        EntityMeta meta = createRandomMeta();
+        return buildEntities(meta, numEntities, null);
+    }
 
     /**
      * Creates an entity list using the entityBuilder class.

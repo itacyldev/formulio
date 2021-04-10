@@ -17,12 +17,20 @@ package es.jcyl.ita.formic.forms.controllers;
 
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.collections.CollectionUtils;
+import org.mozilla.javascript.Script;
+
+import java.util.List;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -45,6 +53,13 @@ public abstract class FormController implements Identificable, FilterableCompone
     private FormEntityLoader entityLoader = new FormEntityLoader();
     private String[] mandatoryFilters;
 
+    /**
+     * controller initialization actions
+     */
+    private String onBeforeLoadAction;
+    private String onBeforeRenderAction;
+    private String onAfterRenderAction;
+
     public FormController(String id, String name) {
         this.id = id;
         this.name = name;
@@ -58,8 +73,10 @@ public abstract class FormController implements Identificable, FilterableCompone
         // load all forms included in the view
         for (UIForm form : this.view.getForms()) {
             entity = entityLoader.load(globalCtx, form);
+            form.setEntity(entity);
         }
     }
+
     public EditableRepository getEditableRepo() {
         return getEditableRepo(this.repo);
 
@@ -72,6 +89,12 @@ public abstract class FormController implements Identificable, FilterableCompone
             throw new FormException(String.format("You can't use a readonly repository to modify " +
                     "entity data repoId:[%s].", repo.getId()));
         }
+    }
+
+    public UIForm getMainForm() {
+        // TODO: improve this
+        List<UIForm> forms = this.getView().getForms();
+        return (CollectionUtils.isEmpty(forms)) ? null : forms.get(0);
     }
 
     /****************************/
@@ -181,5 +204,72 @@ public abstract class FormController implements Identificable, FilterableCompone
             throw new FormException("The content View cannot be null!. " + this.getId());
         }
         this.contentView = contentView;
+    }
+
+    /***
+     * LIFECYCLE HOOKS
+     */
+    public void onBeforeLoad() {
+        // set current form in context
+        UIForm mainForm = getMainForm();
+        ScriptEngine engine = ScriptEngine.getInstance();
+        engine.putProperty("form", mainForm);
+        engine.putProperty("forms", getView().getForms());
+
+        if(StringUtils.isNotBlank(this.onBeforeLoadAction)){
+            engine.callFunction(this.getId(), this.onBeforeLoadAction);
+        }
+    }
+
+    public void onBeforeRender() {
+        // set current entity in context
+        UIForm mainForm = getMainForm();
+        Entity entity = mainForm.getEntity();
+        if (entity != null) {
+            ScriptEngine.getInstance().putProperty("entity", entity);
+        }
+        ScriptEngine engine = ScriptEngine.getInstance();
+        if(StringUtils.isNotBlank(this.onBeforeRenderAction)){
+            engine.callFunction(this.getId(), this.onBeforeRenderAction);
+        }
+    }
+
+    public void onBeforeRenderBack() {
+
+    }
+
+    public void onAfterRender() {
+        UIForm mainForm = getMainForm();
+        ScriptEngine engine = ScriptEngine.getInstance();
+        engine.putProperty("view", mainForm.getContext().getViewContext());
+
+        if(StringUtils.isNotBlank(this.onAfterRenderAction)){
+            engine.callFunction(this.getId(), this.onAfterRenderAction);
+        }
+    }
+
+
+    public String getOnBeforeLoadAction() {
+        return onBeforeLoadAction;
+    }
+
+    public void setOnBeforeLoadAction(String onBeforeLoadAction) {
+        this.onBeforeLoadAction = onBeforeLoadAction;
+    }
+
+    public String getOnBeforeRenderAction() {
+        return onBeforeRenderAction;
+    }
+
+    public void setOnBeforeRenderAction(String onBeforeRenderAction) {
+        this.onBeforeRenderAction = onBeforeRenderAction;
+    }
+
+    public String getOnAfterRenderAction() {
+        return onAfterRenderAction;
+    }
+
+    public void setOnAfterRenderAction(String onAfterRenderAction) {
+        this.onAfterRenderAction = onAfterRenderAction;
     }
 }

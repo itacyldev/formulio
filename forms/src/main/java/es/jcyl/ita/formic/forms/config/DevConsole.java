@@ -362,5 +362,15 @@ public class DevConsole {
         return level;
     }
 
+    /***********/
+    /** Instance accesible methods to give access to console in js scripts
+    /***********/
+    public void log(String msg){
+        DevConsole.info(msg);
+    }
+    public void err(String msg){
+        DevConsole.error(msg);
+    }
+
 
 }

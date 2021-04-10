@@ -62,6 +62,9 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_AFTER_RENDER;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_LOAD;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
@@ -103,8 +106,8 @@ public class TagDef {
     private static void initialize() {
         Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE};
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
-        register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
-        register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
+        register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR, ON_BEFORE_LOAD, ON_BEFORE_RENDER, ON_AFTER_RENDER}));
+        register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM, ON_BEFORE_LOAD, ON_BEFORE_RENDER, ON_AFTER_RENDER}));
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
@@ -175,6 +178,7 @@ public class TagDef {
         register("param", define(base, new Attribute[]{NAME, VALUE}));
 
         register("button", define(baseInput, new Attribute[]{ROUTE}));
+        register("script", define(new Attribute[]{}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {
