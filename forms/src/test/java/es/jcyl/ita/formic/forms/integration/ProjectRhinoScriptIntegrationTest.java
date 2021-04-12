@@ -69,7 +69,7 @@ import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
  * Tests to check commons-converters functionallity
  */
 @RunWith(RobolectricTestRunner.class)
-public class ProjectScriptIntegrationTest {
+public class ProjectRhinoScriptIntegrationTest {
 
     @BeforeClass
     public static void setUp() {

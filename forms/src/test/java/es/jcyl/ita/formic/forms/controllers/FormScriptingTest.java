@@ -94,10 +94,6 @@ public class FormScriptingTest {
         // get one of the fields and set a name we'll use in the validation script
         form.getChildren()[1].setId("f1"); // the string field for the string property
 
-        // load script
-        String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
-        ScriptEngine.getInstance().store(form.getId(), source);
-
         // create a mock repository, set to form and load the entity
         EditableRepository mockRepo = mock(EditableRepository.class);
         when(mockRepo.findById(entity.getId())).thenReturn(entity);
@@ -111,6 +107,12 @@ public class FormScriptingTest {
                 .withRepo(mockRepo)
                 .load()
                 .render();
+
+        // load script
+        String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
+        ScriptEngine engine = ScriptEngine.getInstance();
+        engine.store(form.getId(), source);
+        engine.putProperty("out",System.out);
 
         // set field f1 to a value > 10
         recipe.env.disableInputDelay(true);

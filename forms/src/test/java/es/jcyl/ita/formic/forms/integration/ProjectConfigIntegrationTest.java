@@ -117,45 +117,6 @@ public class ProjectConfigIntegrationTest {
         }
     }
 
-    @Test
-    public void testForm2Configuration() throws Exception {
-        File baseFolder = TestUtils.findFile("config");
-
-        Config config = Config.init(baseFolder.getAbsolutePath());
-        ProjectRepository projectRepo = config.getProjectRepo();
-
-        Project prj = projectRepo.findById("project1");
-        Config.getInstance().setCurrentProject(prj);
-
-        FormConfigRepository formConfigRepo = config.getFormConfigRepo();
-        FormConfig formConfig = formConfigRepo.findById("form2");
-
-        FormEditController edit = formConfig.getEdits().get(0);
-        Assert.assertNotNull(edit.getMainForm());
-
-        UIView view = edit.getView();
-        List<UIAutoComplete> list = UIComponentHelper.findByClass(view, UIAutoComplete.class);
-        Assert.assertEquals("agentsRepo", edit.getRepo().getId());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(list));
-        UIAutoComplete auto = list.get(0);
-        Assert.assertEquals("provRepo", auto.getRepo().getId());
-
-        // check edit controllers
-
-        UIForm form = UIComponentHelper.findFirstByClass(view, UIForm.class);
-        Repository repo = form.getRepo();
-        EntityMeta meta = repo.getMeta();
-        PropertyType[] properties = meta.getProperties();
-        Assert.assertEquals(properties.length + 2, form.getFields().size());
-
-        // check all autos have a binding expresions
-        List<UIAutoComplete> autos = UIComponentHelper.findByClass(view, UIAutoComplete.class);
-        for (UIAutoComplete atc : autos) {
-            Assert.assertNotNull(atc.getValueExpression());
-        }
-
-    }
-
     private void assertEditController(FormController ctl) {
         UIView view = ctl.getView();
         List<UIForm> lst = UIComponentHelper.findByClass(view, UIForm.class);

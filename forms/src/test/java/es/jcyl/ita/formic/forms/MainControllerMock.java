@@ -33,6 +33,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 public class MainControllerMock extends MainController {
     public MainControllerMock(){}
 
+
     @Override
     protected void initActivity(Context context) {
         Class activityClazz = getViewImpl(this.getFormController());

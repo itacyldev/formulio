@@ -20,6 +20,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Script;
+import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
 
@@ -40,8 +41,9 @@ public class ScriptEngine {
 
     private static ScriptEngine _instance;
     Map<String, Script> scripts = new HashMap<>();
-    private ScriptableObject scope;
     private Context rhino;
+    private ScriptableObject sharedScope;
+    private ScriptableObject scope;
 
     public static ScriptEngine getInstance() {
         if (_instance == null) {
@@ -51,7 +53,8 @@ public class ScriptEngine {
     }
 
     public ScriptEngine() {
-        initScope();
+        this.rhino = Context.enter();
+        rhino.setOptimizationLevel(-1);
     }
 
     public Script getScript(String formId) {
@@ -84,17 +87,32 @@ public class ScriptEngine {
         // execute function
         Function function = (Function) scope.get(method, scope);
         Object call = function.call(rhino, scope, scope, args);
-        return (call instanceof Undefined)? null:(NativeObject) call;
+        return (call instanceof Undefined) ? null : (NativeObject) call;
     }
 
-    public void initScope() {
-        this.rhino = Context.enter();
-        rhino.setOptimizationLevel(-1);
+    public void initEngine(Map<String, Object> props) {
         // initialize scope and load Global context
-        this.scope = rhino.initStandardObjects();
+        this.sharedScope = rhino.initStandardObjects();
+        if (props != null) {
+            for (Map.Entry<String, Object> e : props.entrySet()) {
+                ScriptableObject.putProperty(sharedScope, e.getKey(), Context.javaToJS(e.getValue(), sharedScope));
+            }
+        }
+    }
+
+    /**
+     * Initializes current scope to remove previous properties
+     */
+    public void initScope() {
+        this.scope = (ScriptableObject) rhino.newObject(sharedScope);
+        scope.setPrototype(sharedScope);
+        scope.setParentScope(null);
     }
 
     public void putProperty(String name, Object object) {
+        if (scope == null) {
+            initScope();
+        }
         ScriptableObject.putProperty(scope, name, Context.javaToJS(object, scope));
     }
 }

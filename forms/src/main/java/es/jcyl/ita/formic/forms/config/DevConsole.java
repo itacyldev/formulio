@@ -226,9 +226,8 @@ public class DevConsole {
         } else {
             System.out.println(effMsg);
         }
-//        Log.e(DEV_CONSOLE, effMsg);
         if (t != null) {
-//            logger.error(DEV_CONSOLE, Log.getStackTraceString(t));
+            System.err.println(t.getMessage());
         }
         return effMsg;
     }

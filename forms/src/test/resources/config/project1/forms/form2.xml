@@ -11,13 +11,15 @@
             function onafter(widget){
                 console.log("This is a widget" + widget.getId());
                 for(p in widget){
-                console.log(p);
+                    console.log(p);
                 }
-                widget.setBackgroundColor(-500136);
+            widget.setBackgroundColor(-500136);
+            widget.getInputView().setTextColor(-500136);
+            widget.getInputView().setText("Hello world from rhino JS!");
             }
         </script>
-        <form onBeforeRender="onbefore"  onAfterRender="onafter">
-            <text label="zip code" />
+        <form onBeforeRender="onbefore"  >
+            <text label="zip code" onAfterRender="onafter" />
 
         </form>
     </edit>
