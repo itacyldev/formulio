@@ -27,7 +27,9 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 /**
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
@@ -55,6 +57,16 @@ public class MemoRepoBuilderConfigTest {
         Assert.assertNotNull(repoFactory.getRepo("memoRepoTest1"));
     }
 
+    private static final String XML_TEST_PROPS_ATT = "<memoRepo id=\"memoRepoTest1\" properties=\"f1,f2,f3\"/>";
+    @Test
+    public void testPropertiesAttribute() throws Exception {
+        String xml = XmlConfigUtils.createEditForm(XML_TEST_PROPS_ATT);
+        XmlConfigUtils.readFormConfig(xml);
+
+        Repository repo = repoFactory.getRepo("memoRepoTest1");
+        EntityMeta meta = repo.getMeta();
+        Assert.assertEquals(3+1, meta.getProperties().length); // 3 properties + id column added autom.
+    }
     @AfterClass
     public static void tearDown() {
 

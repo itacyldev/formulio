@@ -29,6 +29,7 @@ import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.BaseFilter;
+import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.JexlEntityExpression;
 import es.jcyl.ita.formic.repo.source.EntitySource;
 
@@ -99,11 +100,15 @@ public class MemoRepository extends AbstractEditableRepository<Entity, Object, B
         List<Entity> retList = new ArrayList<>();
 
         // TODO: additional evaluators?
-        if (!(filter.getExpression() instanceof JexlEntityExpression)) {
+        Expression expr = filter.getExpression();
+        if(filter == null || expr == null){
+            return values;
+        }
+        if (expr != null && !(expr instanceof JexlEntityExpression)) {
             throw new UnsupportedOperationException("Just JexlEntityExpression is supported as " +
                     "expression implementor!.");
         }
-        JexlEntityExpression expression = (JexlEntityExpression) filter.getExpression();
+        JexlEntityExpression expression = (JexlEntityExpression) expr;
         Object[] indexes = JexlRepoUtils.bulkEval(values, expression);
         int i = 0;
         for (Entity entity : values) {

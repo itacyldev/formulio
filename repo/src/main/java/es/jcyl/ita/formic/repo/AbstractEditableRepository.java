@@ -114,7 +114,9 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
 
     public T findById(ID key) {
         T entity = doFindById(key);
-        loadRelated(entity);
+        if(entity != null){
+            loadRelated(entity);
+        }
         return entity;
     }
 
@@ -123,7 +125,6 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
     public boolean existsById(ID key) {
         return doFindById(key) != null;
     }
-
 
     @Override
     public void delete(T entity) {

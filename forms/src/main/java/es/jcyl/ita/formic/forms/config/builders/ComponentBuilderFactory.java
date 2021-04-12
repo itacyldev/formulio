@@ -108,8 +108,8 @@ public class ComponentBuilderFactory {
         registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
-        registerBuilder("fileRepo", newBuilder(FileRepoConfigBuilder.class, "fileRepo"));
-        registerBuilder("memoRepo", newBuilder(MemoRepoConfigBuilder.class, "memoRepo"));
+        registerBuilder("filerepo", newBuilder(FileRepoConfigBuilder.class, "fileRepo"));
+        registerBuilder("memorepo", newBuilder(MemoRepoConfigBuilder.class, "memoRepo"));
 
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
         registerBuilder("meta", newBuilder(RepoMetaConfigBuilder.class, "meta"));

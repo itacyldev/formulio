@@ -33,8 +33,14 @@ public class FileEntitySource extends AbstractEntitySource {
 
     public FileEntitySource(File baseFolder) {
         this.baseFolder = baseFolder;
-        this.source = new Source(baseFolder.getAbsolutePath(),baseFolder.getAbsolutePath(),null);
+        this.source = new Source(baseFolder.getAbsolutePath(), baseFolder.getAbsolutePath(), null);
         this.entityTypeId = "file#" + this.source.getId();
+    }
+
+    public FileEntitySource(File baseFolder, String entityTypeId) {
+        this.baseFolder = baseFolder;
+        this.source = new Source(baseFolder.getAbsolutePath(), baseFolder.getAbsolutePath(), null);
+        this.entityTypeId = entityTypeId;
     }
 
     public File getBaseFolder() {

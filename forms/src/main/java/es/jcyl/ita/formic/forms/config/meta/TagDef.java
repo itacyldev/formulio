@@ -125,7 +125,7 @@ public class TagDef {
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("fileRepo", define(new Attribute[]{ID, FOLDER, DEFAULT_EXTENSION}));
-        register("memoRepo", define(new Attribute[]{ID}));
+        register("memoRepo", define(new Attribute[]{ID, PROPERTIES}));
 
         register("repofilter", define(new Attribute[]{ID}));
         register("meta", define(new Attribute[]{PROPERTIES}));

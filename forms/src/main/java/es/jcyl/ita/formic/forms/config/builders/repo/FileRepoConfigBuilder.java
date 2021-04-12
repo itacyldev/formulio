@@ -72,7 +72,7 @@ public class FileRepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> 
                 }
             }
         }
-        RepositoryBuilder builder = getFactory().getRepoFactory().getBuilder(new FileEntitySource(baseFile));
+        RepositoryBuilder builder = getFactory().getRepoFactory().getBuilder(new FileEntitySource(baseFile, node.getId()));
         FileRepository repo = (FileRepository) builder.build();
         repo.setDefaultExtension(node.getAttribute("defaultExtension"));
 //        FileRepository repo = new FileRepository(baseFile);

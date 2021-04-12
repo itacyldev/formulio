@@ -15,10 +15,14 @@ package es.jcyl.ita.formic.forms.config.builders.repo;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
+import es.jcyl.ita.formic.repo.memo.MemoRepository;
 import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 
 /**
@@ -36,7 +40,12 @@ public class MemoRepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<RepoConfig> node) {
         RepositoryBuilder builder = this.getFactory().getRepoFactory().getBuilder(new MemoSource(node.getId()));
-        builder.build();
+        MemoRepository repo = (MemoRepository) builder.build();
+        String propsAtt = node.getAttribute(AttributeDef.PROPERTIES.name.toLowerCase());
+        if (StringUtils.isNotBlank(propsAtt)) {
+            String[] propsNames = propsAtt.split(",");
+            repo.setPropertyNames(propsNames);
+        }
     }
 
     @Override

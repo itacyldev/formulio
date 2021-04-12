@@ -35,6 +35,10 @@ public class ConverterUtils {
             return Long.valueOf((Short) value);
         } else if (value instanceof Byte) {
             return Long.valueOf((Byte) value);
+        } else if (value instanceof Double) {
+            return Double.valueOf((Double) value).longValue();
+        } else if (value instanceof Float) {
+            return Float.valueOf((Float) value).longValue();
         } else {
             throw new RuntimeException("Not numeric type: " + value.getClass());
         }

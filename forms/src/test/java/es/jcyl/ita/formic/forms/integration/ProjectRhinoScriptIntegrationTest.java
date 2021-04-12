@@ -22,30 +22,39 @@ import android.view.View;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.components.datatable.DatatableWidget;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
+import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
-import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
@@ -99,6 +108,9 @@ public class ProjectRhinoScriptIntegrationTest {
 
     @Test
     public void testUseRepoInMemory() throws Exception {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
+
         // register memory repo
         RepositoryFactory factory = RepositoryFactory.getInstance();
         RepositoryBuilder repoBuilder = factory.getBuilder(new MemoSource("memoRepoTest"));
@@ -111,24 +123,54 @@ public class ProjectRhinoScriptIntegrationTest {
         UIDatatableBuilder dtBuilder = new UIDatatableBuilder("table");
         UIDatatable table = dtBuilder.createDataTableFromRepo(repo);
         form.addChild(table);
+        // call function
+        form.setOnBeforeRenderAction("mixRepoData");
 
         // Store JS related to form controller
         File srcFile = TestUtils.findFile("scripts/mixRepoData.js");
-        ScriptEngine.getInstance().store(formController.getId(),
-                FileUtils.readFileToString(srcFile, "UTF-8"));
+        ScriptEngine engine = ScriptEngine.getInstance();
+        engine.store(formController.getId(), FileUtils.readFileToString(srcFile, "UTF-8"));
 
-        // prepare rendering environment
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-        ctx.setTheme(R.style.FormudruidLight);
-        ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
-        env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        // prepare rendering env.
+        RenderingEnv env = prepareRendringEnv(ctx, engine);
+
+        // add event handler to execute scripts during component rendering
+        ViewRenderer renderer = new ViewRenderer();
+        renderer.setEventHandler(new RhinoViewRenderHandler(ScriptEngine.getInstance()));
 
         // render form
-        ViewRenderer renderer = new ViewRenderer();
         View formView = renderer.render(env, form);
 
+        // The script will insert new entities in the memory repo, the number of rows
+        // of the datable widget
+        long count = repo.count(null);
+        Assert.assertEquals(10, count);
+
+        View dtView = ViewHelper.findComponentView(formView, table);
+        Assert.assertNotNull(dtView);
+        Assert.assertNotNull(((DatatableWidget) dtView).getEntities());
+        Assert.assertEquals(10, ((DatatableWidget) dtView).getEntities().size());
+    }
+
+    @NotNull
+    private RenderingEnv prepareRendringEnv(Context ctx, ScriptEngine engine) {
+        // Prepare global context
+        CompositeContext globalContext = new UnPrefixedCompositeContext();
+        globalContext.put("repos", new RepoAccessContext());
+        ActionController mcAC = mock(ActionController.class);
+
+        // Prepare rendering environment
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(globalContext);
+        env.setViewContext(ctx);
+
+        // init scripting environment with common objects
+        Map<String, Object> props = new HashMap<>();
+        props.put("ctx", globalContext);
+        props.put("renderEnv", env);
+        props.put("console", new DevConsole());
+        engine.initEngine(props);
+        return env;
     }
 
 }

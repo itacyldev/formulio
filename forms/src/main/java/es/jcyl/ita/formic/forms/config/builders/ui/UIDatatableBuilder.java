@@ -87,7 +87,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         if (CollectionUtils.isEmpty(addActions)) {
             throw new ConfigurationException(DevConsole.error("Error trying to create default datatable for " +
                     "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
-                    "no 'add' action. use 'route' attribute on <datatable/> instead to set the id " +
+                    "no 'add' action. Use 'route' attribute on <datatable/> instead to set the id " +
                     "of the destination form."));
         } else {
             ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
