@@ -98,7 +98,7 @@ public class FormContextTest {
         form.setRepo(mockRepo);
 
         // load entity and check the entity context is fulfill
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
 
         FormContext fCtx = form.getContext();
@@ -147,7 +147,7 @@ public class FormContextTest {
         when(mockRepo.getMeta()).thenReturn(meta);
         form.setRepo(mockRepo);
         // use FormController to load form
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
         FormContext fCtx = form.getContext();
 

@@ -25,7 +25,7 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.repo.Entity;
 
@@ -174,7 +174,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                             dtLayout.getComponent());
                     if (dtLayout.getComponent().hasParams()) {
                         for (UIParam param : dtLayout.getComponent().getParams()) {
-                            Object value = JexlUtils.eval(currentEntity, param.getValue());
+                            Object value = JexlFormUtils.eval(currentEntity, param.getValue());
                             action.addParam(param.getName(), (Serializable) value);
                         }
                     }
@@ -187,7 +187,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
     private void setViewsLayout(final ViewColumnHolder holder, Entity entity) {
         UIColumn[] columns = dtLayout.getComponent().getColumns();
-        Object[] values = JexlUtils.bulkEval(entity, columns);
+        Object[] values = JexlFormUtils.bulkEval(entity, columns);
 
         for (int i = 0; i < columns.length && i < holder.viewList.size(); i++) {
             String stringValue = (String) ConvertUtils.convert(values[i], String.class);

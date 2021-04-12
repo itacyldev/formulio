@@ -1,28 +1,23 @@
 package es.jcyl.ita.formic.forms.config.builders.scripts;
 
-import junit.framework.Assert;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.javascript.Script;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.List;
-
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.*;
 
 /**
  * <Your description here>
@@ -40,7 +35,7 @@ public class ScriptSourceBuilderTest {
         RepositoryUtils.registerMock("contacts");
     }
 
-    private static final String XML_TEST_BASIC = "<script>\n" +
+    private static final String XML_INLINE_TEST = "<script>\n" +
             "function myfunction(a,b){\n" +
             "\treturn a+b;\n" +
             "}\n" +
@@ -48,7 +43,7 @@ public class ScriptSourceBuilderTest {
 
     @Test
     public void testInlineScriptSource() throws Exception {
-        String xml = XmlConfigUtils.createEditForm(XML_TEST_BASIC);
+        String xml = XmlConfigUtils.createEditForm(XML_INLINE_TEST);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
@@ -56,7 +51,22 @@ public class ScriptSourceBuilderTest {
         // check there's a script related to current form
         Script script = ScriptEngine.getInstance().getScript(editCtl.getId());
         assertNotNull(script);
+    }
 
-        // repo must be set with parent value "contacts"
+    private static final String XML_INFILE_TEST = "<script src=\"script1.js\"/>";
+
+    @Test
+    public void testInFileScriptSource() throws Exception {
+        String xml = XmlConfigUtils.createEditForm(XML_INFILE_TEST);
+        // mock a project with script folder as base form folder
+        Project prjMock = mock(Project.class);
+        when(prjMock.getFormsFolder()).thenReturn(TestUtils.findFile("scripts").getAbsolutePath());
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(prjMock, xml);
+        FormEditController editCtl = formConfig.getEdits().get(0);
+
+        // check there's a script related to current form
+        Script script = ScriptEngine.getInstance().getScript(editCtl.getId());
+        assertNotNull(script);
     }
 }

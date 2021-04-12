@@ -36,17 +36,6 @@ public class FilterHelper {
 
     private static final CriteriaVisitor criteriaVisitor = new CriteriaVisitor();
 
-    public static Filter createInstance(Repository repo) {
-        Filter f;
-        try {
-            f = (Filter) repo.getFilterClass().newInstance();
-        } catch (Exception e) {
-            throw new ViewConfigException("An error occurred while trying to instantiate the filter " +
-                    "class: " + repo.getFilterClass().getName());
-        }
-        return f;
-    }
-
     public static Criteria singleCriteria(String property, String valueBindingExpression) {
         return Criteria.single(
                 ConditionBinding.cond(Condition.contains(property, null),
@@ -103,13 +92,5 @@ public class FilterHelper {
         output.setSorting(definition.getSorting());
     }
 
-    public static Filter clone(Repository repo, Filter filter){
-        Filter f = createInstance(repo);
-        if (filter != null) {
-            f.setExpression(filter.getExpression());
-            f.setSorting(filter.getSorting());
-        }
-        return f;
-    }
 
 }

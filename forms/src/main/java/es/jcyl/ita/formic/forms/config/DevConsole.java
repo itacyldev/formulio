@@ -40,7 +40,7 @@ import ch.qos.logback.classic.util.ContextInitializer;
 import ch.qos.logback.core.joran.spi.JoranException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
 
 /**
@@ -219,7 +219,7 @@ public class DevConsole {
         if (errorLevel < level) {
             return msg;
         }
-        String effMsg = String.valueOf(JexlUtils.eval(devContext, msg));
+        String effMsg = String.valueOf(JexlFormUtils.eval(devContext, msg));
 
         if (errorLevel == Log.ERROR) {
             System.err.println(effMsg);

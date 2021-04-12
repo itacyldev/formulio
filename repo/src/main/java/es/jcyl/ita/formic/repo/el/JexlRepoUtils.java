@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.el;
+package es.jcyl.ita.formic.repo.el;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -23,35 +23,25 @@ import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
 import org.apache.commons.jexl3.internal.TemplateEngine;
 
+import java.util.List;
+
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
-import es.jcyl.ita.formic.forms.el.wrappers.JexlContextWrapper;
-import es.jcyl.ita.formic.forms.el.wrappers.JexlEntityWrapper;
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.el.wrappers.JexlContextWrapper;
+import es.jcyl.ita.formic.repo.el.wrappers.JexlEntityWrapper;
+import es.jcyl.ita.formic.repo.query.JexlEntityExpression;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class JexlUtils {
+public class JexlRepoUtils {
+
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(false).silent(false).create();
 
-    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, false,
+    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, true,
             256, '$', '#');
-
-    public static Object eval(Context ctx, String expression) {
-        try {
-            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
-            return exl.evaluate(new JexlContextWrapper(ctx));
-        } catch (Exception e) {
-            throw new RuntimeException(String.format(
-                    "An error occurred while trying to evaluate the jexl expression [%s].",
-                    expression
-            ), e);
-        }
-    }
 
     public static Object eval(JexlContext ctx, String expression) {
         try {
@@ -65,60 +55,73 @@ public class JexlUtils {
         }
     }
 
+    public static Object eval(Context context, String expression) {
+        JxltEngine.Expression exl = jxltEngine.createExpression(expression);
+        return eval(context, exl);
+    }
+
+    public static Object eval(Context context, JxltEngine.Expression exl) {
+        JexlContextWrapper jc = new JexlContextWrapper(context);
+        return exl.evaluate(jc);
+    }
+
     public static Object eval(Entity entity, String expression) {
+        JxltEngine.Expression exl = null;
         try {
-            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
+            exl = jxltEngine.createExpression(expression);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format(
+                    "An error occurred while trying to create JEXL expression [%s] for entity[%s].",
+                    expression, entity.toString()
+            ), e);
+        }
+        return eval(entity, exl);
+    }
+
+    public static Object[] bulkEval(List<Entity> entityList, String expression) {
+        JxltEngine.Expression exl = jxltEngine.createExpression(expression);
+        return bulkEval(entityList, exl);
+    }
+
+    public static Object[] bulkEval(List<Entity> entityList, JexlEntityExpression entityExpression) {
+        return bulkEval(entityList, entityExpression.getExpression());
+    }
+
+    public static Object[] bulkEval(List<Entity> entityList, JxltEngine.Expression exl) {
+        JexlContext jc = new MapContext();
+
+        Object[] values = new Object[entityList.size()];
+        int i = 0;
+        for (Entity entity : entityList) {
+            jc.set("entity", new JexlEntityWrapper(entity));
+            try {
+                values[i] = exl.evaluate(jc);
+            } catch (Exception e) {
+                throw new RuntimeException(String.format(
+                        "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
+                        exl.asString(), entity), e);
+            }
+            i++;
+        }
+        return values;
+    }
+
+    public static Object eval(Entity entity, JxltEngine.Expression exl) {
+        try {
             JexlContext jc = new MapContext();
             jc.set("entity", new JexlEntityWrapper(entity));
             return exl.evaluate(jc);
         } catch (Exception e) {
             throw new RuntimeException(String.format(
                     "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
-                    expression, entity.toString()
+                    exl, entity.toString()
             ), e);
         }
-    }
-
-    public static Object eval(FormContext ctx, String expression) {
-        // First try on entity
-        Object value = eval(ctx.getEntity(), expression);
-        // then try on form fields
-        if (value != null) {
-            return value;
-        }
-        return eval(ctx, expression);
-    }
-
-    public static Object eval(Context ctx, ValueBindingExpression valueExpression) {
-        return valueExpression.getExpression().evaluate(new JexlContextWrapper(ctx));
-    }
-
-    public static Object eval(Entity entity, ValueBindingExpression valueExpression) {
-        JexlContext jc = new MapContext();
-        jc.set("entity", new JexlEntityWrapper(entity));
-        return valueExpression.getExpression().evaluate(jc);
-    }
-
-    public static Object[] bulkEval(Entity entity, UIComponent[] components) {
-        JexlContext jc = new MapContext();
-        jc.set("entity", new JexlEntityWrapper(entity));
-
-        Object[] values = new Object[components.length];
-        for (int i = 0; i < components.length; i++) {
-            try {
-                values[i] = components[i].getValueExpression().getExpression().evaluate(jc);
-            } catch (Exception e) {
-                throw new RuntimeException(String.format(
-                        "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
-                        components[i].getValueExpression().getExpression(), entity.toString()
-                ), e);
-            }
-        }
-        return values;
     }
 
     public static JxltEngine.Expression createExpression(String expression) {
         return jxltEngine.createExpression(expression);
     }
+
 
 }

@@ -33,11 +33,11 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.forms.DummyEntity;
+import es.jcyl.ita.formic.repo.memo.MemoEntity;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -73,15 +73,15 @@ public class JexlExpressionsTest {
         // create database with random table with 1 entity
 //        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
-        Entity entity = new DummyEntity(null, new EntityMeta("xxx", new PropertyType[]{}, null), null);
+        Entity entity = new MemoEntity(null, new EntityMeta("xxx", new PropertyType[]{}, null), null);
         String expected = "xvasdfasdfvv";
         entity.set("value1", expected);
         Date expectedDate = new Date();
         entity.set("value2", expectedDate);
 
-        Object value = JexlUtils.eval(entity, "${entity.value1}");
+        Object value = JexlFormUtils.eval(entity, "${entity.value1}");
         Assert.assertEquals(expected, value);
-        value = JexlUtils.eval(entity, "${entity.value2}");
+        value = JexlFormUtils.eval(entity, "${entity.value2}");
         Assert.assertEquals(expectedDate, value);
 
 
@@ -122,7 +122,7 @@ public class JexlExpressionsTest {
             ValueBindingExpression ve = factory.create(strValue, c);
             Assert.assertNotNull(ve);
             Assert.assertEquals(ve.getClass(), LiteralBindingExpression.class);
-            AssertUtils.assertEquals(value, JexlUtils.eval(new BasicContext("t"), ve));
+            AssertUtils.assertEquals(value, JexlFormUtils.eval(new BasicContext("t"), ve));
         }
     }
 
@@ -163,9 +163,9 @@ public class JexlExpressionsTest {
     public void methodCalls() {
         JexlContext context = new MapContext();
         context.set("myObject", new MyTestClass());
-        Object o = JexlUtils.eval(context, "${myObject.getMethod()}");
+        Object o = JexlFormUtils.eval(context, "${myObject.getMethod()}");
         assertThat((Integer) o, greaterThan(1));
-        o = JexlUtils.eval(context, "${myObject.method}");
+        o = JexlFormUtils.eval(context, "${myObject.method}");
         assertThat((Integer) o, greaterThan(1));
     }
 
@@ -189,7 +189,7 @@ public class JexlExpressionsTest {
         for (String expr : funcExpression) {
             for (String property : properties) {
                 String effectiveExpression = String.format(expr, property);
-                JxltEngine.Expression e = JexlUtils.createExpression(effectiveExpression);
+                JxltEngine.Expression e = JexlFormUtils.createExpression(effectiveExpression);
                 Object value = e.evaluate(context);
                 System.out.println(">>>> using: " + property);
                 System.out.println(value);
@@ -225,7 +225,7 @@ public class JexlExpressionsTest {
         };
 
         for (Fixture fixture : fxts) {
-            JxltEngine.Expression e = JexlUtils.createExpression(fixture.expression);
+            JxltEngine.Expression e = JexlFormUtils.createExpression(fixture.expression);
             Object value = e.evaluate(context);
             Assert.assertEquals("Error evaluating expression: " + fixture.expression, fixture.expected, value);
         }
@@ -246,9 +246,9 @@ public class JexlExpressionsTest {
     @Test
     public void testAccessCompositeContext() {
         CompositeContext context = createContext();
-        Object o = JexlUtils.eval(context, "${date.now}");
+        Object o = JexlFormUtils.eval(context, "${date.now}");
         assertThat(o, notNullValue());
-        o = JexlUtils.eval(context, "${location.method}");
+        o = JexlFormUtils.eval(context, "${location.method}");
         assertThat(o, notNullValue());
         assertThat((Integer) o, greaterThan(1));
 

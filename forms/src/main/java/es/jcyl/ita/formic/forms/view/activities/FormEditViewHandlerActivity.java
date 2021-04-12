@@ -21,7 +21,7 @@ import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
 /*
@@ -93,7 +93,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                     // TODO: FORMIC-202 UIButton, UILinkRenderer utilizar método desde UserActionHelper
                     String strRoute = "";
                     if (formAction.getRoute() != null) {
-                        JxltEngine.Expression e = JexlUtils.createExpression(formAction.getRoute());
+                        JxltEngine.Expression e = JexlFormUtils.createExpression(formAction.getRoute());
                         Object route = e.evaluate((JexlContext) env.getContext());
                         strRoute = (String) ConvertUtils.convert(route, String.class);
                     }
@@ -103,7 +103,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                     action.setMessage(formAction.getMessage());
                     if (formAction.hasParams()) {
                         for (UIParam param : formAction.getParams()) {
-                            Object value = JexlUtils.eval(env.getContext(), param.getValue());
+                            Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
                             if (value != null) {
                                 action.addParam(param.getName(), (Serializable) value);
                             }

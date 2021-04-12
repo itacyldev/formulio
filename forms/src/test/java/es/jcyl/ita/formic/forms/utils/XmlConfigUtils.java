@@ -74,7 +74,7 @@ public class XmlConfigUtils {
     }
 
     public static FormConfig readFormConfig(String xml) {
-        return readFormConfig(null, xml);
+        return readFormConfig((Project) null, xml);
     }
 
     public static FormConfig readFormConfig(File f) {
@@ -84,14 +84,18 @@ public class XmlConfigUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return readFormConfig(null, xml);
+        return readFormConfig((Project) null, xml);
     }
 
     public static FormConfig readFormConfig(Project p, String xml) {
-        DevConsole.clear();
         ConfigReadingInfo readingInfo = new ConfigReadingInfo();
         readingInfo.setProject(p);
         readingInfo.setCurrentFile("testFile");
+        return (FormConfig) readFormConfig(readingInfo, xml);
+    }
+
+    public static FormConfig readFormConfig(ConfigReadingInfo readingInfo, String xml) {
+        DevConsole.clear();
         DevConsole.setConfigReadingInfo(readingInfo);
         // set current shared into with builder factory
         ComponentBuilderFactory.getInstance().setInfo(readingInfo);

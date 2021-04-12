@@ -39,7 +39,7 @@ import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLitePropertyConverter;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteDBValue;
 import es.jcyl.ita.formic.repo.db.sqlite.sql.TableSQLBuilder;
-import es.jcyl.ita.formic.repo.el.JexlUtils;
+import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 
@@ -139,7 +139,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
     }
 
     private Object readCalculatedJexlProperty(DBPropertyType p) {
-        return JexlUtils.eval(this.context, p.getExpression());
+        return JexlRepoUtils.eval(this.context, p.getExpression());
     }
 
     @Override
@@ -172,7 +172,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
                         "The context is null, make sure the RepositoryFactory has a context instance" +
                         " to se on repos during initialization.");
             }
-            return JexlUtils.eval(context, p.getExpression());
+            return JexlRepoUtils.eval(context, p.getExpression());
         } else {
             throw new UnsupportedOperationException("Not implemented yet!!");
         }

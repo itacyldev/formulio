@@ -13,9 +13,9 @@
                 for(p in widget){
                     console.log(p);
                 }
-            widget.setBackgroundColor(-500136);
-            widget.getInputView().setTextColor(-500136);
-            widget.getInputView().setText("Hello world from rhino JS!");
+                widget.setBackgroundColor(-500136);
+                widget.getInputView().setTextColor(-500136);
+                widget.getInputView().setText("Hello world from rhino JS!");
             }
         </script>
         <form onBeforeRender="onbefore"  >

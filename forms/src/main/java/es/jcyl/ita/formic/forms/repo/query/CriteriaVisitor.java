@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.repo.query.Condition;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Expression;
@@ -62,7 +62,7 @@ public class CriteriaVisitor {
             // if the element has value, add it to parent
             Object value;
             try {
-                value = JexlUtils.eval(context, expre.getBindingExpression());
+                value = JexlFormUtils.eval(context, expre.getBindingExpression());
             } catch (Exception e) {
                 // no variable found is treated as null value for this condition
                 value = null;

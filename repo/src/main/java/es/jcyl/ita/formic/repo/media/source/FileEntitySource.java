@@ -43,8 +43,6 @@ public class FileEntitySource extends AbstractEntitySource {
 
     public class FileEntitySourceBuilder extends AbstractEntitySourceBuilder<FileEntitySource> {
 
-        public static final String QUERY = "QUERY";
-
         public FileEntitySourceBuilder(EntitySourceFactory factory) {
             super(factory);
         }

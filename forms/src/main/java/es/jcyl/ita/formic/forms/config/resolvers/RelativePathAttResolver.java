@@ -21,8 +21,6 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -39,10 +37,18 @@ public class RelativePathAttResolver extends AbstractAttributeResolver<String> {
         String path = node.getAttribute(attName);
         File referencedFile = new File(path);
 
+
         if (!referencedFile.isAbsolute()) {
+            String baseFolder;
             // config relative path to project data folder
-            String dataBasePath = factory.getInfo().getProject().getDataFolder();
-            referencedFile = new File(dataBasePath, path);
+            if (node.getName().toLowerCase().equals("script")) {
+                // use form folder as base path
+                baseFolder = factory.getInfo().getProject().getFormsFolder();
+            } else {
+                // database, file entities, etc.
+                baseFolder = factory.getInfo().getProject().getDataFolder();
+            }
+            referencedFile = new File(baseFolder, path);
         }
         if (!referencedFile.exists()) {
             throw new ConfigurationException(DevConsole.error(String.format("The referenced file '%s' in element %s inside file " +

@@ -18,11 +18,14 @@ package es.jcyl.ita.formic.forms.config.builders.repo;
 import java.io.File;
 
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
 import es.jcyl.ita.formic.repo.media.FileRepository;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.repo.media.source.FileEntitySource;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -32,9 +35,9 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class FileRepoBuilder extends AbstractComponentBuilder<RepoConfig> {
+public class FileRepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
-    public FileRepoBuilder(String tagName) {
+    public FileRepoConfigBuilder(String tagName) {
         super(tagName, RepoConfig.class);
     }
 
@@ -69,9 +72,11 @@ public class FileRepoBuilder extends AbstractComponentBuilder<RepoConfig> {
                 }
             }
         }
-        FileRepository repo = new FileRepository(baseFile);
+        RepositoryBuilder builder = getFactory().getRepoFactory().getBuilder(new FileEntitySource(baseFile));
+        FileRepository repo = (FileRepository) builder.build();
         repo.setDefaultExtension(node.getAttribute("defaultExtension"));
-        this.getFactory().getRepoFactory().register(node.getId(), repo);
+//        FileRepository repo = new FileRepository(baseFile);
+//        this.getFactory().getRepoFactory().register(node.getId(), repo);
     }
 
     @Override

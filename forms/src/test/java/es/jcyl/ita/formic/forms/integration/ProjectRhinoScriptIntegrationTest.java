@@ -17,51 +17,44 @@ package es.jcyl.ita.formic.forms.integration;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.junit.Assert;
+import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mini2Dx.collections.CollectionUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
+import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
-import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.meta.PropertyType;
+import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
+import es.jcyl.ita.formic.repo.memo.MemoRepository;
+import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
-import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -102,8 +95,40 @@ public class ProjectRhinoScriptIntegrationTest {
 
         DevFormNav formNav = new DevFormNav(ctx, mc);
         formNav.nav("form2-edit1");
-
     }
 
+    @Test
+    public void testUseRepoInMemory() throws Exception {
+        // register memory repo
+        RepositoryFactory factory = RepositoryFactory.getInstance();
+        RepositoryBuilder repoBuilder = factory.getBuilder(new MemoSource("memoRepoTest"));
+        MemoRepository repo = (MemoRepository) repoBuilder.build();
+        repo.setPropertyNames(new String[]{"prop1", "prop2", "prop3"});
+
+        // create a form with a datatable, and set repo to datatable
+        UIForm form = DevFormBuilder.createOneFieldForm();
+        FormEditController formController = DevFormBuilder.createFormEditController(form);
+        UIDatatableBuilder dtBuilder = new UIDatatableBuilder("table");
+        UIDatatable table = dtBuilder.createDataTableFromRepo(repo);
+        form.addChild(table);
+
+        // Store JS related to form controller
+        File srcFile = TestUtils.findFile("scripts/mixRepoData.js");
+        ScriptEngine.getInstance().store(formController.getId(),
+                FileUtils.readFileToString(srcFile, "UTF-8"));
+
+        // prepare rendering environment
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
+        env.setViewContext(ctx);
+
+        // render form
+        ViewRenderer renderer = new ViewRenderer();
+        View formView = renderer.render(env, form);
+
+    }
 
 }

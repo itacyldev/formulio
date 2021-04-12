@@ -25,7 +25,7 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.controllers.FCAction;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -42,7 +42,7 @@ public class UserActionHelper {
     public static UserAction evaluate(FCAction actionTemplate, Context context, UIComponent component) {
         String strRoute = "";
         if (actionTemplate.getRoute() != null) {
-            JxltEngine.Expression e = JexlUtils.createExpression(actionTemplate.getRoute());
+            JxltEngine.Expression e = JexlFormUtils.createExpression(actionTemplate.getRoute());
             Object route = e.evaluate((JexlContext) context);
             strRoute = (String) ConvertUtils.convert(route, String.class);
         }
@@ -52,7 +52,7 @@ public class UserActionHelper {
         action.setForceRefresh(actionTemplate.isForceRefresh());
         if (actionTemplate.hasParams()) {
             for (UIParam param : actionTemplate.getParams()) {
-                Object value = JexlUtils.eval(context, param.getValue());
+                Object value = JexlFormUtils.eval(context, param.getValue());
                 if (value != null) {
                     action.addParam(param.getName(), (Serializable) value);
                 }

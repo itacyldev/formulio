@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.repo.query;
+package es.jcyl.ita.formic.repo.memo.builders;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,23 +15,24 @@ package es.jcyl.ita.formic.repo.query;
  * limitations under the License.
  */
 
-import org.apache.commons.jexl3.JxltEngine;
-
-import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
-
+import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.builders.AbstractRepositoryBuilder;
+import es.jcyl.ita.formic.repo.memo.MemoRepository;
+import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 
 /**
+ * In memory repository builder.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JexlEntityExpression extends Expression {
+public class MemoRepositoryBuilder extends AbstractRepositoryBuilder<MemoSource, MemoRepository> {
 
-    private final JxltEngine.Expression expression;
-
-    public JexlEntityExpression(String expression){
-        this.expression = JexlRepoUtils.createExpression(expression);
+    public MemoRepositoryBuilder(RepositoryFactory repoFactory) {
+        super(repoFactory);
     }
 
-    public JxltEngine.Expression getExpression() {
-        return expression;
+    @Override
+    protected MemoRepository doBuild() {
+        return new MemoRepository(this.getSource());
     }
 }
