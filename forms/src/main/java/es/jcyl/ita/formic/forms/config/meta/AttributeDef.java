@@ -133,5 +133,8 @@ public class AttributeDef {
     public static Attribute COLOR = new Attribute("color", "color", "color");
     public static Attribute STROKE_WIDTH = new Attribute("strokeWidth", Integer.class);
 
+    public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
+    public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
+
 
 }

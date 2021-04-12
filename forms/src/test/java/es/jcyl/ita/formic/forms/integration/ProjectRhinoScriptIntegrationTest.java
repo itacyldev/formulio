@@ -15,7 +15,10 @@ package es.jcyl.ita.formic.forms.integration;
  * limitations under the License.
  */
 
+import android.content.Context;
 import android.util.Log;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -29,6 +32,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.MainControllerMock;
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
@@ -38,6 +46,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -45,7 +54,9 @@ import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.utils.DevFormNav;
 import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
@@ -58,7 +69,7 @@ import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
  * Tests to check commons-converters functionallity
  */
 @RunWith(RobolectricTestRunner.class)
-public class ProjectConfigIntegrationTest {
+public class ProjectRhinoScriptIntegrationTest {
 
     @BeforeClass
     public static void setUp() {
@@ -69,68 +80,30 @@ public class ProjectConfigIntegrationTest {
         DevConsole.setLevel(Log.DEBUG);
     }
 
-
-    /**
-     * Check formEdit and formList are properly created
-     */
-    private static final String TEST_BASIC1 = "<main repo=\"contacts\"/>";
-
     @Test
     public void testFormConfig() throws Exception {
+
         File baseFolder = TestUtils.findFile("config");
         Config.init(baseFolder.getAbsolutePath());
         Config config = Config.getInstance();
 
+        // Open project config
         ProjectRepository projectRepo = config.getProjectRepo();
-        Assert.assertNotNull(projectRepo);
-        List<Project> projectList = projectRepo.listAll();
+        Project prj = projectRepo.findById("project1");
+        Config.getInstance().setCurrentProject(prj);
 
-        Assert.assertTrue(CollectionUtils.isNotEmpty(projectList));
-        Project prj = projectList.get(0);
-        prj.open();
-        assertEquals("project1", prj.getName());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(prj.getConfigFiles()));
-        // read config and check repositories and forms
+        // mock main controller
+        MainController mc = new MainControllerMock();
+        mc.setContext(config.getGlobalContext());
 
-        config.setCurrentProject(prj);
-        // there must be 4 repos
-        Set<String> repoIds = config.getRepoConfigReader().getRepoFactory().getRepoIds();
+        // navigate to form
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
 
-        // there must be three form configs
-        List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
-        int expectedNumForms = TestUtils.findFile("config/project1/forms").list().length;
-        assertEquals(expectedNumForms, formConfigs.size());
+        DevFormNav formNav = new DevFormNav(ctx, mc);
+        formNav.nav("form2-edit1");
 
-        // Check all list and edit controller have been loaded
-        FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
-        Collection<FormController> ctlList = fctlFacotry.getList();
-        assertEquals(14, ctlList.size());
-        assertEquals(7, fctlFacotry.getListControllers().size());
-
-        // check list controller
-        for (FormController ctl : fctlFacotry.getList()) {
-            if (ctl instanceof FormListController) {
-                assertListController(ctl);
-            } else {
-                assertEditController(ctl);
-            }
-        }
     }
 
-    private void assertEditController(FormController ctl) {
-        UIView view = ctl.getView();
-        List<UIForm> lst = UIComponentHelper.findByClass(view, UIForm.class);
-        Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
-        UIForm form = lst.get(0);
-        Assert.assertNotNull(form.getRepo());
-    }
-
-    private void assertListController(FormController ctl) {
-        UIView view = ctl.getView();
-        List<FilterableComponent> lst = UIComponentHelper.findByClass(view, FilterableComponent.class);
-        Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
-        FilterableComponent filterableComponent = lst.get(0);
-        Assert.assertNotNull(filterableComponent.getRepo());
-    }
 
 }

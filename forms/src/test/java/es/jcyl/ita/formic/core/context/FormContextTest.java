@@ -38,7 +38,7 @@ import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
@@ -152,7 +152,7 @@ public class FormContextTest {
         FormContext fCtx = form.getContext();
 
         // render view to create android view components and viewContext
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        ViewRenderer renderHelper = new ViewRenderer();
         renderHelper.render(env, form);
 
         // check each entity property is correctly set in the form fields

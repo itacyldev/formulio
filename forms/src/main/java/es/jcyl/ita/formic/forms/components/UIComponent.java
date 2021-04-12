@@ -41,6 +41,11 @@ public abstract class UIComponent implements Identificable {
      * not from the mainEntity.
      */
     private boolean isEntityMapping = false;
+    /**
+     * Scripting hooks
+     */
+    private String onBeforeRenderAction;
+    private String onAfterRenderAction;
 
     /**
      * if the children of this component have to be rendered individually
@@ -235,6 +240,22 @@ public abstract class UIComponent implements Identificable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getOnBeforeRenderAction() {
+        return onBeforeRenderAction;
+    }
+
+    public void setOnBeforeRenderAction(String onBeforeRenderAction) {
+        this.onBeforeRenderAction = onBeforeRenderAction;
+    }
+
+    public String getOnAfterRenderAction() {
+        return onAfterRenderAction;
+    }
+
+    public void setOnAfterRenderAction(String onAfterRenderAction) {
+        this.onAfterRenderAction = onAfterRenderAction;
     }
 
     @Override

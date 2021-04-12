@@ -51,6 +51,12 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
         }
     }
 
+
+    @Override
+    public long count() {
+        return count(null);
+    }
+
     public void setContext(Context ctx) {
         this.context = ctx;
     }

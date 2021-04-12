@@ -42,7 +42,7 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -62,7 +62,7 @@ import static org.mockito.Mockito.*;
 public class AutoCompleteRendererTest {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     @BeforeClass
     public static void setUp() {

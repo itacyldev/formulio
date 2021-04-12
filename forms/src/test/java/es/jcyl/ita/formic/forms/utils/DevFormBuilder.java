@@ -19,7 +19,7 @@ import android.content.Context;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
@@ -35,8 +35,6 @@ import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-
-import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

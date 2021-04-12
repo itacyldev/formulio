@@ -63,6 +63,8 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_AFTER_RENDER;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PLACEHOLDER;
@@ -103,22 +105,23 @@ public class TagDef {
     }
 
     private static void initialize() {
-        Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE};
+        Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
+
+        Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE, ON_BEFORE_RENDER, ON_AFTER_RENDER};
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
         register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
-        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
 
+        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
         register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
-        register("datalistitem", define(new Attribute[]{ID}));
-        register("card", define(new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE, IMAGE_POSITION}));
+        register("datalistitem", define(scriptHooks, new Attribute[]{ID}));
+        register("card", define(scriptHooks, new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE, IMAGE_POSITION, ON_BEFORE_RENDER, ON_AFTER_RENDER}));
 
         Attribute[] text = new Attribute[]{FONT_SIZE, FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, ITALIC, BOLD, UPPERCASE, UNDERLINED};
-        register("head", define(text, new Attribute[]{ID, NAME, VALUE,}));
+        register("head", define(text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
         register("paragraph", define(new Attribute[]{ID, NAME, VALUE}));
         register("divisor", define(new Attribute[]{ID, NAME, COLOR, STROKE_WIDTH}));
-
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("fileRepo", define(new Attribute[]{ID, FOLDER, DEFAULT_EXTENSION}));
@@ -133,7 +136,7 @@ public class TagDef {
                 new Attribute("retrieveMeta", Boolean.class)
         }));
 
-        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, PLACEHOLDER};
+        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER};
         Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
@@ -147,13 +150,13 @@ public class TagDef {
         register("select", select);
         register("autocomplete", select);
         register("radio", define(select, new Attribute[]{ORIENTATION, WEIGHTS}));
-        register("options", define(new Attribute[]{VALUE_PROPERTY, LABEL_EXPRESSION, LABEL_FILTERING_PROP}));
+        register("options", define(new Attribute[]{VALUE_PROPERTY, LABEL_EXPRESSION, LABEL_FILTERING_PROP}, scriptHooks));
         // attribute value in option element is a fixed value we don't need an expression
         Attribute optionValue = new Attribute("value");
-        register("option", define(new Attribute[]{ID, optionValue, LABEL}));
+        register("option", define(new Attribute[]{ID, optionValue, LABEL}, scriptHooks));
 
-        register("row", define(new Attribute[]{ID}));
-        register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
+        register("button", define(baseInput, new Attribute[]{ROUTE}));
+        register("link", define(baseInput, new Attribute[]{ROUTE}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
                 REGISTER_IN_HISTORY, FORCE_REFRESH, MESSAGE});
@@ -165,18 +168,17 @@ public class TagDef {
         register("delete", actionAttributes);
         register("nav", actionAttributes);
 
-        register("link", define(base, new Attribute[]{ROUTE}));
-
         register("tab", define(base, new Attribute[]{ID}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));
 
         register("table", define(base, new Attribute[]{ID, HEADER_TEXT, WEIGHTS, BORDER}));
-        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS, WEIGHTS}));
+        register("row", define(base, new Attribute[]{ID, LABEL, PROPERTIES, COLSPANS, WEIGHTS}, scriptHooks));
+        register("column", define(base, new Attribute[]{HEADER_TEXT, FILTERING, ORDERING}));
 
         register("validator", define(base, new Attribute[]{TYPE_STR}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
 
-        register("button", define(baseInput, new Attribute[]{ROUTE}));
+        register("script", define(new Attribute[]{}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

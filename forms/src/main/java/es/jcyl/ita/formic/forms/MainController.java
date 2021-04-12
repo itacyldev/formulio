@@ -39,17 +39,23 @@ import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -68,7 +74,7 @@ public class MainController implements ContextAwareComponent {
     private CompositeContext globalContext;
 
     // helper to render the uiView in an Android Context
-    private ViewRenderHelper renderHelper = new ViewRenderHelper();
+    private ViewRenderer viewRenderer = new ViewRenderer();
     private RenderingEnv renderingEnv;
 
     // user action management
@@ -76,6 +82,7 @@ public class MainController implements ContextAwareComponent {
     private FormController formController;
     private FormControllerFactory formControllerFactory;
     private ReactivityFlowManager flowManager;
+    private ScriptEngine scriptEngine;
 
     // navigation control
     private Router router;
@@ -90,13 +97,25 @@ public class MainController implements ContextAwareComponent {
         return _instance;
     }
 
-    private MainController() {
+    MainController() {
         formControllerFactory = FormControllerFactory.getInstance();
         router = new Router(this);
         actionController = new ActionController(this, router);
         renderingEnv = new RenderingEnv(actionController);
         flowManager = ReactivityFlowManager.getInstance();
+        scriptEngine = ScriptEngine.getInstance();
         registerFormTypeViews();
+    }
+
+    private void setupScriptingEnv(es.jcyl.ita.formic.core.context.Context ctx) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("ctx", ctx);
+        props.put("renderEnv", this.renderingEnv);
+        props.put("console", new DevConsole());
+        scriptEngine.initEngine(props);
+        // add event handler to execute scripts during component rendering
+        ViewRendererEventHandler handler = new RhinoViewRenderHandler(scriptEngine);
+        this.viewRenderer.setEventHandler(handler);
     }
 
 
@@ -118,29 +137,42 @@ public class MainController implements ContextAwareComponent {
         setupParamsContext(params);
         try {
             // get form configuration for given formId and load data
-            this.formController = formControllerFactory.getController(formId);
+            FormController controller = formControllerFactory.getController(formId);
+            if (controller == null) {
+                throw new FormException(error(String.format("No form controller found with id [%s] " +
+                        "check route string.", formId)));
+            }
+            this.formController = controller;
             this.formController.load(globalContext);
+            this.scriptEngine.initScope();
         } catch (Exception e) {
             restoreState();
             throw e;
         }
 
         // get the activity class for current controller
-        Class activityClazz = getViewImpl(formController);
+        initActivity(andContext);
+    }
 
+    protected void initActivity(android.content.Context context) {
+        Class activityClazz = getViewImpl(formController);
         // Start activity to get Android context
-        Intent intent = new Intent(andContext, activityClazz);
-        andContext.startActivity(intent);
+        Intent intent = new Intent(context, activityClazz);
+        context.startActivity(intent);
     }
 
     private void saveState() {
-        this.state = new State(this.formController, globalContext.getContext("params"));
+        if (this.formController != null) {
+            this.state = new State(this.formController, globalContext.getContext("params"));
+        }
     }
 
     private void restoreState() {
-        this.formController = this.state.fc;
-        globalContext.addContext(this.state.params);
-        this.formController.load(globalContext);
+        if (state != null) {
+            this.formController = this.state.fc;
+            globalContext.addContext(this.state.params);
+            this.formController.load(globalContext);
+        }
     }
 
 
@@ -179,7 +211,7 @@ public class MainController implements ContextAwareComponent {
 
     }
 
-    private Class getViewImpl(FormController formController) {
+    protected Class getViewImpl(FormController formController) {
         return staticMap.get(formController.getClass());
     }
 
@@ -201,10 +233,14 @@ public class MainController implements ContextAwareComponent {
             renderingEnv.getFormContext().clearMessages();
         }
         renderingEnv.clearSelection();
-        View view = renderHelper.render(renderingEnv, uiView);
+
+        formController.onBeforeRender();
+        View view = viewRenderer.render(renderingEnv, uiView);
         renderingEnv.enableInterceptors();
         // set the root View element to renderingEnv for re-renders in the same view
         renderingEnv.setViewRoot(view);
+
+        formController.onAfterRender(view);
         return view;
     }
 
@@ -220,9 +256,9 @@ public class MainController implements ContextAwareComponent {
         InputWidget fieldView = viewContext.findInputFieldViewById(component.getId());
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
-        View newView = renderHelper.render(this.renderingEnv, component);
+        View newView = viewRenderer.render(this.renderingEnv, component);
         renderingEnv.enableInterceptors();
-        renderHelper.replaceView(fieldView, newView);
+        viewRenderer.replaceView(fieldView, newView);
 
         if (!reactiveCall) {
             flowManager.execute(component.getAbsoluteId());
@@ -235,7 +271,7 @@ public class MainController implements ContextAwareComponent {
      * @param component: ui component that fires the changes in the View.
      */
     public void updateDependants(UIComponent component) {
-        renderHelper.renderDeps(this.renderingEnv, component);
+        viewRenderer.renderDeps(this.renderingEnv, component);
     }
 
     /**
@@ -245,7 +281,7 @@ public class MainController implements ContextAwareComponent {
         // render again the form to show validation error
         renderingEnv.disableInterceptors();
         try {
-            View newView = renderHelper.render(renderingEnv, formController.getView());
+            View newView = viewRenderer.render(renderingEnv, formController.getView());
 
             // the View elements to replace hang from the content view of the formController
             ViewGroup contentView = formController.getContentView();
@@ -301,10 +337,11 @@ public class MainController implements ContextAwareComponent {
     @Override
     public void setContext(es.jcyl.ita.formic.core.context.Context ctx) {
         if (!(ctx instanceof CompositeContext)) {
-            throw new IllegalArgumentException(DevConsole.error("MainController needs an instance of CompositeContext to use it as GlobalContext."));
+            throw new IllegalArgumentException(error("MainController needs an instance of CompositeContext to use it as GlobalContext."));
         }
         this.globalContext = (CompositeContext) ctx; // global context is received
         renderingEnv.setGlobalContext(this.globalContext);
+        setupScriptingEnv(ctx);
     }
 
 

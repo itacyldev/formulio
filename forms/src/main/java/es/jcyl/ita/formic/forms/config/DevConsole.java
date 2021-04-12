@@ -226,9 +226,8 @@ public class DevConsole {
         } else {
             System.out.println(effMsg);
         }
-//        Log.e(DEV_CONSOLE, effMsg);
         if (t != null) {
-//            logger.error(DEV_CONSOLE, Log.getStackTraceString(t));
+            System.err.println(t.getMessage());
         }
         return effMsg;
     }
@@ -360,6 +359,16 @@ public class DevConsole {
 
     public static int getLevel() {
         return level;
+    }
+
+    /***********/
+    /** Instance accesible methods to give access to console in js scripts
+    /***********/
+    public void log(String msg){
+        DevConsole.info(msg);
+    }
+    public void err(String msg){
+        DevConsole.error(msg);
     }
 
 

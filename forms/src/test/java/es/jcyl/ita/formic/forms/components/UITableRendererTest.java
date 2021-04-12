@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 import static org.mockito.Mockito.mock;
@@ -51,7 +51,7 @@ public class UITableRendererTest {
 
     Context ctx;
 
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     @Before
     public void setup() {

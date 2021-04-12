@@ -45,7 +45,7 @@ import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -57,7 +57,7 @@ public class SpinnerViewConverterTest {
     FormDataBuilder formBuilder = new FormDataBuilder();
     MultiOptionComponentBuilder selectBuilder = new MultiOptionComponentBuilder(UISelect.class);
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     Context ctx;
 

@@ -40,7 +40,7 @@ import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 
 import static org.mockito.Mockito.mock;
 
@@ -52,7 +52,7 @@ import static org.mockito.Mockito.mock;
 public class AutocompleteStaticViewConverterTest {
 
     AutoCompleteDataBuilder autoBuilder = new AutoCompleteDataBuilder();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     @BeforeClass
     public static void setUp() {

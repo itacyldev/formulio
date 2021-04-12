@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.context.impl.FormContext;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
@@ -38,12 +39,16 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  * Intermediate class to encapsulate rendering to facilitate testing
  */
-public class ViewRenderHelper {
+public class ViewRenderer {
+
+    private ViewRendererEventHandler eventHandler = new NoOpHandler();
 
     public View render(RenderingEnv env, UIComponent root) {
         // enrich the execution environment with current form's context
@@ -55,6 +60,12 @@ public class ViewRenderHelper {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
+        // setup context in script engine
+        if (component instanceof UIForm) {
+            eventHandler.onNewFormFound((UIForm) component);
+        }
+        eventHandler.onBeforeRenderComponent(component);
+        // render android view
         Widget widget;
         if (checkDeferred && hasDeferredExpression(component, env)) {
             // insert a delegated view component as placeholder to render later
@@ -62,15 +73,21 @@ public class ViewRenderHelper {
         } else {
             widget = renderer.render(env, component);
         }
+        // setup view context
         if (component instanceof UIForm) {
             // configure viewContext
-            ((UIForm) component).getContext().setView(widget);
-            env.setFormContext(((UIForm) component).getContext());
+            FormContext fContext = ((UIForm) component).getContext();
+            fContext.setView(widget);
+            env.setFormContext(fContext);
+            // set in script context
+            eventHandler.onViewContextChanged(fContext);
         } else {
             if (env.getFormContext() != null) {
                 env.getFormContext().getViewContext().registerComponentView(component, widget);
             }
         }
+        eventHandler.onAfterRenderComponent(widget);
+
         // if current view is not visible, don't render children
         if (!ViewHelper.isVisible(widget)) {
             return widget;
@@ -84,24 +101,22 @@ public class ViewRenderHelper {
                 Widget groupView = (Widget) widget;
                 gRenderer.initGroup(env, groupView);
 
-
                 List<View> viewList = new ArrayList<>();
                 if (groupView instanceof EntityListProvider) {
                     // save the old entityContext
                     Entity oldEntity = env.getFormContext().getEntity();
 
                     List<Entity> entities = ((EntityListProvider) groupView).getEntities();
-
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         env.getFormContext().setEntity(entity);
+                        eventHandler.onEntityContextChanged(env.getFormContext());
                         View view = render(env, component.getChildren()[0]);
                         viewList.add(view);
                     }
-
                     // restore entity context
                     env.getFormContext().setEntity(oldEntity);
-
+                    eventHandler.onEntityContextChanged(env.getFormContext());
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
@@ -120,6 +135,8 @@ public class ViewRenderHelper {
         }
         return widget;
     }
+
+
 
     private void setupFormContext(UIComponent root, RenderingEnv env) {
         if (root instanceof UIForm) {
@@ -241,6 +258,38 @@ public class ViewRenderHelper {
                     replaceView(view, newView);
                 }
             }
+        }
+    }
+
+    public void setEventHandler(ViewRendererEventHandler handler) {
+        this.eventHandler = handler;
+    }
+
+    private class NoOpHandler implements ViewRendererEventHandler {
+
+        @Override
+        public void onNewFormFound(UIForm form) {
+
+        }
+
+        @Override
+        public void onEntityContextChanged(FormContext fContext) {
+
+        }
+
+        @Override
+        public void onViewContextChanged(FormContext fContext) {
+
+        }
+
+        @Override
+        public void onBeforeRenderComponent(UIComponent component) {
+
+        }
+
+        @Override
+        public void onAfterRenderComponent(Widget widget) {
+
         }
     }
 }
