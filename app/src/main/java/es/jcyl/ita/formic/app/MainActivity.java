@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -32,13 +33,13 @@ import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
@@ -193,25 +194,22 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
-            Toast.makeText(this, warn("No projects found!!. Create a folder under " + projectsFolder),
-                    Toast.LENGTH_LONG).show();
+            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-            Toast.makeText(this,
-                    DevConsole.info(this.getString(R.string.project_opening_init,
-                            (String) prj.getId())),
-                    Toast.LENGTH_LONG).show();
+
+            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
+                    (String) prj.getId())), Toast.LENGTH_LONG);
             try {
                 Config.getInstance().setCurrentProject(prj);
-                Toast.makeText(this,
+                UserMessagesHelper.toast(this,
                         DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG);
             } catch (Exception e) {
-                Toast.makeText(this,
-                        DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
-                        Toast.LENGTH_LONG).show();
+                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
+                        Toast.LENGTH_LONG);
             }
         }
         initialize();
@@ -266,5 +264,4 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         }
     }
-
 }
