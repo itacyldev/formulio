@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.app.dev;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,6 +32,11 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 public class DevConsoleActivity extends AppCompatActivity {
 
     int logLevel;
+
+    public static final int COLOR_ERROR = Color.RED;
+    public static final int COLOR_INFO = Color.GREEN;
+    public static final int COLOR_WARN = Color.YELLOW;
+    public static final int COLOR_DEBUG = Color.BLUE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +64,7 @@ public class DevConsoleActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch((String) ((AppCompatCheckedTextView) view).getText()) {
+                switch ((String) ((AppCompatCheckedTextView) view).getText()) {
                     case "DEBUG":
                         setLogLevel(Log.DEBUG, Level.DEBUG);
                         break;
@@ -115,7 +122,7 @@ public class DevConsoleActivity extends AppCompatActivity {
 
     }
 
-    private Spinner createSpinner(){
+    private Spinner createSpinner() {
         Spinner spinner = this.findViewById(R.id.dev_console_system_log_level);
         final String[] levels = {
                 getString(R.string.debug),
@@ -128,11 +135,11 @@ public class DevConsoleActivity extends AppCompatActivity {
         arrayAdapter.notifyDataSetChanged();
 
         spinner.setAdapter(arrayAdapter);
-        spinner.setSelection(((ArrayAdapter<String>)arrayAdapter).getPosition(DevConsole.getStrLevel(logLevel)));
+        spinner.setSelection(((ArrayAdapter<String>) arrayAdapter).getPosition(DevConsole.getStrLevel(logLevel)));
         return spinner;
     }
 
-    private RadioGroup createRadioGroup(){
+    private RadioGroup createRadioGroup() {
         RadioGroup radioGroup = this.findViewById(R.id.dev_console_log_level);
         radioGroup.addView(createRadioButton(getString(R.string.debug), Log.DEBUG));
         radioGroup.addView(createRadioButton(getString(R.string.info), Log.INFO));
@@ -152,10 +159,41 @@ public class DevConsoleActivity extends AppCompatActivity {
 
     private void setConsoleBodyText(EditText text, String filterBy, int level) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        for (SpannableString spannable : DevConsole.getMessages(filterBy, level)) {
-            builder.append(spannable);
+        for (String msg : DevConsole.getMessages(filterBy, level)) {
+            SpannableString spannableMsg = getSpannableString(msg);
+            builder.append(spannableMsg);
         }
         text.setText(builder, TextView.BufferType.SPANNABLE);
+    }
+
+    private SpannableString getSpannableString(String msg) {
+        int color = getLevelColor(msg);
+        SpannableString spannable = new SpannableString(msg);
+        int start = 0;
+        int end = msg.length();
+        if (color != COLOR_ERROR) {
+            start = msg.indexOf("[");
+            end = msg.indexOf("]") + 1;
+            //end = start + strLevel.length();
+        }
+        spannable.setSpan(new ForegroundColorSpan(color), start, end, 0);
+        return spannable;
+    }
+
+    private int getLevelColor(String msg) {
+        int color = Color.BLACK;
+        if (msg.contains("[DEBUG]")) {
+            color = COLOR_DEBUG;
+        } else if (msg.contains("[INFO]")) {
+            color = COLOR_INFO;
+        } else
+            if (msg.contains("[ERROR]")) {
+            color = COLOR_ERROR;
+        } else if (msg.contains("[WARN]")) {
+            color = COLOR_WARN;
+        }
+
+        return color;
     }
 
     protected void setTheme() {
