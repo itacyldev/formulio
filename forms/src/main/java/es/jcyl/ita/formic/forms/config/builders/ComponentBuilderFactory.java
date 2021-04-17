@@ -37,7 +37,8 @@ import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.EntityMappingBuilder;
-import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.MemoRepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
@@ -107,18 +108,20 @@ public class ComponentBuilderFactory {
         registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
+        registerBuilder("filerepo", newBuilder(FileRepoConfigBuilder.class, "fileRepo"));
+        registerBuilder("memorepo", newBuilder(MemoRepoConfigBuilder.class, "memoRepo"));
+
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
-        registerBuilder("fileRepo", newBuilder(FileRepoBuilder.class, "fileRepo"));
         registerBuilder("meta", newBuilder(RepoMetaConfigBuilder.class, "meta"));
         registerBuilder("property", newDefaultBuilder(PropertyConfig.class, "property"));
         registerBuilder("mapping", newBuilder(EntityMappingBuilder.class, "mapping"));
-
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
 
         registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
         registerBuilder("datalistitem", newBasicBuilder(UIDatalistItem.class, "datalistitem"));
+
         registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
         registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
         registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
@@ -160,8 +163,6 @@ public class ComponentBuilderFactory {
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
         registerBuilder("context", new ContextBuilder());
 
-        //registerBuilder("param", newBasicBuilder(ValidatorBuilder.class, "validator"));
-
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
@@ -176,7 +177,7 @@ public class ComponentBuilderFactory {
 
 
     public void registerBuilder(String tagName, ComponentBuilder builder) {
-        _builders.put(tagName, builder);
+        _builders.put(tagName.toLowerCase(), builder);
     }
 
     public void registerAttResolver(String resolverId, AbstractAttributeResolver resolver) {
@@ -190,7 +191,7 @@ public class ComponentBuilderFactory {
     }
 
     public ComponentBuilder getBuilder(String tagName) {
-        return _builders.get(tagName);
+        return _builders.get(tagName.toLowerCase());
     }
 
     private ComponentBuilder newBuilder(Class clazz, String tagName) {

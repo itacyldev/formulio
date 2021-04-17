@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -138,7 +138,7 @@ public class UICard extends UIComponent {
     public String getLabelValue(Context context) {
         String labelValue = null;
         if (StringUtils.isNotEmpty(label)) {
-            labelValue = JexlUtils.eval(context, label).toString();
+            labelValue = JexlFormUtils.eval(context, label).toString();
         }
         return labelValue;
     }

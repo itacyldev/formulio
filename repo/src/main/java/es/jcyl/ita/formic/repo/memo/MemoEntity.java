@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms;
+package es.jcyl.ita.formic.repo.memo;
 
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
@@ -24,19 +24,18 @@ import es.jcyl.ita.formic.repo.source.EntitySource;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class DummyEntity extends Entity {
+public class MemoEntity extends Entity {
 
+    public MemoEntity(EntitySource source) {
+        this(source, null, null);
+    }
 
-    public DummyEntity(EntitySource source, EntityMeta meta, Object id) {
+    public MemoEntity(EntitySource source, EntityMeta meta) {
+        this(source, meta, null);
+    }
+
+    public MemoEntity(EntitySource source, EntityMeta meta, Object id) {
         super(source, meta, id);
-    }
-
-    @Override
-    public void set(String prop, Object value) {
-        this.getProperties().put(prop, value);
-    }
-
-    public void setId(Object id) {
-
+        this.validateProperties = false;
     }
 }

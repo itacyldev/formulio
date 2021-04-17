@@ -30,6 +30,7 @@ import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -251,7 +252,7 @@ public class DummyFormConfigReader {
 //        muniAuto.addValidator(new RequiredValidator());
         // muni values depend on selected province
         Filter f = new SQLQueryFilter();
-        Filter muniFilter = FilterHelper.createInstance(muniRepo);
+        Filter muniFilter = FilterRepoUtils.createInstance(muniRepo);
         Criteria criteria = Criteria.and(
                 ConditionBinding.cond(Condition.eq("prov", null), exprFactory.create("${view.provincia}")),
                 ConditionBinding.cond(Condition.contains("name", null), exprFactory.create("${this.value}")));
@@ -271,7 +272,7 @@ public class DummyFormConfigReader {
 //        agentsAC.setOptionLabelExpression(exprFactory.create("${entity.contact_id} - ${entity.first_name}, ${entity.last_name}"));
 //        agentsAC.setOptionLabelFilteringProperty("name");
 
-        Filter agentFilter = FilterHelper.createInstance(agents);
+        Filter agentFilter = FilterRepoUtils.createInstance(agents);
         criteria = Criteria.or(
                 ConditionBinding.cond(Condition.eq("first_name", null), exprFactory.create("${this.value}")),
                 ConditionBinding.cond(Condition.contains("last_name", null), exprFactory.create("${this.value}")));

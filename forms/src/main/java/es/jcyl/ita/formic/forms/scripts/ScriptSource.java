@@ -20,7 +20,7 @@ package es.jcyl.ita.formic.forms.scripts;
  */
 public class ScriptSource {
     String source;
-    String fileSource;
+    String src;
 
     public String getSource() {
         return source;
@@ -30,11 +30,11 @@ public class ScriptSource {
         this.source = source;
     }
 
-    public String getFileSource() {
-        return fileSource;
+    public String getSrc() {
+        return src;
     }
 
-    public void setFileSource(String fileSource) {
-        this.fileSource = fileSource;
+    public void setSrc(String src) {
+        this.src = src;
     }
 }

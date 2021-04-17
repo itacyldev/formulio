@@ -32,14 +32,14 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Criteria;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -89,7 +89,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
      */
     private es.jcyl.ita.formic.repo.query.Filter setupFilter(CompositeContext context) {
         Repository repo = component.getRepo();
-        es.jcyl.ita.formic.repo.query.Filter f = FilterHelper.createInstance(repo);
+        es.jcyl.ita.formic.repo.query.Filter f = FilterRepoUtils.createInstance(repo);
 
         if (defFilter != null) {
             FilterHelper.evaluateFilter(context, defFilter, f, component.getMandatoryFilters());
@@ -101,7 +101,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
 
 
     private es.jcyl.ita.formic.repo.query.Filter createDefaultDefinitionFilter() {
-        es.jcyl.ita.formic.repo.query.Filter f = FilterHelper.createInstance(component.getRepo());
+        es.jcyl.ita.formic.repo.query.Filter f = FilterRepoUtils.createInstance(component.getRepo());
         // add default criteria using autocomplete view input
         Criteria criteria = FilterHelper.singleCriteria(component.getOptionLabelFilteringProperty(), THIS_VALUE);
         f.setExpression(criteria);
@@ -191,7 +191,7 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         @Override
         public String getLabel() {
             if (cachedLabel == null) {
-                Object label = JexlUtils.eval(entity, component.getOptionLabelExpression());
+                Object label = JexlFormUtils.eval(entity, component.getOptionLabelExpression());
                 cachedLabel = (String) ConvertUtils.convert(label, String.class);
             }
             return cachedLabel;

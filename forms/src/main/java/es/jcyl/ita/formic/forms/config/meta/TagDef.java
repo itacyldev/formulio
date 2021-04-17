@@ -67,7 +67,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_AFTER_RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PLACEHOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
@@ -78,6 +77,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SELECTED;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SRC;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.STROKE_WIDTH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TEMPLATE;
@@ -125,7 +125,9 @@ public class TagDef {
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("fileRepo", define(new Attribute[]{ID, FOLDER, DEFAULT_EXTENSION}));
-        register("repofilter", define(new Attribute[]{ID, DBFILE, DBTABLE}));
+        register("memoRepo", define(new Attribute[]{ID, PROPERTIES}));
+
+        register("repofilter", define(new Attribute[]{ID}));
         register("meta", define(new Attribute[]{PROPERTIES}));
         register("property", define(new Attribute[]{NAME, EXPRESSION, COLUMN_NAME, EXPRESSION_TYPE, CONVERTER, EVAL_ON}));
         register("mapping", define(new Attribute[]{ID, REPO, PROPERTY,
@@ -178,7 +180,7 @@ public class TagDef {
         register("validator", define(base, new Attribute[]{TYPE_STR}));
         register("param", define(base, new Attribute[]{NAME, VALUE}));
 
-        register("script", define(new Attribute[]{}));
+        register("script", define(new Attribute[]{SRC}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

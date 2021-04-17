@@ -9,7 +9,7 @@ import java.util.Set;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
@@ -210,7 +210,7 @@ public abstract class UIComponent implements Identificable {
     private Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
         Object value;
         try{
-            value = JexlUtils.eval(context, valueBindingExpression);
+            value = JexlFormUtils.eval(context, valueBindingExpression);
         } catch (Exception e) {
             error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
             value = null;
@@ -223,7 +223,7 @@ public abstract class UIComponent implements Identificable {
             return true;
         } else {
             // evaluate expression against context
-            Object value = JexlUtils.eval(context, this.renderExpression);
+            Object value = JexlFormUtils.eval(context, this.renderExpression);
             try {
                 return (Boolean) ConvertUtils.convert(value, Boolean.class);
             } catch (Exception e) {
@@ -295,7 +295,7 @@ public abstract class UIComponent implements Identificable {
             return false;
         } else {
             try {
-                return JexlUtils.eval(context, this.readOnly);
+                return JexlFormUtils.eval(context, this.readOnly);
             } catch (Exception e) {
                 error("Error while trying to evaluate JEXL expression: "+this.readOnly.toString(),e);
                 return null;

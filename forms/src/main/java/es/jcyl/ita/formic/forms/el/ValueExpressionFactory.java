@@ -37,7 +37,7 @@ public class ValueExpressionFactory {
     }
 
     public ValueBindingExpression create(String expression) {
-        JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
+        JxltEngine.Expression jexlExpr = JexlFormUtils.createExpression(expression);
         if (isLiteralExpression(jexlExpr)) {
             return new LiteralBindingExpression(expression);
         } else {
@@ -46,7 +46,7 @@ public class ValueExpressionFactory {
     }
 
     public ValueBindingExpression create(String expression, Class type) {
-        JxltEngine.Expression jexlExpr = JexlUtils.createExpression(expression);
+        JxltEngine.Expression jexlExpr = JexlFormUtils.createExpression(expression);
         if (isLiteralExpression(jexlExpr)) {
             return new LiteralBindingExpression(ConvertUtils.convert(expression, type));
         } else {

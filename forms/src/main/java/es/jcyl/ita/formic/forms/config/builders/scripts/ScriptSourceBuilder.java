@@ -15,17 +15,21 @@ package es.jcyl.ita.formic.forms.config.builders.scripts;
  * limitations under the License.
  */
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.scripts.ScriptSource;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -44,14 +48,25 @@ public class ScriptSourceBuilder extends AbstractComponentBuilder<ScriptSource> 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<ScriptSource> node) {
         // get script text and store relacted to current formController
-        List<String> texts = node.getTexts();
-        String source = StringUtils.join(texts, '\n');
+        String source;
+        if (node.hasAttribute("src")) {
+            try {
+                String absFilePath = node.getElement().getSrc();
+                source = FileUtils.readFileToString(new File(absFilePath), "UTF-8");
+            } catch (IOException e) {
+                throw new ConfigurationException(error(String.format("An error occurred while trying to read " +
+                        "source script from path [%s] defined in file ${file}", node.getAttribute("src")), e));
+            }
+        } else {
+            List<String> texts = node.getTexts();
+            source = StringUtils.join(texts, '\n');
 
+        }
         ConfigNode controllerNode = BuilderHelper.findParentController(node);
         try {
             ScriptEngine.getInstance().store(controllerNode.getId(), source);
         } catch (Exception e) {
-            DevConsole.error(source);
+            error(source);
             throw new ConfigurationException("An error occurred while trying to load script in file ${file}", e);
         }
     }

@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
@@ -75,7 +75,7 @@ public class EnvExecutionContextTest {
         UIForm f1 = createForm();
         UIForm f2 = createForm();
 
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, f1, f2);
+        FormEditController fc = DevFormBuilder.createFormEditController(f1, f2);
 
         // render the view and check de resulting context
         CompositeContext globalContext = new MapCompositeContext();
@@ -99,20 +99,20 @@ public class EnvExecutionContextTest {
         String id2 = "view." + lastForm.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id1));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id2));
 
         // Access each form context using absolute paths
         id1 = f1.getId() + ".entity." + f1.getChildren()[0].getId();
         id2 = f2.getId() + ".view." + f2.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id1));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id2));
 
         // lets check global context contains a "form1","form2" context
-        Assert.assertNotNull(JexlUtils.eval(globalContext, id1));
-        Assert.assertNotNull(JexlUtils.eval(globalContext, id2));
+        Assert.assertNotNull(JexlFormUtils.eval(globalContext, id1));
+        Assert.assertNotNull(JexlFormUtils.eval(globalContext, id2));
 
     }
 

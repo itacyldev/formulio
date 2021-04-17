@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -118,7 +118,7 @@ public class UILinkBuilderTest {
             ValueBindingExpression ve = factory.create(strValue, String.class);
             Assert.assertNotNull(ve);
             Assert.assertEquals(ve.getClass(), LiteralBindingExpression.class);
-            AssertUtils.assertEquals("value" + (i + 1), JexlUtils.eval(new BasicContext("t"), ve));
+            AssertUtils.assertEquals("value" + (i + 1), JexlFormUtils.eval(new BasicContext("t"), ve));
 
         }
     }

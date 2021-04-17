@@ -17,51 +17,52 @@ package es.jcyl.ita.formic.forms.integration;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mini2Dx.collections.CollectionUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
+import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.components.datatable.DatatableWidget;
+import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
-import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.meta.PropertyType;
+import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
+import es.jcyl.ita.formic.repo.memo.MemoRepository;
+import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
-import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -102,8 +103,72 @@ public class ProjectRhinoScriptIntegrationTest {
 
         DevFormNav formNav = new DevFormNav(ctx, mc);
         formNav.nav("form2-edit1");
-
     }
 
+    @Test
+    public void testUseRepoInMemory() throws Exception {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        ctx.setTheme(R.style.FormudruidLight);
+
+        // register memory repo
+        RepositoryFactory factory = RepositoryFactory.getInstance();
+        RepositoryBuilder repoBuilder = factory.getBuilder(new MemoSource("memoRepoTest"));
+        MemoRepository repo = (MemoRepository) repoBuilder.build();
+        repo.setPropertyNames(new String[]{"prop1", "prop2", "prop3"});
+
+        // create a form with a datatable, and set repo to datatable
+        UIForm form = DevFormBuilder.createOneFieldForm();
+        FormEditController formController = DevFormBuilder.createFormEditController(form);
+        UIDatatableBuilder dtBuilder = new UIDatatableBuilder("table");
+        UIDatatable table = dtBuilder.createDataTableFromRepo(repo);
+        form.addChild(table);
+        // call function
+        form.setOnBeforeRenderAction("mixRepoData");
+
+        // Store JS related to form controller
+        File srcFile = TestUtils.findFile("scripts/mixRepoData.js");
+        ScriptEngine engine = ScriptEngine.getInstance();
+        engine.store(formController.getId(), FileUtils.readFileToString(srcFile, "UTF-8"));
+
+        // prepare rendering env.
+        RenderingEnv env = prepareRenderingEnv(ctx, engine);
+
+        // add event handler to execute scripts during component rendering
+        ViewRenderer renderer = new ViewRenderer();
+        renderer.setEventHandler(new RhinoViewRenderHandler(ScriptEngine.getInstance()));
+
+        // render form
+        View formView = renderer.render(env, form);
+
+        // The script will insert new entities in the memory repo, the number of rows
+        // of the datable widget
+        long count = repo.count(null);
+        Assert.assertEquals(10, count);
+
+        View dtView = ViewHelper.findComponentView(formView, table);
+        Assert.assertNotNull(dtView);
+        Assert.assertNotNull(((DatatableWidget) dtView).getEntities());
+        Assert.assertEquals(10, ((DatatableWidget) dtView).getEntities().size());
+    }
+
+    private RenderingEnv prepareRenderingEnv(Context ctx, ScriptEngine engine) {
+        // Prepare global CONTEXT
+        CompositeContext globalContext = new UnPrefixedCompositeContext();
+        globalContext.put("repos", new RepoAccessContext());
+        ActionController mcAC = mock(ActionController.class);
+
+        // Prepare rendering environment
+        RenderingEnv env = new RenderingEnv(mcAC);
+        env.setGlobalContext(globalContext);
+        env.setViewContext(ctx);
+
+        // init scripting environment with common objects
+        Map<String, Object> props = new HashMap<>();
+        props.put("ctx", globalContext);
+        props.put("renderEnv", env);
+        props.put("console", new DevConsole());
+        engine.initEngine(props);
+        return env;
+    }
 
 }

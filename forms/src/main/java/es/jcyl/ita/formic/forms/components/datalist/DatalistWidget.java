@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 
 /**
@@ -118,7 +119,7 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
      * @return
      */
     private Filter setupFilter(CompositeContext context, Filter defFilter) {
-        Filter f = FilterHelper.createInstance(repo);
+        Filter f = FilterRepoUtils.createInstance(repo);
         if (defFilter != null) {
             FilterHelper.evaluateFilter(context, defFilter, f);
         }

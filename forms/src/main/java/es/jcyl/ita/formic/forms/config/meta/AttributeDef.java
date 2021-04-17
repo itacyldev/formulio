@@ -129,12 +129,12 @@ public class AttributeDef {
     public static Attribute ITALIC = new Attribute("italic", Boolean.class);
     public static Attribute UPPERCASE = new Attribute("uppercase", Boolean.class);
     public static Attribute UNDERLINED = new Attribute("underlined", Boolean.class);
-
     public static Attribute COLOR = new Attribute("color", "color", "color");
     public static Attribute STROKE_WIDTH = new Attribute("strokeWidth", Integer.class);
 
+    // scripting
     public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
     public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
-
+    public static Attribute SRC = new Attribute("src", "src", "pathResolver");
 
 }

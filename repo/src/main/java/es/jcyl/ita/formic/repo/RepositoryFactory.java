@@ -31,6 +31,8 @@ import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.source.NativeSQLEntitySource;
 import es.jcyl.ita.formic.repo.media.builders.FileRepositoryBuilder;
 import es.jcyl.ita.formic.repo.media.source.FileEntitySource;
+import es.jcyl.ita.formic.repo.memo.builders.MemoRepositoryBuilder;
+import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 import es.jcyl.ita.formic.repo.source.EntitySource;
 
 /**
@@ -65,10 +67,11 @@ public class RepositoryFactory implements ContextAwareComponent {
     }
 
     private void readConfig() {
-        // TODO: this info must be provided through xml files
+        // TODO: this info must be provided through json/xml files
         defaultRepoBuildersMap.put(DBTableEntitySource.class, SQLiteGreenDAORepoBuilder.class);
         defaultRepoBuildersMap.put(NativeSQLEntitySource.class, RawSQLiteRepoBuilder.class);
         defaultRepoBuildersMap.put(FileEntitySource.class, FileRepositoryBuilder.class);
+        defaultRepoBuildersMap.put(MemoSource.class, MemoRepositoryBuilder.class);
     }
 
     public Repository getRepo(String entityType) {

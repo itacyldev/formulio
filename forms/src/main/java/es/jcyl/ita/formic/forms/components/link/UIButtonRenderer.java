@@ -27,7 +27,7 @@ import java.io.Serializable;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -51,7 +51,7 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
 
         Button addButton = widget.findViewById(R.id.btn_add);
 
-        if(StringUtils.isNotBlank(component.getLabel())){
+        if (StringUtils.isNotBlank(component.getLabel())) {
             addButton.setText(component.getLabel());
         }
 
@@ -68,7 +68,7 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                         UserAction action = UserAction.navigate(component.getRoute(), component);
                         if (component.hasParams()) {
                             for (UIParam param : component.getParams()) {
-                                Object value = JexlUtils.eval(env.getContext(), param.getValue());
+                                Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
                                 action.addParam(param.getName(), (Serializable) value);
                             }
                         }
