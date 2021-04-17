@@ -33,6 +33,9 @@
     <color name="buttonHighlight_Light">#ff554f</color>
     <color name="buttonText_Light">#FFFFFF</color>
 
+    <color name="light_toastText">#D7D7D7</color>
+    <color name="light_toastBackGround">#282828</color>
+
 
     <!-- DARK THEME -->
     <color name="dark_PrimaryColorVariant">#26a69a</color>
@@ -63,5 +66,7 @@
     <color name="buttonHighlight_Dark">#81c784</color>
     <color name="buttonText_Dark">#FFFFFF</color>
 
-
+    <color name="dark_toastText">#282828</color>
+    <color name="dark_toastBackGround">#D7D7D7</color>
 </resources>
+

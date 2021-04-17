@@ -214,5 +214,6 @@ public class FormViewContext extends AbstractBaseContext {
             this.inputViews.put(component.getId(), widget);
         }
     }
+
 }
 

@@ -37,6 +37,7 @@ import androidx.core.content.ContextCompat;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
@@ -59,9 +60,10 @@ import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
 import es.jcyl.ita.formic.repo.query.Criteria;
+import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 import es.jcyl.ita.formic.repo.query.Sort;
 
 /**
@@ -170,7 +172,7 @@ public class DatatableWidget extends Widget<UIDatatable>
      * @return
      */
     private Filter setupFilter(CompositeContext context, Filter defFilter) {
-        Filter f = FilterHelper.createInstance(repo);
+        Filter f = FilterRepoUtils.createInstance(repo);
         if (defFilter != null) {
             FilterHelper.evaluateFilter(context, defFilter, f);
         }
@@ -205,11 +207,10 @@ public class DatatableWidget extends Widget<UIDatatable>
     }
 
     private void addNoResults() {
-        TextView list_no_results =  this.findViewById(R.id.list_no_results);
+        TextView list_no_results = this.findViewById(R.id.list_no_results);
         if (this.entities.size() == 0) {
             list_no_results.setVisibility(VISIBLE);
-        }
-        else{
+        } else {
             list_no_results.setVisibility(GONE);
         }
     }
@@ -225,7 +226,7 @@ public class DatatableWidget extends Widget<UIDatatable>
 
         final TextView fieldNameView = output
                 .findViewById(R.id.list_header_textview);
-        fieldNameView.setText(DataUtils.nullFormat(StringUtils.isNotBlank(columnName)?StringUtils.capitalize(columnName):columnName));
+        fieldNameView.setText(DataUtils.nullFormat(StringUtils.isNotBlank(columnName) ? StringUtils.capitalize(columnName) : columnName));
 
         final ImageView searchView = output
                 .findViewById(R.id.list_header_img);
@@ -408,9 +409,16 @@ public class DatatableWidget extends Widget<UIDatatable>
             }
         }
 
-        Filter filter = new SQLQueryFilter();
+        if (this.filter == null) {
+            Filter filter = FilterRepoUtils.createInstance(this.repo);
+        }
         if (conditions.length > 0) {
             Criteria criteria = Criteria.and(conditions);
+            if (this.getComponent().getFilter() != null && this.getComponent().getFilter().getExpression() != null) {
+                List<Expression> expressions = new ArrayList<>(Arrays.asList(criteria.getChildren()));
+                expressions.add(this.getComponent().getFilter().getExpression());
+                criteria.setChildren(expressions.toArray(new Expression[expressions.size()]));
+            }
             filter.setExpression(criteria);
         }
 

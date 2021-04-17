@@ -30,7 +30,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 
 /**

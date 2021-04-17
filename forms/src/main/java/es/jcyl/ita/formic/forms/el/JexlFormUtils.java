@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.repo.Entity;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class JexlUtils {
+public class JexlFormUtils {
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(false).silent(false).create();
 

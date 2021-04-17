@@ -95,7 +95,7 @@ public class FormEditController extends FormController {
 
     private void updateEntityFromView(FormViewContext viewContext, EntityContext entityContext,
                                       UIInputComponent field) {
-        if (field.isBound() && !(Boolean) ConvertUtils.convert(field.isReadOnly(viewContext), Boolean.class) && !field.isNestedProperty()) {
+        if (field.isBound() && !field.isNestedProperty()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();

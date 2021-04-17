@@ -24,6 +24,10 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
 
+<<<<<<<HEAD
+=======
+>>>>>>>develop
+
 /**
  * s
  *

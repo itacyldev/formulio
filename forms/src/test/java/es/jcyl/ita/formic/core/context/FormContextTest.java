@@ -38,7 +38,7 @@ import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
@@ -98,7 +98,7 @@ public class FormContextTest {
         form.setRepo(mockRepo);
 
         // load entity and check the entity context is fulfill
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
 
         FormContext fCtx = form.getContext();
@@ -147,12 +147,12 @@ public class FormContextTest {
         when(mockRepo.getMeta()).thenReturn(meta);
         form.setRepo(mockRepo);
         // use FormController to load form
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
         FormContext fCtx = form.getContext();
 
         // render view to create android view components and viewContext
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        ViewRenderer renderHelper = new ViewRenderer();
         renderHelper.render(env, form);
 
         // check each entity property is correctly set in the form fields

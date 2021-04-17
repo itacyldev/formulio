@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
-public class FileRepoBuilderTest {
+public class FileRepoBuilderConfigTest {
     private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
     @BeforeClass
@@ -48,7 +48,6 @@ public class FileRepoBuilderTest {
         config.setCurrentProject(p);
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
-
         // register repos
         RepositoryUtils.registerMock("contacts");
     }

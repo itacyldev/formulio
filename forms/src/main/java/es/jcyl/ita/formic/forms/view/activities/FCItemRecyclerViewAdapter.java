@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.export.CSVExporter;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment.OnListFragmentInteractionListener;
 
 /**
@@ -193,9 +194,9 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         @Override
         protected void onPostExecute(final String success) {
             if (success.isEmpty()) {
-                Toast.makeText(context, "Export successful!", Toast.LENGTH_SHORT).show();
+                UserMessagesHelper.toast(context, "Export successful!", Toast.LENGTH_SHORT);
             } else {
-                Toast.makeText(context, "Export failed!", Toast.LENGTH_SHORT).show();
+                UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
             }
         }
     }

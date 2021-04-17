@@ -9,7 +9,7 @@ import java.util.Set;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
@@ -34,11 +34,18 @@ public abstract class UIComponent implements Identificable {
 
     protected ValueBindingExpression readOnly;
     protected String readOnlyMessage;
+
+    protected ValueBindingExpression placeHolder;
     /**
      * Indicates if current component value is referencing the value from a related entity and
      * not from the mainEntity.
      */
     private boolean isEntityMapping = false;
+    /**
+     * Scripting hooks
+     */
+    private String onBeforeRenderAction;
+    private String onAfterRenderAction;
 
     /**
      * if the children of this component have to be rendered individually
@@ -189,14 +196,26 @@ public abstract class UIComponent implements Identificable {
         if (this.valueExpression == null) {
             return null;
         } else {
-            // evaluate expression against context
-            try {
-                return JexlUtils.eval(context, this.valueExpression);
-            } catch (Exception e) {
-                error("Error while trying to evaluate JEXL expression: " + this.valueExpression.toString(), e);
-                return null;
+            Object value = getValue(context, this.valueExpression);
+            if (value == null){
+                if (this.placeHolder == null) {
+                    return null;
+                }
+                value =  value = getValue(context, this.placeHolder);
             }
+            return value;
         }
+    }
+
+    private Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
+        Object value;
+        try{
+            value = JexlFormUtils.eval(context, valueBindingExpression);
+        } catch (Exception e) {
+            error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
+            value = null;
+        }
+        return value;
     }
 
     public boolean isRendered(Context context) {
@@ -204,7 +223,7 @@ public abstract class UIComponent implements Identificable {
             return true;
         } else {
             // evaluate expression against context
-            Object value = JexlUtils.eval(context, this.renderExpression);
+            Object value = JexlFormUtils.eval(context, this.renderExpression);
             try {
                 return (Boolean) ConvertUtils.convert(value, Boolean.class);
             } catch (Exception e) {
@@ -221,6 +240,22 @@ public abstract class UIComponent implements Identificable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getOnBeforeRenderAction() {
+        return onBeforeRenderAction;
+    }
+
+    public void setOnBeforeRenderAction(String onBeforeRenderAction) {
+        this.onBeforeRenderAction = onBeforeRenderAction;
+    }
+
+    public String getOnAfterRenderAction() {
+        return onAfterRenderAction;
+    }
+
+    public void setOnAfterRenderAction(String onAfterRenderAction) {
+        this.onAfterRenderAction = onAfterRenderAction;
     }
 
     @Override
@@ -260,7 +295,7 @@ public abstract class UIComponent implements Identificable {
             return false;
         } else {
             try {
-                return JexlUtils.eval(context, this.readOnly);
+                return JexlFormUtils.eval(context, this.readOnly);
             } catch (Exception e) {
                 error("Error while trying to evaluate JEXL expression: "+this.readOnly.toString(),e);
                 return null;
@@ -272,4 +307,11 @@ public abstract class UIComponent implements Identificable {
         this.readOnly = readOnly;
     }
 
+    public ValueBindingExpression getPlaceHolder() {
+        return placeHolder;
+    }
+
+    public void setPlaceHolder(ValueBindingExpression placeHolder) {
+        this.placeHolder = placeHolder;
+    }
 }

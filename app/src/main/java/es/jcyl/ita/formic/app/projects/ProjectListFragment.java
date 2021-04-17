@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
@@ -46,18 +47,18 @@ public class ProjectListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Activity){
-            ((Activity)context).setTitle(getString(R.string.projects_of) + getString(R.string.app_name));
+        if (context instanceof Activity) {
+            ((Activity) context).setTitle(getString(R.string.projects_of) + getString(R.string.app_name));
         }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.project_list_fragment, container, false);
         rootView.setTag(TAG);
 
@@ -67,20 +68,21 @@ public class ProjectListFragment extends Fragment {
         mReciclerView.setLayoutManager(mLayoutManager);
         mReciclerView.scrollToPosition(0);
         Bundle arguments = getArguments();
-        ArrayList<Project> projects = (arguments != null)?
-                (ArrayList<Project>)arguments.getSerializable(PROJECT_LIST)
+        ArrayList<Project> projects = (arguments != null) ?
+                (ArrayList<Project>) arguments.getSerializable(PROJECT_LIST)
                 : new ArrayList<>();
         ProjectRVAdapter mAdapter = new ProjectRVAdapter(projects);
         mReciclerView.setAdapter(mAdapter);
 
-        if (projects.isEmpty()){
-            Toast.makeText(getContext(), getString(R.string.no_projects),
-                    Toast.LENGTH_SHORT).show();
+        if (projects.isEmpty()) {
+
+            UserMessagesHelper.toast(getContext(), getString(R.string.no_projects),
+                    Toast.LENGTH_SHORT);
         }
         return rootView;
     }
 
-    public static ProjectListFragment newInstance(@NonNull final ProjectRepository projectRepository){
+    public static ProjectListFragment newInstance(@NonNull final ProjectRepository projectRepository) {
         final Bundle bundle = new Bundle();
         bundle.putSerializable(PROJECT_LIST, new ArrayList<>(projectRepository.listAll()));
 

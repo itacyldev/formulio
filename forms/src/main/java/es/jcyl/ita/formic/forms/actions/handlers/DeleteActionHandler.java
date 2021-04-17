@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
-import android.content.res.Resources;
-
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.MainController;
@@ -24,6 +22,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -40,11 +39,12 @@ public class DeleteActionHandler extends AbstractActionHandler implements Action
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
         FormEditController formController = (FormEditController) actionContext.getFc();
-        formController.delete(mc.getGlobalContext());
-        String msg = Resources.getSystem().getString(R.string.action_delete_success);
         if (StringUtils.isBlank(action.getRoute())) {
-            UserMessagesHelper.toast(actionContext.getViewContext(), msg);
+            UserMessagesHelper.toast(actionContext.getViewContext(), action.getMessage());
         } else {
+            String msg = Config.getInstance().getStringResource(R.string.action_delete_success);
+            UserMessagesHelper.toast(actionContext.getViewContext(), msg);
+            formController.delete(mc.getGlobalContext());
             Router router = mc.getRouter();
             router.popHistory(1);
             router.navigate(actionContext, action, msg);

@@ -23,17 +23,19 @@ import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
 import org.apache.commons.jexl3.internal.TemplateEngine;
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
+import java.util.List;
+
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.el.wrappers.JexlContextWrapper;
 import es.jcyl.ita.formic.repo.el.wrappers.JexlEntityWrapper;
+import es.jcyl.ita.formic.repo.query.JexlEntityExpression;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class JexlUtils {
+public class JexlRepoUtils {
 
     protected static final JexlEngine jexl = new JexlBuilder().cache(256)
             .strict(false).silent(false).create();
@@ -74,6 +76,34 @@ public class JexlUtils {
             ), e);
         }
         return eval(entity, exl);
+    }
+
+    public static Object[] bulkEval(List<Entity> entityList, String expression) {
+        JxltEngine.Expression exl = jxltEngine.createExpression(expression);
+        return bulkEval(entityList, exl);
+    }
+
+    public static Object[] bulkEval(List<Entity> entityList, JexlEntityExpression entityExpression) {
+        return bulkEval(entityList, entityExpression.getExpression());
+    }
+
+    public static Object[] bulkEval(List<Entity> entityList, JxltEngine.Expression exl) {
+        JexlContext jc = new MapContext();
+
+        Object[] values = new Object[entityList.size()];
+        int i = 0;
+        for (Entity entity : entityList) {
+            jc.set("entity", new JexlEntityWrapper(entity));
+            try {
+                values[i] = exl.evaluate(jc);
+            } catch (Exception e) {
+                throw new RuntimeException(String.format(
+                        "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
+                        exl.asString(), entity), e);
+            }
+            i++;
+        }
+        return values;
     }
 
     public static Object eval(Entity entity, JxltEngine.Expression exl) {

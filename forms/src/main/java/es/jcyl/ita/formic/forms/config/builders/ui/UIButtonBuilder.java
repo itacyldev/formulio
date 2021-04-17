@@ -24,7 +24,6 @@ import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
 /**
  * @author Rosa María Muñiz (mungarro@itacyl.es)
@@ -50,23 +49,6 @@ public class UIButtonBuilder extends AbstractComponentBuilder<UIButton> {
             UIParam[] params = getParams(paramNodes);
             element.setParams(params);
         }
-    }
-
-    private UIParam[] getParams(List<ConfigNode> paramNodes) {
-        UIParam[] params = new UIParam[paramNodes.size()];
-        for (int i = 0; i < paramNodes.size(); i++) {
-            UIParam uiParam = new UIParam();
-            ConfigNode paramNode = paramNodes.get(i);
-            if (paramNode.hasAttribute("name")) {
-                uiParam.setName(paramNode.getAttribute("name"));
-            }
-            if (paramNode.hasAttribute("value")) {
-                ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-                uiParam.setValue(exprFactory.create(paramNodes.get(i).getAttribute("value")));
-            }
-            params[i] = uiParam;
-        }
-        return params;
     }
 
 }

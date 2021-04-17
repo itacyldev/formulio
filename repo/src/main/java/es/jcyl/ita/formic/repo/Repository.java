@@ -35,6 +35,8 @@ public interface Repository<T extends Entity, F extends Filter> {
 
     List<T> find(F filter);
 
+    long count();
+
     long count(F filter);
 
     List<T> listAll();

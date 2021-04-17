@@ -26,6 +26,7 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
+import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -61,6 +62,14 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         setUpColumns(node);
         setUpNumVisibleRows(node);
         setUpRoute(node);
+
+        UIDatatable element = node.getElement();
+
+        List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
+        if (CollectionUtils.isNotEmpty(paramNodes)) {
+            UIParam[] params = getParams(paramNodes);
+            element.setParams(params);
+        }
     }
 
     private void setUpRoute(ConfigNode<UIDatatable> node) {
@@ -78,7 +87,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         if (CollectionUtils.isEmpty(addActions)) {
             throw new ConfigurationException(DevConsole.error("Error trying to create default datatable for " +
                     "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
-                    "no 'add' action. use 'route' attribute on <datatable/> instead to set the id " +
+                    "no 'add' action. Use 'route' attribute on <datatable/> instead to set the id " +
                     "of the destination form."));
         } else {
             ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one

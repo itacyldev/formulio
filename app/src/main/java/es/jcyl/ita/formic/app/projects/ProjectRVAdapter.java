@@ -33,6 +33,7 @@ import es.jcyl.ita.formic.app.MainActivity;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
 /**
@@ -47,7 +48,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
         private final TextView project_nameTextView;
         private final TextView project_descriptionTextView;
 
-        public ViewHolder(View itemView){
+        public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -56,17 +57,18 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                     // TODO: extract Project View Helper to FORMIC-27
                     Project prj = projectList.get(getAdapterPosition());
                     String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
-                    DevConsole.setLogFileName(projectsFolder, (String)prj.getId());
+                    DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
                     try {
                         Config.getInstance().setCurrentProject(prj);
-                        Toast.makeText(context,
+
+                        UserMessagesHelper.toast(context,
                                 DevConsole.info(context.getString(R.string.project_opening_finish, (String) prj.getId())),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                         ((MainActivity) context).loadFragment(new FormListFragment());
                     } catch (Exception e) {
-                        Toast.makeText(context,
+                        UserMessagesHelper.toast(context,
                                 DevConsole.info(context.getString(R.string.project_opening_error, (String) prj.getId())),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                     }
                 }
             });
@@ -75,35 +77,35 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             project_descriptionTextView = (TextView) itemView.findViewById(R.id.projectDescription);
         }
 
-        public TextView getProject_nameTextView(){
+        public TextView getProject_nameTextView() {
             return project_nameTextView;
         }
 
-        public TextView getProject_descriptionTextView(){
+        public TextView getProject_descriptionTextView() {
             return project_descriptionTextView;
         }
     }
 
-    public ProjectRVAdapter(List<Project> project_list){
+    public ProjectRVAdapter(List<Project> project_list) {
         projectList = project_list;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.project_list_item, viewGroup, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position){
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Project project = projectList.get(position);
         viewHolder.getProject_nameTextView().setText(project.getName());
         viewHolder.getProject_descriptionTextView().setText(project.getDescription());
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return projectList.size();
     }
 }

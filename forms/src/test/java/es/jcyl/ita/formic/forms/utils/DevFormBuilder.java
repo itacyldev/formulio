@@ -18,8 +18,9 @@ package es.jcyl.ita.formic.forms.utils;
 import android.content.Context;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
@@ -36,8 +37,6 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
-import static org.mockito.Mockito.*;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -48,7 +47,7 @@ public class DevFormBuilder {
     static FieldDataBuilder fBuilder = new FieldDataBuilder();
     static FormDataBuilder formBuilder = new FormDataBuilder();
 
-    public static FormEditController createFormEditController(Context viewContext, UIForm mainForm, UIForm... forms) {
+    public static FormEditController createFormEditController(UIForm mainForm, UIForm... forms) {
         UIView view = new UIView("v1");
         view.addChild(mainForm);
         if (forms != null) {
@@ -62,6 +61,7 @@ public class DevFormBuilder {
         fc.setMainForm(mainForm);
         return fc;
     }
+
 
     public static UIForm createOneFieldForm() {
         UIForm form = formBuilder.withNumFields(0).withRandomData().build();
@@ -133,7 +133,7 @@ public class DevFormBuilder {
             this.field = form.getFields().get(0); // link the first field
             this.field.setParentForm(this.form); // make sure field and form are linked
 
-            FormController fc = DevFormBuilder.createFormEditController(ctx, form);
+            FormController fc = DevFormBuilder.createFormEditController(form);
             withFormController(fc);
             return this;
         }

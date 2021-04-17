@@ -24,6 +24,7 @@
     <repo dbFile="dbTest.sqlite" dbTable="super_relation" id="superRelRepo">
         <mapping fk="other_id" property="other" repo="superHRepo" insertable="false" updatable="false" />
     </repo>
-    <fileRepo defaultExtension="jpg" folder="pictures/superheroes" id="superHImages" />
+    <filerepo defaultExtension="jpg" folder="pictures/superheroes" id="superHImages" />
     <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHImagesDBRepo"/>
+    <memorepo id="resumenIncis" properties="f1,f2,f3"/>
 </repos>

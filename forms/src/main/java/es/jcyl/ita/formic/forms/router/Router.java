@@ -178,13 +178,10 @@ public class Router {
     }
 
     private void debugHistory() {
-        debug("----- Router -----");
         if (CollectionUtils.isNotEmpty(memento)) {
             for (State state : memento) {
                 debug(state.toString());
             }
         }
-        debug("Current: " + this.current);
-        debug("------------------");
     }
 }

@@ -26,23 +26,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.core.context.impl.MapCompositeContext;
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -75,17 +75,17 @@ public class EnvExecutionContextTest {
         UIForm f1 = createForm();
         UIForm f2 = createForm();
 
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, f1, f2);
+        FormEditController fc = DevFormBuilder.createFormEditController(f1, f2);
 
         // render the view and check de resulting context
-        CompositeContext globalContext = new UnPrefixedCompositeContext();
+        CompositeContext globalContext = new MapCompositeContext();
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(globalContext);
         env.setViewContext(ctx);
 
         // render the view
-        ViewRenderHelper viewRenderer = new ViewRenderHelper();
+        ViewRenderer viewRenderer = new ViewRenderer();
 
         View view = viewRenderer.render(env, fc.getView());
         Assert.assertNotNull(env.getFormContext().getViewContext());
@@ -99,20 +99,20 @@ public class EnvExecutionContextTest {
         String id2 = "view." + lastForm.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id1));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id2));
 
         // Access each form context using absolute paths
         id1 = f1.getId() + ".entity." + f1.getChildren()[0].getId();
         id2 = f2.getId() + ".view." + f2.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id1));
-        Assert.assertNotNull(JexlUtils.eval(env.getContext(), id2));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id1));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id2));
 
         // lets check global context contains a "form1","form2" context
-        Assert.assertNotNull(JexlUtils.eval(globalContext, id1));
-        Assert.assertNotNull(JexlUtils.eval(globalContext, id2));
+        Assert.assertNotNull(JexlFormUtils.eval(globalContext, id1));
+        Assert.assertNotNull(JexlFormUtils.eval(globalContext, id2));
 
     }
 

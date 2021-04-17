@@ -4,7 +4,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
@@ -42,7 +42,7 @@ public class UITabItem extends UIGroupComponent {
             return false;
         } else {
             // evaluate expression against context
-            Object value = JexlUtils.eval(context, this.selected);
+            Object value = JexlFormUtils.eval(context, this.selected);
             try {
                 return (Boolean) ConvertUtils.convert(value, Boolean.class);
             } catch (Exception e) {

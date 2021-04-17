@@ -2,10 +2,8 @@
  Checks the fieldName value length is at least 5
 */
 function validateForm(){
-
-
     // get value
-    var value = "" + ctx.getViewContext().get("f1")
+    var value = "" + view.get("f1")
     var result = {};
 
     if(value.length < 10){
