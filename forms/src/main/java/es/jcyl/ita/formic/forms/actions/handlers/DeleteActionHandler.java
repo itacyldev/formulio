@@ -30,24 +30,26 @@ import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class DeleteActionHandler extends AbstractActionHandler implements ActionHandler {
+public class DeleteActionHandler extends EntityChangeAction {
 
     public DeleteActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    public void handle(ActionContext actionContext, UserAction action) {
+    protected void doAction(ActionContext actionContext, UserAction action) {
         FormEditController formController = (FormEditController) actionContext.getFc();
-        if (StringUtils.isBlank(action.getRoute())) {
-            UserMessagesHelper.toast(actionContext.getViewContext(), action.getMessage());
-        } else {
-            String msg = Config.getInstance().getStringResource(R.string.action_delete_success);
-            UserMessagesHelper.toast(actionContext.getViewContext(), msg);
-            formController.delete(mc.getGlobalContext());
-            Router router = mc.getRouter();
-            router.popHistory(1);
-            router.navigate(actionContext, action, msg);
-        }
+        formController.delete(mc.getGlobalContext());
     }
+
+    @Override
+    protected String getSuccessMessage() {
+        return Config.getInstance().getStringResource(R.string.action_delete_success);
+    }
+
+    @Override
+    protected String getErrorMessage(Exception e) {
+        return Config.getInstance().getStringResource(R.string.action_delete_error);
+    }
+
 }

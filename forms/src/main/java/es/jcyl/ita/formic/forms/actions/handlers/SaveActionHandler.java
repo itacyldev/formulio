@@ -18,7 +18,6 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -29,7 +28,7 @@ import es.jcyl.ita.formic.forms.router.Router;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class SaveActionHandler extends EntityChangeAction implements ActionHandler {
+public class SaveActionHandler extends EntityChangeAction {
 
     public SaveActionHandler(MainController mc, Router router) {
         super(mc, router);

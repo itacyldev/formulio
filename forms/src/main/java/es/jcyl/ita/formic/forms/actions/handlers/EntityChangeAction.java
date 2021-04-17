@@ -75,10 +75,10 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
     }
 
     protected void onError(ActionContext actionContext, UserAction action, Exception e) {
-        DevConsole.error("Error while execute user action: "+action.toString(), e);
+        DevConsole.error("Error while execute user action: " + action.toString(), e);
         mc.renderBack();
         String msg = getErrorMessage(e);
-        if(StringUtils.isNotBlank(msg)){
+        if (StringUtils.isNotBlank(msg)) {
             UserMessagesHelper.toast(actionContext.getViewContext(), msg);
         }
     }
@@ -86,7 +86,9 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
     /* Subclasses extension points */
     protected abstract void doAction(ActionContext actionContext, UserAction action);
 
-    protected abstract String getSuccessMessage();
+    protected String getSuccessMessage() {
+        return Config.getInstance().getStringResource(R.string.action_generic_success);
+    }
 
     protected String getErrorMessage(Exception e) {
         return Config.getInstance().getStringResource(R.string.action_generic_error);

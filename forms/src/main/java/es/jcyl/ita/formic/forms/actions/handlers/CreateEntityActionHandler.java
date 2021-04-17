@@ -43,6 +43,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class CreateEntityActionHandler extends EntityChangeAction<FormEditController> {
+
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
     public CreateEntityActionHandler(MainController mc, Router router) {
@@ -73,7 +74,6 @@ public class CreateEntityActionHandler extends EntityChangeAction<FormEditContro
         for (Map.Entry<String, Serializable> entry : params.entrySet()) {
             entity.set(entry.getKey(), entry.getValue());
         }
-//        entity.setId(null);
         ((EditableRepository) repo).save(entity);
     }
 

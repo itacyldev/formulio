@@ -1,8 +1,8 @@
 <main name="Form2" description="An example of short description" id="form2" repo="agentsRepo">
     <list name="Form2">
-        <datatable properties="id,provmuni,provincia.name,municipio.name" route="form2#edit2"/>
+        <datatable properties="id,provmuni,provincia.name,municipio.name" route="form2-formLoad"/>
         <actions>
-            <add route="form2-edit2"/>
+            <add route="form2-formLoad"/>
         </actions>
     </list>
     <edit>
