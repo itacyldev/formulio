@@ -22,7 +22,6 @@ import android.view.View;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -152,7 +151,6 @@ public class ProjectRhinoScriptIntegrationTest {
         Assert.assertEquals(10, ((DatatableWidget) dtView).getEntities().size());
     }
 
-    @NotNull
     private RenderingEnv prepareRenderingEnv(Context ctx, ScriptEngine engine) {
         // Prepare global context
         CompositeContext globalContext = new UnPrefixedCompositeContext();
