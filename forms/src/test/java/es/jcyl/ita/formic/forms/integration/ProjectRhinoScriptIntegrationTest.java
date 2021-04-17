@@ -132,7 +132,7 @@ public class ProjectRhinoScriptIntegrationTest {
         engine.store(formController.getId(), FileUtils.readFileToString(srcFile, "UTF-8"));
 
         // prepare rendering env.
-        RenderingEnv env = prepareRendringEnv(ctx, engine);
+        RenderingEnv env = prepareRenderingEnv(ctx, engine);
 
         // add event handler to execute scripts during component rendering
         ViewRenderer renderer = new ViewRenderer();
@@ -153,7 +153,7 @@ public class ProjectRhinoScriptIntegrationTest {
     }
 
     @NotNull
-    private RenderingEnv prepareRendringEnv(Context ctx, ScriptEngine engine) {
+    private RenderingEnv prepareRenderingEnv(Context ctx, ScriptEngine engine) {
         // Prepare global context
         CompositeContext globalContext = new UnPrefixedCompositeContext();
         globalContext.put("repos", new RepoAccessContext());

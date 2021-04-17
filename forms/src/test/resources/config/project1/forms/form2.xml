@@ -5,7 +5,7 @@
             <add route="form2-edit2"/>
         </actions>
     </list>
-    <edit id="formLoad">
+    <edit>
         <script>
             function onbefore(component){
                 console.log("This is a " + component.getId());
@@ -25,14 +25,11 @@
             <text label="zip code" onAfterRender="onafter" />
         </form>
     </edit>
-    <edit>
+    <edit id="formLoad">
         <script src="scripts/loadTableData.js">
-
         </script>
         <form>
             <datatable repo="resumenIncis" onBeforeRender="mixRepoData"/>
-
         </form>
-
     </edit>
 </main>

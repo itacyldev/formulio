@@ -35,11 +35,11 @@ public class ScriptSourceBuilderTest {
         RepositoryUtils.registerMock("contacts");
     }
 
-    private static final String XML_INLINE_TEST = "<script>\n" +
+    private static final String XML_INLINE_TEST = "<script>\n<![CDATA[" +
             "function myfunction(a,b){\n" +
-            "\treturn a+b;\n" +
+            "\treturn (a<b);\n" +
             "}\n" +
-            "</script>";
+            "]]></script>";
 
     @Test
     public void testInlineScriptSource() throws Exception {

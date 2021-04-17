@@ -32,17 +32,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -53,6 +50,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  */
 
 public class XmlConfigFileReader {
+    private static final String RELAXED_FEATURE = "http://xmlpull.org/v1/doc/features.html#relaxed";
     private ReadingProcessListener listener;
 
     private XmlPullParserFactory factory;
@@ -118,7 +116,6 @@ public class XmlConfigFileReader {
                 setIdIfNull(currentNode, resolver);
                 // store current node in the pile
                 nodeStack.push(currentNode);
-
             } else if (eventType == XmlPullParser.TEXT) {
                 // add text to current builder
                 currentNode.addText(xpp.getText());

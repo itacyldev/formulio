@@ -177,7 +177,7 @@ public class ComponentBuilderFactory {
 
 
     public void registerBuilder(String tagName, ComponentBuilder builder) {
-        _builders.put(tagName, builder);
+        _builders.put(tagName.toLowerCase(), builder);
     }
 
     public void registerAttResolver(String resolverId, AbstractAttributeResolver resolver) {
@@ -191,7 +191,7 @@ public class ComponentBuilderFactory {
     }
 
     public ComponentBuilder getBuilder(String tagName) {
-        return _builders.get(tagName);
+        return _builders.get(tagName.toLowerCase());
     }
 
     private ComponentBuilder newBuilder(Class clazz, String tagName) {
