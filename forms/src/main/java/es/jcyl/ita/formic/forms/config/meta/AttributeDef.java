@@ -135,6 +135,9 @@ public class AttributeDef {
     // scripting
     public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
     public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
+    public static Attribute ON_CHANGE = new Attribute("onChange", "onAfterRenderAction", String.class);
+    public static Attribute ON_CLICK = new Attribute("onClick", "onAfterRenderAction", String.class);
     public static Attribute SRC = new Attribute("src", "src", "pathResolver");
+
 
 }

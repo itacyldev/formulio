@@ -9,9 +9,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
@@ -44,7 +43,7 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
                 @Override
                 public void onClick(View view) {
                     // FAB new entity button, navigate to form view without entityId
-                    ViewUserActionInterceptor userActionInterceptor = env.getUserActionInterceptor();
+                    UserEventInterceptor userActionInterceptor = env.getUserActionInterceptor();
                     if (userActionInterceptor != null) {
                         UserAction action = UserAction.navigate(formController.getAction("add").getRoute(), formController);
                         userActionInterceptor.doAction(action);

@@ -90,7 +90,7 @@ public class XmlConfigUtils {
     public static FormConfig readFormConfig(Project p, String xml) {
         ConfigReadingInfo readingInfo = new ConfigReadingInfo();
         readingInfo.setProject(p);
-        readingInfo.setCurrentFile("testFile");
+        readingInfo.fileStart("testFile");
         return (FormConfig) readFormConfig(readingInfo, xml);
     }
 
@@ -101,7 +101,7 @@ public class XmlConfigUtils {
         ComponentBuilderFactory.getInstance().setInfo(readingInfo);
 
         XmlConfigFileReader reader = new XmlConfigFileReader();
-        reader.setListener(readingInfo);
+        reader.addListener(readingInfo);
         InputStream is = XmlConfigUtils.createStream(xml);
         ConfigNode root = reader.read(is);
         return (FormConfig) root.getElement();

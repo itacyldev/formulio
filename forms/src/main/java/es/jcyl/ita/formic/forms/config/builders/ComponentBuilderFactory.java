@@ -17,7 +17,9 @@ package es.jcyl.ita.formic.forms.config.builders;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
@@ -32,7 +34,7 @@ import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
-import es.jcyl.ita.formic.forms.config.builders.controllers.FCActionBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.UIActionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
@@ -61,6 +63,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.ValidatorBuilder;
 import es.jcyl.ita.formic.forms.config.elements.OptionsConfig;
 import es.jcyl.ita.formic.forms.config.elements.PropertyConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
+import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ColorAttributeResolver;
@@ -129,7 +132,7 @@ public class ComponentBuilderFactory {
 
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
 
-        ComponentBuilder actionBuilder = newBuilder(FCActionBuilder.class, "action");
+        ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
         // same component builder with different aliases
         registerBuilder("action", actionBuilder);
         registerBuilder("nav", actionBuilder);
@@ -163,16 +166,36 @@ public class ComponentBuilderFactory {
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
         registerBuilder("context", new ContextBuilder());
 
+        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
+        registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
+
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
         registerAttResolver("validator", new ValidatorAttResolver());
-
         registerAttResolver("color", new ColorAttributeResolver());
+        registerAttResolver("action", new ColorAttributeResolver());
+    }
 
-        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
-        registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
+    /**
+     * Returns the builders and resolvers that need to be notify during the XML reading process.
+     *
+     * @return
+     */
+    public List<ReadingProcessListener> getListeners() {
+        List<ReadingProcessListener> listeners = new ArrayList<>();
+        for (ComponentBuilder builder: _builders.values()){
+            if(builder instanceof ReadingProcessListener){
+                listeners.add((ReadingProcessListener)builder);
+            }
+        }
+        for (AttributeResolver resolver: _resolvers.values()){
+            if(resolver instanceof ReadingProcessListener){
+                listeners.add((ReadingProcessListener)resolver);
+            }
+        }
+        return listeners;
     }
 
 

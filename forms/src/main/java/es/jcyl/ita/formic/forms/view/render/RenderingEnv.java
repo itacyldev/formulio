@@ -29,7 +29,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
@@ -59,7 +59,7 @@ public class RenderingEnv {
      */
     private ViewDAG viewDAG;
     private Map<String, DeferredView> deferredViews;
-    private ViewUserActionInterceptor userActionInterceptor;
+    private UserEventInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private View viewRoot;
     private FormActivity formActivity;
@@ -70,7 +70,7 @@ public class RenderingEnv {
     private boolean inputDelayDisabled = false;
 
     public RenderingEnv(ActionController actionController) {
-        userActionInterceptor = new ViewUserActionInterceptor(actionController);
+        userActionInterceptor = new UserEventInterceptor(actionController);
         currentFormContexts = new ArrayList<>();
     }
 
@@ -128,7 +128,7 @@ public class RenderingEnv {
         currentFormContexts.add(formContext);
     }
 
-    public ViewUserActionInterceptor getUserActionInterceptor() {
+    public UserEventInterceptor getUserActionInterceptor() {
         return userActionInterceptor;
     }
 

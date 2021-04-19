@@ -8,22 +8,22 @@ import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 
-public class FCActionBuilder extends AbstractComponentBuilder<FCAction> {
+public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
 
-    public FCActionBuilder() {
-        super("action", FCAction.class);
+    public UIActionBuilder() {
+        super("action", UIAction.class);
     }
 
     @Override
-    protected void setupOnSubtreeStarts(ConfigNode<FCAction> node) {
+    protected void setupOnSubtreeStarts(ConfigNode<UIAction> node) {
 
     }
 
     @Override
-    protected void setupOnSubtreeEnds(ConfigNode<FCAction> node) {
-        FCAction element = node.getElement();
+    protected void setupOnSubtreeEnds(ConfigNode<UIAction> node) {
+        UIAction element = node.getElement();
         // attach nested options
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         if (CollectionUtils.isNotEmpty(paramNodes)) {

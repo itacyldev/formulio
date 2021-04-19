@@ -65,6 +65,8 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_AFTER_RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_RENDER;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_CHANGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_CLICK;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
@@ -105,7 +107,7 @@ public class TagDef {
     }
 
     private static void initialize() {
-        Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
+        Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER, ON_CHANGE};
 
         Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE, ON_BEFORE_RENDER, ON_AFTER_RENDER};
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
@@ -157,8 +159,8 @@ public class TagDef {
         Attribute optionValue = new Attribute("value");
         register("option", define(new Attribute[]{ID, optionValue, LABEL}, scriptHooks));
 
-        register("button", define(baseInput, new Attribute[]{ROUTE}));
-        register("link", define(baseInput, new Attribute[]{ROUTE}));
+        register("button", define(baseInput, new Attribute[]{ROUTE, ON_CLICK}));
+        register("link", define(baseInput, new Attribute[]{ROUTE, ON_CLICK}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
                 REGISTER_IN_HISTORY, FORCE_REFRESH, MESSAGE});

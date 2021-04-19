@@ -26,7 +26,7 @@ import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
@@ -62,7 +62,7 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                     UserMessagesHelper.toast(env.getViewContext(), component.getReadOnlyMessage(),
                             Toast.LENGTH_LONG);
                 } else {
-                    ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                    UserEventInterceptor interceptor = env.getUserActionInterceptor();
                     if (interceptor != null) {
                         // TODO: FORMIC-202 UIButton utilizar método desde UserActionHelper
                         UserAction action = UserAction.navigate(component.getRoute(), component);

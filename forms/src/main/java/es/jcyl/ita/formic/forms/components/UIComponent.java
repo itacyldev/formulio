@@ -8,6 +8,7 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -28,6 +29,7 @@ public abstract class UIComponent implements Identificable {
     protected UIComponent parent;
     protected UIForm parentForm;
     protected UIComponent[] children;
+    protected UIParam[] params;
 
     private String rendererType;
     private boolean renderChildren;
@@ -46,6 +48,8 @@ public abstract class UIComponent implements Identificable {
      */
     private String onBeforeRenderAction;
     private String onAfterRenderAction;
+    private String onChangeAction;
+    private String onClickAction;
 
     /**
      * if the children of this component have to be rendered individually
@@ -258,6 +262,22 @@ public abstract class UIComponent implements Identificable {
         this.onAfterRenderAction = onAfterRenderAction;
     }
 
+    public String getOnChangeAction() {
+        return onChangeAction;
+    }
+
+    public void setOnChangeAction(String onChangeAction) {
+        this.onChangeAction = onChangeAction;
+    }
+
+    public String getOnClickAction() {
+        return onClickAction;
+    }
+
+    public void setOnClickAction(String onClickAction) {
+        this.onClickAction = onClickAction;
+    }
+
     @Override
     public String toString() {
         return this.getClass().getName() + "{" +
@@ -314,4 +334,17 @@ public abstract class UIComponent implements Identificable {
     public void setPlaceHolder(ValueBindingExpression placeHolder) {
         this.placeHolder = placeHolder;
     }
+
+    public UIParam[] getParams() {
+        return params;
+    }
+
+    public void setParams(UIParam[] params) {
+        this.params = params;
+    }
+
+    public boolean hasParams() {
+        return this.params != null && this.params.length > 0;
+    }
+
 }

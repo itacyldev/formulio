@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -130,6 +132,15 @@ public class UserAction {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    /**
+     * Indicates if current action is going to provoke a change in the view due to a forceRefresh or
+     * because it makes the action controller to perform a navigation.
+     * @return
+     */
+    public boolean isViewChangeAction(){
+        return this.forceRefresh || StringUtils.isNotBlank(this.route);
     }
 
     /*********************************/

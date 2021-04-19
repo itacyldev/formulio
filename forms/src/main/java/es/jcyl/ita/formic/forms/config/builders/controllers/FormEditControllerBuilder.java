@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
@@ -57,7 +57,6 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     @Override
     protected void doWithAttribute(FormEditController element, String name, String value) {
     }
-
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<FormEditController> node) {
@@ -143,11 +142,11 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
 
         List<ConfigNode> actionList = actions.getChildren();
-        FCAction[] lstActions = new FCAction[actionList.size()];
+        UIAction[] lstActions = new UIAction[actionList.size()];
 
-        FCAction action;
+        UIAction action;
         for (int i = 0; i < actionList.size(); i++) {
-            action = (FCAction) actionList.get(i).getElement();
+            action = (UIAction) actionList.get(i).getElement();
             if (StringUtils.isBlank(action.getType())) {
                 action.setType(actionList.get(i).getName());
             }

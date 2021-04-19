@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
@@ -54,7 +54,7 @@ public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
         linkView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
                     // TODO: FORMIC-202 UIButton, UILinkRenderer utilizar método desde UserActionHelper
                     UserAction action = UserAction.navigate(component.getRoute(), component);

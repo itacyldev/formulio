@@ -38,7 +38,7 @@ public class RepoConfigHandler extends AbstractRepoConfigurationReader implement
     @Override
     public void handle(ProjectResource resource) {
         XmlConfigFileReader reader = new XmlConfigFileReader();
-        reader.setListener(this.listener);
+        reader.addListener(this.listener);
         reader.read(Uri.fromFile(resource.file));
         // repos are registered during reading process, just check entities metadata
         checkRepos();

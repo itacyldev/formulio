@@ -27,12 +27,12 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
-import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
@@ -44,7 +44,6 @@ import es.jcyl.ita.formic.forms.project.handlers.DefaultImageRepositoryHandler;
 import es.jcyl.ita.formic.forms.project.handlers.FormConfigHandler;
 import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
-import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
@@ -232,10 +231,11 @@ public class Config {
                 // TODO: Create class ProjectResources to handle files, projectTemplates, etc. #204283
                 // TODO: do we need additional events? (post repo creation, post form creation....)
                 for (ProjectResource resource : configFiles) {
-                    readingListener.setCurrentFile(resource.file.getAbsolutePath());
+                    readingListener.fileStart(resource.file.getAbsolutePath());
                     DevConsole.info("Processing file '${file}'");
                     // get a reader for the file and a register for the resulting config object
                     _handlers.get(resource.type).handle(resource);
+                    readingListener.fileEnd(resource.file.getAbsolutePath());
                 }
                 // anything to do after resource-type files treatment?
                 onAfterResourceTypeReading(project, resType);

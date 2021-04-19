@@ -22,7 +22,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
@@ -167,7 +167,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
+                UserEventInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
                 if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
                     UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),

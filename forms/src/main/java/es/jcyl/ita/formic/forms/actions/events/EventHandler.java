@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.reader;
+package es.jcyl.ita.formic.forms.actions.events;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,29 +15,10 @@ package es.jcyl.ita.formic.forms.config.reader;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.project.Project;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ReadingProcessListener {
+public interface EventHandler {
 
-    void fileStart(String currentFile);
-
-    void fileEnd(String currentFile);
-
-    void viewStart();
-
-    void viewEnd();
-
-    void elementStart(String tag);
-
-    void elementEnd(String tag);
-
-    Project getProject();
-
-    void setProject(Project project);
-
-    String getCurrentFile();
-
+    void handle(Event event);
 }

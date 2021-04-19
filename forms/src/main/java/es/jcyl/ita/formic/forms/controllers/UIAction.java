@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.forms.components.link.UIParam;
  * <p>
  * Allowed user actions/buttons to be shown in the FormController interface
  */
-public class FCAction {
+public class UIAction {
 
     private String label;
     private String type;
@@ -32,10 +32,10 @@ public class FCAction {
     private UIParam[] params;
     private String message;
 
-    public FCAction() {
+    public UIAction() {
     }
 
-    public FCAction(String type, String label, String route) {
+    public UIAction(String type, String label, String route) {
         this.type = type;
         this.label = label;
         this.route = route;

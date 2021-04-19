@@ -22,20 +22,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.List;
-
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.card.UICard;
-import es.jcyl.ita.formic.forms.components.image.UIImage;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.media.meta.FileMeta;
 
 
 /**
@@ -73,7 +65,7 @@ public class FCActionBuilderTest {
     @Test
     public void testGenericAction() throws Exception {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(XML_ACTION);
-        FCAction[] actions = formConfig.getEdits().get(0).getActions();
+        UIAction[] actions = formConfig.getEdits().get(0).getActions();
         Assert.assertNotNull(actions);
         Assert.assertEquals(actions[0].getType(), "create");
 

@@ -42,7 +42,7 @@ public class ConfigReadingInfo implements ReadingProcessListener {
         return currentFile;
     }
 
-    public void setCurrentFile(String currentFile) {
+    public void fileStart(String currentFile) {
         this.currentFile = currentFile;
     }
 
@@ -60,7 +60,7 @@ public class ConfigReadingInfo implements ReadingProcessListener {
 
 
     @Override
-    public void newElement(String tag) {
+    public void elementStart(String tag) {
         this.currentTag = tag;
     }
 }

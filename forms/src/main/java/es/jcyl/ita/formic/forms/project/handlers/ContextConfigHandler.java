@@ -18,12 +18,10 @@ package es.jcyl.ita.formic.forms.project.handlers;
 import android.net.Uri;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
-import es.jcyl.ita.formic.repo.RepositoryFactory;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -37,7 +35,7 @@ public class ContextConfigHandler extends AbstractProjectResourceHandler {
 
     @Override
     public void handle(ProjectResource resource) {
-        reader.setListener(this.listener);
+        reader.addListener(this.listener);
         ConfigNode root = reader.read(Uri.fromFile(resource.file));
         CompositeContext context = createContext(root);
         register(context);

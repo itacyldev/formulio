@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +52,7 @@ import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 
 public class XmlConfigFileReader {
     private static final String RELAXED_FEATURE = "http://xmlpull.org/v1/doc/features.html#relaxed";
-    private ReadingProcessListener listener;
+    private List<ReadingProcessListener> listeners = new ArrayList<>();
 
     private XmlPullParserFactory factory;
     private ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
@@ -63,6 +64,8 @@ public class XmlConfigFileReader {
             factory.setNamespaceAware(false);
             resolver = new ComponentResolver();
             builderFactory.setComponentResolver(resolver);
+            List<ReadingProcessListener> listeners = builderFactory.getListeners();
+            addListeners(listeners);
         } catch (XmlPullParserException e) {
             throw new ConfigurationException(DevConsole.error("Error occurred while trying to instantiate XMLFileFormConfigReader.", e));
         }
@@ -106,11 +109,11 @@ public class XmlConfigFileReader {
         while (eventType != XmlPullParser.END_DOCUMENT) {
 
             if (eventType == XmlPullParser.START_DOCUMENT) {
-
+                // pass
             } else if (eventType == XmlPullParser.START_TAG) {
                 // get builder for this tag
                 currentNode = new ConfigNode(xpp.getName());
-                notifyNewElement(xpp.getName());
+                notifyElementStart(xpp.getName());
 
                 setAttributes(xpp, currentNode, resolver);
                 setIdIfNull(currentNode, resolver);
@@ -133,11 +136,6 @@ public class XmlConfigFileReader {
         return currentNode;
     }
 
-    private void notifyNewElement(String name) {
-        if (listener != null) {
-            listener.newElement(name);
-        }
-    }
 
     private void setIdIfNull(ConfigNode node, ComponentResolver resolver) {
         if (StringUtils.isBlank(node.getId())) {
@@ -146,7 +144,7 @@ public class XmlConfigFileReader {
             String id = null;
             if (tag.toLowerCase().equals("main")) {
                 // use filename as id
-                String currentFile = listener.getCurrentFile();
+                String currentFile = getCurrentFile();
                 id = FilenameUtils.getBaseName(currentFile);
             } else {
                 Set<String> tags = this.resolver.getIdsForTag(tag);
@@ -157,12 +155,15 @@ public class XmlConfigFileReader {
         this.resolver.addComponentId(node.getName(), node.getId());
     }
 
+    private String getCurrentFile() {
+        return (listeners.size() == 0) ? "" : listeners.get(0).getCurrentFile();
+    }
+
     public void build(ConfigNode root) {
         ComponentBuilder builder = builderFactory.getBuilder(root.getName());
-        notifyNewElement(root.getName());
+        notifyElementStart(root.getName());
 
         DevConsole.debug("Starting tag: ${tag}");
-
         if (builder != null) {
             Object element = builder.build(root);
             DevConsole.debug("<${tag}/> element created.");
@@ -176,6 +177,7 @@ public class XmlConfigFileReader {
             DevConsole.debug("Processing children of <${tag}/>");
             builder.processChildren(root);
         }
+        notifyElementEnd(root.getName());
         DevConsole.debug(root);
         DevConsole.debug("Ending tag: ${tag}");
     }
@@ -198,8 +200,41 @@ public class XmlConfigFileReader {
     }
 
 
-    public void setListener(ReadingProcessListener listener) {
-        this.listener = listener;
+    public void addListener(ReadingProcessListener listener) {
+        this.listeners.add(listener);
     }
 
+    public void addListeners(List<ReadingProcessListener> listeners) {
+        if (listeners != null) {
+            for (ReadingProcessListener listener : listeners) {
+                addListener(listener);
+            }
+        }
+    }
+
+    private void notifyElementStart(String name) {
+        boolean isView = false;
+        if (name.toLowerCase().equals("list") || name.toLowerCase().equals("edit")) {
+            isView = true;
+        }
+        for (ReadingProcessListener listener : listeners) {
+            if (isView) {
+                listener.viewStart();
+            }
+            listener.elementStart(name);
+        }
+    }
+
+    private void notifyElementEnd(String name) {
+        boolean isView = false;
+        if (name.toLowerCase().equals("list") || name.toLowerCase().equals("edit")) {
+            isView = true;
+        }
+        for (ReadingProcessListener listener : listeners) {
+            listener.elementEnd(name);
+            if (isView) {
+                listener.viewEnd();
+            }
+        }
+    }
 }

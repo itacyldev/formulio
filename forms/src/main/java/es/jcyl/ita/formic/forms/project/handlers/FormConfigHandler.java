@@ -44,7 +44,7 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
 
     @Override
     public void handle(ProjectResource resource) {
-        reader.setListener(this.listener);
+        reader.addListener(this.listener);
         ConfigNode root = reader.read(Uri.fromFile(resource.file));
         FormConfig config;
         try {
