@@ -65,6 +65,7 @@ import es.jcyl.ita.formic.forms.config.elements.PropertyConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver;
+import es.jcyl.ita.formic.forms.config.resolvers.ActionAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ColorAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
@@ -175,7 +176,7 @@ public class ComponentBuilderFactory {
         registerAttResolver("pathResolver", new RelativePathAttResolver());
         registerAttResolver("validator", new ValidatorAttResolver());
         registerAttResolver("color", new ColorAttributeResolver());
-        registerAttResolver("action", new ColorAttributeResolver());
+        registerAttResolver("action", new ActionAttributeResolver());
     }
 
     /**

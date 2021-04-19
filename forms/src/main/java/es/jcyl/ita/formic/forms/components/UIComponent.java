@@ -8,8 +8,9 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
@@ -29,7 +30,6 @@ public abstract class UIComponent implements Identificable {
     protected UIComponent parent;
     protected UIForm parentForm;
     protected UIComponent[] children;
-    protected UIParam[] params;
 
     private String rendererType;
     private boolean renderChildren;
@@ -43,13 +43,14 @@ public abstract class UIComponent implements Identificable {
      * not from the mainEntity.
      */
     private boolean isEntityMapping = false;
+
+    protected UIAction action;
+    protected UIParam[] params;
     /**
      * Scripting hooks
      */
     private String onBeforeRenderAction;
     private String onAfterRenderAction;
-    private String onChangeAction;
-    private String onClickAction;
 
     /**
      * if the children of this component have to be rendered individually
@@ -262,20 +263,12 @@ public abstract class UIComponent implements Identificable {
         this.onAfterRenderAction = onAfterRenderAction;
     }
 
-    public String getOnChangeAction() {
-        return onChangeAction;
+    public UIAction getAction() {
+        return action;
     }
 
-    public void setOnChangeAction(String onChangeAction) {
-        this.onChangeAction = onChangeAction;
-    }
-
-    public String getOnClickAction() {
-        return onClickAction;
-    }
-
-    public void setOnClickAction(String onClickAction) {
-        this.onClickAction = onClickAction;
+    public void setAction(UIAction action) {
+        this.action = action;
     }
 
     @Override

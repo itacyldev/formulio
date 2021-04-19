@@ -46,6 +46,18 @@ public class ConfigReadingInfo implements ReadingProcessListener {
         this.currentFile = currentFile;
     }
 
+    @Override
+    public void fileEnd(String currentFile) {
+    }
+
+    @Override
+    public void viewStart() {
+    }
+
+    @Override
+    public void viewEnd() {
+    }
+
     public static XmlPullParser getXpp() {
         return xpp;
     }
@@ -62,5 +74,10 @@ public class ConfigReadingInfo implements ReadingProcessListener {
     @Override
     public void elementStart(String tag) {
         this.currentTag = tag;
+    }
+
+    @Override
+    public void elementEnd(String tag) {
+
     }
 }

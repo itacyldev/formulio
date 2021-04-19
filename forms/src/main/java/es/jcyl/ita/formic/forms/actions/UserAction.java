@@ -23,6 +23,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -48,6 +49,10 @@ public class UserAction {
         this(actionType, route, null, origin);
     }
 
+    public UserAction(UIAction action, UIComponent component) {
+        this(action.getType(), action.getRoute(), component);
+    }
+
     public UserAction(String actionType, String route, UIComponent component) {
         this(actionType, route, component, component.getRoot() == null ? null : component.getRoot().getFormController());
     }
@@ -58,6 +63,7 @@ public class UserAction {
         this.component = component;
         this.origin = origin;
     }
+
 
     public String getType() {
         return type;

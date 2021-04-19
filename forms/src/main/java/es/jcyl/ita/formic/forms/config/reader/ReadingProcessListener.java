@@ -38,6 +38,4 @@ public interface ReadingProcessListener {
 
     void setProject(Project project);
 
-    String getCurrentFile();
-
 }

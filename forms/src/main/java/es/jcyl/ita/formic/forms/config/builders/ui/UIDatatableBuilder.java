@@ -26,7 +26,7 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;

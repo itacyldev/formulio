@@ -241,7 +241,6 @@ public class Config {
                 onAfterResourceTypeReading(project, resType);
             }
         }
-        System.out.println(1);
     }
 
     /**

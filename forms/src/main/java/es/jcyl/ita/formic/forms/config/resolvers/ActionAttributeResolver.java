@@ -26,8 +26,6 @@ import es.jcyl.ita.formic.forms.project.Project;
  */
 public class ActionAttributeResolver extends AbstractAttributeResolver implements ReadingProcessListener {
 
-
-
     @Override
     public Object resolve(ConfigNode node, String attName) {
         return null;
@@ -39,32 +37,26 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
 
     @Override
     public void fileStart(String currentFile) {
-
     }
 
     @Override
     public void fileEnd(String currentFile) {
-
     }
 
     @Override
     public void viewStart() {
-
     }
 
     @Override
     public void viewEnd() {
-
     }
 
     @Override
     public void elementStart(String tag) {
-
     }
 
     @Override
     public void elementEnd(String tag) {
-
     }
 
     @Override
@@ -74,11 +66,5 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
 
     @Override
     public void setProject(Project project) {
-
-    }
-
-    @Override
-    public String getCurrentFile() {
-        return null;
     }
 }

@@ -17,8 +17,9 @@ import java.io.Serializable;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
@@ -109,7 +110,9 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                             }
                         }
                     }
-                    interceptor.doAction(action);
+                    // TODO: FORMIC-229 Terminar refactorización de acciones
+                    Event event = new Event(Event.EventType.CLICK, null, action);
+                    interceptor.notify(event);
                 }
             }
         });

@@ -1,0 +1,6 @@
+<main name="Form3" description="An example of short description" id="form3" repo="contacts">
+    <list name="Form3" />
+    <edit>
+        <switcher label="IT profile " value="${entity.it_profile}" />
+    </edit>
+</main>

@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.actions.events;
  *
  */
 
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 
@@ -25,11 +26,12 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
  */
 public class Event {
 
-    public enum EventType {CHANGE, CLICK};
+    public enum EventType {CHANGE, CLICK}
 
     private final EventType type;
     private UIComponent source;
     private UserAction handler;
+    private Context context;
 
     public Event(EventType type, UIComponent source) {
         this(type, source, null);
@@ -55,6 +57,7 @@ public class Event {
     public UserAction getHandler() {
         return handler;
     }
+
     void setHandler(UserAction handler) {
         this.handler = handler;
     }
@@ -66,5 +69,15 @@ public class Event {
     public static Event inputChange(UIComponent component) {
         return new Event(EventType.CHANGE, component);
     }
+    public static Event click(UIComponent component) {
+        return new Event(EventType.CLICK, component);
+    }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }

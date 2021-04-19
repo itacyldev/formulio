@@ -19,6 +19,7 @@ import android.net.Uri;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.collections.CollectionUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -43,11 +44,11 @@ import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
  * Reads form configuration files and creates form controllers and view Components.
  * It first goes over the tree creating a simple ConfigNode and check the element ids, and after
  * that uses builders to create view components and controllers.
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class XmlConfigFileReader {
@@ -57,6 +58,7 @@ public class XmlConfigFileReader {
     private XmlPullParserFactory factory;
     private ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
     private ComponentResolver resolver;
+    private String currentFile;
 
     public XmlConfigFileReader() {
         try {
@@ -74,13 +76,18 @@ public class XmlConfigFileReader {
     public ConfigNode read(Uri uri) throws ConfigurationException {
         try {
             // works just for file schemes!!!!
-            return read(new FileInputStream(uri.getPath()));
+            notifyFileStart(uri.getPath());
+            this.currentFile = uri.getPath();
+            ConfigNode node = read(new FileInputStream(currentFile));
+            notifyFileEnd(currentFile);
+            return node;
         } catch (FileNotFoundException e) {
             throw new ConfigurationException("Error while opening config file " + uri.toString(), e);
         }
     }
 
-    public ConfigNode read(InputStream is) throws ConfigurationException {
+
+    private ConfigNode read(InputStream is) throws ConfigurationException {
         XmlPullParser xpp = null;
         try {
             xpp = factory.newPullParser();
@@ -144,8 +151,7 @@ public class XmlConfigFileReader {
             String id = null;
             if (tag.toLowerCase().equals("main")) {
                 // use filename as id
-                String currentFile = getCurrentFile();
-                id = FilenameUtils.getBaseName(currentFile);
+                id = FilenameUtils.getBaseName(this.currentFile);
             } else {
                 Set<String> tags = this.resolver.getIdsForTag(tag);
                 id = tag + (tags.size() + 1);  // table1, table2, table3,..
@@ -155,9 +161,6 @@ public class XmlConfigFileReader {
         this.resolver.addComponentId(node.getName(), node.getId());
     }
 
-    private String getCurrentFile() {
-        return (listeners.size() == 0) ? "" : listeners.get(0).getCurrentFile();
-    }
 
     public void build(ConfigNode root) {
         ComponentBuilder builder = builderFactory.getBuilder(root.getName());
@@ -201,7 +204,9 @@ public class XmlConfigFileReader {
 
 
     public void addListener(ReadingProcessListener listener) {
-        this.listeners.add(listener);
+        if (listener != null) {
+            this.listeners.add(listener);
+        }
     }
 
     public void addListeners(List<ReadingProcessListener> listeners) {
@@ -212,7 +217,26 @@ public class XmlConfigFileReader {
         }
     }
 
+    private void notifyFileStart(String path) {
+        if (CollectionUtils.isNotEmpty(listeners)) {
+            for (ReadingProcessListener listener : listeners) {
+                listener.fileStart(path);
+            }
+        }
+    }
+
+    private void notifyFileEnd(String path) {
+        if (CollectionUtils.isNotEmpty(listeners)) {
+            for (ReadingProcessListener listener : listeners) {
+                listener.fileEnd(path);
+            }
+        }
+    }
+
     private void notifyElementStart(String name) {
+        if (CollectionUtils.isEmpty(listeners)) {
+            return;
+        }
         boolean isView = false;
         if (name.toLowerCase().equals("list") || name.toLowerCase().equals("edit")) {
             isView = true;
@@ -226,6 +250,9 @@ public class XmlConfigFileReader {
     }
 
     private void notifyElementEnd(String name) {
+        if (CollectionUtils.isEmpty(listeners)) {
+            return;
+        }
         boolean isView = false;
         if (name.toLowerCase().equals("list") || name.toLowerCase().equals("edit")) {
             isView = true;

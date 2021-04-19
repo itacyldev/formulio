@@ -24,6 +24,8 @@ import org.apache.commons.lang3.RandomUtils;
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
@@ -65,7 +67,10 @@ public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
                             action.addParam(param.getName(), (Serializable) value);
                         }
                     }
-                    interceptor.doAction(action);
+                    // TODO: FORMIC-229 Terminar refactorización de acciones
+                    // La cración de la accinó se tiene que hacer en el interceptor como en otros componentes
+                    Event event = new Event(Event.EventType.CLICK, null, action);
+                    interceptor.notify(event);
                 }
             }
         });

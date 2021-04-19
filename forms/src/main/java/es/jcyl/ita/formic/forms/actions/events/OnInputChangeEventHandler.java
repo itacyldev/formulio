@@ -64,6 +64,9 @@ public class OnInputChangeEventHandler
         UIForm form = component.getParentForm();
         FormViewContext viewContext = form.getContext().getViewContext();
         InputWidget fieldView = viewContext.findInputFieldViewById(component.getId());
+        if(fieldView == null){
+            return; // no input field related to current component
+        }
 
         // TODO: FORMIC-224 Refactorizar FormControllers, eliminar diferencias entre Edit y list
         // save view state

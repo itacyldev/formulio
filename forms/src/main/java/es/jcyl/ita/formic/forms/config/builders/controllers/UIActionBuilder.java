@@ -4,7 +4,7 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.components.link.UIParam;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;

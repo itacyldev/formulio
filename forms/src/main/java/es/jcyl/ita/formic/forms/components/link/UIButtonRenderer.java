@@ -25,6 +25,8 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
@@ -64,7 +66,6 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                 } else {
                     UserEventInterceptor interceptor = env.getUserActionInterceptor();
                     if (interceptor != null) {
-                        // TODO: FORMIC-202 UIButton utilizar método desde UserActionHelper
                         UserAction action = UserAction.navigate(component.getRoute(), component);
                         if (component.hasParams()) {
                             for (UIParam param : component.getParams()) {
@@ -72,7 +73,10 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                                 action.addParam(param.getName(), (Serializable) value);
                             }
                         }
-                        interceptor.doAction(action);
+                        // TODO: FORMIC-229 Terminar refactorización de acciones
+                        // La cración de la accinó se tiene que hacer en el interceptor como en otros componentes
+                        Event event = new Event(Event.EventType.CLICK, null, action);
+                        interceptor.notify(event);
                     }
                 }
             }

@@ -96,4 +96,8 @@ public class ActionController {
             UserMessagesHelper.toast(mc.getRenderingEnv().getViewContext(), msg);
         }
     }
+
+    public MainController getMc() {
+        return mc;
+    }
 }

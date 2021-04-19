@@ -19,6 +19,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -162,7 +163,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     private void executeUserAction(RenderingEnv env, UIComponent component) {
         UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.doAction(UserAction.inputChange(component));
+            interceptor.notify(Event.inputChange(component));
         }
     }
 

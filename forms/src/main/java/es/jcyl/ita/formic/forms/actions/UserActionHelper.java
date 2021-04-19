@@ -23,8 +23,8 @@ import java.io.Serializable;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
 /**

@@ -21,7 +21,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.link.UIParam;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;

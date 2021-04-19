@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components.link;
+package es.jcyl.ita.formic.forms.controllers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -29,7 +29,7 @@ public class UIParam {
 
     };
 
-    public UIParam (String name, ValueBindingExpression value){
+    public UIParam(String name, ValueBindingExpression value){
         this.name = name;
         this.value = value;
     }

@@ -39,6 +39,7 @@ import java.util.List;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
@@ -121,7 +122,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
     private void executeUserAction(RenderingEnv env, UIComponent component) {
         UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.doAction(UserAction.inputChange(component));
+            interceptor.notify(Event.inputChange(component));
         }
     }
 
