@@ -133,8 +133,8 @@ public class TagDef {
                 new Attribute("retrieveMeta", Boolean.class)
         }));
 
-        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, PLACEHOLDER};
-        Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
+        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE};
+        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);

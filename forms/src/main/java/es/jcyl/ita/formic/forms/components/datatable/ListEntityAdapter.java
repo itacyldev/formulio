@@ -20,11 +20,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
+import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.el.JexlUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.repo.Entity;
@@ -173,10 +175,13 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                     UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
                             dtLayout.getComponent());
                     if (dtLayout.getComponent().hasParams()) {
+                        CompositeContext gContext= dtLayout.getRenderingEnv().getContext();
+                        gContext.addContext(new EntityContext(currentEntity));
                         for (UIParam param : dtLayout.getComponent().getParams()) {
-                            Object value = JexlUtils.eval(currentEntity, param.getValue());
+                            Object value = JexlUtils.eval(gContext, param.getValue());
                             action.addParam(param.getName(), (Serializable) value);
                         }
+                        gContext.removeContext("entity");
                     }
                     action.addParam("entityId", (Serializable) currentEntity.getId());
                     userActionInterceptor.doAction(action);
