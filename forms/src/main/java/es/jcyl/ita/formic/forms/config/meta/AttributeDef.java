@@ -25,15 +25,15 @@ public class AttributeDef {
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
-    public static Attribute PLACEHOLDER = new Attribute("placeHolder", "placeHolder", "binding");
-
+    public static Attribute READONLY = new Attribute("readOnly", "readOnly", "binding");
+    public static Attribute READONLY_MESSAGE = new Attribute("readOnlyMessage", "readOnlyMessage", String.class);
 
     // common input fields
     public static Attribute TYPE = new Attribute("type", "type", String.class);
     public static Attribute TYPE_STR = new Attribute("type", "typeStr", String.class);
     public static Attribute LABEL = new Attribute("label");
-    public static Attribute READONLY = new Attribute("readOnly", "readOnly", "binding");
-    public static Attribute READONLY_MESSAGE = new Attribute("readOnlyMessage", "readOnlyMessage", String.class);
+    public static Attribute PLACEHOLDER = new Attribute("placeHolder", "placeHolder", "binding");
+
 
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description

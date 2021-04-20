@@ -410,7 +410,7 @@ public class DatatableWidget extends Widget<UIDatatable>
         }
 
         if (this.filter == null) {
-            Filter filter = FilterRepoUtils.createInstance(this.repo);
+            filter = FilterRepoUtils.createInstance(this.repo);
         }
         if (conditions.length > 0) {
             Criteria criteria = Criteria.and(conditions);
