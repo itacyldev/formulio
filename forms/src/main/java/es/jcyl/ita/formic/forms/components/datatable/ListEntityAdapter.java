@@ -26,12 +26,8 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.link.UIParam;
-<<<<<<< HEAD
-import es.jcyl.ita.formic.forms.el.JexlFormUtils;
-=======
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
->>>>>>> FORMIC-203_Soporte_placeHolders
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.repo.Entity;
 
