@@ -25,15 +25,15 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 
-import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -52,7 +52,7 @@ public class RelativePathAttResolverTest {
     }
 
     @Before
-    public void before(){
+    public void before() {
         RepositoryUtils.clearSources();
     }
 

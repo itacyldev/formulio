@@ -21,7 +21,9 @@ import android.view.ViewGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
@@ -49,6 +51,7 @@ public abstract class FormController implements Identificable, FilterableCompone
     protected Filter filter;
     protected ViewGroup contentView; // Android view element where the UIView is rendered
     private UIAction[] actions; // form actions ids
+    private Map<String, UIAction> _actions;
     private FormEntityLoader entityLoader = new FormEntityLoader();
     private String[] mandatoryFilters;
 
@@ -144,8 +147,22 @@ public abstract class FormController implements Identificable, FilterableCompone
         return actions;
     }
 
+    public Map<String, UIAction> getActionMap() {
+        return _actions;
+    }
+
+    public void addAction(String actionId, UIAction action){
+        if(_actions == null){
+            _actions = new HashMap<>();
+        }
+        _actions.put(actionId, action);
+    }
+
     public void setActions(UIAction[] actions) {
         this.actions = actions;
+        for(UIAction action: actions){
+            addAction(action.getId(), action);
+        }
     }
 
     public UIAction getAction(String name) {

@@ -34,6 +34,10 @@ public class UIParam {
         this.value = value;
     }
 
+    public UIParam(UIParam param) {
+        this(param.getName(), param.getValue());
+    }
+
     public String getName() {
         return name;
     }

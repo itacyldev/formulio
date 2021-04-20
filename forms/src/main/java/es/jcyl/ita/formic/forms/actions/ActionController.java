@@ -51,7 +51,7 @@ public class ActionController {
         BackPressedActionHandler bch = new BackPressedActionHandler(mc, router);
         register(ActionType.BACK, bch);
         register(ActionType.CANCEL, bch);
-        register(ActionType.NAVIGATE, new NavigateActionHandler(mc, router));
+        register(ActionType.NAV, new NavigateActionHandler(mc, router));
         register(ActionType.DELETE, new DeleteActionHandler(mc, router));
         register(ActionType.DELETE_LIST, new DeleteFromListActionHandler(mc, router));
         register(ActionType.CREATE, new CreateEntityActionHandler(mc, router));

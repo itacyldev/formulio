@@ -153,17 +153,17 @@ public class UserAction {
     /** Default action types **/
     /*********************************/
     public static UserAction navigate(String formId) {
-        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, null, null);
+        UserAction action = new UserAction(ActionType.NAV.name(), formId, null, null);
         return action;
     }
 
     public static UserAction navigate(String formId, UIComponent component) {
-        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, component);
+        UserAction action = new UserAction(ActionType.NAV.name(), formId, component);
         return action;
     }
 
     public static UserAction navigate(String formId, FormController origin) {
-        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, origin);
+        UserAction action = new UserAction(ActionType.NAV.name(), formId, origin);
         return action;
     }
 

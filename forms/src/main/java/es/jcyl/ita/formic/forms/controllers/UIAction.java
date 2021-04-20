@@ -24,6 +24,7 @@ package es.jcyl.ita.formic.forms.controllers;
  */
 public class UIAction {
 
+    private String id;
     private String label;
     private String type;
     private String route;
@@ -39,6 +40,30 @@ public class UIAction {
         this.type = type;
         this.label = label;
         this.route = route;
+    }
+
+    public UIAction(UIAction action) {
+        this(action.type, action.label, action.route);
+        this.forceRefresh = action.isForceRefresh();
+        this.registerInHistory = action.isRegisterInHistory();
+        this.message = action.getMessage();
+        // clone parameters
+        if (action.getParams() != null) {
+            int i = 0;
+            this.params = new UIParam[action.getParams().length];
+            for (UIParam param : action.getParams()) {
+                this.params[i] = new UIParam(param);
+                i++;
+            }
+        }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getRoute() {

@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.config.reader.xml;
  * limitations under the License.
  */
 
-import android.net.Uri;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,7 +35,6 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.config.reader.dummy.DummyFormConfigReader;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -47,7 +44,7 @@ import es.jcyl.ita.formic.forms.project.handlers.FormConfigHandler;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -74,8 +71,6 @@ public class XmlConfigReaderTest {
         RepositoryUtils.registerMock("agents");
         RepositoryUtils.registerMock("provincia");
         RepositoryUtils.registerMock("municipio");
-        DummyFormConfigReader reader = new DummyFormConfigReader();
-        reader.read("", Uri.EMPTY);
     }
 
     /**

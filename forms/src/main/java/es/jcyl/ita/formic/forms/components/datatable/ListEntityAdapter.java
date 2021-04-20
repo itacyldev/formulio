@@ -25,6 +25,7 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
@@ -171,10 +172,15 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 UserEventInterceptor interceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
                 if (interceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
+                    UIAction uiAction = dtLayout.getComponent().getAction();
+                    if (uiAction == null) {
+                        return;
+                    }
+
                     UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
                             dtLayout.getComponent());
-                    if (dtLayout.getComponent().hasParams()) {
-                        for (UIParam param : dtLayout.getComponent().getParams()) {
+                    if (uiAction.hasParams()) {
+                        for (UIParam param : uiAction.getParams()) {
                             Object value = JexlFormUtils.eval(currentEntity, param.getValue());
                             action.addParam(param.getName(), (Serializable) value);
                         }

@@ -120,8 +120,6 @@ public class XmlConfigFileReader {
             } else if (eventType == XmlPullParser.START_TAG) {
                 // get builder for this tag
                 currentNode = new ConfigNode(xpp.getName());
-                notifyElementStart(xpp.getName());
-
                 setAttributes(xpp, currentNode, resolver);
                 setIdIfNull(currentNode, resolver);
                 // store current node in the pile
@@ -164,7 +162,7 @@ public class XmlConfigFileReader {
 
     public void build(ConfigNode root) {
         ComponentBuilder builder = builderFactory.getBuilder(root.getName());
-        notifyElementStart(root.getName());
+        notifyElementStart(root);
 
         DevConsole.debug("Starting tag: ${tag}");
         if (builder != null) {
@@ -174,13 +172,15 @@ public class XmlConfigFileReader {
         }
         List<ConfigNode> children = root.getChildren();
         for (ConfigNode kid : children) {
+            notifyElementStart(kid);
             build(kid);
+            notifyElementEnd(kid);
         }
         if (builder != null) {
             DevConsole.debug("Processing children of <${tag}/>");
             builder.processChildren(root);
         }
-        notifyElementEnd(root.getName());
+        notifyElementEnd(root);
         DevConsole.debug(root);
         DevConsole.debug("Ending tag: ${tag}");
     }
@@ -233,34 +233,36 @@ public class XmlConfigFileReader {
         }
     }
 
-    private void notifyElementStart(String name) {
+    private void notifyElementStart(ConfigNode node) {
         if (CollectionUtils.isEmpty(listeners)) {
             return;
         }
         boolean isView = false;
-        if (name.toLowerCase().equals("list") || name.toLowerCase().equals("edit")) {
+        String tagName = node.getName().toLowerCase();
+        if (tagName.equals("edit") || tagName.equals("list")) {
             isView = true;
         }
         for (ReadingProcessListener listener : listeners) {
             if (isView) {
-                listener.viewStart();
+                listener.viewStart(node);
             }
-            listener.elementStart(name);
+            listener.elementStart(node);
         }
     }
 
-    private void notifyElementEnd(String name) {
+    private void notifyElementEnd(ConfigNode node) {
         if (CollectionUtils.isEmpty(listeners)) {
             return;
         }
         boolean isView = false;
-        if (name.toLowerCase().equals("list") || name.toLowerCase().equals("edit")) {
+        String tagName = node.getName().toLowerCase();
+        if (tagName.equals("edit") || tagName.equals("list")) {
             isView = true;
         }
         for (ReadingProcessListener listener : listeners) {
-            listener.elementEnd(name);
+            listener.elementEnd(node);
             if (isView) {
-                listener.viewEnd();
+                listener.viewEnd(node);
             }
         }
     }

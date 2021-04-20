@@ -24,19 +24,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
-import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -140,6 +140,9 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
      */
     private void setUpActions(ConfigNode<FormEditController> node) {
         ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
+        if (actions == null) {
+            return;
+        }
 
         List<ConfigNode> actionList = actions.getChildren();
         UIAction[] lstActions = new UIAction[actionList.size()];

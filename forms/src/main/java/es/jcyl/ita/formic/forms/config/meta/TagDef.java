@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.config.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ACTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BOLD;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
@@ -62,11 +63,9 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ONSAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_AFTER_RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_RENDER;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_CHANGE;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_CLICK;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_SAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
@@ -107,18 +106,18 @@ public class TagDef {
     }
 
     private static void initialize() {
-        Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER, ON_CHANGE};
+        Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
 
         Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE, ON_BEFORE_RENDER, ON_AFTER_RENDER};
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
-        register("form", define(baseRepoAccessor, new Attribute[]{ONSAVE}));
+        register("form", define(baseRepoAccessor, new Attribute[]{ON_SAVE}));
 
-        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS}));
-        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE}));
+        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, ACTION}));
+        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE, ACTION}));
         register("datalistitem", define(scriptHooks, new Attribute[]{ID}));
-        register("card", define(scriptHooks, new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE, IMAGE_POSITION, ON_BEFORE_RENDER, ON_AFTER_RENDER}));
+        register("card", define(scriptHooks, new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE, IMAGE_POSITION, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION}));
 
         Attribute[] text = new Attribute[]{FONT_SIZE, FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, ITALIC, BOLD, UPPERCASE, UNDERLINED};
         register("head", define(text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
@@ -140,7 +139,7 @@ public class TagDef {
                 new Attribute("retrieveMeta", Boolean.class)
         }));
 
-        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER};
+        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION};
         Attribute[] input = new Attribute[]{LABEL, READONLY, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
@@ -159,8 +158,8 @@ public class TagDef {
         Attribute optionValue = new Attribute("value");
         register("option", define(new Attribute[]{ID, optionValue, LABEL}, scriptHooks));
 
-        register("button", define(baseInput, new Attribute[]{ROUTE, ON_CLICK}));
-        register("link", define(baseInput, new Attribute[]{ROUTE, ON_CLICK}));
+        register("button", define(baseInput, new Attribute[]{ROUTE, ACTION}));
+        register("link", define(baseInput, new Attribute[]{ROUTE, ACTION}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
                 REGISTER_IN_HISTORY, FORCE_REFRESH, MESSAGE});

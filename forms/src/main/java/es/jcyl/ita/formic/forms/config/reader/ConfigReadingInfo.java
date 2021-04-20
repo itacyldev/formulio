@@ -51,11 +51,11 @@ public class ConfigReadingInfo implements ReadingProcessListener {
     }
 
     @Override
-    public void viewStart() {
+    public void viewStart(ConfigNode node) {
     }
 
     @Override
-    public void viewEnd() {
+    public void viewEnd(ConfigNode node) {
     }
 
     public static XmlPullParser getXpp() {
@@ -72,12 +72,12 @@ public class ConfigReadingInfo implements ReadingProcessListener {
 
 
     @Override
-    public void elementStart(String tag) {
-        this.currentTag = tag;
+    public void elementStart(ConfigNode node) {
+        this.currentTag = node.getName();
     }
 
     @Override
-    public void elementEnd(String tag) {
+    public void elementEnd(ConfigNode node) {
 
     }
 }

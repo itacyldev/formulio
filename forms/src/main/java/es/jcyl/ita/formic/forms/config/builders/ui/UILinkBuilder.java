@@ -20,6 +20,7 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.link.UILink;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
@@ -43,11 +44,20 @@ public class UILinkBuilder extends AbstractComponentBuilder<UILink> {
         //BuilderHelper.setUpValueExpressionType/(node);
 
         UILink element = node.getElement();
+
+        UIAction uiAction = element.getAction();
+        // TODO: FORMIC-229 Terminar refactorización de acciones
+        if (uiAction == null) { // default action
+            uiAction = new UIAction();
+            uiAction.setType("nav");
+            uiAction.setRoute(element.getRoute());
+            element.setAction(uiAction);
+        }
         // attach nested options
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         if (CollectionUtils.isNotEmpty(paramNodes)) {
             UIParam[] params = getParams(paramNodes);
-            element.setParams(params);
+            uiAction.setParams(params);
         }
     }
 

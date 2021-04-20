@@ -176,6 +176,7 @@ public class ComponentBuilderFactory {
         registerAttResolver("pathResolver", new RelativePathAttResolver());
         registerAttResolver("validator", new ValidatorAttResolver());
         registerAttResolver("color", new ColorAttributeResolver());
+
         registerAttResolver("action", new ActionAttributeResolver());
     }
 

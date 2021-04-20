@@ -25,6 +25,7 @@ import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
@@ -58,11 +59,15 @@ public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
             public void onClick(View v) {
                 UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
+                    UIAction uiAction = component.getAction();
+                    if (uiAction == null) {
+                        return;
+                    }
                     // TODO: FORMIC-202 UIButton, UILinkRenderer utilizar método desde UserActionHelper
                     UserAction action = UserAction.navigate(component.getRoute(), component);
                     action.setComponent(component);
-                    if (component.hasParams()) {
-                        for (UIParam param : component.getParams()) {
+                    if (uiAction.hasParams()) {
+                        for (UIParam param : uiAction.getParams()) {
                             Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
                             action.addParam(param.getName(), (Serializable) value);
                         }

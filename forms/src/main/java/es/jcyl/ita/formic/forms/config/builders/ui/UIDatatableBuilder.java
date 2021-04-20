@@ -26,13 +26,14 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
@@ -66,9 +67,17 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         UIDatatable element = node.getElement();
 
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
+        UIAction uiAction = element.getAction();
+        // TODO: FORMIC-229 Terminar refactorización de acciones
+        if (uiAction == null) { // default action
+            uiAction = new UIAction();
+            uiAction.setType("nav");
+            uiAction.setRoute(element.getRoute());
+            element.setAction(uiAction);
+        }
         if (CollectionUtils.isNotEmpty(paramNodes)) {
             UIParam[] params = getParams(paramNodes);
-            element.setParams(params);
+            uiAction.setParams(params);
         }
     }
 

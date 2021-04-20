@@ -26,13 +26,13 @@ public interface ReadingProcessListener {
 
     void fileEnd(String currentFile);
 
-    void viewStart();
+    void viewStart(ConfigNode node);
 
-    void viewEnd();
+    void viewEnd(ConfigNode node);
 
-    void elementStart(String tag);
+    void elementStart(ConfigNode node);
 
-    void elementEnd(String tag);
+    void elementEnd(ConfigNode node);
 
     Project getProject();
 
