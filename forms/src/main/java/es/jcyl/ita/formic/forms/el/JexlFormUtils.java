@@ -23,6 +23,10 @@ import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.internal.Engine;
 import org.apache.commons.jexl3.internal.TemplateEngine;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
@@ -35,7 +39,15 @@ import es.jcyl.ita.formic.repo.Entity;
  */
 
 public class JexlFormUtils {
-    protected static final JexlEngine jexl = new JexlBuilder().cache(256)
+    //protected static final Map<String, Object> funcs = new HashMap<String, Object>().put("math", Math.class);
+    protected static final Map<String, Object> funcs;
+    static {
+        Map<String, Object> aMap = new HashMap<String, Object>();
+        aMap.put("math", Math.class);
+        funcs = Collections.unmodifiableMap(aMap);
+    }
+
+    protected static final JexlEngine jexl = new JexlBuilder().cache(256).namespaces(funcs)
             .strict(false).silent(false).create();
 
     protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, false,
