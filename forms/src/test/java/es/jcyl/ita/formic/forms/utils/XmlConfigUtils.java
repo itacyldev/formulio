@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.utils;
  * limitations under the License.
  */
 
+import android.net.Uri;
+
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -22,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URI;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -30,6 +33,8 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;
 import es.jcyl.ita.formic.forms.project.Project;
+
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -90,7 +95,7 @@ public class XmlConfigUtils {
     public static FormConfig readFormConfig(Project p, String xml) {
         ConfigReadingInfo readingInfo = new ConfigReadingInfo();
         readingInfo.setProject(p);
-        readingInfo.setCurrentFile("testFile");
+        readingInfo.fileStart("testFile");
         return (FormConfig) readFormConfig(readingInfo, xml);
     }
 
@@ -101,9 +106,11 @@ public class XmlConfigUtils {
         ComponentBuilderFactory.getInstance().setInfo(readingInfo);
 
         XmlConfigFileReader reader = new XmlConfigFileReader();
-        reader.setListener(readingInfo);
-        InputStream is = XmlConfigUtils.createStream(xml);
-        ConfigNode root = reader.read(is);
+        reader.addListener(readingInfo);
+        File tmpXMLFile = XmlConfigUtils.createTmpXMLFile(xml);
+        Uri uri = mock(Uri.class);
+        when(uri.getPath()).thenReturn(tmpXMLFile.getAbsolutePath());
+        ConfigNode root = reader.read(uri);
         return (FormConfig) root.getElement();
     }
 

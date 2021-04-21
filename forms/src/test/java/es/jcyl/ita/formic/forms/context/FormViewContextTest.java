@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
@@ -35,6 +36,7 @@ import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
@@ -68,7 +70,8 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
-        RenderingEnv env = new RenderingEnv(null);
+        MainController mc = MockingUtils.mockMainController(ctx);
+        RenderingEnv env = new RenderingEnv(mc.getActionController());
         env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
@@ -99,7 +102,8 @@ public class FormViewContextTest {
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
-        RenderingEnv env = new RenderingEnv(null);
+        MainController mc = MockingUtils.mockMainController(ctx);
+        RenderingEnv env = new RenderingEnv(mc.getActionController());
         env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 

@@ -30,13 +30,13 @@ import es.jcyl.ita.formic.repo.Repository;
 
 public class FormEntityPersister {
 
-    public void save(Context context, UIForm form) {
+    public void save(UIForm form) {
         Entity entity = form.getEntity();
         EditableRepository repo = getEditableRepo(form);
         repo.save(entity);
     }
 
-    public void delete(Context context, UIForm form) {
+    public void delete(UIForm form) {
         Entity entity = form.getEntity();
         EditableRepository repo = getEditableRepo(form);
         repo.delete(entity);

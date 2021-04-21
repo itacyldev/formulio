@@ -39,8 +39,6 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -82,7 +80,7 @@ public class ViewRenderer {
             // set in script context
             eventHandler.onViewContextChanged(fContext);
         } else {
-            if (env.getFormContext() != null) {
+            if (env.getFormContext() != null && env.getFormContext().getViewContext() != null) {
                 env.getFormContext().getViewContext().registerComponentView(component, widget);
             }
         }
@@ -135,7 +133,6 @@ public class ViewRenderer {
         }
         return widget;
     }
-
 
 
     private void setupFormContext(UIComponent root, RenderingEnv env) {

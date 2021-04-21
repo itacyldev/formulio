@@ -30,6 +30,7 @@ import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -107,12 +108,12 @@ public class UILinkBuilderTest {
         Assert.assertNotNull(links);
 
         UILink link = links.get(0);
-
-        Assert.assertNotNull(link.getParams());
-        Assert.assertEquals(2, link.getParams().length);
-        for (int i = 0; i < link.getParams().length; i++) {
-            Assert.assertNotNull(link.getParams()[i].getName());
-            Assert.assertEquals("name" + (i + 1), link.getParams()[i].getName());
+        UIAction uiAction = link.getAction();
+        Assert.assertNotNull(uiAction.getParams());
+        Assert.assertEquals(2, uiAction.getParams().length);
+        for (int i = 0; i < uiAction.getParams().length; i++) {
+            Assert.assertNotNull(uiAction.getParams()[i].getName());
+            Assert.assertEquals("name" + (i + 1), uiAction.getParams()[i].getName());
 
             String strValue = (String) ConvertUtils.convert("value" + (i + 1), String.class);
             ValueBindingExpression ve = factory.create(strValue, String.class);

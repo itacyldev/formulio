@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
@@ -63,9 +63,9 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // notify action
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(UserAction.inputChange(component));
+                    interceptor.notify(Event.inputChange(widget.getComponent()));
                 }
             }
 

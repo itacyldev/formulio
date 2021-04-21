@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.FormContext;
@@ -86,7 +87,7 @@ public class FormContextTest {
 
         // configure the context as the MainController would do during navigation
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(null);
+        RenderingEnv env = new RenderingEnv(mock(ActionController.class));
         env.setGlobalContext(gCtx);
 
         // create form using entity meta to define UIFields
@@ -137,7 +138,7 @@ public class FormContextTest {
 
         // configure the context as the MainController would do
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(null);
+        RenderingEnv env = new RenderingEnv(mock(ActionController.class));
         env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 

@@ -7,7 +7,7 @@ function validateForm(){
     var result = {};
 
     if(value.length < 10){
-        out.println(value.length);
+        out.println("Invalid value: " + value.length);
         result["error"] = true;
         result["message"] = "The value of field f1 has to be at least 10";
     }

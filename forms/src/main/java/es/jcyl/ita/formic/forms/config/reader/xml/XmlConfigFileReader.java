@@ -19,6 +19,7 @@ import android.net.Uri;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.collections.CollectionUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -27,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,20 +44,21 @@ import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
  * Reads form configuration files and creates form controllers and view Components.
  * It first goes over the tree creating a simple ConfigNode and check the element ids, and after
  * that uses builders to create view components and controllers.
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class XmlConfigFileReader {
     private static final String RELAXED_FEATURE = "http://xmlpull.org/v1/doc/features.html#relaxed";
-    private ReadingProcessListener listener;
+    private List<ReadingProcessListener> listeners = new ArrayList<>();
 
     private XmlPullParserFactory factory;
     private ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
     private ComponentResolver resolver;
+    private String currentFile;
 
     public XmlConfigFileReader() {
         try {
@@ -63,6 +66,8 @@ public class XmlConfigFileReader {
             factory.setNamespaceAware(false);
             resolver = new ComponentResolver();
             builderFactory.setComponentResolver(resolver);
+            List<ReadingProcessListener> listeners = builderFactory.getListeners();
+            addListeners(listeners);
         } catch (XmlPullParserException e) {
             throw new ConfigurationException(DevConsole.error("Error occurred while trying to instantiate XMLFileFormConfigReader.", e));
         }
@@ -71,13 +76,18 @@ public class XmlConfigFileReader {
     public ConfigNode read(Uri uri) throws ConfigurationException {
         try {
             // works just for file schemes!!!!
-            return read(new FileInputStream(uri.getPath()));
+            notifyFileStart(uri.getPath());
+            this.currentFile = uri.getPath();
+            ConfigNode node = read(new FileInputStream(currentFile));
+            notifyFileEnd(currentFile);
+            return node;
         } catch (FileNotFoundException e) {
             throw new ConfigurationException("Error while opening config file " + uri.toString(), e);
         }
     }
 
-    public ConfigNode read(InputStream is) throws ConfigurationException {
+
+    private ConfigNode read(InputStream is) throws ConfigurationException {
         XmlPullParser xpp = null;
         try {
             xpp = factory.newPullParser();
@@ -106,12 +116,10 @@ public class XmlConfigFileReader {
         while (eventType != XmlPullParser.END_DOCUMENT) {
 
             if (eventType == XmlPullParser.START_DOCUMENT) {
-
+                // pass
             } else if (eventType == XmlPullParser.START_TAG) {
                 // get builder for this tag
                 currentNode = new ConfigNode(xpp.getName());
-                notifyNewElement(xpp.getName());
-
                 setAttributes(xpp, currentNode, resolver);
                 setIdIfNull(currentNode, resolver);
                 // store current node in the pile
@@ -133,11 +141,6 @@ public class XmlConfigFileReader {
         return currentNode;
     }
 
-    private void notifyNewElement(String name) {
-        if (listener != null) {
-            listener.newElement(name);
-        }
-    }
 
     private void setIdIfNull(ConfigNode node, ComponentResolver resolver) {
         if (StringUtils.isBlank(node.getId())) {
@@ -146,8 +149,7 @@ public class XmlConfigFileReader {
             String id = null;
             if (tag.toLowerCase().equals("main")) {
                 // use filename as id
-                String currentFile = listener.getCurrentFile();
-                id = FilenameUtils.getBaseName(currentFile);
+                id = FilenameUtils.getBaseName(this.currentFile);
             } else {
                 Set<String> tags = this.resolver.getIdsForTag(tag);
                 id = tag + (tags.size() + 1);  // table1, table2, table3,..
@@ -157,12 +159,12 @@ public class XmlConfigFileReader {
         this.resolver.addComponentId(node.getName(), node.getId());
     }
 
+
     public void build(ConfigNode root) {
         ComponentBuilder builder = builderFactory.getBuilder(root.getName());
-        notifyNewElement(root.getName());
+        notifyElementStart(root);
 
         DevConsole.debug("Starting tag: ${tag}");
-
         if (builder != null) {
             Object element = builder.build(root);
             DevConsole.debug("<${tag}/> element created.");
@@ -170,12 +172,15 @@ public class XmlConfigFileReader {
         }
         List<ConfigNode> children = root.getChildren();
         for (ConfigNode kid : children) {
+            notifyElementStart(kid);
             build(kid);
+            notifyElementEnd(kid);
         }
         if (builder != null) {
             DevConsole.debug("Processing children of <${tag}/>");
             builder.processChildren(root);
         }
+        notifyElementEnd(root);
         DevConsole.debug(root);
         DevConsole.debug("Ending tag: ${tag}");
     }
@@ -198,8 +203,67 @@ public class XmlConfigFileReader {
     }
 
 
-    public void setListener(ReadingProcessListener listener) {
-        this.listener = listener;
+    public void addListener(ReadingProcessListener listener) {
+        if (listener != null) {
+            this.listeners.add(listener);
+        }
     }
 
+    public void addListeners(List<ReadingProcessListener> listeners) {
+        if (listeners != null) {
+            for (ReadingProcessListener listener : listeners) {
+                addListener(listener);
+            }
+        }
+    }
+
+    private void notifyFileStart(String path) {
+        if (CollectionUtils.isNotEmpty(listeners)) {
+            for (ReadingProcessListener listener : listeners) {
+                listener.fileStart(path);
+            }
+        }
+    }
+
+    private void notifyFileEnd(String path) {
+        if (CollectionUtils.isNotEmpty(listeners)) {
+            for (ReadingProcessListener listener : listeners) {
+                listener.fileEnd(path);
+            }
+        }
+    }
+
+    private void notifyElementStart(ConfigNode node) {
+        if (CollectionUtils.isEmpty(listeners)) {
+            return;
+        }
+        boolean isView = false;
+        String tagName = node.getName().toLowerCase();
+        if (tagName.equals("edit") || tagName.equals("list")) {
+            isView = true;
+        }
+        for (ReadingProcessListener listener : listeners) {
+            if (isView) {
+                listener.viewStart(node);
+            }
+            listener.elementStart(node);
+        }
+    }
+
+    private void notifyElementEnd(ConfigNode node) {
+        if (CollectionUtils.isEmpty(listeners)) {
+            return;
+        }
+        boolean isView = false;
+        String tagName = node.getName().toLowerCase();
+        if (tagName.equals("edit") || tagName.equals("list")) {
+            isView = true;
+        }
+        for (ReadingProcessListener listener : listeners) {
+            listener.elementEnd(node);
+            if (isView) {
+                listener.viewEnd(node);
+            }
+        }
+    }
 }

@@ -25,8 +25,11 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
@@ -62,17 +65,10 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                     UserMessagesHelper.toast(env.getViewContext(), component.getReadOnlyMessage(),
                             Toast.LENGTH_LONG);
                 } else {
-                    ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                    UserEventInterceptor interceptor = env.getUserActionInterceptor();
                     if (interceptor != null) {
-                        // TODO: FORMIC-202 UIButton utilizar método desde UserActionHelper
-                        UserAction action = UserAction.navigate(component.getRoute(), component);
-                        if (component.hasParams()) {
-                            for (UIParam param : component.getParams()) {
-                                Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
-                                action.addParam(param.getName(), (Serializable) value);
-                            }
-                        }
-                        interceptor.doAction(action);
+                        Event event = new Event(Event.EventType.CLICK, component);
+                        interceptor.notify(event);
                     }
                 }
             }

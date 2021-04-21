@@ -9,6 +9,7 @@ import java.util.Set;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
@@ -41,6 +42,8 @@ public abstract class UIComponent implements Identificable {
      * not from the mainEntity.
      */
     private boolean isEntityMapping = false;
+
+    protected UIAction action;
     /**
      * Scripting hooks
      */
@@ -197,11 +200,11 @@ public abstract class UIComponent implements Identificable {
             return null;
         } else {
             Object value = getValue(context, this.valueExpression);
-            if (value == null){
+            if (value == null) {
                 if (this.placeHolder == null) {
                     return null;
                 }
-                value =  value = getValue(context, this.placeHolder);
+                value = value = getValue(context, this.placeHolder);
             }
             return value;
         }
@@ -209,7 +212,7 @@ public abstract class UIComponent implements Identificable {
 
     private Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
         Object value;
-        try{
+        try {
             value = JexlFormUtils.eval(context, valueBindingExpression);
         } catch (Exception e) {
             error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
@@ -258,6 +261,14 @@ public abstract class UIComponent implements Identificable {
         this.onAfterRenderAction = onAfterRenderAction;
     }
 
+    public UIAction getAction() {
+        return action;
+    }
+
+    public void setAction(UIAction action) {
+        this.action = action;
+    }
+
     @Override
     public String toString() {
         return this.getClass().getName() + "{" +
@@ -297,7 +308,7 @@ public abstract class UIComponent implements Identificable {
             try {
                 return JexlFormUtils.eval(context, this.readOnly);
             } catch (Exception e) {
-                error("Error while trying to evaluate JEXL expression: "+this.readOnly.toString(),e);
+                error("Error while trying to evaluate JEXL expression: " + this.readOnly.toString(), e);
                 return null;
             }
         }
@@ -314,4 +325,5 @@ public abstract class UIComponent implements Identificable {
     public void setPlaceHolder(ValueBindingExpression placeHolder) {
         this.placeHolder = placeHolder;
     }
+
 }

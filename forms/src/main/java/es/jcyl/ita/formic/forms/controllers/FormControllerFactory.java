@@ -20,6 +20,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import es.jcyl.ita.formic.forms.MainController;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -30,6 +33,7 @@ public class FormControllerFactory {
 
     private static FormControllerFactory instance;
     private Map<String, FormController> formInstances;
+    private MainController mc;
 
     public static FormControllerFactory getInstance() {
         if (instance == null) {
@@ -44,6 +48,7 @@ public class FormControllerFactory {
 
     public void register(FormController controller) {
         formInstances.put(controller.getId(), controller);
+        controller.setMc(mc);
     }
 
     public FormController getController(String id) {
@@ -59,6 +64,9 @@ public class FormControllerFactory {
         }
         return lst;
     }
+    public Set<String> getControllerIds(){
+        return formInstances.keySet();
+    }
 
     public Collection<FormController> getList() {
         return formInstances.values();
@@ -66,5 +74,9 @@ public class FormControllerFactory {
 
     public void clear() {
         formInstances.clear();
+    }
+
+    public void setMc(MainController mc) {
+        this.mc = mc;
     }
 }

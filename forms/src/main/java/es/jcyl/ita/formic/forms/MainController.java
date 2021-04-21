@@ -99,11 +99,12 @@ public class MainController implements ContextAwareComponent {
 
     MainController() {
         formControllerFactory = FormControllerFactory.getInstance();
+        formControllerFactory.setMc(this);
         router = new Router(this);
         actionController = new ActionController(this, router);
         renderingEnv = new RenderingEnv(actionController);
-        flowManager = ReactivityFlowManager.getInstance();
         scriptEngine = ScriptEngine.getInstance();
+        flowManager = ReactivityFlowManager.getInstance();
         registerFormTypeViews();
     }
 
@@ -140,7 +141,8 @@ public class MainController implements ContextAwareComponent {
             FormController controller = formControllerFactory.getController(formId);
             if (controller == null) {
                 throw new FormException(error(String.format("No form controller found with id [%s] " +
-                        "check route string.", formId)));
+                                "check route string. Available ids: %s", formId,
+                        formControllerFactory.getControllerIds())));
             }
             this.formController = controller;
             this.formController.load(globalContext);
@@ -327,6 +329,10 @@ public class MainController implements ContextAwareComponent {
 
     public Router getRouter() {
         return router;
+    }
+
+    public ScriptEngine getScriptEngine() {
+        return scriptEngine;
     }
 
     /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/

@@ -20,10 +20,11 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.link.UIButton;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 
 /**
  * @author Rosa María Muñiz (mungarro@itacyl.es)
@@ -44,10 +45,19 @@ public class UIButtonBuilder extends AbstractComponentBuilder<UIButton> {
 
         UIButton element = node.getElement();
         // attach nested options
+        UIAction uiAction = element.getAction();
+        // TODO: FORMIC-229 Terminar refactorización de acciones
+        if (uiAction == null) { // default action
+            uiAction = new UIAction();
+            uiAction.setType("nav");
+            uiAction.setRoute(element.getRoute());
+            element.setAction(uiAction);
+        }
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         if (CollectionUtils.isNotEmpty(paramNodes)) {
             UIParam[] params = getParams(paramNodes);
-            element.setParams(params);
+            // TODO: solve this for link and button
+            uiAction.setParams(params);
         }
     }
 

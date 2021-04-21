@@ -42,8 +42,20 @@ public class ConfigReadingInfo implements ReadingProcessListener {
         return currentFile;
     }
 
-    public void setCurrentFile(String currentFile) {
+    public void fileStart(String currentFile) {
         this.currentFile = currentFile;
+    }
+
+    @Override
+    public void fileEnd(String currentFile) {
+    }
+
+    @Override
+    public void viewStart(ConfigNode node) {
+    }
+
+    @Override
+    public void viewEnd(ConfigNode node) {
     }
 
     public static XmlPullParser getXpp() {
@@ -60,7 +72,12 @@ public class ConfigReadingInfo implements ReadingProcessListener {
 
 
     @Override
-    public void newElement(String tag) {
-        this.currentTag = tag;
+    public void elementStart(ConfigNode node) {
+        this.currentTag = node.getName();
+    }
+
+    @Override
+    public void elementEnd(ConfigNode node) {
+
     }
 }

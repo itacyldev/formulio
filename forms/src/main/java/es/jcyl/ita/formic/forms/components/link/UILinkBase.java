@@ -34,7 +34,6 @@ public class UILinkBase extends UIComponent {
     private TYPE type = LINK;
 
     private String route;
-    private UIParam[] params;
 
     @Override
     public String getRendererType() {return type.name().toLowerCase();}
@@ -45,17 +44,5 @@ public class UILinkBase extends UIComponent {
 
     public void setRoute(String route) {
         this.route = route;
-    }
-
-    public UIParam[] getParams() {
-        return params;
-    }
-
-    public void setParams(UIParam[] params) {
-        this.params = params;
-    }
-
-    public boolean hasParams() {
-        return this.params != null && this.params.length > 0;
     }
 }

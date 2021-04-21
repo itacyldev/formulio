@@ -31,7 +31,7 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -157,10 +157,10 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
 
         List<ConfigNode> actionList = actions.getChildren();
-        FCAction[] lstActions = new FCAction[actionList.size()];
+        UIAction[] lstActions = new UIAction[actionList.size()];
 
         for (int i = 0; i < actionList.size(); i++) {
-            lstActions[i] = (FCAction) actionList.get(i).getElement();
+            lstActions[i] = (UIAction) actionList.get(i).getElement();
             lstActions[i].setType(actionList.get(i).getName());
         }
         node.getElement().setActions(lstActions);

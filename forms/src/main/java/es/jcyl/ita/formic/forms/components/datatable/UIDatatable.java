@@ -21,7 +21,6 @@ import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
@@ -46,8 +45,6 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
     // row selection
     private int numFieldsToShow = 20;
     private int numVisibleRows = 10;
-
-    private UIParam[] params;
 
     public UIDatatable() {
         setRendererType("datatable");
@@ -158,15 +155,4 @@ public class UIDatatable extends UIComponent implements FilterableComponent {
         return expressions;
     }
 
-    public UIParam[] getParams() {
-        return params;
-    }
-
-    public void setParams(UIParam[] params) {
-        this.params = params;
-    }
-
-    public boolean hasParams() {
-        return this.params != null && this.params.length > 0;
-    }
 }

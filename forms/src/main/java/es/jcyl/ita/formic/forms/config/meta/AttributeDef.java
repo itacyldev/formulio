@@ -103,9 +103,6 @@ public class AttributeDef {
     // tab
     public static Attribute SELECTED = new Attribute("selected", "selected", "binding");
 
-    // event handling
-    public static Attribute ONSAVE = new Attribute("onsave", true);
-
     // style, layout, ...
     public static Attribute HEIGHT = new Attribute("height", Integer.class);
     public static Attribute WIDTH = new Attribute("width", Integer.class);
@@ -133,8 +130,11 @@ public class AttributeDef {
     public static Attribute STROKE_WIDTH = new Attribute("strokeWidth", Integer.class);
 
     // scripting
+    public static Attribute ON_SAVE = new Attribute("onsave", true);
     public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
     public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
+    public static Attribute ACTION = new Attribute("action", "action", "action");
     public static Attribute SRC = new Attribute("src", "src", "pathResolver");
+
 
 }

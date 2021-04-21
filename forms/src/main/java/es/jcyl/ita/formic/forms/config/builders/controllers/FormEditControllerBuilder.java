@@ -24,19 +24,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
-import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -57,7 +57,6 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     @Override
     protected void doWithAttribute(FormEditController element, String name, String value) {
     }
-
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<FormEditController> node) {
@@ -141,13 +140,16 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
      */
     private void setUpActions(ConfigNode<FormEditController> node) {
         ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
+        if (actions == null) {
+            return;
+        }
 
         List<ConfigNode> actionList = actions.getChildren();
-        FCAction[] lstActions = new FCAction[actionList.size()];
+        UIAction[] lstActions = new UIAction[actionList.size()];
 
-        FCAction action;
+        UIAction action;
         for (int i = 0; i < actionList.size(); i++) {
-            action = (FCAction) actionList.get(i).getElement();
+            action = (UIAction) actionList.get(i).getElement();
             if (StringUtils.isBlank(action.getType())) {
                 action.setType(actionList.get(i).getName());
             }
@@ -194,7 +196,8 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
     /**
-     * If current <edit/> element doesnt have a form, create one and nested all elements except actions
+     * If current <edit/> element doesnt have a form, create one and nested all elements except
+     * actions and scripts
      *
      * @return
      */
@@ -213,7 +216,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
         List<ConfigNode> formChildren = new ArrayList<>();
         for (ConfigNode n : root.getChildren()) {
-            if (n.getName().equals("actions")) {
+            if (n.getName().equals("actions") || n.getName().equals("script")) {
                 rootChildren.add(n);
             } else {
                 formChildren.add(n);

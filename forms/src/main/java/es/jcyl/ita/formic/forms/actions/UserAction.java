@@ -15,12 +15,15 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -38,12 +41,20 @@ public class UserAction {
 
     private FormController origin;
 
+    public UserAction(ActionType actionType) {
+        this(actionType.name(), null, null, null);
+    }
+
     public UserAction(String actionType, UIComponent component) {
         this(actionType, null, component, null);
     }
 
     public UserAction(String actionType, String route, FormController origin) {
         this(actionType, route, null, origin);
+    }
+
+    public UserAction(UIAction action, UIComponent component) {
+        this(action.getType(), action.getRoute(), component);
     }
 
     public UserAction(String actionType, String route, UIComponent component) {
@@ -56,6 +67,7 @@ public class UserAction {
         this.component = component;
         this.origin = origin;
     }
+
 
     public String getType() {
         return type;
@@ -132,31 +144,35 @@ public class UserAction {
         this.message = message;
     }
 
+    /**
+     * Indicates if current action is going to provoke a change in the view due to a forceRefresh or
+     * because it makes the action controller to perform a navigation.
+     * @return
+     */
+    public boolean isViewChangeAction(){
+        return this.forceRefresh || StringUtils.isNotBlank(this.route);
+    }
+
     /*********************************/
     /** Default action types **/
     /*********************************/
     public static UserAction navigate(String formId) {
-        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, null, null);
+        UserAction action = new UserAction(ActionType.NAV.name(), formId, null, null);
         return action;
     }
 
     public static UserAction navigate(String formId, UIComponent component) {
-        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, component);
+        UserAction action = new UserAction(ActionType.NAV.name(), formId, component);
         return action;
     }
 
     public static UserAction navigate(String formId, FormController origin) {
-        UserAction action = new UserAction(ActionType.NAVIGATE.name(), formId, origin);
+        UserAction action = new UserAction(ActionType.NAV.name(), formId, origin);
         return action;
     }
 
     public static UserAction back(FormController origin) {
         UserAction action = new UserAction(ActionType.BACK.name(), null, origin);
-        return action;
-    }
-
-    public static UserAction inputChange(UIComponent component) {
-        UserAction action = new UserAction(ActionType.INPUT_CHANGE.name(), null, component);
         return action;
     }
 

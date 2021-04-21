@@ -24,7 +24,6 @@ import es.jcyl.ita.formic.forms.actions.handlers.BackPressedActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
-import es.jcyl.ita.formic.forms.actions.handlers.InputChangeActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.NavigateActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -47,14 +46,14 @@ public class ActionController {
         this.router = router;
         // default actions
         register(ActionType.SAVE, new SaveActionHandler(mc, router));
-        register(ActionType.INPUT_CHANGE, new InputChangeActionHandler(mc, router));
         BackPressedActionHandler bch = new BackPressedActionHandler(mc, router);
         register(ActionType.BACK, bch);
         register(ActionType.CANCEL, bch);
-        register(ActionType.NAVIGATE, new NavigateActionHandler(mc, router));
+        register(ActionType.NAV, new NavigateActionHandler(mc, router));
         register(ActionType.DELETE, new DeleteActionHandler(mc, router));
         register(ActionType.DELETE_LIST, new DeleteFromListActionHandler(mc, router));
         register(ActionType.CREATE, new CreateEntityActionHandler(mc, router));
+        register(ActionType.JS, new JsActionHandler(mc, router));
     }
 
     public void register(ActionType type, ActionHandler handler) {
@@ -95,5 +94,9 @@ public class ActionController {
             DevConsole.error(msg, e);
             UserMessagesHelper.toast(mc.getRenderingEnv().getViewContext(), msg);
         }
+    }
+
+    public MainController getMc() {
+        return mc;
     }
 }

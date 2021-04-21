@@ -23,8 +23,8 @@ import java.io.Serializable;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.link.UIParam;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
 /**
@@ -39,7 +39,7 @@ public class UserActionHelper {
      * @param context:       Context used to evaluate template's binding expressions
      * @return
      */
-    public static UserAction evaluate(FCAction actionTemplate, Context context, UIComponent component) {
+    public static UserAction evaluate(UIAction actionTemplate, Context context, UIComponent component) {
         String strRoute = "";
         if (actionTemplate.getRoute() != null) {
             JxltEngine.Expression e = JexlFormUtils.createExpression(actionTemplate.getRoute());
