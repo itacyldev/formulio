@@ -78,7 +78,7 @@ public class CreateEntityActionHandler extends EntityChangeAction<FormEditContro
     }
 
     @Override
-    protected String getSuccessMessage() {
+    protected String getSuccessMessage(UserAction action) {
         return Config.getInstance().getStringResource(R.string.action_create_success);
     }
 

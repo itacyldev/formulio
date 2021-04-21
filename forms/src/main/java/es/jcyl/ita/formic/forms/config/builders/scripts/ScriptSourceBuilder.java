@@ -26,7 +26,6 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.scripts.ScriptSource;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -63,8 +62,12 @@ public class ScriptSourceBuilder extends AbstractComponentBuilder<ScriptSource> 
 
         }
         ConfigNode controllerNode = BuilderHelper.findParentController(node);
+        if (controllerNode == null) {
+            throw new ConfigurationException(error("Invalid script definition, make sure " +
+                    "the <script> tag is nested inside an <edit> or <list> tag."));
+        }
         try {
-            ScriptEngine.getInstance().store(controllerNode.getId(), source);
+            this.getFactory().getScriptEngine().store(controllerNode.getId(), source);
         } catch (Exception e) {
             error(source);
             throw new ConfigurationException("An error occurred while trying to load script in file ${file}", e);

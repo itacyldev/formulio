@@ -146,6 +146,7 @@ public class Config {
             this.formConfigRepo.deleteAll();
         }
         formControllerFactory.clear();
+        MainController.getInstance().getScriptEngine().clearSources();
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
         this.globalContext.clear();

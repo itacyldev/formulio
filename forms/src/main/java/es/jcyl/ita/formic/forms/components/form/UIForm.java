@@ -113,43 +113,6 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     }
 
 
-    public boolean isVisible(UIInputComponent field) {
-        FormViewContext viewContext = context.getViewContext();
-
-        InputWidget fieldView = viewContext.findInputFieldViewById(field.getId());
-        return fieldView.isVisible();
-    }
-
-    public boolean validate(UIInputComponent field) {
-        FormViewContext viewContext = context.getViewContext();
-
-        // get user input using view context and check all validators.
-        String value = viewContext.getString(field.getId());
-        boolean valid = true;
-        for (Validator validator : field.getValidators()) {
-            try {
-                if (isVisible(field)) {
-                    validator.validate(context, field, value);
-                }
-            } catch (ValidatorException e) {
-                // get the error and put it in form context
-                FormContextHelper.setMessage(context, field.getId(), e.getMessage());
-                valid = false;
-            }
-        }
-        // call validation function
-        if (this.onValidate != null) {
-            ScriptEngine srcEngine = ScriptEngine.getInstance();
-            // TODO: we have to pass a combination of globalContext + formContext
-            Map result = srcEngine.callFunction(this.id, this.onValidate);
-            if (result.containsKey("error")) {
-                FormContextHelper.setMessage(context, this.getId(), (String) result.get("message"));
-                valid = false;
-            }
-        }
-        return valid;
-    }
-
     public Filter getFilter() {
         return filter;
     }

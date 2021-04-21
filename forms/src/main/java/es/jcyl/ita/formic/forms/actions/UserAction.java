@@ -41,6 +41,10 @@ public class UserAction {
 
     private FormController origin;
 
+    public UserAction(ActionType actionType) {
+        this(actionType.name(), null, null, null);
+    }
+
     public UserAction(String actionType, UIComponent component) {
         this(actionType, null, component, null);
     }
@@ -169,11 +173,6 @@ public class UserAction {
 
     public static UserAction back(FormController origin) {
         UserAction action = new UserAction(ActionType.BACK.name(), null, origin);
-        return action;
-    }
-
-    public static UserAction inputChange(UIComponent component) {
-        UserAction action = new UserAction(ActionType.INPUT_CHANGE.name(), null, component);
         return action;
     }
 

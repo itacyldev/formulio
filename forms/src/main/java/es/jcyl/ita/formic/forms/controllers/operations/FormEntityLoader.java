@@ -41,7 +41,6 @@ import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 public class FormEntityLoader {
 
-
     public Entity load(CompositeContext globalCtx, UIForm form) {
         Entity entity;
         Repository repo = form.getRepo();

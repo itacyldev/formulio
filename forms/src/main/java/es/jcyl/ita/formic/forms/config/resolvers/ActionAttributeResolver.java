@@ -190,6 +190,9 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
         UIComponent component = (UIComponent) node.getElement();
         UIAction componentAction = new UIAction();
         componentAction.setType(ActionType.JS.name());
+        componentAction.setRegisterInHistory(false);
+        componentAction.setForceRefresh(true);
+
         // create param "method" with the name of the js function
         UIParam[] params = new UIParam[1];
         ValueBindingExpression paramValue = this.factory.getExpressionFactory().create(node.getAttribute("action"));

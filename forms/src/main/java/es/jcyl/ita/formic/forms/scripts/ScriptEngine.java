@@ -18,9 +18,7 @@ package es.jcyl.ita.formic.forms.scripts;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
-import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Script;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
 
@@ -70,7 +68,7 @@ public class ScriptEngine {
         source.exec(rhino, scope);
     }
 
-    public Map callFunction(String formId, String method, Object... args) {
+    public Object callFunction(String formId, String method, Object... args) {
         Script script = this.scripts.get(formId);
         if (script == null) {
             throw new IllegalStateException("No script found for formId: " + formId);
@@ -81,13 +79,13 @@ public class ScriptEngine {
         return (script == null) ? null : callFunction(script, method, args);
     }
 
-    public Map callFunction(Script script, String method, Object... args) {
+    public Object callFunction(Script script, String method, Object... args) {
         // load script functions in scope
         script.exec(rhino, scope);
         // execute function
         Function function = (Function) scope.get(method, scope);
-        Object call = function.call(rhino, scope, scope, args);
-        return (call instanceof Undefined) ? null : (NativeObject) call;
+        Object result = function.call(rhino, scope, scope, args);
+        return (result instanceof Undefined) ? null : result;
     }
 
     public void initEngine(Map<String, Object> props) {
@@ -114,5 +112,9 @@ public class ScriptEngine {
             initScope();
         }
         ScriptableObject.putProperty(scope, name, Context.javaToJS(object, scope));
+    }
+
+    public void clearSources() {
+        this.scripts.clear();
     }
 }

@@ -43,12 +43,12 @@ public class DeleteActionHandler extends EntityChangeAction {
     }
 
     @Override
-    protected String getSuccessMessage() {
+    protected String getSuccessMessage(UserAction action) {
         return Config.getInstance().getStringResource(R.string.action_delete_success);
     }
 
     @Override
-    protected String getErrorMessage(Exception e) {
+    protected String getErrorMessage(UserAction action, Exception e) {
         return Config.getInstance().getStringResource(R.string.action_delete_error);
     }
 

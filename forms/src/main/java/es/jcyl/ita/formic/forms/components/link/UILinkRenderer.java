@@ -21,15 +21,9 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import java.io.Serializable;
-
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
-import es.jcyl.ita.formic.forms.controllers.UIParam;
-import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -54,27 +48,13 @@ public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
 
         String value = getComponentValue(env, component, String.class);
         linkView.setText(Html.fromHtml(String.format("<u>%s</u>", value)));
+
         linkView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    UIAction uiAction = component.getAction();
-                    if (uiAction == null) {
-                        return;
-                    }
-                    // TODO: FORMIC-202 UIButton, UILinkRenderer utilizar método desde UserActionHelper
-                    UserAction action = UserAction.navigate(component.getRoute(), component);
-                    action.setComponent(component);
-                    if (uiAction.hasParams()) {
-                        for (UIParam param : uiAction.getParams()) {
-                            Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
-                            action.addParam(param.getName(), (Serializable) value);
-                        }
-                    }
-                    // TODO: FORMIC-229 Terminar refactorización de acciones
-                    // La cración de la accinó se tiene que hacer en el interceptor como en otros componentes
-                    Event event = new Event(Event.EventType.CLICK, null, action);
+                    Event event = new Event(Event.EventType.CLICK, component);
                     interceptor.notify(event);
                 }
             }

@@ -110,9 +110,10 @@ public class FormScriptingTest {
 
         // load script
         String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
-        ScriptEngine engine = ScriptEngine.getInstance();
-        engine.store(form.getId(), source);
-        engine.putProperty("out",System.out);
+        ScriptEngine engine = recipe.mc.getScriptEngine();
+        engine.store(recipe.mc.getFormController().getId(), source);
+        engine.initEngine(null);
+        engine.putProperty("out", System.out);
 
         // set field f1 to a value > 10
         recipe.env.disableInputDelay(true);

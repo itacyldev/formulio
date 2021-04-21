@@ -74,6 +74,7 @@ import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -96,6 +97,7 @@ public class ComponentBuilderFactory {
     private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
     private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     private EntitySourceFactory sourceFactory = EntitySourceFactory.getInstance();
+    private ScriptEngine scriptEngine = ScriptEngine.getInstance();
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -307,5 +309,9 @@ public class ComponentBuilderFactory {
 
     public EntitySourceFactory getSourceFactory() {
         return sourceFactory;
+    }
+
+    public ScriptEngine getScriptEngine() {
+        return scriptEngine;
     }
 }

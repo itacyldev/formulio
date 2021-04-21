@@ -134,6 +134,7 @@ public class DevFormBuilder {
             this.field.setParentForm(this.form); // make sure field and form are linked
 
             FormController fc = DevFormBuilder.createFormEditController(form);
+            fc.setMc(this.mc);
             withFormController(fc);
             return this;
         }

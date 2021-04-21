@@ -25,7 +25,9 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
@@ -37,10 +39,12 @@ public class OnInputChangeEventHandler
 
     private final MainController mc;
     private final ActionController ac;
+    private final FormValidator formValidator;
 
     public OnInputChangeEventHandler(MainController mc, ActionController actionController) {
         this.mc = mc;
         this.ac = actionController;
+        this.formValidator = new FormValidator(mc);
     }
 
     @Override
@@ -57,7 +61,6 @@ public class OnInputChangeEventHandler
                 return;
             }
         }
-
         if (!(component instanceof UIInputComponent)) {
             return;// nothing to do, no input element
         }
@@ -71,8 +74,7 @@ public class OnInputChangeEventHandler
         // TODO: FORMIC-224 Refactorizar FormControllers, eliminar diferencias entre Edit y list
         // save view state
         Object state = fieldView.getValue();
-        FormEditController formController = (FormEditController) mc.getFormController();
-        boolean valid = formController.validate((UIInputComponent) component);
+        boolean valid = formValidator.validate(component.getParentForm(), (UIInputComponent) component);
         if (!valid) {
             // update the view to show messages
             mc.updateView(component, false);

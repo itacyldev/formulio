@@ -24,7 +24,7 @@ import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
 
 /**
- * s
+ * Predefined save action to persist changes in form's main entity.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -41,7 +41,7 @@ public class SaveActionHandler extends EntityChangeAction {
     }
 
     @Override
-    protected String getSuccessMessage() {
+    protected String getSuccessMessage(UserAction action) {
         return Config.getInstance().getStringResource(R.string.action_save_success);
     }
 

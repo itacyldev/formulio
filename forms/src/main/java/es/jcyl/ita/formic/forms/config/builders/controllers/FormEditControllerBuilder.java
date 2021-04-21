@@ -196,7 +196,8 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
     /**
-     * If current <edit/> element doesnt have a form, create one and nested all elements except actions
+     * If current <edit/> element doesnt have a form, create one and nested all elements except
+     * actions and scripts
      *
      * @return
      */
@@ -215,7 +216,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
         List<ConfigNode> formChildren = new ArrayList<>();
         for (ConfigNode n : root.getChildren()) {
-            if (n.getName().equals("actions")) {
+            if (n.getName().equals("actions") || n.getName().equals("script")) {
                 rootChildren.add(n);
             } else {
                 formChildren.add(n);

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
@@ -44,6 +45,7 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * Stores form configuration, view, permissions, etc. and provides operations to perform CRUD over and entity
  */
 public abstract class FormController implements Identificable, FilterableComponent {
+    protected MainController mc;
     protected String id;
     protected String name;
     protected UIView view;
@@ -226,14 +228,14 @@ public abstract class FormController implements Identificable, FilterableCompone
      */
 
     public void onBeforeRender() {
-        ScriptEngine engine = ScriptEngine.getInstance();
+        ScriptEngine engine = mc.getScriptEngine();
         if(StringUtils.isNotBlank(this.onBeforeRenderAction)){
             engine.callFunction(this.getId(), this.onBeforeRenderAction, this);
         }
     }
 
     public void onAfterRender(View view) {
-        ScriptEngine engine = ScriptEngine.getInstance();
+        ScriptEngine engine = mc.getScriptEngine();
         if(StringUtils.isNotBlank(this.onAfterRenderAction)){
             engine.callFunction(this.getId(), this.onAfterRenderAction, view);
         }
@@ -253,5 +255,13 @@ public abstract class FormController implements Identificable, FilterableCompone
 
     public void setOnAfterRenderAction(String onAfterRenderAction) {
         this.onAfterRenderAction = onAfterRenderAction;
+    }
+
+    public MainController getMc() {
+        return mc;
+    }
+
+    public void setMc(MainController mc) {
+        this.mc = mc;
     }
 }

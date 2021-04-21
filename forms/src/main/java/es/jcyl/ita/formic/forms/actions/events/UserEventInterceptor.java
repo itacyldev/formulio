@@ -71,13 +71,6 @@ public class UserEventInterceptor {
         }
         return action;
     }
-//
-//    public void doAction(UserAction action) {
-//        if (disabled || actionController == null) {
-//            return;
-//        }
-//        actionController.doUserAction(action);
-//    }
 
     public boolean isDisabled() {
         return disabled;
