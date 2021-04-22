@@ -15,9 +15,12 @@ package es.jcyl.ita.formic.repo;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.util.List;
 
 import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
@@ -35,8 +38,8 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
         }
     }
 
-    public void save(List<T> entities){
-        for(T entity: entities){
+    public void save(List<T> entities) {
+        for (T entity : entities) {
             save(entity);
         }
     }
@@ -59,6 +62,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
                 // set the related property field a null
                 continue;
             }
+
             if (!(mapping.getRepo() instanceof EditableRepository)) {
                 throw new RepositoryException(String.format("Error while saving entity [%s#%s], " +
                                 "Cannot save the related entity base on mapping for property [%s], " +
@@ -66,6 +70,19 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
                         mainEntity.getMetadata().getName(), mainEntity.getId(),
                         mapping.getFk()));
             }
+
+            // check if fk and related entity id is equals
+            PropertyType fkProperty = mainEntity.getMetadata().getPropertyByName(mapping.getFk());
+            Object relId = ConvertUtils.convert(relEntity.getId(), fkProperty.type);
+            Object fk = mainEntity.get(mapping.getFk());
+            //if not equals update related entity in main entity
+            if (!fk.equals(relId)) {
+                EditableRepository relRepo = (EditableRepository) mapping.getRepo();
+                relEntity = relRepo.findById(fk);
+                mainEntity.set(mapping.getProperty(), relEntity, true);
+                continue;
+            }
+
             EditableRepository relRepo = (EditableRepository) mapping.getRepo();
             // eval calculated properties if needed
             if (mapping.hasCalcProps()) {
@@ -114,7 +131,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
 
     public T findById(ID key) {
         T entity = doFindById(key);
-        if(entity != null){
+        if (entity != null) {
             loadRelated(entity);
         }
         return entity;
