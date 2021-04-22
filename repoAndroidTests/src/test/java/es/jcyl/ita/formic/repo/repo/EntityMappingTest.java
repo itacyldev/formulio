@@ -136,6 +136,8 @@ public class EntityMappingTest {
         Entity relEntity = relRepo.newEntity();
 
         // link with main entity and save
+        PropertyType fkProperty = mainEntity.getMetadata().getPropertyByName(FK_NAME);
+        mainEntity.set(FK_NAME, ConvertUtils.convert(relEntity.getId(), fkProperty.type));
         mainEntity.set(PROPERTY_NAME, relEntity, true); // link related entity as transient
         dbRepo.save(mainEntity);
         dbRepo.clearCache();
@@ -147,7 +149,6 @@ public class EntityMappingTest {
         Entity dbActualRelEntity = (Entity) dbActualEntity.get(PROPERTY_NAME);
         // the relEntity PK column and mainEntity FK column may have different data types,
         // convert before compare
-        PropertyType fkProperty = mainEntity.getMetadata().getPropertyByName(FK_NAME);
         Object expectedValue = ConvertUtils.convert(dbActualRelEntity.getId(), fkProperty.type);
         assertThat(dbActualEntity.get(FK_NAME), equalTo(expectedValue));
 
@@ -274,6 +275,8 @@ public class EntityMappingTest {
         relEntity.set(propertyRel.name, ConvertUtils.convert(123, propertyRel.type));
 
         // link with main entity and save
+        PropertyType fkProperty = mainEntity.getMetadata().getPropertyByName(FK_NAME);
+        mainEntity.set(FK_NAME, ConvertUtils.convert(relEntity.getId(), fkProperty.type));
         mainEntity.set(PROPERTY_NAME, relEntity, true); // link related entity as transient
         dbRepo.save(mainEntity);
         dbRepo.clearCache();

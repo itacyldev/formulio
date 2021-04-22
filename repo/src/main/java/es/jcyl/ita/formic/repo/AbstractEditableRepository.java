@@ -75,8 +75,11 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
             PropertyType fkProperty = mainEntity.getMetadata().getPropertyByName(mapping.getFk());
             Object relId = ConvertUtils.convert(relEntity.getId(), fkProperty.type);
             Object fk = mainEntity.get(mapping.getFk());
-            //if not equals update related entity in main entity
-            if (!fk.equals(relId)) {
+
+            if (fk == null) {
+                mainEntity.set(mapping.getProperty(), null, true);
+            } else if (!fk.equals(relId)) {
+                //if not equals update related entity in main entity
                 EditableRepository relRepo = (EditableRepository) mapping.getRepo();
                 relEntity = relRepo.findById(fk);
                 mainEntity.set(mapping.getProperty(), relEntity, true);
