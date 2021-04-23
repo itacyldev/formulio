@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
@@ -119,7 +118,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         labelView.setHintTextAppearance(R.style.TextInputLabel_label);
     }
 
-    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout,UIField component){
+    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout, UIField component) {
         // set clear button
         if (!(Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
             textInputLayout.setEndIconActivated(true);
@@ -135,7 +134,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         }
     }
 
-    protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component){
+    protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component) {
         if (component.getHint() != null) {
             textInputLayout.setEndIconDrawable(R.drawable.ic_tool_info);
             TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
@@ -143,7 +142,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
             textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
                     final View view = inflate(env.getViewContext(), R.layout.info_dialog, null);
                     TextView titleView = view.findViewById(R.id.info);
                     titleView.setText(component.getHint());
@@ -156,7 +155,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         }
     }
 
-    protected void adjustBounds(){
+    protected void adjustBounds() {
 
     }
 
@@ -203,7 +202,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     }
 
     protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout) {
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)){
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
             textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
         }
     }

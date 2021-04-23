@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIInputComponent extends UIComponent {
+public class UIInputComponent extends AbstractUIComponent {
     private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
     protected String label;

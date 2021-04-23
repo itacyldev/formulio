@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -32,8 +31,6 @@ import java.util.Set;
 import androidx.test.platform.app.InstrumentationRegistry;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.EntityMapping;
-import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
@@ -44,9 +41,7 @@ import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 
@@ -127,7 +122,7 @@ public class FormControllerTest {
 
         // save expected values to check later
         Map<String, Object> expectedValues = new HashMap<>();
-        FormViewContext viewContext = (FormViewContext) form.getContext().getContext("view");
+        ViewContext viewContext = (ViewContext) form.getContext().getContext("view");
         // modify view using viewContext to mimic user interaction
         Map<String, Object> properties = entity.getProperties();
         Set<Map.Entry<String, Object>> entries = properties.entrySet();

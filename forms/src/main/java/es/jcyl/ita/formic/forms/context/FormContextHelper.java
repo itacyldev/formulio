@@ -18,20 +18,20 @@ package es.jcyl.ita.formic.forms.context;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class FormContextHelper {
 
-    public static void setMessage(FormContext context, String elementId, String message) {
+    public static void setMessage(ComponentContext context, String elementId, String message) {
         // TODO: more than one message
         Context msgCtx = context.getContext("messages");
         msgCtx.put(elementId, message);
     }
 
-    public static String getMessage(FormContext context, String elementId) {
+    public static String getMessage(ComponentContext context, String elementId) {
         // TODO: more than one message
         if (context == null || elementId == null) {
             return null;
@@ -46,7 +46,7 @@ public class FormContextHelper {
      * @param context
      * @param root
      */
-    public static boolean hasNestedMessages(FormContext context, UIComponent root) {
+    public static boolean hasNestedMessages(ComponentContext context, UIComponent root) {
         if (!(root instanceof UIGroupComponent)) {
             return (getMessage(context, root.getId()) != null);
         } else {

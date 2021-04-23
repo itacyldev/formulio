@@ -131,7 +131,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         }
         int pos = 0;
         for (UIComponent tabItem : kids) {
-            String message = FormContextHelper.getMessage(env.getFormContext(), tabItem.getId());
+            String message = FormContextHelper.getMessage(env.getComponentContext(), tabItem.getId());
             if (!StringUtils.isBlank(message)) {
                 tabLayout.getTabAt(pos).setIcon(R.drawable.ic_input_error);
             }

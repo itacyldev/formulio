@@ -31,8 +31,8 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -205,7 +205,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
             }
         }
 
-       node.getElement().setEntityList((FilterableComponent) selector);
+        node.getElement().setEntityList((FilterableComponent) selector);
     }
 
     private ConfigNode createActionNode(String action, String id, String label, String route) {

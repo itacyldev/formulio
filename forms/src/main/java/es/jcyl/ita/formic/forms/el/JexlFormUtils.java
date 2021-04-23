@@ -29,7 +29,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.el.wrappers.JexlContextWrapper;
 import es.jcyl.ita.formic.forms.el.wrappers.JexlEntityWrapper;
 import es.jcyl.ita.formic.repo.Entity;
@@ -41,6 +41,7 @@ import es.jcyl.ita.formic.repo.Entity;
 public class JexlFormUtils {
     //protected static final Map<String, Object> funcs = new HashMap<String, Object>().put("math", Math.class);
     protected static final Map<String, Object> funcs;
+
     static {
         Map<String, Object> aMap = new HashMap<String, Object>();
         aMap.put("math", Math.class);
@@ -91,7 +92,7 @@ public class JexlFormUtils {
         }
     }
 
-    public static Object eval(FormContext ctx, String expression) {
+    public static Object eval(ComponentContext ctx, String expression) {
         // First try on entity
         Object value = eval(ctx.getEntity(), expression);
         // then try on form fields

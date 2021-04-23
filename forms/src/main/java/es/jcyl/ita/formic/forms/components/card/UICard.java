@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.forms.components.card;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.el.JexlFormUtils;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UICard extends UIComponent {
+public class UICard extends AbstractUIComponent {
 
     String template;
     UIHeading title;

@@ -94,7 +94,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
                 }
             });
         }*/
-        this.mainEntity = env.getFormContext().getEntity();
+        this.mainEntity = env.getComponentContext().getEntity();
     }
 
     public GallerySelector getGallerySelector() {

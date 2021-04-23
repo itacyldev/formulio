@@ -88,10 +88,10 @@ public class EnvExecutionContextTest {
         ViewRenderer viewRenderer = new ViewRenderer();
 
         View view = viewRenderer.render(env, fc.getView());
-        Assert.assertNotNull(env.getFormContext().getViewContext());
-        Assert.assertNotNull(env.getFormContext().getEntityContext());
+        Assert.assertNotNull(env.getComponentContext().getViewContext());
+        Assert.assertNotNull(env.getComponentContext().getEntityContext());
 
-        UIForm lastForm = env.getFormContext().getForm();
+        UIForm lastForm = (UIForm) env.getComponentContext().getRoot();
         lastForm.getContext().setView(view);
 
         // access the context of the last evaluated form using relative paths like view.field or entity.field

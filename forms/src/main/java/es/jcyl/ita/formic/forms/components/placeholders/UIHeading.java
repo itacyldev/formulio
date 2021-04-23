@@ -18,12 +18,12 @@ package es.jcyl.ita.formic.forms.components.placeholders;
 
 import android.graphics.Color;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIHeading extends UIComponent {
+public class UIHeading extends AbstractUIComponent {
 
     private String style;
     private int fontSize;

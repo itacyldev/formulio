@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
@@ -79,7 +79,7 @@ public class FormViewContextTest {
         View formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        FormViewContext fvContext = new FormViewContext(form, formView);
+        ViewContext fvContext = new ViewContext(form, formView);
 
         // check the context contains all the form elements
         for (UIComponent c : form.getChildren()) {
@@ -111,7 +111,7 @@ public class FormViewContextTest {
         View formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        FormViewContext fvContext = new FormViewContext(form, formView);
+        ViewContext fvContext = new ViewContext(form, formView);
 
         // check the context contains all the form elements
         for (UIInputComponent c : form.getFields()) {

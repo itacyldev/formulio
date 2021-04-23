@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
@@ -102,7 +102,7 @@ public class FormContextTest {
         FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
 
-        FormContext fCtx = form.getContext();
+        ComponentContext fCtx = form.getContext();
         Assert.assertNotNull(fCtx.getEntity());
 
         // access entity elements throw context
@@ -150,7 +150,7 @@ public class FormContextTest {
         // use FormController to load form
         FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
-        FormContext fCtx = form.getContext();
+        ComponentContext fCtx = form.getContext();
 
         // render view to create android view components and viewContext
         ViewRenderer renderHelper = new ViewRenderer();

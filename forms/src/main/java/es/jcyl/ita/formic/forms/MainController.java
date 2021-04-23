@@ -35,7 +35,8 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -231,8 +232,8 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setViewContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.disableInterceptors();
-        if (renderingEnv.getFormContext() != null) {
-            renderingEnv.getFormContext().clearMessages();
+        if (renderingEnv.getComponentContext() != null) {
+            renderingEnv.getComponentContext().clearMessages();
         }
         renderingEnv.clearSelection();
 
@@ -251,9 +252,9 @@ public class MainController implements ContextAwareComponent {
      */
     public void updateView(UIComponent component, boolean reactiveCall) {
         // find related view element
-        UIForm form = component.getParentForm();
+        ComponentContext componentContext = component.getParentContext();
         // find view using viewContext
-        FormViewContext viewContext = form.getContext().getViewContext();
+        ViewContext viewContext = componentContext.getViewContext();
 
         InputWidget fieldView = viewContext.findInputFieldViewById(component.getId());
         // render the new Android view for the component and replace it

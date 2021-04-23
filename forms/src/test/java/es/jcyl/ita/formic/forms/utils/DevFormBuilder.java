@@ -18,24 +18,23 @@ package es.jcyl.ita.formic.forms.utils;
 import android.content.Context;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.builders.FieldDataBuilder;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
+import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -72,7 +71,7 @@ public class DevFormBuilder {
         return form;
     }
 
-    public static FormContext createFormContextForEntity(UIForm form, Entity entity) {
+    public static ComponentContext createFormContextForEntity(UIForm form, Entity entity) {
         return null;
     }
 
@@ -94,7 +93,7 @@ public class DevFormBuilder {
             return invoke(ctx, true);
         }
 
-        private void createGlobalContext(){
+        private void createGlobalContext() {
             globalContext = new UnPrefixedCompositeContext();
             globalContext.addContext(new DateTimeContext("date"));
         }

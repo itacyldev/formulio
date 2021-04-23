@@ -45,17 +45,21 @@ public class UserMessagesHelper {
     }
 
     public static void toast(Context viewContext, String msg) {
-        Toast.makeText(viewContext, msg, Toast.LENGTH_SHORT).show();
+        if (msg != null) {
+            Toast.makeText(viewContext, msg, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void toast(Context viewContext, String[] msg) {
         // TODO: special toast: https://stackoverflow.com/questions/22594376/display-two-toast-messages-at-once
         // for now, show just first one
-        toast(viewContext, msg[0]);
+        if (msg[0] != null) {
+            toast(viewContext, msg[0]);
+        }
     }
 
     public static void toast(Context viewContext, String msg, int duration) {
-        Toast toast =  Toast.makeText(viewContext, msg, duration);
+        Toast toast = Toast.makeText(viewContext, msg, duration);
         View view = toast.getView();
         TextView text = (TextView) view.findViewById(android.R.id.message);
 

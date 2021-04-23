@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -125,7 +125,8 @@ public class DAGManager {
      *
      * @param componentId
      */
-    private void buildComponentDag(String componentId, Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags, Map<String, UIComponent> components) {
+    private void buildComponentDag(String componentId, Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags,
+                                   Map<String, UIComponent> components) {
         UIComponent component = components.get(componentId);
 
         // The DAG is created only if the component depends on other components

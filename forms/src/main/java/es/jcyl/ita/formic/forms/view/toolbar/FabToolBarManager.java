@@ -25,6 +25,7 @@ import es.jcyl.ita.formic.forms.view.selection.SelectionObserver;
 
 /**
  * Manages visualization of
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class FabToolBarManager implements SelectionObserver {
@@ -37,7 +38,7 @@ public class FabToolBarManager implements SelectionObserver {
 
     }
 
-    private void render(){
+    private void render() {
         // mostrar botones en función de acciones
     }
 }

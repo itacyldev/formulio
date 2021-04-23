@@ -112,7 +112,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
         if (message != null) {
             ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
         }

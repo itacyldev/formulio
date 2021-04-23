@@ -38,7 +38,7 @@ public class ConfigNodeHelper {
      * @param tagName
      * @return
      */
-    public static List<ConfigNode>  getChildrenByTag(ConfigNode root, String tagName) {
+    public static List<ConfigNode> getChildrenByTag(ConfigNode root, String tagName) {
         Set<String> set = new HashSet<>(Arrays.asList(tagName));
         return getChildrenByTag(root, set);
     }

@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -39,18 +39,18 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
 
     @Override
     public void onNewFormFound(UIForm form) {
-        FormContext fContext = form.getContext();
+        ComponentContext fContext = form.getContext();
         engine.putProperty("form", form);
         engine.putProperty("entity", fContext.getEntity());
     }
 
     @Override
-    public void onEntityContextChanged(FormContext context) {
+    public void onEntityContextChanged(ComponentContext context) {
         engine.putProperty("entity", context.getEntity());
     }
 
     @Override
-    public void onViewContextChanged(FormContext context) {
+    public void onViewContextChanged(ComponentContext context) {
         engine.putProperty("view", context.getViewContext());
     }
 

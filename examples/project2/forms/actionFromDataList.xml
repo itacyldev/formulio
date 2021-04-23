@@ -2,18 +2,16 @@
     <list>
         <script>
             function updateEntity(){
-            console.log(entity.contact_id);
+            console.log(entity.it_profile);
             }
         </script>
         <form>
             <datalist>
                 <datalistitem>
-                    <table weights="50, 50">
-                        <row>
-                            <input value="${entity.first_name}" />
-                            <button action="updateEntity" />
-                        </row>
-                    </table>
+                    <input value="${entity.it_profile}" hasDeleteButton="false"/>
+                    <button action="updateEntity">
+                        <param name="entity_id" value="${entity.contact_id}"/>
+                    </button>
                 </datalistitem>
             </datalist>
         </form>

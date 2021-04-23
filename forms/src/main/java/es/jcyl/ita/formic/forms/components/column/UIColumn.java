@@ -15,12 +15,12 @@ package es.jcyl.ita.formic.forms.components.column;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIColumn extends UIComponent {
+public class UIColumn extends AbstractUIComponent {
 
 
     // sort by, filter by, filter matching, header expression

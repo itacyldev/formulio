@@ -3,7 +3,7 @@ package es.jcyl.ita.formic.forms.components;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UIGroupComponent extends UIComponent {
+public class UIGroupComponent extends AbstractUIComponent {
 
     protected String LayoutType;
 
@@ -11,19 +11,15 @@ public class UIGroupComponent extends UIComponent {
 
     protected String[] properties;
 
-    @Override
     public void setChildren(UIComponent[] children) {
         super.setChildren(children);
         this.fields = findNestedFields(this, UIInputComponent.class);
     }
 
-    @Override
     public void addChild(UIComponent... lstChildren) {
         super.addChild(lstChildren);
         this.fields = findNestedFields(this, UIInputComponent.class);
     }
-
-
 
     public static <T> List<T> findNestedFields(UIComponent root, Class<T> clazz) {
         List<T> lst = new ArrayList<>();

@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.forms.actions;
 
 import android.content.Context;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 
 /**

@@ -15,15 +15,12 @@ package es.jcyl.ita.formic.forms.view.selection;
  * limitations under the License.
  */
 
-import java.util.Observable;
-
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public interface SelectionObserver {
 
-    void update(UIComponent component, Object...params);
+    void update(UIComponent component, Object... params);
 }

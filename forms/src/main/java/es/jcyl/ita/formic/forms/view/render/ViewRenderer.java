@@ -30,8 +30,9 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.form.ContextHolder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
@@ -72,16 +73,16 @@ public class ViewRenderer {
             widget = renderer.render(env, component);
         }
         // setup view context
-        if (component instanceof UIForm) {
+        if (component instanceof ContextHolder) {
             // configure viewContext
-            FormContext fContext = ((UIForm) component).getContext();
-            fContext.setView(widget);
-            env.setFormContext(fContext);
+            ComponentContext cContext = ((ContextHolder) component).getContext();
+            cContext.setView(widget);
+            env.setComponentContext(cContext);
             // set in script context
-            eventHandler.onViewContextChanged(fContext);
+            eventHandler.onViewContextChanged(cContext);
         } else {
-            if (env.getFormContext() != null && env.getFormContext().getViewContext() != null) {
-                env.getFormContext().getViewContext().registerComponentView(component, widget);
+            if (env.getComponentContext() != null && env.getComponentContext().getViewContext() != null) {
+                env.getComponentContext().getViewContext().registerComponentView(component, widget);
             }
         }
         eventHandler.onAfterRenderComponent(widget);
@@ -102,19 +103,19 @@ public class ViewRenderer {
                 List<View> viewList = new ArrayList<>();
                 if (groupView instanceof EntityListProvider) {
                     // save the old entityContext
-                    Entity oldEntity = env.getFormContext().getEntity();
+                    Entity oldEntity = env.getComponentContext().getEntity();
 
                     List<Entity> entities = ((EntityListProvider) groupView).getEntities();
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
-                        env.getFormContext().setEntity(entity);
-                        eventHandler.onEntityContextChanged(env.getFormContext());
+                        env.getComponentContext().setEntity(entity);
+                        eventHandler.onEntityContextChanged(env.getComponentContext());
                         View view = render(env, component.getChildren()[0]);
                         viewList.add(view);
                     }
                     // restore entity context
-                    env.getFormContext().setEntity(oldEntity);
-                    eventHandler.onEntityContextChanged(env.getFormContext());
+                    env.getComponentContext().setEntity(oldEntity);
+                    eventHandler.onEntityContextChanged(env.getComponentContext());
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
@@ -137,10 +138,10 @@ public class ViewRenderer {
 
     private void setupFormContext(UIComponent root, RenderingEnv env) {
         if (root instanceof UIForm) {
-            env.setFormContext(((UIForm) root).getContext());
+            env.setComponentContext(((UIForm) root).getContext());
         } else {
             if (root != null && root.getParentForm() != null) {
-                env.setFormContext(((UIForm) root.getParentForm()).getContext());
+                env.setComponentContext(((UIForm) root.getParentForm()).getContext());
             }
         }
     }
@@ -241,11 +242,11 @@ public class ViewRenderer {
             } else {
                 // find view element to update
                 UIComponent cNode = node.getComponent();
-                View view = ViewHelper.findComponentView(rootView, cNode);
+                View view = ViewHelper.findComponentView(rootView, cNode);  // PROBLEMAAAAAA
                 if (component instanceof UIForm) {
-                    env.setFormContext(((UIForm) component).getContext());
+                    env.setComponentContext(((UIForm) component).getContext());
                 } else {
-                    env.setFormContext(component.getParentForm().getContext());
+                    env.setComponentContext(component.getParentForm().getContext());
                 }
                 if (view instanceof DynamicComponent) {
                     ((DynamicComponent) view).load(env);
@@ -270,12 +271,12 @@ public class ViewRenderer {
         }
 
         @Override
-        public void onEntityContextChanged(FormContext fContext) {
+        public void onEntityContextChanged(ComponentContext fContext) {
 
         }
 
         @Override
-        public void onViewContextChanged(FormContext fContext) {
+        public void onViewContextChanged(ComponentContext fContext) {
 
         }
 

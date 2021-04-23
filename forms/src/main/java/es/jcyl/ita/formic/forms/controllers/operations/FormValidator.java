@@ -21,8 +21,8 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.validation.Validator;
@@ -47,8 +47,8 @@ public class FormValidator {
      * @return
      */
     public boolean validate(UIForm form, UIInputComponent field) {
-        FormContext context = form.getContext();
-        FormViewContext viewContext = context.getViewContext();
+        ComponentContext context = form.getContext();
+        ViewContext viewContext = context.getViewContext();
 
         // get user input using view context and check all validators.
         String value = viewContext.getString(field.getId());
@@ -90,9 +90,9 @@ public class FormValidator {
     }
 
 
-    public boolean isVisible(FormContext context, UIInputComponent field) {
-        FormViewContext viewContext = context.getViewContext();
-
+    public boolean isVisible(ComponentContext context, UIInputComponent field) {
+        ViewContext viewContext = context.getViewContext();
+        // TODO: replace with field.isRendered(context);
         InputWidget fieldView = viewContext.findInputFieldViewById(field.getId());
         return fieldView.isVisible();
     }

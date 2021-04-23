@@ -1,8 +1,8 @@
 package es.jcyl.ita.formic.forms.components.placeholders;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 
-public class UIDivisor extends UIComponent {
+public class UIDivisor extends AbstractUIComponent {
 
     private Integer color;
     private Integer strokeWidth;

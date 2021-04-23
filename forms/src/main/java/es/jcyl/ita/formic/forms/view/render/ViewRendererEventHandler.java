@@ -21,17 +21,16 @@ package es.jcyl.ita.formic.forms.view.render;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.repo.Entity;
 
 public interface ViewRendererEventHandler {
 
     void onNewFormFound(UIForm form);
 
-    void onEntityContextChanged(FormContext fContext);
+    void onEntityContextChanged(ComponentContext fContext);
 
-    void onViewContextChanged(FormContext fContext);
+    void onViewContextChanged(ComponentContext fContext);
 
     void onBeforeRenderComponent(UIComponent component);
 

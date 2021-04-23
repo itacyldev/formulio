@@ -92,7 +92,7 @@ public class DelegatedExpressionTest {
         String propertyName = entity.getMetadata().getProperties()[0].getName();
         String entityExpr = String.format("${entity.%s}", propertyName);
         // setup f1 so its value will be obtained from entity
-        form.getElement("f1").setValueExpression(exprFactory.create(entityExpr));
+        form.getChildById("f1").setValueExpression(exprFactory.create(entityExpr));
 
         // set entity in forms context
         form.getContext().setEntity(entity);

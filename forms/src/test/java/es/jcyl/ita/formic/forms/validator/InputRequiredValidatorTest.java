@@ -28,7 +28,7 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
@@ -65,8 +65,8 @@ public class InputRequiredValidatorTest {
         recipe.field.addValidator(new RequiredValidator());
 
         // get the view context to access data
-        FormViewContext formViewContext = recipe.form.getContext().getViewContext();
-        formViewContext.put(recipe.field.getId(), "");
+        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        viewContext.put(recipe.field.getId(), "");
 
         // execute validation
         ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
@@ -84,8 +84,8 @@ public class InputRequiredValidatorTest {
         recipe.field.addValidator(new RequiredValidator());
 
         // get the view context to access data
-        FormViewContext formViewContext = recipe.form.getContext().getViewContext();
-        formViewContext.put(recipe.field.getId(), "xxxxxxxxx");
+        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        viewContext.put(recipe.field.getId(), "xxxxxxxxx");
 
         // execute validation
         ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);

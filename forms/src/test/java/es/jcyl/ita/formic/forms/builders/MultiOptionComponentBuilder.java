@@ -25,7 +25,7 @@ public class MultiOptionComponentBuilder<T extends UISelect> extends AbstractDat
 
     @Override
     protected T getModelInstance() {
-        if(this.componentClass == null){
+        if (this.componentClass == null) {
             return null;
         }
         try {

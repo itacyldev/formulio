@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components;
+package es.jcyl.ita.formic.forms.components.form;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,19 +15,20 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.EntityContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 
 /**
- * Some UIComponents can handle and modify entity values directly instead of using the
- * converters, this happens for the UIForm component, but also for components that can define an
- * external EntityRelation.
- *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public interface ContextHolder extends UIComponent {
 
-public interface EntityHolder {
+    ComponentContext getContext();
 
-    void setEntity(Entity entity);
+    ViewContext getViewContext();
 
-    Entity getEntity();
+    EntityContext getEntityContext();
+
 }

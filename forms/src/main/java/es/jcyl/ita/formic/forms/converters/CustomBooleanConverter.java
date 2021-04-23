@@ -206,6 +206,13 @@ public class CustomBooleanConverter extends AbstractConverter {
                 return false;
             }
         }
+        // treat as number and if it's > 0 then true
+        try {
+            float fValue = Float.valueOf(stringValue);
+            return fValue > 0;
+        } catch (Exception e) {
+            // pass
+        }
         throw conversionException(type, stringValue);
     }
 

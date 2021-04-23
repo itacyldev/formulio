@@ -18,7 +18,7 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.form.ContextHolder;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
@@ -47,15 +47,15 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
  * Gives access to view component values using a context interface.
  */
 
-public class FormViewContext extends AbstractBaseContext {
+public class ViewContext extends AbstractBaseContext {
     private final View view; // Form's Android view root
-    private final UIForm form;
+    private final ContextHolder root;
     private Map<String, View> inputViews = new HashMap<String, View>();
 
-    public FormViewContext(UIForm form, View formView) {
+    public ViewContext(ContextHolder root, View view) {
         this.setPrefix("view");
-        this.form = form;
-        this.view = formView;
+        this.root = root;
+        this.view = view;
     }
 
     /**
@@ -65,7 +65,7 @@ public class FormViewContext extends AbstractBaseContext {
      * @return
      */
     public InputWidget findInputFieldViewById(String fieldId) {
-        return ViewHelper.findInputFieldViewById(this.view, this.form.getId(), fieldId);
+        return ViewHelper.findInputFieldViewById(this.view, this.root.getId(), fieldId);
     }
 
     /**
@@ -80,7 +80,7 @@ public class FormViewContext extends AbstractBaseContext {
         InputWidget fieldView = findInputFieldViewById(elementId);
         if (fieldView == null) {
             warn(String.format("No view element id [%s] " +
-                    "doesn't exists in the form [%s].", elementId, form.getId()));
+                    "doesn't exists in the form [%s].", elementId, root.getId()));
             return null;
         }
         Object value = fieldView.getValue();
@@ -93,13 +93,13 @@ public class FormViewContext extends AbstractBaseContext {
         InputWidget fieldView = findInputFieldViewById(elementId);
         if (fieldView == null) {
             warn(String.format("No view element id [%s] " +
-                    "doesn't exists in the form [%s].", elementId, form.getId()));
+                    "doesn't exists in the form [%s].", elementId, root.getId()));
             return null;
         }
-        UIComponent component = form.getElement(elementId);
+        UIComponent component = root.getChildById(elementId);
         if (component == null) {
             warn(String.format("The component id provided [%s] " +
-                    "doesn't exists in the form [%s].", elementId, form.getId()));
+                    "doesn't exists in the form [%s].", elementId, root.getId()));
             return null;
         }
         Object value = fieldView.getValue();
@@ -124,12 +124,12 @@ public class FormViewContext extends AbstractBaseContext {
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        return ViewHelper.findComponentView(this.view, this.form.getId(), o.toString()) != null;
+        return ViewHelper.findComponentView(this.view, this.root.getId(), o.toString()) != null;
     }
 
     @Override
     public boolean containsValue(@Nullable Object o) {
-        return form.getElement(o.toString()) != null;
+        return root.getChildById(o.toString()) != null;
     }
 
     @Nullable

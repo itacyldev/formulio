@@ -16,19 +16,14 @@ package es.jcyl.ita.formic.forms.actions.events;
  */
 
 import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.handlers.AbstractActionHandler;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
-import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
@@ -64,8 +59,8 @@ public class OnInputChangeEventHandler
         if (!(component instanceof UIInputComponent)) {
             return;// nothing to do, no input element
         }
-        UIForm form = component.getParentForm();
-        FormViewContext viewContext = form.getContext().getViewContext();
+        ComponentContext cContext = component.getParentContext();
+        ViewContext viewContext = cContext.getViewContext();
         InputWidget fieldView = viewContext.findInputFieldViewById(component.getId());
         if(fieldView == null){
             return; // no input field related to current component

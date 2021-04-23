@@ -147,9 +147,10 @@ public class UserAction {
     /**
      * Indicates if current action is going to provoke a change in the view due to a forceRefresh or
      * because it makes the action controller to perform a navigation.
+     *
      * @return
      */
-    public boolean isViewChangeAction(){
+    public boolean isViewChangeAction() {
         return this.forceRefresh || StringUtils.isNotBlank(this.route);
     }
 

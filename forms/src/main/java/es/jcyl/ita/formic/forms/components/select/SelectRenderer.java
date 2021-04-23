@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
@@ -97,7 +96,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
         if (message != null) {
             ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
         }

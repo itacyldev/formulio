@@ -14,7 +14,7 @@ public class StringValidator extends RegexValidator implements Validator {
     public void validate(Context ctx, UIComponent component, String value) {
         Boolean valid = isValid(value);
 
-        if(!valid){
+        if (!valid) {
             throw new ValidatorException("");
         }
     }

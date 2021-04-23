@@ -3,8 +3,8 @@ package es.jcyl.ita.formic.forms.context.impl;
 import android.view.View;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.forms.components.form.ContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /*
@@ -24,20 +24,20 @@ import es.jcyl.ita.formic.repo.Entity;
  */
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Rio (gustavo.rio@itacyl.es)
  */
 
-public class FormContext extends UnPrefixedCompositeContext {
+public class ComponentContext extends UnPrefixedCompositeContext {
 
-    private final UIForm form;
+    private final ContextHolder root;
     private View rootView;
     private Entity entity;
 
-    private FormViewContext viewContext;
+    private ViewContext viewContext;
     private EntityContext entityContext;
 
-    public FormContext(UIForm form) {
-        this.form = form;
+    public ComponentContext(ContextHolder component) {
+        this.root = component;
         // component messages
         this.addContext(new BasicContext("messages"));
         // view state
@@ -46,11 +46,11 @@ public class FormContext extends UnPrefixedCompositeContext {
 
     @Override
     public String getPrefix() {
-        return this.form.getId();
+        return this.root.getId();
     }
 
-    public UIForm getForm() {
-        return form;
+    public ContextHolder getRoot() {
+        return root;
     }
 
     public void setEntity(Entity entity) {
@@ -61,7 +61,7 @@ public class FormContext extends UnPrefixedCompositeContext {
 
     public void setView(View rootView) {
         this.rootView = rootView;
-        this.viewContext = new FormViewContext(this.form, this.rootView);
+        this.viewContext = new ViewContext(this.root, this.rootView);
         this.addContext(viewContext);
     }
 
@@ -81,7 +81,7 @@ public class FormContext extends UnPrefixedCompositeContext {
         return rootView;
     }
 
-    public FormViewContext getViewContext() {
+    public ViewContext getViewContext() {
         return viewContext;
     }
 
@@ -94,7 +94,7 @@ public class FormContext extends UnPrefixedCompositeContext {
     }
 
     public String toString() {
-        return this.getForm().getId();
+        return this.getRoot().getId();
     }
 
 }

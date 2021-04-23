@@ -157,7 +157,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         TextView titleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_title");
         String titleValue = null;
         if (title != null) {
-            titleValue = (String) ConvertUtils.convert(title.getValue(env.getFormContext()), String.class);
+            titleValue = (String) ConvertUtils.convert(title.getValue(env.getComponentContext()), String.class);
         }
         if (StringUtils.isNotEmpty(titleValue)) {
             titleView.setText(titleValue);
@@ -169,7 +169,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         TextView subtitleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_subtitle");
         String subtitleValue = null;
         if (subtitle != null) {
-            subtitleValue = (String) ConvertUtils.convert(subtitle.getValue(env.getFormContext()), String.class);
+            subtitleValue = (String) ConvertUtils.convert(subtitle.getValue(env.getComponentContext()), String.class);
         }
         if (StringUtils.isNotEmpty(subtitleValue)) {
             subtitleView.setText(subtitleValue);
@@ -181,7 +181,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         TextView descriptionView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_text");
         String descriptionValue = null;
         if (description != null) {
-            descriptionValue = (String) ConvertUtils.convert(description.getValue(env.getFormContext()), String.class);
+            descriptionValue = (String) ConvertUtils.convert(description.getValue(env.getComponentContext()), String.class);
         }
         if (StringUtils.isNotEmpty(descriptionValue)) {
             descriptionView.setText(descriptionValue);

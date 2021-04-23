@@ -8,6 +8,7 @@ public class DAGNode {
 
     private String id;
     private TYPE type;
+    private UIComponent component;
 
     public UIComponent getComponent() {
         return component;
@@ -41,8 +42,6 @@ public class DAGNode {
     public void setComponent(UIComponent component) {
         this.component = component;
     }
-
-    private UIComponent component;
 
     @Override
     public String toString() {
