@@ -59,7 +59,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
        //setLabel(inputView, textInputLayout, component);
 
         // set event
-        addTextChangeListener(env, inputView, component);
+        addTextChangeListener(env, inputView, widget);
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         removeUnderline(env, component, textInputLayout);

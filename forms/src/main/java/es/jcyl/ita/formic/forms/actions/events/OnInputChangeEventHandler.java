@@ -44,7 +44,7 @@ public class OnInputChangeEventHandler
 
     @Override
     public void handle(Event event) {
-        UIComponent component = event.getSource();
+        UIComponent component = event.getSource().getComponent();
 
         // if the component has defined an UserAction for this event, use it
         UserAction action = event.getHandler();

@@ -51,7 +51,7 @@ public class ViewRenderer {
 
     public View render(RenderingEnv env, UIComponent root) {
         // enrich the execution environment with current form's context
-        setupFormContext(root, env);
+        setupComponentContext(root, env);
         return render(env, root, true);
     }
 
@@ -68,7 +68,7 @@ public class ViewRenderer {
         Widget widget;
         if (checkDeferred && hasDeferredExpression(component, env)) {
             // insert a delegated view component as placeholder to render later
-            widget = createDeferredView(env.getViewContext(), component, env);
+            widget = createDeferredView(env, component);
         } else {
             widget = renderer.render(env, component);
         }
@@ -136,18 +136,18 @@ public class ViewRenderer {
     }
 
 
-    private void setupFormContext(UIComponent root, RenderingEnv env) {
-        if (root instanceof UIForm) {
-            env.setComponentContext(((UIForm) root).getContext());
+    private void setupComponentContext(UIComponent root, RenderingEnv env) {
+        if (root instanceof ContextHolder) {
+            env.setComponentContext(((ContextHolder) root).getContext());
         } else {
-            if (root != null && root.getParentForm() != null) {
-                env.setComponentContext(((UIForm) root.getParentForm()).getContext());
+            if (root.getParentContext() != null) {
+                env.setComponentContext(root.getParentContext());
             }
         }
     }
 
-    private Widget createDeferredView(Context viewContext, UIComponent root, RenderingEnv env) {
-        DeferredView view = new DeferredView(viewContext, root);
+    private Widget createDeferredView(RenderingEnv env, UIComponent root) {
+        DeferredView view = new DeferredView(env.getViewContext(), root);
         env.addDeferred(root.getAbsoluteId(), view);
         return view;
     }
@@ -243,10 +243,10 @@ public class ViewRenderer {
                 // find view element to update
                 UIComponent cNode = node.getComponent();
                 View view = ViewHelper.findComponentView(rootView, cNode);  // PROBLEMAAAAAA
-                if (component instanceof UIForm) {
-                    env.setComponentContext(((UIForm) component).getContext());
+                if (component instanceof ContextHolder) {
+                    env.setComponentContext(((ContextHolder) component).getContext());
                 } else {
-                    env.setComponentContext(component.getParentForm().getContext());
+                    env.setComponentContext(component.getParentContext());
                 }
                 if (view instanceof DynamicComponent) {
                     ((DynamicComponent) view).load(env);

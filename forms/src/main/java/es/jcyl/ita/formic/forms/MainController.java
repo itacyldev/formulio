@@ -263,9 +263,9 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.enableInterceptors();
         viewRenderer.replaceView(fieldView, newView);
 
-        if (!reactiveCall) {
-            flowManager.execute(component.getAbsoluteId());
-        }
+//        if (!reactiveCall) {
+//            flowManager.execute(component.getAbsoluteId());
+//        }
     }
 
     /**

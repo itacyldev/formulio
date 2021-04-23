@@ -23,7 +23,9 @@ import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.form.ContextHolder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -94,8 +96,8 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
      * @return
      */
     protected String getWidgetViewTag(C c) {
-        UIForm form = c.getParentForm();
-        String formId = (form == null) ? "root" : form.getId();
+        ComponentContext ctx = c.getParentContext();
+        String formId = (ctx == null) ? "root" : ctx.getHolderId();
         return formId + ":" + c.getId();
     }
 

@@ -64,7 +64,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
                 // notify action
                 UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.notify(Event.inputChange(widget.getComponent()));
+                    interceptor.notify(Event.inputChange(widget));
                 }
             }
 

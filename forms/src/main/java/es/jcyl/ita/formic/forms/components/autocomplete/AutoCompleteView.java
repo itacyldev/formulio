@@ -40,7 +40,6 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
@@ -49,6 +48,7 @@ import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Condition;
@@ -98,8 +98,8 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         return ctx;
     }
 
-    public void initialize(RenderingEnv env, UIAutoComplete component, ImageView arrowDropDown) {
-        this.component = component;
+    public void initialize(RenderingEnv env, Widget<UIAutoComplete> widget, ImageView arrowDropDown) {
+        this.component = widget.getComponent();
         ArrayAdapter adapter;
         if (component.isStatic()) {
             // create adapter using UIOptions
@@ -113,37 +113,37 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         }
         this.setAdapter(adapter);
 
-        addClickOptionListener(env, component);
-        addTextChangeListener(env, component);
-        addLostFocusListener(env, component, arrowDropDown);
+        addClickOptionListener(env, widget);
+        addTextChangeListener(env, widget);
+        addLostFocusListener(env, widget, arrowDropDown);
     }
 
-    private void executeUserAction(RenderingEnv env, UIComponent component) {
+    private void executeUserAction(RenderingEnv env, Widget<UIAutoComplete> widget) {
         UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.notify(Event.inputChange(component));
+            interceptor.notify(Event.inputChange(widget));
         }
     }
 
-    private void addClickOptionListener(RenderingEnv env, UIAutoComplete component) {
+    private void addClickOptionListener(RenderingEnv env, Widget<UIAutoComplete> widget) {
         this.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectionInProgress = true;
                 setSelection(position);
                 selectionInProgress = false;
-                executeUserAction(env, component);
+                executeUserAction(env, widget);
             }
         });
     }
 
-    private void addLostFocusListener(RenderingEnv env, UIAutoComplete component, ImageView arrowDropDown) {
+    private void addLostFocusListener(RenderingEnv env, Widget<UIAutoComplete> widget, ImageView arrowDropDown) {
         this.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 // if current text doesn't match and option, remove if
                 TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor, R.attr.primaryColor});
-                arrowDropDown.setImageTintList(ta.getColorStateList(v.hasFocus()?1:0));
+                arrowDropDown.setImageTintList(ta.getColorStateList(v.hasFocus() ? 1 : 0));
 
                 if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {
                     if (value == null) {
@@ -154,7 +154,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         });
     }
 
-    private void addTextChangeListener(RenderingEnv env, UIAutoComplete component) {
+    private void addTextChangeListener(RenderingEnv env, Widget widget) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
         this.addTextChangedListener(new TextWatcher() {
@@ -164,7 +164,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                     boolean found = findCurrentSelection();
                     if (found) {
                         // if text matches an option
-                        executeUserAction(env, component);
+                        executeUserAction(env, widget);
                     }
                 }
             };
@@ -190,7 +190,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                         boolean found = findCurrentSelection();
                         if (found) {
                             // if text matches an option
-                            executeUserAction(env, component);
+                            executeUserAction(env, widget);
                         }
                     } else {
                         handler.postDelayed(workRunnable, env.getInputTypingDelay());

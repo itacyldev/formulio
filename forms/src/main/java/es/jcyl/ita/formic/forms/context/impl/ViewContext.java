@@ -68,6 +68,9 @@ public class ViewContext extends AbstractBaseContext {
         return ViewHelper.findInputFieldViewById(this.view, this.root.getId(), fieldId);
     }
 
+    public InputWidget findInputFieldViewById(UIComponent field) {
+        return ViewHelper.findInputFieldViewById(this.view, this.root.getId(), field.getId());
+    }
     /**
      * Access the component value as string, without applying the conversion using the
      * component binding expression
@@ -124,18 +127,18 @@ public class ViewContext extends AbstractBaseContext {
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        return ViewHelper.findComponentView(this.view, this.root.getId(), o.toString()) != null;
+        return findInputFieldViewById((String) o) != null;
     }
 
     @Override
     public boolean containsValue(@Nullable Object o) {
-        return root.getChildById(o.toString()) != null;
+        return root.getChildById((String) o) != null;
     }
 
     @Nullable
     @Override
     public Object get(@Nullable Object o) {
-        return getValue(o.toString());
+        return getValue((String) o);
     }
 
     @Nullable

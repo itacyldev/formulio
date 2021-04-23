@@ -43,6 +43,9 @@ public class ComponentContext extends UnPrefixedCompositeContext {
         // view state
         this.addContext(new BasicContext("state"));
     }
+    public String getHolderId(){
+        return this.root.getId();
+    }
 
     @Override
     public String getPrefix() {

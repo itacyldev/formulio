@@ -9,6 +9,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.form.ContextHolder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -199,18 +200,18 @@ public class DAGManager {
         // is form relative reference
         if (varReference.startsWith("view")) {
             // relative reference uses current component form to find the component
-            UIForm form = component.getParentForm();
-            if (form == null) {
+            ContextHolder contextHolder = component.getParentContext().getRoot();
+            if (contextHolder == null) {
                 throw new ViewConfigException(String.format("Invalid variable reference. " +
-                        "Relative references can be used just inside a form. " +
+                        "Relative references can be used just inside a form or a context holder. " +
                         "Wrap element [%s] inside a form.", component.getId()));
             }
             String childId = varReference.replace("view.", "");
-            UIComponent child = UIComponentHelper.findChild(form, childId);
+            UIComponent child = UIComponentHelper.findChild(contextHolder, childId);
             if (child == null) {
                 error(String.format("Invalid relative reference: [%s]. No children component " +
                                 "found within form [%s] with id [%s] in file ${file}.",
-                        varReference, form.getId(), childId));
+                        varReference, contextHolder.getId(), childId));
                 return null;
             }
             return child.getAbsoluteId();

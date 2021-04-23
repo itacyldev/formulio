@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
@@ -61,14 +62,10 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
             return;
         }
         try {
-            // get current  form
-            UIForm form;
-            if (component instanceof UIForm) {
-                form = (UIForm) component;
-            } else {
-                form = component.getParentForm();
-            }
-            engine.callFunction(currentCtrl(form).getId(), component.getOnBeforeRenderAction(), component);
+            // get current controller
+            UIView root = component.getRoot();
+            FormController formController = root.getFormController();
+            engine.callFunction(formController.getId(), component.getOnBeforeRenderAction(), component);
         } catch (Exception e) {
             error(String.format("Error while executing onBeforeRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);
@@ -83,14 +80,12 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
             return;
         }
         try {
-            engine.callFunction(currentCtrl(component).getId(), component.getOnAfterRenderAction(), widget);
+            UIView root = component.getRoot();
+            FormController formController = root.getFormController();
+            engine.callFunction(formController.getId(), component.getOnAfterRenderAction(), widget);
         } catch (Exception e) {
             error(String.format("Error while executing onAfterRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);
         }
-    }
-
-    private FormController currentCtrl(UIComponent form) {
-        return form.getRoot().getFormController();
     }
 }

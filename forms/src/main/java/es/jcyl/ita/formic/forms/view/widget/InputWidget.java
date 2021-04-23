@@ -113,10 +113,6 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
         this.converter = converter;
     }
 
-    public String getFormId() {
-        return formId;
-    }
-
     public String getInputId() {
         return inputId;
     }
@@ -124,9 +120,6 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
     /******/
     /** Form and field ids are set during the rendering process */
     /*******/
-    public void setFormId(String formId) {
-        this.formId = formId;
-    }
 
     public void setInputId(String inputId) {
         this.inputId = inputId;

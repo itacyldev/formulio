@@ -48,9 +48,6 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         C component = widget.getComponent();
         // find and attach label and input
         widget.setConverter(component.getConverter());
-        if (component.getParentForm() != null) {
-            widget.setFormId(component.getParentForm().getId());
-        }
         widget.setInputId(component.getId());
 
         // find label and setup

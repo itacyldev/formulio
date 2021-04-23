@@ -45,7 +45,7 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
         AutoCompleteView input = widget.getInputView();
         ImageView arrowDropDown = ViewHelper.findViewAndSetId(widget, R.id.input_view_image,
                 ImageView.class);
-        input.initialize(env, widget.getComponent(), arrowDropDown);
+        input.initialize(env, widget, arrowDropDown);
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);

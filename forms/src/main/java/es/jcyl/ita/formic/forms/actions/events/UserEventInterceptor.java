@@ -55,7 +55,7 @@ public class UserEventInterceptor {
     }
 
     private UserAction createUserAction(Event event) {
-        UIComponent component = event.getSource();
+        UIComponent component = event.getSource().getComponent();
         UIAction uiAction = component.getAction();
         if (uiAction == null) {
             // no defined action for current event

@@ -54,7 +54,7 @@ public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
             public void onClick(View v) {
                 UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    Event event = new Event(Event.EventType.CLICK, component);
+                    Event event = new Event(Event.EventType.CLICK, widget);
                     interceptor.notify(event);
                 }
             }

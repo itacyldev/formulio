@@ -22,6 +22,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 public abstract class AbstractUIComponent implements Identificable, UIComponent {
 
     protected String id;
+    private String absoluteId;
     protected String label;
 
     protected ValueBindingExpression valueExpression;
@@ -67,6 +68,13 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
      * @return
      */
     public String getAbsoluteId() {
+        if (this.absoluteId == null) {
+            this.absoluteId = calculateAbsoluteId();
+        }
+        return this.absoluteId;
+    }
+
+    private String calculateAbsoluteId() {
         String completeId = id;
         if (parent != null) {
             completeId = parent.getAbsoluteId() + "." + id;
@@ -86,6 +94,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     public void setId(final String id) {
         this.id = id;
+        this.absoluteId = this.calculateAbsoluteId();
     }
 
     public UIComponent getParent() {
@@ -97,6 +106,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
         if (parent != null) {
             this.root = parent.getRoot();
         }
+        this.absoluteId = calculateAbsoluteId();
     }
 
     public UIComponent[] getChildren() {
@@ -176,7 +186,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
     }
 
     public UIForm getParentForm() {
-        if (this.parentContext == null) {
+        if (this.parentForm == null) {
             // find
             UIComponent node = this.getParent();
             // climb up the tree until you find a form

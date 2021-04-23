@@ -120,7 +120,7 @@ public class FormViewContextTest {
             fvContext.put(c.getId(), expected);
 
             // access the value from the view element
-            InputWidget widget = fvContext.findInputFieldViewById(c.getId());
+            InputWidget widget = fvContext.findInputFieldViewById(c);
 
             // use a viewConverter to get the value from android view element
             ViewValueConverter<TextView> converter = c.getConverter();

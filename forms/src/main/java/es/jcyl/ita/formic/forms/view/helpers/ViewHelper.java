@@ -196,13 +196,14 @@ public class ViewHelper {
 
     public static View findComponentView(View rootView, UIComponent component) {
         // same name rule followed by FileRenderer to tag the BaseView of
-        // the InputFileView: formId:elementId
-        String formId = (component.getParentForm() != null) ? component.getParentForm().getId() : "root";
-        return rootView.findViewWithTag(formId + ":" + component.getId());
+        // the InputFileView: contextHolderId:elementId
+        String ctxHolderId = (component.getParentContext()!=null)?component.getParentContext().getHolderId():"root";
+//        String formId = (component.getParentForm() != null) ? component.getParentForm().getId() : "root";
+        return rootView.findViewWithTag(ctxHolderId + ":" + component.getId());
     }
 
     public static InputWidget findInputFieldViewById(View rootView, UIInputComponent field) {
-        return findInputFieldViewById(rootView, field.getParentForm().getId(), field.getId());
+        return findInputFieldViewById(rootView, field.getParentContext().getHolderId(), field.getId());
     }
 
     public static InputWidget findInputFieldViewById(View rootView, String formId, String fieldId) {

@@ -25,6 +25,7 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 import static android.view.View.inflate;
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
@@ -69,7 +70,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         //setLabel(inputView, textInputLayout, component);
 
         // set event
-        addTextChangeListener(env, inputView, component);
+        addTextChangeListener(env, inputView, widget);
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
 
@@ -159,21 +160,21 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     }
 
-    private void executeUserAction(RenderingEnv env, UIComponent component) {
+    private void executeUserAction(RenderingEnv env, Widget widget) {
         UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.notify(Event.inputChange(component));
+            interceptor.notify(Event.inputChange(widget));
         }
     }
 
-    protected void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
+    protected void addTextChangeListener(RenderingEnv env, EditText view, Widget widget) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
         view.addTextChangedListener(new TextWatcher() {
             Runnable workRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    executeUserAction(env, component);
+                    executeUserAction(env, widget);
                 }
             };
 
@@ -192,7 +193,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
             public void afterTextChanged(Editable editable) {
                 if (!env.isInterceptorDisabled()) {
                     if (env.isInputDelayDisabled()) {
-                        executeUserAction(env, component);
+                        executeUserAction(env, widget);
                     } else {
                         handler.postDelayed(workRunnable, env.getInputTypingDelay());
                     }

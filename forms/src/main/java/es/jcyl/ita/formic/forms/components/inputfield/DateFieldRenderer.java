@@ -81,7 +81,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
                         UserEventInterceptor interceptor = env.getUserActionInterceptor();
                         if (interceptor != null) {
-                            interceptor.notify(Event.inputChange(widget.getComponent()));
+                            interceptor.notify(Event.inputChange(widget));
                         }
                     }
                 };
