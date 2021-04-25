@@ -19,7 +19,7 @@ import android.view.View;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**

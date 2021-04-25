@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.widget.context;
+package es.jcyl.ita.formic.forms.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

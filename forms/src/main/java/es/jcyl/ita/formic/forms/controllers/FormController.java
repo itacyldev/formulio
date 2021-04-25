@@ -29,13 +29,12 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.view.ViewStateHolder;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -55,6 +54,7 @@ public abstract class FormController implements Identificable, FilterableCompone
     protected Repository repo;
     protected Filter filter;
     protected ViewGroup contentView; // Android view element where the UIView is rendered
+    protected ViewStateHolder stateHolder = new ViewStateHolder();
     private UIAction[] actions; // form actions ids
     private Map<String, UIAction> _actions;
     private FormEntityLoader entityLoader = new FormEntityLoader();
@@ -110,17 +110,11 @@ public abstract class FormController implements Identificable, FilterableCompone
 
     public void saveViewState() {
         ViewWidget rootWidget = this.getRootWidget();
-        for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
-            WidgetContext widgetContext = holder.getWidgetContext();
-            widgetContext.saveViewState();
-        }
+        stateHolder.saveState(rootWidget);
     }
 
     public void restoreViewState() {
-        for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
-            WidgetContext widgetContext = holder.getWidgetContext();
-            widgetContext.restoreViewState();
-        }
+        stateHolder.restoreState(rootWidget);
     }
 
 

@@ -1,7 +1,5 @@
 package es.jcyl.ita.formic.forms.context.impl;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -21,6 +19,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
@@ -49,7 +48,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
 public class ViewContext extends AbstractBaseContext {
     private final Widget widget; // Form's Android view root
-    private Map<String, View> statefulViews = new HashMap<String, View>();
+    private Map<String, StatefulWidget> statefulViews = new HashMap<String, StatefulWidget>();
 
     public ViewContext(Widget widget) {
         this.setPrefix("view");
@@ -69,6 +68,7 @@ public class ViewContext extends AbstractBaseContext {
     public InputWidget findInputWidget(String fieldId) {
         return ViewHelper.findInputWidget(this.widget, fieldId);
     }
+
     /**
      * Access the component value as string, without applying the conversion using the
      * component binding expression
@@ -157,7 +157,7 @@ public class ViewContext extends AbstractBaseContext {
         throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
-    public List<InputWidget> getStatefulViews() {
+    public List<StatefulWidget> getStatefulViews() {
         return new ArrayList(statefulViews.values());
     }
 
@@ -204,10 +204,8 @@ public class ViewContext extends AbstractBaseContext {
      * @param widget
      * @param widget
      */
-    public void registerWidget(Widget widget) {
-        if (widget instanceof InputWidget) {
-            this.statefulViews.put(widget.getComponent().getId(), widget);
-        }
+    public void registerWidget(StatefulWidget widget) {
+        this.statefulViews.put(widget.getComponent().getId(), widget);
     }
 
 }

@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;

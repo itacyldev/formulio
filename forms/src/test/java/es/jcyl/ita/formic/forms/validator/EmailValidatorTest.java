@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

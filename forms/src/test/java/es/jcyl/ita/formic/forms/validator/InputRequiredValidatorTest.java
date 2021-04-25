@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

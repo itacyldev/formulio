@@ -80,20 +80,8 @@ public class WidgetContext extends UnPrefixedCompositeContext {
 
     public void registerWidget(Widget widget) {
         if (widget instanceof StatefulWidget) {
-            this.viewContext.registerWidget(widget);
+            this.viewContext.registerWidget((StatefulWidget) widget);
         }
-    }
-
-    public void saveViewState() {
-
-//        stateHolder.saveState(viewContext);
-
-    }
-
-    public void restoreViewState() {
-
-//        stateHolder.restoreState(viewContext);
-
     }
 
 }

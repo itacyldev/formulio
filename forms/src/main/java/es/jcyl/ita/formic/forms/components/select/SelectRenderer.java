@@ -17,7 +17,7 @@ import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;

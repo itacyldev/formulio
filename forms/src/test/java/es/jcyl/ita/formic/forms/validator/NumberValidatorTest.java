@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.validation.NumberValidator;

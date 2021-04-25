@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**

@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.view.widget;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
+
 /**
  * Defines operations to retrieve and set state in view widgets.
  *
@@ -22,7 +24,12 @@ package es.jcyl.ita.formic.forms.view.widget;
  */
 public interface StatefulWidget {
 
+    int getId();
+
     void setState(Object value);
 
     Object getState();
+
+    UIComponent getComponent();
+
 }
