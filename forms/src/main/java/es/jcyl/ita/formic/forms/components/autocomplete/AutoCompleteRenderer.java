@@ -24,7 +24,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
@@ -35,7 +35,7 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, AutoCompleteView> {
 
     @Override
-    protected AutoCompleteWidget  createWidget(RenderingEnv env, UIAutoComplete component) {
+    protected AutoCompleteWidget createWidget(RenderingEnv env, UIAutoComplete component) {
         AutoCompleteWidget widget = (AutoCompleteWidget) super.createWidget(env, component);
         return widget;
     }
@@ -49,7 +49,7 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {

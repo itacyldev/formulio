@@ -48,8 +48,11 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
      */
     public Object getValue(final String key) {
         String[] newKey = splitKey(key);
-        return (newKey == null || this.contexts == null) ? super.get(key) :
-                this.contexts.get(newKey[0]).get(newKey[1]);
+        if (newKey == null || this.contexts == null) {
+            return super.getValue(key);
+        } else {
+            return (!this.hasContext(newKey[0])) ? null : this.contexts.get(newKey[0]).get(newKey[1]);
+        }
     }
 
 
@@ -74,8 +77,7 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
         if (newKey == null) {
             return super.containsKey(key);
         } else {
-            Context ctx = this.contexts.get(newKey[0]);
-            return ctx.containsKey(newKey[1]);
+            return (!this.hasContext(newKey[0])) ? false : this.contexts.get(newKey[0]).containsKey(newKey[1]);
         }
     }
 
@@ -121,7 +123,7 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
 
     @Override
     public boolean isEmpty() {
-        return size()==0;
+        return size() == 0;
     }
 
     @Override

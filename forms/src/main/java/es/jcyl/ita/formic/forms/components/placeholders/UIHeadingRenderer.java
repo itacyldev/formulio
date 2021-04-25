@@ -23,7 +23,7 @@ import android.widget.TextView;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -41,7 +41,7 @@ public class UIHeadingRenderer extends AbstractRenderer<UIHeading, Widget<UIHead
     protected void composeWidget(RenderingEnv env, Widget<UIHeading> widget) {
         UIHeading heading = widget.getComponent();
 
-        String value = (String) heading.getValue(env.getContext());
+        String value = (String) heading.getValue(env.getWidgetContext());
 
         TextView textView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.heading_text);
 

@@ -21,7 +21,7 @@ import android.view.View;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.Renderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -31,7 +31,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class UIDivisorRenderer implements Renderer<UIDivisor> {
     @Override
     public Widget render(RenderingEnv env, UIDivisor component) {
-        Widget divisorWidget = ViewHelper.inflate(env.getViewContext(), R.layout.widget_divisor, Widget.class);
+        Widget divisorWidget = ViewHelper.inflate(env.getAndroidContext(), R.layout.widget_divisor, Widget.class);
 
         View divisorView = ViewHelper.findViewAndSetId(divisorWidget, R.id.divisor);
         if (component.getColor() != null) {

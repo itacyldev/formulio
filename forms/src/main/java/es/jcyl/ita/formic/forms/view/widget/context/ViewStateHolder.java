@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.context.impl;
+package es.jcyl.ita.formic.forms.view.widget.context;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.context.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
@@ -25,7 +26,7 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
  * <p>
  * Stores view state using a FormViewContext as intermediate
  */
-public class ViewStateHolder {
+class ViewStateHolder {
 
     private Map<String, Object> state = new HashMap<String, Object>();
 
@@ -38,7 +39,7 @@ public class ViewStateHolder {
      */
     public void saveState(ViewContext viewContext) {
         clear();
-        for (InputWidget fieldView : viewContext.getInputViews()) {
+        for (InputWidget fieldView : viewContext.getStatefulViews()) {
             if (fieldView.isVisible()) {
                 state.put(fieldView.getInputId(), fieldView.getState());
             }
@@ -49,7 +50,7 @@ public class ViewStateHolder {
      * Restore view state form the context
      */
     public void restoreState(ViewContext viewContext) {
-        for (InputWidget fieldView : viewContext.getInputViews()) {
+        for (InputWidget fieldView : viewContext.getStatefulViews()) {
             if (fieldView.isVisible()) {
                 String fieldId = fieldView.getInputId();
                 fieldView.setState(state.get(fieldId));

@@ -18,6 +18,12 @@ package es.jcyl.ita.formic.forms.utils;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -25,7 +31,41 @@ import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 public class ContextTestUtils {
 
     public static CompositeContext createGlobalContext() {
-        CompositeContext ctx = new OrderedCompositeContext();
+        CompositeContext ctx = new UnPrefixedCompositeContext();
+        ctx.addContext(new BasicContext("messages"));
+        ctx.addContext(new BasicContext("state"));
+        return ctx;
+    }
+
+    public static WidgetContext createWidgetContext() {
+        Widget widget = mock(Widget.class);
+        return createWidgetContext(widget);
+
+    }
+
+    public static WidgetContext createWidgetContext(Widget widget) {
+        WidgetContextHolder holder = new WidgetContextHolder() {
+            WidgetContext ctx;
+
+            @Override
+            public Widget getWidget() {
+                return widget;
+            }
+
+            @Override
+            public WidgetContext getWidgetContext() {
+                return ctx;
+            }
+
+            @Override
+            public void setWidgetContext(WidgetContext context) {
+                ctx = context;
+            }
+        };
+
+        WidgetContext ctx = new WidgetContext(holder);
+        // messages and state contexts
+        ctx.addContext(createGlobalContext());
         return ctx;
     }
 

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -59,7 +59,7 @@ public class UIDatatableRenderer extends AbstractGroupRenderer<UIDatatable, Data
         widget.setHeaderView(headerLayout);
 
         ListView bodyView = tableView.findViewById(R.id.list_view);
-        setLayoutParams(bodyView, env.getViewContext(), widget.getComponent());
+        setLayoutParams(bodyView, env.getAndroidContext(), widget.getComponent());
         widget.setBodyView(bodyView);
 
         widget.load(env);

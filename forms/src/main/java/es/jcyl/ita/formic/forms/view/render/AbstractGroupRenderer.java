@@ -18,7 +18,8 @@ package es.jcyl.ita.formic.forms.view.render;
 import android.view.View;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -43,8 +44,8 @@ public abstract class AbstractGroupRenderer<C extends UIComponent, W extends Wid
     @Override
     public void endGroup(RenderingEnv env, Widget<C> root) {
         // check if any of the nested elements has an error message
-        if (FormContextHelper.hasNestedMessages(env.getComponentContext(), root.getComponent())) {
-            FormContextHelper.setMessage(env.getComponentContext(), root.getComponent().getId(), "error");
+        if (WidgetContextHelper.hasNestedMessages(env.getWidgetContext(), root.getComponent())) {
+            WidgetContextHelper.setMessage(env.getWidgetContext(), root.getComponent().getId(), "error");
             setNestedMessage(env, root);
         }
     }

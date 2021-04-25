@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.context;
+package es.jcyl.ita.formic.forms.view.widget.context;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,27 +15,34 @@ package es.jcyl.ita.formic.forms.context;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormContextHelper {
+public class WidgetContextHelper {
 
-    public static void setMessage(ComponentContext context, String elementId, String message) {
+    public static void setMessage(CompositeContext context, String elementId, String message) {
         // TODO: more than one message
         Context msgCtx = context.getContext("messages");
         msgCtx.put(elementId, message);
     }
 
-    public static String getMessage(ComponentContext context, String elementId) {
-        // TODO: more than one message
-        if (context == null || elementId == null) {
-            return null;
-        }
+    public static void clearMessage(CompositeContext context, String elementId) {
+        Context msgCtx = context.getContext("messages");
+        msgCtx.remove(elementId);
+    }
+
+    public static void clearMessages(CompositeContext context) {
+        Context msgCtx = context.getContext("messages");
+        msgCtx.clear();
+    }
+
+    public static String getMessage(CompositeContext context, String elementId) {
         Context msgCtx = context.getContext("messages");
         return (String) msgCtx.get(elementId);
     }
@@ -46,12 +53,12 @@ public class FormContextHelper {
      * @param context
      * @param root
      */
-    public static boolean hasNestedMessages(ComponentContext context, UIComponent root) {
+    public static boolean hasNestedMessages(CompositeContext context, UIComponent root) {
         if (!(root instanceof UIGroupComponent)) {
             return (getMessage(context, root.getId()) != null);
         } else {
             boolean hasMessage = (getMessage(context, root.getId()) != null);
-            if(hasMessage){
+            if (hasMessage) {
                 return true;
             }
             // check in children
@@ -61,4 +68,5 @@ public class FormContextHelper {
             return hasMessage;
         }
     }
+
 }

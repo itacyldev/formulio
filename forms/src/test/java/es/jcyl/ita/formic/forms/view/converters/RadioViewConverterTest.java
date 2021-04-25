@@ -27,14 +27,14 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.radio.UIRadio;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.builders.MultiOptionComponentBuilder;
+import es.jcyl.ita.formic.forms.components.radio.UIRadio;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
@@ -87,8 +87,7 @@ public class RadioViewConverterTest {
         RadioValueConverter conv = new RadioValueConverter();
         for (int i = 0; i < values.length; i++) {
             InputWidget<UIRadio, RadioGroup> widget =
-                    ViewHelper.findInputFieldViewById(env.getViewRoot(),
-                    field);
+                    ViewHelper.findInputWidget(env.getRootWidget(),field);
             RadioGroup inputView = widget.getInputView();
 
             // transform the value using the converter and check the result against the original value

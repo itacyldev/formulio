@@ -98,12 +98,14 @@ public class ReactivityFlowManager {
      * @param dag
      * @return
      */
+
     private Flowable<String> createObservableNode(DAGNode node,
                                                   DirectedAcyclicGraph<DAGNode, DefaultEdge> dag) {
         Flowable<String> flowable =
                 Flowable.fromCallable(() -> {
                     UIComponent component = node.getComponent();
-                    MainController.getInstance().updateView(component, true);
+                    // TODO: refactoring pending
+//                    MainController.getInstance().updateView(component, true);
                     //Thread.sleep(500);
                     return "node " + node.getId() + " updated";
                 });

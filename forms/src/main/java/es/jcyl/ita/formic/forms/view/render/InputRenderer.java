@@ -37,6 +37,7 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 
@@ -117,7 +118,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         I inputView = widget.getInputView();
         String inputTag = getInputTag(component);
         inputView.setTag(inputTag);
-        inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class));
+        inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class));
     }
 
     protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton){

@@ -29,9 +29,9 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.el.wrappers.JexlContextWrapper;
 import es.jcyl.ita.formic.forms.el.wrappers.JexlEntityWrapper;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -92,7 +92,7 @@ public class JexlFormUtils {
         }
     }
 
-    public static Object eval(ComponentContext ctx, String expression) {
+    public static Object eval(WidgetContext ctx, String expression) {
         // First try on entity
         Object value = eval(ctx.getEntity(), expression);
         // then try on form fields

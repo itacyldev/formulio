@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.forms.components.form.EntityHolder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 
@@ -54,8 +54,6 @@ public interface UIComponent {
 
     UIForm getParentForm();
 
-    ComponentContext getParentContext();
-
     void setRoot(UIView root);
 
     UIView getRoot();
@@ -85,4 +83,12 @@ public interface UIComponent {
     void setAction(UIAction componentAction);
 
     boolean isRendered(Context context);
+
+    /**
+     * Returns the first UIComponent capable of holding an Entity, the corresponding widget
+     * will be a WidgetContextHolder
+     *
+     * @return
+     */
+    EntityHolder getEntityHolder();
 }

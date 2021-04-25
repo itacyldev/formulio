@@ -18,12 +18,12 @@ package es.jcyl.ita.formic.forms.scripts;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.repo.Entity;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -39,22 +39,14 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
     }
 
     @Override
-    public void onNewFormFound(UIForm form) {
-        ComponentContext fContext = form.getContext();
-        engine.putProperty("form", form);
-        engine.putProperty("entity", fContext.getEntity());
+    public void onEntityContextChanged(Entity entity) {
+        engine.putProperty("entity", entity);
     }
 
     @Override
-    public void onEntityContextChanged(ComponentContext context) {
-        engine.putProperty("entity", context.getEntity());
-    }
-
-    @Override
-    public void onViewContextChanged(ComponentContext context) {
+    public void onWidgetContextChange(WidgetContext context) {
         engine.putProperty("view", context.getViewContext());
     }
-
 
     @Override
     public void onBeforeRenderComponent(UIComponent component) {

@@ -28,11 +28,15 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.validation.CommonsValidatorWrapper;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -66,14 +70,19 @@ public class EmailValidatorTest {
         recipe.field.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
 
         // get the view context to access data
-        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        WidgetContext widgetContext = recipe.env.getWidgetContext();
+        ViewContext viewContext = widgetContext.getViewContext();
         viewContext.put(recipe.field.getId(), "");
 
         // execute validation
-        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
+        Widget fieldWidget = ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
+        FormValidator validator = new FormValidator(recipe.mc);
+        boolean valid = validator.validate((InputWidget) fieldWidget);
+
+        Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
+        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -85,14 +94,19 @@ public class EmailValidatorTest {
         recipe.field.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
 
         // get the view context to access data
-        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        WidgetContext widgetContext = recipe.env.getWidgetContext();
+        ViewContext viewContext = widgetContext.getViewContext();
         viewContext.put(recipe.field.getId(), "myemil@subdomain.domain.org");
 
         // execute validation
-        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
+        Widget fieldWidget = ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
+        FormValidator validator = new FormValidator(recipe.mc);
+        boolean valid = validator.validate((InputWidget) fieldWidget);
+
+        Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
+        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
 
@@ -105,13 +119,18 @@ public class EmailValidatorTest {
         recipe.field.addValidator(new CommonsValidatorWrapper(EmailValidator.getInstance()));
 
         // get the view context to access data
-        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        WidgetContext widgetContext = recipe.env.getWidgetContext();
+        ViewContext viewContext = widgetContext.getViewContext();
         viewContext.put(recipe.field.getId(), "myemil-subdomain.domain.org");
 
         // execute validation
-        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
+        Widget fieldWidget = ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
+        FormValidator validator = new FormValidator(recipe.mc);
+        boolean valid = validator.validate((InputWidget) fieldWidget);
+
+        Assert.assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
+        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 }

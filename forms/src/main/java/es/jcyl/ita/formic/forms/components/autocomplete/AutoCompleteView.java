@@ -47,7 +47,7 @@ import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -94,7 +94,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         // the user input will be retrieved as text from the view, value is retrieved as raw text
         thisViewCtx.registerViewElement("value", getId(), convFactory.get("text"), String.class);
         thisViewCtx.setPrefix("this");
-        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        CompositeContext ctx = ContextUtils.combine(env.getWidgetContext(), thisViewCtx);
         return ctx;
     }
 
@@ -103,7 +103,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         ArrayAdapter adapter;
         if (component.isStatic()) {
             // create adapter using UIOptions
-            adapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(), component.getOptions(),
+            adapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getAndroidContext(), component.getOptions(),
                     component.hasNullOption(), android.R.layout.select_dialog_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         } else {
@@ -142,7 +142,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 // if current text doesn't match and option, remove if
-                TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor, R.attr.primaryColor});
+                TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor, R.attr.primaryColor});
                 arrowDropDown.setImageTintList(ta.getColorStateList(v.hasFocus() ? 1 : 0));
 
                 if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {

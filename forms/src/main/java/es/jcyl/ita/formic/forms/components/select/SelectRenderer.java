@@ -17,10 +17,10 @@ import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
@@ -52,7 +52,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
         UISelect component = widget.getComponent();
 
         // setup adapter and event handler
-        ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(),
+        ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getAndroidContext(),
                 component.getOptions(), component.hasNullOption(), android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         arrayAdapter.notifyDataSetChanged();
@@ -75,7 +75,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +96,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
+        String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
         if (message != null) {
             ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
         }

@@ -26,6 +26,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
@@ -51,7 +52,9 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
         } catch (Exception e) {
             // re-render form content
             onError(actionContext, action, e);
-            throw e;
+            if (!(e instanceof ValidatorException)) {
+                throw e;
+            }
         }
     }
 
@@ -75,7 +78,6 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
     }
 
     protected void onError(ActionContext actionContext, UserAction action, Exception e) {
-        DevConsole.error("Error while execute user action: " + action.toString(), e);
         mc.renderBack();
         String msg = getErrorMessage(action, e);
         if (StringUtils.isNotBlank(msg)) {

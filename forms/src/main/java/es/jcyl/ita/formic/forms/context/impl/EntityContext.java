@@ -39,6 +39,10 @@ public class EntityContext extends AbstractBaseContext {
         this.setPrefix("entity");
     }
 
+    public Entity getEntity(){
+        return this.entity;
+    }
+
     @Override
     public String getString(String key) {
         Object value = this.entity.get(key);

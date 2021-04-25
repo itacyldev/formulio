@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.render;
+package es.jcyl.ita.formic.forms.components.form;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,18 @@ package es.jcyl.ita.formic.forms.view.render;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public interface WidgetContextHolder {
 
-public interface Renderer<C extends UIComponent>{
+    Widget getWidget();
 
-    Widget render (RenderingEnv env, C component);
+    WidgetContext getWidgetContext();
+
+    void setWidgetContext(WidgetContext context);
 
 }

@@ -5,7 +5,6 @@ import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
 
-import java.util.Date;
 import java.util.HashMap;
 
 
@@ -65,5 +64,10 @@ public abstract class AbstractMapContext extends HashMap<String, Object>
     @Override
     public boolean has(String name) {
         return containsKey(name);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "[" + this.getPrefix() + "]";
     }
 }

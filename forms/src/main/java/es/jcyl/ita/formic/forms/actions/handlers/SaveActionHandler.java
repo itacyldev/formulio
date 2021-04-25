@@ -22,6 +22,7 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.validation.ValidatorException;
 
 /**
  * Predefined save action to persist changes in form's main entity.
@@ -45,4 +46,12 @@ public class SaveActionHandler extends EntityChangeAction {
         return Config.getInstance().getStringResource(R.string.action_save_success);
     }
 
+    @Override
+    protected String getErrorMessage(UserAction action, Exception e) {
+        if (e instanceof ValidatorException) {
+            return Config.getInstance().getStringResource(R.string.action_generic_invalid_form);
+        } else {
+            return super.getErrorMessage(action, e);
+        }
+    }
 }

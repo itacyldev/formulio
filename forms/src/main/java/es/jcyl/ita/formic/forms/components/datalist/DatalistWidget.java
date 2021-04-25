@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -107,7 +107,7 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
 
     private CompositeContext setupThisContext(RenderingEnv env) {
         thisViewCtx.setPrefix("this");
-        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        CompositeContext ctx = ContextUtils.combine(env.getWidgetContext(), thisViewCtx);
         return ctx;
     }
 

@@ -29,7 +29,6 @@ import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
@@ -74,25 +73,18 @@ public class ActionController {
         try {
             // create context for action execution
             ActionContext actionContext = new ActionContext(mc.getFormController(),
-                    mc.getRenderingEnv().getViewContext());
+                    mc.getRenderingEnv().getAndroidContext());
             ActionHandler handler = actionMap.get(action.getType().toLowerCase());
 
             if (DevConsole.isDebugEnabled()) {
                 DevConsole.debug(String.format("Executing action %s with ActionHandler: %s.",
                         action, handler));
             }
-            try {
-                handler.handle(actionContext, action);
-            } catch (ValidatorException e) {
-                // re-render the form content
-                mc.renderBack();
-                UserMessagesHelper.toast(actionContext.getViewContext(),
-                        Config.getInstance().getStringResource(R.string.action_generic_invalid_form));
-            }
+            handler.handle(actionContext, action);
         } catch (Exception e) {
             String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
             DevConsole.error(msg, e);
-            UserMessagesHelper.toast(mc.getRenderingEnv().getViewContext(), msg);
+            UserMessagesHelper.toast(mc.getRenderingEnv().getAndroidContext(), msg);
         }
     }
 

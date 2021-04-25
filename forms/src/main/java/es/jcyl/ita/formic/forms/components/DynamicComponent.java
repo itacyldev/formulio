@@ -15,7 +15,7 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

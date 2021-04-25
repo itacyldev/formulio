@@ -29,7 +29,10 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
@@ -62,6 +65,7 @@ public abstract class FormController implements Identificable, FilterableCompone
      */
     private String onBeforeRenderAction;
     private String onAfterRenderAction;
+    private ViewWidget rootWidget;
 
     public FormController(String id, String name) {
         this.id = id;
@@ -105,14 +109,17 @@ public abstract class FormController implements Identificable, FilterableCompone
     /****************************/
 
     public void saveViewState() {
-        for (UIForm form : this.view.getForms()) {
-            form.saveViewState();
+        ViewWidget rootWidget = this.getRootWidget();
+        for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
+            WidgetContext widgetContext = holder.getWidgetContext();
+            widgetContext.saveViewState();
         }
     }
 
     public void restoreViewState() {
-        for (UIForm form : this.view.getForms()) {
-            form.restoreViewState();
+        for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
+            WidgetContext widgetContext = holder.getWidgetContext();
+            widgetContext.restoreViewState();
         }
     }
 
@@ -153,8 +160,8 @@ public abstract class FormController implements Identificable, FilterableCompone
         return _actions;
     }
 
-    public void addAction(String actionId, UIAction action){
-        if(_actions == null){
+    public void addAction(String actionId, UIAction action) {
+        if (_actions == null) {
             _actions = new HashMap<>();
         }
         _actions.put(actionId, action);
@@ -162,7 +169,7 @@ public abstract class FormController implements Identificable, FilterableCompone
 
     public void setActions(UIAction[] actions) {
         this.actions = actions;
-        for(UIAction action: actions){
+        for (UIAction action : actions) {
             addAction(action.getId(), action);
         }
     }
@@ -229,14 +236,14 @@ public abstract class FormController implements Identificable, FilterableCompone
 
     public void onBeforeRender() {
         ScriptEngine engine = mc.getScriptEngine();
-        if(StringUtils.isNotBlank(this.onBeforeRenderAction)){
+        if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
             engine.callFunction(this.getId(), this.onBeforeRenderAction, this);
         }
     }
 
     public void onAfterRender(View view) {
         ScriptEngine engine = mc.getScriptEngine();
-        if(StringUtils.isNotBlank(this.onAfterRenderAction)){
+        if (StringUtils.isNotBlank(this.onAfterRenderAction)) {
             engine.callFunction(this.getId(), this.onAfterRenderAction, view);
         }
     }
@@ -263,5 +270,13 @@ public abstract class FormController implements Identificable, FilterableCompone
 
     public void setMc(MainController mc) {
         this.mc = mc;
+    }
+
+    public void setRootWidget(ViewWidget widget) {
+        this.rootWidget = widget;
+    }
+
+    public ViewWidget getRootWidget() {
+        return rootWidget;
     }
 }

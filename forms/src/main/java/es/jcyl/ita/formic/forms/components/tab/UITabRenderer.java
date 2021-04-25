@@ -14,9 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.context.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*
@@ -48,7 +48,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
     @Override
     protected void composeWidget(RenderingEnv env, Widget<UITab> widget) {
         UITab component = widget.getComponent();
-        FragmentActivity fragmentActivity = (FragmentActivity) env.getViewContext();
+        FragmentActivity fragmentActivity = (FragmentActivity) env.getAndroidContext();
 
         TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
         ViewPager2 viewPager = widget.findViewById(R.id.viewPager);
@@ -131,7 +131,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         }
         int pos = 0;
         for (UIComponent tabItem : kids) {
-            String message = FormContextHelper.getMessage(env.getComponentContext(), tabItem.getId());
+            String message = WidgetContextHelper.getMessage(env.getWidgetContext(), tabItem.getId());
             if (!StringUtils.isBlank(message)) {
                 tabLayout.getTabAt(pos).setIcon(R.drawable.ic_input_error);
             }
@@ -144,7 +144,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         boolean isSelected = false;
         for (int i=0; i<component.getChildren().length && !isSelected; i++){
             UITabItem tabItem = (UITabItem) component.getChildren()[i];
-            isSelected = tabItem.isSelected(env.getContext());
+            isSelected = tabItem.isSelected(env.getWidgetContext());
             currentItem++;
         }
         return isSelected?currentItem:0;

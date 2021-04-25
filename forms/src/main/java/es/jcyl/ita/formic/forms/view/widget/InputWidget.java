@@ -39,7 +39,6 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
     /**
      * related UIComponents
      */
-    private String formId;
     private String inputId;
 
     public InputWidget(Context context) {

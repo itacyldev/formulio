@@ -15,13 +15,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
@@ -48,19 +47,19 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIField, Button> widget) {
-        StyleHolder<Button> styleHolder = new ButtonStyleHolder(env.getViewContext());
+        StyleHolder<Button> styleHolder = new ButtonStyleHolder(env.getAndroidContext());
 
         // configure input view elements
         Button today = ViewHelper.findViewAndSetId(widget, R.id.field_layout_today,
                 Button.class);
         styleHolder.applyStyle(today);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasTodayButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasTodayButton()) {
             today.setVisibility(View.GONE);
         }
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
 

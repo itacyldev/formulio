@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 /**
  * Interface to provide access to Android Activity from rendering environment and to register

@@ -14,7 +14,7 @@ import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*
@@ -65,7 +65,7 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
             int i=0;
             for (String h : splits) {
                 // inflate header cell from resource
-                Widget headerLayout = ViewHelper.inflate(env.getViewContext(),
+                Widget headerLayout = ViewHelper.inflate(env.getAndroidContext(),
                         R.layout.widget_table_header, Widget.class);
                 TextView headerCell = ViewHelper.findViewAndSetId(headerLayout, R.id.header_view, TextView.class);
                 headerLayout.removeView(headerCell);

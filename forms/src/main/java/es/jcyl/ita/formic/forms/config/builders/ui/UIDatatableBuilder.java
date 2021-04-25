@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -169,6 +170,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
      */
     public UIDatatable createDataTableFromRepo(Repository repo, String[] properties) {
         UIDatatable datatable = new UIDatatable();
+        datatable.setId(String.valueOf(RandomUtils.nextInt()));
         datatable.setRepo(repo);
         List<UIColumn> lstCols = createDefaultColumns(repo, properties);
         datatable.setColumns(lstCols.toArray(new UIColumn[lstCols.size()]));

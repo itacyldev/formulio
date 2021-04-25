@@ -32,26 +32,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
-import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.builders.FieldDataBuilder;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
+import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -95,11 +97,11 @@ public class DelegatedExpressionTest {
         form.getChildById("f1").setValueExpression(exprFactory.create(entityExpr));
 
         // set entity in forms context
-        form.getContext().setEntity(entity);
+        form.setEntity(entity);
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
         env.setViewDAG(viewDAG);
 
         // walk the tree executing expressions
@@ -109,7 +111,7 @@ public class DelegatedExpressionTest {
         Object expectedValue = entity.get(propertyName);
         for (UIInputComponent kid : form.getFields()) {
             UIInputComponent field = kid;
-            Assert.assertEquals(expectedValue.toString(), field.getValue(env.getContext()).toString());
+            Assert.assertEquals(expectedValue.toString(), field.getValue(env.getWidgetContext()).toString());
         }
     }
 

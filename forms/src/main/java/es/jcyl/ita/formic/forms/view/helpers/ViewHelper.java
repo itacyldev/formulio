@@ -23,7 +23,6 @@ import android.view.animation.Transformation;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,9 +36,8 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.components.tab.TabFragment;
-import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -164,56 +162,53 @@ public class ViewHelper {
         return label;
     }
 
-    public static View findComponentView(View rootView, String formId, String componentId) {
-        // same name rule followed by FileRenderer to tag the BaseView of
-        // the InputFileView: formId:elementId
-        View view = rootView.findViewWithTag(formId + ":" + componentId);
-
-        if (view == null) {
-            //if rootView is an object of type ViewPager2,
-            // must search in all fragments of the ViewPager2's adapter
-            if (rootView instanceof ViewPager2) {
-                ViewPagerAdapter adapter = (ViewPagerAdapter) ((ViewPager2) rootView).getAdapter();
-                for (TabFragment fragment : adapter.getTabFragments()) {
-                    view = findComponentView(fragment.getTabView(), formId, componentId);
-                    if (view != null) {
-                        break;
-                    }
-                }
-            } else if (rootView instanceof ViewGroup) {
-                ViewGroup group = (ViewGroup) rootView;
-                for (int i = 0; i < group.getChildCount(); i++) {
-                    View child = group.getChildAt(i);
-                    view = findComponentView(child, formId, componentId);
-                    if (view != null) {
-                        break;
-                    }
-                }
-            }
-        }
-        return view;
+    public static View findComponentWidget(View rootView, String componentId) {
+//        // same name rule followed by FileRenderer to tag the BaseView of
+//        // the InputFileView: formId:elementId
+//        View view = rootView.findViewWithTag(componentId);
+//
+//        if (view == null) {
+//            //if rootView is an object of type ViewPager2,
+//            // must search in all fragments of the ViewPager2's adapter
+//            if (rootView instanceof ViewPager2) {
+//                ViewPagerAdapter adapter = (ViewPagerAdapter) ((ViewPager2) rootView).getAdapter();
+//                for (TabFragment fragment : adapter.getTabFragments()) {
+//                    view = findComponentWidget(fragment.getTabView(), componentId);
+//                    if (view != null) {
+//                        break;
+//                    }
+//                }
+//            } else if (rootView instanceof ViewGroup) {
+//                ViewGroup group = (ViewGroup) rootView;
+//                for (int i = 0; i < group.getChildCount(); i++) {
+//                    View child = group.getChildAt(i);
+//                    view = findComponentWidget(child, componentId);
+//                    if (view != null) {
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        return view;
+        return rootView.findViewWithTag(componentId);
     }
 
-    public static View findComponentView(View rootView, UIComponent component) {
-        // same name rule followed by FileRenderer to tag the BaseView of
-        // the InputFileView: contextHolderId:elementId
-        String ctxHolderId = (component.getParentContext()!=null)?component.getParentContext().getHolderId():"root";
-//        String formId = (component.getParentForm() != null) ? component.getParentForm().getId() : "root";
-        return rootView.findViewWithTag(ctxHolderId + ":" + component.getId());
+    public static Widget findComponentWidget(View rootView, UIComponent component) {
+        return rootView.findViewWithTag(component.getId());
     }
 
-    public static InputWidget findInputFieldViewById(View rootView, UIInputComponent field) {
-        return findInputFieldViewById(rootView, field.getParentContext().getHolderId(), field.getId());
+    public static InputWidget findInputWidget(View rootView, UIInputComponent field) {
+        return findInputWidget(rootView, field.getId());
     }
 
-    public static InputWidget findInputFieldViewById(View rootView, String formId, String fieldId) {
-        View view = ViewHelper.findComponentView(rootView, formId, fieldId);
+    public static InputWidget findInputWidget(View rootView, String fieldId) {
+        View view = ViewHelper.findComponentWidget(rootView, fieldId);
         if (view == null) {
             return null;
         }
         if (!(view instanceof InputWidget)) {
             throw new IllegalArgumentException(String.format("The view element referenced by [%s]" +
-                    " in the form [%s] is not and InputFieldView", formId, fieldId));
+                    " is not and InputFieldView", fieldId));
         }
         return (InputWidget) view;
     }

@@ -1,10 +1,6 @@
 package es.jcyl.ita.formic.forms.components.datalist;
 
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
-import es.jcyl.ita.formic.forms.components.form.ContextHolder;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
-import es.jcyl.ita.formic.forms.context.impl.EntityContext;
-import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -26,28 +22,10 @@ import es.jcyl.ita.formic.forms.context.impl.ViewContext;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIDatalistItem extends UIGroupComponent implements ContextHolder {
+public class UIDatalistItem extends UIGroupComponent {
 
     public UIDatalistItem() {
         this.setRendererType("datalistitem");
         this.setRenderChildren(true);
-        this.context = new ComponentContext(this);
-    }
-
-    private ComponentContext context;
-
-    @Override
-    public ComponentContext getContext() {
-        return context;
-    }
-
-    @Override
-    public ViewContext getViewContext() {
-        return context.getViewContext();
-    }
-
-    @Override
-    public EntityContext getEntityContext() {
-        return context.getEntityContext();
     }
 }

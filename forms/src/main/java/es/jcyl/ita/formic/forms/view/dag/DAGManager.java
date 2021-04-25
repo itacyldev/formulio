@@ -7,10 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.ContextHolder;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.form.EntityHolder;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
@@ -200,7 +199,7 @@ public class DAGManager {
         // is form relative reference
         if (varReference.startsWith("view")) {
             // relative reference uses current component form to find the component
-            ContextHolder contextHolder = component.getParentContext().getRoot();
+            EntityHolder contextHolder = component.getEntityHolder();
             if (contextHolder == null) {
                 throw new ViewConfigException(String.format("Invalid variable reference. " +
                         "Relative references can be used just inside a form or a context holder. " +
