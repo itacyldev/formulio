@@ -62,7 +62,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(holder.mItem.getId());
+        holder.mIdView.setText(holder.mItem.getDescription());
         holder.mContentView.setText(holder.mItem.getName());
         holder.numEntities.setText(holder.mItem.count() + " entities");
 
