@@ -48,6 +48,7 @@ public abstract class FormController implements Identificable, FilterableCompone
     protected MainController mc;
     protected String id;
     protected String name;
+    protected String description;
     protected UIView view;
     protected Repository repo;
     protected Filter filter;
@@ -133,9 +134,17 @@ public abstract class FormController implements Identificable, FilterableCompone
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public UIView getView() {
         return view;
