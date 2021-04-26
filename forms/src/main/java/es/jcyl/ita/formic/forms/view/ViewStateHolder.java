@@ -70,7 +70,7 @@ public class ViewStateHolder {
      * Restore view state form the context
      */
     private void restoreState(WidgetContextHolder holder) {
-        String holderId = holder.getWidget().getComponentId();// formId, dataitemId, ...
+        String holderId = holder.getWidget().getComponentId(); // formId, dataitemId, ...
         Map<String, Object> holderState = this.state.get(holderId);
         if (holderState != null) {
             ViewContext viewContext = holder.getWidgetContext().getViewContext();
