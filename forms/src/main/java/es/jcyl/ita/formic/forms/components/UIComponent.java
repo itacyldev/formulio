@@ -85,4 +85,7 @@ public interface UIComponent {
     void setAction(UIAction componentAction);
 
     boolean isRendered(Context context);
+
+    ValueBindingExpression getPlaceHolder();
+
 }

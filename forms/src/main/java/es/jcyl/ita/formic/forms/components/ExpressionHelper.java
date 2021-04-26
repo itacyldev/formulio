@@ -41,6 +41,10 @@ public class ExpressionHelper {
         if (component.getRenderExpression() != null) {
             express.add(component.getRenderExpression());
         }
+
+        if (component.getPlaceHolder() !=null){
+            express.add(component.getPlaceHolder());
+        }
         return express;
     }
 
