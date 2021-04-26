@@ -1,6 +1,5 @@
 package es.jcyl.ita.formic.forms.view.render.renderer;
 
-import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
@@ -45,7 +44,7 @@ public class WidgetContext extends UnPrefixedCompositeContext {
     }
 
     public String getHolderId() {
-        return this.holder.getWidget().getWidgetId();
+        return this.holder.getWidget().getComponentId();
     }
 
     public WidgetContextHolder getHolder() {
@@ -54,7 +53,7 @@ public class WidgetContext extends UnPrefixedCompositeContext {
 
     @Override
     public String getPrefix() {
-        return this.holder.getWidget().getWidgetId();
+        return this.holder.getWidget().getComponentId();
     }
 
     public Widget getWidget() {

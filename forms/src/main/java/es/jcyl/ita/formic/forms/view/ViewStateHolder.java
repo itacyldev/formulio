@@ -21,7 +21,6 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 
 /**
@@ -31,7 +30,11 @@ import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
  */
 public class ViewStateHolder {
 
-    private Map<Integer, Object> state = new HashMap<Integer, Object>();
+    /**
+     * A map for each WidgetContextHolder in which is stored the the state of each StateFull item of
+     * the context
+     */
+    private Map<String, Map<String, Object>> state = new HashMap();
 
     public void clear() {
         this.state.clear();
@@ -43,34 +46,43 @@ public class ViewStateHolder {
     public void saveState(ViewWidget rootWidget) {
         clear();
         for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
-            ViewContext viewContext = holder.getWidgetContext().getViewContext();
-            saveState(viewContext);
+            saveState(holder);
         }
     }
 
     /**
      * Gets all the inputFields and stores their state in the context "state"
      */
-    public void saveState(ViewContext viewContext) {
-        clear();
+    private void saveState(WidgetContextHolder holder) {
+        String holderId = holder.getWidget().getComponentId();  // formId, dataitemId, ...
+        Map<String, Object> holderState = this.state.get(holderId);
+        if (holderState == null) {
+            holderState = new HashMap<>();
+            this.state.put(holderId, holderState);
+        }
+        ViewContext viewContext = holder.getWidgetContext().getViewContext();
         for (StatefulWidget widget : viewContext.getStatefulViews()) {
-            state.put(widget.getId(), widget.getState());
+            holderState.put(widget.getComponent().getId(), widget.getState());
         }
     }
 
     /**
      * Restore view state form the context
      */
-    public void restoreState(ViewContext viewContext) {
-        for (StatefulWidget widget : viewContext.getStatefulViews()) {
-            widget.setState(state.get(widget.getId()));
+    private void restoreState(WidgetContextHolder holder) {
+        String holderId = holder.getWidget().getComponentId();// formId, dataitemId, ...
+        Map<String, Object> holderState = this.state.get(holderId);
+        if (holderState != null) {
+            ViewContext viewContext = holder.getWidgetContext().getViewContext();
+            for (StatefulWidget widget : viewContext.getStatefulViews()) {
+                widget.setState(holderState.get(widget.getComponent().getId()));
+            }
         }
     }
 
     public void restoreState(ViewWidget rootWidget) {
         for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
-            ViewContext viewContext = holder.getWidgetContext().getViewContext();
-            restoreState(viewContext);
+            restoreState(holder);
         }
     }
 }

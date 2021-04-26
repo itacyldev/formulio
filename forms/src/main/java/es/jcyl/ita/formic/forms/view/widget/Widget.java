@@ -54,7 +54,7 @@ public class Widget<C extends UIComponent> extends LinearLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public String getWidgetId() {
+    public String getComponentId() {
         return this.component.getAbsoluteId();
     }
 

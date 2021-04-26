@@ -40,7 +40,6 @@ public class OnInputChangeEventHandler
 
     @Override
     public void handle(Event event) {
-//        UIComponent component = event.getSource().getComponent();
         Widget widget = event.getSource();
 
         // if the component has defined an UserAction for this event, use it
@@ -69,6 +68,8 @@ public class OnInputChangeEventHandler
             try {
                 newFieldView.setValue(state);
                 newFieldView.setFocus(true);
+                newFieldView.getWidgetContext().getViewContext().get(newFieldView.getComponent().getId());
+                newFieldView.getWidgetContext().getViewContext().get(newFieldView.getComponentId());
             } finally {
                 mc.getRenderingEnv().enableInterceptors();
             }

@@ -81,7 +81,7 @@ public class ViewContext extends AbstractBaseContext {
         InputWidget fieldView = findInputWidget(elementId);
         if (fieldView == null) {
             warn(String.format("No view element id [%s] " +
-                    "doesn't exists inside widget [%s].", elementId, widget.getWidgetId()));
+                    "doesn't exists inside widget [%s].", elementId, widget.getComponentId()));
             return null;
         }
         Object value = fieldView.getValue();

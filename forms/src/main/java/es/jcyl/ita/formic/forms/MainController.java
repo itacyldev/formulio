@@ -244,10 +244,10 @@ public class MainController implements ContextAwareComponent {
     public Widget updateView(Widget widget, boolean reactiveCall) {
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
-        View newView = viewRenderer.render(this.renderingEnv, widget.getComponent());
-        renderingEnv.enableInterceptors();
+        Widget newView = viewRenderer.render(this.renderingEnv, widget.getComponent());
         viewRenderer.replaceView(widget, newView);
-        return widget;
+        renderingEnv.enableInterceptors();
+        return newView;
 //        if (!reactiveCall) {
 //            flowManager.execute(component.getAbsoluteId());
 //        }
@@ -269,12 +269,13 @@ public class MainController implements ContextAwareComponent {
         // render again the form to show validation error
         renderingEnv.disableInterceptors();
         try {
-            View newView = viewRenderer.render(renderingEnv, formController.getView());
+            Widget newRootWidget = viewRenderer.render(renderingEnv, formController.getView());
 
             // the View elements to replace hang from the content view of the formController
             ViewGroup contentView = formController.getContentView();
             contentView.removeAllViews();
-            contentView.addView(newView);
+            contentView.addView(newRootWidget);
+            formController.setRootWidget((ViewWidget) newRootWidget);
 
             // disable user events and restore values to the view
             formController.restoreViewState();
