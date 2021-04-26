@@ -68,8 +68,6 @@ public class OnInputChangeEventHandler
             try {
                 newFieldView.setValue(state);
                 newFieldView.setFocus(true);
-                newFieldView.getWidgetContext().getViewContext().get(newFieldView.getComponent().getId());
-                newFieldView.getWidgetContext().getViewContext().get(newFieldView.getComponentId());
             } finally {
                 mc.getRenderingEnv().enableInterceptors();
             }
