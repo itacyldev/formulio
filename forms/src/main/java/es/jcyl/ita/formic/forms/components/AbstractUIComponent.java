@@ -230,7 +230,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
                 if (this.placeHolder == null) {
                     return null;
                 }
-                value = value = getValue(context, this.placeHolder);
+                value = getValue(context, this.placeHolder);
             }
             return value;
         }
