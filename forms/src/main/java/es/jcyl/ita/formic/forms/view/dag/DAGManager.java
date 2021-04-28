@@ -142,7 +142,7 @@ public class DAGManager {
             List<String> dependingVariables = ve.getDependingVariables();
 
             for (String depString : dependingVariables) {
-                if (depString.startsWith("entity")) {
+                if (depString.startsWith("entity")|| depString.startsWith("param")) {
                     // entity properties mapping are skipped
                     continue;
                 }
