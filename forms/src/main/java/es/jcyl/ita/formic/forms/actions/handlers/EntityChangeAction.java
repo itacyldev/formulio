@@ -23,7 +23,6 @@ import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
@@ -41,9 +40,8 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
 
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
-        // save view state for each form
-        FormController formController = actionContext.getFc();
-        formController.saveViewState();
+        // save view state for each WidgetContextHolder (forms, list-items, ..)
+        mc.saveViewState();
         try {
             doAction(actionContext, action);
             String msg = getSuccessMessage(action);
@@ -61,7 +59,7 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
     protected void resolveNavigation(ActionContext actionContext, UserAction action, String msg) {
         if (action.isForceRefresh()) {
             // Postback action
-            mc.renderBack();
+            mc.updateView(action.getWidget().getWidgetContext().getWidget());
             if (StringUtils.isNotBlank(msg)) {
                 UserMessagesHelper.toast(actionContext.getViewContext(), msg);
             }
@@ -79,6 +77,7 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
 
     protected void onError(ActionContext actionContext, UserAction action, Exception e) {
         mc.renderBack();
+        mc.restoreViewState();
         String msg = getErrorMessage(action, e);
         if (StringUtils.isNotBlank(msg)) {
             UserMessagesHelper.toast(actionContext.getViewContext(), msg);

@@ -76,7 +76,7 @@ public class FormControllerTest {
     @Test
     public void testLoadEntity() {
         // create random meta for entity and create entity
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
         // create repository mock
@@ -102,7 +102,7 @@ public class FormControllerTest {
     @Test
     public void testSaveEntity() {
         // create random entity meta and use databuilder to populate entity data
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
 

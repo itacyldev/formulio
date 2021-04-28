@@ -48,11 +48,8 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
      */
     public Object getValue(final String key) {
         String[] newKey = splitKey(key);
-        if (newKey == null || this.contexts == null) {
-            return super.getValue(key);
-        } else {
-            return (!this.hasContext(newKey[0])) ? null : this.contexts.get(newKey[0]).get(newKey[1]);
-        }
+        return (newKey == null || this.contexts == null) ? super.get(key) :
+                this.contexts.get(newKey[0]).get(newKey[1]);
     }
 
 
@@ -158,7 +155,6 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
 
     @Override
     public Set<Entry<String, Object>> entrySet() {
-
         Set<Entry<String, Object>> globalSet = new HashSet<Entry<String, Object>>();
         String fullKey;
         for (Entry<String, Context> entry : this.contexts.entrySet()) {
@@ -180,8 +176,6 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
         int firstPointPos = key.indexOf('.');
         if (firstPointPos == -1) {
             return null;
-//            throw new ContextException(String.format("No prefix found in the expression [%s], the access to " +
-//                    "context variable must be prefixed with de parent context id.", key));
         }
         String prefix = key.substring(0, firstPointPos);
         if (!this.contexts.containsKey(prefix)) {

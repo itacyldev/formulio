@@ -76,6 +76,45 @@ public class ActionAttributeResolverTest {
         Assert.assertEquals(ActionType.DELETE.name().toLowerCase(), myButton.getAction().getType());
     }
 
+    private static final String XML_TEST_BUTTON_ROUTE = "<button id=\"myButton\" route=\"aRouteToGo\" />";
+
+    @Test
+    public void testActionWithRouteParam() {
+        // prepare
+        String xml = XmlConfigUtils.createEditForm(XML_TEST_BUTTON_ROUTE);
+        // act
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+
+        // find myButton
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
+
+        Assert.assertNotNull(myButton);
+        Assert.assertNotNull(myButton.getAction());
+        Assert.assertEquals(ActionType.NAV.name().toLowerCase(), myButton.getAction().getType());
+    }
+
+    private static final String XML_TEST_BUTTON_ACTION_PARAMS = "<button id=\"myButton\" action=\"nav\" route=\"aRouteToGo\" forceRefresh=\"true\" registerInHistory=\"false\" />";
+
+    @Test
+    public void testActionButtonWithActionParams() {
+        // prepare
+        String xml = XmlConfigUtils.createEditForm(XML_TEST_BUTTON_ACTION_PARAMS);
+        // act
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+
+        // find myButton
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
+
+        Assert.assertNotNull(myButton);
+        Assert.assertNotNull(myButton.getAction());
+        Assert.assertEquals(ActionType.NAV.name().toLowerCase(), myButton.getAction().getType());
+        Assert.assertEquals(true, myButton.getAction().isForceRefresh());
+        Assert.assertEquals(false, myButton.getAction().isRegisterInHistory());
+        Assert.assertEquals("aRouteToGo", myButton.getAction().getRoute());
+    }
+
     private static final String XML_NESTED_ACTION = "<button id=\"myButton\" >" +
             "<action type=\"save\" forceRefresh=\"true\">" +
             "<param name=\"param1\" value=\"valor1\"/>" +
@@ -167,7 +206,9 @@ public class ActionAttributeResolverTest {
 
 
     private static final String XML_JS_METHOD_REFERENCE = "<form>" +
-            "<button id=\"myButton\" action=\"myJsMethod\"/>" +
+            "<button id=\"myButton\" action=\"myJsMethod\">" +
+            "<param name=\"param1\" value=\"value1\"/>" +
+            "</button>" +
             "</form>" +
             "<script> var message='Some js here!'; </script>";
 
@@ -193,7 +234,8 @@ public class ActionAttributeResolverTest {
         Assert.assertEquals(ActionType.JS.name(), action.getType());
         UIParam[] params = action.getParams();
         Assert.assertThat(params, not(emptyArray()));
-        Assert.assertThat(params, arrayWithSize(1));
+        Assert.assertThat(params, arrayWithSize(2));
         Assert.assertThat(params[0].getValue().toString(), equalTo("myJsMethod"));
+        Assert.assertThat(params[1].getValue().toString(), equalTo("value1"));
     }
 }

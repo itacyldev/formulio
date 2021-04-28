@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.scripts;
 
 import android.util.Log;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,10 +39,12 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 import static org.mockito.Mockito.*;
@@ -92,6 +95,27 @@ public class RhinoScriptsTest {
         }
     }
 
+    static final String SCRIPT_SOURCE = " function hello(param) {" +
+            " return 'ok ' + param;" +
+            "}";
+
+    @Test
+    public void testCallFunction() throws Exception {
+
+        CompositeContext gCtx = ContextTestUtils.createGlobalContext();
+        ScriptEngine engine = new ScriptEngine();
+        engine.initEngine(null);
+        engine.store("formTest", SCRIPT_SOURCE);
+        engine.initScope("formTest");
+
+        String expected = RandomUtils.randomString(10);
+        Object o = engine.callFunction("hello", expected);
+        String value = (String) o;
+        Assert.assertEquals("ok " + expected, value);
+
+        runScript(SCRIPT_SOURCE, gCtx);
+    }
+
 
     @Test
     public void testFormConfig() throws Exception {
@@ -113,7 +137,6 @@ public class RhinoScriptsTest {
         String source = TestUtils.readSource(file);
 
         runScript(source, gCtx);
-
     }
 
 
@@ -127,7 +150,29 @@ public class RhinoScriptsTest {
 
         Script script = rhino.compileString(source, "src", 1, null);
         script.exec(rhino, scope);
+
         Context.exit();
+    }
+
+
+    static final String IMPORTING_SOURCE =
+            " function f1() { " +
+                    " return Packages.es.jcyl.ita.formic.forms.scripts.ScriptEntityUtils.test('hollo');" +
+                    "}";
+
+    @Test
+    public void testImportUtilsFunctions() throws Exception {
+
+        CompositeContext gCtx = ContextTestUtils.createGlobalContext();
+        ScriptEngine engine = new ScriptEngine();
+        engine.initEngine(null);
+        engine.store("formTest", IMPORTING_SOURCE);
+        engine.initScope("formTest");
+
+//        runScript(IMPORTING_SOURCE, gCtx);
+
+        Object result = engine.callFunction("f1");
+
     }
 
 }

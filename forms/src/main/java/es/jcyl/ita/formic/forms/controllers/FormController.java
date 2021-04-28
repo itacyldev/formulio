@@ -229,16 +229,16 @@ public abstract class FormController implements Identificable, FilterableCompone
      */
 
     public void onBeforeRender() {
-        ScriptEngine engine = mc.getScriptEngine();
         if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
-            engine.callFunction(this.getId(), this.onBeforeRenderAction, this);
+            ScriptEngine engine = mc.getScriptEngine();
+            engine.callFunction(this.onBeforeRenderAction, this);
         }
     }
 
     public void onAfterRender(View view) {
-        ScriptEngine engine = mc.getScriptEngine();
         if (StringUtils.isNotBlank(this.onAfterRenderAction)) {
-            engine.callFunction(this.getId(), this.onAfterRenderAction, view);
+            ScriptEngine engine = mc.getScriptEngine();
+            engine.callFunction(this.onAfterRenderAction, view);
         }
     }
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components.form;
+package es.jcyl.ita.formic.forms.components.datalist;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -20,28 +20,28 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
+import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
- * Widget to keep widget and entity information after the rendering process.
- *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormWidget extends Widget<UIForm> implements WidgetContextHolder {
 
-    public FormWidget(Context context) {
+public class DatalistItemWidget extends Widget<UIDatalistItem> implements WidgetContextHolder {
+
+    public DatalistItemWidget(Context context) {
         super(context);
     }
 
-    public FormWidget(Context context, @Nullable AttributeSet attrs) {
+    public DatalistItemWidget(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FormWidget(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public DatalistItemWidget(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public FormWidget(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public DatalistItemWidget(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -50,8 +50,10 @@ public class FormWidget extends Widget<UIForm> implements WidgetContextHolder {
         return this.getComponentId();
     }
 
+
     @Override
     public Widget getWidget() {
         return this;
     }
+
 }

@@ -41,7 +41,7 @@ public class DevFormNav {
         nav(formControllerId, null);
     }
 
-    public void nav(String formControllerId, Map<String, Serializable> params) {
+    public void nav(String formControllerId, Map<String, Object> params) {
         UserAction navAction = UserAction.navigate(formControllerId);
         if (params != null) {
             navAction.setParams(params);
@@ -52,7 +52,7 @@ public class DevFormNav {
     }
 
     public void navToEntity(String formControllerId, String entityId) {
-        Map<String, Serializable> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("entityId", entityId);
         nav(formControllerId, params);
     }

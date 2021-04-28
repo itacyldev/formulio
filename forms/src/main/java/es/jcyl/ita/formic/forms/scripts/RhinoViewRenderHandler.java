@@ -18,10 +18,8 @@ package es.jcyl.ita.formic.forms.scripts;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
@@ -55,9 +53,7 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
         }
         try {
             // get current controller
-            UIView root = component.getRoot();
-            FormController formController = root.getFormController();
-            engine.callFunction(formController.getId(), component.getOnBeforeRenderAction(), component);
+            engine.callFunction(component.getOnBeforeRenderAction(), component);
         } catch (Exception e) {
             error(String.format("Error while executing onBeforeRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);
@@ -72,9 +68,7 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
             return;
         }
         try {
-            UIView root = component.getRoot();
-            FormController formController = root.getFormController();
-            engine.callFunction(formController.getId(), component.getOnAfterRenderAction(), widget);
+            engine.callFunction(component.getOnAfterRenderAction(), widget);
         } catch (Exception e) {
             error(String.format("Error while executing onAfterRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);

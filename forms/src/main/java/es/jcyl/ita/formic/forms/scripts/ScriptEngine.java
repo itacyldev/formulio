@@ -68,22 +68,16 @@ public class ScriptEngine {
         source.exec(rhino, scope);
     }
 
-    public Object callFunction(String formId, String method, Object... args) {
-        Script script = this.scripts.get(formId);
-        if (script == null) {
-            throw new IllegalStateException("No script found for formId: " + formId);
-        }
-        if (method == null) {
-            throw new IllegalArgumentException("Script method is null!");
-        }
-        return (script == null) ? null : callFunction(script, method, args);
-    }
-
-    public Object callFunction(Script script, String method, Object... args) {
-        // load script functions in scope
-        script.exec(rhino, scope);
+    public Object callFunction(String method, Object... args) {
         // execute function
-        Function function = (Function) scope.get(method, scope);
+        Object fObj = scope.get(method, scope);
+        if (!(fObj instanceof Function)) {
+            throw new IllegalArgumentException("Function not found: " + method);
+        }
+        Function function = (Function) fObj;
+        if (scope == null) {
+            throw new IllegalStateException("Scope not initialized!.");
+        }
         Object result = function.call(rhino, scope, scope, args);
         return (result instanceof Undefined) ? null : result;
     }
@@ -99,19 +93,24 @@ public class ScriptEngine {
     }
 
     /**
-     * Initializes current scope to remove previous properties
+     * Initializes current scope to remove previous properties and load current View scripts
      */
-    public void initScope() {
+    public void initScope(String formControllerId) {
+        Script script = getScript(formControllerId);
+        if (script == null) {
+            return; // no js in this view
+        }
         this.scope = (ScriptableObject) rhino.newObject(sharedScope);
         scope.setPrototype(sharedScope);
         scope.setParentScope(null);
+
+        script.exec(rhino, scope);
     }
 
     public void putProperty(String name, Object object) {
-        if (scope == null) {
-            initScope();
+        if (scope != null) {
+            ScriptableObject.putProperty(scope, name, Context.javaToJS(object, scope));
         }
-        ScriptableObject.putProperty(scope, name, Context.javaToJS(object, scope));
     }
 
     public void clearSources() {

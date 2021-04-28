@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import es.jcyl.ita.formic.forms.components.EntityHolderProxy;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -66,6 +67,9 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
      * @return
      */
     protected W createWidget(RenderingEnv env, C component) {
+//        if(component instanceof EntityHolderProxy){
+//            component = (C) ((EntityHolderProxy) component).getDelegate();
+//        }
         Widget widget = ViewHelper.inflate(env.getAndroidContext(), getWidgetLayoutId(component), Widget.class);
         // set unique id and tag
         widget.setId(RandomUtils.nextInt());

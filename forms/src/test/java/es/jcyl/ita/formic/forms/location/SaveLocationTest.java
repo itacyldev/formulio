@@ -83,7 +83,7 @@ public class SaveLocationTest {
         DevDbBuilder dbBuilder = new DevDbBuilder();
 
         // Create calculated property for the location
-        EntityMeta meta = dbBuilder.createRandomMeta();
+        EntityMeta meta = dbBuilder.buildRandomMeta();
         DBPropertyType[] props = (DBPropertyType[]) meta.getProperties();
         DBPropertyType locationProperty = createLocationProperty(props[1], INSERT, JEXL, "${location.asString}");
 

@@ -55,7 +55,7 @@ public class RepositoryUtils {
     }
 
     public static Repository registerMock(String id) {
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         return registerMock(id, meta);
     }
 

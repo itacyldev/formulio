@@ -114,9 +114,11 @@ public class FormScriptingTest {
 
         // load script: the value si valid if length > 10
         String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
+
         ScriptEngine engine = recipe.mc.getScriptEngine();
         engine.store(recipe.mc.getFormController().getId(), source);
         engine.initEngine(null);
+        engine.initScope(recipe.mc.getFormController().getId());
         engine.putProperty("out", System.out);
 
         FormValidator formValidator = new FormValidator(recipe.mc);

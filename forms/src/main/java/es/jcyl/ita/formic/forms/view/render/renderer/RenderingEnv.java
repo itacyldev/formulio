@@ -92,6 +92,7 @@ public class RenderingEnv {
         }
         this.clearSelection();
         this.clearMessages();
+        this.initEmptyWidgetCtx(globalContext);
     }
 
     public void clearMessages() {
@@ -210,6 +211,9 @@ public class RenderingEnv {
         this.globalContext.addContext(new EntityContext(entity));
         // register
         this.entity = entity;
+        if(this.getWidgetContext() == EMPTY_WIDGET_CTX){
+            EMPTY_WIDGET_CTX.setEntity(entity);
+        }
     }
 
     Entity getEntity() {
@@ -228,6 +232,11 @@ public class RenderingEnv {
     private void initEmptyWidgetCtx(CompositeContext gContxt) {
 
         EMPTY_WIDGET_CTX = new WidgetContext(new WidgetContextHolder() {
+            @Override
+            public String getHolderId() {
+                return null;
+            }
+
             @Override
             public Widget getWidget() {
                 return null;

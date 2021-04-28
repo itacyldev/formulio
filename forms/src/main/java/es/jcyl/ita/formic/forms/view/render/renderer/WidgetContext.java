@@ -43,6 +43,16 @@ public class WidgetContext extends UnPrefixedCompositeContext {
         this.addContext(viewContext);
     }
 
+    @Override
+    public Object getValue(String key) {
+        // shortcut to access entity object instead of EntityContext
+        if ("entity".equals(key) && this.entityContext != null) {
+            return this.entityContext.getEntity();
+        } else {
+            return super.getValue(key);
+        }
+    }
+
     public String getHolderId() {
         return this.holder.getWidget().getComponentId();
     }

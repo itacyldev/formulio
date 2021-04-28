@@ -24,6 +24,7 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -36,8 +37,9 @@ public class UserAction {
     private boolean forceRefresh = false;
     private boolean registerInHistory = true;
     private String message;
-    private Map<String, Serializable> params;
+    private Map<String, Object> params;
     private UIComponent component;
+    private Widget widget;
 
     private FormController origin;
 
@@ -55,6 +57,8 @@ public class UserAction {
 
     public UserAction(UIAction action, UIComponent component) {
         this(action.getType(), action.getRoute(), component);
+        this.setRegisterInHistory(action.isRegisterInHistory());
+        this.setForceRefresh(action.isForceRefresh());
     }
 
     public UserAction(String actionType, String route, UIComponent component) {
@@ -109,15 +113,15 @@ public class UserAction {
         this.registerInHistory = registerInHistory;
     }
 
-    public Map<String, Serializable> getParams() {
+    public Map<String, Object> getParams() {
         return params;
     }
 
-    public void setParams(Map<String, Serializable> params) {
+    public void setParams(Map<String, Object> params) {
         this.params = params;
     }
 
-    public void addParam(String param, Serializable value) {
+    public void addParam(String param, Object value) {
         if (this.params == null) {
             this.params = new HashMap<>();
         }
@@ -177,6 +181,14 @@ public class UserAction {
         return action;
     }
 
+    public Widget getWidget() {
+        return widget;
+    }
+
+    public void setWidget(Widget widget) {
+        this.widget = widget;
+    }
+
     @Override
     public String toString() {
         return "UserAction{" +
@@ -186,4 +198,5 @@ public class UserAction {
                 ", params=" + params +
                 '}';
     }
+
 }

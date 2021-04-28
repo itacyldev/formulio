@@ -69,7 +69,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         UIAction uiAction = element.getAction();
-        // TODO: FORMIC-229 Terminar refactorización de acciones
+        // FORMIC-245 Crear atribute resolverpara el attribute "route"
         if (uiAction == null) { // default action
             uiAction = new UIAction();
             uiAction.setType("nav");
@@ -77,7 +77,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
             element.setAction(uiAction);
         }
         if (CollectionUtils.isNotEmpty(paramNodes)) {
-            UIParam[] params = getParams(paramNodes);
+            UIParam[] params = BuilderHelper.getParams(paramNodes);
             uiAction.setParams(params);
         }
     }

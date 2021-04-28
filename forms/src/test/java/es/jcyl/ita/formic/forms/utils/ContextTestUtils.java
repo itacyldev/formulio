@@ -48,6 +48,11 @@ public class ContextTestUtils {
             WidgetContext ctx;
 
             @Override
+            public String getHolderId() {
+                return null;
+            }
+
+            @Override
             public Widget getWidget() {
                 return widget;
             }

@@ -18,7 +18,6 @@ package es.jcyl.ita.formic.repo.builders;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.Editable;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.StandardDatabase;
@@ -120,7 +119,7 @@ public class DevDbBuilder {
         this.db = db;
         this.daoMaster = new DaoMaster(db);
         if (this.meta == null) {
-            this.meta = createRandomMeta(RandomUtils.randomString(10), this.limitedValues);
+            this.meta = buildRandomMeta(RandomUtils.randomString(10), this.limitedValues);
         }
         // create table using meta information
         DevDbBuilder.createTable(this.getDb(), this.meta);
@@ -199,15 +198,15 @@ public class DevDbBuilder {
     ///////////////////////////////////////////////
 
 
-    public static EntityMeta createRandomMeta() {
-        return createRandomMeta(RandomUtils.randomString(10), null);
+    public static EntityMeta buildRandomMeta() {
+        return buildRandomMeta(RandomUtils.randomString(10), null);
     }
 
-    public static EntityMeta createRandomMeta(String name) {
-        return createRandomMeta(name, null);
+    public static EntityMeta buildRandomMeta(String name) {
+        return buildRandomMeta(name, null);
     }
 
-    public static EntityMeta createRandomMeta(String name, Map<String, Object[]> limitedValues) {
+    public static EntityMeta buildRandomMeta(String name, Map<String, Object[]> limitedValues) {
         EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
         metaBuilder.withBasicTypes(true).withRandomData().withEntityName(name);
         if (limitedValues != null) {
@@ -281,6 +280,10 @@ public class DevDbBuilder {
         return RepositoryFactory.getInstance().getEditableRepo(eSource.getEntityTypeId());
     }
 
+    public static Entity buildRandomEntity() {
+        EntityMeta meta = buildRandomMeta();
+        return buildEntities(meta, 1, null).get(0);
+    }
 
     public static Entity buildEntity(EntityMeta meta) {
         return buildEntities(meta, 1, null).get(0);
@@ -290,7 +293,7 @@ public class DevDbBuilder {
         return buildEntities(meta, numEntities, null);
     }
     public static List<Entity> buildEntitiesRandomMeta(int numEntities) {
-        EntityMeta meta = createRandomMeta();
+        EntityMeta meta = buildRandomMeta();
         return buildEntities(meta, numEntities, null);
     }
 

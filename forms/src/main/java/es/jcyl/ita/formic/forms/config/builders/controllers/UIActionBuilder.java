@@ -4,6 +4,7 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
@@ -27,7 +28,7 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
         // attach nested options
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         if (CollectionUtils.isNotEmpty(paramNodes)) {
-            UIParam[] params = getParams(paramNodes);
+            UIParam[] params = BuilderHelper.getParams(paramNodes);
             element.setParams(params);
         }
     }

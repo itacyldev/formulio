@@ -24,9 +24,13 @@ import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * Stores view state of each WidgetContextHolder. For each holder, this object keeps a map referenced
+ * by the id of the holder component (typically a form or a itemlist), and stores the state of the
+ * hodler's registered views (Statefullviews, tytpically inputs).
+ * It is used to store and restore the view state after each user interaction to restore the view elements.
  * <p>
- * Stores view state using a FormViewContext as intermediate
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ViewStateHolder {
 
@@ -54,7 +58,7 @@ public class ViewStateHolder {
      * Gets all the inputFields and stores their state in the context "state"
      */
     private void saveState(WidgetContextHolder holder) {
-        String holderId = holder.getWidget().getComponentId();  // formId, dataitemId, ...
+        String holderId = holder.getHolderId();  // unique formId, dataitemId, ...
         Map<String, Object> holderState = this.state.get(holderId);
         if (holderState == null) {
             holderState = new HashMap<>();
@@ -70,7 +74,7 @@ public class ViewStateHolder {
      * Restore view state form the context
      */
     private void restoreState(WidgetContextHolder holder) {
-        String holderId = holder.getWidget().getComponentId(); // formId, dataitemId, ...
+        String holderId = holder.getHolderId(); // unique formId, dataitemId, ...
         Map<String, Object> holderState = this.state.get(holderId);
         if (holderState != null) {
             ViewContext viewContext = holder.getWidgetContext().getViewContext();

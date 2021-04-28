@@ -172,9 +172,7 @@ public class XmlConfigFileReader {
         }
         List<ConfigNode> children = root.getChildren();
         for (ConfigNode kid : children) {
-            notifyElementStart(kid);
             build(kid);
-            notifyElementEnd(kid);
         }
         if (builder != null) {
             DevConsole.debug("Processing children of <${tag}/>");

@@ -18,12 +18,10 @@ package es.jcyl.ita.formic.forms;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -130,7 +128,7 @@ public class MainController implements ContextAwareComponent {
      * @param params
      */
     public void navigate(android.content.Context andContext, String formId,
-                         Map<String, Serializable> params) {
+                         Map<String, Object> params) {
         saveState();
 
         setupParamsContext(params);
@@ -144,7 +142,7 @@ public class MainController implements ContextAwareComponent {
             }
             this.formController = controller;
             this.formController.load(globalContext);
-            this.scriptEngine.initScope();
+            this.scriptEngine.initScope(controller.getId());
         } catch (Exception e) {
             restoreState();
             throw e;
@@ -176,7 +174,7 @@ public class MainController implements ContextAwareComponent {
     }
 
 
-    private void setupParamsContext(@Nullable Map<String, Serializable> params) {
+    private void setupParamsContext(@Nullable Map<String, Object> params) {
         BasicContext pContext = new BasicContext("params");
         if (params != null) {
             pContext.putAll(params);
@@ -241,6 +239,10 @@ public class MainController implements ContextAwareComponent {
     /**
      * Method called from the reactor engine to notify the vew which components have to be updated
      */
+    public Widget updateView(Widget widget) {
+        return updateView(widget, false);
+    }
+
     public Widget updateView(Widget widget, boolean reactiveCall) {
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
@@ -263,7 +265,7 @@ public class MainController implements ContextAwareComponent {
     }
 
     /**
-     * Re-renders last view to show validation errors
+     * Re-renders last view to show validation errors or updated entity values.
      */
     public void renderBack() {
         // render again the form to show validation error
@@ -277,13 +279,26 @@ public class MainController implements ContextAwareComponent {
             contentView.addView(newRootWidget);
             formController.setRootWidget((ViewWidget) newRootWidget);
 
-            // disable user events and restore values to the view
-            formController.restoreViewState();
         } finally {
             renderingEnv.enableInterceptors();
         }
     }
 
+    public void saveViewState() {
+        formController.saveViewState();
+    }
+
+    /**
+     * Disables user events and restore values to the view
+     */
+    public void restoreViewState() {
+        renderingEnv.disableInterceptors();
+        try {
+            formController.restoreViewState();
+        } finally {
+            renderingEnv.enableInterceptors();
+        }
+    }
 
     public class State {
         FormController fc;

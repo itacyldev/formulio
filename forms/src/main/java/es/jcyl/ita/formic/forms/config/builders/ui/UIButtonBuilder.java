@@ -53,12 +53,6 @@ public class UIButtonBuilder extends AbstractComponentBuilder<UIButton> {
             uiAction.setRoute(element.getRoute());
             element.setAction(uiAction);
         }
-        List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
-        if (CollectionUtils.isNotEmpty(paramNodes)) {
-            UIParam[] params = getParams(paramNodes);
-            // TODO: solve this for link and button
-            uiAction.setParams(params);
-        }
     }
 
 }

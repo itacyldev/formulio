@@ -72,11 +72,13 @@ public class FormValidator {
         // call validation function
         UIForm form = field.getParentForm();
         if (form.getOnValidate() != null) {
-            ScriptEngine srcEngine = mc.getScriptEngine();
-            FormController fc = form.getRoot().getFormController();
+            ScriptEngine scriptEngine = mc.getScriptEngine();
+            // setup validation context
+            scriptEngine.putProperty("view", viewContext);
+            scriptEngine.putProperty("entity", widgetContext.getEntity());
 
             // TODO: we have to pass a combination of globalContext + formContext
-            Map result = (Map) srcEngine.callFunction(fc.getId(), form.getOnValidate());
+            Map result = (Map) scriptEngine.callFunction(form.getOnValidate());
             if (result.containsKey("error")) {
                 WidgetContextHelper.setMessage(widgetContext, field.getId(), (String) result.get("message"));
                 valid = false;

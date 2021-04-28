@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components.form;
+package es.jcyl.ita.formic.forms.scripts;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,15 +15,29 @@ package es.jcyl.ita.formic.forms.components.form;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface EntityHolder extends UIComponent {
+public class ScriptEntityUtils {
 
-    Entity getEntity();
+    public static void set(Entity entity, String property, Object value){
+        if(entity == null){
+            return;
+        }
+        PropertyType propertyMeta = entity.getMetadata().getPropertyByName(property);
+        if(propertyMeta == null){
+            return;
+        }
+        Object castedValue = ConvertUtils.convert(value, propertyMeta.getType() );
+        entity.set(property, castedValue);
+    }
 
-    void setEntity(Entity entity);
+    public static String test(String value){
+        return value;
+    }
 }

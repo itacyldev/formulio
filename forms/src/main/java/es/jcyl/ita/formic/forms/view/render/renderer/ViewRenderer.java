@@ -27,9 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
+import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.EntityHolder;
+import es.jcyl.ita.formic.forms.components.datalist.UIDataListItemProxy;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -105,12 +107,16 @@ public class ViewRenderer {
                     Entity oldEntity = env.getEntity();
 
                     List<Entity> entities = ((EntityListProvider) groupView).getEntities();
+                    int iter = 0;
+                    // TODO: FORMIC-249 Refactorizar viewRenderer
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
-                        env.setEntity(entity);
+//                        env.setEntity(entity);
                         eventHandler.onEntityContextChanged(entity);
-                        View view = render(env, component.getChildren()[0]);
+
+                        View view = render(env, proxify(iter, component.getChildren()[0], entity));
                         viewList.add(view);
+                        iter++;
                     }
                     // restore entity context
                     env.getWidgetContext().setEntity(oldEntity);
@@ -132,6 +138,23 @@ public class ViewRenderer {
             processDeferredViews(env);
         }
         return widget;
+    }
+
+    /**
+     * Creates a component proxy for curren elemnt
+     *
+     * @param id
+     * @param component
+     * @param entity
+     * @return
+     */
+    private UIComponent proxify(int id, UIComponent component, Entity entity) {
+        if (component instanceof UIDatalistItem) {
+            String cId = component.getId();
+            return new UIDataListItemProxy(cId + "_" + id, component, entity);
+        } else {
+            return component;
+        }
     }
 
     /**

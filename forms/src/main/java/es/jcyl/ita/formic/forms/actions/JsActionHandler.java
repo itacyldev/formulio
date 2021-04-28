@@ -15,14 +15,14 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
-import java.io.Serializable;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.handlers.EntityChangeAction;
-import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Predefined action to execute a js method as result of user interaction with a UIComponent.
@@ -31,17 +31,37 @@ import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
  */
 public class JsActionHandler extends EntityChangeAction {
 
+    private static final Object[] EMPTY_PARAMS = new Object[]{};
+
     public JsActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
     protected void doAction(ActionContext actionContext, UserAction action) {
-        FormController formController = actionContext.getFc();
-        Map<String, Serializable> params = action.getParams();
-        Serializable methodName = params.get("method");
+        Map<String, Object> params = action.getParams();
+        String methodName = null;
+        Object[] callParams = EMPTY_PARAMS;
+        if (params.size() > 1) {
+            // has additional parameters
+            callParams = new Object[params.size() - 1];
+        }
+        int i = 0;
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase("method")) {
+                methodName = (String) entry.getValue();
+            } else {
+                callParams[i] = entry.getValue();
+                i++;
+            }
+        }
+        if (methodName == null) {
+            throw new UserActionException(error("No methodName parameter found, to call a " +
+                    "js function from a component, set a parameter <param name='method' " +
+                    "value='yourJsFunctionName'/>"));
+        }
         ScriptEngine scriptEngine = this.mc.getScriptEngine();
-        scriptEngine.callFunction(formController.getId(), methodName.toString());
+        scriptEngine.callFunction(methodName, callParams);
     }
 
     @Override

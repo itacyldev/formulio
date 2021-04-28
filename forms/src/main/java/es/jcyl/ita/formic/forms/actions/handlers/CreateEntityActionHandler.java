@@ -69,9 +69,9 @@ public class CreateEntityActionHandler extends EntityChangeAction<FormEditContro
         }
         // create new Type
         Entity entity = ((EditableRepository) repo).newEntity();
-        Map<String, Serializable> params = new HashMap<>(action.getParams());
+        Map<String, Object> params = new HashMap<>(action.getParams());
         params.remove("repo");
-        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
             entity.set(entry.getKey(), entry.getValue());
         }
         ((EditableRepository) repo).save(entity);

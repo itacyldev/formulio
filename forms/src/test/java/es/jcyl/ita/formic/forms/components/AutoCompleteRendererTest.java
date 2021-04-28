@@ -140,7 +140,7 @@ public class AutoCompleteRendererTest {
 
         env.initialize();
 
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         int expectedOptions = RandomUtils.randomInt(0, 13);
         List<Entity> entities = DevDbBuilder.buildEntities(meta, expectedOptions);
         // mock the repository to return random entities

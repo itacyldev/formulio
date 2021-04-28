@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.components.form.EntityHolder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.UIAction;

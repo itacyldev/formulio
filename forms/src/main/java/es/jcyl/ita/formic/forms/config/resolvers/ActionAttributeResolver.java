@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config.resolvers;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.controllers.FormController;
@@ -70,7 +73,6 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.info;
  */
 public class ActionAttributeResolver extends AbstractAttributeResolver implements ReadingProcessListener {
 
-
     private List<ConfigNode> unresolvedActions = new ArrayList<>();
 
     @Override
@@ -109,6 +111,11 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
     private void createActionNode(ActionType actionType, ConfigNode node) {
         ConfigNode actionNode = new ConfigNode("action");
         actionNode.setAttribute("type", actionType.name().toLowerCase());
+        // get additional action attributes from current node
+        actionNode.setAttribute("route", node.getAttribute("route"));
+        actionNode.setAttribute("forceRefresh", node.getAttribute("forceRefresh"));
+        actionNode.setAttribute("registerInHistory", node.getAttribute("registerInHistory"));
+
         // if node has "param" nested nodes, assign them to the action
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         for (ConfigNode pNode : paramNodes) {
@@ -188,13 +195,42 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
      */
     private void setupJsAction(ConfigNode node) {
         UIComponent component = (UIComponent) node.getElement();
+        UIParam[] existingParams = null;
+        if (component.getAction() != null && component.getAction().hasParams()) {
+            existingParams = component.getAction().getParams();
+        }
         UIAction componentAction = new UIAction();
         componentAction.setType(ActionType.JS.name());
-        componentAction.setRegisterInHistory(false);
-        componentAction.setForceRefresh(true);
+        if (node.hasAttribute(AttributeDef.REGISTER_IN_HISTORY.name)) {
+            componentAction.setRegisterInHistory((Boolean) ConvertUtils.convert(
+                    node.getAttribute(AttributeDef.REGISTER_IN_HISTORY.name), Boolean.class));
+        } else {
+            componentAction.setRegisterInHistory(false);
+        }
+        if (node.hasAttribute(AttributeDef.FORCE_REFRESH.name)) {
+            componentAction.setForceRefresh((Boolean) ConvertUtils.convert(
+                    node.getAttribute(AttributeDef.FORCE_REFRESH.name), Boolean.class));
+        } else {
+            componentAction.setForceRefresh(true);
+        }
 
-        // create param "method" with the name of the js function
-        UIParam[] params = new UIParam[1];
+        /* Add param "method" with the name of the js function */
+        // check existing parameters
+        UIParam[] params;
+        List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
+        if (existingParams != null) {
+            params = new UIParam[existingParams.length + 1];
+            System.arraycopy(existingParams, 0, params, 1, existingParams.length);
+        } else if (CollectionUtils.isNotEmpty(paramNodes)) {
+            existingParams = BuilderHelper.getParams(paramNodes);
+            // add one gap and copy leaving the first position empty (destpos=1)
+            params = new UIParam[existingParams.length + 1];
+            System.arraycopy(existingParams, 0, params, 1, existingParams.length);
+        } else {
+            // has existing action params
+            params = new UIParam[1];
+        }
+        // add 'method' parameter
         ValueBindingExpression paramValue = this.factory.getExpressionFactory().create(node.getAttribute("action"));
         params[0] = new UIParam("method", paramValue);
         componentAction.setParams(params);

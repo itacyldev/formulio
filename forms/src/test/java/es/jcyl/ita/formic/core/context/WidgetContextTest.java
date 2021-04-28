@@ -78,7 +78,7 @@ public class WidgetContextTest {
     @Test
     public void testEntityContext() {
         // create random entity meta and use databuilder to populate entity data
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
 
@@ -106,7 +106,7 @@ public class WidgetContextTest {
     @Test
     public void testViewContext() {
         // create random entity
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         meta = metaBuilder.addProperties(new Class[]{Double.class, Date.class, ByteArray.class, Boolean.class,
                 String.class, Float.class, Integer.class, Long.class})
                 .build();

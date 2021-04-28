@@ -139,6 +139,7 @@ public class ProjectRhinoScriptIntegrationTest {
         renderer.setEventHandler(new RhinoViewRenderHandler(ScriptEngine.getInstance()));
 
         // render form
+        engine.initScope(formController.getId());
         View formView = renderer.render(env, form);
 
         // The script will insert new entities in the memory repo, the number of rows

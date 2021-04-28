@@ -128,7 +128,7 @@ public class Router {
     }
 
 
-    private void recordHistory(String formId, Map<String, Serializable> params) {
+    private void recordHistory(String formId, Map<String, Object> params) {
         if (current != null) {
             this.memento.add(current);
         }
@@ -165,9 +165,9 @@ public class Router {
 
     public class State {
         String formId;
-        Map<String, Serializable> params;
+        Map<String, Object> params;
 
-        public State(String formId, Map<String, Serializable> params) {
+        public State(String formId, Map<String, Object> params) {
             this.formId = formId;
             this.params = params;
         }
