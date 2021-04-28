@@ -183,7 +183,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                         CompositeContext gContext = dtLayout.getRenderingEnv().getContext();
                         gContext.addContext(new EntityContext(currentEntity));
                         for (UIParam param : uiAction.getParams()) {
-                            Object value = JexlFormUtils.eval(currentEntity, param.getValue());
+                            Object value = JexlFormUtils.eval(gContext, param.getValue());
                             action.addParam(param.getName(), (Serializable) value);
                         }
                         gContext.removeContext("entity");
