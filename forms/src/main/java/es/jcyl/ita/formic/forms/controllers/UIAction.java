@@ -29,7 +29,10 @@ public class UIAction {
     private String type;
     private String route;
     private boolean registerInHistory = true;
-    private boolean forceRefresh = false;
+    /**
+     * What has to be refreshed after action execution
+     */
+    private String refresh;
     private UIParam[] params;
     private String message;
 
@@ -44,7 +47,7 @@ public class UIAction {
 
     public UIAction(UIAction action) {
         this(action.type, action.label, action.route);
-        this.forceRefresh = action.isForceRefresh();
+        this.refresh = action.getRefresh();
         this.registerInHistory = action.isRegisterInHistory();
         this.message = action.getMessage();
         // clone parameters
@@ -110,19 +113,19 @@ public class UIAction {
         return this.params != null && this.params.length > 0;
     }
 
-    public boolean isForceRefresh() {
-        return forceRefresh;
-    }
-
-    public void setForceRefresh(boolean forceRefresh) {
-        this.forceRefresh = forceRefresh;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(String refresh) {
+        this.refresh = refresh;
     }
 }

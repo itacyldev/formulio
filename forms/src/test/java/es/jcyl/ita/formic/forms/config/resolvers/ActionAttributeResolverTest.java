@@ -94,7 +94,7 @@ public class ActionAttributeResolverTest {
         Assert.assertEquals(ActionType.NAV.name().toLowerCase(), myButton.getAction().getType());
     }
 
-    private static final String XML_TEST_BUTTON_ACTION_PARAMS = "<button id=\"myButton\" action=\"nav\" route=\"aRouteToGo\" forceRefresh=\"true\" registerInHistory=\"false\" />";
+    private static final String XML_TEST_BUTTON_ACTION_PARAMS = "<button id=\"myButton\" action=\"nav\" route=\"aRouteToGo\" refresh=\"this\" registerInHistory=\"false\" />";
 
     @Test
     public void testActionButtonWithActionParams() {
@@ -110,13 +110,13 @@ public class ActionAttributeResolverTest {
         Assert.assertNotNull(myButton);
         Assert.assertNotNull(myButton.getAction());
         Assert.assertEquals(ActionType.NAV.name().toLowerCase(), myButton.getAction().getType());
-        Assert.assertEquals(true, myButton.getAction().isForceRefresh());
+        Assert.assertEquals("this", myButton.getAction().getRefresh());
         Assert.assertEquals(false, myButton.getAction().isRegisterInHistory());
         Assert.assertEquals("aRouteToGo", myButton.getAction().getRoute());
     }
 
     private static final String XML_NESTED_ACTION = "<button id=\"myButton\" >" +
-            "<action type=\"save\" forceRefresh=\"true\">" +
+            "<action type=\"save\" refresh=\"all\">" +
             "<param name=\"param1\" value=\"valor1\"/>" +
             "<param name=\"param2\" value=\"valor2\"/>" +
             "</action>" +
@@ -138,7 +138,7 @@ public class ActionAttributeResolverTest {
         Assert.assertNotNull(action);
 
         Assert.assertEquals(ActionType.SAVE.name().toLowerCase(), action.getType());
-        Assert.assertEquals(true, action.isForceRefresh());
+        Assert.assertEquals("all", action.getRefresh());
         // check parameters
         UIParam[] params = action.getParams();
         Assert.assertThat(params, not(emptyArray()));
@@ -146,7 +146,7 @@ public class ActionAttributeResolverTest {
     }
 
     private static final String XML_NESTED_WITH_ERROR = "<button id=\"myButton\" action=\"nav\">" +
-            "<action type=\"delete\" forceRefresh=\"true\"/>" +
+            "<action type=\"delete\" refresh=\"all\"/>" +
             "</button>";
 
     /**

@@ -272,13 +272,11 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.disableInterceptors();
         try {
             Widget newRootWidget = viewRenderer.render(renderingEnv, formController.getView());
-
             // the View elements to replace hang from the content view of the formController
             ViewGroup contentView = formController.getContentView();
             contentView.removeAllViews();
             contentView.addView(newRootWidget);
             formController.setRootWidget((ViewWidget) newRootWidget);
-
         } finally {
             renderingEnv.enableInterceptors();
         }

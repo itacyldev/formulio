@@ -16,9 +16,15 @@
         </script>
         <form>
             <datalist>
-                <datalistitem>
+                <datalistitem id="myitem">
                     <input value="${entity.it_profile}" hasDeleteButton="false"/>
-                    <button action="updateEntity" forceRefresh="true">
+                    <button action="updateEntity" refresh="this" label="Refresh this">
+                        <param name="entity" value="${entity}"/>
+                    </button>
+                    <button action="updateEntity" refresh="all" label="refresh all">
+                        <param name="entity" value="${entity}"/>
+                    </button>
+                    <button action="updateEntity" refresh="myitem-1" label="refresh widget">
                         <param name="entity" value="${entity}"/>
                     </button>
                 </datalistitem>

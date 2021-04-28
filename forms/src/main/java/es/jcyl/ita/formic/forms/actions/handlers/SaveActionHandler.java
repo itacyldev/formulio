@@ -29,20 +29,20 @@ import es.jcyl.ita.formic.forms.validation.ValidatorException;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class SaveActionHandler extends EntityChangeAction {
+public class SaveActionHandler extends AbstractActionHandler {
 
     public SaveActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    protected void doAction(ActionContext actionContext, UserAction action) {
+    public void handle(ActionContext actionContext, UserAction action) {
         FormEditController formController = (FormEditController) actionContext.getFc();
         formController.save(this.mc.getGlobalContext());
     }
 
     @Override
-    protected String getSuccessMessage(UserAction action) {
+    public String getSuccessMessage(ActionContext actionContext, UserAction action) {
         return Config.getInstance().getStringResource(R.string.action_save_success);
     }
 
@@ -54,4 +54,5 @@ public class SaveActionHandler extends EntityChangeAction {
             return super.getErrorMessage(action, e);
         }
     }
+
 }

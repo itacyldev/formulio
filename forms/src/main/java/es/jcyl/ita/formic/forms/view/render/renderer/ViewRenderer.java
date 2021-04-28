@@ -113,7 +113,6 @@ public class ViewRenderer {
                         // create an EntityContext to render each entity
 //                        env.setEntity(entity);
                         eventHandler.onEntityContextChanged(entity);
-
                         View view = render(env, proxify(iter, component.getChildren()[0], entity));
                         viewList.add(view);
                         iter++;
@@ -144,14 +143,15 @@ public class ViewRenderer {
      * Creates a component proxy for curren elemnt
      *
      * @param id
-     * @param component
+     * @param COMPONENT
      * @param entity
      * @return
      */
     private UIComponent proxify(int id, UIComponent component, Entity entity) {
         if (component instanceof UIDatalistItem) {
             String cId = component.getId();
-            return new UIDataListItemProxy(cId + "_" + id, component, entity);
+            // set component id to item-1,item-2, starting with 1
+            return new UIDataListItemProxy(cId + "-" + (id + 1), component, entity);
         } else {
             return component;
         }
@@ -185,6 +185,7 @@ public class ViewRenderer {
                 env.getWidgetContext().registerWidget(widget);
             }
         }
+        widget.setRootWidget(env.getRootWidget());
     }
 
     private Widget createDeferredView(RenderingEnv env, UIComponent component) {

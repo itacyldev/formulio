@@ -49,8 +49,10 @@ public class ViewStateHolder {
      */
     public void saveState(ViewWidget rootWidget) {
         clear();
-        for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
-            saveState(holder);
+        if (rootWidget.getContextHolders() != null) {
+            for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
+                saveState(holder);
+            }
         }
     }
 
@@ -85,8 +87,10 @@ public class ViewStateHolder {
     }
 
     public void restoreState(ViewWidget rootWidget) {
-        for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
-            restoreState(holder);
+        if (rootWidget.getContextHolders() != null) {
+            for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
+                restoreState(holder);
+            }
         }
     }
 }

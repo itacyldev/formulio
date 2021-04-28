@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.forms.actions;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.actions.handlers.EntityChangeAction;
+import es.jcyl.ita.formic.forms.actions.handlers.AbstractActionHandler;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 
@@ -29,7 +29,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JsActionHandler extends EntityChangeAction {
+public class JsActionHandler extends AbstractActionHandler {
 
     private static final Object[] EMPTY_PARAMS = new Object[]{};
 
@@ -37,8 +37,7 @@ public class JsActionHandler extends EntityChangeAction {
         super(mc, router);
     }
 
-    @Override
-    protected void doAction(ActionContext actionContext, UserAction action) {
+    public void handle(ActionContext actionContext, UserAction action) {
         Map<String, Object> params = action.getParams();
         String methodName = null;
         Object[] callParams = EMPTY_PARAMS;
@@ -65,8 +64,12 @@ public class JsActionHandler extends EntityChangeAction {
     }
 
     @Override
-    protected String getSuccessMessage(UserAction action) {
-        return action.getMessage();
+    public void onError(ActionContext actionContext, UserAction action, Exception e) {
+
     }
 
+    @Override
+    public String getSuccessMessage(ActionContext actionContext, UserAction action) {
+        return null;
+    }
 }

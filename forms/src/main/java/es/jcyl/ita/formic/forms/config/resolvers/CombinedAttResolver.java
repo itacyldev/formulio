@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.actions.handlers;
+package es.jcyl.ita.formic.forms.config.resolvers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,25 +15,29 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.actions.ActionContext;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
-import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.config.AttributeResolver;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 /**
+ * Aggregated resolver to perform more than one resolution on the same parameter
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler extends AbstractActionHandler
-        implements ActionHandler {
+public class CombinedAttResolver extends AbstractAttributeResolver<Object> {
 
-    public BackPressedActionHandler(MainController mc, Router router) {
-        super(mc, router);
+    private final AttributeResolver[] resolvers;
+
+    public CombinedAttResolver(AttributeResolver... resolvers) {
+        this.resolvers = resolvers;
     }
 
+
     @Override
-    public void handle(ActionContext actionContext, UserAction action) {
-        mc.getRouter().back(actionContext.getViewContext());
+    public Object resolve(ConfigNode node, String attName) {
+        Object obj = null;
+        for (AttributeResolver resolver : resolvers) {
+            obj = resolver.resolve(node, attName);
+        }
+        return obj; // just last value is kept
     }
 }

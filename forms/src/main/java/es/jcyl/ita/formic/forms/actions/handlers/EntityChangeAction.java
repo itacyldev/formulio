@@ -46,7 +46,6 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
             doAction(actionContext, action);
             String msg = getSuccessMessage(action);
             // resolve after-action navigation
-            resolveNavigation(actionContext, action, msg);
         } catch (Exception e) {
             // re-render form content
             onError(actionContext, action, e);
@@ -55,27 +54,7 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
             }
         }
     }
-
-    protected void resolveNavigation(ActionContext actionContext, UserAction action, String msg) {
-        if (action.isForceRefresh()) {
-            // Postback action
-            mc.updateView(action.getWidget().getWidgetContext().getWidget());
-            if (StringUtils.isNotBlank(msg)) {
-                UserMessagesHelper.toast(actionContext.getViewContext(), msg);
-            }
-        } else if (StringUtils.isBlank(action.getRoute())) {
-            // no navigation, stay in form
-            if (StringUtils.isNotBlank(msg)) {
-                UserMessagesHelper.toast(actionContext.getViewContext(), msg);
-            }
-        } else {
-            // don't want to go back to form detail if user presses back button
-            router.popHistory(1);
-            router.navigate(actionContext, action, msg);
-        }
-    }
-
-    protected void onError(ActionContext actionContext, UserAction action, Exception e) {
+    public void onError(ActionContext actionContext, UserAction action, Exception e) {
         mc.renderBack();
         mc.restoreViewState();
         String msg = getErrorMessage(action, e);

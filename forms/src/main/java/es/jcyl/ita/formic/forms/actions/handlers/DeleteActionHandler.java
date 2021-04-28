@@ -15,35 +15,31 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
-
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class DeleteActionHandler extends EntityChangeAction {
+public class DeleteActionHandler extends AbstractActionHandler {
 
     public DeleteActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    protected void doAction(ActionContext actionContext, UserAction action) {
+    public void handle(ActionContext actionContext, UserAction action) {
         FormEditController formController = (FormEditController) actionContext.getFc();
         formController.delete(mc.getGlobalContext());
     }
 
     @Override
-    protected String getSuccessMessage(UserAction action) {
+    public String getSuccessMessage(ActionContext actionContext, UserAction action) {
         return Config.getInstance().getStringResource(R.string.action_delete_success);
     }
 

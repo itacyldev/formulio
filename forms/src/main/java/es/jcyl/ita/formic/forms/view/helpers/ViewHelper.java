@@ -161,8 +161,7 @@ public class ViewHelper {
 
         return label;
     }
-
-    public static View findComponentWidget(View rootView, String componentId) {
+    public static Widget findComponentWidget(View rootView, String componentId) {
 //        // same name rule followed by FileRenderer to tag the BaseView of
 //        // the InputFileView: formId:elementId
 //        View view = rootView.findViewWithTag(componentId);
@@ -190,7 +189,7 @@ public class ViewHelper {
 //            }
 //        }
 //        return view;
-        return rootView.findViewWithTag(componentId);
+        return (Widget) rootView.findViewWithTag(componentId);
     }
 
     public static Widget findComponentWidget(View rootView, UIComponent component) {

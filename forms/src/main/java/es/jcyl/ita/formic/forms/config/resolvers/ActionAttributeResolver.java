@@ -25,10 +25,12 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
+import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.controllers.FormController;
@@ -75,8 +77,19 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
 
     private List<ConfigNode> unresolvedActions = new ArrayList<>();
 
+    BindingExpressionAttResolver bindinExprResolver = new BindingExpressionAttResolver();
+
     @Override
     public Object resolve(ConfigNode node, String attName) {
+        if (attName.toLowerCase().equals(AttributeDef.ACTION.name)) {
+            return resolveActionAtt(node, attName);
+        } else {
+            // route
+            return resolveRouteAtt(node, attName);
+        }
+    }
+
+    public Object resolveActionAtt(ConfigNode node, String attName) {
         String actionType = node.getAttribute(attName);
         // check if threre's a nested <action/> element
         ConfigNode nestedAction = ConfigNodeHelper.getFirstChildrenByTag(node, "action");
@@ -102,6 +115,33 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
     }
 
     /**
+     * In case the component has been set with the attribute "route" but not action is defined, a
+     * default navigation action is set to the value set in parameter "route"
+     *
+     * @param node
+     * @param attName
+     * @return
+     */
+    public Object resolveRouteAtt(ConfigNode node, String attName) {
+        AttributeResolver bindingResolver = this.factory.getAttributeResolver("binding");
+        Object value = bindingResolver.resolve(node, attName);
+
+        if (TagDef.isActionTag(node.getName())) {
+            return value; // action will be created by action builder
+        }
+        ConfigNode nestedAction = ConfigNodeHelper.getFirstChildrenByTag(node, "action");
+        boolean hasNestedActions = nestedAction != null;
+        // No action defined but the router attribute is set
+        if (!node.hasAttribute("action") && !hasNestedActions
+                && node.hasAttribute("route")) {
+            createActionNode(ActionType.NAV, node);
+        }
+        // the action will be set by the actionBuilder
+        return value;
+    }
+
+
+    /**
      * Creates a nested config node for the 'action' attributed so the ActionBuilder will pick up
      * the node and create the action
      *
@@ -110,11 +150,14 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
      */
     private void createActionNode(ActionType actionType, ConfigNode node) {
         ConfigNode actionNode = new ConfigNode("action");
-        actionNode.setAttribute("type", actionType.name().toLowerCase());
+        actionNode.setAttribute(AttributeDef.TYPE.name, actionType.name().toLowerCase());
         // get additional action attributes from current node
-        actionNode.setAttribute("route", node.getAttribute("route"));
-        actionNode.setAttribute("forceRefresh", node.getAttribute("forceRefresh"));
-        actionNode.setAttribute("registerInHistory", node.getAttribute("registerInHistory"));
+        actionNode.setAttribute(AttributeDef.ROUTE.name,
+                node.getAttribute(AttributeDef.ROUTE.name));
+        actionNode.setAttribute(AttributeDef.REFRESH.name,
+                node.getAttribute(AttributeDef.REFRESH.name));
+        actionNode.setAttribute(AttributeDef.REGISTER_IN_HISTORY.name,
+                node.getAttribute(AttributeDef.REGISTER_IN_HISTORY.name));
 
         // if node has "param" nested nodes, assign them to the action
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
@@ -207,11 +250,10 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
         } else {
             componentAction.setRegisterInHistory(false);
         }
-        if (node.hasAttribute(AttributeDef.FORCE_REFRESH.name)) {
-            componentAction.setForceRefresh((Boolean) ConvertUtils.convert(
-                    node.getAttribute(AttributeDef.FORCE_REFRESH.name), Boolean.class));
-        } else {
-            componentAction.setForceRefresh(true);
+        if (node.hasAttribute(AttributeDef.REFRESH.name)) {
+            componentAction.setRefresh(node.getAttribute(AttributeDef.REFRESH.name));
+        } else { // re-render the hole view
+            componentAction.setRefresh("all");
         }
 
         /* Add param "method" with the name of the js function */

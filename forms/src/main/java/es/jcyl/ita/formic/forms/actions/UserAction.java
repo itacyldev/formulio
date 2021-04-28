@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.forms.actions;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class UserAction {
     private String type;
     private String name;
     private String route;
-    private boolean forceRefresh = false;
+    private String refresh;
     private boolean registerInHistory = true;
     private String message;
     private Map<String, Object> params;
@@ -58,7 +57,11 @@ public class UserAction {
     public UserAction(UIAction action, UIComponent component) {
         this(action.getType(), action.getRoute(), component);
         this.setRegisterInHistory(action.isRegisterInHistory());
-        this.setForceRefresh(action.isForceRefresh());
+        this.setRefresh(action.getRefresh());
+    }
+
+    public void setRefresh(String refresh) {
+        this.refresh = refresh;
     }
 
     public UserAction(String actionType, String route, UIComponent component) {
@@ -97,12 +100,8 @@ public class UserAction {
         this.route = route;
     }
 
-    public boolean isForceRefresh() {
-        return forceRefresh;
-    }
-
-    public void setForceRefresh(boolean forceRefresh) {
-        this.forceRefresh = forceRefresh;
+    public String getRefresh() {
+        return refresh;
     }
 
     public boolean isRegisterInHistory() {
@@ -149,13 +148,13 @@ public class UserAction {
     }
 
     /**
-     * Indicates if current action is going to provoke a change in the view due to a forceRefresh or
+     * Indicates if current action is going to provoke a change in the view due to a refresh or
      * because it makes the action controller to perform a navigation.
      *
      * @return
      */
     public boolean isViewChangeAction() {
-        return this.forceRefresh || StringUtils.isNotBlank(this.route);
+        return StringUtils.isNotBlank(this.refresh) || StringUtils.isNotBlank(this.route);
     }
 
     /*********************************/
@@ -189,6 +188,7 @@ public class UserAction {
         this.widget = widget;
     }
 
+
     @Override
     public String toString() {
         return "UserAction{" +
@@ -199,4 +199,11 @@ public class UserAction {
                 '}';
     }
 
+    /**
+     * Indicates if current action has set the value of attribute refresh
+     * @return
+     */
+    public boolean isRefreshSet() {
+        return StringUtils.isNotBlank(this.refresh);
+    }
 }

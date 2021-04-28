@@ -100,7 +100,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                     }
                     UserAction action = new UserAction(formAction.getType(), strRoute, formController);
                     action.setRegisterInHistory(formAction.isRegisterInHistory());
-                    action.setForceRefresh(formAction.isForceRefresh());
+                    action.setRefresh(formAction.getRefresh());
                     action.setMessage(formAction.getMessage());
                     if (formAction.hasParams()) {
                         for (UIParam param : formAction.getParams()) {

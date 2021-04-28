@@ -34,7 +34,6 @@ public class AttributeDef {
     public static Attribute LABEL = new Attribute("label");
     public static Attribute PLACEHOLDER = new Attribute("placeHolder", "placeHolder", "binding");
 
-
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
     public static Attribute NAME = new Attribute("name");
@@ -62,12 +61,6 @@ public class AttributeDef {
     public static Attribute HAS_DELETE_BUTTON = new Attribute("hasDeleteButton", Boolean.class);
 
     public static Attribute HAS_TODAY_BUTTON = new Attribute("hasTodayButton", Boolean.class);
-
-    // common trasversal parameters
-    public static Attribute ROUTE = new Attribute("route", "route", "binding");
-    public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
-    public static Attribute FORCE_REFRESH = new Attribute("forceRefresh", Boolean.class);
-    public static Attribute MESSAGE = new Attribute("message", "message", String.class);
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");
@@ -129,12 +122,17 @@ public class AttributeDef {
     public static Attribute COLOR = new Attribute("color", "color", "color");
     public static Attribute STROKE_WIDTH = new Attribute("strokeWidth", Integer.class);
 
+    // Action parameters
+    public static Attribute ACTION = new Attribute("action", "action", "action");
+    public static Attribute ROUTE = new Attribute("route", "route", "binding-route");
+    public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
+    public static Attribute REFRESH = new Attribute("refresh", String.class);
+    public static Attribute MESSAGE = new Attribute("message", "message", String.class);
+
     // scripting
     public static Attribute ON_SAVE = new Attribute("onsave", true);
     public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
     public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
-    public static Attribute ACTION = new Attribute("action", "action", "action");
     public static Attribute SRC = new Attribute("src", "src", "pathResolver");
-
 
 }
