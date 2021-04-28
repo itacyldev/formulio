@@ -100,15 +100,26 @@ public class FormEditController extends FormController {
         }
     }
 
+    /**
+     * Get values from the view widgets and apply them to the entity properties
+     *
+     * @param viewContext
+     * @param entityContext
+     * @param field
+     */
+    // apply change from view context to entity context
     private void updateEntityFromView(ViewContext viewContext, EntityContext entityContext,
                                       UIInputComponent field) {
         if (field.isBound() && !field.isNestedProperty()) {
-            // apply change from view context to entity context
-            Object value = viewContext.get(field.getId());
-            String entityProp = field.getValueExpression().getBindingProperty();
-            // remove the "entity" prefix
-            entityProp = entityProp.substring(entityProp.indexOf(".") + 1);
-            entityContext.put(entityProp, value);
+            // Update the entity usint just the widgets contained in the view, no visible
+            // widgets might not have been rendered
+            if (viewContext.containsKey(field.getId())) {
+                Object value = viewContext.get(field.getId());
+                String entityProp = field.getValueExpression().getBindingProperty();
+                // remove the "entity" prefix
+                entityProp = entityProp.substring(entityProp.indexOf(".") + 1);
+                entityContext.put(entityProp, value);
+            }
         }
     }
 

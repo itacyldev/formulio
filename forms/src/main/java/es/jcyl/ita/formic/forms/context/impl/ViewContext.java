@@ -16,8 +16,6 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -61,12 +59,12 @@ public class ViewContext extends AbstractBaseContext {
      * @param field
      * @return
      */
-    public InputWidget findInputWidget(UIInputComponent field) {
-        return ViewHelper.findInputWidget(this.widget, field);
+    public Widget findWidget(UIComponent field) {
+        return (Widget) this.statefulViews.get(field.getId());
     }
 
-    public InputWidget findInputWidget(String fieldId) {
-        return ViewHelper.findInputWidget(this.widget, fieldId);
+    public Widget findWidget(String componentId) {
+        return (Widget) this.statefulViews.get(componentId);
     }
 
     /**
@@ -78,24 +76,21 @@ public class ViewContext extends AbstractBaseContext {
      */
     @Override
     public String getString(String elementId) {
-        InputWidget fieldView = findInputWidget(elementId);
-        if (fieldView == null) {
-            warn(String.format("No view element id [%s] " +
-                    "doesn't exists inside widget [%s].", elementId, widget.getComponentId()));
-            return null;
-        }
-        Object value = fieldView.getValue();
-        String strValue = (String) ConvertUtils.convert(value, String.class);
-        return strValue;
+        Object oValue = getValue(elementId);
+        return (String) ConvertUtils.convert(oValue, String.class);
     }
 
     @Override
     public Object getValue(String elementId) {
-        InputWidget fieldView = findInputWidget(elementId);
-        if (fieldView == null) {
-            warn(String.format("No view element found with id [%s].", elementId));
+        Widget widget = findWidget(elementId);
+        if (widget == null) {
+            warn(String.format("No view element id [%s] .", elementId));
             return null;
         }
+        if (!(widget instanceof InputWidget)) {
+            return null;
+        }
+        InputWidget fieldView = (InputWidget) widget;
         UIComponent component = fieldView.getComponent();
         Object value = fieldView.getValue();
         if (component.getValueExpression() == null) {
@@ -119,12 +114,12 @@ public class ViewContext extends AbstractBaseContext {
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        return findInputWidget((String) o) != null;
+        return findWidget((String) o) != null;
     }
 
     @Override
     public boolean containsValue(@Nullable Object o) {
-        return findInputWidget((String) o) != null;
+        return findWidget((String) o) != null;
     }
 
     @Nullable
@@ -136,8 +131,10 @@ public class ViewContext extends AbstractBaseContext {
     @Nullable
     @Override
     public Object put(String elementId, Object value) {
-        InputWidget viewField = findInputWidget(elementId);
-        viewField.setValue(value);
+        InputWidget viewField = (InputWidget) findWidget(elementId);
+        if (viewField != null) {
+            viewField.setValue(value);
+        }
         return null; // don't return previous value
     }
 

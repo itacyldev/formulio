@@ -21,15 +21,13 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.FormWidget;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 /**
@@ -52,7 +50,7 @@ public class FormValidator {
     public boolean validate(InputWidget inputWidget) {
         WidgetContext widgetContext = inputWidget.getWidgetContext();
         ViewContext viewContext = widgetContext.getViewContext();
-        UIField field = (UIField) inputWidget.getComponent();
+        UIInputComponent field = (UIInputComponent) inputWidget.getComponent();
 
         // get user input using view context and check all validators.
         String value = viewContext.getString(field.getId());
@@ -100,7 +98,9 @@ public class FormValidator {
         for (UIInputComponent field : form.getFields()) {
             // validate
             InputWidget inputWidget = ViewHelper.findInputWidget(formWidget, field);
-            valid &= validate(inputWidget);
+            if (inputWidget != null) { // just visible widgets/components
+                valid &= validate(inputWidget);
+            }
         }
         return valid;
     }

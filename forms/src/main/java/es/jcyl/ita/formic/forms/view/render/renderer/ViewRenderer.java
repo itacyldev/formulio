@@ -143,7 +143,7 @@ public class ViewRenderer {
      * Creates a component proxy for curren elemnt
      *
      * @param id
-     * @param COMPONENT
+     * @param component
      * @param entity
      * @return
      */
