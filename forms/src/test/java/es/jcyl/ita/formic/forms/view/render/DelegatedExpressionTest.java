@@ -119,11 +119,7 @@ public class DelegatedExpressionTest {
         UIForm form = recipe.form;
         UIInputComponent f1 = recipe.field;
         f1.setId("f1");
-//        form.setId("form");
         FieldDataBuilder fBuilder = new FieldDataBuilder();
-//        UIField f2 = fBuilder.withRandomData().withId("f2").withValueBindingExpression("${" + form.getId() + ".view.f1}").build();
-//        UIField f3 = fBuilder.withRandomData().withId("f3").withValueBindingExpression("${" + form.getId() + ".view.f2}").build();
-//        UIField f4 = fBuilder.withRandomData().withId("f4").withValueBindingExpression("${" + form.getId() + ".view.f2}").build();
         UIField f2 = fBuilder.withRandomData().withId("f2").withValueBindingExpression("${view.f1}").build();
         UIField f3 = fBuilder.withRandomData().withId("f3").withValueBindingExpression("${view.f2}").build();
         UIField f4 = fBuilder.withRandomData().withId("f4").withValueBindingExpression("${view.f2}").build();
