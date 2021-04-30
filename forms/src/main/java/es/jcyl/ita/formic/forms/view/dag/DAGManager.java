@@ -135,7 +135,6 @@ public class DAGManager {
         if (component.getValueBindingExpressions() == null) {
             return;
         }
-
         for (ValueBindingExpression ve : component.getValueBindingExpressions()) {
             if (ve == null || ve.isLiteral()) {
                 // no expression or the expression doesn't includes dependencies
@@ -145,7 +144,7 @@ public class DAGManager {
             List<String> dependingVariables = ve.getDependingVariables();
 
             for (String depString : dependingVariables) {
-                if (depString.startsWith("entity") || depString.startsWith("param")) {
+                if (depString.startsWith("entity")|| depString.startsWith("param")) {
                     // entity properties mapping are skipped
                     continue;
                 }
@@ -187,7 +186,6 @@ public class DAGManager {
                 if (!dag.containsEdge(dependingNode, componentNode)) {
                     dag.addEdge(dependingNode, componentNode);
                 }
-
                 buildComponentDag(dependingComponentId, dags, components);
             }
         }
@@ -290,7 +288,6 @@ public class DAGManager {
     public ViewDAG getViewDAG(String viewId) {
         return viewDags.get(viewId);
     }
-
 
     /**
      * @return
