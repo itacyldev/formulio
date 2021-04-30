@@ -5,6 +5,8 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +21,46 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 
-
+@RunWith(RobolectricTestRunner.class)
 public class DAGManagerTest {
 
+    /**
+     * Creates a DAG with a root node and 2 branches
+     */
+    @Test
+    public void createDagWith2Branches() {
+        UIView view = new UIView("view");
+        UIForm form = createForm2Branches("form");
+        form.setRoot(view);
+        view.addChild(form);
+
+        DAGManager dagManager = DAGManager.getInstance();
+        dagManager.flush();
+        dagManager.generateDags(view);
+
+        ViewDAG viewDags = dagManager.getViewDAG(view.getId());
+
+        Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags = viewDags.getDags();
+
+        Assert.assertEquals(1, dags.size());
+
+        // Get each field's dag
+        Graph<DAGNode, DefaultEdge> dag1 = viewDags.getDAG("form.field1");
+
+        Assert.assertEquals(4, dag1.vertexSet().size());
+
+    }
+
+
+    /**
+     * Creates the DAGs of a form whose fields give rise to 2 dependency chains
+     */
     @Test
     public void createDags() {
-        UIView view = createView("view");
+        UIView view = new UIView("view");
+        UIForm form = createForm2Dags("form");
+        form.setRoot(view);
+        view.addChild(form);
 
         DAGManager dagManager = DAGManager.getInstance();
         dagManager.flush();
@@ -42,7 +78,6 @@ public class DAGManagerTest {
 
         Assert.assertEquals(4, dag1.vertexSet().size());
         Assert.assertEquals(2, dag2.vertexSet().size());
-
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -77,6 +112,18 @@ public class DAGManagerTest {
         Assert.assertNotNull(dags2);
     }
 
+    /**
+     *
+     */
+    @Test
+    public void testPrintDAG() {
+        UIView view = createView("view");
+        DAGManager dagManager = DAGManager.getInstance();
+        dagManager.flush();
+        dagManager.generateDags(view);
+        System.out.print(dagManager.printViewDAG("view", "form.field1"));
+    }
+
     private UIView createView(String viewId) {
         UIView view = new UIView(viewId);
         UIForm form = createForm("form");
@@ -95,7 +142,35 @@ public class DAGManagerTest {
         return view;
     }
 
+
     private UIForm createForm(String formId) {
+
+        UIForm form = DevFormBuilder.createOneFieldForm();
+        form.setId(formId);
+
+        FieldDataBuilder fieldBuilder = new FieldDataBuilder();
+
+        UIInputComponent field1 = form.getFields().get(0);
+        field1.setId("field1");
+        UIField field2 =
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
+                        "field 2").withValueBindingExpression("${" + field1.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field2);
+
+        UIField field3 =
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field3").withLabel(
+                        "field 3").withValueBindingExpression("${" + field2.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field3);
+
+        UIField field4 =
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field4").withLabel(
+                        "field 4").withValueBindingExpression("${" + field2.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field4);
+
+        return form;
+    }
+
+    private UIForm createForm2Dags(String formId) {
 
         UIForm form = DevFormBuilder.createOneFieldForm();
         form.setId(formId);
@@ -134,6 +209,33 @@ public class DAGManagerTest {
                 fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field7").withLabel(
                         "field 7").build();
         form.addChild(field7);
+
+        return form;
+    }
+
+    private UIForm createForm2Branches(String formId) {
+
+        UIForm form = DevFormBuilder.createOneFieldForm();
+        form.setId(formId);
+
+        FieldDataBuilder fieldBuilder = new FieldDataBuilder();
+
+        UIInputComponent field1 = form.getFields().get(0);
+        field1.setId("field1");
+        UIField field2 =
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field2").withLabel(
+                        "field 2").withValueBindingExpression("${" + field1.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field2);
+
+        UIField field3 =
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field3").withLabel(
+                        "field 3").withValueBindingExpression("${" + field2.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field3);
+
+        UIField field4 =
+                fieldBuilder.withFieldType(UIField.TYPE.TEXT).withId("field4").withLabel(
+                        "field 4").withValueBindingExpression("${" + field1.getAbsoluteId() + "}", String.class).build();
+        form.addChild(field4);
 
         return form;
     }
