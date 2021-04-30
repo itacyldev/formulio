@@ -123,6 +123,7 @@ public class ViewDAG {
         for (String key : dags.keySet()) {
             DirectedAcyclicGraph<DAGNode, DefaultEdge> dag = dags.get(key);
             DAGNode rootNode = dag.iterator().next();
+            sb.append("\n");
             printNode(dag, rootNode, sb, 1);
         }
         return sb;
@@ -139,10 +140,10 @@ public class ViewDAG {
 
     private void printNode(DirectedAcyclicGraph<DAGNode, DefaultEdge> dag, DAGNode node, StringBuffer sb, int level) {
         sb.append(node.getId());
+        sb.append("\n");
         Set<DefaultEdge> outgoingEdges = dag.outgoingEdgesOf(node);
         for (DefaultEdge edge : outgoingEdges) {
             DAGNode child = dag.getEdgeTarget(edge);
-            sb.append("\n");
             for (int i = 0; i < level; i++) {
                 sb.append("\t");
             }
