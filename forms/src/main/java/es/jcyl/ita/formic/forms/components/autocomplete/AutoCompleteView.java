@@ -38,23 +38,22 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionType;
-import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
-import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Condition;
 import es.jcyl.ita.formic.repo.query.Criteria;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -120,9 +119,9 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
-        ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+        UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+            interceptor.notify(Event.inputChange(component));
         }
     }
 
@@ -251,7 +250,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         Repository repo = this.component.getRepo();
         Condition cond = new Condition(this.component.getOptionValueProperty(),
                 this.component.getValueFilteringOperator(), value);
-        es.jcyl.ita.formic.repo.query.Filter f = FilterHelper.createInstance(repo);
+        es.jcyl.ita.formic.repo.query.Filter f = FilterRepoUtils.createInstance(repo);
         f.setExpression(Criteria.single(cond));
         List<Entity> lst = repo.find(f);
 
@@ -262,7 +261,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         } else {
             Entity entity = lst.get(0);
             // calculate the label to show in the input
-            Object oLabel = JexlUtils.eval(entity, component.getOptionLabelExpression());
+            Object oLabel = JexlFormUtils.eval(entity, component.getOptionLabelExpression());
             if (oLabel != null) {
                 this.value = value;
                 String label = (String) ConvertUtils.convert(oLabel, String.class);

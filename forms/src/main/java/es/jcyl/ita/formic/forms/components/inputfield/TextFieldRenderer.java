@@ -15,11 +15,11 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionType;
-import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
@@ -78,7 +78,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (widget.getComponent().isReadOnly() || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -118,9 +118,9 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         labelView.setHintTextAppearance(R.style.TextInputLabel_label);
     }
 
-    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout,UIField component){
+    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout, UIField component) {
         // set clear button
-        if (!component.isReadOnly()) {
+        if (!(Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
             textInputLayout.setEndIconActivated(true);
             textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
             TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
@@ -134,7 +134,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         }
     }
 
-    protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component){
+    protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component) {
         if (component.getHint() != null) {
             textInputLayout.setEndIconDrawable(R.drawable.ic_tool_info);
             TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
@@ -142,7 +142,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
             textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
                     final View view = inflate(env.getViewContext(), R.layout.info_dialog, null);
                     TextView titleView = view.findViewById(R.id.info);
                     titleView.setText(component.getHint());
@@ -155,14 +155,14 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         }
     }
 
-    protected void adjustBounds(){
+    protected void adjustBounds() {
 
     }
 
     private void executeUserAction(RenderingEnv env, UIComponent component) {
-        ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+        UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+            interceptor.notify(Event.inputChange(component));
         }
     }
 
@@ -186,11 +186,6 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 if (!env.isInputDelayDisabled()) {
                     handler.removeCallbacks(workRunnable);
                 }
-                /*if (component.isReadOnly()){
-                    TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.surfaceColor});
-                    ColorStateList  colorStateList = ta.getColorStateList(0);
-                    ViewCompat.setBackgroundTintList(view, colorStateList);
-                }*/
             }
 
             @Override
@@ -207,25 +202,8 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     }
 
     protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout) {
-        if (component.isReadOnly()){
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
             textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
-
-            /*Field field = TextInputLayout.class.getDeclaredField("boxStrokeColor");
-            field.setAccessible(true);
-            field.set(textInputLayout,
-                    ContextCompat.getColor(env.getViewContext(), R.color.TRANSPARENT));
-
-            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
-            }catch (NoSuchFieldException | IllegalAccessException e) {
-                Log.w("TAG", "Failed to change box color, item might look wrong");
-            }*/
-
-            //textInputLayout.getContext().setTheme(R.style.TextInputLayoutOutlinedBox);
-            //textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
-            /*TextInputLayoutWithoutUnderline
-            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.AppBackgroundColor});
-            ColorStateList colorStateList = ta.getColorStateList(0);
-            ViewCompat.setBackgroundTintList(inputView, colorStateList);*/
         }
     }
 

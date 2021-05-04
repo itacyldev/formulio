@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 /**
  * Stateless helper to retrieve form's main entity from repository.
@@ -39,7 +40,6 @@ import es.jcyl.ita.formic.repo.query.Filter;
  */
 
 public class FormEntityLoader {
-
 
     public Entity load(CompositeContext globalCtx, UIForm form) {
         Entity entity;
@@ -64,8 +64,6 @@ public class FormEntityLoader {
                 throw new FormException("No entity found using id=[" + entityId + "]");
             }
         }
-        form.setEntity(entity);
-
         return entity;
     }
 
@@ -117,7 +115,7 @@ public class FormEntityLoader {
 
 
     private Filter setupFilter(Context context, Repository repo, Filter filter) {
-        Filter f = FilterHelper.createInstance(repo);
+        Filter f = FilterRepoUtils.createInstance(repo);
         FilterHelper.evaluateFilter(context, filter, f);
         return f;
     }

@@ -24,17 +24,15 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.project.Project;
-import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.utils.ProjectUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
@@ -92,9 +90,9 @@ public class FormConfigBuilderTest {
         Assert.assertNotNull(ctl.getActions());
         Assert.assertTrue(ctl.getActions().length > 0);
         // check editActions
-        FCAction[] actions = ctl.getActions();
+        UIAction[] actions = ctl.getActions();
         String listCtlId = formConfig.getList().getId(); // id of related listController
-        for (FCAction action : actions) {
+        for (UIAction action : actions) {
             if (action.getType().equalsIgnoreCase("save")) {
                 Assert.assertEquals(listCtlId, action.getRoute());
             } else if (action.getType().equalsIgnoreCase("cancel")) {
@@ -119,7 +117,7 @@ public class FormConfigBuilderTest {
         // check listActions
         actions = ctl.getActions();
         String editCtrlId = ctl.getId(); // id of related editController
-        for (FCAction action : actions) {
+        for (UIAction action : actions) {
             if (action.getType().equalsIgnoreCase("add")
                     || action.getType().equalsIgnoreCase("update")) {
                 Assert.assertEquals(editCtrlId, action.getRoute());
@@ -128,8 +126,6 @@ public class FormConfigBuilderTest {
         // check listAction has a table
         List<UIDatatable> tables = UIComponentHelper.findByClass(ctlList.getView(), UIDatatable.class);
         Assert.assertTrue("No default table found for FormListController", tables.size() == 1);
-
-//        Assert.assertNotNull(ctlList.getEntitySelector()); pending of #203650
     }
 
     /**
@@ -178,9 +174,9 @@ public class FormConfigBuilderTest {
         }
 
         // check FormListController actions
-        FCAction[] actions = formConfig.getList().getActions();
+        UIAction[] actions = formConfig.getList().getActions();
         // check is not null, and all of them have a route and label
-        for (FCAction action : actions) {
+        for (UIAction action : actions) {
             Assert.assertNotNull(action.getLabel());
             Assert.assertNotNull(action.getRoute());
             Assert.assertNotNull(action.getType());
@@ -190,7 +186,7 @@ public class FormConfigBuilderTest {
         for (FormEditController edit : formConfig.getEdits()) {
             Assert.assertNotNull(edit.getMainForm());
             Assert.assertNotNull(edit.getActions());
-            for (FCAction action : edit.getActions()) {
+            for (UIAction action : edit.getActions()) {
                 Assert.assertNotNull(action.getType());
             }
             Assert.assertNotNull(edit.getAction("cancel"));

@@ -36,7 +36,7 @@ public class ViewStateHolder {
     /**
      * Gets all the inputFields and stores their state in the context "state"
      */
-    public void saveState(FormViewContext viewContext) {
+    public void saveState(ViewContext viewContext) {
         clear();
         for (InputWidget fieldView : viewContext.getInputViews()) {
             if (fieldView.isVisible()) {
@@ -48,7 +48,7 @@ public class ViewStateHolder {
     /**
      * Restore view state form the context
      */
-    public void restoreState(FormViewContext viewContext) {
+    public void restoreState(ViewContext viewContext) {
         for (InputWidget fieldView : viewContext.getInputViews()) {
             if (fieldView.isVisible()) {
                 String fieldId = fieldView.getInputId();

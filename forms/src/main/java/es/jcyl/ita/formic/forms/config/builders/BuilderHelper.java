@@ -388,4 +388,26 @@ public class BuilderHelper {
             return null;
         }
     }
+
+    /**
+     * Finds current form controller
+     *
+     * @param node
+     * @return
+     */
+    public static ConfigNode findParentController(ConfigNode node) {
+        ConfigNode parent = node.getParent();
+        if (parent == null) {
+            return null;
+        } else {
+            while (parent != null) {
+                if (parent.getName().toLowerCase().equals("list")
+                        || parent.getName().toLowerCase().equals("edit")) {
+                    return parent;
+                }
+                parent = parent.getParent();
+            }
+            return null;
+        }
+    }
 }

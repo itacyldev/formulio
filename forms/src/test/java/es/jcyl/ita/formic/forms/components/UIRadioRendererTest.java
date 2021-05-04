@@ -18,8 +18,6 @@ package es.jcyl.ita.formic.forms.components;
 import android.content.Context;
 import android.view.View;
 import android.widget.RadioGroup;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -31,21 +29,17 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.radio.UIRadio;
-import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.validation.RequiredValidator;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -55,7 +49,7 @@ import static org.mockito.Mockito.mock;
 public class UIRadioRendererTest {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     Context ctx;
 

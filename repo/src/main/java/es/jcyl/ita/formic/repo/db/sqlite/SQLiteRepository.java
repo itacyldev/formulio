@@ -50,7 +50,7 @@ public class SQLiteRepository extends AbstractEditableRepository<Entity, Object,
 
     @Override
     protected void doSave(Entity entity) {
-        this.dao.insertOrReplaceInTx(entity);
+        this.dao.save(entity);
     }
 
     @Override

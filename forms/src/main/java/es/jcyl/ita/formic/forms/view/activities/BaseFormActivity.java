@@ -59,8 +59,16 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
                     "See console for details."});
         }
 
-        doRender();
+        doRender(mc.getRenderingEnv());
+        renderToolBars(mc.getRenderingEnv());
         showMessages();
+    }
+
+    protected void renderToolBars(RenderingEnv env) {
+        // configurar menu
+
+        // configurar fab
+
     }
 
     protected void attachContentView() {
@@ -71,7 +79,7 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
 
     protected abstract int getLayoutResource();
 
-    protected abstract void doRender();
+    protected abstract void doRender(RenderingEnv renderingEnv);
 
     protected void showMessages() {
         // check if there are messages to show

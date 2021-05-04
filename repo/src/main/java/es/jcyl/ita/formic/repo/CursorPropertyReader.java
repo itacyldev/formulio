@@ -44,7 +44,7 @@ public class CursorPropertyReader {
                     value = cursor.getString(position);
                     break;
                 case REAL:
-                    value = cursor.getFloat(position);
+                    value = cursor.getDouble(position);
                     break;
                 case BLOB:
                     value = cursor.getBlob(position);

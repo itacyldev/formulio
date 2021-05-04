@@ -19,20 +19,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.handlers.BackPressedActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
-import es.jcyl.ita.formic.forms.actions.handlers.InputChangeActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.NavigateActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
+import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.validation.ValidatorException;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ActionController {
 
-    private static final Map<String, ActionHandler> actionMap = new HashMap<>();
+    private final Map<String, ActionHandler> actionMap = new HashMap<>();
     private final MainController mc;
     private final Router router;
 
@@ -41,13 +46,14 @@ public class ActionController {
         this.router = router;
         // default actions
         register(ActionType.SAVE, new SaveActionHandler(mc, router));
-        register(ActionType.INPUT_CHANGE, new InputChangeActionHandler(mc, router));
         BackPressedActionHandler bch = new BackPressedActionHandler(mc, router);
         register(ActionType.BACK, bch);
         register(ActionType.CANCEL, bch);
-        register(ActionType.NAVIGATE, new NavigateActionHandler(mc, router));
+        register(ActionType.NAV, new NavigateActionHandler(mc, router));
         register(ActionType.DELETE, new DeleteActionHandler(mc, router));
         register(ActionType.DELETE_LIST, new DeleteFromListActionHandler(mc, router));
+        register(ActionType.CREATE, new CreateEntityActionHandler(mc, router));
+        register(ActionType.JS, new JsActionHandler(mc, router));
     }
 
     public void register(ActionType type, ActionHandler handler) {
@@ -58,16 +64,39 @@ public class ActionController {
         actionMap.put(type.toLowerCase(), handler);
     }
 
-    public void doUserAction(UserAction action) {
-        // TODO: log user interactions
-        ActionHandler handler = actionMap.get(action.getType().toLowerCase());
-        // make sure the formController referred by the action is the current form controller,
-        // in other case dismiss action
-        if ((action.getFormController() == null)
-                || (action.getFormController() == mc.getFormController())) {
-            handler.handle(mc.getFormController(), action);
-            // TODO: catch errors, log, toast for user with meaningful information
+    public synchronized void doUserAction(UserAction action) {
+        if (action.getOrigin() != null && action.getOrigin() != mc.getFormController()) {
+            // Make sure the formController referred by the action is the current form controller,
+            // in other case dismiss action to prevent executing delayed actions
+            return;
+        }
+
+        try {
+            // create context for action execution
+            ActionContext actionContext = new ActionContext(mc.getFormController(),
+                    mc.getRenderingEnv().getViewContext());
+            ActionHandler handler = actionMap.get(action.getType().toLowerCase());
+
+            if (DevConsole.isDebugEnabled()) {
+                DevConsole.debug(String.format("Executing action %s with ActionHandler: %s.",
+                        action, handler));
+            }
+            try {
+                handler.handle(actionContext, action);
+            } catch (ValidatorException e) {
+                // re-render the form content
+                mc.renderBack();
+                UserMessagesHelper.toast(actionContext.getViewContext(),
+                        Config.getInstance().getStringResource(R.string.action_generic_invalid_form));
+            }
+        } catch (Exception e) {
+            String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
+            DevConsole.error(msg, e);
+            UserMessagesHelper.toast(mc.getRenderingEnv().getViewContext(), msg);
         }
     }
 
+    public MainController getMc() {
+        return mc;
+    }
 }

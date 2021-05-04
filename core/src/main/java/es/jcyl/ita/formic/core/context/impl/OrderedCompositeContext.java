@@ -500,13 +500,8 @@ public class OrderedCompositeContext extends AbstractMapContext
         Collection<Context> collection = this.getPlainContextList();
 
         for (Context context : collection) {
-            String dateF = "";
-            if (context.getCreationDate() != null) {
-                dateF = dtf.format(context.getCreationDate());
-            }
-            String line = String.format("\t%s - %s - %s",
-                    context.getClass().getSimpleName(), context.getPrefix(),
-                    dateF);
+            String line = String.format("\t%s - %s",
+                    context.getClass().getSimpleName(), context.getPrefix());
             printable.add(line);
         }
         printable.add("===============================================");

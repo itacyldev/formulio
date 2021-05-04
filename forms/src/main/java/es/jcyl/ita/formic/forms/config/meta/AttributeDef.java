@@ -25,11 +25,16 @@ public class AttributeDef {
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
+    public static Attribute READONLY = new Attribute("readOnly", "readOnly", "binding");
+    public static Attribute READONLY_MESSAGE = new Attribute("readOnlyMessage", "readOnlyMessage", String.class);
+
     // common input fields
-//    public static Attribute TYPE = new Attribute("type", true);
+    public static Attribute TYPE = new Attribute("type", "type", String.class);
+    public static Attribute TYPE_STR = new Attribute("type", "typeStr", String.class);
     public static Attribute LABEL = new Attribute("label");
-    public static Attribute LABELS = new Attribute("labels");
-    public static Attribute READONLY = new Attribute("readOnly", Boolean.class);
+    public static Attribute PLACEHOLDER = new Attribute("placeHolder", "placeHolder", "binding");
+
+
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
     public static Attribute NAME = new Attribute("name");
@@ -38,7 +43,7 @@ public class AttributeDef {
     // edit view
     public static Attribute MAINFORM = new Attribute("mainForm");
     // list view
-    public static Attribute ENTITYSELECTOR = new Attribute("entitySelector");
+    public static Attribute ENTITYSELECTOR = new Attribute("entityList");
 
     // column
     public static Attribute HEADER_TEXT = new Attribute("headerText");
@@ -46,7 +51,6 @@ public class AttributeDef {
     public static Attribute ORDERING = new Attribute("ordering", Boolean.class);
 
     // input
-    public static Attribute TYPE = new Attribute("type", "typeStr", String.class);
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
     public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
     public static Attribute LINES = new Attribute("lines", Integer.class);
@@ -60,9 +64,10 @@ public class AttributeDef {
     public static Attribute HAS_TODAY_BUTTON = new Attribute("hasTodayButton", Boolean.class);
 
     // common trasversal parameters
-    public static Attribute ROUTE = new Attribute("route", true);
+    public static Attribute ROUTE = new Attribute("route", "route", "binding");
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
-
+    public static Attribute FORCE_REFRESH = new Attribute("forceRefresh", Boolean.class);
+    public static Attribute MESSAGE = new Attribute("message", "message", String.class);
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");
@@ -95,8 +100,8 @@ public class AttributeDef {
     public static final Attribute EXPANDED = new Attribute("expanded", true);
     public static final Attribute EXPANDABLE = new Attribute("expandable", true);
 
-    // event handling
-    public static Attribute ONSAVE = new Attribute("onsave", true);
+    // tab
+    public static Attribute SELECTED = new Attribute("selected", "selected", "binding");
 
     // style, layout, ...
     public static Attribute HEIGHT = new Attribute("height", Integer.class);
@@ -121,9 +126,15 @@ public class AttributeDef {
     public static Attribute ITALIC = new Attribute("italic", Boolean.class);
     public static Attribute UPPERCASE = new Attribute("uppercase", Boolean.class);
     public static Attribute UNDERLINED = new Attribute("underlined", Boolean.class);
-
     public static Attribute COLOR = new Attribute("color", "color", "color");
-    public static Attribute STROKE_WIDTH = new Attribute("strokeWidth",Integer.class);
+    public static Attribute STROKE_WIDTH = new Attribute("strokeWidth", Integer.class);
+
+    // scripting
+    public static Attribute ON_SAVE = new Attribute("onsave", true);
+    public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
+    public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
+    public static Attribute ACTION = new Attribute("action", "action", "action");
+    public static Attribute SRC = new Attribute("src", "src", "pathResolver");
 
 
 }

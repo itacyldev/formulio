@@ -20,14 +20,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.context.impl.EntityContext;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.repo.Entity;
-
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -124,7 +128,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         adjustColumnWidth(this.dtLayout.getHeaderView());
 
         //if there is no route in the table
-        if (this.dtLayout.getComponent().getRoute() == null){
+        if (this.dtLayout.getComponent().getRoute() == null) {
             item.setBackground(ContextCompat.getDrawable(context, R.drawable.unselectablebuttonbackground));
         }
 
@@ -166,13 +170,31 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         layout.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ViewUserActionInterceptor userActionInterceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
+                UserEventInterceptor interceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
-                if (userActionInterceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
-                    UserAction action = UserAction.navigate(context, dtLayout.getComponent(),
-                            dtLayout.getComponent().getRoute());
+                if (interceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
+                    UIAction uiAction = dtLayout.getComponent().getAction();
+                    if (uiAction == null) {
+                        return;
+                    }
+                    UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
+                            dtLayout.getComponent());
+                    if (uiAction.hasParams()) {
+                        CompositeContext gContext = dtLayout.getRenderingEnv().getContext();
+                        gContext.addContext(new EntityContext(currentEntity));
+                        for (UIParam param : uiAction.getParams()) {
+                            Object value = JexlFormUtils.eval(gContext, param.getValue());
+                            action.addParam(param.getName(), (Serializable) value);
+                        }
+                        gContext.removeContext("entity");
+                    }
                     action.addParam("entityId", (Serializable) currentEntity.getId());
-                    userActionInterceptor.doAction(action);
+                    // TODO: FORMIC-229 Terminar refactorización de acciones
+                    // La cración de la accinó se tiene que hacer en el interceptor como en otros componentes
+                    // el datatable tiene que tener creado un UIAction desde los builders con la información
+                    // de navegación/acción a realizar al clickar en un item
+                    Event event = new Event(Event.EventType.CLICK, null, action);
+                    interceptor.notify(event);
                 }
             }
         });
@@ -180,7 +202,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
     private void setViewsLayout(final ViewColumnHolder holder, Entity entity) {
         UIColumn[] columns = dtLayout.getComponent().getColumns();
-        Object[] values = JexlUtils.bulkEval(entity, columns);
+        Object[] values = JexlFormUtils.bulkEval(entity, columns);
 
         for (int i = 0; i < columns.length && i < holder.viewList.size(); i++) {
             String stringValue = (String) ConvertUtils.convert(values[i], String.class);

@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
@@ -119,7 +120,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         I inputView = widget.getInputView();
         String inputTag = getInputTag(component);
         inputView.setTag(inputTag);
-        inputView.setEnabled(!widget.getComponent().isReadOnly());
+        inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class));
     }
 
     protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton){

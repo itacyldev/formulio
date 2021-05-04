@@ -8,12 +8,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JxltEngine;
+import org.mini2Dx.beanutils.ConvertUtils;
+
+import java.io.Serializable;
+
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -45,7 +55,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     }
 
     @Override
-    protected void doRender() {
+    protected void doRender(RenderingEnv renderingEnv) {
         // add action buttons
         ViewGroup toolBar = findViewById(R.id.form_toolbar);
         renderToolBar(toolBar);
@@ -54,7 +64,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
 
     private void renderToolBar(ViewGroup parentView) {
         if (this.formController.getActions() != null) {
-            for (FCAction action : this.formController.getActions()) {
+            for (UIAction action : this.formController.getActions()) {
                 renderActionButton(this, parentView, action);
             }
         }
@@ -68,21 +78,41 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = UserAction.back(this);
-        action.setOrigin(formController.getId());
+        UserAction action = UserAction.back(this.formController);
+//        action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
         finish();
     }
 
-    private Button renderActionButton(Context context, ViewGroup parent, FCAction formAction) {
+    private Button renderActionButton(Context context, ViewGroup parent, UIAction formAction) {
         Button button = new Button(context);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(formController, context, null, formAction.getType(),
-                            formAction.getRoute(), formAction.isRegisterInHistory()));
+                    // TODO: FORMIC-202 UIButton, UILinkRenderer utilizar método desde UserActionHelper
+                    String strRoute = "";
+                    if (formAction.getRoute() != null) {
+                        JxltEngine.Expression e = JexlFormUtils.createExpression(formAction.getRoute());
+                        Object route = e.evaluate((JexlContext) env.getContext());
+                        strRoute = (String) ConvertUtils.convert(route, String.class);
+                    }
+                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
+                    action.setRegisterInHistory(formAction.isRegisterInHistory());
+                    action.setForceRefresh(formAction.isForceRefresh());
+                    action.setMessage(formAction.getMessage());
+                    if (formAction.hasParams()) {
+                        for (UIParam param : formAction.getParams()) {
+                            Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
+                            if (value != null) {
+                                action.addParam(param.getName(), (Serializable) value);
+                            }
+                        }
+                    }
+                    // TODO: FORMIC-229 Terminar refactorización de acciones
+                    Event event = new Event(Event.EventType.CLICK, null, action);
+                    interceptor.notify(event);
                 }
             }
         });

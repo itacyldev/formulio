@@ -223,6 +223,39 @@ public class SQLiteRepositoryTest {
         Assert.assertEquals(newValue, e2.get(property.getName()));
     }
 
+    /**
+     * Test for insert or replace sqlite operation, make sure when the id is set to null, even if
+     * all attributes are the same, the entity is inserted again.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testInsertClonedEntity() throws Exception {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+        // create empty database
+        DevDbBuilder dbBuilder = new DevDbBuilder();
+        dbBuilder.withNumEntities(0).build(ctx, "testDB");
+
+        EditableRepository repo = dbBuilder.getSQLiteRepository();
+
+        // Action: delete table, insert entities and fetchAll
+        List<Entity> lstEntities = DevDbBuilder.buildEntities(dbBuilder.getMeta(), 1, null);
+        Entity entity = lstEntities.get(0);
+        repo.save(entity);
+
+        // clone entity
+        Entity clonedEntity = repo.newEntity();
+        clonedEntity.setProperties(entity.getProperties());
+
+        // Act - insert some cloned entities and check they're in the repo
+        int numEntities = RandomUtils.randomInt(1, 5);
+        for (int i = 0; i < numEntities; i++) {
+            clonedEntity.setId(null); // set id to null before inserting
+            repo.save(clonedEntity);
+        }
+
+        Assert.assertEquals(numEntities + 1, repo.count(null));
+    }
 
     @Test
     public void testCount() throws Exception {

@@ -15,15 +15,13 @@ package es.jcyl.ita.formic.forms.components.datatable;
  * limitations under the License.
  */
 
-import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.EntitySelector;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -31,7 +29,7 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIDatatable extends UIComponent implements EntitySelector {
+public class UIDatatable extends AbstractUIComponent implements FilterableComponent {
 
     Repository repo;
 
@@ -46,21 +44,10 @@ public class UIDatatable extends UIComponent implements EntitySelector {
     // paginator / flow configuration
     // row selection
     private int numFieldsToShow = 20;
-
-    private int numVisibleRows;
-    private List<Entity> selectedEntities;
+    private int numVisibleRows = 10;
 
     public UIDatatable() {
         setRendererType("datatable");
-    }
-
-    @Override
-    public List<Entity> getSelectedEntities() {
-        return selectedEntities;
-    }
-
-    public void selectEntity(Entity entity) {
-        this.selectedEntities.add(entity);
     }
 
     public Repository getRepo() {

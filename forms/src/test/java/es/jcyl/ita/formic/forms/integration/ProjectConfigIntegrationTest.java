@@ -25,11 +25,12 @@ import org.mini2Dx.collections.CollectionUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
@@ -98,62 +99,33 @@ public class ProjectConfigIntegrationTest {
 
         // there must be three form configs
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
-        int expectedNumForms = TestUtils.findFile("config/project1/forms").list().length;
+        int expectedNumForms = getNunFilesInFolder(TestUtils.findFile("config/project1/forms"));
         assertEquals(expectedNumForms, formConfigs.size());
 
-        // Check all list and edit controller have been loaded
-        FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
-        Collection<FormController> ctlList = fctlFacotry.getList();
-        assertEquals(14, ctlList.size());
-        assertEquals(7, fctlFacotry.getListControllers().size());
-
-        // check list controller
-        for (FormController ctl : fctlFacotry.getList()) {
-            if (ctl instanceof FormListController) {
-                assertListController(ctl);
-            } else {
-                assertEditController(ctl);
-            }
-        }
+        //  Just for manual testing
+//        // Check all list and edit controller have been loaded
+//        FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
+//        Collection<FormController> ctlList = fctlFacotry.getList();
+//        assertEquals(14, ctlList.size());
+//        assertEquals(7, fctlFacotry.getListControllers().size());
+//
+//        // check list controller
+//        for (FormController ctl : fctlFacotry.getList()) {
+//            if (ctl instanceof FormListController) {
+//                assertListController(ctl);
+//            } else {
+//                assertEditController(ctl);
+//            }
+//        }
     }
-
-    @Test
-    public void testForm2Configuration() throws Exception {
-        File baseFolder = TestUtils.findFile("config");
-
-        Config config = Config.init(baseFolder.getAbsolutePath());
-        ProjectRepository projectRepo = config.getProjectRepo();
-
-        Project prj = projectRepo.findById("project1");
-        Config.getInstance().setCurrentProject(prj);
-
-        FormConfigRepository formConfigRepo = config.getFormConfigRepo();
-        FormConfig formConfig = formConfigRepo.findById("form2");
-
-        FormEditController edit = formConfig.getEdits().get(0);
-        Assert.assertNotNull(edit.getMainForm());
-
-        UIView view = edit.getView();
-        List<UIAutoComplete> list = UIComponentHelper.findByClass(view, UIAutoComplete.class);
-        Assert.assertEquals("agentsRepo", edit.getRepo().getId());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(list));
-        UIAutoComplete auto = list.get(0);
-        Assert.assertEquals("provRepo", auto.getRepo().getId());
-
-        // check edit controllers
-
-        UIForm form = UIComponentHelper.findFirstByClass(view, UIForm.class);
-        Repository repo = form.getRepo();
-        EntityMeta meta = repo.getMeta();
-        PropertyType[] properties = meta.getProperties();
-        Assert.assertEquals(properties.length + 2, form.getFields().size());
-
-        // check all autos have a binding expresions
-        List<UIAutoComplete> autos = UIComponentHelper.findByClass(view, UIAutoComplete.class);
-        for (UIAutoComplete atc : autos) {
-            Assert.assertNotNull(atc.getValueExpression());
-        }
-
+    private int getNunFilesInFolder(File folder){
+        File[] files = folder.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return !f.isDirectory();
+            }
+        });
+        return files.length;
     }
 
     private void assertEditController(FormController ctl) {
@@ -166,10 +138,10 @@ public class ProjectConfigIntegrationTest {
 
     private void assertListController(FormController ctl) {
         UIView view = ctl.getView();
-        List<EntitySelector> lst = UIComponentHelper.findByClass(view, EntitySelector.class);
+        List<FilterableComponent> lst = UIComponentHelper.findByClass(view, FilterableComponent.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
-        EntitySelector entitySelector = lst.get(0);
-        Assert.assertNotNull(entitySelector.getRepo());
+        FilterableComponent filterableComponent = lst.get(0);
+        Assert.assertNotNull(filterableComponent.getRepo());
     }
 
 }

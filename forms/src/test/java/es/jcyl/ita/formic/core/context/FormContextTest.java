@@ -30,15 +30,16 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
@@ -86,7 +87,7 @@ public class FormContextTest {
 
         // configure the context as the MainController would do during navigation
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(null);
+        RenderingEnv env = new RenderingEnv(mock(ActionController.class));
         env.setGlobalContext(gCtx);
 
         // create form using entity meta to define UIFields
@@ -98,10 +99,10 @@ public class FormContextTest {
         form.setRepo(mockRepo);
 
         // load entity and check the entity context is fulfill
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
 
-        FormContext fCtx = form.getContext();
+        ComponentContext fCtx = form.getContext();
         Assert.assertNotNull(fCtx.getEntity());
 
         // access entity elements throw context
@@ -137,7 +138,7 @@ public class FormContextTest {
 
         // configure the context as the MainController would do
         CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(null);
+        RenderingEnv env = new RenderingEnv(mock(ActionController.class));
         env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
@@ -147,12 +148,12 @@ public class FormContextTest {
         when(mockRepo.getMeta()).thenReturn(meta);
         form.setRepo(mockRepo);
         // use FormController to load form
-        FormEditController fc = DevFormBuilder.createFormEditController(ctx, form);
+        FormEditController fc = DevFormBuilder.createFormEditController(form);
         fc.load(gCtx);
-        FormContext fCtx = form.getContext();
+        ComponentContext fCtx = form.getContext();
 
         // render view to create android view components and viewContext
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        ViewRenderer renderHelper = new ViewRenderer();
         renderHelper.render(env, form);
 
         // check each entity property is correctly set in the form fields

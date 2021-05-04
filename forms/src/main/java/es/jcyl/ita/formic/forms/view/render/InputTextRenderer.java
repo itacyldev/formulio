@@ -39,7 +39,7 @@ public abstract class InputTextRenderer<C extends UIInputComponent, I extends Te
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<C, I> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
         if (message != null) {
             widget.getInputView().setError(message);
         }

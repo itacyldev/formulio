@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  */
 
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.controllers.FormController;
@@ -32,7 +33,7 @@ public class BackPressedActionHandler extends AbstractActionHandler
     }
 
     @Override
-    public void handle(FormController formController, UserAction action) {
-        mc.getRouter().back(action.getViewContext());
+    public void handle(ActionContext actionContext, UserAction action) {
+        mc.getRouter().back(actionContext.getViewContext());
     }
 }

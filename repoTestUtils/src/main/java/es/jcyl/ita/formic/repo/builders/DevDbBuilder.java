@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.repo.builders;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.Editable;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.StandardDatabase;
@@ -74,6 +75,7 @@ public class DevDbBuilder {
     private Database db;
     private int numEntities = 10;
     private Map<String, Object[]> limitedValues;
+    private EditableRepository repo;
 
     public DevDbBuilder withNumEntities(int num) {
         this.numEntities = num;
@@ -127,12 +129,13 @@ public class DevDbBuilder {
         this.source = DevDbBuilder.createEntitySource("db", this.meta.getName(), "xx", db);
 
         // create repository
-        EditableRepository repo = getSQLiteRepository(source, this.meta);
+        this.repo = getSQLiteRepository(source, this.meta);
 
         // create and insert test data
         List<Entity> lstEntities = buildEntities(this.meta, this.numEntities, this.limitedValues);
         for (Entity e : lstEntities) {
-            repo.save(e);
+            e.setId(null); // set id to null to make sure entities are inserted
+            this.repo.save(e);
         }
     }
 
@@ -187,6 +190,9 @@ public class DevDbBuilder {
         return db;
     }
 
+    public EditableRepository getRepo() {
+        return repo;
+    }
 
     ///////////////////////////////////////////////
     //// Helper functions
@@ -281,6 +287,10 @@ public class DevDbBuilder {
     }
 
     public static List<Entity> buildEntities(EntityMeta meta, int numEntities) {
+        return buildEntities(meta, numEntities, null);
+    }
+    public static List<Entity> buildEntitiesRandomMeta(int numEntities) {
+        EntityMeta meta = createRandomMeta();
         return buildEntities(meta, numEntities, null);
     }
 

@@ -16,12 +16,12 @@ package es.jcyl.ita.formic.forms.components.placeholders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIParagraph extends UIComponent {
+public class UIParagraph extends AbstractUIComponent {
 
     int numLines;
 

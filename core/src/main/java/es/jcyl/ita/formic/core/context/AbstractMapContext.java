@@ -16,26 +16,13 @@ public abstract class AbstractMapContext extends HashMap<String, Object>
     protected static final JexlEngine jexl = new JexlBuilder().cache(512)
             .strict(true).silent(false).create();
 
-    private Date creationDate;
     private String prefix;
 
     public AbstractMapContext() {
-        this.creationDate = new Date();
     }
 
     public AbstractMapContext(String prefix) {
-        this.creationDate = new Date();
         setPrefix(prefix);
-    }
-
-    @Override
-    public Date getCreationDate() {
-        return this.creationDate;
-    }
-
-    @Override
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
     }
 
     @Override
@@ -52,35 +39,10 @@ public abstract class AbstractMapContext extends HashMap<String, Object>
         }
     }
 
-    protected boolean hasExlExpressison(String str) {
-        return str.contains("[") || str.contains("(") || str.contains(".");
-    }
-
-    protected String getPropertyForExpression(String str) {
-        int dotPos = str.indexOf('.');
-        dotPos = (dotPos < 0) ? Integer.MAX_VALUE : dotPos;
-        int bracketPos = str.indexOf('[');
-        bracketPos = (bracketPos < 0) ? Integer.MAX_VALUE : bracketPos;
-        int parenthesesPos = str.indexOf('[');
-        parenthesesPos = (parenthesesPos < 0) ? Integer.MAX_VALUE
-                : parenthesesPos;
-
-        int min = Math.min(dotPos, Math.min(bracketPos, parenthesesPos));
-        if (min < 0) {
-            return null;
-        } else {
-            return str.substring(0, min);
-        }
-    }
-
     @Override
     public String getString(String key) {
         Object o = this.get(key);
-        if (o == null) {
-            return null;
-        } else {
-            return o.toString();
-        }
+        return (o == null) ? null : o.toString();
     }
 
     @Override

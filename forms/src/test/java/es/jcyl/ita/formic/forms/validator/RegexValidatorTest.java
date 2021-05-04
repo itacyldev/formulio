@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.validation.Validator;
@@ -82,8 +82,8 @@ public class RegexValidatorTest {
         recipe.field.addValidator(regexValidator);
 
         // get the view context to access data
-        FormViewContext formViewContext = recipe.form.getContext().getViewContext();
-        formViewContext.put(recipe.field.getId(), "a");
+        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        viewContext.put(recipe.field.getId(), "a");
 
         // execute validation
         ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);

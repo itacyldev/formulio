@@ -25,6 +25,7 @@ import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.CalculatedProperty;
 import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.Repository;
@@ -36,6 +37,8 @@ import es.jcyl.ita.formic.repo.Repository;
 public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
 
     private static final String PROJECT_IMAGES = "DEFAULT_PROJECT_IMAGES";
+
+    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     public UIImageBuilder(String tagName) {
         super(tagName, UIImage.class);
@@ -64,7 +67,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         if (valueExpr.isLiteral()) {
             // If the expression is a literal, the image has to be retrieved using project default
             // image repository Ej: /images/myfavoriteImage.jpeg. The component is readonly
-            image.setReadOnly(true); // this will disable camera and gallery buttons
+            image.setReadOnly(exprFactory.create("true")); // this will disable camera and gallery buttons
             image.setInputType(UIImage.ImageInputType.NO_CONTROLS.value);
             usesExternalRepo = true;
         } else if (valueExpr.isReadOnly()) {
@@ -146,9 +149,6 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         }
         EntityMapping relation = new EntityMapping(repo, fkExpression, img.getId());
         relation.setFilter(img.getFilter());
-        relation.setInsertable(!img.isReadOnly());
-        relation.setDeletable(!img.isReadOnly());
-        relation.setUpdatable(!img.isReadOnly());
 
         if (imgBndExpr.isReadOnly() && !imgBndExpr.isLiteral()) {
             // if the expression is a readonly expression that uses entity attributes to

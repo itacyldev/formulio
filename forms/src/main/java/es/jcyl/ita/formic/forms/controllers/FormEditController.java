@@ -15,13 +15,22 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
+import java.util.Map;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityPersister;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -50,7 +59,7 @@ public class FormEditController extends FormController {
     }
 
     public boolean save(CompositeContext context, UIForm form) {
-        if (form.isReadOnly()) {
+        if ((Boolean) ConvertUtils.convert(form.isReadOnly(context), Boolean.class)) {
             return false;// no changes
         }
         // validate form date
@@ -62,7 +71,7 @@ public class FormEditController extends FormController {
         updateEntityFromView(form);
 
         // persist changes in current and related entities
-        this.entityPersister.save(context, form);
+        this.entityPersister.save(form);
         return true;
     }
 
@@ -72,10 +81,10 @@ public class FormEditController extends FormController {
     }
 
     public boolean delete(CompositeContext context, UIForm form) {
-        if (form.isReadOnly()) {
+        if ((Boolean) ConvertUtils.convert(form.isReadOnly(context), Boolean.class)) {
             return false;
         }
-        entityPersister.delete(context, form);
+        entityPersister.delete(form);
         return true;
     }
 
@@ -83,7 +92,7 @@ public class FormEditController extends FormController {
      * Access form fields looking for value bindings that can be setable
      */
     private void updateEntityFromView(UIForm form) {
-        FormViewContext viewContext = form.getContext().getViewContext();
+        ViewContext viewContext = form.getContext().getViewContext();
         EntityContext entityContext = form.getContext().getEntityContext();
         // go over all the form elements looking for bindings that are not readonly
         for (UIInputComponent field : form.getFields()) {
@@ -91,9 +100,9 @@ public class FormEditController extends FormController {
         }
     }
 
-    private void updateEntityFromView(FormViewContext viewContext, EntityContext entityContext,
+    private void updateEntityFromView(ViewContext viewContext, EntityContext entityContext,
                                       UIInputComponent field) {
-        if (field.isBound() && !field.isReadOnly() && !field.isNestedProperty()) {
+        if (field.isBound() && !field.isNestedProperty()) {
             // apply change from view context to entity context
             Object value = viewContext.get(field.getId());
             String entityProp = field.getValueExpression().getBindingProperty();
@@ -117,7 +126,7 @@ public class FormEditController extends FormController {
         form.getContext().clearMessages();
         for (UIInputComponent field : form.getFields()) {
             // validate
-            valid &= form.validate(field);
+            valid &= validate(field);
         }
         return valid;
     }
@@ -130,7 +139,41 @@ public class FormEditController extends FormController {
      */
     public boolean validate(UIInputComponent field) {
         UIForm form = field.getParentForm();
-        return form.validate(field);
+        ComponentContext context = form.getContext();
+        ViewContext viewContext = context.getViewContext();
+
+        // get user input using view context and check all validators.
+        String value = viewContext.getString(field.getId());
+        boolean valid = true;
+        for (Validator validator : field.getValidators()) {
+            try {
+                if (isVisible(context, field)) {
+                    validator.validate(context, field, value);
+                }
+            } catch (ValidatorException e) {
+                // get the error and put it in form context
+                FormContextHelper.setMessage(context, field.getId(), e.getMessage());
+                valid = false;
+            }
+        }
+        // call validation function
+        if (form.getOnValidate() != null) {
+            ScriptEngine srcEngine = mc.getScriptEngine();
+            // TODO: we have to pass a combination of globalContext + formContext
+            Map result = (Map) srcEngine.callFunction(this.id, form.getOnValidate());
+            if (result.containsKey("error")) {
+                FormContextHelper.setMessage(context, form.getId(), (String) result.get("message"));
+                valid = false;
+            }
+        }
+        return valid;
+    }
+
+    public boolean isVisible(ComponentContext context, UIInputComponent field) {
+        ViewContext viewContext = context.getViewContext();
+
+        InputWidget fieldView = viewContext.findInputFieldViewById(field.getId());
+        return fieldView.isVisible();
     }
 
     public Entity getCurrentEntity() {

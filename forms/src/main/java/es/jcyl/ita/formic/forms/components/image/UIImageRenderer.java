@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -75,7 +76,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly() || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         } else {
             resetButton.setOnClickListener(new View.OnClickListener() {

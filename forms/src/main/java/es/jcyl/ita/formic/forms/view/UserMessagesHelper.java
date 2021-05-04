@@ -16,10 +16,15 @@ package es.jcyl.ita.formic.forms.view;
  */
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.router.Router;
 
 /**
@@ -40,13 +45,35 @@ public class UserMessagesHelper {
     }
 
     public static void toast(Context viewContext, String msg) {
-        Toast.makeText(viewContext, msg, Toast.LENGTH_SHORT).show();
+        if (msg != null) {
+            Toast.makeText(viewContext, msg, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void toast(Context viewContext, String[] msg) {
         // TODO: special toast: https://stackoverflow.com/questions/22594376/display-two-toast-messages-at-once
         // for now, show just first one
-        toast(viewContext, msg[0]);
+        if (msg[0] != null) {
+            toast(viewContext, msg[0]);
+        }
+    }
+
+    public static void toast(Context viewContext, String msg, int duration) {
+        Toast toast = Toast.makeText(viewContext, msg, duration);
+        View view = toast.getView();
+        TextView text = (TextView) view.findViewById(android.R.id.message);
+
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(viewContext);
+        String currentTheme = sharedPreferences.getString("current_theme", "light");
+        if (currentTheme.equals("light")) {
+            view.setBackgroundColor(viewContext.getResources().getColor(R.color.light_OnBackgroundColor));
+            text.setTextColor(viewContext.getResources().getColor(R.color.light_toastText));
+        } else {
+            view.setBackgroundColor(viewContext.getResources().getColor(R.color.dark_OnBackgroundColor));
+            text.setTextColor(viewContext.getResources().getColor(R.color.dark_toastText));
+        }
+        toast.show();
     }
 }
 

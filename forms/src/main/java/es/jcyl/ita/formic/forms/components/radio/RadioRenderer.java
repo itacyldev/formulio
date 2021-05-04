@@ -7,10 +7,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionType;
-import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
@@ -47,7 +49,6 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
 
     @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
-
         RadioGroup radioGroup = widget.getInputView();
         UIRadio component = widget.getComponent();
         radioGroup.setOrientation(component.getOrientationType());
@@ -57,35 +58,36 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         RadioButton button;
         int i = 0;
 
-        float[] weigthts = ComponentUtils.getWeigths(component.getWeights(), options.length, component.getId(), null);
+        if (ArrayUtils.isNotEmpty(options)) {
+            float[] weigthts = ComponentUtils.getWeigths(component.getWeights(), options.length, component.getId(), null);
+            for (UIOption option : options) {
+                button = new RadioButtonWidget(env.getViewContext(), option);
+                button.setText(option.getLabel());
+                button.setId(i);
 
-        for (UIOption option : options) {
-            button = new RadioButtonWidget(env.getViewContext(), option);
-            button.setText(option.getLabel());
-            button.setId(i);
+                StyleHolder<RadioButton> styleHolder = new RadioButtonStyleHolder(env.getViewContext());
+                styleHolder.applyStyle(button);
 
-            StyleHolder<RadioButton> styleHolder = new RadioButtonStyleHolder(env.getViewContext());
-            styleHolder.applyStyle(button);
-
-            radioGroup.addView(button);
-
-            setLayoutParams(weigthts, i, button);
-            i++;
+                radioGroup.addView(button);
+                setLayoutParams(weigthts, i, button);
+                i++;
+            }
         }
+
         // set listener to handler option clicks
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(component, ActionType.INPUT_CHANGE.name()));
+                    interceptor.notify(Event.inputChange(component));
                 }
             }
         });
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (component.isReadOnly() || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class) || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +112,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getFormContext(), component.getId());
+        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
         if (message != null) {
             ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
         }

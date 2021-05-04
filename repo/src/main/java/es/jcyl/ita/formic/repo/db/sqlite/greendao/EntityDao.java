@@ -30,6 +30,7 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.repo.CursorPropertyBinder;
 import es.jcyl.ita.formic.repo.CursorPropertyReader;
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.RepositoryException;
 import es.jcyl.ita.formic.repo.converter.ConverterUtils;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.db.meta.KeyGeneratorStrategy;
@@ -38,7 +39,7 @@ import es.jcyl.ita.formic.repo.db.source.DBTableEntitySource;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLitePropertyConverter;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteDBValue;
 import es.jcyl.ita.formic.repo.db.sqlite.sql.TableSQLBuilder;
-import es.jcyl.ita.formic.repo.el.JexlUtils;
+import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 
@@ -92,6 +93,15 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
         return values;
     }
 
+    public void save(Entity entity) {
+        if (this.hasKey(entity)) {
+            this.insertOrReplace(entity);
+        } else {
+            this.insert(entity);
+        }
+
+    }
+
     @Override
     protected Entity readEntity(Cursor cursor, int offset) {
         DBTableEntitySource source = this.entityConfig().getSource();
@@ -129,7 +139,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
     }
 
     private Object readCalculatedJexlProperty(DBPropertyType p) {
-        return JexlUtils.eval(this.context, p.getExpression());
+        return JexlRepoUtils.eval(this.context, p.getExpression());
     }
 
     @Override
@@ -157,7 +167,12 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
     private Object calculateProperty(DBPropertyType p) {
         // create expression and evaluate
         if (p.isJexlExpression()) {
-            return JexlUtils.eval(context, p.getExpression());
+            if (context == null) {
+                throw new RepositoryException("Error while trying to evaluate Entity calculated expression:" +
+                        "The context is null, make sure the RepositoryFactory has a context instance" +
+                        " to se on repos during initialization.");
+            }
+            return JexlRepoUtils.eval(context, p.getExpression());
         } else {
             throw new UnsupportedOperationException("Not implemented yet!!");
         }

@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.components.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.controllers.FormController;
@@ -26,7 +27,7 @@ import es.jcyl.ita.formic.forms.controllers.FormController;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIView extends UIComponent {
+public class UIView extends AbstractUIComponent {
 
     FormController formController;
     List<UIForm> forms;

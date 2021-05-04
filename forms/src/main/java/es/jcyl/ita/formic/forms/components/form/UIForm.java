@@ -1,34 +1,26 @@
 package es.jcyl.ita.formic.forms.components.form;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.EntityContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.context.impl.ViewStateHolder;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
-import es.jcyl.ita.formic.forms.validation.Validator;
-import es.jcyl.ita.formic.forms.validation.ValidatorException;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 
-public class UIForm extends UIGroupComponent implements FilterableComponent, EntityHolder {
+public class UIForm extends UIGroupComponent implements FilterableComponent, ContextHolder {
 
-    private FormContext context;
+    private ComponentContext context;
     private final ViewStateHolder memento;
     private String entityId = "params.entityId";
     private Entity currentEntity;
@@ -44,24 +36,15 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     public UIForm() {
         this.setRendererType("form");
         this.setRenderChildren(true);
-        this.context = new FormContext(this);
+        this.context = new ComponentContext(this);
         this.memento = new ViewStateHolder();
-    }
-
-    /**
-     * finds form child by its id
-     *
-     * @param id
-     */
-    public UIComponent getElement(String id) {
-        return UIComponentHelper.findChild(this, id);
     }
 
     public List<UIInputComponent> getFields() {
         return this.fields;
     }
 
-    public FormContext getContext() {
+    public ComponentContext getContext() {
         return context;
     }
 
@@ -113,42 +96,6 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     }
 
 
-    public boolean isVisible(UIInputComponent field) {
-        FormViewContext viewContext = context.getViewContext();
-
-        InputWidget fieldView = viewContext.findInputFieldViewById(field.getId());
-        return fieldView.isVisible();
-    }
-
-    public boolean validate(UIInputComponent field) {
-        FormViewContext viewContext = context.getViewContext();
-
-        // get user input using view context and check all validators.
-        String value = viewContext.getString(field.getId());
-        boolean valid = true;
-        for (Validator validator : field.getValidators()) {
-            try {
-                if (isVisible(field)) {
-                    validator.validate(context, field, value);
-                }
-            } catch (ValidatorException e) {
-                // get the error and put it in form context
-                FormContextHelper.setMessage(context, field.getId(), e.getMessage());
-                valid = false;
-            }
-        }
-        // call validation function
-        if (this.onValidate != null) {
-            ScriptEngine srcEngine = ScriptEngine.getInstance();
-            // TODO: we have to pass a combination of globalContext + formContext
-            Map result = srcEngine.execute(this.id, getContext(), this.onValidate);
-            if (result.containsKey("error")) {
-                throw new ValidatorException((String) result.get("message"));
-            }
-        }
-        return valid;
-    }
-
     public Filter getFilter() {
         return filter;
     }
@@ -189,4 +136,18 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
         }
         return expressions;
     }
+    /**
+     * ContextHolder interface
+     */
+    @Override
+    public ViewContext getViewContext() {
+        return null;
+    }
+
+    @Override
+    public EntityContext getEntityContext() {
+        return null;
+    }
+
+
 }

@@ -62,4 +62,9 @@ public class ConditionBinding extends Condition {
         cond.setBindingExpression(expr);
         return cond;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s_%s_%s", getProperty(), getOp(), getBindingExpression());
+    }
 }

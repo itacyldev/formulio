@@ -1,250 +1,91 @@
 package es.jcyl.ita.formic.forms.components;
+/*
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import org.mini2Dx.beanutils.ConvertUtils;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.repo.meta.Identificable;
-import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+/**
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
+public interface UIComponent {
 
-public abstract class UIComponent implements Identificable {
+    void setId(String id);
 
-    protected String id;
-    protected String label;
+    String getId();
 
-    protected ValueBindingExpression valueExpression;
-    private ValueBindingExpression renderExpression;
+    String getAbsoluteId();
 
-    protected UIView root;
-    protected UIComponent parent;
-    protected UIForm parentForm;
-    protected UIComponent[] children;
+    void setChildren(List<UIComponent> children);
 
-    private String rendererType;
-    private boolean renderChildren;
-    /**
-     * Indicates if current component value is referencing the value from a related entity and
-     * not from the mainEntity.
-     */
-    private boolean isEntityMapping = false;
+    void setChildren(UIComponent[] children);
 
-    /**
-     * if the children of this component have to be rendered individually
-     */
+    void addChild(UIComponent... lstChildren);
 
-    public String getId() {
-        return id;
-    }
+    boolean hasChildren();
 
-    /**
-     * gets the id by concatenating the id of all your ancestors
-     *
-     * @return
-     */
-    public String getAbsoluteId() {
-        String completeId = id;
-        if (parent != null) {
-            completeId = parent.getAbsoluteId() + "." + id;
-        }
-        return completeId;
-    }
+    UIComponent[] getChildren();
 
-    public void setId(final String id) {
-        this.id = id;
-    }
+    UIComponent getChildById(String id);
 
-    public UIComponent getParent() {
-        return parent;
-    }
+    void setParent(UIComponent parent);
 
-    public void setParent(UIComponent parent) {
-        this.parent = parent;
-        if (parent != null) {
-            this.root = parent.getRoot();
-        }
-    }
+    UIComponent getParent();
 
-    public UIComponent[] getChildren() {
-        return children;
-    }
+    UIForm getParentForm();
 
-    public boolean hasChildren() {
-        return this.children != null && this.children.length > 0;
-    }
+    ComponentContext getParentContext();
 
-    public void addChild(UIComponent child) {
-        addChild(new UIComponent[]{child});
-    }
+    void setRoot(UIView root);
 
-    public void addChild(UIComponent... lstChildren) {
-        UIComponent[] newKids;
-        if (children == null) {
-            newKids = Arrays.copyOf(lstChildren, lstChildren.length);
-        } else {
-            newKids = Arrays.copyOf(this.children, this.children.length + lstChildren.length);
-            System.arraycopy(lstChildren, 0, newKids, this.children.length, lstChildren.length);
-        }
-        this.children = newKids;
-        linkParent();
-    }
+    UIView getRoot();
 
-    public void removeAll() {
-        this.children = null;
-    }
+    void setValueExpression(ValueBindingExpression valueBindingExpression);
 
-    public String getRendererType() {
-        return rendererType;
-    }
+    ValueBindingExpression getValueExpression();
 
-    public void setRendererType(String rendererType) {
-        this.rendererType = rendererType;
-    }
+    Object getValue(Context context);
 
-    public UIView getRoot() {
-        return root;
-    }
+    Set<ValueBindingExpression> getValueBindingExpressions();
 
-    public void setRoot(UIView root) {
-        this.root = root;
-        if (this.children != null) {
-            for (UIComponent kid : this.children) {
-                kid.setRoot(root);
-            }
-        }
-    }
+    String getRendererType();
 
-    public void setChildren(List<UIComponent> children) {
-        setChildren(children.toArray(new UIComponent[children.size()]));
-    }
+    boolean isRenderChildren();
 
-    public void setChildren(UIComponent[] children) {
-        this.children = children;
-        // re-link children parent
-        linkParent();
-    }
+    String getOnBeforeRenderAction();
 
+    String getOnAfterRenderAction();
 
-    private void linkParent() {
-        if (this.children != null) {
-            for (UIComponent kid : this.children) {
-                kid.setParent(this);
-            }
-        }
-    }
+    UIAction getAction();
 
-    public boolean isRenderChildren() {
-        return renderChildren;
-    }
+    String getLabel();
 
-    public void setRenderChildren(boolean renderChildren) {
-        this.renderChildren = renderChildren;
-    }
+    ValueBindingExpression getRenderExpression();
 
-    public UIForm getParentForm() {
-        if (this.parentForm == null) {
-            // find
-            UIComponent node = this.getParent();
-            // climb up the tree until you find a form
-            while ((node != null) && !(node instanceof UIForm)) {
-                node = node.getParent();
-            }
-            this.parentForm = (node instanceof UIForm) ? (UIForm) node : null;
-        }
-        return this.parentForm;
-    }
+    void setAction(UIAction componentAction);
 
-    public void setParentForm(UIForm parentForm) {
-        this.parentForm = parentForm;
-    }
+    boolean isRendered(Context context);
 
-    public ValueBindingExpression getValueExpression() {
-        return valueExpression;
-    }
+    ValueBindingExpression getPlaceHolder();
 
-    public void setValueExpression(ValueBindingExpression valueExpression) {
-        this.valueExpression = valueExpression;
-    }
-
-    public ValueBindingExpression getRenderExpression() {
-        return renderExpression;
-    }
-
-    public void setRenderExpression(ValueBindingExpression renderExpression) {
-        this.renderExpression = renderExpression;
-    }
-
-    public Object getValue(Context context) {
-        if (this.valueExpression == null) {
-            return null;
-        } else {
-            // evaluate expression against context
-            try{
-                return JexlUtils.eval(context, this.valueExpression);
-            }catch(Exception e){
-                error("Error while trying to evaluate JEXL expression: "+this.valueExpression.toString(),e);
-                return null;
-            }
-        }
-    }
-
-    public boolean isRendered(Context context) {
-        if (this.renderExpression == null) {
-            return true;
-        } else {
-            // evaluate expression against context
-            Object value = JexlUtils.eval(context, this.renderExpression);
-            try {
-                return (Boolean) ConvertUtils.convert(value, Boolean.class);
-            } catch (Exception e) {
-                throw new ViewConfigException(String.format("Invalid rendering expression in " +
-                                "component [%s] the resulting value couldn't be cast to Boolean.",
-                        this.getId(), this.renderExpression, e));
-            }
-        }
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    @Override
-    public String toString() {
-        String output = "";
-
-        if (id != null) {
-            output += id;
-        }
-        if (output.length() > 0) {
-            return output;
-        } else {
-            return super.toString();
-        }
-    }
-
-    /**
-     * Method used to get all the binding expressions defined for this component so dependencies
-     * inter-components can be easily calculated.
-     *
-     * @return
-     */
-    public Set<ValueBindingExpression> getValueBindingExpressions() {
-        return ExpressionHelper.getExpressions(this);
-    }
-
-    public void setEntityMapping(boolean entityMapping) {
-        isEntityMapping = entityMapping;
-    }
 }

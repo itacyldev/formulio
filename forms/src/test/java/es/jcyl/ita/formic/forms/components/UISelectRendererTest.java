@@ -30,22 +30,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.select.UISelect;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -55,7 +56,7 @@ import static org.mockito.Mockito.mock;
 public class UISelectRendererTest {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     Context ctx;
 
@@ -80,6 +81,7 @@ public class UISelectRendererTest {
         env.setViewContext(ctx);
 
         UISelect select = new UISelect();
+        select.setParentForm(new UIForm());
         int expectedOptions = RandomUtils.randomInt(0, 5);
 
         select.setId(RandomUtils.randomString(4));
@@ -90,8 +92,9 @@ public class UISelectRendererTest {
             options[i] = new UIOption(name, name);
         }
         select.setOptions(options);
-        InputWidget<UISelect, Spinner> view =
-                (InputWidget<UISelect, Spinner>) renderHelper.render(env,
+
+        env.disableInterceptors();
+        InputWidget<UISelect, Spinner> view = (InputWidget<UISelect, Spinner>) renderHelper.render(env,
                 select);
         Assert.assertNotNull(view);
 
@@ -132,7 +135,7 @@ public class UISelectRendererTest {
 
         Assert.assertEquals("The label is not correct.",
                 "some text",
-                (String) ((TextView)ViewHelper.findLabelView(view, field)).getText());
+                (String) ((TextView) ViewHelper.findLabelView(view, field)).getText());
 
         RequiredValidator mockRequired = mock(RequiredValidator.class);
         field.addValidator(mockRequired);
@@ -140,6 +143,6 @@ public class UISelectRendererTest {
 
         Assert.assertEquals("The label must be marked with asterisk.",
                 "some text *",
-                (String) ((TextView)ViewHelper.findLabelView(view, field)).getText());
+                (String) ((TextView) ViewHelper.findLabelView(view, field)).getText());
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
-import es.jcyl.ita.formic.repo.el.JexlUtils;
+import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
 import es.jcyl.ita.formic.repo.meta.AggregatedMeta;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
@@ -49,6 +49,12 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
             return String.format("%s#%s", this.getSource().getSourceId(),
                     this.getSource().getEntityTypeId());
         }
+    }
+
+
+    @Override
+    public long count() {
+        return count(null);
     }
 
     public void setContext(Context ctx) {
@@ -129,7 +135,7 @@ public abstract class AbstractBaseRepository<T extends Entity, F extends Filter>
             // Use relation expression to obtain the entity Id
             Object relEntityId;
             if (mapping.isFkExpression()) {
-                relEntityId = JexlUtils.eval(mainEntity, mapping.getFk());
+                relEntityId = JexlRepoUtils.eval(mainEntity, mapping.getFk());
             } else {
                 relEntityId = mainEntity.get(mapping.getFk());
             }

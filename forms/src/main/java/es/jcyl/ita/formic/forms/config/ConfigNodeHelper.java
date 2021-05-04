@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.config;
  * limitations under the License.
  */
 
-import android.text.InputType;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.validation.Validator;
 

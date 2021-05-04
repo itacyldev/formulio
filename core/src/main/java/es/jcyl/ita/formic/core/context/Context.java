@@ -1,29 +1,18 @@
 package es.jcyl.ita.formic.core.context;
 
 
-import java.util.Date;
 import java.util.Map;
 
-public abstract interface Context extends Map<String, Object> {
+public interface Context extends Map<String, Object> {
 
     /**
      * Prefix for a
      *
      * @return
      */
-    public void setPrefix(String prefix);
+    void setPrefix(String prefix);
 
-    public String getPrefix();
-
-
-    /**
-     * Context creation datetime
-     *
-     * @return
-     */
-    public void setCreationDate(Date date);
-
-    public Date getCreationDate();
+    String getPrefix();
 
     /**
      * Returns object referred by the key as String.
@@ -31,9 +20,8 @@ public abstract interface Context extends Map<String, Object> {
      * @param key
      * @return
      */
-    public String getString(String key);
+    String getString(String key);
 
-
-    public Object getValue(String key);
+    Object getValue(String key);
 
 }

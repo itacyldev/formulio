@@ -20,6 +20,10 @@ package es.jcyl.ita.formic.repo.meta;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Describes the information needed to persist the current type of entity.
  */
@@ -104,6 +108,21 @@ public class EntityMeta<P extends PropertyType> {
         return names;
     }
 
+    public void setProperty(String propertyName, P property) {
+        int i = 0;
+        for (P p : properties) {
+            if (p.name.equals(propertyName)) {
+                properties[i] = property;
+                return;
+            }
+            i++;
+        }
+        // add
+        List<P> auxList = new ArrayList<P>();
+        auxList.add(property);
+        properties = auxList.toArray((P[]) Array.newInstance(properties.getClass(), auxList.size()));
+    }
+
     public void setProperties(P[] properties) {
         this.properties = properties;
     }
@@ -114,6 +133,19 @@ public class EntityMeta<P extends PropertyType> {
 
     public boolean hasIdProperties() {
         return (this.idProperties != null && this.idProperties.length > 0);
+    }
+
+    public boolean isIdProperty(String propertyName) {
+        if (idProperties == null) {
+            return false;
+        } else {
+            for (String p : idProperties) {
+                if (p.equals(propertyName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     public boolean hasMulticolumnKey() {

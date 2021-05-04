@@ -15,14 +15,12 @@ package es.jcyl.ita.formic.forms.components.datalist;
  * limitations under the License.
  */
 
-import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.EntitySelector;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -31,32 +29,19 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIDatalist extends UIComponent implements EntitySelector {
+public class UIDatalist extends AbstractUIComponent implements FilterableComponent {
 
     private Repository repo;
     private Filter filter;
     private String[] mandatoryFilters;
 
     private int numItems;
-    private List<Entity> selectedEntities;
 
     public UIDatalist() {
         setRendererType("datalist");
         this.setRenderChildren(true);
     }
 
-    @Override
-    public List<Entity> getSelectedEntities() {
-        return selectedEntities;
-    }
-
-    public void selectEntity(Entity entity) {
-        this.selectedEntities.add(entity);
-    }
-
-    public void clearSelection() {
-        this.selectedEntities.clear();
-    }
 
     public Repository getRepo() {
         return repo;
@@ -103,4 +88,5 @@ public class UIDatalist extends UIComponent implements EntitySelector {
         }
         return expressions;
     }
+
 }

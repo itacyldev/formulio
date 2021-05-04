@@ -4,9 +4,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
@@ -40,14 +40,12 @@ public class CheckBoxFieldRenderer extends InputTextRenderer<UIField, Switch> {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton,
                                          boolean value) {
-                ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.doAction(new UserAction(widget.getComponent(),
-                            ActionType.INPUT_CHANGE.name()));
+                    interceptor.notify(Event.inputChange(widget.getComponent()));
                 }
             }
         });
-
     }
 
     @Override

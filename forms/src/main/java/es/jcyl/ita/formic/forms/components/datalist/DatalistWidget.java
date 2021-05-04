@@ -29,10 +29,13 @@ import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
+import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 
 /**
@@ -40,26 +43,23 @@ import es.jcyl.ita.formic.repo.query.Filter;
  */
 
 public class DatalistWidget extends Widget<UIDatalist> implements DynamicComponent,
-        EntityListProvider {
+        EntityListProvider, EntitySelector {
 
     private Repository repo;
     private RenderingEnv renderingEnv;
     private List<Entity> entities = new ArrayList<>();
-
-    private List<Entity> selectedEntities = new ArrayList<>();
-
 
     // view filtering criteria
     private Filter filter;
 
     private AndViewContext thisViewCtx = new AndViewContext(this);
     private LinearLayout contentView;
+    private SelectionManager selectionMgr;
 
     @Override
     public void setup(RenderingEnv env) {
         super.setup(env);
         this.repo = component.getRepo();
-
     }
 
     public DatalistWidget(Context context) {
@@ -119,7 +119,7 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
      * @return
      */
     private Filter setupFilter(CompositeContext context, Filter defFilter) {
-        Filter f = FilterHelper.createInstance(repo);
+        Filter f = FilterRepoUtils.createInstance(repo);
         if (defFilter != null) {
             FilterHelper.evaluateFilter(context, defFilter, f);
         }
@@ -135,4 +135,10 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
     public List<Entity> getEntities() {
         return this.entities;
     }
+
+    @Override
+    public void setSelectionManager(SelectionManager manager) {
+        this.selectionMgr = manager;
+    }
+
 }

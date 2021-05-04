@@ -1,0 +1,19 @@
+<main name="myFirstForm" description="DataList with buttons" id="form1" repo="contacts">
+    <list>
+        <script>
+            function updateEntity(){
+            console.log(entity.it_profile);
+            }
+        </script>
+        <form>
+            <datalist>
+                <datalistitem>
+                    <input value="${entity.it_profile}" hasDeleteButton="false"/>
+                    <button action="updateEntity">
+                        <param name="entity_id" value="${entity.contact_id}"/>
+                    </button>
+                </datalistitem>
+            </datalist>
+        </form>
+    </list>
+</main>

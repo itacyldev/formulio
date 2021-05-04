@@ -18,6 +18,7 @@ import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 import es.jcyl.ita.formic.repo.query.Operator;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
@@ -64,24 +65,26 @@ public class FilterHelperTest {
         builder.withMeta(meta).withNumEntities(100).build(ctx);
 
         Repository repo = builder.getSQLiteRepository();
-        Filter effFilter = FilterHelper.createInstance(repo);
-        Filter filterDef = FilterHelper.createInstance(repo);
+        Filter effFilter = FilterRepoUtils.createInstance(repo);
+        Filter filterDef = FilterRepoUtils.createInstance(repo);
 
         BasicContext bCtx = new BasicContext("test");
         bCtx.set("a", 10);
 
-        Criteria criteria = Criteria.single(ConditionBinding.cond(propertyName1, Operator.GT, exprFactory.create("${a}", Integer.class)));
+        // create filtering criteria: property1 >= ${a}
+        Criteria criteria = Criteria.single(ConditionBinding.cond(propertyName1, Operator.GT,
+                exprFactory.create("${a}", Integer.class)));
         filterDef.setExpression(criteria);
 
         String[] mandatoryFilters = new String[]{"a"};
         FilterHelper.evaluateFilter(bCtx, filterDef, effFilter, mandatoryFilters);
-        // filter should include one immpossible condition
+        // filter should include one impossible condition
         List list = repo.find(effFilter);
         Assert.assertTrue(list.size() > 0);
         // remove a value from the context
 
         bCtx.remove("a");
-        effFilter = FilterHelper.createInstance(repo);
+        effFilter = FilterRepoUtils.createInstance(repo);
         FilterHelper.evaluateFilter(bCtx, filterDef, effFilter, mandatoryFilters);
         // filter should include one immpossible condition
         list = repo.find(effFilter);

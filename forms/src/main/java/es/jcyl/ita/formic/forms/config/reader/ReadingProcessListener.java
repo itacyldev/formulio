@@ -22,13 +22,20 @@ import es.jcyl.ita.formic.forms.project.Project;
  */
 public interface ReadingProcessListener {
 
-    void newElement(String tag);
+    void fileStart(String currentFile);
+
+    void fileEnd(String currentFile);
+
+    void viewStart(ConfigNode node);
+
+    void viewEnd(ConfigNode node);
+
+    void elementStart(ConfigNode node);
+
+    void elementEnd(ConfigNode node);
 
     Project getProject();
 
-     void setProject(Project project);
+    void setProject(Project project);
 
-     String getCurrentFile();
-
-     void setCurrentFile(String currentFile);
 }

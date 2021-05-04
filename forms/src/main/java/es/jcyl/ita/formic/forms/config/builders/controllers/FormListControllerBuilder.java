@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.EntitySelector;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
@@ -31,8 +31,8 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -88,8 +88,8 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
     }
 
     /**
-     * In case current formController doesn't have and entitySelector, it creates a default datatable
-     * connected to current repository.
+     * In case current formController doesn't have an entityList componente defined, it creates a
+     * default datatable connected to current repository.
      *
      * @param root
      * @return
@@ -145,7 +145,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         node.getElement().getView().setRoot(node.getElement().getView());
 
         setUpActions(node);
-        setUpEntitySelector(node); // see issue #203650
+        setUpEntityList(node); // see issue #203650
     }
 
     /**
@@ -157,35 +157,35 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
 
         List<ConfigNode> actionList = actions.getChildren();
-        FCAction[] lstActions = new FCAction[actionList.size()];
+        UIAction[] lstActions = new UIAction[actionList.size()];
 
         for (int i = 0; i < actionList.size(); i++) {
-            lstActions[i] = (FCAction) actionList.get(i).getElement();
+            lstActions[i] = (UIAction) actionList.get(i).getElement();
             lstActions[i].setType(actionList.get(i).getName());
         }
         node.getElement().setActions(lstActions);
     }
 
     /**
-     * Looks for an inner element that implements an EntitySelector interface, if no component
-     * is found it creates a default dataTable. It also checks the attribute "entitySelector" is
+     * Looks for an inner element that implements an FilterableComponent interface, if no component
+     * is found it creates a default dataTable. It also checks the attribute "entityList" is
      * properly set and references an instance of interface EntitySelector.
      *
      * @param node
      */
-    private void setUpEntitySelector(ConfigNode<FormListController> node) {
+    private void setUpEntityList(ConfigNode<FormListController> node) {
         Object selector = null;
-        List<ConfigNode> entitySelectors = ConfigNodeHelper.getDescendantByTag(node, ENTITY_SELECTOR_SET);
-        String entitySelectorId = node.getAttribute("entitySelector");
+        List<ConfigNode> entityList = ConfigNodeHelper.getDescendantByTag(node, ENTITY_SELECTOR_SET);
+        String entityListId = node.getAttribute("entityList");
 
-        if (StringUtils.isNotBlank(entitySelectorId)) {
+        if (StringUtils.isNotBlank(entityListId)) {
 //            // try to find the referenced component in the selectors list
-//            for (ConfigNode n : entitySelectors) {
-//                if (n.getId().equals(entitySelectorId)) {
+//            for (ConfigNode n : entityList) {
+//                if (n.getId().equals(entityListId)) {
 //                    Object element = n.getElement();
-//                    if (element != null && element instanceof EntitySelector) {
-//                        throw new ConfigurationException(error(String.format("The attribute 'entitySelector' " +
-//                                "references an object that doesn't implements EntitySelector interfaces. " +
+//                    if (element != null && element instanceof FilterableComponent) {
+//                        throw new ConfigurationException(error(String.format("The attribute 'entityList' " +
+//                                "references an object that doesn't implements FilterableComponent interfaces. " +
 //                                "This attribute can be used to point to one of these components: [%s] ", ENTITY_SELECTOR_SET)));
 //                    } else {
 //                        selector = element;
@@ -194,44 +194,19 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 //            }
             throw new UnsupportedOperationException("Not supported yet!");
         } else {// the attribute is not set
-            int numSelectors = entitySelectors.size();
+            int numSelectors = entityList.size();
             if (numSelectors == 1) {
-                // if there's just one entitySelector use it
-                selector = entitySelectors.get(0).getElement();
+                // if there's just one filterableComponent use it
+                selector = entityList.get(0).getElement();
             } else {
                 throw new ConfigurationException(error("The <list/> form defined in " +
-                        "file '${file}' has more than one EntitySelector, use the attribute 'entitySelector'" +
+                        "file '${file}' has more than one FilterableComponent, use the attribute 'entityList'" +
                         " to set the id of the main selector"));
             }
         }
 
-       node.getElement().setEntitySelector((EntitySelector) selector);
-
-
+        node.getElement().setEntityList((FilterableComponent) selector);
     }
-
-//    /**
-//     * Uses datatableBuilder to create a default entitySelector with current repository
-//     *
-//     * @param node
-//     * @return
-//     */
-//    private UIDatatable createDefaultUISelector(ConfigNode<FormListController> node) {
-//        ComponentBuilder<UIDatatable> builder = this.getFactory().getBuilder("datatable", UIDatatable.class);
-//
-//        ConfigNode newNode = new ConfigNode("datatable");
-//        node.addChild(newNode);
-//        if (node.hasAttribute("repo")) {
-//            newNode.setAttribute("repo", node.getAttribute("repo"));
-//        }
-//        newNode.setId("datatable" + node.getId());
-//        UIDatatable table = builder.build(newNode);
-//        newNode.setElement(table);
-//        builder.processChildren(newNode);
-//
-//        return table;
-//    }
-
 
     private ConfigNode createActionNode(String action, String id, String label, String route) {
         ConfigNode node = new ConfigNode(action);

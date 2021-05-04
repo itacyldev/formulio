@@ -17,6 +17,7 @@ import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 public class CSVExporter {
 
@@ -45,7 +46,7 @@ public class CSVExporter {
             file.createNewFile();
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
-            Filter f = FilterHelper.clone(repo, filter);
+            Filter f = FilterRepoUtils.clone(repo, filter);
 
             long total = repo.count(f);
             f.setOffset(OFFSET);

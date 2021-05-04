@@ -22,8 +22,8 @@ import org.junit.Test;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.forms.el.JexlUtils;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -41,7 +41,7 @@ public class UnPrefixedCompositeContextTest {
 
     @Test
     public void testAccessWithPrefixedKeys() {
-        UnPrefixedCompositeContext ctx = new UnPrefixedCompositeContext();
+        CompositeContext ctx = new UnPrefixedCompositeContext();
         Context bc1 = new BasicContext("bc1");
         ctx.addContext(bc1);
         Context bc2 = new BasicContext("bc2");
@@ -72,10 +72,10 @@ public class UnPrefixedCompositeContextTest {
         bc2.put("str", "testText");
 
         // try access with prefix
-        Assert.assertEquals(5, JexlUtils.eval((JexlContext)ctx, "${bc1.A + bc2.a}"));
-        Assert.assertEquals(7, JexlUtils.eval((JexlContext)ctx, "${bc1.B + bc2.b}"));
+        Assert.assertEquals(5, JexlFormUtils.eval((JexlContext)ctx, "${bc1.A + bc2.a}"));
+        Assert.assertEquals(7, JexlFormUtils.eval((JexlContext)ctx, "${bc1.B + bc2.b}"));
         // test access to methods in context objects
-        Assert.assertEquals("test", JexlUtils.eval((JexlContext)ctx, "${bc2.str.substring(0,4)}"));
+        Assert.assertEquals("test", JexlFormUtils.eval((JexlContext)ctx, "${bc2.str.substring(0,4)}"));
 
     }
 }

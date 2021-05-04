@@ -28,16 +28,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.FormViewContext;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderHelper;
+import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
@@ -64,11 +66,12 @@ public class FormViewContextTest {
      */
     @Test
     public void testAccessViewValuesFromContext() {
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        ViewRenderer renderHelper = new ViewRenderer();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
-        RenderingEnv env = new RenderingEnv(null);
+        MainController mc = MockingUtils.mockMainController(ctx);
+        RenderingEnv env = new RenderingEnv(mc.getActionController());
         env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
@@ -76,7 +79,7 @@ public class FormViewContextTest {
         View formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        FormViewContext fvContext = new FormViewContext(form, formView);
+        ViewContext fvContext = new ViewContext(form, formView);
 
         // check the context contains all the form elements
         for (UIComponent c : form.getChildren()) {
@@ -95,11 +98,12 @@ public class FormViewContextTest {
      */
     @Test
     public void setSetViewValuesThroughContext() {
-        ViewRenderHelper renderHelper = new ViewRenderHelper();
+        ViewRenderer renderHelper = new ViewRenderer();
         UIForm form = formBuilder.withNumFields(10).withRandomData().build();
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
-        RenderingEnv env = new RenderingEnv(null);
+        MainController mc = MockingUtils.mockMainController(ctx);
+        RenderingEnv env = new RenderingEnv(mc.getActionController());
         env.setGlobalContext(gCtx);
         env.setViewContext(ctx);
 
@@ -107,7 +111,7 @@ public class FormViewContextTest {
         View formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        FormViewContext fvContext = new FormViewContext(form, formView);
+        ViewContext fvContext = new ViewContext(form, formView);
 
         // check the context contains all the form elements
         for (UIInputComponent c : form.getFields()) {

@@ -27,6 +27,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.io.ByteArrayOutputStream;
 
 import es.jcyl.ita.formic.forms.R;
@@ -64,7 +66,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setup(RenderingEnv env) {
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if (component.isReadOnly()) {
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
             cameraButton.setEnabled(false);
         } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
             cameraButton.setVisibility(View.INVISIBLE);
@@ -92,7 +94,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
                 }
             });
         }*/
-        this.mainEntity = env.getFormContext().getEntity();
+        this.mainEntity = env.getComponentContext().getEntity();
     }
 
     public GallerySelector getGallerySelector() {
@@ -153,10 +155,13 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     @Override
     public void setState(Object value) {
+        if(value == null){
+            return;
+        }
         MediaResource resource = (MediaResource) value;
         getInputView().setResource(resource);
         Bitmap bitmap = resource.toBitMap();
-        if(bitmap != null){
+        if (bitmap != null) {
             this.getInputView().setImageBitmap(bitmap);
         }
     }

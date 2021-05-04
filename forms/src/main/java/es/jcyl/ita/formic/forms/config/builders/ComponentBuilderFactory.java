@@ -17,11 +17,12 @@ package es.jcyl.ita.formic.forms.config.builders;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
-import es.jcyl.ita.formic.forms.components.link.UILink;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
@@ -33,16 +34,20 @@ import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.UIActionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.EntityMappingBuilder;
-import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.repo.MemoRepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoFilterBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
+import es.jcyl.ita.formic.forms.config.builders.scripts.ScriptSourceBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIButtonBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UICardBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIColumnBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatalistBuilder;
@@ -50,6 +55,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UILinkBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIMultiOptionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIRowBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UITabItemBuilder;
@@ -57,16 +63,18 @@ import es.jcyl.ita.formic.forms.config.builders.ui.ValidatorBuilder;
 import es.jcyl.ita.formic.forms.config.elements.OptionsConfig;
 import es.jcyl.ita.formic.forms.config.elements.PropertyConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
+import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.resolvers.AbstractAttributeResolver;
+import es.jcyl.ita.formic.forms.config.resolvers.ActionAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.BindingExpressionAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ColorAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
-import es.jcyl.ita.formic.forms.controllers.FCAction;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -89,6 +97,7 @@ public class ComponentBuilderFactory {
     private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
     private RepositoryFactory repoFactory = RepositoryFactory.getInstance();
     private EntitySourceFactory sourceFactory = EntitySourceFactory.getInstance();
+    private ScriptEngine scriptEngine = ScriptEngine.getInstance();
 
     public static ComponentBuilderFactory getInstance() {
         if (_instance == null) {
@@ -105,34 +114,36 @@ public class ComponentBuilderFactory {
         registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
+        registerBuilder("filerepo", newBuilder(FileRepoConfigBuilder.class, "fileRepo"));
+        registerBuilder("memorepo", newBuilder(MemoRepoConfigBuilder.class, "memoRepo"));
+
         registerBuilder("repofilter", newBuilder(RepoFilterBuilder.class, "repofilter"));
-        registerBuilder("fileRepo", newBuilder(FileRepoBuilder.class, "fileRepo"));
         registerBuilder("meta", newBuilder(RepoMetaConfigBuilder.class, "meta"));
         registerBuilder("property", newDefaultBuilder(PropertyConfig.class, "property"));
         registerBuilder("mapping", newBuilder(EntityMappingBuilder.class, "mapping"));
-
 
         registerBuilder("datatable", newBuilder(UIDatatableBuilder.class, "datatable"));
         registerBuilder("column", newBuilder(UIColumnBuilder.class, "column"));
 
         registerBuilder("datalist", newBuilder(UIDatalistBuilder.class, "datalist"));
         registerBuilder("datalistitem", newBasicBuilder(UIDatalistItem.class, "datalistitem"));
+
         registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
         registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
         registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
-        registerBuilder("link", newDefaultBuilder(UILink.class, "link"));
+        registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
 
-
-        ComponentBuilder defaultActionBuilder = newDefaultBuilder(FCAction.class, "action");
-        // same component builder with different alias
-        registerBuilder("nav", defaultActionBuilder);
-        registerBuilder("add", defaultActionBuilder);
-        registerBuilder("update", defaultActionBuilder);
-        registerBuilder("delete", defaultActionBuilder);
-        registerBuilder("save", defaultActionBuilder);
-        registerBuilder("cancel", defaultActionBuilder);
+        ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
+        // same component builder with different aliases
+        registerBuilder("action", actionBuilder);
+        registerBuilder("nav", actionBuilder);
+        registerBuilder("add", actionBuilder);
+        registerBuilder("update", actionBuilder);
+        registerBuilder("delete", actionBuilder);
+        registerBuilder("save", actionBuilder);
+        registerBuilder("cancel", actionBuilder);
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);
@@ -158,20 +169,42 @@ public class ComponentBuilderFactory {
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
         registerBuilder("context", new ContextBuilder());
 
-        //registerBuilder("param", newBasicBuilder(ValidatorBuilder.class, "validator"));
+        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
+        registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
 
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
         registerAttResolver("binding", exprResolver);
         registerAttResolver("repo", new RepositoryAttributeResolver());
         registerAttResolver("pathResolver", new RelativePathAttResolver());
         registerAttResolver("validator", new ValidatorAttResolver());
-
         registerAttResolver("color", new ColorAttributeResolver());
+
+        registerAttResolver("action", new ActionAttributeResolver());
+    }
+
+    /**
+     * Returns the builders and resolvers that need to be notify during the XML reading process.
+     *
+     * @return
+     */
+    public List<ReadingProcessListener> getListeners() {
+        List<ReadingProcessListener> listeners = new ArrayList<>();
+        for (ComponentBuilder builder: _builders.values()){
+            if(builder instanceof ReadingProcessListener){
+                listeners.add((ReadingProcessListener)builder);
+            }
+        }
+        for (AttributeResolver resolver: _resolvers.values()){
+            if(resolver instanceof ReadingProcessListener){
+                listeners.add((ReadingProcessListener)resolver);
+            }
+        }
+        return listeners;
     }
 
 
     public void registerBuilder(String tagName, ComponentBuilder builder) {
-        _builders.put(tagName, builder);
+        _builders.put(tagName.toLowerCase(), builder);
     }
 
     public void registerAttResolver(String resolverId, AbstractAttributeResolver resolver) {
@@ -185,7 +218,7 @@ public class ComponentBuilderFactory {
     }
 
     public ComponentBuilder getBuilder(String tagName) {
-        return _builders.get(tagName);
+        return _builders.get(tagName.toLowerCase());
     }
 
     private ComponentBuilder newBuilder(Class clazz, String tagName) {
@@ -276,5 +309,9 @@ public class ComponentBuilderFactory {
 
     public EntitySourceFactory getSourceFactory() {
         return sourceFactory;
+    }
+
+    public ScriptEngine getScriptEngine() {
+        return scriptEngine;
     }
 }

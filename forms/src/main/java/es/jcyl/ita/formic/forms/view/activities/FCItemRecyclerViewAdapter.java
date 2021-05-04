@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.export.CSVExporter;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment.OnListFragmentInteractionListener;
 
 /**
@@ -61,7 +62,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(holder.mItem.getId());
+        holder.mIdView.setText(holder.mItem.getDescription());
         holder.mContentView.setText(holder.mItem.getName());
         holder.numEntities.setText(holder.mItem.count() + " entities");
 
@@ -87,7 +88,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
 
                 boolean exportable = false;
                 //if (holder.mItem.getView().getChildren()[0] instanceof UIDatatable || holder.mItem.getView().getChildren()[0] instanceof UIDatalist){
-                if (holder.mItem.count() > 0){
+                if (holder.mItem.count() > 0) {
                     exportable = true;
                 }
                 popup.getMenu().findItem(R.id.action_item_export).setVisible(exportable);
@@ -99,7 +100,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
                         int itemId = item.getItemId();
                         if (itemId == R.id.action_item_export) {//handle menu1 click
                             if (null != mListener) {
-                                ExportDatabaseCSVTask task=new ExportDatabaseCSVTask();
+                                ExportDatabaseCSVTask task = new ExportDatabaseCSVTask();
                                 task.execute(holder.mItem);
                             }
                         } else if (itemId == R.id.action_item_detail) {//handle menu1 click
@@ -167,35 +168,35 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
 
     private class ExportDatabaseCSVTask extends AsyncTask<FormListController, String, String> {
 
-        protected String doInBackground(final FormListController... args) {
-            File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports","");
+        protected String doInBackground(final FormListController... controllers) {
+            File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
 
             CSVExporter csvExporter = CSVExporter.getInstance();
-            File file = csvExporter.export(args[0].getEntitySelector().getRepo(), args[0].getEntitySelector().getFilter(), exportDir, args[0].getName(), "csv");
+            File file = csvExporter.export(controllers[0].getEntityList().getRepo(),
+                    controllers[0].getEntityList().getFilter(), exportDir,
+                    controllers[0].getName(), "csv");
 
             shareFile(file);
             return "";
         }
 
         private void shareFile(File file) {
-
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
             shareIntent.setType(URLConnection.guessContentTypeFromName(file.getName()));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()+ ".provider", file));
+            shareIntent.putExtra(Intent.EXTRA_STREAM,
+                    FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file));
             shareIntent.setType("text/csv");
 
             context.startActivity(Intent.createChooser(shareIntent, "Share File"));
-
         }
 
         @SuppressLint("NewApi")
         @Override
         protected void onPostExecute(final String success) {
             if (success.isEmpty()) {
-                Toast.makeText(context, "Export successful!", Toast.LENGTH_SHORT).show();
+                UserMessagesHelper.toast(context, "Export successful!", Toast.LENGTH_SHORT);
             } else {
-                Toast.makeText(context, "Export failed!", Toast.LENGTH_SHORT).show();
+                UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
             }
         }
     }

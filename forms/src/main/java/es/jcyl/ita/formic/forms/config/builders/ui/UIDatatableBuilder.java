@@ -32,6 +32,8 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
@@ -61,6 +63,22 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         setUpColumns(node);
         setUpNumVisibleRows(node);
         setUpRoute(node);
+
+        UIDatatable element = node.getElement();
+
+        List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
+        UIAction uiAction = element.getAction();
+        // TODO: FORMIC-229 Terminar refactorización de acciones
+        if (uiAction == null) { // default action
+            uiAction = new UIAction();
+            uiAction.setType("nav");
+            uiAction.setRoute(element.getRoute());
+            element.setAction(uiAction);
+        }
+        if (CollectionUtils.isNotEmpty(paramNodes)) {
+            UIParam[] params = getParams(paramNodes);
+            uiAction.setParams(params);
+        }
     }
 
     private void setUpRoute(ConfigNode<UIDatatable> node) {
@@ -78,7 +96,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         if (CollectionUtils.isEmpty(addActions)) {
             throw new ConfigurationException(DevConsole.error("Error trying to create default datatable for " +
                     "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
-                    "no 'add' action. use 'route' attribute on <datatable/> instead to set the id " +
+                    "no 'add' action. Use 'route' attribute on <datatable/> instead to set the id " +
                     "of the destination form."));
         } else {
             ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
@@ -87,15 +105,11 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
     }
 
     private void setUpNumVisibleRows(ConfigNode<UIDatatable> node) {
-        int numVisibleRows = 1; // Number of default visible rows
-        if (node.hasAttribute("numVisibleRows")) {
-            numVisibleRows = Integer.parseInt(node.getAttribute("numVisibleRows"));
+        if (!node.hasAttribute("numVisibleRows") && node.getParent().getElement() instanceof FormListController) {
+            // Fill container with rows
+            UIDatatable dataTable = node.getElement();
+            dataTable.setNumVisibleRows(-1);
         }
-        if (node.getParent().getElement() instanceof FormListController) {
-            numVisibleRows = -1; // Fill container with rows
-        }
-        UIDatatable dataTable = node.getElement();
-        dataTable.setNumVisibleRows(numVisibleRows);
     }
 
     private void setUpColumns(ConfigNode<UIDatatable> node) {

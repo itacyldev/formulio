@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class DeferredView extends Widget {
-    private  UIComponent component;
+    private UIComponent component;
 
     public DeferredView(Context context) {
         super(context);

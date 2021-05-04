@@ -29,12 +29,13 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 
 /**
  * Context storing object used during the rendering process to give the renderers access to commons objects
@@ -49,15 +50,16 @@ public class RenderingEnv {
      * context access
      */
     private CompositeContext globalContext;
-    private FormContext formContext;
+    private ComponentContext componentContext;
     private CompositeContext combinedContext;
-    private List<FormContext> currentFormContexts;
+    private List<ComponentContext> currentComponentContexts;
+    private SelectionManager selectionManager = new SelectionManager();
     /**
      * view rendering
      */
     private ViewDAG viewDAG;
     private Map<String, DeferredView> deferredViews;
-    private ViewUserActionInterceptor userActionInterceptor;
+    private UserEventInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private View viewRoot;
     private FormActivity formActivity;
@@ -68,8 +70,8 @@ public class RenderingEnv {
     private boolean inputDelayDisabled = false;
 
     public RenderingEnv(ActionController actionController) {
-        userActionInterceptor = new ViewUserActionInterceptor(actionController);
-        currentFormContexts = new ArrayList<>();
+        userActionInterceptor = new UserEventInterceptor(actionController);
+        currentComponentContexts = new ArrayList<>();
     }
 
     /**
@@ -82,12 +84,12 @@ public class RenderingEnv {
         }
         this.combinedContext = null;
         // remove last context from global context
-        if (!currentFormContexts.isEmpty()) {
-            for (FormContext formContext : currentFormContexts) {
-                this.globalContext.removeContext(formContext);
+        if (!currentComponentContexts.isEmpty()) {
+            for (ComponentContext componentContext : currentComponentContexts) {
+                this.globalContext.removeContext(componentContext);
             }
         }
-        currentFormContexts.clear();
+        currentComponentContexts.clear();
     }
 
     public CompositeContext getContext() {
@@ -102,8 +104,8 @@ public class RenderingEnv {
         this.userActionInterceptor.setDisabled(false);
     }
 
-    public FormContext getFormContext() {
-        return formContext;
+    public ComponentContext getComponentContext() {
+        return componentContext;
     }
 
     /**
@@ -111,22 +113,22 @@ public class RenderingEnv {
      * the formId to the global context. So relative access can be done inside the form elements,
      * but also absolute access inter-form can be achieve throught the global context references.
      *
-     * @param formContext
+     * @param componentContext
      */
-    public void setFormContext(FormContext formContext) {
-        if (formContext == null) {
+    public void setComponentContext(ComponentContext componentContext) {
+        if (componentContext == null) {
             throw new IllegalStateException("FormContext mustn't be null!.");
         }
-        this.formContext = formContext;
+        this.componentContext = componentContext;
         // add form to context with full id
-        this.globalContext.addContext(formContext);
+        this.globalContext.addContext(componentContext);
         // register
-        this.combinedContext = ContextUtils.combine(globalContext, formContext);
+        this.combinedContext = ContextUtils.combine(globalContext, componentContext);
         // register this FormContext
-        currentFormContexts.add(formContext);
+        currentComponentContexts.add(componentContext);
     }
 
-    public ViewUserActionInterceptor getUserActionInterceptor() {
+    public UserEventInterceptor getUserActionInterceptor() {
         return userActionInterceptor;
     }
 
@@ -196,6 +198,16 @@ public class RenderingEnv {
 
     public void setGlobalContext(CompositeContext globalContext) {
         this.globalContext = globalContext;
+    }
+
+    public void clearSelection() {
+        if (this.selectionManager != null) {
+            this.selectionManager.clear();
+        }
+    }
+
+    public SelectionManager getSelectionManager() {
+        return selectionManager;
     }
 }
 

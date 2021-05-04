@@ -15,19 +15,58 @@ package es.jcyl.ita.formic.forms.utils;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.actions.ActionController;
+import android.content.Context;
 
-import static org.mockito.Mockito.mock;
+import java.util.HashMap;
+import java.util.Map;
+
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class MockingUtils {
 
-
-    public static ActionController mockAC(){
-        ActionController mockAC = mock(ActionController.class);
-        return mockAC;
+    public static MainController mockMainController(Context androidContext) {
+        return mockMainController(androidContext, null);
     }
 
+    public static MainController mockMainController(Context androidContext, CompositeContext globalContext) {
+        MainController mc = mock(MainController.class);
+        when(mc.getFormController()).thenReturn(mock(FormEditController.class));
+        // set global context
+        when(mc.getGlobalContext()).thenReturn(globalContext);
+        // mock and set ActionController
+        ActionController mockAc = mock(ActionController.class);
+        when(mockAc.getMc()).thenReturn(mc);
+        when(mc.getActionController()).thenReturn(mockAc);
+        // mock router
+        when(mc.getRouter()).thenReturn(mock(Router.class));
+        // mock and set Rendering environment
+        RenderingEnv env = mock(RenderingEnv.class);
+        when(env.getViewContext()).thenReturn(androidContext);
+        when(mc.getRenderingEnv()).thenReturn(env);
+
+        // create script engine and set to Mc
+        Map<String, Object> props = new HashMap<>();
+        if (globalContext != null) {
+            props.put("ctx", globalContext);
+        }
+        props.put("renderEnv", env);
+        props.put("console", new DevConsole());
+        ScriptEngine scriptEngine = new ScriptEngine();
+        scriptEngine.initEngine(props);
+        when(mc.getScriptEngine()).thenReturn(scriptEngine);
+
+        return mc;
+    }
 }

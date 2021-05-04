@@ -26,6 +26,7 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.repo.filter.RepoFilterVisitor;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -52,7 +53,7 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
         Criteria criteria = (Criteria) visitor.visit(node, mandatoryFields);
 
 
-        Filter filter = FilterHelper.createInstance(parentComponent.getRepo());
+        Filter filter = FilterRepoUtils.createInstance(parentComponent.getRepo());
 
         filter.setExpression(criteria);
 

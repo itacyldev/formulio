@@ -85,7 +85,7 @@ public class ExpressionInterpreter {
             } else {
                 WhereCondition[] restConds = new WhereCondition[children.length - 2];
                 for (int i = 0; i < e.getChildren().length - 2; i++) {
-                    restConds[i] = expression(children[i]).interpret(dao, qBuilder, children[i]);
+                    restConds[i] = expression(children[i + 2]).interpret(dao, qBuilder, children[i + 2]);
                 }
                 return op.equals("and") ? qBuilder.and(firstCond, secondCond, restConds)
                         : qBuilder.or(firstCond, secondCond, restConds);

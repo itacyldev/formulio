@@ -15,9 +15,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.interceptors.ViewUserActionInterceptor;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
@@ -54,13 +54,13 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         Button today = ViewHelper.findViewAndSetId(widget, R.id.field_layout_today,
                 Button.class);
         styleHolder.applyStyle(today);
-        if (widget.getComponent().isReadOnly() || !widget.getComponent().hasTodayButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasTodayButton()) {
             today.setVisibility(View.GONE);
         }
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if (widget.getComponent().isReadOnly() || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
 
@@ -79,10 +79,9 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
                         String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
                         input.setText(strValue);
 
-                        ViewUserActionInterceptor interceptor = env.getUserActionInterceptor();
+                        UserEventInterceptor interceptor = env.getUserActionInterceptor();
                         if (interceptor != null) {
-                            interceptor.doAction(new UserAction(widget.getComponent(),
-                                    ActionType.INPUT_CHANGE.name()));
+                            interceptor.notify(Event.inputChange(widget.getComponent()));
                         }
                     }
                 };

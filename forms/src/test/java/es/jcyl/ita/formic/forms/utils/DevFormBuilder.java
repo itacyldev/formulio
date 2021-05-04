@@ -18,23 +18,23 @@ package es.jcyl.ita.formic.forms.utils;
 import android.content.Context;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.builders.FieldDataBuilder;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.context.impl.FormContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
+import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -46,7 +46,7 @@ public class DevFormBuilder {
     static FieldDataBuilder fBuilder = new FieldDataBuilder();
     static FormDataBuilder formBuilder = new FormDataBuilder();
 
-    public static FormEditController createFormEditController(Context viewContext, UIForm mainForm, UIForm... forms) {
+    public static FormEditController createFormEditController(UIForm mainForm, UIForm... forms) {
         UIView view = new UIView("v1");
         view.addChild(mainForm);
         if (forms != null) {
@@ -61,6 +61,7 @@ public class DevFormBuilder {
         return fc;
     }
 
+
     public static UIForm createOneFieldForm() {
         UIForm form = formBuilder.withNumFields(0).withRandomData().build();
         UIField field = fBuilder.withRandomData().withFieldType(UIField.TYPE.TEXT).build();
@@ -70,7 +71,7 @@ public class DevFormBuilder {
         return form;
     }
 
-    public static FormContext createFormContextForEntity(UIForm form, Entity entity) {
+    public static ComponentContext createFormContextForEntity(UIForm form, Entity entity) {
         return null;
     }
 
@@ -92,7 +93,7 @@ public class DevFormBuilder {
             return invoke(ctx, true);
         }
 
-        private void createGlobalContext(){
+        private void createGlobalContext() {
             globalContext = new UnPrefixedCompositeContext();
             globalContext.addContext(new DateTimeContext("date"));
         }
@@ -106,6 +107,7 @@ public class DevFormBuilder {
 
             // configure the context as the MainController would do
             env = mc.getRenderingEnv();
+            env.setViewContext(ctx);
             // disable user action handlers during the tests
             env.disableInterceptors();
             // create a one-field form
@@ -130,7 +132,8 @@ public class DevFormBuilder {
             this.field = form.getFields().get(0); // link the first field
             this.field.setParentForm(this.form); // make sure field and form are linked
 
-            FormController fc = DevFormBuilder.createFormEditController(ctx, form);
+            FormController fc = DevFormBuilder.createFormEditController(form);
+            fc.setMc(this.mc);
             withFormController(fc);
             return this;
         }

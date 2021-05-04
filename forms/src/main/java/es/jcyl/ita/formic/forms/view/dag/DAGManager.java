@@ -7,10 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
@@ -83,7 +84,8 @@ public class DAGManager {
             }
 
             viewDags.put(viewRoot.getId(), viewDAG);
-
+            DevConsole.debug("DAG from " + viewRoot.getId() + ":");
+            DevConsole.debug(viewDAG.print().toString());
         }
     }
 
@@ -125,7 +127,8 @@ public class DAGManager {
      *
      * @param componentId
      */
-    private void buildComponentDag(String componentId, Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags, Map<String, UIComponent> components) {
+    private void buildComponentDag(String componentId, Map<String, DirectedAcyclicGraph<DAGNode, DefaultEdge>> dags,
+                                   Map<String, UIComponent> components) {
         UIComponent component = components.get(componentId);
 
         // The DAG is created only if the component depends on other components
@@ -141,7 +144,7 @@ public class DAGManager {
             List<String> dependingVariables = ve.getDependingVariables();
 
             for (String depString : dependingVariables) {
-                if (depString.startsWith("entity")) {
+                if (depString.startsWith("entity")|| depString.startsWith("param")) {
                     // entity properties mapping are skipped
                     continue;
                 }
@@ -161,24 +164,27 @@ public class DAGManager {
                 }
                 DAGNode dependingNode = getComponentNode(dependingComponent);
                 DirectedAcyclicGraph dag;
-                if (dags.containsKey(componentId)) {
+
+                if (dags.containsKey(dependingComponentId)) {
+                    dag = dags.get(dependingComponentId);
+                } else if (dags.containsKey(componentId)) {
                     dag = dags.get(componentId);
-                    if (!dag.containsVertex(dependingNode)) {
-                        dag.addVertex(dependingNode);
-                    }
-                    if (!dag.containsEdge(dependingNode, componentNode)) {
-                        dag.addEdge(dependingNode, componentNode);
-                    }
-                    dags.put(dependingComponentId, dag);
                 } else {
                     dag = getDagComponent(dependingComponentId, dags);
-                    if (!dag.containsVertex(componentNode)) {
-                        dag.addVertex(componentNode);
-                    }
-                    if (!dag.containsEdge(dependingNode, componentNode)) {
-                        dag.addEdge(dependingNode, componentNode);
-                    }
+                }
+
+                if (!dag.containsVertex(dependingNode)) {
+                    dag.addVertex(dependingNode);
+                    dags.put(dependingComponentId, dag);
+                }
+
+                if (!dag.containsVertex(componentNode)) {
+                    dag.addVertex(componentNode);
                     dags.put(componentId, dag);
+                }
+
+                if (!dag.containsEdge(dependingNode, componentNode)) {
+                    dag.addEdge(dependingNode, componentNode);
                 }
                 buildComponentDag(dependingComponentId, dags, components);
             }
@@ -290,6 +296,33 @@ public class DAGManager {
         return viewDags;
     }
 
+    /**
+     * @param viewId
+     * @return
+     */
+    public StringBuffer printViewDAG(String viewId) {
+        StringBuffer sb = null;
+        ViewDAG viewDAG = viewDags.get(viewId);
+        if (viewDAG != null) {
+            sb = viewDAG.print();
+        }
+        return sb;
+    }
+
+    /**
+     *
+     * @param viewId
+     * @param nodeId
+     * @return
+     */
+    public StringBuffer printViewDAG(String viewId, String nodeId) {
+        StringBuffer sb = null;
+        ViewDAG viewDAG = viewDags.get(viewId);
+        if (viewDAG != null) {
+            sb = viewDAG.print(nodeId);
+        }
+        return sb;
+    }
 
     public void flush() {
         if (nodes != null) {

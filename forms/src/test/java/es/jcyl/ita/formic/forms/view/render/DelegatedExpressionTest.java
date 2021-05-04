@@ -63,7 +63,7 @@ public class DelegatedExpressionTest {
     EntityDataBuilder entityBuilder;
     EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-    ViewRenderHelper renderHelper = new ViewRenderHelper();
+    ViewRenderer renderHelper = new ViewRenderer();
 
     Context ctx;
 
@@ -92,7 +92,7 @@ public class DelegatedExpressionTest {
         String propertyName = entity.getMetadata().getProperties()[0].getName();
         String entityExpr = String.format("${entity.%s}", propertyName);
         // setup f1 so its value will be obtained from entity
-        form.getElement("f1").setValueExpression(exprFactory.create(entityExpr));
+        form.getChildById("f1").setValueExpression(exprFactory.create(entityExpr));
 
         // set entity in forms context
         form.getContext().setEntity(entity);
@@ -119,11 +119,7 @@ public class DelegatedExpressionTest {
         UIForm form = recipe.form;
         UIInputComponent f1 = recipe.field;
         f1.setId("f1");
-//        form.setId("form");
         FieldDataBuilder fBuilder = new FieldDataBuilder();
-//        UIField f2 = fBuilder.withRandomData().withId("f2").withValueBindingExpression("${" + form.getId() + ".view.f1}").build();
-//        UIField f3 = fBuilder.withRandomData().withId("f3").withValueBindingExpression("${" + form.getId() + ".view.f2}").build();
-//        UIField f4 = fBuilder.withRandomData().withId("f4").withValueBindingExpression("${" + form.getId() + ".view.f2}").build();
         UIField f2 = fBuilder.withRandomData().withId("f2").withValueBindingExpression("${view.f1}").build();
         UIField f3 = fBuilder.withRandomData().withId("f3").withValueBindingExpression("${view.f2}").build();
         UIField f4 = fBuilder.withRandomData().withId("f4").withValueBindingExpression("${view.f2}").build();
