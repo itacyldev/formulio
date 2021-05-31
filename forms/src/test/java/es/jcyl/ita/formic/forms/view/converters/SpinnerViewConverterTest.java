@@ -44,8 +44,8 @@ import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -92,7 +92,7 @@ public class SpinnerViewConverterTest {
         SpinnerValueConverter conv = new SpinnerValueConverter();
         for (int i = 0; i < values.length; i++) {
             InputWidget<UISelect, Spinner> widget =
-                    ViewHelper.findInputFieldViewById(env.getViewRoot(),
+                    ViewHelper.findInputWidget(env.getRootWidget(),
                     field);
             Spinner inputView = widget.getInputView();
 
@@ -125,7 +125,7 @@ public class SpinnerViewConverterTest {
         SpinnerValueConverter conv = new SpinnerValueConverter();
         for (int i = 0; i < values.length; i++) {
             InputWidget<UISelect, Spinner> widget =
-                    ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+                    ViewHelper.findInputWidget(env.getRootWidget(), field);
             Spinner inputView = widget.getInputView();
 
             // transform the value using the converter and check the result against the original value
@@ -170,7 +170,7 @@ public class SpinnerViewConverterTest {
             SpinnerValueConverter conv = new SpinnerValueConverter();
             for (int i = 0; i < values.length; i++) {
                 InputWidget<UISelect,Spinner> widget =
-                        ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+                        ViewHelper.findInputWidget(env.getRootWidget(), field);
                 Spinner inputView = widget.getInputView();
 
                 // transform the value using the converter and check the result against the original value
@@ -224,7 +224,7 @@ public class SpinnerViewConverterTest {
             env.disableInterceptors();
 
             InputWidget<UISelect, Spinner> widget =
-                    ViewHelper.findInputFieldViewById(env.getViewRoot(), select);
+                    ViewHelper.findInputWidget(env.getRootWidget(), select);
             Spinner inputView = widget.getInputView();
             SpinnerValueConverter conv = new SpinnerValueConverter();
             // transform the value using the converter and check the result against the original value

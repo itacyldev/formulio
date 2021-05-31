@@ -33,12 +33,16 @@ import java.util.Map;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorFactory;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -82,14 +86,19 @@ public class RegexValidatorTest {
         recipe.field.addValidator(regexValidator);
 
         // get the view context to access data
-        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        WidgetContext widgetContext = recipe.env.getWidgetContext();
+        ViewContext viewContext = widgetContext.getViewContext();
         viewContext.put(recipe.field.getId(), "a");
 
         // execute validation
-        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
+        Widget fieldWidget = ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
+        FormValidator validator = new FormValidator(recipe.mc);
+        boolean valid = validator.validate((InputWidget) fieldWidget);
+
+        Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
+        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     /**

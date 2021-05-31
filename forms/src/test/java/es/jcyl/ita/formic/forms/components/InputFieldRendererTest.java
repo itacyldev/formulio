@@ -17,18 +17,14 @@ package es.jcyl.ita.formic.forms.components;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-
-import java.util.Set;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
@@ -36,9 +32,8 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 import static org.mockito.Mockito.mock;
@@ -64,7 +59,7 @@ public class InputFieldRendererTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         UIField field = new UIField();
         field.setId(RandomUtils.randomString(4));
@@ -84,28 +79,4 @@ public class InputFieldRendererTest {
                 ViewHelper.getLabelValue(view, field));
     }
 
-    @Test
-    @Ignore("Erase button is no needed anymore")
-    public void clearFieldTest() {
-        ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
-        env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
-
-        UIField field = new UIField();
-        field.setId(RandomUtils.randomString(4));
-        InputWidget inputFieldView = (InputWidget) renderHelper.render(env, field);
-        Set<ImageView> viewSet = ViewHelper.findViewsContainingText(inputFieldView,
-                "Cancel", ImageView.class);
-        ImageView eraseImage = viewSet.isEmpty() ? null : viewSet.iterator().next();
-        inputFieldView.setValue("filling");
-
-        Assert.assertNotNull("Erase image missing.", eraseImage);
-        Assert.assertEquals("Incorrectly filled.",
-                "filling", inputFieldView.getValue());
-
-        eraseImage.performClick();
-        Assert.assertEquals("The field has not been cleaned.",
-                "", inputFieldView.getValue());
-    }
 }

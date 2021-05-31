@@ -15,20 +15,20 @@ package es.jcyl.ita.formic.forms.components.form;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
-import es.jcyl.ita.formic.forms.context.impl.EntityContext;
-import es.jcyl.ita.formic.forms.context.impl.ViewContext;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ContextHolder extends UIComponent {
+public interface WidgetContextHolder {
 
-    ComponentContext getContext();
+    String getHolderId();
 
-    ViewContext getViewContext();
+    Widget getWidget();
 
-    EntityContext getEntityContext();
+    WidgetContext getWidgetContext();
+
+    void setWidgetContext(WidgetContext context);
 
 }

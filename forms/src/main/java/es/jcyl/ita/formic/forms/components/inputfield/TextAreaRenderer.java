@@ -14,7 +14,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 import static android.view.View.inflate;
@@ -59,7 +59,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
        //setLabel(inputView, textInputLayout, component);
 
         // set event
-        addTextChangeListener(env, inputView, component);
+        addTextChangeListener(env, inputView, widget);
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         removeUnderline(env, component, textInputLayout);
@@ -70,7 +70,8 @@ public class TextAreaRenderer extends TextFieldRenderer {
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class)
+                || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -89,8 +90,8 @@ public class TextAreaRenderer extends TextFieldRenderer {
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
-                final View view = inflate(env.getViewContext(), R.layout.info_dialog, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
                 TextView titleView = view.findViewById(R.id.info);
                 titleView.setText(component.getHint());
                 builder.setCustomTitle(view)

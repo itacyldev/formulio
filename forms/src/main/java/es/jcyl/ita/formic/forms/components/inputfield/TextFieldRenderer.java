@@ -20,11 +20,11 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 import static android.view.View.inflate;
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
@@ -69,7 +69,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         //setLabel(inputView, textInputLayout, component);
 
         // set event
-        addTextChangeListener(env, inputView, component);
+        addTextChangeListener(env, inputView, widget);
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
 
@@ -78,7 +78,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -120,10 +120,10 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout, UIField component) {
         // set clear button
-        if (!(Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
+        if (!(Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)) {
             textInputLayout.setEndIconActivated(true);
             textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
-            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
+            TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
             textInputLayout.setEndIconTintList(ta.getColorStateList(0));
             textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,13 +137,13 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component) {
         if (component.getHint() != null) {
             textInputLayout.setEndIconDrawable(R.drawable.ic_tool_info);
-            TypedArray ta = env.getViewContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
+            TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
             textInputLayout.setEndIconTintList(ta.getColorStateList(0));
             textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(env.getViewContext(), R.style.DialogStyle);
-                    final View view = inflate(env.getViewContext(), R.layout.info_dialog, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                    final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
                     TextView titleView = view.findViewById(R.id.info);
                     titleView.setText(component.getHint());
                     builder.setCustomTitle(view)
@@ -159,21 +159,21 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     }
 
-    private void executeUserAction(RenderingEnv env, UIComponent component) {
+    private void executeUserAction(RenderingEnv env, Widget widget) {
         UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
-            interceptor.notify(Event.inputChange(component));
+            interceptor.notify(Event.inputChange(widget));
         }
     }
 
-    protected void addTextChangeListener(RenderingEnv env, EditText view, UIField component) {
+    protected void addTextChangeListener(RenderingEnv env, EditText view, Widget widget) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
         view.addTextChangedListener(new TextWatcher() {
             Runnable workRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    executeUserAction(env, component);
+                    executeUserAction(env, widget);
                 }
             };
 
@@ -192,7 +192,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
             public void afterTextChanged(Editable editable) {
                 if (!env.isInterceptorDisabled()) {
                     if (env.isInputDelayDisabled()) {
-                        executeUserAction(env, component);
+                        executeUserAction(env, widget);
                     } else {
                         handler.postDelayed(workRunnable, env.getInputTypingDelay());
                     }
@@ -202,7 +202,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     }
 
     protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout) {
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)) {
             textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
         }
     }

@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.meta.types.Geometry;
@@ -73,7 +73,7 @@ public class TextFieldViewConverterTest {
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
         RenderingEnv env = recipe.env;
-        View view = env.getViewRoot();
+        View view = env.getRootWidget();
 
         // Test all different kinds of types
         Class[] clazzez = new Class[]{ByteArray.class, Date.class, String.class, Long.class, Integer.class,
@@ -84,7 +84,7 @@ public class TextFieldViewConverterTest {
         for (Class clazz : clazzez) {
             Object expected = RandomUtils.randomObject(clazz);
             // retrieve the android view element and set value using the converter
-            InputWidget widget = ViewHelper.findInputFieldViewById(view, recipe.field);
+            InputWidget widget = ViewHelper.findInputWidget(view, recipe.field);
             TextView inputView = (TextView) widget.getInputView();
             conv.setViewValue(inputView, expected);
 
@@ -104,7 +104,7 @@ public class TextFieldViewConverterTest {
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm()
                 .invoke(ctx, true).render();
         RenderingEnv env = recipe.env;
-        View view = env.getViewRoot();
+        View view = env.getRootWidget();
 
         // Test all different kinds of types
         Class[] clazzez = new Class[]{ByteArray.class, Date.class, String.class, Long.class, Integer.class,
@@ -115,14 +115,14 @@ public class TextFieldViewConverterTest {
         for (Class clazz : clazzez) {
 //            Object expected = RandomUtils.randomObject(clazz);
             // retrieve the android view element and set value using the converter
-            InputWidget widget = ViewHelper.findInputFieldViewById(view, recipe.field);
+            InputWidget widget = ViewHelper.findInputWidget(view, recipe.field);
             TextView inputView = (TextView) widget.getInputView();
             conv.setViewValue(inputView, null);
 
             // get the view and check de value is set
             Object actual = conv.getValueFromView(inputView);
             actual = ConvertUtils.convert(actual, clazz);
-            Assert.assertNull("Assert not fulfill for class: "+clazz.getName(), actual);
+            Assert.assertNull("Assert not fulfill for class: " + clazz.getName(), actual);
         }
 
     }

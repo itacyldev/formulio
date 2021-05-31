@@ -54,7 +54,7 @@ public class ChangeEntityActionHandlerTest {
 
         // prepare user Action
         UserAction userAction = new UserAction("testAction", mock(UIComponent.class));
-        userAction.setForceRefresh(true);
+        userAction.setRefresh("all");
         // act
         actionController.doUserAction(userAction);
         // assert

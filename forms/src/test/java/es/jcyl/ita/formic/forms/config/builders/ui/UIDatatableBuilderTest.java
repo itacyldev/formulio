@@ -102,7 +102,7 @@ public class UIDatatableBuilderTest {
     public void testDefaultColumns() throws Exception {
         String xml = XmlConfigUtils.createMainList(XML_TEST_DEFAULT_COLS);
         // register repository mock with a random meta
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         RepositoryUtils.registerMock("defColsRepo", meta);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);

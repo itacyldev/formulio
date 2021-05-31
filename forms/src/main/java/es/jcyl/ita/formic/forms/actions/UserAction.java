@@ -17,13 +17,13 @@ package es.jcyl.ita.formic.forms.actions;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -33,11 +33,12 @@ public class UserAction {
     private String type;
     private String name;
     private String route;
-    private boolean forceRefresh = false;
+    private String refresh;
     private boolean registerInHistory = true;
     private String message;
-    private Map<String, Serializable> params;
+    private Map<String, Object> params;
     private UIComponent component;
+    private Widget widget;
 
     private FormController origin;
 
@@ -55,6 +56,12 @@ public class UserAction {
 
     public UserAction(UIAction action, UIComponent component) {
         this(action.getType(), action.getRoute(), component);
+        this.setRegisterInHistory(action.isRegisterInHistory());
+        this.setRefresh(action.getRefresh());
+    }
+
+    public void setRefresh(String refresh) {
+        this.refresh = refresh;
     }
 
     public UserAction(String actionType, String route, UIComponent component) {
@@ -93,12 +100,8 @@ public class UserAction {
         this.route = route;
     }
 
-    public boolean isForceRefresh() {
-        return forceRefresh;
-    }
-
-    public void setForceRefresh(boolean forceRefresh) {
-        this.forceRefresh = forceRefresh;
+    public String getRefresh() {
+        return refresh;
     }
 
     public boolean isRegisterInHistory() {
@@ -109,15 +112,15 @@ public class UserAction {
         this.registerInHistory = registerInHistory;
     }
 
-    public Map<String, Serializable> getParams() {
+    public Map<String, Object> getParams() {
         return params;
     }
 
-    public void setParams(Map<String, Serializable> params) {
+    public void setParams(Map<String, Object> params) {
         this.params = params;
     }
 
-    public void addParam(String param, Serializable value) {
+    public void addParam(String param, Object value) {
         if (this.params == null) {
             this.params = new HashMap<>();
         }
@@ -145,13 +148,13 @@ public class UserAction {
     }
 
     /**
-     * Indicates if current action is going to provoke a change in the view due to a forceRefresh or
+     * Indicates if current action is going to provoke a change in the view due to a refresh or
      * because it makes the action controller to perform a navigation.
      *
      * @return
      */
     public boolean isViewChangeAction() {
-        return this.forceRefresh || StringUtils.isNotBlank(this.route);
+        return StringUtils.isNotBlank(this.refresh) || StringUtils.isNotBlank(this.route);
     }
 
     /*********************************/
@@ -177,6 +180,15 @@ public class UserAction {
         return action;
     }
 
+    public Widget getWidget() {
+        return widget;
+    }
+
+    public void setWidget(Widget widget) {
+        this.widget = widget;
+    }
+
+
     @Override
     public String toString() {
         return "UserAction{" +
@@ -185,5 +197,13 @@ public class UserAction {
                 ", component='" + component + '\'' +
                 ", params=" + params +
                 '}';
+    }
+
+    /**
+     * Indicates if current action has set the value of attribute refresh
+     * @return
+     */
+    public boolean isRefreshSet() {
+        return StringUtils.isNotBlank(this.refresh);
     }
 }

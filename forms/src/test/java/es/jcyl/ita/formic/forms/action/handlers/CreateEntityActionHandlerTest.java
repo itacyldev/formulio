@@ -60,7 +60,7 @@ public class CreateEntityActionHandlerTest {
 
     @Before
     public void setUp() {
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         if (ctx != null) {
             ctx = InstrumentationRegistry.getInstrumentation().getContext();
@@ -77,7 +77,7 @@ public class CreateEntityActionHandlerTest {
 
         // prepare user Action
         UserAction userAction = new UserAction(ActionType.CREATE.name(), null, mc.getFormController());
-        Map<String, Serializable> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         String entityType = "testRandomEntityType";
         params.put("repo", entityType);
         userAction.setParams(params);
@@ -105,7 +105,7 @@ public class CreateEntityActionHandlerTest {
             // check actionEntity data
             Assert.assertNotNull(actualEntity);
             params.remove("repo");
-            for (Map.Entry<String, Serializable> param : params.entrySet()) {
+            for (Map.Entry<String, Object> param : params.entrySet()) {
                 // check parameters passed are in the entity, except for Id values that
                 // should be set by the repo
                 if (!actualEntity.getMetadata().isIdProperty(param.getKey())) {
@@ -119,7 +119,7 @@ public class CreateEntityActionHandlerTest {
 
     }
 
-    private void fillWithRandomValues(EntityMeta meta, Map<String, Serializable> params) {
+    private void fillWithRandomValues(EntityMeta meta, Map<String, Object> params) {
         for (PropertyType type : meta.getProperties()) {
             Class clz = type.getType();
             Object value = RandomUtils.randomObject(clz);

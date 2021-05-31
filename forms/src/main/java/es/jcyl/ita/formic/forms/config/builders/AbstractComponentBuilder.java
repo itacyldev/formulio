@@ -132,24 +132,6 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
-    protected UIParam[] getParams(List<ConfigNode> paramNodes) {
-        UIParam[] params = new UIParam[paramNodes.size()];
-        for (int i = 0; i < paramNodes.size(); i++) {
-            UIParam uiParam = new UIParam();
-            ConfigNode paramNode = paramNodes.get(i);
-            if (paramNode.hasAttribute("name")) {
-                uiParam.setName(paramNode.getAttribute("name"));
-            }
-            if (paramNode.hasAttribute("value")) {
-                ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-                uiParam.setValue(exprFactory.create(paramNodes.get(i).getAttribute("value")));
-            }
-            params[i] = uiParam;
-        }
-        return params;
-    }
-
-
     protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName) {
         return null;
     }

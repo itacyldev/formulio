@@ -27,7 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 
@@ -39,7 +40,7 @@ public abstract class InputTextRenderer<C extends UIInputComponent, I extends Te
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<C, I> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
+        String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
         if (message != null) {
             widget.getInputView().setError(message);
         }

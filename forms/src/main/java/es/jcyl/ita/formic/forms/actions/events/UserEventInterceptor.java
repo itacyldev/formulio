@@ -55,18 +55,19 @@ public class UserEventInterceptor {
     }
 
     private UserAction createUserAction(Event event) {
-        UIComponent component = event.getSource();
+        UIComponent component = event.getSource().getComponent();
         UIAction uiAction = component.getAction();
         if (uiAction == null) {
             // no defined action for current event
             return null;
         }
-        Context context = (event.getContext() != null) ? event.getContext() : mc.getGlobalContext();
+        Context context = (event.getContext() != null) ? event.getContext() : event.getSource().getWidgetContext();
         UserAction action = new UserAction(component.getAction(), component);
+        action.setWidget(event.getSource());
         if (uiAction.hasParams()) {
             for (UIParam param : uiAction.getParams()) {
                 Object value = JexlFormUtils.eval(context, param.getValue());
-                action.addParam(param.getName(), (Serializable) value);
+                action.addParam(param.getName(),value);
             }
         }
         return action;

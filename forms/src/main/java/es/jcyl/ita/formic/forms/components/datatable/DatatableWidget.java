@@ -54,7 +54,7 @@ import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.forms.view.converters.TextViewConverter;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -472,7 +472,7 @@ public class DatatableWidget extends Widget<UIDatatable>
 
     private CompositeContext setupThisContext(RenderingEnv env) {
         thisViewCtx.setPrefix("this");
-        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        CompositeContext ctx = ContextUtils.combine(env.getWidgetContext(), thisViewCtx);
         return ctx;
     }
 

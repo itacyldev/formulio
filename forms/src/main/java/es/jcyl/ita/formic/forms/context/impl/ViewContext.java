@@ -1,7 +1,5 @@
 package es.jcyl.ita.formic.forms.context.impl;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -18,10 +16,9 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.ContextHolder;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
@@ -48,24 +45,26 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
  */
 
 public class ViewContext extends AbstractBaseContext {
-    private final View view; // Form's Android view root
-    private final ContextHolder root;
-    private Map<String, View> inputViews = new HashMap<String, View>();
+    private final Widget widget; // Form's Android view root
+    private Map<String, StatefulWidget> statefulViews = new HashMap<String, StatefulWidget>();
 
-    public ViewContext(ContextHolder root, View view) {
+    public ViewContext(Widget widget) {
         this.setPrefix("view");
-        this.root = root;
-        this.view = view;
+        this.widget = widget;
     }
 
     /**
-     * Locates a form element by its id
+     * Locates a form element widget by its component
      *
-     * @param fieldId
+     * @param field
      * @return
      */
-    public InputWidget findInputFieldViewById(String fieldId) {
-        return ViewHelper.findInputFieldViewById(this.view, this.root.getId(), fieldId);
+    public Widget findWidget(UIComponent field) {
+        return (Widget) this.statefulViews.get(field.getId());
+    }
+
+    public Widget findWidget(String componentId) {
+        return (Widget) this.statefulViews.get(componentId);
     }
 
     /**
@@ -77,31 +76,22 @@ public class ViewContext extends AbstractBaseContext {
      */
     @Override
     public String getString(String elementId) {
-        InputWidget fieldView = findInputFieldViewById(elementId);
-        if (fieldView == null) {
-            warn(String.format("No view element id [%s] " +
-                    "doesn't exists in the form [%s].", elementId, root.getId()));
-            return null;
-        }
-        Object value = fieldView.getValue();
-        String strValue = (String) ConvertUtils.convert(value, String.class);
-        return strValue;
+        Object oValue = getValue(elementId);
+        return (String) ConvertUtils.convert(oValue, String.class);
     }
 
     @Override
     public Object getValue(String elementId) {
-        InputWidget fieldView = findInputFieldViewById(elementId);
-        if (fieldView == null) {
-            warn(String.format("No view element id [%s] " +
-                    "doesn't exists in the form [%s].", elementId, root.getId()));
+        Widget widget = findWidget(elementId);
+        if (widget == null) {
+            warn(String.format("No view element id [%s] .", elementId));
             return null;
         }
-        UIComponent component = root.getChildById(elementId);
-        if (component == null) {
-            warn(String.format("The component id provided [%s] " +
-                    "doesn't exists in the form [%s].", elementId, root.getId()));
+        if (!(widget instanceof InputWidget)) {
             return null;
         }
+        InputWidget fieldView = (InputWidget) widget;
+        UIComponent component = fieldView.getComponent();
         Object value = fieldView.getValue();
         if (component.getValueExpression() == null) {
             return value;
@@ -124,25 +114,27 @@ public class ViewContext extends AbstractBaseContext {
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        return ViewHelper.findComponentView(this.view, this.root.getId(), o.toString()) != null;
+        return findWidget((String) o) != null;
     }
 
     @Override
     public boolean containsValue(@Nullable Object o) {
-        return root.getChildById(o.toString()) != null;
+        return findWidget((String) o) != null;
     }
 
     @Nullable
     @Override
     public Object get(@Nullable Object o) {
-        return getValue(o.toString());
+        return getValue((String) o);
     }
 
     @Nullable
     @Override
     public Object put(String elementId, Object value) {
-        InputWidget viewField = findInputFieldViewById(elementId);
-        viewField.setValue(value);
+        InputWidget viewField = (InputWidget) findWidget(elementId);
+        if (viewField != null) {
+            viewField.setValue(value);
+        }
         return null; // don't return previous value
     }
 
@@ -162,8 +154,8 @@ public class ViewContext extends AbstractBaseContext {
         throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
-    public List<InputWidget> getInputViews() {
-        return new ArrayList(inputViews.values());
+    public List<StatefulWidget> getStatefulViews() {
+        return new ArrayList(statefulViews.values());
     }
 
     @NonNull
@@ -171,9 +163,9 @@ public class ViewContext extends AbstractBaseContext {
     public Set<String> keySet() {
         // get input ids
         Set<String> keys = new HashSet<>();
-        inputViews.keySet();
-        if (inputViews != null) {
-            keys.addAll(inputViews.keySet());
+        statefulViews.keySet();
+        if (statefulViews != null) {
+            keys.addAll(statefulViews.keySet());
         }
         return keys;
     }
@@ -206,13 +198,11 @@ public class ViewContext extends AbstractBaseContext {
     /**
      * Registers componentes in the view contexto to store/retrieve their state in case of re-rendering (postback)
      *
-     * @param component
+     * @param widget
      * @param widget
      */
-    public void registerComponentView(UIComponent component, View widget) {
-        if (widget instanceof StatefulWidget) {
-            this.inputViews.put(component.getId(), widget);
-        }
+    public void registerWidget(StatefulWidget widget) {
+        this.statefulViews.put(widget.getComponent().getId(), widget);
     }
 
 }

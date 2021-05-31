@@ -66,7 +66,7 @@ public class DataTableBuilderTest {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
         // create random entity meta and use databuilder to populate entity data
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
 
@@ -94,7 +94,7 @@ public class DataTableBuilderTest {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
 
         // create random entity meta and use databuilder to populate entity data
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
 

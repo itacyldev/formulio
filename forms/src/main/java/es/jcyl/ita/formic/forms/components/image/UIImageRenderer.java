@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EntityMapping;
 
@@ -76,14 +76,15 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
+        Boolean isReadOnly = (Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class);
+        if (isReadOnly || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         } else {
             resetButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View arg0) {
                     Drawable noImage = ContextCompat
-                            .getDrawable(env.getViewContext(), R.drawable.
+                            .getDrawable(env.getAndroidContext(), R.drawable.
                                     no_image);
                     inputView.setImageDrawable(noImage);
 
@@ -121,7 +122,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
         String entityProp = null;
 
         List<EntityMapping> mappings = form.getRepo().getMappings();
-        for (EntityMapping mapping: mappings) {
+        for (EntityMapping mapping : mappings) {
             if (mapping.getProperty().equals(component.getId())) {
                 entityProp = mapping.getFk();
             }

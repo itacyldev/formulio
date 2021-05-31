@@ -19,13 +19,11 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -33,16 +31,13 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.validation.RequiredValidator;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
@@ -78,7 +73,7 @@ public class UISelectRendererTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         UISelect select = new UISelect();
         select.setParentForm(new UIForm());
@@ -109,7 +104,7 @@ public class UISelectRendererTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         UISelect select = new UISelect();
         select.setId(RandomUtils.randomString(4));
@@ -120,29 +115,4 @@ public class UISelectRendererTest {
         Assert.assertTrue(view.getVisibility() == View.GONE);
     }
 
-    @Test
-    @Ignore("Labels aren't individual components anymore")
-    public void fieldLabelRendererTest() {
-        ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
-        env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
-
-        UIField field = new UIField();
-        field.setId(RandomUtils.randomString(4));
-        field.setLabel("some text");
-        View view = renderHelper.render(env, field);
-
-        Assert.assertEquals("The label is not correct.",
-                "some text",
-                (String) ((TextView) ViewHelper.findLabelView(view, field)).getText());
-
-        RequiredValidator mockRequired = mock(RequiredValidator.class);
-        field.addValidator(mockRequired);
-        view = renderHelper.render(env, field);
-
-        Assert.assertEquals("The label must be marked with asterisk.",
-                "some text *",
-                (String) ((TextView) ViewHelper.findLabelView(view, field)).getText());
-    }
 }

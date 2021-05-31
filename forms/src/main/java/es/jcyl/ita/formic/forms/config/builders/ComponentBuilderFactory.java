@@ -19,8 +19,10 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
@@ -34,10 +36,10 @@ import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
-import es.jcyl.ita.formic.forms.config.builders.controllers.UIActionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.UIActionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.EntityMappingBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.MemoRepoConfigBuilder;
@@ -178,8 +180,9 @@ public class ComponentBuilderFactory {
         registerAttResolver("pathResolver", new RelativePathAttResolver());
         registerAttResolver("validator", new ValidatorAttResolver());
         registerAttResolver("color", new ColorAttributeResolver());
-
-        registerAttResolver("action", new ActionAttributeResolver());
+        ActionAttributeResolver attResolver = new ActionAttributeResolver();
+        registerAttResolver("action", attResolver);
+        registerAttResolver("binding-route", attResolver);
     }
 
     /**
@@ -189,14 +192,25 @@ public class ComponentBuilderFactory {
      */
     public List<ReadingProcessListener> getListeners() {
         List<ReadingProcessListener> listeners = new ArrayList<>();
-        for (ComponentBuilder builder: _builders.values()){
-            if(builder instanceof ReadingProcessListener){
-                listeners.add((ReadingProcessListener)builder);
+        // get unique instances
+        Set<ComponentBuilder> registeredBuilders = new HashSet<>();
+        for (ComponentBuilder builder : _builders.values()) {
+            if (builder instanceof ReadingProcessListener) {
+                // do not duplicated instance registering
+                if(!registeredBuilders.contains(builder)){
+                    listeners.add((ReadingProcessListener) builder);
+                    registeredBuilders.add(builder);
+                }
             }
         }
-        for (AttributeResolver resolver: _resolvers.values()){
-            if(resolver instanceof ReadingProcessListener){
-                listeners.add((ReadingProcessListener)resolver);
+        Set<AttributeResolver> registeredResolvers = new HashSet<>();
+        for (AttributeResolver resolver : _resolvers.values()) {
+            if (resolver instanceof ReadingProcessListener) {
+                // do not duplicated instance registering
+                if(!registeredResolvers.contains(resolver)){
+                    listeners.add((ReadingProcessListener) resolver);
+                    registeredResolvers.add(resolver);
+                }
             }
         }
         return listeners;

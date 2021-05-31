@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.render;
+package es.jcyl.ita.formic.forms.view.render.renderer;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -20,22 +20,25 @@ package es.jcyl.ita.formic.forms.view.render;
  */
 
 import android.content.Context;
-import android.view.View;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.context.ContextUtils;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * Context storing object used during the rendering process to give the renderers access to commons objects
@@ -50,9 +53,14 @@ public class RenderingEnv {
      * context access
      */
     private CompositeContext globalContext;
-    private ComponentContext componentContext;
-    private CompositeContext combinedContext;
-    private List<ComponentContext> currentComponentContexts;
+    private WidgetContext widgetContext;
+    /**
+     * Wrapper for globalContext, used in case contxt is accesed before first WidgetContextHolder
+     * has been renderer. Testing purposes mainly.
+     */
+    private static WidgetContext EMPTY_WIDGET_CTX;
+    private ViewWidget rootWidget;
+
     private SelectionManager selectionManager = new SelectionManager();
     /**
      * view rendering
@@ -61,17 +69,17 @@ public class RenderingEnv {
     private Map<String, DeferredView> deferredViews;
     private UserEventInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
-    private View viewRoot;
     private FormActivity formActivity;
     /**
      * User text typing delay controls
      */
     private int inputTypingDelay = 450;
     private boolean inputDelayDisabled = false;
+    // current entity in context
+    private Entity entity;
 
     public RenderingEnv(ActionController actionController) {
         userActionInterceptor = new UserEventInterceptor(actionController);
-        currentComponentContexts = new ArrayList<>();
     }
 
     /**
@@ -80,20 +88,19 @@ public class RenderingEnv {
     public void initialize() {
         if (this.globalContext == null) {
             throw new IllegalStateException(DevConsole.error("Global Context is not set, call " +
-                    "setGlobaContext first!!."));
+                    "setGlobalContext first!!."));
         }
-        this.combinedContext = null;
-        // remove last context from global context
-        if (!currentComponentContexts.isEmpty()) {
-            for (ComponentContext componentContext : currentComponentContexts) {
-                this.globalContext.removeContext(componentContext);
-            }
-        }
-        currentComponentContexts.clear();
+        this.clearSelection();
+        this.clearMessages();
+        this.initEmptyWidgetCtx(globalContext);
     }
 
-    public CompositeContext getContext() {
-        return (combinedContext == null) ? globalContext : combinedContext;
+    public void clearMessages() {
+        WidgetContextHelper.clearMessages(this.globalContext);
+    }
+
+    CompositeContext getContext() {
+        return globalContext;
     }
 
     public void disableInterceptors() {
@@ -104,8 +111,8 @@ public class RenderingEnv {
         this.userActionInterceptor.setDisabled(false);
     }
 
-    public ComponentContext getComponentContext() {
-        return componentContext;
+    public WidgetContext getWidgetContext() {
+        return (widgetContext == null) ? EMPTY_WIDGET_CTX : widgetContext;
     }
 
     /**
@@ -113,19 +120,13 @@ public class RenderingEnv {
      * the formId to the global context. So relative access can be done inside the form elements,
      * but also absolute access inter-form can be achieve throught the global context references.
      *
-     * @param componentContext
+     * @param widgetContext
      */
-    public void setComponentContext(ComponentContext componentContext) {
-        if (componentContext == null) {
-            throw new IllegalStateException("FormContext mustn't be null!.");
+    public void setWidgetContext(WidgetContext widgetContext) {
+        if (widgetContext == null) {
+            throw new IllegalStateException("WidgetContext cannot be null!.");
         }
-        this.componentContext = componentContext;
-        // add form to context with full id
-        this.globalContext.addContext(componentContext);
-        // register
-        this.combinedContext = ContextUtils.combine(globalContext, componentContext);
-        // register this FormContext
-        currentComponentContexts.add(componentContext);
+        this.widgetContext = widgetContext;
     }
 
     public UserEventInterceptor getUserActionInterceptor() {
@@ -152,21 +153,14 @@ public class RenderingEnv {
         return viewDAG;
     }
 
-    public void setViewContext(Context viewContext) {
+    public void setAndroidContext(Context viewContext) {
         this.viewContext = viewContext;
     }
 
-    public Context getViewContext() {
+    public Context getAndroidContext() {
         return viewContext;
     }
 
-    public void setViewRoot(View view) {
-        this.viewRoot = view;
-    }
-
-    public View getViewRoot() {
-        return viewRoot;
-    }
 
     public boolean isInterceptorDisabled() {
         return this.userActionInterceptor.isDisabled();
@@ -198,6 +192,8 @@ public class RenderingEnv {
 
     public void setGlobalContext(CompositeContext globalContext) {
         this.globalContext = globalContext;
+        this.globalContext.addContext(new BasicContext("messages"));
+        initEmptyWidgetCtx(globalContext);
     }
 
     public void clearSelection() {
@@ -209,5 +205,55 @@ public class RenderingEnv {
     public SelectionManager getSelectionManager() {
         return selectionManager;
     }
+
+    void setEntity(Entity entity) {
+        // add form to context with full id
+        this.globalContext.addContext(new EntityContext(entity));
+        // register
+        this.entity = entity;
+        if(this.getWidgetContext() == EMPTY_WIDGET_CTX){
+            EMPTY_WIDGET_CTX.setEntity(entity);
+        }
+    }
+
+    Entity getEntity() {
+        return entity;
+    }
+
+    public ViewWidget getRootWidget() {
+        return rootWidget;
+    }
+
+    public void setRootWidget(ViewWidget rootWidget) {
+        this.rootWidget = rootWidget;
+    }
+
+
+    private void initEmptyWidgetCtx(CompositeContext gContxt) {
+
+        EMPTY_WIDGET_CTX = new WidgetContext(new WidgetContextHolder() {
+            @Override
+            public String getHolderId() {
+                return null;
+            }
+
+            @Override
+            public Widget getWidget() {
+                return null;
+            }
+
+            @Override
+            public WidgetContext getWidgetContext() {
+                return null;
+            }
+
+            @Override
+            public void setWidgetContext(WidgetContext context) {
+
+            }
+        });
+        EMPTY_WIDGET_CTX.addContext(gContxt);
+    }
+
 }
 

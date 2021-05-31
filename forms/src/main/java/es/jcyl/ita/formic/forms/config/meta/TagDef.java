@@ -43,7 +43,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_REFRESH;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REFRESH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_DELETE_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_TODAY_BUTTON;
@@ -105,6 +105,7 @@ public class TagDef {
     static {
         initialize();
     }
+    private static String ACTION_TAGS[] = {"action","add","update","save","cancel","delete","nav"};
 
     private static void initialize() {
         Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
@@ -163,7 +164,7 @@ public class TagDef {
         register("link", define(baseInput, new Attribute[]{ROUTE, ACTION}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
-                REGISTER_IN_HISTORY, FORCE_REFRESH, MESSAGE});
+                REGISTER_IN_HISTORY, REFRESH, MESSAGE});
         register("action", actionAttributes);
         register("add", actionAttributes);
         register("update", actionAttributes);
@@ -227,6 +228,15 @@ public class TagDef {
             return false;
         }
         return getDefinition(tagName).containsKey(attName);
+    }
+
+    public static boolean isActionTag(String tagName){
+        for (String tag: ACTION_TAGS){
+            if(tagName.toLowerCase().equals(tag)){
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -142,6 +142,8 @@ public class FormDataBuilder extends AbstractDataBuilder<UIForm> {
             }
 
             field.setValueExpression(ve);
+            field.setParent(this.baseModel);
+            field.setParentForm(this.baseModel);
             fields.add(field);
         }
 

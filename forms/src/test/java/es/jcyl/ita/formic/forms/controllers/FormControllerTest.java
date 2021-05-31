@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
@@ -74,7 +76,7 @@ public class FormControllerTest {
     @Test
     public void testLoadEntity() {
         // create random meta for entity and create entity
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
         // create repository mock
@@ -100,7 +102,7 @@ public class FormControllerTest {
     @Test
     public void testSaveEntity() {
         // create random entity meta and use databuilder to populate entity data
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
 
@@ -122,7 +124,9 @@ public class FormControllerTest {
 
         // save expected values to check later
         Map<String, Object> expectedValues = new HashMap<>();
-        ViewContext viewContext = (ViewContext) form.getContext().getContext("view");
+        WidgetContext widgetContext = recipe.env.getWidgetContext();
+        ViewContext viewContext = widgetContext.getViewContext();
+
         // modify view using viewContext to mimic user interaction
         Map<String, Object> properties = entity.getProperties();
         Set<Map.Entry<String, Object>> entries = properties.entrySet();

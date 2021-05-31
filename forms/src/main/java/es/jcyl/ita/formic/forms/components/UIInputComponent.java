@@ -75,10 +75,8 @@ public class UIInputComponent extends AbstractUIComponent {
 
     @Override
     public String toString() {
-        return String.format("[%s]: %s/%s", this.getClass(), this.id, this.getLabel());
+        return String.format("[%s]: %s/%s", this.getClass().getSimpleName(), this.id, this.getLabel());
     }
-
-
 
     public boolean isNestedProperty() {
         List<String> dependingVariables = this.getValueExpression().getDependingVariables();

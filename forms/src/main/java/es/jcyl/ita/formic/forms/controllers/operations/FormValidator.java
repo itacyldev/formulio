@@ -19,15 +19,16 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.form.FormWidget;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.validation.Validator;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -43,57 +44,65 @@ public class FormValidator {
     /**
      * Runs validation on the given element
      *
-     * @param field
+     * @param inputWidget
      * @return
      */
-    public boolean validate(UIForm form, UIInputComponent field) {
-        ComponentContext context = form.getContext();
-        ViewContext viewContext = context.getViewContext();
+    public boolean validate(InputWidget inputWidget) {
+        WidgetContext widgetContext = inputWidget.getWidgetContext();
+        ViewContext viewContext = widgetContext.getViewContext();
+        UIInputComponent field = (UIInputComponent) inputWidget.getComponent();
 
         // get user input using view context and check all validators.
         String value = viewContext.getString(field.getId());
         boolean valid = true;
+        WidgetContextHelper.clearMessage(widgetContext, field.getId());
         for (Validator validator : field.getValidators()) {
             try {
-                if (isVisible(context, field)) {
-                    validator.validate(context, field, value);
+                if (inputWidget.isVisible()) {
+                    validator.validate(widgetContext, field, value);
                 }
             } catch (ValidatorException e) {
                 // get the error and put it in form context
-                FormContextHelper.setMessage(context, field.getId(), e.getMessage());
+                WidgetContextHelper.setMessage(widgetContext, field.getId(), e.getMessage());
                 valid = false;
             }
         }
         // call validation function
+        UIForm form = field.getParentForm();
         if (form.getOnValidate() != null) {
-            ScriptEngine srcEngine = mc.getScriptEngine();
-            FormController fc = form.getRoot().getFormController();
+            ScriptEngine scriptEngine = mc.getScriptEngine();
+            // setup validation context
+            scriptEngine.putProperty("view", viewContext);
+            scriptEngine.putProperty("entity", widgetContext.getEntity());
 
             // TODO: we have to pass a combination of globalContext + formContext
-            Map result = (Map) srcEngine.callFunction(fc.getId(), form.getOnValidate());
+            Map result = (Map) scriptEngine.callFunction(form.getOnValidate());
             if (result.containsKey("error")) {
-                FormContextHelper.setMessage(context, form.getId(), (String) result.get("message"));
+                WidgetContextHelper.setMessage(widgetContext, field.getId(), (String) result.get("message"));
                 valid = false;
             }
         }
         return valid;
     }
 
-    public boolean validate(UIForm form) {
+    /**
+     * Runs validation on all the elements of the given form.
+     *
+     * @param formWidget
+     * @return
+     */
+    public boolean validate(FormWidget formWidget) {
         boolean valid = true;
-        form.getContext().clearMessages();
+        WidgetContextHelper.clearMessages(formWidget.getWidgetContext());
+        UIForm form = formWidget.getComponent();
         for (UIInputComponent field : form.getFields()) {
             // validate
-            valid &= validate(form, field);
+            InputWidget inputWidget = ViewHelper.findInputWidget(formWidget, field);
+            if (inputWidget != null) { // just visible widgets/components
+                valid &= validate(inputWidget);
+            }
         }
         return valid;
     }
 
-
-    public boolean isVisible(ComponentContext context, UIInputComponent field) {
-        ViewContext viewContext = context.getViewContext();
-        // TODO: replace with field.isRendered(context);
-        InputWidget fieldView = viewContext.findInputFieldViewById(field.getId());
-        return fieldView.isVisible();
-    }
 }

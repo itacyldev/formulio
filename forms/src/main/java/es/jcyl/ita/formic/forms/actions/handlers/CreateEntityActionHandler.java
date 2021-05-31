@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
 import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -42,7 +40,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class CreateEntityActionHandler extends EntityChangeAction<FormEditController> {
+public class CreateEntityActionHandler extends AbstractActionHandler {
 
     RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 
@@ -51,7 +49,7 @@ public class CreateEntityActionHandler extends EntityChangeAction<FormEditContro
     }
 
     @Override
-    protected void doAction(ActionContext actionContext, UserAction action) {
+    public void handle(ActionContext actionContext, UserAction action) {
         String repoId = (String) action.getParams().get("repo");
         if (StringUtils.isBlank(repoId)) {
             throw new UserActionException(error("The parameter 'repo' is mandatory for the entity creation action."));
@@ -69,17 +67,12 @@ public class CreateEntityActionHandler extends EntityChangeAction<FormEditContro
         }
         // create new Type
         Entity entity = ((EditableRepository) repo).newEntity();
-        Map<String, Serializable> params = new HashMap<>(action.getParams());
+        Map<String, Object> params = new HashMap<>(action.getParams());
         params.remove("repo");
-        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
             entity.set(entry.getKey(), entry.getValue());
         }
         ((EditableRepository) repo).save(entity);
-    }
-
-    @Override
-    protected String getSuccessMessage(UserAction action) {
-        return Config.getInstance().getStringResource(R.string.action_create_success);
     }
 
 }

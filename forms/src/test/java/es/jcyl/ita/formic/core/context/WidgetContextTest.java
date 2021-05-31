@@ -31,16 +31,14 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
-import es.jcyl.ita.formic.repo.EditableRepository;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -49,8 +47,7 @@ import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -58,7 +55,7 @@ import static org.mockito.Mockito.when;
  * Test access to Entity and View through the FormContext.
  */
 @RunWith(RobolectricTestRunner.class)
-public class FormContextTest {
+public class WidgetContextTest {
 
     FormDataBuilder formBuilder = new FormDataBuilder();
     EntityDataBuilder entityBuilder;
@@ -81,29 +78,13 @@ public class FormContextTest {
     @Test
     public void testEntityContext() {
         // create random entity meta and use databuilder to populate entity data
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
 
-        // configure the context as the MainController would do during navigation
-        CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
-        RenderingEnv env = new RenderingEnv(mock(ActionController.class));
-        env.setGlobalContext(gCtx);
+        WidgetContext wContext = new WidgetContext(mock(WidgetContextHolder.class));
 
-        // create form using entity meta to define UIFields
-        UIForm form = formBuilder.withMeta(meta).withRandomData().build();
-        // create a mock repository, set to form and load the entity
-        EditableRepository mockRepo = mock(EditableRepository.class);
-        when(mockRepo.findById(entity.getId())).thenReturn(entity);
-        when(mockRepo.getMeta()).thenReturn(meta);
-        form.setRepo(mockRepo);
-
-        // load entity and check the entity context is fulfill
-        FormEditController fc = DevFormBuilder.createFormEditController(form);
-        fc.load(gCtx);
-
-        ComponentContext fCtx = form.getContext();
-        Assert.assertNotNull(fCtx.getEntity());
+        wContext.setEntity(entity);
 
         // access entity elements throw context
         // check each entity property is correctly set in the form fields
@@ -113,7 +94,7 @@ public class FormContextTest {
             // get the related component by id
             String propId = prop.getKey();
             Object expected = prop.getValue();
-            Object actual = fCtx.getValue("entity." + propId);
+            Object actual = wContext.getValue("entity." + propId);
             Assert.assertEquals(expected, actual);
         }
     }
@@ -125,7 +106,7 @@ public class FormContextTest {
     @Test
     public void testViewContext() {
         // create random entity
-        EntityMeta meta = DevDbBuilder.createRandomMeta();
+        EntityMeta meta = DevDbBuilder.buildRandomMeta();
         meta = metaBuilder.addProperties(new Class[]{Double.class, Date.class, ByteArray.class, Boolean.class,
                 String.class, Float.class, Integer.class, Long.class})
                 .build();
@@ -135,26 +116,17 @@ public class FormContextTest {
         // create an entity using data builder
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
+        form.setEntity(entity);
 
-        // configure the context as the MainController would do
-        CompositeContext gCtx = ContextTestUtils.createGlobalContextWithParam("entityId", entity.getId());
         RenderingEnv env = new RenderingEnv(mock(ActionController.class));
-        env.setGlobalContext(gCtx);
-        env.setViewContext(ctx);
-
-        // create a mock repository, set to form and load the entity
-        EditableRepository mockRepo = mock(EditableRepository.class);
-        when(mockRepo.findById(entity.getId())).thenReturn(entity);
-        when(mockRepo.getMeta()).thenReturn(meta);
-        form.setRepo(mockRepo);
-        // use FormController to load form
-        FormEditController fc = DevFormBuilder.createFormEditController(form);
-        fc.load(gCtx);
-        ComponentContext fCtx = form.getContext();
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
+        env.setAndroidContext(ctx);
+        env.disableInterceptors();
 
         // render view to create android view components and viewContext
         ViewRenderer renderHelper = new ViewRenderer();
         renderHelper.render(env, form);
+        WidgetContext wContext = env.getWidgetContext();
 
         // check each entity property is correctly set in the form fields
         Map<String, Object> properties = entity.getProperties();
@@ -165,7 +137,7 @@ public class FormContextTest {
             Object expected = prop.getValue();
             // get the view value using the FormViewContext
             System.out.println(String.format("Testing property [%s] of type [%s].", propId, expected.getClass()));
-            Object actual = fCtx.getValue("view." + propId);
+            Object actual = wContext.getValue("view." + propId);
 
             AssertUtils.assertEquals(String.format("Error trying to check property [%s] of type [%s].", propId, expected.getClass()),
                     expected, actual);

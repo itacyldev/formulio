@@ -32,7 +32,9 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
@@ -409,5 +411,22 @@ public class BuilderHelper {
             }
             return null;
         }
+    }
+
+    public static UIParam[] getParams(List<ConfigNode> paramNodes) {
+        UIParam[] params = new UIParam[paramNodes.size()];
+        for (int i = 0; i < paramNodes.size(); i++) {
+            UIParam uiParam = new UIParam();
+            ConfigNode paramNode = paramNodes.get(i);
+            if (paramNode.hasAttribute("name")) {
+                uiParam.setName(paramNode.getAttribute("name"));
+            }
+            if (paramNode.hasAttribute("value")) {
+                ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+                uiParam.setValue(exprFactory.create(paramNodes.get(i).getAttribute("value")));
+            }
+            params[i] = uiParam;
+        }
+        return params;
     }
 }

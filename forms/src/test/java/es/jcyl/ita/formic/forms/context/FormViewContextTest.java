@@ -16,7 +16,6 @@ package es.jcyl.ita.formic.core.context;
  */
 
 import android.content.Context;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -38,9 +37,10 @@ import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -73,13 +73,13 @@ public class FormViewContextTest {
         MainController mc = MockingUtils.mockMainController(ctx);
         RenderingEnv env = new RenderingEnv(mc.getActionController());
         env.setGlobalContext(gCtx);
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // render view to create android view components
-        View formView = renderHelper.render(env, form);
+        Widget formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        ViewContext fvContext = new ViewContext(form, formView);
+        ViewContext fvContext = new ViewContext(formView);
 
         // check the context contains all the form elements
         for (UIComponent c : form.getChildren()) {
@@ -105,13 +105,13 @@ public class FormViewContextTest {
         MainController mc = MockingUtils.mockMainController(ctx);
         RenderingEnv env = new RenderingEnv(mc.getActionController());
         env.setGlobalContext(gCtx);
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // render view to create android view components
-        View formView = renderHelper.render(env, form);
+        Widget formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        ViewContext fvContext = new ViewContext(form, formView);
+        ViewContext fvContext = new ViewContext(formView);
 
         // check the context contains all the form elements
         for (UIInputComponent c : form.getFields()) {
@@ -120,7 +120,7 @@ public class FormViewContextTest {
             fvContext.put(c.getId(), expected);
 
             // access the value from the view element
-            InputWidget widget = fvContext.findInputFieldViewById(c.getId());
+            InputWidget widget = fvContext.findWidget(c);
 
             // use a viewConverter to get the value from android view element
             ViewValueConverter<TextView> converter = c.getConverter();

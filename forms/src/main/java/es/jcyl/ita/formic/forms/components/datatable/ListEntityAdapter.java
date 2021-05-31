@@ -180,7 +180,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                     UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
                             dtLayout.getComponent());
                     if (uiAction.hasParams()) {
-                        CompositeContext gContext = dtLayout.getRenderingEnv().getContext();
+                        CompositeContext gContext = dtLayout.getRenderingEnv().getWidgetContext();
                         gContext.addContext(new EntityContext(currentEntity));
                         for (UIParam param : uiAction.getParams()) {
                             Object value = JexlFormUtils.eval(gContext, param.getValue());

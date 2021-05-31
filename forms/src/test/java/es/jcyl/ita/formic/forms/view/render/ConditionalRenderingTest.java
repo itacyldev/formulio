@@ -26,22 +26,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -83,7 +85,7 @@ public class ConditionalRenderingTest {
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
         // set entity in forms context
-        form.getContext().setEntity(entity);
+        form.setEntity(entity);
 
         // modify form field to set expression depending on entity value
         String strPropName = meta.getProperties()[1].name;
@@ -95,7 +97,7 @@ public class ConditionalRenderingTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
         int i = 0;
@@ -104,7 +106,7 @@ public class ConditionalRenderingTest {
             // render view
             View baseFormView = renderHelper.render(env, form);
             // find the field and check visibility
-            View fieldView = ViewHelper.findInputFieldViewById(baseFormView, field);
+            View fieldView = ViewHelper.findInputWidget(baseFormView, field);
             Assert.assertEquals("Unexpected visibility value for: " + value,
                     expectedVisibility[i], ViewHelper.isVisible(fieldView));
             i++;
@@ -123,7 +125,7 @@ public class ConditionalRenderingTest {
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
         // set entity in forms context
-        form.getContext().setEntity(entity);
+        form.setEntity(entity);
 
         // modify form field to set expression depending on entity value
         String longPropName = meta.getProperties()[1].name;
@@ -137,7 +139,7 @@ public class ConditionalRenderingTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
@@ -147,7 +149,7 @@ public class ConditionalRenderingTest {
             // render view
             View baseFormView = renderHelper.render(env, form);
             // find the field and check visibility
-            View fieldView = ViewHelper.findInputFieldViewById(baseFormView, field);
+            View fieldView = ViewHelper.findInputWidget(baseFormView, field);
             Assert.assertEquals("Unexpected visibility value for: " + value,
                     expectedVisibility[i], ViewHelper.isVisible(fieldView));
             i++;
@@ -166,7 +168,7 @@ public class ConditionalRenderingTest {
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
         // set entity in forms context
-        form.getContext().setEntity(entity);
+        form.setEntity(entity);
 
         // modify form field to set expression depending on entity value
         String longPropName = meta.getProperties()[1].name;
@@ -182,7 +184,7 @@ public class ConditionalRenderingTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
@@ -193,7 +195,7 @@ public class ConditionalRenderingTest {
             // render view
             View baseFormView = renderHelper.render(env, form);
             // find the field and check visibility
-            View fieldView = ViewHelper.findInputFieldViewById(baseFormView, field);
+            View fieldView = ViewHelper.findInputWidget(baseFormView, field);
             Assert.assertEquals("Unexpected visibility value for: " + value,
                     expectedVisibility[i], ViewHelper.isVisible(fieldView));
             i++;
@@ -216,7 +218,7 @@ public class ConditionalRenderingTest {
         entityBuilder = new EntityDataBuilder(meta);
         Entity entity = entityBuilder.withRandomData().build();
         // set entity in forms context
-        form.getContext().setEntity(entity);
+        form.setEntity(entity);
 
         // set render condition to form
         // modify form field to set expression depending on entity value
@@ -230,7 +232,7 @@ public class ConditionalRenderingTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // per each value, render the view to calculate expressions and check the field has the
         // expected visibility
@@ -238,6 +240,7 @@ public class ConditionalRenderingTest {
         for (Float value : values) {
             entity.set(longPropName, value);
             // render view
+            form.setEntity(entity);
             View baseFormView = renderHelper.render(env, form);
             boolean isFormVisible = ViewHelper.isVisible(baseFormView);
             // check form render visibility
@@ -245,7 +248,7 @@ public class ConditionalRenderingTest {
                     expectedVisibility[i], isFormVisible);
             if (!isFormVisible) {
                 // check the children haven't been rendered
-                View fieldView = ViewHelper.findInputFieldViewById(baseFormView, field);
+                View fieldView = ViewHelper.findInputWidget(baseFormView, field);
                 Assert.assertNull(fieldView);
             }
             i++;

@@ -20,6 +20,7 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.link.UILink;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
@@ -46,7 +47,7 @@ public class UILinkBuilder extends AbstractComponentBuilder<UILink> {
         UILink element = node.getElement();
 
         UIAction uiAction = element.getAction();
-        // TODO: FORMIC-229 Terminar refactorización de acciones
+        // FORMIC-245 Crear atribute resolverpara el attribute "route"
         if (uiAction == null) { // default action
             uiAction = new UIAction();
             uiAction.setType("nav");
@@ -56,7 +57,7 @@ public class UILinkBuilder extends AbstractComponentBuilder<UILink> {
         // attach nested options
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         if (CollectionUtils.isNotEmpty(paramNodes)) {
-            UIParam[] params = getParams(paramNodes);
+            UIParam[] params = BuilderHelper.getParams(paramNodes);
             uiAction.setParams(params);
         }
     }

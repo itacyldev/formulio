@@ -23,7 +23,7 @@ import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -95,16 +95,16 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                     String strRoute = "";
                     if (formAction.getRoute() != null) {
                         JxltEngine.Expression e = JexlFormUtils.createExpression(formAction.getRoute());
-                        Object route = e.evaluate((JexlContext) env.getContext());
+                        Object route = e.evaluate((JexlContext) env.getWidgetContext());
                         strRoute = (String) ConvertUtils.convert(route, String.class);
                     }
                     UserAction action = new UserAction(formAction.getType(), strRoute, formController);
                     action.setRegisterInHistory(formAction.isRegisterInHistory());
-                    action.setForceRefresh(formAction.isForceRefresh());
+                    action.setRefresh(formAction.getRefresh());
                     action.setMessage(formAction.getMessage());
                     if (formAction.hasParams()) {
                         for (UIParam param : formAction.getParams()) {
-                            Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
+                            Object value = JexlFormUtils.eval(env.getWidgetContext(), param.getValue());
                             if (value != null) {
                                 action.addParam(param.getName(), (Serializable) value);
                             }

@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.context.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,13 +31,17 @@ import es.jcyl.ita.formic.repo.Entity;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class EntityContext extends AbstractBaseContext {
+public class EntityContext extends AbstractBaseContext implements Serializable {
 
     private final Entity entity;
 
     public EntityContext(Entity entity) {
         this.entity = entity;
         this.setPrefix("entity");
+    }
+
+    public Entity getEntity(){
+        return this.entity;
     }
 
     @Override

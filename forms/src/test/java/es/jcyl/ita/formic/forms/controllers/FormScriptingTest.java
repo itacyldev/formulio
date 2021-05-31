@@ -28,14 +28,18 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
+import es.jcyl.ita.formic.forms.components.form.FormWidget;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.context.impl.ViewContext;
+import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
-import es.jcyl.ita.formic.forms.validation.ValidatorException;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -108,36 +112,39 @@ public class FormScriptingTest {
                 .load()
                 .render();
 
-        // load script
+        // load script: the value si valid if length > 10
         String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
+
         ScriptEngine engine = recipe.mc.getScriptEngine();
         engine.store(recipe.mc.getFormController().getId(), source);
         engine.initEngine(null);
+        engine.initScope(recipe.mc.getFormController().getId());
         engine.putProperty("out", System.out);
 
+        FormValidator formValidator = new FormValidator(recipe.mc);
+        InputWidget inputWidget = (InputWidget) ViewHelper.findComponentWidget(recipe.viewWidget, "f1");
+
         // set field f1 to a value > 10
-        recipe.env.disableInputDelay(true);
-        recipe.env.enableInterceptors();
-        form.getContext().getViewContext().put("f1", "12345678910111213");
+        ViewContext viewContext = recipe.env.getWidgetContext().getViewContext();
+        viewContext.put("f1", "12345678910111213");
         // call save method to
-        ((FormEditController) recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
+        boolean valid = formValidator.validate(inputWidget);
+        Assert.assertTrue(valid);
 
         // set a field shorter than 10, the validation has to throw an exception with message
-        recipe.env.enableInterceptors();
-        recipe.env.disableInputDelay(true);
-        form.getContext().getViewContext().put("f1", "12345");
+        viewContext.put("f1", "12345");
+        valid = formValidator.validate(inputWidget);
 
-        String errorMessage = FormContextHelper.getMessage(form.getContext(), form.getId());
+        Assert.assertFalse(valid);
+        String errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), "f1");
         Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
 
-        boolean hasFailed = false;
-        try {
-            ((FormEditController) recipe.mc.getFormController()).save(recipe.mc.getGlobalContext());
-        } catch (ValidatorException e) {
-            // check the message has been set from the validation function
-            Assert.assertNotNull(e.getMessage());
-            hasFailed = true;
-        }
-        Assert.assertTrue(hasFailed);
+        // Try validating the full form
+        FormWidget formWidget = (FormWidget) ViewHelper.findComponentWidget(recipe.viewWidget, form.getId());
+        valid = formValidator.validate(formWidget);
+        // check the message has been set from the validation function
+        Assert.assertFalse(valid);
+        errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), "f1");
+        Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
     }
 }

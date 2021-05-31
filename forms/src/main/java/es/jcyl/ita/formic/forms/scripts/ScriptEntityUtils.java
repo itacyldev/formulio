@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.actions.handlers;
+package es.jcyl.ita.formic.forms.scripts;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,25 +15,29 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.actions.ActionContext;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
-import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.router.Router;
+import org.mini2Dx.beanutils.ConvertUtils;
+
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class BackPressedActionHandler extends AbstractActionHandler
-        implements ActionHandler {
+public class ScriptEntityUtils {
 
-    public BackPressedActionHandler(MainController mc, Router router) {
-        super(mc, router);
+    public static void set(Entity entity, String property, Object value){
+        if(entity == null){
+            return;
+        }
+        PropertyType propertyMeta = entity.getMetadata().getPropertyByName(property);
+        if(propertyMeta == null){
+            return;
+        }
+        Object castedValue = ConvertUtils.convert(value, propertyMeta.getType() );
+        entity.set(property, castedValue);
     }
 
-    @Override
-    public void handle(ActionContext actionContext, UserAction action) {
-        mc.getRouter().back(actionContext.getViewContext());
+    public static String test(String value){
+        return value;
     }
 }

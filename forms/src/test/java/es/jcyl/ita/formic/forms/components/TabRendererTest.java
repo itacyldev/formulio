@@ -40,8 +40,8 @@ import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
@@ -76,8 +76,8 @@ public class TabRendererTest {
     @Test
     public void test2Tabs() {
         RenderingEnv env = mock(RenderingEnv.class);
-        when(env.getViewContext()).thenReturn(ctx);
-        when(env.getContext()).thenReturn(ContextTestUtils.createGlobalContext());
+        when(env.getAndroidContext()).thenReturn(ctx);
+        when(env.getWidgetContext()).thenReturn(ContextTestUtils.createWidgetContext());
 
         UITabItem tabItem1 = new UITabItem();
         tabItem1.setLabel("tab 1");

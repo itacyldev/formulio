@@ -28,11 +28,11 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.controllers.FormController;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 
@@ -71,10 +71,6 @@ public class DevFormBuilder {
         return form;
     }
 
-    public static ComponentContext createFormContextForEntity(UIForm form, Entity entity) {
-        return null;
-    }
-
     /***************
      * Data preparation recipes as Object methods
      **********************/
@@ -87,6 +83,7 @@ public class DevFormBuilder {
         public EditableRepository repo;
         public MainController mc;
         public CompositeContext globalContext;
+        public Widget viewWidget;
 
         public CreateOneFieldForm invoke(android.content.Context ctx) {
             // disable triggers by default
@@ -107,9 +104,11 @@ public class DevFormBuilder {
 
             // configure the context as the MainController would do
             env = mc.getRenderingEnv();
-            env.setViewContext(ctx);
+            env.setAndroidContext(ctx);
             // disable user action handlers during the tests
-            env.disableInterceptors();
+            if(disableTriggers){
+                env.disableInterceptors();
+            }
             // create a one-field form
             form = createOneFieldForm();
 
@@ -180,14 +179,14 @@ public class DevFormBuilder {
         public CreateOneFieldForm loadEntity(Entity entity) {
             checkInvokeHasBeenCalled();
             // load entity using form controller
-            this.form.getContext().setEntity(entity);
+            this.form.setEntity(entity);
             return this;
         }
 
         public CreateOneFieldForm render() {
             checkInvokeHasBeenCalled();
             // render the form to setup the viewContext
-            mc.renderView(ctx);
+            this.viewWidget = mc.renderView(ctx);
             env.disableInterceptors();
             return this;
         }

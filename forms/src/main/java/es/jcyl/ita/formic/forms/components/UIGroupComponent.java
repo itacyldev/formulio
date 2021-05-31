@@ -3,7 +3,7 @@ package es.jcyl.ita.formic.forms.components;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UIGroupComponent extends AbstractUIComponent {
+public abstract class UIGroupComponent extends AbstractUIComponent {
 
     protected String LayoutType;
 

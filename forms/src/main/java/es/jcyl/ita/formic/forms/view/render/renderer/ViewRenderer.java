@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.render;
+package es.jcyl.ita.formic.forms.view.render.renderer;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,7 +15,6 @@ package es.jcyl.ita.formic.forms.view.render;
  * limitations under the License.
  */
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,62 +27,64 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.DynamicComponent;
+import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.ContextHolder;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.components.datalist.UIDataListItemProxy;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
+import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.DeferredView;
+import es.jcyl.ita.formic.forms.view.render.GroupRenderer;
+import es.jcyl.ita.formic.forms.view.render.Renderer;
+import es.jcyl.ita.formic.forms.view.render.RendererFactory;
+import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * Creates Android view elements from UIComponents definitions
  * <p>
- * Intermediate class to encapsulate rendering to facilitate testing
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ViewRenderer {
 
     private ViewRendererEventHandler eventHandler = new NoOpHandler();
 
-    public View render(RenderingEnv env, UIComponent root) {
-        // enrich the execution environment with current form's context
-        setupFormContext(root, env);
-        return render(env, root, true);
+    public Widget render(RenderingEnv env, UIComponent component) {
+        return render(env, component, true);
     }
 
-    private View render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
+    private Widget render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
-        // setup context in script engine
-        if (component instanceof UIForm) {
-            eventHandler.onNewFormFound((UIForm) component);
-        }
         eventHandler.onBeforeRenderComponent(component);
+        // setup entity in context
+        if (component instanceof EntityHolder) {
+            // enrich the execution environment with current form's context
+            Entity entity = ((EntityHolder) component).getEntity();
+            env.setEntity(entity);
+            eventHandler.onEntityContextChanged(entity);
+        }
         // render android view
         Widget widget;
         if (checkDeferred && hasDeferredExpression(component, env)) {
             // insert a delegated view component as placeholder to render later
-            widget = createDeferredView(env.getViewContext(), component, env);
+            widget = createDeferredView(env, component);
         } else {
             widget = renderer.render(env, component);
         }
-        // setup view context
-        if (component instanceof ContextHolder) {
-            // configure viewContext
-            ComponentContext cContext = ((ContextHolder) component).getContext();
-            cContext.setView(widget);
-            env.setComponentContext(cContext);
-            // set in script context
-            eventHandler.onViewContextChanged(cContext);
+        // link root widget to current widget
+        if (widget instanceof ViewWidget) {
+            env.setRootWidget((ViewWidget) widget);
         } else {
-            if (env.getComponentContext() != null && env.getComponentContext().getViewContext() != null) {
-                env.getComponentContext().getViewContext().registerComponentView(component, widget);
-            }
+            registerWidget(env, widget);
         }
         eventHandler.onAfterRenderComponent(widget);
 
@@ -103,19 +104,22 @@ public class ViewRenderer {
                 List<View> viewList = new ArrayList<>();
                 if (groupView instanceof EntityListProvider) {
                     // save the old entityContext
-                    Entity oldEntity = env.getComponentContext().getEntity();
+                    Entity oldEntity = env.getEntity();
 
                     List<Entity> entities = ((EntityListProvider) groupView).getEntities();
+                    int iter = 0;
+                    // TODO: FORMIC-249 Refactorizar viewRenderer
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
-                        env.getComponentContext().setEntity(entity);
-                        eventHandler.onEntityContextChanged(env.getComponentContext());
-                        View view = render(env, component.getChildren()[0]);
+//                        env.setEntity(entity);
+                        eventHandler.onEntityContextChanged(entity);
+                        View view = render(env, proxify(iter, component.getChildren()[0], entity));
                         viewList.add(view);
+                        iter++;
                     }
                     // restore entity context
-                    env.getComponentContext().setEntity(oldEntity);
-                    eventHandler.onEntityContextChanged(env.getComponentContext());
+                    env.getWidgetContext().setEntity(oldEntity);
+                    eventHandler.onEntityContextChanged(oldEntity);
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
@@ -135,20 +139,58 @@ public class ViewRenderer {
         return widget;
     }
 
-
-    private void setupFormContext(UIComponent root, RenderingEnv env) {
-        if (root instanceof UIForm) {
-            env.setComponentContext(((UIForm) root).getContext());
+    /**
+     * Creates a component proxy for curren elemnt
+     *
+     * @param id
+     * @param component
+     * @param entity
+     * @return
+     */
+    private UIComponent proxify(int id, UIComponent component, Entity entity) {
+        if (component instanceof UIDatalistItem) {
+            String cId = component.getId();
+            // set component id to item-1,item-2, starting with 1
+            return new UIDataListItemProxy(cId + "-" + (id + 1), component, entity);
         } else {
-            if (root != null && root.getParentForm() != null) {
-                env.setComponentContext(((UIForm) root.getParentForm()).getContext());
-            }
+            return component;
         }
     }
 
-    private Widget createDeferredView(Context viewContext, UIComponent root, RenderingEnv env) {
-        DeferredView view = new DeferredView(viewContext, root);
-        env.addDeferred(root.getAbsoluteId(), view);
+    /**
+     * Links the created widget with the widgetContext and the root ViewWidget
+     *
+     * @param env
+     * @param widget
+     */
+    private void registerWidget(RenderingEnv env, Widget widget) {
+        if (widget instanceof WidgetContextHolder) {
+            // create widgetContext and set to current widget
+            WidgetContext wCtx = new WidgetContext((WidgetContextHolder) widget);
+            // set the entity used to render this widget in its context
+            wCtx.setEntity(env.getEntity());
+            // add global context
+            wCtx.addContext(env.getContext());
+            widget.setWidgetContext(wCtx);
+            // set as current WidgetContext so nested elements will use it
+            env.setWidgetContext(wCtx);
+            eventHandler.onWidgetContextChange(wCtx);
+            // register current widget in view
+            if (env.getRootWidget() != null) {
+                env.getRootWidget().registerContextHolder((WidgetContextHolder) widget);
+            }
+        } else {
+            widget.setWidgetContext(env.getWidgetContext());
+            if (env.getWidgetContext() != null) {
+                env.getWidgetContext().registerWidget(widget);
+            }
+        }
+        widget.setRootWidget(env.getRootWidget());
+    }
+
+    private Widget createDeferredView(RenderingEnv env, UIComponent component) {
+        DeferredView view = new DeferredView(env.getAndroidContext(), component);
+        env.addDeferred(component.getAbsoluteId(), view);
         return view;
     }
 
@@ -202,13 +244,16 @@ public class ViewRenderer {
             for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
                 DAGNode node = it.next();
                 // find deferredView for this component
-                View defView = deferredViews.get(node.getComponent().getAbsoluteId());
+                Widget defView = deferredViews.get(node.getComponent().getAbsoluteId());
                 if (defView != null) {
                     // remove from deferred elements
                     deferredViews.remove(defView);
+
                     // render the view and replace deferred element
-                    View newView = this.render(env, node.getComponent(), false);
-                    replaceView(defView, newView);
+//                    restoreEntityInContext(env, defView);
+                    Widget newWidget = this.render(env, node.getComponent(), false);
+                    registerWidget(env, newWidget);
+                    replaceView(defView, newWidget);
                 }
             }
         }
@@ -217,8 +262,9 @@ public class ViewRenderer {
     /**
      * Given an element in current view, renders all the dependant elements
      */
-    public void renderDeps(RenderingEnv env, UIComponent component) {
+    public void renderDeps(RenderingEnv env, Widget widget) {
         // get element dags
+        UIComponent component = widget.getComponent();
         ViewDAG viewDAG = env.getViewDAG();
         if (viewDAG == null || viewDAG.getDags().size() == 0) {
             return;
@@ -227,8 +273,6 @@ public class ViewRenderer {
         if (dag == null) {
             return;// no dependant components
         }
-        // get current Android view
-        View rootView = env.getViewRoot();
         // walk the tree in topological order to follow the dependencies from the current element
         // sets the rendering starting point, when given element is found in the DAG
         boolean found = false;
@@ -240,24 +284,39 @@ public class ViewRenderer {
                     found = true; // start rendering in next element
                 }
             } else {
-                // find view element to update
-                UIComponent cNode = node.getComponent();
-                View view = ViewHelper.findComponentView(rootView, cNode);  // PROBLEMAAAAAA
-                if (component instanceof UIForm) {
-                    env.setComponentContext(((UIForm) component).getContext());
+//                restoreEntityInContext(env, widget);
+                if (widget instanceof DynamicComponent) {
+                    ((DynamicComponent) widget).load(env);
                 } else {
-                    env.setComponentContext(component.getParentForm().getContext());
-                }
-                if (view instanceof DynamicComponent) {
-                    ((DynamicComponent) view).load(env);
-                } else {
+                    //TODO: está mal, hay que recupear el contexto del widget del componente "node",
                     // re-render and replace view
-                    View newView = this.render(env, node.getComponent(), false);
-                    replaceView(view, newView);
+                    Widget newWidget = this.render(env, node.getComponent(), false);
+                    registerWidget(env, newWidget);
+                    replaceView(widget, newWidget);
                 }
             }
         }
     }
+
+//    /**
+//     * Sets the entity used during the widget initial rendering in the Rendering environment
+//     *
+//     * @param env
+//     * @param widget
+//     */
+//    private void restoreEntityInContext(RenderingEnv env, Widget widget) {
+//        // restore entity in context
+//        if (widget instanceof WidgetContextHolder) {
+//            env.setEntity(((WidgetContextHolder) widget).getWidgetContext().getEntity());
+//        } else {
+//            // get the entity from parent's widget context
+//            // TODO: ESTO DEBERÍA SOBRAR EL PARENT WIDGET YA HABRÁ FIJADO LA ENTIDAD, SALVO EN RENDERDEPS
+//            if (widget.getWidgetContext() != null) {
+//                Entity entity = widget.getWidgetContext().getEntity();
+//                env.setEntity(entity);
+//            }
+//        }
+//    }
 
     public void setEventHandler(ViewRendererEventHandler handler) {
         this.eventHandler = handler;
@@ -266,17 +325,12 @@ public class ViewRenderer {
     private class NoOpHandler implements ViewRendererEventHandler {
 
         @Override
-        public void onNewFormFound(UIForm form) {
+        public void onEntityContextChanged(Entity entity) {
 
         }
 
         @Override
-        public void onEntityContextChanged(ComponentContext fContext) {
-
-        }
-
-        @Override
-        public void onViewContextChanged(ComponentContext fContext) {
+        public void onWidgetContextChange(WidgetContext context) {
 
         }
 

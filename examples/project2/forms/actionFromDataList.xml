@@ -1,16 +1,31 @@
 <main name="myFirstForm" description="DataList with buttons" id="form1" repo="contacts">
     <list>
         <script>
-            function updateEntity(){
-            console.log(entity.it_profile);
+            function updateEntity(et){
+                var it_profile = et.get("it_profile");
+                console.log(it_profile);
+                var repo = ctx.get("repos").get("contacts");
+                if (it_profile == null) {
+                    it_profile = 0;
+                }
+                it_profile+=1;
+                console.log(repo);
+                Packages.es.jcyl.ita.formic.forms.scripts.ScriptEntityUtils.set(et, "it_profile",it_profile);
+                repo.save(et);
             }
         </script>
         <form>
             <datalist>
-                <datalistitem>
+                <datalistitem id="myitem">
                     <input value="${entity.it_profile}" hasDeleteButton="false"/>
-                    <button action="updateEntity">
-                        <param name="entity_id" value="${entity.contact_id}"/>
+                    <button action="updateEntity" refresh="this" label="Refresh this">
+                        <param name="entity" value="${entity}"/>
+                    </button>
+                    <button action="updateEntity" refresh="all" label="refresh all">
+                        <param name="entity" value="${entity}"/>
+                    </button>
+                    <button action="updateEntity" refresh="myitem-1" label="refresh widget">
+                        <param name="entity" value="${entity}"/>
                     </button>
                 </datalistitem>
             </datalist>

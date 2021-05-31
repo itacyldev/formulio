@@ -17,10 +17,10 @@ import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /*
@@ -61,11 +61,11 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         if (ArrayUtils.isNotEmpty(options)) {
             float[] weigthts = ComponentUtils.getWeigths(component.getWeights(), options.length, component.getId(), null);
             for (UIOption option : options) {
-                button = new RadioButtonWidget(env.getViewContext(), option);
+                button = new RadioButtonWidget(env.getAndroidContext(), option);
                 button.setText(option.getLabel());
                 button.setId(i);
 
-                StyleHolder<RadioButton> styleHolder = new RadioButtonStyleHolder(env.getViewContext());
+                StyleHolder<RadioButton> styleHolder = new RadioButtonStyleHolder(env.getAndroidContext());
                 styleHolder.applyStyle(button);
 
                 radioGroup.addView(button);
@@ -80,14 +80,15 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.notify(Event.inputChange(component));
+                    interceptor.notify(Event.inputChange(widget));
                 }
             }
         });
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class) || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)
+                || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +113,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
+        String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
         if (message != null) {
             ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
         }

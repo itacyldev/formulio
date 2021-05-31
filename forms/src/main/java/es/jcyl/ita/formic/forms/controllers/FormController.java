@@ -30,9 +30,11 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.view.ViewStateHolder;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -53,6 +55,7 @@ public abstract class FormController implements Identificable, FilterableCompone
     protected Repository repo;
     protected Filter filter;
     protected ViewGroup contentView; // Android view element where the UIView is rendered
+    protected ViewStateHolder stateHolder = new ViewStateHolder();
     private UIAction[] actions; // form actions ids
     private Map<String, UIAction> _actions;
     private FormEntityLoader entityLoader = new FormEntityLoader();
@@ -63,6 +66,7 @@ public abstract class FormController implements Identificable, FilterableCompone
      */
     private String onBeforeRenderAction;
     private String onAfterRenderAction;
+    private ViewWidget rootWidget;
 
     public FormController(String id, String name) {
         this.id = id;
@@ -106,15 +110,12 @@ public abstract class FormController implements Identificable, FilterableCompone
     /****************************/
 
     public void saveViewState() {
-        for (UIForm form : this.view.getForms()) {
-            form.saveViewState();
-        }
+        ViewWidget rootWidget = this.getRootWidget();
+        stateHolder.saveState(rootWidget);
     }
 
     public void restoreViewState() {
-        for (UIForm form : this.view.getForms()) {
-            form.restoreViewState();
-        }
+        stateHolder.restoreState(rootWidget);
     }
 
 
@@ -162,8 +163,8 @@ public abstract class FormController implements Identificable, FilterableCompone
         return _actions;
     }
 
-    public void addAction(String actionId, UIAction action){
-        if(_actions == null){
+    public void addAction(String actionId, UIAction action) {
+        if (_actions == null) {
             _actions = new HashMap<>();
         }
         _actions.put(actionId, action);
@@ -171,7 +172,7 @@ public abstract class FormController implements Identificable, FilterableCompone
 
     public void setActions(UIAction[] actions) {
         this.actions = actions;
-        for(UIAction action: actions){
+        for (UIAction action : actions) {
             addAction(action.getId(), action);
         }
     }
@@ -237,16 +238,16 @@ public abstract class FormController implements Identificable, FilterableCompone
      */
 
     public void onBeforeRender() {
-        ScriptEngine engine = mc.getScriptEngine();
-        if(StringUtils.isNotBlank(this.onBeforeRenderAction)){
-            engine.callFunction(this.getId(), this.onBeforeRenderAction, this);
+        if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
+            ScriptEngine engine = mc.getScriptEngine();
+            engine.callFunction(this.onBeforeRenderAction, this);
         }
     }
 
     public void onAfterRender(View view) {
-        ScriptEngine engine = mc.getScriptEngine();
-        if(StringUtils.isNotBlank(this.onAfterRenderAction)){
-            engine.callFunction(this.getId(), this.onAfterRenderAction, view);
+        if (StringUtils.isNotBlank(this.onAfterRenderAction)) {
+            ScriptEngine engine = mc.getScriptEngine();
+            engine.callFunction(this.onAfterRenderAction, view);
         }
     }
 
@@ -272,5 +273,13 @@ public abstract class FormController implements Identificable, FilterableCompone
 
     public void setMc(MainController mc) {
         this.mc = mc;
+    }
+
+    public void setRootWidget(ViewWidget widget) {
+        this.rootWidget = widget;
+    }
+
+    public ViewWidget getRootWidget() {
+        return rootWidget;
     }
 }

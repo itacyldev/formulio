@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import es.jcyl.ita.formic.core.context.impl.MapCompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
@@ -34,9 +33,10 @@ import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -78,37 +78,37 @@ public class EnvExecutionContextTest {
         FormEditController fc = DevFormBuilder.createFormEditController(f1, f2);
 
         // render the view and check de resulting context
-        CompositeContext globalContext = new MapCompositeContext();
+        CompositeContext globalContext = ContextTestUtils.createGlobalContext();
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(globalContext);
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // render the view
         ViewRenderer viewRenderer = new ViewRenderer();
 
         View view = viewRenderer.render(env, fc.getView());
-        Assert.assertNotNull(env.getComponentContext().getViewContext());
-        Assert.assertNotNull(env.getComponentContext().getEntityContext());
+        Assert.assertNotNull(env.getWidgetContext().getViewContext());
+        Assert.assertNotNull(env.getWidgetContext().getEntityContext());
 
-        UIForm lastForm = (UIForm) env.getComponentContext().getRoot();
-        lastForm.getContext().setView(view);
+//        UIForm lastForm = (UIForm) env.getWidgetContext().getRoot();
+//        lastForm.getContext().setView(view);
 
         // access the context of the last evaluated form using relative paths like view.field or entity.field
-        String id1 = "entity." + lastForm.getChildren()[0].getId();
-        String id2 = "view." + lastForm.getChildren()[0].getId();
+        String id1 = "entity." + f2.getChildren()[0].getId();
+        String id2 = "view." + f2.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
-        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id1));
-        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id2));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getWidgetContext(), id1));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getWidgetContext(), id2));
 
         // Access each form context using absolute paths
         id1 = f1.getId() + ".entity." + f1.getChildren()[0].getId();
         id2 = f2.getId() + ".view." + f2.getChildren()[0].getId();
 
         // check the values can be accessed using JEXL expressions
-        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id1));
-        Assert.assertNotNull(JexlFormUtils.eval(env.getContext(), id2));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getWidgetContext(), id1));
+        Assert.assertNotNull(JexlFormUtils.eval(env.getWidgetContext(), id2));
 
         // lets check global context contains a "form1","form2" context
         Assert.assertNotNull(JexlFormUtils.eval(globalContext, id1));
@@ -118,17 +118,13 @@ public class EnvExecutionContextTest {
 
 
     private UIForm createForm() {
-        EntityMeta meta1 = DevDbBuilder.createRandomMeta();
+        EntityMeta meta1 = DevDbBuilder.buildRandomMeta();
         EntityDataBuilder entityBuilder1 = new EntityDataBuilder(meta1);
         Entity entity1 = entityBuilder1.withRandomData().build();
         UIForm f1 = formBuilder.withMeta(meta1).withRandomData().build();
 
         // set an entity to simulate the loading before rendering
-        f1.getContext().setEntity(entity1);
-
-
+        f1.setEntity(entity1);
         return f1;
     }
-
-
 }

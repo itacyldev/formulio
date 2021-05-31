@@ -20,6 +20,7 @@ package es.jcyl.ita.formic.forms.actions.events;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -29,11 +30,11 @@ public class Event {
     public enum EventType {CHANGE, CLICK}
 
     private final EventType type;
-    private UIComponent source;
+    private Widget source;
     private UserAction handler;
     private Context context;
 
-    public Event(EventType type, UIComponent source) {
+    public Event(EventType type, Widget source) {
         this(type, source, null);
     }
 
@@ -44,7 +45,7 @@ public class Event {
      * @param source:       origin of the event
      * @param eventHandler: specific user action to execute as responser for the event.
      */
-    public Event(EventType type, UIComponent source, UserAction eventHandler) {
+    public Event(EventType type, Widget source, UserAction eventHandler) {
         this.type = type;
         this.source = source;
         this.handler = eventHandler;
@@ -62,14 +63,14 @@ public class Event {
         this.handler = handler;
     }
 
-    public UIComponent getSource() {
+    public Widget getSource() {
         return source;
     }
 
-    public static Event inputChange(UIComponent component) {
+    public static Event inputChange(Widget component) {
         return new Event(EventType.CHANGE, component);
     }
-    public static Event click(UIComponent component) {
+    public static Event click(Widget component) {
         return new Event(EventType.CLICK, component);
     }
 

@@ -35,7 +35,7 @@ import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Criteria;
@@ -58,9 +58,9 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
     private es.jcyl.ita.formic.repo.query.Filter defFilter;
 
     public EntityListELAdapter(RenderingEnv env, CompositeContext context, int resource, int textViewId, UIAutoComplete component) {
-        super(env.getViewContext(), resource);
+        super(env.getAndroidContext(), resource);
         dataList = new ArrayList<>();
-        mContext = env.getViewContext();
+        mContext = env.getAndroidContext();
         globalContext = context;
         itemLayout = resource;
         this.itemId = textViewId;

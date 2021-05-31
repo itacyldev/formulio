@@ -18,13 +18,9 @@ package es.jcyl.ita.formic.forms.actions.events;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
-import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -44,48 +40,40 @@ public class OnInputChangeEventHandler
 
     @Override
     public void handle(Event event) {
-        UIComponent component = event.getSource();
+        Widget widget = event.getSource();
 
         // if the component has defined an UserAction for this event, use it
         UserAction action = event.getHandler();
-        if(action != null){
+        if (action != null) {
             ac.doUserAction(action);
-            if(action.isViewChangeAction()){
+            if (action.isViewChangeAction()) {
                 // if the action forces a transition to another view we don't need to update
                 // view values and re-render components
                 return;
             }
         }
-        if (!(component instanceof UIInputComponent)) {
-            return;// nothing to do, no input element
+        if (!(widget instanceof InputWidget)) {
+            return;
         }
-        ComponentContext cContext = component.getParentContext();
-        ViewContext viewContext = cContext.getViewContext();
-        InputWidget fieldView = viewContext.findInputFieldViewById(component.getId());
-        if(fieldView == null){
-            return; // no input field related to current component
-        }
+        InputWidget fieldView = (InputWidget) widget;
 
-        // TODO: FORMIC-224 Refactorizar FormControllers, eliminar diferencias entre Edit y list
         // save view state
         Object state = fieldView.getValue();
-        boolean valid = formValidator.validate(component.getParentForm(), (UIInputComponent) component);
+        boolean valid = formValidator.validate(fieldView);
         if (!valid) {
             // update the view to show messages
-            mc.updateView(component, false);
-            // find the new View and restore state
-            fieldView = viewContext.findInputFieldViewById(component.getId());
+            InputWidget newFieldView = (InputWidget) mc.updateView(fieldView, false);
             mc.getRenderingEnv().disableInterceptors();
+            // set values in new View
             try {
-                fieldView.setValue(state);
-                // restore focus on the current view element
-                fieldView.setFocus(true);
+                newFieldView.setValue(state);
+                newFieldView.setFocus(true);
             } finally {
                 mc.getRenderingEnv().enableInterceptors();
             }
         } else {
             // render depending objects
-            mc.updateDependants(component);
+            mc.updateDependants(widget);
         }
     }
 
