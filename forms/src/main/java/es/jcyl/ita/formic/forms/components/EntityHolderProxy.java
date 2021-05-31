@@ -188,6 +188,11 @@ public class EntityHolderProxy implements EntityHolder {
     }
 
     @Override
+    public ValueBindingExpression getPlaceHolder() {
+        return null;
+    }
+
+    @Override
     public EntityHolder getEntityHolder() {
         return delegate.getEntityHolder();
     }
