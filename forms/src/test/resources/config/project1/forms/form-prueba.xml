@@ -158,6 +158,15 @@
                         </options>
                     </radio>
 
+                    <radio label="5. Radio vertical:" orientation="vertical" value="${entity.radio}" validator="required" weights="20, 20">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                            <option label="Radio4" value="Radio4" />
+                        </options>
+                    </radio>
+
                 </tabitem>
 
                 <tabitem label="Tab 4: Card">
