@@ -231,8 +231,10 @@ public class DatatableWidget extends Widget<UIDatatable>
         final ImageView searchView = output
                 .findViewById(R.id.list_header_img);
 
-        if (column.isFiltering()) {
-            addHeaderFilterLayout(column, output, fieldNameView, searchView);
+        addHeaderFilterLayout(column, output, fieldNameView, searchView);
+
+        if (!column.isFiltering()) {
+            searchView.setVisibility(INVISIBLE);
         }
 
         return output;
@@ -351,9 +353,11 @@ public class DatatableWidget extends Widget<UIDatatable>
     private void resetFilter() {
         sort = null;
         for (UIColumn column : this.getComponent().getColumns()) {
-            EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
-            if (StringUtils.isNotEmpty(filterText.getText().toString())) {
-                filterText.setText("");
+            if (column.isFiltering()) {
+                EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
+                if (StringUtils.isNotEmpty(filterText.getText().toString())) {
+                    filterText.setText("");
+                }
             }
         }
         disableOrderImages(null);
@@ -389,6 +393,25 @@ public class DatatableWidget extends Widget<UIDatatable>
             View header_item = this.headerView.getChildAt(i);
             View header_filter = header_item.findViewById(R.id.list_header_filter_layout);
             header_filter.setVisibility(visibility);
+
+            setFilterSearchVisibility(header_item, this.getComponent().getColumn(i));
+            setFilterOrderVisibility(header_item, this.getComponent().getColumn(i));
+
+        }
+    }
+
+    private void setFilterSearchVisibility(View header_item, UIColumn column) {
+        if (!column.isFiltering()) {
+            ImageView filterSearch = header_item.findViewById(R.id.list_header_filter_search);
+            filterSearch.setVisibility(INVISIBLE);
+            EditText filterText = header_item.findViewById(R.id.list_header_filter_text);
+            filterText.setVisibility(INVISIBLE);
+        }
+    }
+    private void setFilterOrderVisibility(View header_item, UIColumn column) {
+        if (!column.isOrdering()) {
+            ImageView filterOrder = header_item.findViewById(R.id.list_header_filter_order);
+            filterOrder.setVisibility(INVISIBLE);
         }
     }
 
@@ -402,10 +425,12 @@ public class DatatableWidget extends Widget<UIDatatable>
         ConditionBinding[] conditions = new ConditionBinding[this.getComponent().getColumns().length];
         int i = 0;
         for (UIColumn c : this.getComponent().getColumns()) {
-            String headerTextValue = thisViewCtx.getString(c.getId());
-            if (StringUtils.isNotEmpty(headerTextValue)) {
-                conditions[i] = createHeaderCondition(c);
-                i++;
+            if (c.isFiltering()) {
+                String headerTextValue = thisViewCtx.getString(c.getId());
+                if (StringUtils.isNotEmpty(headerTextValue)) {
+                    conditions[i] = createHeaderCondition(c);
+                    i++;
+                }
             }
         }
 

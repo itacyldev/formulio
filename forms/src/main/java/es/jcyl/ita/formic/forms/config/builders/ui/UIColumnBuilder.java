@@ -41,6 +41,9 @@ public class UIColumnBuilder extends BaseUIComponentBuilder<UIColumn> {
             for (ConfigNode child : node.getChildren()) {
                 String name = child.getName();
                 UIColumnFilter filter = new UIColumnFilter();
+                if (node.getElement().getHeaderFilter() != null){
+                    filter = node.getElement().getHeaderFilter();
+                }
                 if (name.equals("filter")) {
                     addHeaderFilter(child, filter);
 
