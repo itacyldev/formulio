@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.components.table;
 
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -96,6 +97,37 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
             }
 
             i++;
+        }
+
+        rowView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout()
+            {
+                adjustRowHeight(rowView);
+            }
+        });
+
+    }
+
+    private int gatMaxRowHeight(TableRow rowView){
+        int maxRowHeight = 0;
+        Integer nChild = rowView.getChildCount();
+        for (int i = 0; i < nChild; i++) {
+            View cellView = rowView.getChildAt(i);
+            if (maxRowHeight < cellView.getHeight()){
+                maxRowHeight = cellView.getHeight();
+            }
+        }
+        return maxRowHeight;
+    }
+
+    private void adjustRowHeight(TableRow rowView){
+        int maxRowHeight = gatMaxRowHeight(rowView);
+        Integer nChild = rowView.getChildCount();
+        for (int i = 0; i < nChild; i++) {
+            View cellView = rowView.getChildAt(i);
+            cellView.setMinimumHeight(maxRowHeight);
         }
     }
 

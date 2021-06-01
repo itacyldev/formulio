@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
+import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -60,8 +61,13 @@ public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, Datali
     @SuppressLint("ResourceType")
     @Override
     public void addViews(RenderingEnv env, Widget<UIDatalist> root, View[] views) {
+
         for (View view : views) {
-            ((DatalistWidget) root).getContentView().addView(view);
+            if (root instanceof DeferredView){
+                root.addView(view);
+            }else {
+                ((DatalistWidget) root).getContentView().addView(view);
+            }
         }
     }
 }
