@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.core.context;
+package es.jcyl.ita.formic.forms.context;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
@@ -79,7 +80,7 @@ public class FormViewContextTest {
         Widget formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        ViewContext fvContext = new ViewContext(formView);
+        ViewContext fvContext = env.getWidgetContext().getViewContext();
 
         // check the context contains all the form elements
         for (UIComponent c : form.getChildren()) {
@@ -111,7 +112,8 @@ public class FormViewContextTest {
         Widget formView = renderHelper.render(env, form);
 
         // create view context to access view elements
-        ViewContext fvContext = new ViewContext(formView);
+
+        ViewContext fvContext = env.getWidgetContext().getViewContext();
 
         // check the context contains all the form elements
         for (UIInputComponent c : form.getFields()) {
@@ -120,7 +122,7 @@ public class FormViewContextTest {
             fvContext.put(c.getId(), expected);
 
             // access the value from the view element
-            InputWidget widget = fvContext.findWidget(c);
+            InputWidget widget = (InputWidget) fvContext.findWidget(c);
 
             // use a viewConverter to get the value from android view element
             ViewValueConverter<TextView> converter = c.getConverter();
