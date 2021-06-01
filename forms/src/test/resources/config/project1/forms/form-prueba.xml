@@ -121,6 +121,17 @@
                             <image hasDeleteButton="false" repo="superHImages"
                                 value="${entity.image}" />
                         </row>
+                        <row>
+                            <textarea readOnly="true" value="8.  " />
+                            <textarea readOnly="true" value="Radio: " />
+                            <radio orientation="horizontal" value="Radio1" hasDeleteButton="false">
+                                <options>
+                                    <option id="optRadio1" label="Radio1" value="Radio1" />
+                                    <option id="optRadio2" label="Radio2" value="Radio2" />
+                                    <option id="optRadio3" label="Radio3" value="Radio3" />
+                                </options>
+                            </radio>
+                        </row>
                     </table>
                 </tabitem>
                 <tabitem label="Tab 3: Radio">

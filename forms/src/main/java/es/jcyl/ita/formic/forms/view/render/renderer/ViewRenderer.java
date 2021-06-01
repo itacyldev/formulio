@@ -202,6 +202,9 @@ public class ViewRenderer {
     public void replaceView(View view1, View view2) {
         ViewGroup parent = (ViewGroup) view1.getParent();
         int index = parent.indexOfChild(view1);
+        if (view1.getLayoutParams() != null) {
+            view2.setLayoutParams(view1.getLayoutParams());
+        }
         parent.removeView(view1);
         parent.addView(view2, index);
     }

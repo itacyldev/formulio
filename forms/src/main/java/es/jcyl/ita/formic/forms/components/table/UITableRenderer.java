@@ -91,6 +91,8 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
 
         View row = null;
         int i = 0;
+
+        boolean hasChildren = false;
         for (View view : views) {
             // look for nested row widget
             if (view instanceof Widget) {
@@ -106,9 +108,17 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
             }
             boolean isLastRow = i == views.length -1;
             setBorderRow(widget, component, row, isLastRow);
+            if (((TableRow) row).getChildCount() > 0){
+                hasChildren = true;
+            }
             tableView.addView(row);
             i++;
+        }
 
+        if (!hasChildren){
+            tableView.setStretchAllColumns(false);
+            DevConsole.warn(String.format("\n" +
+                    "Tablerow [%s] does not contain any views to add", widget.getId()));
         }
     }
 
