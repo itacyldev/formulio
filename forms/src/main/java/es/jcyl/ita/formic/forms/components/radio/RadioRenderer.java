@@ -69,7 +69,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
                 styleHolder.applyStyle(button);
 
                 radioGroup.addView(button);
-                setLayoutParams(weigthts, i, button);
+                setLayoutParams(weigthts, i, button, component.getOrientationType());
                 i++;
             }
         }
@@ -119,9 +119,13 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         }
     }
 
-    private static void setLayoutParams(float[] weigthts, int i, View view) {
+    private static void setLayoutParams(float[] weigthts, int i, View view, int orientationType) {
         if (weigthts != null && i < weigthts.length) {
-            view.setLayoutParams(new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT, weigthts[i]));
+            if (orientationType == RadioGroup.HORIZONTAL) {
+                view.setLayoutParams(new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT, weigthts[i]));
+            }else{
+                view.setLayoutParams(new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, 0, weigthts[i]));
+            }
         }
     }
 
