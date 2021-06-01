@@ -34,7 +34,7 @@ public class TableUtils {
         if (weigthts != null && i < weigthts.length) {
             TableRow.LayoutParams lp = new TableRow.LayoutParams();
             lp.weight = 1; //column weight
-            lp = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, weigthts[i]);
+            lp = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weigthts[i]);
             view.setLayoutParams(lp);
         }
     }

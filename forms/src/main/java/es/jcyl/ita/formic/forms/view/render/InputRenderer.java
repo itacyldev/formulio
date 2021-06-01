@@ -56,6 +56,8 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 TextView.class);
         if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
             setLabel(fieldLabel, component);
+        }else{
+            fieldLabel.setVisibility(View.GONE);
         }
 
         // get input view and set Tag and Value
