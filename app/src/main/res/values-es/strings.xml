@@ -15,4 +15,5 @@
     <string name="detail">Detalle</string>
     <string name="action_delete_success">Entidad eliminada con éxito.</string>
     <string name="action_delete_error">Ocurrió un error al intentar eliminar la entidad. Compruebe la consola de desarrollador.</string>
+    <string name="loading">Cargando...</string>
 </resources>
