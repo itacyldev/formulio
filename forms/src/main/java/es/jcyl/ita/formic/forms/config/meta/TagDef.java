@@ -43,7 +43,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REFRESH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_DELETE_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_TODAY_BUTTON;
@@ -68,11 +67,13 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_RENDER
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_SAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PATTERN;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PLACEHOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY_MESSAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REFRESH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HISTORY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
@@ -142,12 +143,13 @@ public class TagDef {
         }));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION};
-        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER};
+        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER, PATTERN};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);
         register("text", baseInput);
         register("date", baseInput);
+        register("datetime", baseInput);
         register("textarea", define(base, input, new Attribute[]{LINES, HINT}));
         register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY}));
 

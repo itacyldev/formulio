@@ -21,8 +21,18 @@
 
                     <switcher label="4. Switcher: " value="${entity.switcher}" />
 
-                    <date converter="string" label="5. Date: " validator="required"
-                        value="${entity.fecha}" />
+                    <date converter="string" label="5.1 Date con patrón yyyy/MM/dd: " validator="required"
+                        value="${entity.fecha}" pattern="yyyy/MM/dd"/>
+
+                    <date converter="string" label="5.2 Date sin patrón: " validator="required"
+                        value="${entity.fecha}"/>
+
+                    <datetime converter="string" label="5.3 Datetime con patrón: " validator="required"
+                        value="${entity.fecha}" pattern="yyyy/MM/dd HH/mm/ss"/>
+
+                    <datetime converter="string" label="5.3 Datetime sin patrón: " validator="required"
+                        value="${entity.fecha}"/>
+
 
                     <select label="6. Select: " validator="required" value="${entity.combo}">
                         <options>

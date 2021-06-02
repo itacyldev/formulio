@@ -58,6 +58,7 @@ public class RendererFactory {
         renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("textarea", new TextAreaRenderer());
         renderInstances.put("date", new DateFieldRenderer());
+        renderInstances.put("datetime", new DateFieldRenderer());
         renderInstances.put("switcher", new CheckBoxFieldRenderer());
         renderInstances.put("datatable", new UIDatatableRenderer());
         renderInstances.put("link", new UILinkRenderer());
