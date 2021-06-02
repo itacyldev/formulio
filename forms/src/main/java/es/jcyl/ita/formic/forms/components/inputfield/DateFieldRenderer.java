@@ -21,6 +21,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -146,11 +147,18 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
     }
 
     private String formatDate(String value, InputWidget<UIField, Button> widget) {
+        String formattedDate = "";
         long millisInDay = 60 * 60 * 24 * 1000;
-        long currentTime = ((Date) ConvertUtils.convert(value, Date.class)).getTime();
-        long dateOnly = (currentTime / millisInDay) * millisInDay;
-        Date clearDate = new Date(widget.getComponent().getType().equals(UIField.TYPE.DATE.name())?dateOnly:currentTime);
-        return new SimpleDateFormat(widget.getComponent().getPattern()).format(clearDate);
+        try {
+            long currentTime = ((Date) ConvertUtils.convert(value, Date.class)).getTime();
+            long dateOnly = (currentTime / millisInDay) * millisInDay;
+            Date clearDate = new Date(widget.getComponent().getType().equals(UIField.TYPE.DATE.name())?dateOnly:currentTime);
+            formattedDate = new SimpleDateFormat(widget.getComponent().getPattern()).format(clearDate);
+        }catch (Exception e){
+            DevConsole.error(String.format("An error occurred while trying to format the date [%s].", value));
+            return value;
+        }
+        return formattedDate;
     }
 
     private String formatDate(Date date, String pattern){
