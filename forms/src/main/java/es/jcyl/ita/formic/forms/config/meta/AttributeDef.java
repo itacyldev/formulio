@@ -62,6 +62,8 @@ public class AttributeDef {
 
     public static Attribute HAS_TODAY_BUTTON = new Attribute("hasTodayButton", Boolean.class);
 
+    public static Attribute PATTERN = new Attribute("pattern", String.class);
+
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");
     public static Attribute DBFILE = new Attribute("dbFile", "dbFile", "pathResolver");

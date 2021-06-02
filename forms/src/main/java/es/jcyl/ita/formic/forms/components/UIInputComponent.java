@@ -37,6 +37,7 @@ public class UIInputComponent extends AbstractUIComponent {
     protected boolean hasTodayButton = true;
 
 
+
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
 
@@ -151,4 +152,5 @@ public class UIInputComponent extends AbstractUIComponent {
     public void setHasTodayButton(boolean hasTodayButton) {
         this.hasTodayButton = hasTodayButton;
     }
+
 }

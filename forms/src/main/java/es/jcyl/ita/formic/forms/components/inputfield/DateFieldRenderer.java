@@ -2,14 +2,17 @@ package es.jcyl.ita.formic.forms.components.inputfield;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TimePicker;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -66,24 +69,44 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         Button input = widget.getInputView();
         styleHolder.applyStyle(input);
 
+        final Calendar c = new GregorianCalendar();
+
         final DatePickerDialog.OnDateSetListener listener =
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(final DatePicker view, final int year,
                                           final int monthOfYear, final int dayOfMonth) {
                         view.updateDate(year, monthOfYear, dayOfMonth);
-                        final Calendar c = new GregorianCalendar();
+                        //final Calendar c = new GregorianCalendar();
                         c.set(year, monthOfYear, dayOfMonth);
 
+                        if (widget.getComponent().getType().equals(UIField.TYPE.DATETIME.name())) {
+                            Calendar c = Calendar.getInstance();
+                            int hour = c.get(Calendar.HOUR);
+                            int minute = c.get(Calendar.MINUTE);
+                            TimePickerDialog timePickerDialog = new TimePickerDialog(widget.getContext(), R.style.DialogStyle, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                    c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                    c.set(Calendar.MINUTE, minute);
+                                    String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
+                                    input.setText(formatDate(strValue, widget));
+                                }
+                            }, hour, minute, false);
+                            timePickerDialog.show();
+                        }
+
                         String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
-                        input.setText(strValue);
+                        input.setText(formatDate(strValue, widget));
 
                         UserEventInterceptor interceptor = env.getUserActionInterceptor();
                         if (interceptor != null) {
                             interceptor.notify(Event.inputChange(widget));
                         }
                     }
+
                 };
+
 
         input.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +126,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             public void onClick(final View arg0) {
                 // set now
                 String strValue = (String) ConvertUtils.convert(new Date(), String.class);
-                input.setText(strValue);
+                input.setText(formatDate(strValue, widget));
             }
         });
 
@@ -115,6 +138,23 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         });
 
         setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+    }
+
+    protected void setValueInView(RenderingEnv env, InputWidget<UIField, Button> widget) {
+        String value = getComponentValue(env, widget.getComponent(), String.class);
+        widget.getConverter().setViewValue(widget.getInputView(), formatDate(value, widget));
+    }
+
+    private String formatDate(String value, InputWidget<UIField, Button> widget) {
+        long millisInDay = 60 * 60 * 24 * 1000;
+        long currentTime = ((Date) ConvertUtils.convert(value, Date.class)).getTime();
+        long dateOnly = (currentTime / millisInDay) * millisInDay;
+        Date clearDate = new Date(widget.getComponent().getType().equals(UIField.TYPE.DATE.name())?dateOnly:currentTime);
+        return new SimpleDateFormat(widget.getComponent().getPattern()).format(clearDate);
+    }
+
+    private String formatDate(Date date, String pattern){
+        return new SimpleDateFormat(pattern).format(date);
     }
 
     @Override

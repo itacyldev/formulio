@@ -153,6 +153,7 @@ public class ComponentBuilderFactory {
         registerBuilder("textarea", newBuilder(UIFieldBuilder.class, "textarea"));
         registerBuilder("switcher", inputFieldBuilder);
         registerBuilder("date", inputFieldBuilder);
+        registerBuilder("datetime", inputFieldBuilder);
         registerBuilder("image", newBuilder(UIImageBuilder.class, "image"));
 
         registerBuilder("select", newBuilder(UIMultiOptionBuilder.class, "select", UISelect.class));
