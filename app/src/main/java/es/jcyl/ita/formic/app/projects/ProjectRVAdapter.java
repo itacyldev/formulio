@@ -48,7 +48,6 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
 
     private static Context context;
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView project_nameTextView;
         private final TextView project_descriptionTextView;
@@ -61,7 +60,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 public void onClick(View v) {
 
                     context = project_nameTextView.getContext();
-                    new MyTask().execute(10);
+                    new MyTask(context).execute(10);
 
                 }
             });
@@ -83,6 +82,12 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             ProgressDialog progressDialog;
             boolean projectOpeningFinish = true;
             Project prj;
+            Context currentContext;
+
+            public MyTask(Context context) {
+                //currentContext = context;
+                currentContext =  context;
+            }
 
             @Override
             protected String doInBackground(Integer... params) {
@@ -90,32 +95,32 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 prj = projectList.get(getAdapterPosition());
                 String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-                try {
-                    Config.getInstance().setCurrentProject(prj);
-                    ((MainActivity) context).loadFragment(new FormListFragment());
-                } catch (Exception e) {
-                    projectOpeningFinish = false;
-
-                }
                 return "Task Completed.";
             }
             @Override
             protected void onPostExecute(String result) {
+                try {
+                    Config.getInstance().setCurrentProject(prj);
+                    ((MainActivity) currentContext).loadFragment(new FormListFragment());
+                } catch (Exception e) {
+                    projectOpeningFinish = false;
+
+                }
                 progressDialog.dismiss();
                 if (!projectOpeningFinish){
-                    UserMessagesHelper.toast(context,
-                            DevConsole.info(context.getString(R.string.project_opening_error, (String) prj.getId())),
+                    UserMessagesHelper.toast(currentContext,
+                            DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) prj.getId())),
                             Toast.LENGTH_LONG);
                 }else{
-                    UserMessagesHelper.toast(context,
-                            DevConsole.info(context.getString(R.string.project_opening_finish, (String) prj.getId())),
+                    UserMessagesHelper.toast(currentContext,
+                            DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) prj.getId())),
                             Toast.LENGTH_LONG);
                 }
             }
             @Override
             protected void onPreExecute() {
-                progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage(context.getString(R.string.loading));
+                progressDialog = new ProgressDialog(currentContext);
+                progressDialog.setMessage(currentContext.getString(R.string.loading));
                 progressDialog.setIndeterminate(false);
                 progressDialog.setCancelable(false);
                 progressDialog.show();
