@@ -87,7 +87,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)
                 || component.isMandatory() || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }

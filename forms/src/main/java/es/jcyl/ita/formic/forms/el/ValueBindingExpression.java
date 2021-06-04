@@ -44,7 +44,7 @@ public interface ValueBindingExpression {
      *
      * @return
      */
-     boolean isReadOnly();
+     boolean isReadonly();
 
      String getBindingProperty();
 

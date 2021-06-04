@@ -162,7 +162,7 @@ public class BuilderHelper {
         // set converter if needed
         UIInputComponent element = node.getElement();
         ValueBindingExpression expr = element.getValueExpression();
-        if (expr != null && !expr.isReadOnly()) {
+        if (expr != null && !expr.isReadonly()) {
             String propertyName = expr.getBindingProperty();
             EntityMeta meta = null;
             try {

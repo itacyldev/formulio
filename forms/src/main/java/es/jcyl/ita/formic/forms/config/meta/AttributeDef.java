@@ -25,8 +25,8 @@ public class AttributeDef {
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
-    public static Attribute READONLY = new Attribute("readOnly", "readOnly", "binding");
-    public static Attribute READONLY_MESSAGE = new Attribute("readOnlyMessage", "readOnlyMessage", String.class);
+    public static Attribute READONLY = new Attribute("readonly", "readonly", "binding");
+    public static Attribute READONLY_MESSAGE = new Attribute("readonlyMessage", "readonlyMessage", String.class);
 
     // common input fields
     public static Attribute TYPE = new Attribute("type", "type", String.class);

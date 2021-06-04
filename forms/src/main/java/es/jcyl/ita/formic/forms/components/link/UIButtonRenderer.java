@@ -55,8 +55,8 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)) {
-                    UserMessagesHelper.toast(env.getAndroidContext(), component.getReadOnlyMessage(),
+                if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
+                    UserMessagesHelper.toast(env.getAndroidContext(), component.getReadonlyMessage(),
                             Toast.LENGTH_LONG);
                 } else {
                     UserEventInterceptor interceptor = env.getUserActionInterceptor();

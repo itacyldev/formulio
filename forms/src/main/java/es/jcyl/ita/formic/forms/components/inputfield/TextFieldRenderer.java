@@ -78,7 +78,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
+        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
             resetButton.setVisibility(View.GONE);
         }
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +120,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
     protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout, UIField component) {
         // set clear button
-        if (!(Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)) {
+        if (!(Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             textInputLayout.setEndIconActivated(true);
             textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
             TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
@@ -202,7 +202,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     }
 
     protected void removeUnderline(RenderingEnv env, UIField component, TextInputLayout textInputLayout) {
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)) {
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
         }
     }

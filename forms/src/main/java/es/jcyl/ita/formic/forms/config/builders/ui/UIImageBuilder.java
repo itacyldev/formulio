@@ -67,10 +67,10 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         if (valueExpr.isLiteral()) {
             // If the expression is a literal, the image has to be retrieved using project default
             // image repository Ej: /images/myfavoriteImage.jpeg. The component is readonly
-            image.setReadOnly(exprFactory.create("true")); // this will disable camera and gallery buttons
+            image.setReadonly(exprFactory.create("true")); // this will disable camera and gallery buttons
             image.setInputType(UIImage.ImageInputType.NO_CONTROLS.value);
             usesExternalRepo = true;
-        } else if (valueExpr.isReadOnly()) {
+        } else if (valueExpr.isReadonly()) {
             // if the expression is not an entity attribute binding, by default it is interpreted as
             // and expression to define the Id of the entity in the repository. For example in a
             // FileEntity repository: ${entity.category}/${entity.id}.jpeg
@@ -150,7 +150,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         EntityMapping relation = new EntityMapping(repo, fkExpression, img.getId());
         relation.setFilter(img.getFilter());
 
-        if (imgBndExpr.isReadOnly() && !imgBndExpr.isLiteral()) {
+        if (imgBndExpr.isReadonly() && !imgBndExpr.isLiteral()) {
             // if the expression is a readonly expression that uses entity attributes to
             // calculate the ID, we need to define a calculated property for the entity that will
             // be interpreted before the entity is saved: ID = valueExpression

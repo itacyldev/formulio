@@ -20,7 +20,7 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     private String entityId = "params.entityId";
     private Entity currentEntity;
     private String onValidate; // js function to call on validation
-    private boolean readOnly;
+    private boolean readonly;
     /**
      * filterable component
      **/
@@ -72,8 +72,8 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     }
 
 
-    public boolean isReadOnly() {
-        return this.readOnly || !(this.repo instanceof EditableRepository);
+    public boolean isReadonly() {
+        return this.readonly || !(this.repo instanceof EditableRepository);
     }
 
 
@@ -95,8 +95,8 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
         this.filter = filter;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
     }
 
     public void setEntity(Entity currentEntity) {

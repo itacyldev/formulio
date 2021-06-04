@@ -93,7 +93,7 @@ public class UIInputComponent extends AbstractUIComponent {
      * @return
      */
     public boolean isBound() {
-        return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
+        return (getValueExpression() == null) ? false : !getValueExpression().isReadonly();
     }
 
     public String getLabel() {

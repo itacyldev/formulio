@@ -51,9 +51,9 @@ public class FormEntityLoader {
             // create empty entity
             // TODO: recover this piece of code when the ActionContext is ready and the operation type is
             // accesible
-            //            if (isReadOnly()) {
-            //                throw new ViewConfigException(String.format("The form [%s] is readOnly, no new " +
-            //                        "entities can be created. Use an EditableRepository or set the readOnly " +
+            //            if (isReadonly()) {
+            //                throw new ViewConfigException(String.format("The form [%s] is readonly, no new " +
+            //                        "entities can be created. Use an EditableRepository or set the readonly " +
             //                        "attribute to false.", this.getId()));
             //            }
             entity = new Entity(repo.getSource(), repo.getMeta());
@@ -82,7 +82,7 @@ public class FormEntityLoader {
         } else {
             // if there's a filter defined in the form, use the filter to find the entity
             if (filter == null) {
-                throw new ViewConfigException(String.format("You are using a readOnly repository in " +
+                throw new ViewConfigException(String.format("You are using a readonly repository in " +
                                 "form [%s] but no repofilter has been configured to define the query to " +
                                 "find the entity from its id. Add a repofilter tag with an eq condition" +
                                 " with the expression ${params.entityId}.",

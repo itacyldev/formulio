@@ -41,25 +41,25 @@
 							<paragraph value="Comprobar inscripción en los Registros del C.R."/>
 						</row>
 						<row>
-                            <textarea readOnly="true" value="Fecha 1: "/>
+                            <textarea readonly="true" value="Fecha 1: "/>
                             <date converter="string" value="${entity.q1_1_fecha1}" hasDeleteButton="false" hasTodayButton="false" />
 							<!--<textarea value="${entity.q1_1_fecha1}" hasDeleteButton="false"/>-->
 						</row>
 
                         <row>
-                            <textarea readOnly="true" value="Fecha 2: "/>
+                            <textarea readonly="true" value="Fecha 2: "/>
                             <date converter="string" value="${entity.q1_1_fecha2}" hasDeleteButton="false" hasTodayButton="false"/>
                             <!--<textarea value="${entity.q1_1_fecha2}" hasDeleteButton="false"/>-->
                         </row>
 
                         <row>
-                            <textarea readOnly="true" value="Fecha 3: "/>
+                            <textarea readonly="true" value="Fecha 3: "/>
                             <!--<textarea value="${entity.q1_1_fecha3}" hasDeleteButton="false"/>-->
                             <date converter="string" value="${entity.q1_1_fecha3}" hasDeleteButton="false" hasTodayButton="false"/>
                         </row>
 
                         <row>
-                            <textarea readOnly="true" value="Fecha 4: "/>
+                            <textarea readonly="true" value="Fecha 4: "/>
                             <date converter="string" value="${entity.q1_1_fecha4}" hasDeleteButton="false" hasTodayButton="false"/>
                             <!--<textarea value="${entity.q1_1_fecha4}" hasDeleteButton="false"/>-->
                         </row>
@@ -81,20 +81,20 @@
 							<paragraph value="Comprobar inscripción en el RGSEAA (puede hacerse vía AESAN o IREA) o solicitud de inscripción junto con declaración responsable del solicitante. Comprobar último acta de inspección emitido por la Administración." />
 						</row>
 						<row>
-							<textarea readOnly="true" value="Nº RGSEAA:" />
+							<textarea readonly="true" value="Nº RGSEAA:" />
 							<textarea value="${entity.q1_2_num_rgseaa}" hasDeleteButton="false" inputType="4" />
 						</row>
 						<row>
-							<textarea readOnly="true" value="Fecha:" />
+							<textarea readonly="true" value="Fecha:" />
                             <!--<textarea value="${entity.q1_2_fecha}" hasDeleteButton="false" />-->
                             <date converter="string" value="${entity.q1_2_fecha}" hasDeleteButton="false" hasTodayButton="false"/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Nº Acta:" />
+							<textarea readonly="true" value="Nº Acta:" />
 							<textarea value="${entity.q1_2_num_acta}" hasDeleteButton="false" />
 						</row>
 						<row>
-							<textarea readOnly="true" value="F. últ. insp. san.:" />
+							<textarea readonly="true" value="F. últ. insp. san.:" />
 							<!--<textarea value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" />-->
                             <date converter="string" value="${entity.q1_2_fecha_ultima_inspeccion_sanitaria}" hasDeleteButton="false" hasTodayButton="false"/>
 						</row>
@@ -325,22 +325,22 @@
 							<paragraph value="Comprobar Declaración de Producción de vino del CRDOP. Comprobar coincidencia con Declaración de Producción de la Administración y asiento en libros-registro. Comprobar Rendimiento extracción para vino amparado  ≤ 70 (ó 72) litros de vino / 100 kg de uva."/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Tinto"/>
+							<textarea readonly="true" value="Tinto"/>
                             <textarea value="${entity.q3_2_dpo_tinto}" hasDeleteButton="false" inputType="4"/>
 							<textarea value="${entity.q3_2_total_tinto}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Rosado"/>
+							<textarea readonly="true" value="Rosado"/>
 							<textarea value="${entity.q3_2_dpo_rosado}" hasDeleteButton="false" inputType="4"/>
 							<textarea value="${entity.q3_2_total_rosado}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Blanco"/>
+							<textarea readonly="true" value="Blanco"/>
 							<textarea value="${entity.q3_2_dpo_blanco}" hasDeleteButton="false" inputType="4"/>
 							<textarea value="${entity.q3_2_total_blanco}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Otros"/>
+							<textarea readonly="true" value="Otros"/>
 							<textarea value="${entity.q3_2_dop_otros}" hasDeleteButton="false" inputType="4"/>
 							<textarea value="${entity.q3_2_total_otros}" hasDeleteButton="false" inputType="4"/>
 						</row>
@@ -459,11 +459,11 @@
 							<paragraph value="Comprobar inscripción en el Registro de Envasadores y Embotelladores de Vino y Bebidas Alcohólicas. Se comprobará igualmente su inscripción como instalación embotelladora en los Registros del CRDO." />
 						</row>
 						<row>
-							<textarea readOnly="true" value="Nº RE:" />
+							<textarea readonly="true" value="Nº RE:" />
 							<textarea value="${entity.q6_1_num_re}" hasDeleteButton="false" inputType="4"/>
 						</row>
 						<row>
-							<textarea readOnly="true" value="Fecha:" />
+							<textarea readonly="true" value="Fecha:" />
 							<!--<textarea value="${entity.q6_1_fecha}" hasDeleteButton="false"/>-->
                             <date converter="string" value="${entity.q6_1_fecha}" hasDeleteButton="false" hasTodayButton="false"/>
 						</row>

@@ -2,13 +2,13 @@
     <edit>
         <form>
             <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}">
-                <image repo="superHImages" value="${entity.image}" readOnly="true"/>
+                <image repo="superHImages" value="${entity.image}" readonly="true"/>
             </card>
             <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}" imagePosition="bottom">
-                <image repo="superHImages" value="${entity.image}" readOnly="true"/>
+                <image repo="superHImages" value="${entity.image}" readonly="true"/>
             </card>
             <card label="Label" expandable="true" expanded="true" subtitle="${entity.real_name}" title="${entity.name}" imagePosition="right">
-                <image repo="superHImages" value="${entity.image}" readOnly="true"/>
+                <image repo="superHImages" value="${entity.image}" readonly="true"/>
             </card>
             <card label="${entity.name}" expandable="true" expanded="true" imagePosition="left">
                 <head name="title" value="${entity.name}"/>
