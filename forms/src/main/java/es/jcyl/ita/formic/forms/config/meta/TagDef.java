@@ -29,7 +29,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBTABLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DEFAULT_EXTENSION;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DEFAULT_VALUE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ENTITYSELECTOR;
@@ -143,7 +142,7 @@ public class TagDef {
         }));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION};
-        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER, PATTERN};
+        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER, PATTERN};
         Map<String, Attribute> baseInput = define(base, input);
         register("input", define(baseInput, new Attribute[]{HINT}));
         register("checkbox", baseInput);

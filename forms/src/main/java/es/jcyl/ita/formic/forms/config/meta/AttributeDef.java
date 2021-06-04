@@ -54,8 +54,6 @@ public class AttributeDef {
     public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
     public static Attribute LINES = new Attribute("lines", Integer.class);
 
-    public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
-
     public static Attribute HINT = new Attribute("hint");
 
     public static Attribute HAS_DELETE_BUTTON = new Attribute("hasDeleteButton", Boolean.class);
