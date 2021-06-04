@@ -58,7 +58,7 @@ public class FormEditController extends FormController {
 
     public boolean save(CompositeContext context, FormWidget formWidget) {
         UIForm form = formWidget.getComponent();
-        if ((Boolean) ConvertUtils.convert(form.isReadOnly(context), Boolean.class)) {
+        if ((Boolean) ConvertUtils.convert(form.isReadonly(context), Boolean.class)) {
             return false;// no changes
         }
         // validate form date
@@ -80,7 +80,7 @@ public class FormEditController extends FormController {
     }
 
     public boolean delete(CompositeContext context, UIForm form) {
-        if ((Boolean) ConvertUtils.convert(form.isReadOnly(context), Boolean.class)) {
+        if ((Boolean) ConvertUtils.convert(form.isReadonly(context), Boolean.class)) {
             return false;
         }
         entityPersister.delete(form);

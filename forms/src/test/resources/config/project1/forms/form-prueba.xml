@@ -66,9 +66,9 @@
                             <paragraph value="Descripción de la tabla en un paragraph" />
                         </row>
                         <row>
-                            <textarea readOnly="true" value="1. " />
-                            <textarea readOnly="true" value="Input " />
-                            <textarea readOnly="true" value="${entity.input}" />
+                            <textarea readonly="true" value="1. " />
+                            <textarea readonly="true" value="Input " />
+                            <textarea readonly="true" value="${entity.input}" />
                         </row>
                     </table>
 
@@ -77,9 +77,9 @@
                             <paragraph value="Descripción de la tabla en un paragraph" />
                         </row>
                         <row>
-                            <textarea readOnly="true" value="1.  " />
-                            <textarea readOnly="true" value="Input " />
-                            <textarea readOnly="true" value="${entity.input}" />
+                            <textarea readonly="true" value="1.  " />
+                            <textarea readonly="true" value="Input " />
+                            <textarea readonly="true" value="${entity.input}" />
                         </row>
                     </table>
 
@@ -89,24 +89,24 @@
                                 value="1: 20-30-50, 2: 20-30, 3: 20-30-50-70, 4: 40-40-80, 5: 30-80 6: asdfla" />
                         </row>
                         <row weights="20, 30, 50">
-                            <textarea readOnly="true" value="1.  " />
-                            <textarea readOnly="true" value="Input " />
+                            <textarea readonly="true" value="1.  " />
+                            <textarea readonly="true" value="Input " />
                             <input hasDeleteButton="false" value="${entity.input}" />
                         </row>
                         <row weights="20, 30">
-                            <textarea readOnly="true" value="2.  " />
-                            <textarea readOnly="true" value="Textarea: " />
+                            <textarea readonly="true" value="2.  " />
+                            <textarea readonly="true" value="Textarea: " />
                             <textarea hasDeleteButton="false" value="${entity.textarea}" />
                         </row>
                         <row weights="20, 30, 50, 70">
-                            <textarea readOnly="true" value="3.  " />
-                            <textarea readOnly="true" value="Date: " />
+                            <textarea readonly="true" value="3.  " />
+                            <textarea readonly="true" value="Date: " />
                             <date converter="string" hasDeleteButton="false"
                                 value="${entity.fecha}" />
                         </row>
                         <row weights="40, 40, 80">
-                            <textarea readOnly="true" value="4.  " />
-                            <textarea readOnly="true" value="Select: " />
+                            <textarea readonly="true" value="4.  " />
+                            <textarea readonly="true" value="Select: " />
                             <select hasDeleteButton="false" value="${entity.combo}">
                                 <options>
                                     <option label="Combo1" value="Combo1" />
@@ -116,24 +116,24 @@
                             </select>
                         </row>
                         <row weights="30, 80">
-                            <textarea readOnly="true" value="5.  " />
-                            <textarea readOnly="true" value="Switcher: " />
+                            <textarea readonly="true" value="5.  " />
+                            <textarea readonly="true" value="Switcher: " />
                             <switcher value="${entity.switcher}" />
                         </row>
                         <row weights="asdfla">
-                            <textarea readOnly="true" value="6.  " />
-                            <textarea readOnly="true" value="Autocomplete: " />
-                            <textarea readOnly="true" value="${entity.autocompletado_id}" />
+                            <textarea readonly="true" value="6.  " />
+                            <textarea readonly="true" value="Autocomplete: " />
+                            <textarea readonly="true" value="${entity.autocompletado_id}" />
                         </row>
                         <row>
-                            <textarea readOnly="true" value="7.  " />
-                            <textarea readOnly="true" value="Image: " />
+                            <textarea readonly="true" value="7.  " />
+                            <textarea readonly="true" value="Image: " />
                             <image hasDeleteButton="false" repo="superHImages"
                                 value="${entity.image}" />
                         </row>
                         <row>
-                            <textarea readOnly="true" value="8.  " />
-                            <textarea readOnly="true" value="Radio: " />
+                            <textarea readonly="true" value="8.  " />
+                            <textarea readonly="true" value="Radio: " />
                             <radio orientation="horizontal" value="Radio1" hasDeleteButton="false">
                                 <options>
                                     <option id="optRadio1" label="Radio1" value="Radio1" />

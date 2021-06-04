@@ -98,7 +98,7 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
         if (property.isPrimaryKey()) {
             // if the property is pk, do not show if the value is empty
             node.setAttribute("render", "${not empty(entity." + property.name + ")}");
-            node.setAttribute("readOnly", "true");
+            node.setAttribute("readonly", "true");
         }
 
         UIFieldBuilderHelper.addValidators(node, property);

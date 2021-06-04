@@ -35,8 +35,8 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
     private String rendererType;
     private boolean renderChildren;
 
-    protected ValueBindingExpression readOnly;
-    protected String readOnlyMessage;
+    protected ValueBindingExpression readonly;
+    protected String readonlyMessage;
 
     protected ValueBindingExpression placeHolder;
     /**
@@ -330,29 +330,29 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
         isEntityMapping = entityMapping;
     }
 
-    public String getReadOnlyMessage() {
-        return readOnlyMessage;
+    public String getReadonlyMessage() {
+        return readonlyMessage;
     }
 
-    public void setReadOnlyMessage(String readOnlyMessage) {
-        this.readOnlyMessage = readOnlyMessage;
+    public void setReadonlyMessage(String readonlyMessage) {
+        this.readonlyMessage = readonlyMessage;
     }
 
-    public boolean isReadOnly(Context context) {
-        if (this.readOnly == null) {
+    public boolean isReadonly(Context context) {
+        if (this.readonly == null) {
             return false;
         } else {
             try {
-                return (Boolean) ConvertUtils.convert(JexlFormUtils.eval(context, this.readOnly), Boolean.class);
+                return (Boolean) ConvertUtils.convert(JexlFormUtils.eval(context, this.readonly), Boolean.class);
             } catch (Exception e) {
-                error("Error while trying to evaluate JEXL expression: " + this.readOnly.toString(), e);
+                error("Error while trying to evaluate JEXL expression: " + this.readonly.toString(), e);
                 return false;
             }
         }
     }
 
-    public void setReadOnly(ValueBindingExpression readOnly) {
-        this.readOnly = readOnly;
+    public void setReadonly(ValueBindingExpression readonly) {
+        this.readonly = readonly;
     }
 
     public ValueBindingExpression getPlaceHolder() {

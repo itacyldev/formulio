@@ -87,6 +87,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             public MyTask(Context context) {
                 //currentContext = context;
                 currentContext =  context;
+                //progressBar = pB;
             }
 
             @Override
@@ -119,7 +120,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             }
             @Override
             protected void onPreExecute() {
-                progressDialog = new ProgressDialog(currentContext);
+                progressDialog = new ProgressDialog(currentContext, R.style.DialogStyle);
                 progressDialog.setMessage(currentContext.getString(R.string.loading));
                 progressDialog.setIndeterminate(false);
                 progressDialog.setCancelable(false);

@@ -51,7 +51,7 @@
                             valueProperty="id" />
                     </autocomplete>
 
-                    <image converter="b64Image" height="200" readOnly="true"
+                    <image converter="b64Image" height="200" readonly="true"
                         repo="superHImagesDBRepo" repoProperty="image_thumb"
                         value="${entity.sworn_enemy}" width="300" />
 

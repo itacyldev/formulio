@@ -66,7 +66,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setup(RenderingEnv env) {
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getWidgetContext()), Boolean.class)) {
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             cameraButton.setEnabled(false);
         } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
             cameraButton.setVisibility(View.INVISIBLE);
