@@ -199,9 +199,7 @@ public abstract class FormController implements Identificable, FilterableCompone
     }
 
     public void setRepo(Repository repo) {
-
         this.repo = repo;
-
     }
 
     public Filter getFilter() {
@@ -240,7 +238,6 @@ public abstract class FormController implements Identificable, FilterableCompone
     /***
      * LIFECYCLE HOOKS
      */
-
     public void onBeforeRender() {
         if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
             ScriptEngine engine = mc.getScriptEngine();
