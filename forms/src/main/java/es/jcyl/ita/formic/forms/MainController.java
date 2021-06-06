@@ -29,6 +29,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -83,7 +84,7 @@ public class MainController implements ContextAwareComponent {
     // navigation control
     private Router router;
     private static HashMap<Class, Class> staticMap;
-    private State state;
+    private MCState state;
 
 
     public static MainController getInstance() {
@@ -129,7 +130,7 @@ public class MainController implements ContextAwareComponent {
      */
     public void navigate(android.content.Context andContext, String formId,
                          Map<String, Object> params) {
-        saveState();
+        saveMCState();
 
         setupParamsContext(params);
         try {
@@ -144,7 +145,7 @@ public class MainController implements ContextAwareComponent {
             this.formController.load(globalContext);
             this.scriptEngine.initScope(controller.getId());
         } catch (Exception e) {
-            restoreState();
+            restoreMCState();
             throw e;
         }
 
@@ -159,13 +160,13 @@ public class MainController implements ContextAwareComponent {
         context.startActivity(intent);
     }
 
-    private void saveState() {
+    private void saveMCState() {
         if (this.formController != null) {
-            this.state = new State(this.formController, globalContext.getContext("params"));
+            this.state = new MCState(this.formController, globalContext.getContext("params"));
         }
     }
 
-    private void restoreState() {
+    private void restoreMCState() {
         if (state != null) {
             this.formController = this.state.fc;
             globalContext.addContext(this.state.params);
@@ -227,13 +228,28 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.disableInterceptors();
 
+        // render view Widget and restore partial state if needed
         formController.onBeforeRender();
         Widget widget = viewRenderer.render(renderingEnv, uiView);
         formController.setRootWidget((ViewWidget) widget);
-        renderingEnv.enableInterceptors();
+        restorePrevState(formController);
 
-        formController.onAfterRender(widget);
+        renderingEnv.enableInterceptors();
+        formController.onAfterRender(widget); //TODO: after or before enabling Interceptors?
+
         return widget;
+    }
+
+    /**
+     * Restore view previous state if needed
+     *
+     * @param formController
+     */
+    private void restorePrevState(FormController formController) {
+        UserAction action = this.router.getCurrentAction();
+        if (action != null && action.isRestoreView()) {
+            formController.restoreViewPartialState();
+        }
     }
 
     /**
@@ -298,11 +314,11 @@ public class MainController implements ContextAwareComponent {
         }
     }
 
-    public class State {
+    public class MCState {
         FormController fc;
         es.jcyl.ita.formic.core.context.Context params;
 
-        public State(FormController fc, es.jcyl.ita.formic.core.context.Context params) {
+        public MCState(FormController fc, es.jcyl.ita.formic.core.context.Context params) {
             this.fc = fc;
             this.params = params;
         }

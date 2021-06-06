@@ -98,7 +98,8 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                         Object route = e.evaluate((JexlContext) env.getWidgetContext());
                         strRoute = (String) ConvertUtils.convert(route, String.class);
                     }
-                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
+//                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
+                    UserAction action = new UserAction(formAction, formController);
                     action.setRegisterInHistory(formAction.isRegisterInHistory());
                     action.setRefresh(formAction.getRefresh());
                     action.setMessage(formAction.getMessage());

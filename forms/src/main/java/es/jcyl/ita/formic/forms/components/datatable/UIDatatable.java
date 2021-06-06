@@ -17,9 +17,9 @@ package es.jcyl.ita.formic.forms.components.datatable;
 
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;

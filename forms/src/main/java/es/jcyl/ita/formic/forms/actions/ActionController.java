@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
-import es.jcyl.ita.formic.forms.actions.handlers.NavigateActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.EmptyActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -56,7 +56,7 @@ public class ActionController {
         this.router = router;
         // default actions
         register(ActionType.SAVE, new SaveActionHandler(mc, router));
-        ActionHandler navHandler = new NavigateActionHandler(mc, router);
+        ActionHandler navHandler = new EmptyActionHandler(mc, router);
         register(ActionType.BACK, navHandler);
         register(ActionType.CANCEL, navHandler);
         register(ActionType.NAV, navHandler);
@@ -117,6 +117,7 @@ public class ActionController {
 
     protected void resolveNavigation(ActionContext actionContext, UserAction action, String msg) {
         if (action.isRefreshSet()) {
+            // update current view after action completion
             String refresh = action.getRefresh();
             if (REFRESH_THIS.equals(refresh.toLowerCase())) {
                 mc.updateView(action.getWidget().getWidgetContext().getWidget());
@@ -142,7 +143,7 @@ public class ActionController {
             }
         } else {
             // don't want to go back to form detail if user presses back button
-            router.popHistory(1);
+            //router.popHistory(1);
             router.navigate(actionContext, action, msg);
         }
     }

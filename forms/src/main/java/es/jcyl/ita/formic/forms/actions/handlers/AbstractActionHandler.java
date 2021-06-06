@@ -50,7 +50,7 @@ public abstract class AbstractActionHandler implements ActionHandler {
     /**
      * Default messages
      * @param action
-     * @return
+     * @RETURN
      */
     public String getSuccessMessage(ActionContext actionContext, UserAction action) {
         return null;

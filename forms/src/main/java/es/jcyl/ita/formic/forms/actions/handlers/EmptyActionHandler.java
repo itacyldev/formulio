@@ -28,34 +28,18 @@ import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
+ * Empty action handler to hold pure navigation actions.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class NavigateActionHandler extends AbstractActionHandler {
+public class EmptyActionHandler extends AbstractActionHandler {
 
-    public NavigateActionHandler(MainController mc, Router router) {
+    public EmptyActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
-    /**
-     * Handles user navigations request accessing the router.
-     * The method has the synchronized modifier to avoid simultaneous requests.
-     *
-     * @param action
-     */
+
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
-//        // create route from action params
-//        String formId = action.getRoute();
-//        if (StringUtils.isBlank(formId)) {
-//            throw new UserActionException(error(String.format("A navigation action was called from the " +
-//                    "form [%s], but the parameter 'route' was empty, make sure " +
-//                    "the attribute of the component is properly set and references a valid " +
-//                    "formId.", actionContext.getFc().getId())));
-//        }
-//        try {
-//            router.navigate(actionContext, action);
-//        } catch (FormException e) {
-//            UserMessagesHelper.toast(actionContext.getViewContext(), e.getLocalizedMessage());
-//        }
     }
 }

@@ -31,6 +31,8 @@ import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
+import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
@@ -55,8 +57,16 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIDatatable> node) {
-//        BuilderHelper.inheritAttribute(node, "repo");
         BuilderHelper.setUpRepo(node, true);
+        // default att values
+    }
+
+    @Override
+    protected Object getDefaultAttributeValue(UIDatatable element, ConfigNode node, String attName) {
+        if(AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)){
+            return Boolean.TRUE;
+        }
+        return super.getDefaultAttributeValue(element, node, attName);
     }
 
     @Override
@@ -69,7 +79,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         UIAction uiAction = element.getAction();
-        // FORMIC-245 Crear atribute resolverpara el attribute "route"
+        // FORMIC-245 Crear atribute resolver para el attribute "route"
         if (uiAction == null) { // default action
             uiAction = new UIAction();
             uiAction.setType("nav");

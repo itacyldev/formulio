@@ -118,6 +118,10 @@ public abstract class FormController implements Identificable, FilterableCompone
         stateHolder.restoreState(rootWidget);
     }
 
+    public void restoreViewPartialState() {
+        stateHolder.restorePartialState(rootWidget);
+    }
+
 
     /****************************/
     /** GETTER/SETTERS **/

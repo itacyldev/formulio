@@ -34,6 +34,7 @@ public class UserAction {
     private String name;
     private String route;
     private String refresh;
+    private boolean restoreView = false;
     private boolean registerInHistory = true;
     private String message;
     private Map<String, Object> params;
@@ -58,6 +59,13 @@ public class UserAction {
         this(action.getType(), action.getRoute(), component);
         this.setRegisterInHistory(action.isRegisterInHistory());
         this.setRefresh(action.getRefresh());
+        this.setRestoreView(action.isRestoreView());
+    }
+    public UserAction(UIAction action, FormController origin) {
+        this(action.getType(), action.getRoute(), null, origin);
+        this.setRegisterInHistory(action.isRegisterInHistory());
+        this.setRefresh(action.getRefresh());
+        this.setRestoreView(action.isRestoreView());
     }
 
     public void setRefresh(String refresh) {
@@ -110,6 +118,14 @@ public class UserAction {
 
     public void setRegisterInHistory(boolean registerInHistory) {
         this.registerInHistory = registerInHistory;
+    }
+
+    public boolean isRestoreView() {
+        return restoreView;
+    }
+
+    public void setRestoreView(boolean restoreView) {
+        this.restoreView = restoreView;
     }
 
     public Map<String, Object> getParams() {
@@ -201,6 +217,7 @@ public class UserAction {
 
     /**
      * Indicates if current action has set the value of attribute refresh
+     *
      * @return
      */
     public boolean isRefreshSet() {

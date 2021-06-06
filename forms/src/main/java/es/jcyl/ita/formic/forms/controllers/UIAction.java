@@ -28,6 +28,7 @@ public class UIAction {
     private String label;
     private String type;
     private String route;
+    private boolean restoreView = false;
     private boolean registerInHistory = true;
     /**
      * What has to be refreshed after action execution
@@ -127,5 +128,13 @@ public class UIAction {
 
     public void setRefresh(String refresh) {
         this.refresh = refresh;
+    }
+
+    public boolean isRestoreView() {
+        return restoreView;
+    }
+
+    public void setRestoreView(boolean restoreView) {
+        this.restoreView = restoreView;
     }
 }

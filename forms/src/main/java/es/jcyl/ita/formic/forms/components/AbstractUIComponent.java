@@ -34,6 +34,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     private String rendererType;
     private boolean renderChildren;
+    private boolean allowsPartialRestore;
 
     protected ValueBindingExpression readonly;
     protected String readonlyMessage;
@@ -363,4 +364,11 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
         this.placeHolder = placeHolder;
     }
 
+    public Boolean getAllowsPartialRestore() {
+        return allowsPartialRestore;
+    }
+
+    public void setAllowsPartialRestore(Boolean allowsPartialRestore) {
+        this.allowsPartialRestore = allowsPartialRestore;
+    }
 }

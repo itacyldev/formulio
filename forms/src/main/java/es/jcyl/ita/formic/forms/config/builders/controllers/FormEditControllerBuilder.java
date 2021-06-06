@@ -233,6 +233,8 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         node.setAttribute("label", label);
         node.setAttribute("route", route);
         node.setAttribute("registerInHistory", registerInHistory);
+        node.setAttribute("restoreView", "true");
+
         return node;
     }
 

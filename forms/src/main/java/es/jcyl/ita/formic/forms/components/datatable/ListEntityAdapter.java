@@ -177,8 +177,9 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                     if (uiAction == null) {
                         return;
                     }
-                    UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
-                            dtLayout.getComponent());
+                    UserAction action = new UserAction(uiAction,dtLayout.getComponent());
+//                    UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
+//                            dtLayout.getComponent());
                     if (uiAction.hasParams()) {
                         CompositeContext gContext = dtLayout.getRenderingEnv().getWidgetContext();
                         gContext.addContext(new EntityContext(currentEntity));

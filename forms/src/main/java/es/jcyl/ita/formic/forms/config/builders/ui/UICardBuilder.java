@@ -19,10 +19,12 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.card.UICard;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DESCRIPTION;
@@ -45,6 +47,8 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
     }
 
     protected void setAttributes(UICard card, ConfigNode node) {
+        // TODO: esto tiene que estar en el substreestarts en lugar de modificar la lectura de la superclase
+        // FORMIC-287 Refactorizar CardBuilder
         Map<String, String> attributes = node.getAttributes();
 
         String attValue = attributes.get(IMAGE.name);
@@ -92,6 +96,13 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
     @Override
     public void setupOnSubtreeStarts(ConfigNode<UICard> node) {
         processHeader(node);
+    }
+
+    protected Object getDefaultAttributeValue(UIDatalist element, ConfigNode node, String attName) {
+        if(AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)){
+            return Boolean.TRUE;
+        }
+        return null;
     }
 
     private void processHeader(ConfigNode<UICard> node) {

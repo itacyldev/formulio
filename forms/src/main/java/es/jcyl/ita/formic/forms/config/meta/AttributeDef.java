@@ -27,6 +27,7 @@ public class AttributeDef {
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
     public static Attribute READONLY = new Attribute("readonly", "readonly", "binding");
     public static Attribute READONLY_MESSAGE = new Attribute("readonlyMessage", "readonlyMessage", String.class);
+    public static Attribute ALLOWS_PARTIAL_RESTORE = new Attribute("allowsPartialRestore", Boolean.class);
 
     // common input fields
     public static Attribute TYPE = new Attribute("type", "type", String.class);
@@ -127,6 +128,7 @@ public class AttributeDef {
     public static Attribute ROUTE = new Attribute("route", "route", "binding-route");
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
     public static Attribute REFRESH = new Attribute("refresh", String.class);
+    public static Attribute RESTORE_VIEW = new Attribute("restoreView", Boolean.class);
     public static Attribute MESSAGE = new Attribute("message", "message", String.class);
 
     // scripting

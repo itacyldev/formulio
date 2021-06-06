@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -61,6 +62,14 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         super.setupOnSubtreeEnds(node);
         setNumItems(node);
         setUpRoute(node);
+    }
+
+    @Override
+    protected Object getDefaultAttributeValue(UIDatalist element, ConfigNode node, String attName) {
+        if(AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)){
+            return Boolean.TRUE;
+        }
+        return super.getDefaultAttributeValue(element, node, attName);
     }
 
     private void setUpRoute(ConfigNode<UIDatalist> node) {
@@ -137,4 +146,5 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
             node.setChildren(itemNodes);
         }
     }
+
 }
