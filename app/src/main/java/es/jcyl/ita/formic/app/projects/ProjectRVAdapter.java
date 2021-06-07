@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.app.projects;
  * limitations under the License.
  */
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -80,14 +81,13 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
 
         class MyTask extends AsyncTask<Integer, Integer, String> {
             ProgressDialog progressDialog;
+            AlertDialog dialog;
             boolean projectOpeningFinish = true;
             Project prj;
             Context currentContext;
 
             public MyTask(Context context) {
-                //currentContext = context;
                 currentContext =  context;
-                //progressBar = pB;
             }
 
             @Override
@@ -107,7 +107,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                     projectOpeningFinish = false;
 
                 }
-                progressDialog.dismiss();
+                dialog.dismiss(); // to hide this dialog
                 if (!projectOpeningFinish){
                     UserMessagesHelper.toast(currentContext,
                             DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) prj.getId())),
@@ -120,11 +120,12 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             }
             @Override
             protected void onPreExecute() {
-                progressDialog = new ProgressDialog(currentContext, R.style.DialogStyle);
-                progressDialog.setMessage(currentContext.getString(R.string.loading));
-                progressDialog.setIndeterminate(false);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(false); // if you want user to wait for some process to finish,
+                builder.setView(R.layout.layout_loading_dialog);
+                dialog = builder.create();
+                dialog.show(); // to show this dialog
+
             }
             @Override
             protected void onProgressUpdate(Integer... values) {
