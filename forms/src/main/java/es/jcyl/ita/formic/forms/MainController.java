@@ -246,7 +246,7 @@ public class MainController implements ContextAwareComponent {
      * @param formController
      */
     private void restorePrevState(FormController formController) {
-        UserAction action = this.router.getCurrentAction();
+        UserAction action = actionController.getCurrentAction();
         if (action != null && action.isRestoreView()) {
             formController.restoreViewPartialState();
         }

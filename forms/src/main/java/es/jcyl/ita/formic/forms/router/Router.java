@@ -40,7 +40,6 @@ public class Router {
     MainController mc;
     private List<State> memento;
     private State current;
-    private UserAction currentAction;
     private Activity currentActivity;
     private String[] currentViewMessages;
 
@@ -61,7 +60,6 @@ public class Router {
     }
 
     public void navigate(ActionContext actionContext, UserAction action, String... messages) {
-        this.currentAction = action;
         this.currentViewMessages = messages;
         if ("back".equalsIgnoreCase(action.getRoute())) {
             this.back(actionContext.getViewContext());
@@ -161,10 +159,6 @@ public class Router {
         for (int i = 0; i < steps; i++) {
             this.popHistory();
         }
-    }
-
-    public UserAction getCurrentAction() {
-        return (currentAction == null) ? null : currentAction;
     }
 
     public class State {

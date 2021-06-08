@@ -14,7 +14,7 @@
     <edit id="nav2">
         <paragraph value="Formulario2 - ${params.myParam}" />
         <actions>
-            <nav label="Nav2" route="navForm-nav1" >
+            <nav label="Nav1" route="navForm-nav1" >
                 <param name="myParam" value="value2"/>
             </nav>
             <nav label="Back" route="back" />

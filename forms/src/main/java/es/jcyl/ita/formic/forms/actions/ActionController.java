@@ -50,6 +50,7 @@ public class ActionController {
     private final Map<String, ActionHandler> actionMap = new HashMap<>();
     private final MainController mc;
     private final Router router;
+    private UserAction currentAction;
 
     public ActionController(MainController mc, Router router) {
         this.mc = mc;
@@ -80,6 +81,7 @@ public class ActionController {
             // in other case dismiss action to prevent executing delayed actions
             return;
         }
+        this.currentAction = action;
 
         ActionHandler handler;
         try {
@@ -169,6 +171,10 @@ public class ActionController {
 
     public MainController getMc() {
         return mc;
+    }
+
+    public UserAction getCurrentAction() {
+        return this.currentAction;
     }
 }
 
