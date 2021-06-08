@@ -82,6 +82,25 @@ public class RenderingEnv {
         userActionInterceptor = new UserEventInterceptor(actionController);
     }
 
+    protected RenderingEnv(){
+    }
+
+    public static RenderingEnv clone(RenderingEnv env){
+        RenderingEnv newEnv = new RenderingEnv();
+        newEnv.globalContext = env.globalContext;
+        newEnv.widgetContext = env.widgetContext;
+        newEnv.rootWidget = env.rootWidget;
+        newEnv.viewDAG = env.viewDAG;
+        newEnv.deferredViews = env.deferredViews;
+        newEnv.userActionInterceptor = env.userActionInterceptor;
+        newEnv.viewContext = env.viewContext;
+        newEnv.formActivity = env.formActivity;
+        newEnv.inputTypingDelay = env.inputTypingDelay;
+        newEnv.inputDelayDisabled = env.inputDelayDisabled;
+        newEnv.entity = env.entity;
+        return newEnv;
+    }
+
     /**
      * Clears composite context before starting the rendering process
      */

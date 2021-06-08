@@ -29,6 +29,7 @@ import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -42,8 +43,7 @@ import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DatalistWidget extends Widget<UIDatalist> implements DynamicComponent,
-        EntityListProvider, EntitySelector {
+public class DatalistWidget extends Widget<UIDatalist> implements EntityListProvider, EntitySelector {
 
     private Repository repo;
     private RenderingEnv renderingEnv;
@@ -74,13 +74,10 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
         super(context, attrs, defStyle);
     }
 
-    @Override
     public void load(RenderingEnv env) {
         this.renderingEnv = env;
-
         // set filter to repo using current view data
         this.entities.clear();
-
         CompositeContext ctx = setupThisContext(env);
         this.filter = setupFilter(ctx, this.getComponent().getFilter());
         // read first page to render data
@@ -107,7 +104,10 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
 
     private CompositeContext setupThisContext(RenderingEnv env) {
         thisViewCtx.setPrefix("this");
-        CompositeContext ctx = ContextUtils.combine(env.getWidgetContext(), thisViewCtx);
+        // use default widgetContext for initialRendering
+        WidgetContext widgetContext = (this.getWidgetContext() != null)
+                ? this.getWidgetContext() : env.getWidgetContext();
+        CompositeContext ctx = ContextUtils.combine(widgetContext, thisViewCtx);
         return ctx;
     }
 

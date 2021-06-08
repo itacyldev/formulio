@@ -33,7 +33,6 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, DatalistWidget> {
     @Override
     protected void composeWidget(RenderingEnv env, DatalistWidget widget) {
-
     }
 
     @Override

@@ -24,6 +24,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -59,6 +60,7 @@ public class RepoFilterBuilderTest {
                     "    <eq property=\"prop2\" value=\"field2\" />" +
                     "  </repofilter>" +
                     "</form>";
+
     @Test
     public void testBasicRepoFilter() throws Exception {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_BASIC);
@@ -77,6 +79,34 @@ public class RepoFilterBuilderTest {
         Assert.assertEquals(2, criteria.getChildren().length);
     }
 
+
+    private static final String XML_DATA_LIST =
+            "  <form repo=\"contacts\">" +
+                    "  <datalist>" +
+                    "  <repofilter>" +
+                    "    <eq property=\"prop1\" value=\"field1\"/>" +
+                    "    <eq property=\"prop2\" value=\"field2\" />" +
+                    "  </repofilter>" +
+                    "  </datalist>" +
+                    "</form>";
+
+    @Test
+    public void testDataListRepoFilter() throws Exception {
+        String xml = XmlConfigUtils.createMainEdit(XML_DATA_LIST);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        FormEditController editCtl = formConfig.getEdits().get(0);
+        List<UIDatalist> lst = UIComponentHelper.findByClass(editCtl.getView(), UIDatalist.class);
+        Assert.assertNotNull(lst);
+
+        UIDatalist dataList = lst.get(0);
+        Filter filter = dataList.getFilter();
+        Assert.assertNotNull(filter);
+
+        Criteria criteria = (Criteria) filter.getExpression();
+        Assert.assertEquals(Criteria.CriteriaType.AND, criteria.getType());
+        Assert.assertEquals(2, criteria.getChildren().length);
+    }
 
     private static final String XML_TEST_MANDATORY_FIELDS =
             "  <form repo=\"contacts\">" +

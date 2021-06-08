@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +67,7 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
 
     @Override
     protected Object getDefaultAttributeValue(UIDatalist element, ConfigNode node, String attName) {
-        if(AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)){
+        if (AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)) {
             return Boolean.TRUE;
         }
         return super.getDefaultAttributeValue(element, node, attName);
@@ -135,16 +136,30 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
      */
     private void addItemNode(ConfigNode<UIDatalist> node) {
         String tag = "datalistitem";
-        List<ConfigNode> itemNodes = BuilderHelper.findChildrenByTag(node, tag);
-        if (itemNodes.size() == 0) {
-            ConfigNode<UICard> itemNode = new ConfigNode<>(tag);
-            itemNode.setId(node.getId() + "_" + tag);
-            List<ConfigNode> children = node.getChildren();
-            itemNode.setChildren(children);
+        List<ConfigNode> dataListKids = BuilderHelper.findChildrenByTag(node, tag);
+        if (dataListKids.size() == 0) {
+            ConfigNode<UICard> dataListItemNode = new ConfigNode<>(tag);
+            dataListItemNode.setId(node.getId() + "_" + tag);
+            // add all nested elements as children of the template datalistItem excluding repo tags
+            List<ConfigNode> children = new ArrayList<ConfigNode>();
 
-            itemNodes.add(itemNode);
-            node.setChildren(itemNodes);
+            for (ConfigNode n : node.getChildren()) {
+                if (!isRepoTag(n.getName())) {
+                    children.add(n);
+                } else {
+                    // keep within datalist
+                    dataListKids.add(n);
+                }
+            }
+            dataListItemNode.setChildren(children);
+            dataListKids.add(dataListItemNode);
+            node.setChildren(dataListKids);
         }
+    }
+
+    private boolean isRepoTag(String name) {
+        name = name.toLowerCase();
+        return name.equals("repo") || name.equals("repofilter") || name.equals("meta");
     }
 
 }

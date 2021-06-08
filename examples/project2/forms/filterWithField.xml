@@ -1,0 +1,22 @@
+<main name="listFilter" description="listFilter" id="listFilter" repo="contacts">
+    <list>
+        <form>
+            <head value="Example of list filtering by Input" />
+            <head value="Example of list filtering by Input" />
+            <input id="contactName" label="Name:" />
+            <datatable repo="contacts">
+                <repofilter>
+                    <contains property="first_name" value="${view.contactName}" />
+                </repofilter>
+            </datatable>
+            <!--
+            <datalist repo="contacts">
+                <repofilter>
+                    <contains property="first_name" value="${view.contactName}" />
+                </repofilter>
+                <input value="${entity.first_name}" />
+            </datalist>
+            -->
+        </form>
+    </list>
+</main>

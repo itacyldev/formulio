@@ -18,6 +18,8 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.ViewUtils;
+
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
@@ -198,14 +200,15 @@ public class ViewRenderer {
         return renderer;
     }
 
-    public void replaceView(View view1, View view2) {
-        ViewGroup parent = (ViewGroup) view1.getParent();
-        int index = parent.indexOfChild(view1);
-        if (view1.getLayoutParams() != null) {
-            view2.setLayoutParams(view1.getLayoutParams());
+    public void replaceView(Widget widget1, Widget widget2) {
+        ViewGroup parent = (ViewGroup) widget1.getParent();
+        int index = parent.indexOfChild(widget1);
+        if (widget1.getLayoutParams() != null) {
+            widget2.setLayoutParams(widget1.getLayoutParams());
         }
-        parent.removeView(view1);
-        parent.addView(view2, index);
+        widget2.setWidgetContext(widget1.getWidgetContext());
+        parent.removeView(widget1);
+        parent.addView(widget2, index);
     }
 
 
@@ -275,7 +278,7 @@ public class ViewRenderer {
         if (dag == null) {
             return;// no dependant components
         }
-        // walk the tree in topological order to follow the dependencies from the current element
+        // Walk the tree in topological order to follow the dependencies from the current element
         // sets the rendering starting point, when given element is found in the DAG
         boolean found = false;
 
@@ -286,64 +289,41 @@ public class ViewRenderer {
                     found = true; // start rendering in next element
                 }
             } else {
-//                restoreEntityInContext(env, widget);
-                if (widget instanceof DynamicComponent) {
-                    ((DynamicComponent) widget).load(env);
+                Widget dependantWidget = ViewHelper.findComponentWidget(env.getRootWidget(), node.getComponent());
+                if (dependantWidget instanceof DynamicComponent) {
+                    // update widget content internally
+                    ((DynamicComponent) dependantWidget).load(env);
                 } else {
-                    //TODO: está mal, hay que recupear el contexto del widget del componente "node",
-                    // re-render and replace view
-                    Widget newWidget = this.render(env, node.getComponent(), false);
+                    // update widget content using render flow
+                    RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
+                    widgetRendEnv.setWidgetContext(dependantWidget.getWidgetContext());
+                    Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
                     registerWidget(env, newWidget);
-                    replaceView(widget, newWidget);
+                    replaceView(dependantWidget, newWidget);
                 }
             }
         }
     }
-
-//    /**
-//     * Sets the entity used during the widget initial rendering in the Rendering environment
-//     *
-//     * @param env
-//     * @param widget
-//     */
-//    private void restoreEntityInContext(RenderingEnv env, Widget widget) {
-//        // restore entity in context
-//        if (widget instanceof WidgetContextHolder) {
-//            env.setEntity(((WidgetContextHolder) widget).getWidgetContext().getEntity());
-//        } else {
-//            // get the entity from parent's widget context
-//            // TODO: ESTO DEBERÍA SOBRAR EL PARENT WIDGET YA HABRÁ FIJADO LA ENTIDAD, SALVO EN RENDERDEPS
-//            if (widget.getWidgetContext() != null) {
-//                Entity entity = widget.getWidgetContext().getEntity();
-//                env.setEntity(entity);
-//            }
-//        }
-//    }
 
     public void setEventHandler(ViewRendererEventHandler handler) {
         this.eventHandler = handler;
     }
 
     private class NoOpHandler implements ViewRendererEventHandler {
-
         @Override
         public void onEntityContextChanged(Entity entity) {
-
         }
 
         @Override
         public void onWidgetContextChange(WidgetContext context) {
-
         }
 
         @Override
         public void onBeforeRenderComponent(UIComponent component) {
-
         }
 
         @Override
         public void onAfterRenderComponent(Widget widget) {
-
         }
     }
 }

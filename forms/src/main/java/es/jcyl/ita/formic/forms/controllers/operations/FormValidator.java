@@ -69,7 +69,7 @@ public class FormValidator {
         }
         // call validation function
         UIForm form = field.getParentForm();
-        if (form.getOnValidate() != null) {
+        if (form != null && form.getOnValidate() != null) {
             ScriptEngine scriptEngine = mc.getScriptEngine();
             // setup validation context
             scriptEngine.putProperty("view", viewContext);
