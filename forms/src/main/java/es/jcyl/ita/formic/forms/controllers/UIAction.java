@@ -30,6 +30,7 @@ public class UIAction {
     private String route;
     private boolean restoreView = false;
     private boolean registerInHistory = true;
+    private int popHistory = 0;
     /**
      * What has to be refreshed after action execution
      */
@@ -100,6 +101,14 @@ public class UIAction {
 
     public void setRegisterInHistory(boolean registerInHistory) {
         this.registerInHistory = registerInHistory;
+    }
+
+    public int getPopHistory() {
+        return popHistory;
+    }
+
+    public void setPopHistory(int popHistory) {
+        this.popHistory = popHistory;
     }
 
     public UIParam[] getParams() {

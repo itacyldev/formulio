@@ -69,6 +69,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PATTERN;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PLACEHOLDER;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.POP_HISTORY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
@@ -165,7 +166,7 @@ public class TagDef {
         register("link", define(baseInput, new Attribute[]{ROUTE, ACTION}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
-                REGISTER_IN_HISTORY, REFRESH, RESTORE_VIEW, MESSAGE});
+                REGISTER_IN_HISTORY, REFRESH, RESTORE_VIEW, MESSAGE, POP_HISTORY});
         register("action", actionAttributes);
         register("add", actionAttributes);
         register("update", actionAttributes);

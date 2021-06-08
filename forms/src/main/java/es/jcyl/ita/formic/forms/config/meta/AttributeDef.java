@@ -129,6 +129,7 @@ public class AttributeDef {
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
     public static Attribute REFRESH = new Attribute("refresh", String.class);
     public static Attribute RESTORE_VIEW = new Attribute("restoreView", Boolean.class);
+    public static Attribute POP_HISTORY = new Attribute("popHistory", Integer.class);
     public static Attribute MESSAGE = new Attribute("message", "message", String.class);
 
     // scripting
@@ -136,5 +137,4 @@ public class AttributeDef {
     public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
     public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
     public static Attribute SRC = new Attribute("src", "src", "pathResolver");
-
 }

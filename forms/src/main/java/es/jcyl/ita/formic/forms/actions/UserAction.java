@@ -36,6 +36,7 @@ public class UserAction {
     private String refresh;
     private boolean restoreView = false;
     private boolean registerInHistory = true;
+    private int popHistory = 0;
     private String message;
     private Map<String, Object> params;
     private UIComponent component;
@@ -60,12 +61,15 @@ public class UserAction {
         this.setRegisterInHistory(action.isRegisterInHistory());
         this.setRefresh(action.getRefresh());
         this.setRestoreView(action.isRestoreView());
+        this.setPopHistory(action.getPopHistory());
     }
+
     public UserAction(UIAction action, FormController origin) {
         this(action.getType(), action.getRoute(), null, origin);
         this.setRegisterInHistory(action.isRegisterInHistory());
         this.setRefresh(action.getRefresh());
         this.setRestoreView(action.isRestoreView());
+        this.setPopHistory(action.getPopHistory());
     }
 
     public void setRefresh(String refresh) {
@@ -118,6 +122,14 @@ public class UserAction {
 
     public void setRegisterInHistory(boolean registerInHistory) {
         this.registerInHistory = registerInHistory;
+    }
+
+    public int getPopHistory() {
+        return popHistory;
+    }
+
+    public void setPopHistory(int popHistory) {
+        this.popHistory = popHistory;
     }
 
     public boolean isRestoreView() {

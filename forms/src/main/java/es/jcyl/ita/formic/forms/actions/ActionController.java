@@ -142,8 +142,6 @@ public class ActionController {
                 UserMessagesHelper.toast(actionContext.getViewContext(), msg);
             }
         } else {
-            // don't want to go back to form detail if user presses back button
-            //router.popHistory(1);
             router.navigate(actionContext, action, msg);
         }
     }

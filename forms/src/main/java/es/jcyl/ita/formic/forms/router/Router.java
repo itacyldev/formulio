@@ -66,6 +66,9 @@ public class Router {
         if ("back".equalsIgnoreCase(action.getRoute())) {
             this.back(actionContext.getViewContext());
         } else {
+            if (action.getPopHistory() > 0) {
+                popHistory(action.getPopHistory());
+            }
             mc.navigate(actionContext.getViewContext(), action.getRoute(), action.getParams());
             if (action.isRegisterInHistory()) {
                 recordHistory(action.getRoute(), action);
