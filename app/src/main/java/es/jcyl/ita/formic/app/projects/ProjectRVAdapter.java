@@ -16,7 +16,6 @@ package es.jcyl.ita.formic.app.projects;
  */
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -80,7 +79,6 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
         }
 
         class MyTask extends AsyncTask<Integer, Integer, String> {
-            ProgressDialog progressDialog;
             AlertDialog dialog;
             boolean projectOpeningFinish = true;
             Project prj;
@@ -120,7 +118,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             }
             @Override
             protected void onPreExecute() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
                 builder.setCancelable(false); // if you want user to wait for some process to finish,
                 builder.setView(R.layout.layout_loading_dialog);
                 dialog = builder.create();
