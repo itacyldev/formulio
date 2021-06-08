@@ -75,13 +75,15 @@ public class ViewStateHolder {
     /**
      * Restore view state form the context
      */
-    private void restoreState(WidgetContextHolder holder) {
+    private void restoreState(WidgetContextHolder holder, boolean partial) {
         String holderId = holder.getHolderId(); // unique formId, dataitemId, ...
         Map<String, Object> holderState = this.state.get(holderId);
         if (holderState != null) {
             ViewContext viewContext = holder.getWidgetContext().getViewContext();
             for (StatefulWidget widget : viewContext.getStatefulViews()) {
-                widget.setState(holderState.get(widget.getComponent().getId()));
+                if (!partial || partial && widget.allowsPartialRestore()) {
+                    widget.setState(holderState.get(widget.getComponent().getId()));
+                }
             }
         }
     }
@@ -89,8 +91,22 @@ public class ViewStateHolder {
     public void restoreState(ViewWidget rootWidget) {
         if (rootWidget.getContextHolders() != null) {
             for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
-                restoreState(holder);
+                restoreState(holder, false);
             }
         }
     }
+
+    /**
+     * Limite the restoration to those components that has the attribute "AllowsPartialRestore" = true
+     *
+     * @param rootWidget
+     */
+    public void restorePartialState(ViewWidget rootWidget) {
+        if (rootWidget.getContextHolders() != null) {
+            for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
+                restoreState(holder, true);
+            }
+        }
+    }
+
 }

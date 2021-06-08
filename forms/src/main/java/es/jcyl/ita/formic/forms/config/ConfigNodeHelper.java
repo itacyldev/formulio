@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.validation.Validator;
 
@@ -274,4 +275,15 @@ public class ConfigNodeHelper {
         return null;
     }
 
+    /**
+     * Sets a value in node if the attribute is currently not set
+     * @param node
+     * @param attName
+     * @param value
+     */
+    public static void setIfNull(ConfigNode node, String attName, String value) {
+        if(!node.hasAttribute("attName")){
+            node.setAttribute(attName, value);
+        }
+    }
 }

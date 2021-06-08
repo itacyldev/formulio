@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
-import es.jcyl.ita.formic.forms.actions.handlers.NavigateActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.EmptyActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -50,13 +50,14 @@ public class ActionController {
     private final Map<String, ActionHandler> actionMap = new HashMap<>();
     private final MainController mc;
     private final Router router;
+    private UserAction currentAction;
 
     public ActionController(MainController mc, Router router) {
         this.mc = mc;
         this.router = router;
         // default actions
         register(ActionType.SAVE, new SaveActionHandler(mc, router));
-        ActionHandler navHandler = new NavigateActionHandler(mc, router);
+        ActionHandler navHandler = new EmptyActionHandler(mc, router);
         register(ActionType.BACK, navHandler);
         register(ActionType.CANCEL, navHandler);
         register(ActionType.NAV, navHandler);
@@ -80,6 +81,7 @@ public class ActionController {
             // in other case dismiss action to prevent executing delayed actions
             return;
         }
+        this.currentAction = action;
 
         ActionHandler handler;
         try {
@@ -117,6 +119,7 @@ public class ActionController {
 
     protected void resolveNavigation(ActionContext actionContext, UserAction action, String msg) {
         if (action.isRefreshSet()) {
+            // update current view after action completion
             String refresh = action.getRefresh();
             if (REFRESH_THIS.equals(refresh.toLowerCase())) {
                 mc.updateView(action.getWidget().getWidgetContext().getWidget());
@@ -141,8 +144,6 @@ public class ActionController {
                 UserMessagesHelper.toast(actionContext.getViewContext(), msg);
             }
         } else {
-            // don't want to go back to form detail if user presses back button
-            router.popHistory(1);
             router.navigate(actionContext, action, msg);
         }
     }
@@ -170,6 +171,10 @@ public class ActionController {
 
     public MainController getMc() {
         return mc;
+    }
+
+    public UserAction getCurrentAction() {
+        return this.currentAction;
     }
 }
 

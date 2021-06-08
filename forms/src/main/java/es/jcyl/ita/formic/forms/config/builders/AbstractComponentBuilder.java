@@ -18,16 +18,13 @@ package es.jcyl.ita.formic.forms.config.builders;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -95,35 +92,40 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     }
 
     protected void setAttributes(E element, ConfigNode node) {
-        Map<String, String> attributes = node.getAttributes();
+        Map<String, Attribute> attributes = TagDef.getDefinition(node.getName());
 
-        for (Map.Entry<String, String> entry : attributes.entrySet()) {
+        if (attributes == null) {
+            throw new ConfigurationException(error("Invalid tagName found: " + node.getName()));
+        }
+        for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
             String attName = entry.getKey();
+            Attribute attribute = entry.getValue();
+            String attValue = node.getAttribute(attName);
             try {
-                Attribute attribute = this.attributeDefs.get(attName);
-                if (attribute == null) {
-                    error(String.format("Invalid attribute found in tag <%s/>: [%s].", node.getName(), attName));
-                } else if (attribute.assignable) {
-                    String setter = (attribute.setter == null) ? attribute.name : attribute.setter;
+                if (attribute.assignable) {
                     Object value;
-                    if (attribute.resolver == null) {
-                        // convert value if needed
-                        value = (attribute.type == null) ? entry.getValue() :
-                                ConvertUtils.convert(entry.getValue(), attribute.type);
-                    } else {
-                        // use resolver to set attribute
-                        AttributeResolver resolver = getAttributeResolver(attribute.resolver);
-                        value = resolver.resolve(node, attribute.name);
-                    }
-                    if (value == null) {
+                    String setter = (attribute.setter == null) ? attribute.name : attribute.setter;
+                    if (!node.hasAttribute(attName)) {
+                        // att hasn't been set
                         value = getDefaultAttributeValue(element, node, attName);
+                    } else {
+                        if (attribute.resolver == null) {
+                            // convert value if needed
+                            value = (attribute.type == null) ? attValue :
+                                    ConvertUtils.convert(attValue, attribute.type);
+                        } else {
+                            // use resolver to set attribute
+                            AttributeResolver resolver = getAttributeResolver(attribute.resolver);
+                            value = resolver.resolve(node, attribute.name);
+                        }
                     }
-                    // set attribute using reflection
-                    BeanUtils.setProperty(element, setter, value);
+                    if (value != null) {
+                        BeanUtils.setProperty(element, setter, value);
+                    }
                 } else {
                     //TODO: create strategies per attribute?
                     // for now let the builder assume this responsibility and reuse with helpers
-                    doWithAttribute(element, attName, entry.getValue());
+                    doWithAttribute(element, attName, attValue);
                 }
             } catch (Exception e) {
                 throw new ConfigurationException(error(String.format("Error while trying to set " +

@@ -16,14 +16,11 @@ package es.jcyl.ita.formic.forms.router;
  */
 
 import android.app.Activity;
-import android.content.Context;
 
 import org.mini2Dx.collections.CollectionUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
@@ -67,9 +64,12 @@ public class Router {
         if ("back".equalsIgnoreCase(action.getRoute())) {
             this.back(actionContext.getViewContext());
         } else {
+            if (action.getPopHistory() > 0) {
+                popHistory(action.getPopHistory());
+            }
             mc.navigate(actionContext.getViewContext(), action.getRoute(), action.getParams());
             if (action.isRegisterInHistory()) {
-                recordHistory(action.getRoute(), action.getParams());
+                recordHistory(action.getRoute(), action);
             }
         }
     }
@@ -90,12 +90,8 @@ public class Router {
         this.currentViewMessages = messages;
         State lastState = popHistory();
         if (lastState != null) {
-            doNavigate(context, lastState);
+            mc.navigate(context, lastState.formId, lastState.action.getParams());
         }
-    }
-
-    private void doNavigate(Context context, State state) {
-        mc.navigate(context, state.formId, state.params);
     }
 
     /**
@@ -105,8 +101,10 @@ public class Router {
      */
     private State popHistory() {
         this.current = null;
-        this.currentActivity.finish();
-        this.currentActivity = null;
+        if (this.currentActivity != null) {
+            this.currentActivity.finish();
+            this.currentActivity = null;
+        }
         if (hasHistory()) {
             // get last state from history
             int lastPos = this.memento.size() - 1;
@@ -128,11 +126,11 @@ public class Router {
     }
 
 
-    private void recordHistory(String formId, Map<String, Object> params) {
+    private void recordHistory(String formId, UserAction action) {
         if (current != null) {
             this.memento.add(current);
         }
-        this.current = new State(formId, params);
+        this.current = new State(formId, action);
         if (DevConsole.isDebugEnabled()) {
             debugHistory();
         }
@@ -165,15 +163,15 @@ public class Router {
 
     public class State {
         String formId;
-        Map<String, Object> params;
+        UserAction action;
 
-        public State(String formId, Map<String, Object> params) {
+        public State(String formId, UserAction action) {
             this.formId = formId;
-            this.params = params;
+            this.action = action;
         }
 
         public String toString() {
-            return String.format("%s - %s", formId, params);
+            return String.format("%s - %s", formId, action);
         }
     }
 

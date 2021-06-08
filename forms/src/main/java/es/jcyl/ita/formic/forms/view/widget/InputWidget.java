@@ -86,6 +86,11 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
         return getValue();
     }
 
+    @Override
+    public boolean allowsPartialRestore() {
+        return this.component.getAllowsPartialRestore();
+    }
+
     /**
      * method called after related elements are bound to current InputFieldView.
      */

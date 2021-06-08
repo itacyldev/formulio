@@ -36,6 +36,7 @@ import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import static es.jcyl.ita.formic.forms.config.DevConsole.info;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -119,19 +120,22 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         }
         ConfigNode root = ConfigNodeHelper.getRoot(node);
         List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(root, "edit");
+
+        // add empty actions node
+        ConfigNode actionsNode = new ConfigNode("actions");
+        node.addChild(actionsNode);
+
         String editId;
         if (edits.size() > 1) {
-            throw new ConfigurationException(error("List-view with more that one edit-view " +
+            info("List-view with more that one edit-view " +
                     "and with no actions defined!. When you have more that one <edit/> in a form, " +
                     "you have to use <actions/> element in the <list/> to define which view will " +
-                    "be navigated from the list."));
+                    "be navigated from the list, or use a <datatable/datalist> element.");
+            return;
         }
         // there must be at least one create by FormConfigBuilder
         editId = edits.get(0).getId();
-
         String listId = node.getId();
-        ConfigNode actionsNode = new ConfigNode("actions");
-        node.addChild(actionsNode);
         actionsNode.addChild(createActionNode("add", listId + "#add", "Add", editId));
         actionsNode.addChild(createActionNode("update", listId + "#update", "Update", editId));
         actionsNode.addChild(createActionNode("delete", listId + "#delete", "Delete", null));
@@ -157,13 +161,14 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
 
         List<ConfigNode> actionList = actions.getChildren();
-        UIAction[] lstActions = new UIAction[actionList.size()];
-
-        for (int i = 0; i < actionList.size(); i++) {
-            lstActions[i] = (UIAction) actionList.get(i).getElement();
-            lstActions[i].setType(actionList.get(i).getName());
+        if (CollectionUtils.isNotEmpty(actionList)) {
+            UIAction[] lstActions = new UIAction[actionList.size()];
+            for (int i = 0; i < actionList.size(); i++) {
+                lstActions[i] = (UIAction) actionList.get(i).getElement();
+                lstActions[i].setType(actionList.get(i).getName());
+            }
+            node.getElement().setActions(lstActions);
         }
-        node.getElement().setActions(lstActions);
     }
 
     /**

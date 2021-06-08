@@ -29,7 +29,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class ViewWidget extends Widget<UIView> {
+public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
 
     private List<WidgetContextHolder> contextHolders;
 
@@ -58,5 +58,15 @@ public class ViewWidget extends Widget<UIView> {
 
     public List<WidgetContextHolder> getContextHolders() {
         return contextHolders;
+    }
+
+    @Override
+    public String getHolderId() {
+        return this.getComponentId();
+    }
+
+    @Override
+    public Widget getWidget() {
+        return this;
     }
 }

@@ -36,8 +36,6 @@ public class UIInputComponent extends AbstractUIComponent {
     protected boolean hasDeleteButton = true;
     protected boolean hasTodayButton = true;
 
-
-
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
 

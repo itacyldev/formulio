@@ -116,8 +116,8 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         ConfigNode actionsNode = new ConfigNode("actions");
         node.addChild(actionsNode);
 
-        actionsNode.addChild(createActionNode("save", listId + "#save", "Save", listId, "false"));
-        actionsNode.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back", "false"));
+        actionsNode.addChild(createActionNode("save", listId + "#save", "Save", listId));
+        actionsNode.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back"));
     }
 
 
@@ -227,12 +227,14 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
 
-    private ConfigNode createActionNode(String action, String id, String label, String route, String registerInHistory) {
+    private ConfigNode createActionNode(String action, String id, String label, String route) {
         ConfigNode node = new ConfigNode(action);
         node.setId(id);
         node.setAttribute("label", label);
         node.setAttribute("route", route);
-        node.setAttribute("registerInHistory", registerInHistory);
+        node.setAttribute("registerInHistory", "false");
+        node.setAttribute("restoreView", "true");
+        node.setAttribute("popHistory", "1");
         return node;
     }
 

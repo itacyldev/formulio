@@ -40,10 +40,6 @@ public class ValidatorBuilder extends AbstractComponentBuilder<Validator> {
         return element;
     }
 
-    @Override
-    protected void setAttributes(Validator element, ConfigNode node) {
-    }
-
     private Map<String, String> getParams(ConfigNode<Validator> node) {
         Map<String, String> params = new HashMap<>();
         for (ConfigNode param : node.getChildren()) {

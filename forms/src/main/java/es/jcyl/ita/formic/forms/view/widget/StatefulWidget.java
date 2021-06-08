@@ -32,4 +32,6 @@ public interface StatefulWidget {
 
     UIComponent getComponent();
 
+    boolean allowsPartialRestore();
+
 }

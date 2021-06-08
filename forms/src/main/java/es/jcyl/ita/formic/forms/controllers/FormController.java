@@ -118,6 +118,10 @@ public abstract class FormController implements Identificable, FilterableCompone
         stateHolder.restoreState(rootWidget);
     }
 
+    public void restoreViewPartialState() {
+        stateHolder.restorePartialState(rootWidget);
+    }
+
 
     /****************************/
     /** GETTER/SETTERS **/
@@ -195,9 +199,7 @@ public abstract class FormController implements Identificable, FilterableCompone
     }
 
     public void setRepo(Repository repo) {
-
         this.repo = repo;
-
     }
 
     public Filter getFilter() {
@@ -236,7 +238,6 @@ public abstract class FormController implements Identificable, FilterableCompone
     /***
      * LIFECYCLE HOOKS
      */
-
     public void onBeforeRender() {
         if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
             ScriptEngine engine = mc.getScriptEngine();

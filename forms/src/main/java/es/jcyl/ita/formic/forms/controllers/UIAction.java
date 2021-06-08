@@ -28,7 +28,9 @@ public class UIAction {
     private String label;
     private String type;
     private String route;
+    private boolean restoreView = false;
     private boolean registerInHistory = true;
+    private int popHistory = 0;
     /**
      * What has to be refreshed after action execution
      */
@@ -101,6 +103,14 @@ public class UIAction {
         this.registerInHistory = registerInHistory;
     }
 
+    public int getPopHistory() {
+        return popHistory;
+    }
+
+    public void setPopHistory(int popHistory) {
+        this.popHistory = popHistory;
+    }
+
     public UIParam[] getParams() {
         return params;
     }
@@ -127,5 +137,13 @@ public class UIAction {
 
     public void setRefresh(String refresh) {
         this.refresh = refresh;
+    }
+
+    public boolean isRestoreView() {
+        return restoreView;
+    }
+
+    public void setRestoreView(boolean restoreView) {
+        this.restoreView = restoreView;
     }
 }

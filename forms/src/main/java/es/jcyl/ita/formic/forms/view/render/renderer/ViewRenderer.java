@@ -83,9 +83,8 @@ public class ViewRenderer {
         // link root widget to current widget
         if (widget instanceof ViewWidget) {
             env.setRootWidget((ViewWidget) widget);
-        } else {
-            registerWidget(env, widget);
         }
+        registerWidget(env, widget);
         eventHandler.onAfterRenderComponent(widget);
 
         // if current view is not visible, don't render children

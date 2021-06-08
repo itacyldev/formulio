@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ import es.jcyl.ita.formic.forms.view.converters.TextViewConverter;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -71,7 +73,7 @@ import es.jcyl.ita.formic.repo.query.Sort;
  */
 
 public class DatatableWidget extends Widget<UIDatatable>
-        implements DynamicComponent, EntityListProvider, EntitySelector {
+        implements DynamicComponent, EntityListProvider, EntitySelector, StatefulWidget {
 
     private final String HEADER_FILTER_SUFIX = "_header_filter";
     private final String HEADER_ORDER_SUFIX = "header_order";
@@ -535,5 +537,22 @@ public class DatatableWidget extends Widget<UIDatatable>
     @Override
     public void setSelectionManager(SelectionManager manager) {
         this.selectionMgr = manager;
+    }
+
+    @Override
+    public void setState(Object value) {
+        System.out.println("Restore: " + value);
+    }
+
+    @Override
+    public Object getState() {
+        String value = RandomStringUtils.random(3);
+        System.out.println("Save datatable state: " + value);
+        return value;
+    }
+
+    @Override
+    public boolean allowsPartialRestore() {
+        return this.component.getAllowsPartialRestore();
     }
 }
