@@ -18,8 +18,6 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.widget.ViewUtils;
-
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
@@ -256,9 +254,13 @@ public class ViewRenderer {
 
                     // render the view and replace deferred element
 //                    restoreEntityInContext(env, defView);
-                    Widget newWidget = this.render(env, node.getComponent(), false);
+
+                    RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
+                    widgetRendEnv.setWidgetContext(defView.getWidgetContext());
+                    Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
                     registerWidget(env, newWidget);
                     replaceView(defView, newWidget);
+
                 }
             }
         }

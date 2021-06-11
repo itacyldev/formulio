@@ -60,6 +60,9 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasTodayButton()) {
             today.setVisibility(View.GONE);
         }
+        if (widget.getComponent().getType().equals(UIField.TYPE.DATETIME.name())) {
+            today.setText(R.string.now);
+        }
 
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
