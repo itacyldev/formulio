@@ -22,6 +22,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JxltEngine;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +42,7 @@ import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
@@ -135,7 +140,11 @@ public class MainController implements ContextAwareComponent {
         setupParamsContext(params);
         try {
             // get form configuration for given formId and load data
-            FormController controller = formControllerFactory.getController(formId);
+            JxltEngine.Expression e = JexlFormUtils.createExpression(formId);
+            Object route = e.evaluate((JexlContext) globalContext);
+            String strFormId = (String) ConvertUtils.convert(route, String.class);
+
+            FormController controller = formControllerFactory.getController(strFormId);
             if (controller == null) {
                 throw new FormException(error(String.format("No form controller found with id [%s] " +
                                 "check route string. Available ids: %s", formId,

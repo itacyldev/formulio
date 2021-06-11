@@ -34,7 +34,6 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -197,6 +196,7 @@ public class DatatableWidget extends Widget<UIDatatable>
 
     private void addData() {
         this.entities.addAll(this.repo.find(this.filter));
+        long count = repo.count(null);
 
         //notify that the model changedA
         ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
@@ -205,7 +205,9 @@ public class DatatableWidget extends Widget<UIDatatable>
         }
         addNoResults();
 
-        this.offset += this.pageSize;
+        if (this.offset < count) {
+            this.offset += this.pageSize;
+        }
     }
 
     private void addNoResults() {
@@ -541,14 +543,85 @@ public class DatatableWidget extends Widget<UIDatatable>
 
     @Override
     public void setState(Object value) {
-        System.out.println("Restore: " + value);
+        this.filter = ((DatatableState)value).getFilter();
+        this.sort = ((DatatableState)value).getSort();
+        int offset = (((DatatableState)value).getOffset());
+        AndViewContext andViewContext = ((DatatableState)value).getThisViewCtx();
+
+        //Data
+        this.offset = 0;
+        this.entities.clear();
+
+        while (offset != this.offset){
+            this.filter.setOffset(this.offset);
+            addData();
+        }
+
+        //Scroll
+        this.bodyView.smoothScrollToPositionFromTop(((DatatableState)value).getFirstVisiblePosition(), this.offset);
+
+        //Header text and column order
+        boolean hasHeaderTextValue = false;
+        int i = 0;
+
+        for (UIColumn column : this.getComponent().getColumns()) {
+            if (column.isFiltering()) {
+
+                hasHeaderTextValue = setHeaderTextValue(column, andViewContext);
+
+                setColumnOrderProperty(i, column);
+            }
+            i++;
+        }
+
+        if (hasHeaderTextValue || this.sort != null) {
+            setHeaderFilterVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void setColumnOrderProperty(int i, UIColumn column) {
+        String columnOrderProperty = column.getHeaderFilter().getOrderProperty();
+
+        if (sort != null && columnOrderProperty.equals(sort.getProperty())) {
+            Drawable orderImage = null;
+            Sort.SortType type = sort.getType();
+            sort = createHeaderSort(column, type);
+            orderImage = getOrderIcon(type);
+
+
+            View header_item = this.headerView.getChildAt(i);
+            ImageView filterOrder = header_item.findViewById(R.id.list_header_filter_order);
+            filterOrder.setImageDrawable(orderImage);
+
+            //sets a noorder image for the rest of the columns
+            disableOrderImages(column.getId());
+        }
+    }
+
+    private boolean setHeaderTextValue(UIColumn column, AndViewContext andViewContext){
+        boolean hasHeaderTextValue = false;
+
+        String headerTextValue = andViewContext.getString(column.getId());
+        if (StringUtils.isNotEmpty(headerTextValue)) {
+            thisViewCtx.set(column.getId(), headerTextValue);
+            addHeaderToCtx(column.getId(), column.getId() + HEADER_FILTER_SUFIX);
+            EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
+            filterText.setText(headerTextValue);
+            hasHeaderTextValue = true;
+        }
+        return hasHeaderTextValue;
     }
 
     @Override
     public Object getState() {
-        String value = RandomStringUtils.random(3);
-        System.out.println("Save datatable state: " + value);
-        return value;
+        DatatableState dataTableState = new DatatableState();
+        dataTableState.setFilter(this.filter);
+        dataTableState.setSort(this.sort);
+        dataTableState.setThisViewCtx(thisViewCtx);
+        dataTableState.setFirstVisiblePosition(this.bodyView.getFirstVisiblePosition());
+        dataTableState.setOffset(this.offset);
+        return dataTableState;
     }
 
     @Override
