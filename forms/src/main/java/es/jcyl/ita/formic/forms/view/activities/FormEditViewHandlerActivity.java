@@ -103,6 +103,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                     action.setRegisterInHistory(formAction.isRegisterInHistory());
                     action.setRefresh(formAction.getRefresh());
                     action.setMessage(formAction.getMessage());
+                    action.setRoute(strRoute);
                     if (formAction.hasParams()) {
                         for (UIParam param : formAction.getParams()) {
                             Object value = JexlFormUtils.eval(env.getWidgetContext(), param.getValue());
