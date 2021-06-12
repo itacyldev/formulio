@@ -1,22 +1,34 @@
-<main name="listFilter" description="listFilter" id="listFilter" repo="contacts">
-    <list>
+<main name="bodegas" description="Bodegas" id="bodegas" repo="bodegaRepo">
+    <edit>
         <form>
-            <head value="Example of list filtering by Input" />
-            <head value="Example of list filtering by Input" />
-            <input id="contactName" label="Name:" />
-            <datatable repo="contacts">
-                <repofilter>
-                    <contains property="first_name" value="${view.contactName}" />
-                </repofilter>
-            </datatable>
-            <!--
-            <datalist repo="contacts">
-                <repofilter>
-                    <contains property="first_name" value="${view.contactName}" />
-                </repofilter>
-                <input value="${entity.first_name}" />
-            </datalist>
-            -->
+            <tab>
+                <tabitem label="1">
+                    <text label="Id: " readonly="true" value="${entity.id}" />
+                    <autocomplete forceSelection="true" id="provincia" label="Provincia: "
+                        repo="provRepo" value="${entity.prov_id}">
+                        <options labelExpression="${entity.name}" labelFilteringProperty="name"
+                            valueProperty="id" />
+                    </autocomplete>
+                    <autocomplete forceSelection="true" id="provmuni" label="Municipio: "
+                        repo="muniRepo" value="${entity.provmuni_id}">
+                        <options labelExpression="${entity.name}" labelFilteringProperty="name"
+                            valueProperty="provmuni" />
+                        <repofilter>
+                            <eq mandatory="true" property="prov" value="${view.provincia}" />
+                            <contains property="name" value="${this.value}" />
+                        </repofilter>
+                    </autocomplete>
+                </tabitem>
+                <tabitem label="2">
+                    <text label="Razón Social: " validator="required"
+                        value="${entity.razon_social}" />
+                    <text label="Dirección: " value="${entity.direccion}" />
+                    <text label="Teléfono: " value="${entity.telefono}" />
+                    <text label="Email: " validator="email" value="${entity.email}" />
+                    <text label="Alc. Actual: " value="${entity.alcance_actual}" />
+                    <text label="Alc. Solic.: " value="${entity.alcance_solicitado}" />
+                </tabitem>
+            </tab>
         </form>
-    </list>
+    </edit>
 </main>

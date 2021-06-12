@@ -34,8 +34,9 @@ public class DeferredView extends Widget {
     }
     public DeferredView(Context context, UIComponent component) {
         super(context);
+        this.setId(RandomUtils.nextInt());
+        this.setTag(component.getId());
         this.component =  component;
-        setId(RandomUtils.nextInt());
     }
 
     public UIComponent getComponent() {

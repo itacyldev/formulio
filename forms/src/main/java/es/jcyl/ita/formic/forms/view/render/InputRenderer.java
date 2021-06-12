@@ -78,7 +78,6 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
 
         // set value and error messages
         setValueInView(env, widget);
-
         setMessages(env, widget);
     }
 

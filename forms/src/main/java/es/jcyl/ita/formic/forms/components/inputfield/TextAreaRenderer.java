@@ -55,17 +55,11 @@ public class TextAreaRenderer extends TextFieldRenderer {
         if (component.getInputType() != null) {
             inputView.setInputType(component.getInputType());
         }
-        // set floating label
-       //setLabel(inputView, textInputLayout, component);
-
         // set event
         addTextChangeListener(env, inputView, widget);
 
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         removeUnderline(env, component, textInputLayout);
-
-        TextView label = ViewHelper.findViewAndSetId(widget, R.id.label_view,
-                TextView.class);
 
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
@@ -100,9 +94,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
                 dialog.show();
             }
         });
-
         setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
-
     }
 
 

@@ -18,10 +18,9 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.widget.ViewUtils;
-
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.mini2Dx.collections.MapUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -89,8 +88,8 @@ public class ViewRenderer {
         registerWidget(env, widget);
         eventHandler.onAfterRenderComponent(widget);
 
-        // if current view is not visible, don't render children
-        if (!ViewHelper.isVisible(widget)) {
+        // if current view is not visible or is pending of evaluation, don't render children
+        if (!ViewHelper.isVisible(widget) || (widget instanceof DeferredView)) {
             return widget;
         }
 
@@ -231,7 +230,7 @@ public class ViewRenderer {
     }
 
     /**
-     * Replaces the delegate views inserted in the tree with their proper elements.
+     * Replaces the deferred views inserted in the tree with their proper elements.
      * It uses a DAG tree to evaluate the expressions following their dependencies so the final
      * result is correct.
      *
@@ -244,21 +243,22 @@ public class ViewRenderer {
         if (viewDAG == null || deferredViews == null) {
             return;
         }
-        for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
-            // follow dag evaluating expressions and rendering views
-            for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
-                DAGNode node = it.next();
-                // find deferredView for this component
-                Widget defView = deferredViews.get(node.getComponent().getAbsoluteId());
-                if (defView != null) {
-                    // remove from deferred elements
-                    deferredViews.remove(defView);
-
-                    // render the view and replace deferred element
-//                    restoreEntityInContext(env, defView);
-                    Widget newWidget = this.render(env, node.getComponent(), false);
-                    registerWidget(env, newWidget);
-                    replaceView(defView, newWidget);
+        // Until all deferred views has been processed
+        while (MapUtils.isNotEmpty(deferredViews)) {
+            for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
+                // follow dag evaluating expressions and rendering views
+                for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
+                    DAGNode node = it.next();
+                    // find deferredView for this component
+                    Widget defView = deferredViews.remove(node.getComponent().getAbsoluteId());
+                    if (defView != null) {
+                        // render the view and replace deferred element
+                        RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
+                        widgetRendEnv.setWidgetContext(defView.getWidgetContext());
+                        Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
+                        registerWidget(env, newWidget);
+                        replaceView(defView, newWidget);
+                    }
                 }
             }
         }
@@ -289,17 +289,25 @@ public class ViewRenderer {
                     found = true; // start rendering in next element
                 }
             } else {
-                Widget dependantWidget = ViewHelper.findComponentWidget(env.getRootWidget(), node.getComponent());
+                // find object locally to widgetContext
+                Widget dependantWidget = ViewHelper.findComponentWidget(
+                        widget.getWidgetContext().getHolder().getWidget(), node.getComponent());
+                if (dependantWidget == null) {
+                    // look from top of the view
+                    dependantWidget = ViewHelper.findComponentWidget(env.getRootWidget(), node.getComponent());
+                }
                 if (dependantWidget instanceof DynamicComponent) {
                     // update widget content internally
                     ((DynamicComponent) dependantWidget).load(env);
                 } else {
                     // update widget content using render flow
                     RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
-                    widgetRendEnv.setWidgetContext(dependantWidget.getWidgetContext());
-                    Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
-                    registerWidget(env, newWidget);
-                    replaceView(dependantWidget, newWidget);
+                    if (dependantWidget != null) {
+                        widgetRendEnv.setWidgetContext(dependantWidget.getWidgetContext());
+                        Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
+                        registerWidget(env, newWidget);
+                        replaceView(dependantWidget, newWidget);
+                    }
                 }
             }
         }

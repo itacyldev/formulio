@@ -82,6 +82,10 @@ public class EntityMeta<P extends PropertyType> {
     public PropertyType getPropertyByName(String name) {
         int pos = findPropertyByName(name);
         if (pos == -1) {
+            if (name.toLowerCase().equals("id")) {
+                // use id as alias for the id property
+                return this.getIdProperties()[0];
+            }
             return null;
         } else {
             return this.properties[pos];

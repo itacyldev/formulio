@@ -64,10 +64,6 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         if (component.getInputType() != null) {
             inputView.setInputType(component.getInputType());
         }
-
-        // set floating label
-        //setLabel(inputView, textInputLayout, component);
-
         // set event
         addTextChangeListener(env, inputView, widget);
 
@@ -87,13 +83,8 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 inputView.setText(null);
             }
         });
-        //setClearButton(env, inputView, textInputLayout, component);
-
         // set info button
         setInfoButton(env, textInputLayout, component);
-
-        TextView label = ViewHelper.findViewAndSetId(widget, R.id.label_view,
-                TextView.class);
         setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
     }
 
