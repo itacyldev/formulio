@@ -25,6 +25,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -50,7 +51,7 @@ public class SaveActionHandler extends AbstractActionHandler {
         if (StringUtils.isNotBlank(action.getController())) {
             ViewWidget rootWidget = action.getWidget().getRootWidget();
             // check all controllers exits before method is executed
-            List<WidgetController> ctrlList = getControllers(rootWidget, action);
+            List<WidgetController> ctrlList = ActionHandlerHelper.getControllers(rootWidget, action);
             for (WidgetController controller : ctrlList) {
                 controller.save();
             }
@@ -61,25 +62,6 @@ public class SaveActionHandler extends AbstractActionHandler {
         }
     }
 
-    private List<WidgetController> getControllers(ViewWidget rootWidget, UserAction action) {
-        List<WidgetController> lst = new ArrayList<>();
-        String ctrlIds[] = StringUtils.split(action.getController(), ",");
-        String notFoundIds = "";
-        for (String id : ctrlIds) {
-            WidgetController controller = rootWidget.getWidgetController(id);
-            if (controller == null) {
-                notFoundIds += id + ", ";
-            } else {
-                lst.add(controller);
-            }
-        }
-        if (notFoundIds.length() > 0) {
-            throw new UserActionException(error(String.format("An attempt to execute save() on " +
-                    "WidgetController(s) [%s] was made but they cannot be found in current view." +
-                    "Check the 'controller' attribute in action [%s].", notFoundIds, action)));
-        }
-        return lst;
-    }
 
     @Override
     public String getSuccessMessage(ActionContext actionContext, UserAction action) {

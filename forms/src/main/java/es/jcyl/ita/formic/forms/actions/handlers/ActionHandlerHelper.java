@@ -15,8 +15,42 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionException;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 /**
+ * Action Handler shared methods
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class ActionHandlerHelper {
+public class ActionHandlerHelper {
+
+    public static List<WidgetController> getControllers(ViewWidget rootWidget, UserAction action) {
+        List<WidgetController> lst = new ArrayList<>();
+        String ctrlIds[] = StringUtils.split(action.getController(), ",");
+        String notFoundIds = "";
+        for (String id : ctrlIds) {
+            WidgetController controller = rootWidget.getWidgetController(id);
+            if (controller == null) {
+                notFoundIds += id + ", ";
+            } else {
+                lst.add(controller);
+            }
+        }
+        if (notFoundIds.length() > 0) {
+            throw new UserActionException(error(String.format("An attempt to execute save() on " +
+                    "WidgetController(s) [%s] was made but they cannot be found in current view." +
+                    "Check the 'controller' attribute in action [%s].", notFoundIds, action)));
+        }
+        return lst;
+    }
 }
