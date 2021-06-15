@@ -16,12 +16,13 @@ import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.controllers.UIParam;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
@@ -78,7 +79,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = UserAction.back(this.formController);
+        UserAction action = new UserAction(ActionType.BACK.name(), "back", this.formController);
 //        action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
         finish();
