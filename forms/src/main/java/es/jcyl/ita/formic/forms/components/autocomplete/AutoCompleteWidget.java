@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.forms.components.autocomplete;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
+import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
  */
 
 public class AutoCompleteWidget extends InputWidget<UIAutoComplete, AutoCompleteView>
-        implements DynamicComponent {
+        implements DynamicWidget {
 
     public AutoCompleteWidget(Context context) {
         super(context);

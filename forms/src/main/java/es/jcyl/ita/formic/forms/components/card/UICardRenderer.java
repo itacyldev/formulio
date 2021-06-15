@@ -252,7 +252,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UICard> root, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UICard> root, Widget[] views) {
         for (View view : views) {
             if (view instanceof ImageWidget) {
                 View imageView = ((ImageWidget) view).getInputView();

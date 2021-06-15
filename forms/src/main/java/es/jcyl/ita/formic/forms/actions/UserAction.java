@@ -32,6 +32,7 @@ public class UserAction {
 
     private String type;
     private String name;
+    private String controller;
     private String route;
     private String refresh;
     private boolean restoreView = false;
@@ -62,6 +63,7 @@ public class UserAction {
         this.setRefresh(action.getRefresh());
         this.setRestoreView(action.isRestoreView());
         this.setPopHistory(action.getPopHistory());
+        this.setController(action.getController());
     }
 
     public UserAction(UIAction action, FormController origin) {
@@ -70,6 +72,7 @@ public class UserAction {
         this.setRefresh(action.getRefresh());
         this.setRestoreView(action.isRestoreView());
         this.setPopHistory(action.getPopHistory());
+        this.setController(action.getController());
     }
 
     public void setRefresh(String refresh) {
@@ -183,6 +186,14 @@ public class UserAction {
      */
     public boolean isViewChangeAction() {
         return StringUtils.isNotBlank(this.refresh) || StringUtils.isNotBlank(this.route);
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
     }
 
     /*********************************/

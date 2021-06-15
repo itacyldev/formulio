@@ -35,9 +35,9 @@ public abstract class AbstractGroupRenderer<C extends UIComponent, W extends Wid
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<C> root, View[] views) {
-        for (View view : views) {
-            root.addView(view);
+    public void addViews(RenderingEnv env, Widget<C> root, Widget[] widgets) {
+        for (Widget widget : widgets) {
+            root.addView(widget);
         }
     }
 

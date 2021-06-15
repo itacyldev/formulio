@@ -1,6 +1,12 @@
-package es.jcyl.ita.formic.forms.view.selection;
+package es.jcyl.ita.formic.forms.view.widget;
+
+import java.util.List;
+
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
+import es.jcyl.ita.formic.repo.Entity;
+
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +21,14 @@ package es.jcyl.ita.formic.forms.view.selection;
  * limitations under the License.
  */
 
-import java.util.List;
-
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
-import es.jcyl.ita.formic.repo.Entity;
-
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public interface EntitySelector  {
 
-    void setSelectionManager(SelectionManager manager);
+public interface EntityListProviderWidget extends RepoAccessWidget {
+
+    List<Entity> getEntities();
+
+    WidgetController getController();
 
 }

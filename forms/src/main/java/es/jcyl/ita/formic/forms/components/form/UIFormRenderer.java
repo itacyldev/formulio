@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.components.form;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.controllers.widget.BasicWidgetController;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -35,4 +36,5 @@ public class UIFormRenderer extends AbstractGroupRenderer<UIForm, Widget<UIForm>
     protected int getWidgetLayoutId(UIForm component) {
         return R.layout.widget_form;
     }
+
 }

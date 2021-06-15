@@ -19,7 +19,6 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -62,8 +61,10 @@ public class WidgetContextHelper {
                 return true;
             }
             // check in children
-            for (UIComponent kid : root.getChildren()) {
-                hasMessage |= hasNestedMessages(context, kid);
+            if (root.hasChildren()) {
+                for (UIComponent kid : root.getChildren()) {
+                    hasMessage |= hasNestedMessages(context, kid);
+                }
             }
             return hasMessage;
         }

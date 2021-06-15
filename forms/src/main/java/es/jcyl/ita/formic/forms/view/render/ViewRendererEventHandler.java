@@ -20,11 +20,15 @@ package es.jcyl.ita.formic.forms.view.render;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
 public interface ViewRendererEventHandler {
+
+    void onViewStart(UIView view);
 
     void onEntityContextChanged(Entity entity);
 
@@ -33,4 +37,6 @@ public interface ViewRendererEventHandler {
     void onBeforeRenderComponent(UIComponent component);
 
     void onAfterRenderComponent(Widget widget);
+
+    void onViewEnd(ViewWidget viewWidget);
 }

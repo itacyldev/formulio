@@ -22,12 +22,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.List;
+
+import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
 
 /**
@@ -36,7 +41,7 @@ import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
  * Tests to check commons-converters functionallity
  */
 @RunWith(RobolectricTestRunner.class)
-public class FCActionBuilderTest {
+public class UIActionBuilderTest {
 
     @BeforeClass
     public static void setUp() {
@@ -49,12 +54,12 @@ public class FCActionBuilderTest {
 
 
     private static final String XML_ACTION = "<main name=\"myFirstForm\" description=\"An example of short description\" id=\"form1\" repo=\"contacts\">" +
-            "<list name=\"Form2\">"+
-            "<datatable />"+
-            "</list>"+
+            "<list name=\"Form2\">" +
+            "<datatable />" +
+            "</list>" +
             "<edit id=\"form1#edit\">" +
             "<actions>" +
-            "<action type=\"create\" label=\"create\">" +
+            "<action type=\"create\" label=\"create\" controller=\"widget1\">" +
             "<param name=\"entityType\" value=\"contacts\"/>" +
             "<param name=\"email\" value=\"mivalor@gmail.com\"/>" +
             "</action>" +
@@ -68,7 +73,26 @@ public class FCActionBuilderTest {
         UIAction[] actions = formConfig.getEdits().get(0).getActions();
         Assert.assertNotNull(actions);
         Assert.assertEquals(actions[0].getType(), "create");
+        Assert.assertEquals(actions[0].getController(), "widget1");
+    }
 
+    private static final String XML_BUTTON =
+            "<button id=\"myButton\" label=\"guardar\">\n" +
+                    "  <action type=\"save\" controller=\"widget1\"/>\n" +
+                    "</button>\n";
+
+    @Test
+    public void testButtonAction() throws Exception {
+        String configXML = XmlConfigUtils.createEditForm(XML_BUTTON);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(configXML);
+        // find the button
+        UIAction[] actions = formConfig.getEdits().get(0).getActions();
+        List<UIButton> buttonList = UIComponentHelper.findByClass(formConfig.getEdits().get(0).getView(), UIButton.class);
+        UIButton button = buttonList.get(0);
+        Assert.assertNotNull(button);
+        UIAction action = button.getAction();
+        Assert.assertEquals(action.getType(), "save");
+        Assert.assertEquals(action.getController(), "widget1");
     }
 
     @AfterClass

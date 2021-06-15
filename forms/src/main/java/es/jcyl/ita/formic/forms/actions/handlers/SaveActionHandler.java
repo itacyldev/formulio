@@ -15,14 +15,24 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionException;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Predefined save action to persist changes in form's main entity.
@@ -37,8 +47,38 @@ public class SaveActionHandler extends AbstractActionHandler {
 
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
-        FormEditController formController = (FormEditController) actionContext.getFc();
-        formController.save(this.mc.getGlobalContext());
+        if (StringUtils.isNotBlank(action.getController())) {
+            ViewWidget rootWidget = action.getWidget().getRootWidget();
+            // check all controllers exits before method is executed
+            List<WidgetController> ctrlList = getControllers(rootWidget, action);
+            for (WidgetController controller : ctrlList) {
+                controller.save();
+            }
+        } else {
+            // TODO: refactorizar para que el guardado del form se haga como operación del widget
+            FormEditController formController = (FormEditController) actionContext.getFc();
+            formController.save(this.mc.getGlobalContext());
+        }
+    }
+
+    private List<WidgetController> getControllers(ViewWidget rootWidget, UserAction action) {
+        List<WidgetController> lst = new ArrayList<>();
+        String ctrlIds[] = StringUtils.split(action.getController(), ",");
+        String notFoundIds = "";
+        for (String id : ctrlIds) {
+            WidgetController controller = rootWidget.getWidgetController(id);
+            if (controller == null) {
+                notFoundIds += id + ", ";
+            } else {
+                lst.add(controller);
+            }
+        }
+        if (notFoundIds.length() > 0) {
+            throw new UserActionException(error(String.format("An attempt to execute save() on " +
+                    "WidgetController(s) [%s] was made but they cannot be found in current view." +
+                    "Check the 'controller' attribute in action [%s].", notFoundIds, action)));
+        }
+        return lst;
     }
 
     @Override

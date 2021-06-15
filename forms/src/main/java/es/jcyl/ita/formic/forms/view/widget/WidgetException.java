@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.render;
+package es.jcyl.ita.formic.forms.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,22 +15,25 @@ package es.jcyl.ita.formic.forms.view.render;
  * limitations under the License.
  */
 
-import android.view.View;
-
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.Widget;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public interface GroupRenderer<C extends UIComponent> {
+public class WidgetException extends RuntimeException {
+    public WidgetException() {
+        super();
+    }
 
-    void initGroup(RenderingEnv env, Widget<C> root);
+    public WidgetException(String message) {
+        super(message);
+    }
 
-    void addViews(RenderingEnv env, Widget<C> root, Widget[] widgets);
+    public WidgetException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-    void endGroup(RenderingEnv env, Widget<C> root);
+    public WidgetException(Throwable cause) {
+        super(cause);
+    }
 
 }

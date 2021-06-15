@@ -27,6 +27,7 @@ public class UIAction {
     private String id;
     private String label;
     private String type;
+    private String controller;
     private String route;
     private boolean restoreView = false;
     private boolean registerInHistory = true;
@@ -89,6 +90,14 @@ public class UIAction {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
     }
 
     public void setRoute(String route) {

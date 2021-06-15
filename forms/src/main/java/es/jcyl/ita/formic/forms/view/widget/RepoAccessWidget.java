@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components;
+package es.jcyl.ita.formic.forms.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,15 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.repo.Repository;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Interface for componentes that need data loading during the rendering process.
  */
+public interface RepoAccessWidget {
 
-public interface DynamicComponent {
+    Widget getWidget();
 
-    void load(RenderingEnv env);
+    Repository getRepository();
 
 }

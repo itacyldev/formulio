@@ -27,13 +27,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
 import es.jcyl.ita.formic.forms.components.EntityHolder;
-import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.datalist.UIDataListItemProxy;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItemProxy;
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
@@ -44,6 +43,9 @@ import es.jcyl.ita.formic.forms.view.render.GroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.Renderer;
 import es.jcyl.ita.formic.forms.view.render.RendererFactory;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
+import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
+import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
+import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
@@ -68,7 +70,7 @@ public class ViewRenderer {
         eventHandler.onBeforeRenderComponent(component);
         // setup entity in context
         if (component instanceof EntityHolder) {
-            // enrich the execution environment with current form's context
+            // enrich the execution environment with current component entity
             Entity entity = ((EntityHolder) component).getEntity();
             env.setEntity(entity);
             eventHandler.onEntityContextChanged(entity);
@@ -96,30 +98,31 @@ public class ViewRenderer {
         // render children if needed
         if (renderer instanceof GroupRenderer) {
             GroupRenderer gRenderer = (GroupRenderer) renderer;
+            Widget groupView = (Widget) widget;
             if (component.isRenderChildren() && component.hasChildren()) {
                 // recursively render children components
-                Widget groupView = (Widget) widget;
                 gRenderer.initGroup(env, groupView);
 
                 List<View> viewList = new ArrayList<>();
-                if (groupView instanceof EntityListProvider) {
+                if (groupView instanceof EntityListProviderWidget) {
                     // save the old entityContext
-                    Entity oldEntity = env.getEntity();
-
-                    List<Entity> entities = ((EntityListProvider) groupView).getEntities();
+                    WidgetContext prev = env.getWidgetContext();
+//                    Entity oldEntity = env.getEntity();
+                    List<Entity> entities = ((EntityListProviderWidget) groupView).getEntities();
                     int iter = 0;
                     // TODO: FORMIC-249 Refactorizar viewRenderer
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
-//                        env.setEntity(entity);
                         eventHandler.onEntityContextChanged(entity);
                         View view = render(env, proxify(iter, component.getChildren()[0], entity));
                         viewList.add(view);
                         iter++;
                     }
                     // restore entity context
-                    env.getWidgetContext().setEntity(oldEntity);
-                    eventHandler.onEntityContextChanged(oldEntity);
+                    env.setWidgetContext(prev);
+//                    eventHandler.onWidgetContextChange(prev);
+//                    env.getWidgetContext().setEntity(oldEntity);
+//                    eventHandler.onEntityContextChanged(env);
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
@@ -128,9 +131,9 @@ public class ViewRenderer {
                         viewList.add(view);
                     }
                 }
-                gRenderer.addViews(env, groupView, viewList.toArray(new View[viewList.size()]));
-                gRenderer.endGroup(env, groupView);
+                gRenderer.addViews(env, groupView, viewList.toArray(new Widget[viewList.size()]));
             }
+            gRenderer.endGroup(env, groupView);
         }
         if (checkDeferred && component.getParent() == null) {
             // last step in the tree walk, process delegates when we're back on the view root
@@ -148,10 +151,11 @@ public class ViewRenderer {
      * @return
      */
     private UIComponent proxify(int id, UIComponent component, Entity entity) {
+        // TODO: fix
         if (component instanceof UIDatalistItem) {
             String cId = component.getId();
             // set component id to item-1,item-2, starting with 1
-            return new UIDataListItemProxy(cId + "-" + (id + 1), component, entity);
+            return new UIDatalistItemProxy(cId + "-" + (id + 1), component, entity);
         } else {
             return component;
         }
@@ -186,6 +190,9 @@ public class ViewRenderer {
             }
         }
         widget.setRootWidget(env.getRootWidget());
+        if ((widget instanceof ControllableWidget) && (env.getRootWidget() != null)) { // rootWidget == null just in tests
+            env.getRootWidget().registerWidgetController((ControllableWidget) widget);
+        }
     }
 
     private Widget createDeferredView(RenderingEnv env, UIComponent component) {
@@ -296,9 +303,9 @@ public class ViewRenderer {
                     // look from top of the view
                     dependantWidget = ViewHelper.findComponentWidget(env.getRootWidget(), node.getComponent());
                 }
-                if (dependantWidget instanceof DynamicComponent) {
+                if (dependantWidget instanceof DynamicWidget) {
                     // update widget content internally
-                    ((DynamicComponent) dependantWidget).load(env);
+                    ((DynamicWidget) dependantWidget).load(env);
                 } else {
                     // update widget content using render flow
                     RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
@@ -319,6 +326,10 @@ public class ViewRenderer {
 
     private class NoOpHandler implements ViewRendererEventHandler {
         @Override
+        public void onViewStart(UIView view) {
+        }
+
+        @Override
         public void onEntityContextChanged(Entity entity) {
         }
 
@@ -332,6 +343,10 @@ public class ViewRenderer {
 
         @Override
         public void onAfterRenderComponent(Widget widget) {
+        }
+
+        @Override
+        public void onViewEnd(ViewWidget viewWidget) {
         }
     }
 }

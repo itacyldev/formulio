@@ -30,17 +30,17 @@ import es.jcyl.ita.formic.repo.Entity;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIDataListItemProxy extends UIDatalistItem implements EntityHolder {
+public class UIDatalistItemProxy extends UIDatalistItem implements EntityHolder {
 
     private String id;
     private final UIComponent delegate;
     private Entity entity;
 
-    public UIDataListItemProxy(UIDatalistItem component) {
+    public UIDatalistItemProxy(UIDatalistItem component) {
         this(component.getId(), component, null);
     }
 
-    public UIDataListItemProxy(String id, UIComponent component, Entity entity) {
+    public UIDatalistItemProxy(String id, UIComponent component, Entity entity) {
         this.id = id;
         this.delegate = component;
         this.entity = entity;

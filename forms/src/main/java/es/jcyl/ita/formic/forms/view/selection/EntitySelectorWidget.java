@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.render;
+package es.jcyl.ita.formic.forms.view.selection;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,22 +15,17 @@ package es.jcyl.ita.formic.forms.view.render;
  * limitations under the License.
  */
 
-import android.view.View;
+import java.util.List;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public interface EntitySelectorWidget {
 
-public interface GroupRenderer<C extends UIComponent> {
-
-    void initGroup(RenderingEnv env, Widget<C> root);
-
-    void addViews(RenderingEnv env, Widget<C> root, Widget[] widgets);
-
-    void endGroup(RenderingEnv env, Widget<C> root);
+    void setSelectionManager(SelectionManager manager);
 
 }

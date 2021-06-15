@@ -110,7 +110,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UITab> root, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UITab> root, Widget[] views) {
         ViewPager2 viewPager = root.findViewById(R.id.viewPager);
         ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
 

@@ -85,7 +85,7 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UITable> widget, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UITable> widget, Widget[] views) {
         TableLayout tableView = widget.findViewById(R.id.table_layout);
         UITable component = widget.getComponent();
 

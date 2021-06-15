@@ -1,11 +1,6 @@
-package es.jcyl.ita.formic.forms.components;
-
-import java.util.List;
-
-import es.jcyl.ita.formic.repo.Entity;
-
+package es.jcyl.ita.formic.forms.actions.handlers;
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +16,7 @@ import es.jcyl.ita.formic.repo.Entity;
  */
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-
-public interface EntityListProvider {
-
-    void setEntities(List<Entity> entities);
-
-    List<Entity> getEntities();
-
+class ActionHandlerHelper {
 }

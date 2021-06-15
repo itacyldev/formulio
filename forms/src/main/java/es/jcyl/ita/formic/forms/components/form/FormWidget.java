@@ -20,6 +20,10 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
+import es.jcyl.ita.formic.forms.controllers.widget.BasicWidgetController;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -27,7 +31,8 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormWidget extends Widget<UIForm> implements WidgetContextHolder {
+public class FormWidget extends Widget<UIForm> implements WidgetContextHolder, ControllableWidget {
+    private BasicWidgetController controller;
 
     public FormWidget(Context context) {
         super(context);
@@ -51,7 +56,23 @@ public class FormWidget extends Widget<UIForm> implements WidgetContextHolder {
     }
 
     @Override
+    public WidgetController getController() {
+        return controller;
+    }
+
+    public void setController(BasicWidgetController controller) {
+        this.controller = controller;
+    }
+
+    @Override
     public Widget getWidget() {
         return this;
     }
+
+    public void setWidgetContext(WidgetContext widgetContext) {
+        super.setWidgetContext(widgetContext);
+        // create controller once the widgetContext has been set
+        this.setController(new BasicWidgetController(this));
+    }
+
 }

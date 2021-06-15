@@ -18,6 +18,8 @@ package es.jcyl.ita.formic.forms.scripts;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -34,6 +36,10 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
 
     public RhinoViewRenderHandler(ScriptEngine scriptEngine) {
         this.engine = scriptEngine;
+    }
+
+    @Override
+    public void onViewStart(UIView view) {
     }
 
     @Override
@@ -73,5 +79,10 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
             error(String.format("Error while executing onAfterRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);
         }
+    }
+
+    @Override
+    public void onViewEnd(ViewWidget viewWidget) {
+        engine.putProperty("root", viewWidget);
     }
 }

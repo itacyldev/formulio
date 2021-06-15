@@ -50,7 +50,7 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UIRow> root, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UIRow> root, Widget[] views) {
         TableRow rowView = root.findViewById(R.id.row_layout);
         UIRow component = root.getComponent();
 

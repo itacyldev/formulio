@@ -51,7 +51,6 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
         if (StringUtils.isNotBlank(component.getLabel())) {
             addButton.setText(component.getLabel());
         }
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

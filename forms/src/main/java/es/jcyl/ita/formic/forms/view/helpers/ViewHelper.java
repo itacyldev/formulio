@@ -39,6 +39,8 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -161,34 +163,8 @@ public class ViewHelper {
 
         return label;
     }
+
     public static Widget findComponentWidget(View rootView, String componentId) {
-//        // same name rule followed by FileRenderer to tag the BaseView of
-//        // the InputFileView: formId:elementId
-//        View view = rootView.findViewWithTag(componentId);
-//
-//        if (view == null) {
-//            //if rootView is an object of type ViewPager2,
-//            // must search in all fragments of the ViewPager2's adapter
-//            if (rootView instanceof ViewPager2) {
-//                ViewPagerAdapter adapter = (ViewPagerAdapter) ((ViewPager2) rootView).getAdapter();
-//                for (TabFragment fragment : adapter.getTabFragments()) {
-//                    view = findComponentWidget(fragment.getTabView(), componentId);
-//                    if (view != null) {
-//                        break;
-//                    }
-//                }
-//            } else if (rootView instanceof ViewGroup) {
-//                ViewGroup group = (ViewGroup) rootView;
-//                for (int i = 0; i < group.getChildCount(); i++) {
-//                    View child = group.getChildAt(i);
-//                    view = findComponentWidget(child, componentId);
-//                    if (view != null) {
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//        return view;
         return (Widget) rootView.findViewWithTag(componentId);
     }
 
@@ -206,7 +182,7 @@ public class ViewHelper {
             return null;
         }
         if (!(view instanceof InputWidget)) {
-            throw new IllegalArgumentException(String.format("The view element referenced by [%s]" +
+            warn(String.format("The view element referenced by [%s]" +
                     " is not and InputFieldView", fieldId));
         }
         return (InputWidget) view;

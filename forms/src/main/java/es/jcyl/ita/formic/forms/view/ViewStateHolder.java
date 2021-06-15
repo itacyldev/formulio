@@ -67,7 +67,7 @@ public class ViewStateHolder {
             this.state.put(holderId, holderState);
         }
         ViewContext viewContext = holder.getWidgetContext().getViewContext();
-        for (StatefulWidget widget : viewContext.getStatefulViews()) {
+        for (StatefulWidget widget : viewContext.getStatefulWidgets()) {
             holderState.put(widget.getComponent().getId(), widget.getState());
         }
     }
@@ -80,7 +80,7 @@ public class ViewStateHolder {
         Map<String, Object> holderState = this.state.get(holderId);
         if (holderState != null) {
             ViewContext viewContext = holder.getWidgetContext().getViewContext();
-            for (StatefulWidget widget : viewContext.getStatefulViews()) {
+            for (StatefulWidget widget : viewContext.getStatefulWidgets()) {
                 if (!partial || partial && widget.allowsPartialRestore()) {
                     widget.setState(holderState.get(widget.getComponent().getId()));
                 }

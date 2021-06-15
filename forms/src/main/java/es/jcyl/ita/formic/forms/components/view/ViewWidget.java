@@ -21,9 +21,13 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
+import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -32,6 +36,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
 
     private List<WidgetContextHolder> contextHolders;
+    private Map<String, WidgetController> widgetControllers = new HashMap<>();
 
     public ViewWidget(Context context) {
         super(context);
@@ -68,5 +73,14 @@ public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
     @Override
     public Widget getWidget() {
         return this;
+    }
+
+    public WidgetController getWidgetController(String widgetId) {
+        return this.widgetControllers.get(widgetId);
+    }
+
+    public void registerWidgetController(ControllableWidget widget) {
+        String id = widget.getWidget().getComponent().getId();
+        this.widgetControllers.put(id, widget.getController());
     }
 }

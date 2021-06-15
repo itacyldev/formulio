@@ -20,6 +20,8 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 

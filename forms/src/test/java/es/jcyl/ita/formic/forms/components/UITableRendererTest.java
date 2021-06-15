@@ -57,7 +57,6 @@ public class UITableRendererTest {
     public void setup() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
-
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -74,6 +73,7 @@ public class UITableRendererTest {
 
         // create an entity with 10 properties and gather then into a 2 rows x 5 columns
         UITable table = new UITable();
+
         Widget tableView = (Widget) renderHelper.render(env, table);
         // check there's a TextView element
         Assert.assertNotNull(tableView);

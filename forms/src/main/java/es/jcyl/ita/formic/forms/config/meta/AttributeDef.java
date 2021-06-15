@@ -126,6 +126,7 @@ public class AttributeDef {
     // Action parameters
     public static Attribute ACTION = new Attribute("action", "action", "action");
     public static Attribute ROUTE = new Attribute("route", "route", "binding-route");
+    public static Attribute CONTROLLER = new Attribute("controller", String.class);
     public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
     public static Attribute REFRESH = new Attribute("refresh", String.class);
     public static Attribute RESTORE_VIEW = new Attribute("restoreView", Boolean.class);

@@ -154,7 +154,7 @@ public class ViewContext extends AbstractBaseContext {
         throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
     }
 
-    public List<StatefulWidget> getStatefulViews() {
+    public List<StatefulWidget> getStatefulWidgets() {
         return new ArrayList(statefulViews.values());
     }
 

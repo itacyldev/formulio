@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.render;
+package es.jcyl.ita.formic.forms.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,22 +15,16 @@ package es.jcyl.ita.formic.forms.view.render;
  * limitations under the License.
  */
 
-import android.view.View;
-
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
+ *
+ * Interface for componentes that need data loading during the rendering process.
  */
 
-public interface GroupRenderer<C extends UIComponent> {
+public interface DynamicWidget {
 
-    void initGroup(RenderingEnv env, Widget<C> root);
-
-    void addViews(RenderingEnv env, Widget<C> root, Widget[] widgets);
-
-    void endGroup(RenderingEnv env, Widget<C> root);
+    void load(RenderingEnv env);
 
 }

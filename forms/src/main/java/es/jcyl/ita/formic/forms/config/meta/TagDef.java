@@ -26,6 +26,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONTROLLER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBTABLE;
@@ -166,7 +167,7 @@ public class TagDef {
         register("link", define(baseInput, new Attribute[]{ROUTE, ACTION}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
-                REGISTER_IN_HISTORY, REFRESH, RESTORE_VIEW, MESSAGE, POP_HISTORY});
+                CONTROLLER, REGISTER_IN_HISTORY, REFRESH, RESTORE_VIEW, MESSAGE, POP_HISTORY});
         register("action", actionAttributes);
         register("add", actionAttributes);
         register("update", actionAttributes);

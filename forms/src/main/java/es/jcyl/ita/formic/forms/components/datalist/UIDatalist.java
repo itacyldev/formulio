@@ -42,7 +42,6 @@ public class UIDatalist extends AbstractUIComponent implements FilterableCompone
         this.setRenderChildren(true);
     }
 
-
     public Repository getRepo() {
         return repo;
     }

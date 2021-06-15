@@ -22,11 +22,10 @@ import androidx.annotation.Nullable;
 import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import es.jcyl.ita.formic.forms.components.EntityHolderProxy;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
+import es.jcyl.ita.formic.forms.view.selection.EntitySelectorWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -38,8 +37,8 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
 
     public final Widget<C> render(RenderingEnv env, C component) {
         W widget = createWidget(env, component);
-        if (widget instanceof EntitySelector) {
-            ((EntitySelector) widget).setSelectionManager(env.getSelectionManager());
+        if (widget instanceof EntitySelectorWidget) {
+            ((EntitySelectorWidget) widget).setSelectionManager(env.getSelectionManager());
         }
         // check render condition
         boolean isRendered = component.isRendered(env.getWidgetContext());
