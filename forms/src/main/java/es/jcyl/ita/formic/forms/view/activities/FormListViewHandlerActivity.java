@@ -9,6 +9,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
@@ -64,7 +65,8 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        mc.getActionController().doUserAction(UserAction.back(this.formController));
+        UserAction action = new UserAction(ActionType.BACK.name(), "back", this.formController);
+        mc.getActionController().doUserAction(action);
         finish();
     }
 
