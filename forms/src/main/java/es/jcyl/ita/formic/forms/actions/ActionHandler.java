@@ -23,6 +23,14 @@ public interface ActionHandler {
 
     void handle(ActionContext actionContext, UserAction action);
 
+    /**
+     * Allows the handler modify the navigation UserAction to add/remove parameters.
+     * @param actionContext
+     * @param action
+     * @return
+     */
+    UserAction prepareNavigation(ActionContext actionContext, UserAction action);
+
     void onError(ActionContext actionContext, UserAction action, Exception e);
 
     String getSuccessMessage(ActionContext actionContext, UserAction action);

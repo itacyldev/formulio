@@ -136,6 +136,7 @@ public class Config {
      */
     private void initContext() {
         globalContext = new UnPrefixedCompositeContext();
+        globalContext.addContext(new DateTimeContext());
         MainController.getInstance().setContext(globalContext);
         RepositoryFactory.getInstance().setContext(globalContext);
     }

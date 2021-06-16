@@ -110,7 +110,7 @@ public class TagDef {
         initialize();
     }
 
-    private static String ACTION_TAGS[] = {"action", "add", "update", "save", "cancel", "delete", "nav"};
+    private static String ACTION_TAGS[] = {"action", "add", "create", "update", "save", "cancel", "delete", "nav"};
 
     private static void initialize() {
         Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
@@ -170,6 +170,7 @@ public class TagDef {
                 CONTROLLER, REGISTER_IN_HISTORY, REFRESH, RESTORE_VIEW, MESSAGE, POP_HISTORY});
         register("action", actionAttributes);
         register("add", actionAttributes);
+        register("create", actionAttributes);
         register("update", actionAttributes);
         register("save", actionAttributes);
         register("cancel", actionAttributes);

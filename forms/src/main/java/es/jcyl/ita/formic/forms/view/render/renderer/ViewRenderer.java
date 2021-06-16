@@ -107,7 +107,6 @@ public class ViewRenderer {
                 if (groupView instanceof EntityListProviderWidget) {
                     // save the old entityContext
                     WidgetContext prev = env.getWidgetContext();
-//                    Entity oldEntity = env.getEntity();
                     List<Entity> entities = ((EntityListProviderWidget) groupView).getEntities();
                     int iter = 0;
                     // TODO: FORMIC-249 Refactorizar viewRenderer
@@ -120,9 +119,6 @@ public class ViewRenderer {
                     }
                     // restore entity context
                     env.setWidgetContext(prev);
-//                    eventHandler.onWidgetContextChange(prev);
-//                    env.getWidgetContext().setEntity(oldEntity);
-//                    eventHandler.onEntityContextChanged(env);
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
@@ -191,7 +187,7 @@ public class ViewRenderer {
         }
         widget.setRootWidget(env.getRootWidget());
         if ((widget instanceof ControllableWidget) && (env.getRootWidget() != null)) { // rootWidget == null just in tests
-            env.getRootWidget().registerWidgetController((ControllableWidget) widget);
+            env.getRootWidget().registerControllableWidget((ControllableWidget) widget);
         }
     }
 

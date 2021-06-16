@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
 
     private List<WidgetContextHolder> contextHolders;
-    private Map<String, WidgetController> widgetControllers = new HashMap<>();
+    private Map<String, ControllableWidget> widgetControllers = new HashMap<>();
 
     public ViewWidget(Context context) {
         super(context);
@@ -76,11 +76,11 @@ public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
     }
 
     public WidgetController getWidgetController(String widgetId) {
-        return this.widgetControllers.get(widgetId);
+        return this.widgetControllers.get(widgetId).getController();
     }
 
-    public void registerWidgetController(ControllableWidget widget) {
+    public void registerControllableWidget(ControllableWidget widget) {
         String id = widget.getWidget().getComponent().getId();
-        this.widgetControllers.put(id, widget.getController());
+        this.widgetControllers.put(id, widget);
     }
 }

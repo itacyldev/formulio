@@ -142,6 +142,7 @@ public class ComponentBuilderFactory {
         registerBuilder("action", actionBuilder);
         registerBuilder("nav", actionBuilder);
         registerBuilder("add", actionBuilder);
+        registerBuilder("create", actionBuilder);
         registerBuilder("update", actionBuilder);
         registerBuilder("delete", actionBuilder);
         registerBuilder("save", actionBuilder);

@@ -100,7 +100,8 @@ public class ActionController {
             try {
                 handler.handle(actionContext, action);
                 String msg = handler.getSuccessMessage(actionContext, action);
-                resolveNavigation(actionContext, action, msg);
+                UserAction navAction = handler.prepareNavigation(actionContext, action);
+                resolveNavigation(actionContext, navAction, msg);
             } catch (UserActionException | ValidatorException e) {
                 mc.renderBack();
                 mc.restoreViewState();

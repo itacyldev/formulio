@@ -34,7 +34,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     private String rendererType;
     private boolean renderChildren;
-    private boolean allowsPartialRestore;
+    private boolean allowsPartialRestore = true;
 
     protected ValueBindingExpression readonly;
     protected String readonlyMessage;

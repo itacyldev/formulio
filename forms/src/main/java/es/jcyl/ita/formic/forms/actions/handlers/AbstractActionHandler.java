@@ -39,6 +39,9 @@ public abstract class AbstractActionHandler implements ActionHandler {
         this.mc = mc;
     }
 
+    public UserAction prepareNavigation(ActionContext actionContext, UserAction action){
+        return action;
+    }
 
     public void onError(ActionContext actionContext, UserAction action, Exception e) {
         String msg = getErrorMessage(action, e);

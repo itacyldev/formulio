@@ -196,6 +196,27 @@ public class UserAction {
         this.controller = controller;
     }
 
+    /**
+     * Creates a new action copying all the attributes but the action parameters
+     * from the passed UserAction.
+     *
+     * @param action
+     * @return
+     */
+    public static UserAction clone(UserAction action) {
+        UserAction newAction = new UserAction(action.getType(), action.getComponent());
+        newAction.name = action.name;
+        newAction.controller = action.controller;
+        newAction.route = action.route;
+        newAction.refresh = action.refresh;
+        newAction.restoreView = action.restoreView;
+        newAction.registerInHistory = action.registerInHistory;
+        newAction.popHistory = action.popHistory;
+        newAction.message = action.message;
+        newAction.widget = action.widget;
+        return newAction;
+    }
+
     /*********************************/
     /** Default action types **/
     /*********************************/

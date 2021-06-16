@@ -39,7 +39,7 @@ public class ActionHandlerHelper {
         String ctrlIds[] = StringUtils.split(action.getController(), ",");
         String notFoundIds = "";
         for (String id : ctrlIds) {
-            WidgetController controller = rootWidget.getWidgetController(id);
+            WidgetController controller = rootWidget.getWidgetController(id.trim());
             if (controller == null) {
                 notFoundIds += id + ", ";
             } else {
@@ -47,8 +47,9 @@ public class ActionHandlerHelper {
             }
         }
         if (notFoundIds.length() > 0) {
+            notFoundIds = notFoundIds.substring(0,notFoundIds.length()-2);
             throw new UserActionException(error(String.format("An attempt to execute save() on " +
-                    "WidgetController(s) [%s] was made but they cannot be found in current view." +
+                    "WidgetController(s) [%s] was made but it/they cannot be found in current view." +
                     "Check the 'controller' attribute in action [%s].", notFoundIds, action)));
         }
         return lst;

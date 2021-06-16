@@ -61,7 +61,7 @@ public class FormEntityLoader {
             // what if its null? throw an Exception?
             entity = findEntity(globalCtx, repo, form.getFilter(), entityId);
             if (entity == null) {
-                throw new FormException("No entity found using id=[" + entityId + "]");
+                throw new FormException("No entity found using id=[" + entityId + "] in the repository: " + repo);
             }
         }
         return entity;

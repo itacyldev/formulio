@@ -16,21 +16,22 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
+import es.jcyl.ita.formic.repo.meta.PropertyType;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -52,7 +53,8 @@ public class CreateEntityActionHandler extends AbstractActionHandler {
     public void handle(ActionContext actionContext, UserAction action) {
         String repoId = (String) action.getParams().get("repo");
         if (StringUtils.isBlank(repoId)) {
-            throw new UserActionException(error("The parameter 'repo' is mandatory for the entity creation action."));
+            throw new UserActionException(error("The parameter 'repo' is mandatory for the " +
+                    "entity creation action."));
         }
         // get repository for the new entity
         Repository repo = repoFactory.getRepo(repoId);
@@ -69,10 +71,31 @@ public class CreateEntityActionHandler extends AbstractActionHandler {
         Entity entity = ((EditableRepository) repo).newEntity();
         Map<String, Object> params = new HashMap<>(action.getParams());
         params.remove("repo");
+        EntityMeta meta = entity.getMetadata();
         for (Map.Entry<String, Object> entry : params.entrySet()) {
-            entity.set(entry.getKey(), entry.getValue());
+            PropertyType property = meta.getPropertyByName(entry.getKey());
+            if (property != null) {
+                entity.set(property.name, ConvertUtils.convert(entry.getValue(), property.type));
+            }
         }
         ((EditableRepository) repo).save(entity);
+
+        // get the new entity Id and store it in the context to use in the navigation
+        actionContext.setAttribute("entityId", entity.getId());
     }
 
+    /**
+     * Modify the UserAction to add the new Entity id as parameter
+     *
+     * @param actionContext
+     * @param action
+     * @return
+     */
+    @Override
+    public UserAction prepareNavigation(ActionContext actionContext, UserAction action) {
+        UserAction navAction = UserAction.clone(action);
+        // set entityId as parameter
+        navAction.addParam("entityId", actionContext.getAttribute("entityId"));
+        return navAction;
+    }
 }
