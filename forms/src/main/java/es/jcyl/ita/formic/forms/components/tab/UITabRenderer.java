@@ -14,10 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -38,7 +38,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
+public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
 
     @Override
     protected int getWidgetLayoutId(UITab component) {
@@ -46,23 +46,26 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, Widget<UITab> widget) {
+    protected void composeWidget(RenderingEnv env, TabWidget widget) {
         UITab component = widget.getComponent();
         FragmentActivity fragmentActivity = (FragmentActivity) env.getAndroidContext();
 
         TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
         ViewPager2 viewPager = widget.findViewById(R.id.viewPager);
 
+        widget.setTabLayout(tabLayout);
+        widget.setViewPager(viewPager);
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
 
-        viewPager.post(new Runnable(){
+        /*viewPager.post(new Runnable(){
             @Override
             public void run(){
                 int currentItem = getCurrentItem(env, component);
                 viewPager.setCurrentItem(currentItem, false);
             }
-        });
+        });*/
 
         viewPagerAdapter.notifyDataSetChanged();
 
@@ -90,6 +93,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
                             TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
                             updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
                             viewPager.requestLayout();
+                            viewPager.getRootView().findViewById(R.id.scroll).setScrollY(widget.getPositionScrollY());
                         }
                     }
                 });

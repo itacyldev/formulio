@@ -177,7 +177,7 @@ public class TagDef {
         register("delete", actionAttributes);
         register("nav", actionAttributes);
 
-        register("tab", define(base, new Attribute[]{ID}));
+        register("tab", define(base, new Attribute[]{ID, ALLOWS_PARTIAL_RESTORE}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));
 
         register("table", define(base, new Attribute[]{ID, HEADER_TEXT, WEIGHTS, BORDER}));
