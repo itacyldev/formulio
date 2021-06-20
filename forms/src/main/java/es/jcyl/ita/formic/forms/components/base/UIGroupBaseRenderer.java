@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.components.base;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,29 +16,28 @@ package es.jcyl.ita.formic.forms.config.builders;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Default class to create basic components
  */
-public class DefaultComponentBuilder extends AbstractComponentBuilder {
+public class UIGroupBaseRenderer extends AbstractGroupRenderer {
 
-    public DefaultComponentBuilder(String tagName, Class clazz) {
-        super(tagName, clazz);
+    private final int widgetLayoutId;
+
+    public UIGroupBaseRenderer(int widgetLayoutId) {
+        this.widgetLayoutId = widgetLayoutId;
     }
 
     @Override
-    protected void doWithAttribute(Object element, String name, String value) {
+    protected int getWidgetLayoutId(UIComponent component) {
+        return widgetLayoutId;
     }
 
     @Override
-    protected void setupOnSubtreeStarts(ConfigNode node) {
-    }
-
-    @Override
-    protected void setupOnSubtreeEnds(ConfigNode node) {
+    protected void composeWidget(RenderingEnv env, Widget widget) {
+        // do nothing
     }
 }

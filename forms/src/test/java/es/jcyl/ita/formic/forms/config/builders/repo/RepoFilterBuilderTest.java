@@ -67,7 +67,7 @@ public class RepoFilterBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> formList = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> formList = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(formList);
 
         UIForm form = formList.get(0);
@@ -96,7 +96,7 @@ public class RepoFilterBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIDatalist> lst = UIComponentHelper.findByClass(editCtl.getView(), UIDatalist.class);
+        List<UIDatalist> lst = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIDatalist.class);
         Assert.assertNotNull(lst);
 
         UIDatalist dataList = lst.get(0);
@@ -122,7 +122,7 @@ public class RepoFilterBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> formList = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> formList = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(formList);
 
 
@@ -155,7 +155,7 @@ public class RepoFilterBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> formList = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> formList = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(formList);
 
         UIForm form = formList.get(0);

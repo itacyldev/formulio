@@ -24,12 +24,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
@@ -38,6 +37,7 @@ import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.query.Filter;
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
@@ -71,9 +71,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
                 ctl.setFilter((Filter) repoFilters.get(0).getElement());
             }
         }
-        UIView view = new UIView(ctl.getId() + ">view");
-        view.setFormController(ctl);
-        ctl.setView(view);
+        BuilderHelper.createDefaultView(node);
 
         // if no nested repo defined, inherit attribute from parent
         if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
@@ -84,7 +82,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         createDefaultForm(node);
         // setup actions must be configured at start of he subtree, so the can be
         // used by nested elements to configure themselves if needed
-        createDefaultActionNodes(node);
+        createDefaultButtonbar(node);
 
         BuilderHelper.addDefaultRepoNode(node);
         // if no repo configuration is defined, use parent
@@ -92,17 +90,28 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
     /**
-     * Searchs for actions in nested configuration. It is called in the subtree start, so
-     * it has to handle ConfigNodes and not elements
+     * Searchs for default buttonbar of type "bottom", if none is defined creates one with default
+     * save/cancel actions.
      *
      * @param node
      */
-    private void createDefaultActionNodes(ConfigNode<FormEditController> node) {
-        if (ConfigNodeHelper.hasDescendantByTag(node, ACTION_SET)) {
-            // it already has a form
+    private void createDefaultButtonbar(ConfigNode<FormEditController> node) {
+        ConfigNode viewNode = node.getChildren().get(0);
+        // look for buttonbars
+        List<ConfigNode> children = viewNode.getChildren();
+        boolean hasBottomBar = false;
+        for (ConfigNode n : children) {
+            if (n.getName().toLowerCase().equals("buttonbar")) {
+                String type = n.getAttribute("type");
+                hasBottomBar = !StringUtils.isBlank(type)
+                        && type.toUpperCase().equals(UIButtonBar.ButtonBarType.BOTTOM.toString());
+                break;
+            }
+        }
+        if (hasBottomBar) {
             return;
         }
-        DevConsole.debug("No nested actions found, creating default form actions.");
+        debug("No nested bottombar found, creating default one.");
 
         ConfigNode root = ConfigNodeHelper.getRoot(node);
         List<ConfigNode> listCtls = ConfigNodeHelper.getChildrenByTag(root, "list");
@@ -113,50 +122,29 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         // there must be at least one create by FormConfigBuilder
         listId = listCtls.get(0).getId();
 
-        ConfigNode actionsNode = new ConfigNode("actions");
-        node.addChild(actionsNode);
+        ConfigNode buttonbar = new ConfigNode("buttonbar");
+        buttonbar.setAttribute("type", UIButtonBar.ButtonBarType.BOTTOM.name());
+        viewNode.addChild(buttonbar);
 
-        actionsNode.addChild(createActionNode("save", listId + "#save", "Save", listId));
-        actionsNode.addChild(createActionNode("cancel", listId + "#cancel", "Cancel", "back"));
+        buttonbar.addChild(createButton("save", listId + "#save", "Save", listId));
+        buttonbar.addChild(createButton("cancel", listId + "#cancel", "Cancel", "back"));
     }
 
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<FormEditController> node) {
-        // add nested ui elements
-        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
-        node.getElement().getView().setChildren(uiComponents);
-        node.getElement().getView().setRoot(node.getElement().getView());
+        // link view and controller
+        ConfigNode viewNode = node.getChildren().get(0);
+        UIView view = (UIView) viewNode.getElement();
+        FormEditController fController = node.getElement();
+        view.setFormController(fController);
+        fController.setView(view);
 
-        setUpActions(node);
+        BuilderHelper.setUpActions(node);
         setUpForms(node);
     }
 
 
-    /**
-     * Searchs for actions in nested configuration
-     *
-     * @param node
-     */
-    private void setUpActions(ConfigNode<FormEditController> node) {
-        ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
-        if (actions == null) {
-            return;
-        }
-
-        List<ConfigNode> actionList = actions.getChildren();
-        UIAction[] lstActions = new UIAction[actionList.size()];
-
-        UIAction action;
-        for (int i = 0; i < actionList.size(); i++) {
-            action = (UIAction) actionList.get(i).getElement();
-            if (StringUtils.isBlank(action.getType())) {
-                action.setType(actionList.get(i).getName());
-            }
-            lstActions[i] = action;
-        }
-        node.getElement().setActions(lstActions);
-    }
 
     private void setUpForms(ConfigNode<FormEditController> node) {
         FormEditController ctl = node.getElement();
@@ -195,6 +183,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         // add forms
     }
 
+
     /**
      * If current <edit/> element doesnt have a form, create one and nested all elements except
      * actions and scripts
@@ -206,30 +195,57 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
             // it already has a form
             return;
         }
+        ConfigNode viewNode = ConfigNodeHelper.getDescendantByTag(root, "view").get(0);
         ConfigNode formNode = new ConfigNode("form");
         formNode.setId("form" + root.getId());
         if (root.hasAttribute("repo")) {
             formNode.setAttribute("repo", root.getAttribute("repo"));
         }
-        List<ConfigNode> rootChildren = new ArrayList<>();
-        rootChildren.add(formNode);
+        List<ConfigNode> viewChildren = new ArrayList<>();
+        viewChildren.add(formNode);
 
         List<ConfigNode> formChildren = new ArrayList<>();
-        for (ConfigNode n : root.getChildren()) {
-            if (n.getName().equals("actions") || n.getName().equals("script")) {
-                rootChildren.add(n);
+        List<ConfigNode> children = viewNode.getChildren();
+        for (ConfigNode n : children) {
+            if (n.getName().equals("actions") || n.getName().equals("script") ||
+                    isViewButtonBar(n)) {
+                viewChildren.add(n);
             } else {
                 formChildren.add(n);
             }
         }
-        root.setChildren(rootChildren);
+        viewNode.setChildren(viewChildren);
         formNode.setChildren(formChildren);
     }
 
+    /**
+     * Checks if the configNode is defining a view ButtonBar
+     *
+     * @param n
+     * @return
+     */
+    private boolean isViewButtonBar(ConfigNode n) {
+        String name = n.getName();
+        if (!name.toLowerCase().equals("buttonbar")) {
+            return false;
+        } else {
+            String type = n.getAttribute("type");
+            if (type == null) {
+                return false;
+            } else {
+                type = type.toUpperCase();
+                return type.equals(UIButtonBar.ButtonBarType.BOTTOM.toString()) ||
+                        type.equals(UIButtonBar.ButtonBarType.FAB.toString()) ||
+                        type.equals(UIButtonBar.ButtonBarType.MENU.toString());
+            }
+        }
+    }
 
-    private ConfigNode createActionNode(String action, String id, String label, String route) {
-        ConfigNode node = new ConfigNode(action);
+
+    private ConfigNode createButton(String action, String id, String label, String route) {
+        ConfigNode node = new ConfigNode("button");
         node.setId(id);
+        node.setAttribute("action", action);
         node.setAttribute("label", label);
         node.setAttribute("route", route);
         node.setAttribute("registerInHistory", "false");

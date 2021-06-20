@@ -61,7 +61,7 @@ public class UIDatatableBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
+        List<UIDatatable> datables = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatatable.class);
         Assert.assertNotNull(datables);
 
         // repo must be set with parent value "contacts"
@@ -80,7 +80,7 @@ public class UIDatatableBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_REPO);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
+        List<UIDatatable> datables = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatatable.class);
 
         // repo must be set with parent value "contacts"
         UIDatatable datatable = (UIDatatable) datables.get(0);
@@ -106,7 +106,7 @@ public class UIDatatableBuilderTest {
         RepositoryUtils.registerMock("defColsRepo", meta);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
+        List<UIDatatable> datables = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatatable.class);
         UIDatatable datatable = datables.get(0);
 
         // check columns
@@ -152,7 +152,7 @@ public class UIDatatableBuilderTest {
         RepositoryUtils.registerMock("defColsRepo", meta);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatatable> datables = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatatable.class);
+        List<UIDatatable> datables = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatatable.class);
         UIDatatable datatable = datables.get(0);
 
         // check columns

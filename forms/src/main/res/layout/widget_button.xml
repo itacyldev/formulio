@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <es.jcyl.ita.formic.forms.view.widget.Widget xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget_padding"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="@style/Widget_padding">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_add"
+            android:id="@+id/btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/roundbutton"/>
+            android:background="@drawable/roundbutton"
+            android:clickable="true" />
         <!--android:drawableLeft="@drawable/ic_action_new"-->
-    </RelativeLayout>>
-
+    </RelativeLayout>
 </es.jcyl.ita.formic.forms.view.widget.Widget>

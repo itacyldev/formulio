@@ -119,6 +119,7 @@ public class TagDef {
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
+        register("view", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("form", define(baseRepoAccessor, new Attribute[]{ON_SAVE}));
 
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, ACTION, ALLOWS_PARTIAL_RESTORE}));
@@ -163,6 +164,7 @@ public class TagDef {
         Attribute optionValue = new Attribute("value");
         register("option", define(new Attribute[]{ID, optionValue, LABEL}, scriptHooks));
 
+        register("buttonbar", define(base, new Attribute[]{TYPE}));
         register("button", define(baseInput, new Attribute[]{ROUTE, ACTION}));
         register("link", define(baseInput, new Attribute[]{ROUTE, ACTION}));
 

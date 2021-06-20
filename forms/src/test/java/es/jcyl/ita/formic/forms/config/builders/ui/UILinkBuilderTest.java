@@ -67,7 +67,7 @@ public class UILinkBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UILink> links = UIComponentHelper.findByClass(formConfig.getList().getView(), UILink.class);
+        List<UILink> links = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UILink.class);
         Assert.assertNotNull(links);
         UILink link = links.get(0);
         Assert.assertNotNull(link.getId());
@@ -82,7 +82,7 @@ public class UILinkBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_LINK_WITH_ATTS);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UILink> links = UIComponentHelper.findByClass(formConfig.getList().getView(), UILink.class);
+        List<UILink> links = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UILink.class);
         Assert.assertNotNull(links);
 
         UILink link = links.get(0);
@@ -104,7 +104,7 @@ public class UILinkBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_LINK_WITH_PARAMS);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UILink> links = UIComponentHelper.findByClass(formConfig.getList().getView(), UILink.class);
+        List<UILink> links = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UILink.class);
         Assert.assertNotNull(links);
 
         UILink link = links.get(0);

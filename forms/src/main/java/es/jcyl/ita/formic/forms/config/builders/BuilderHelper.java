@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.BeanUtilsBean;
 import org.mini2Dx.beanutils.PropertyUtilsBean;
+import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,9 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -60,6 +64,33 @@ public class BuilderHelper {
         ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
         Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
         setElementValue(node.getElement(), "repo", repo);
+    }
+
+
+    /**
+     * Searchs for actions in nested configuration
+     *
+     * @param node
+     */
+    public static void setUpActions(ConfigNode node) {
+        List<ConfigNode> lst = ConfigNodeHelper.getDescendantByTag(node, "actions");
+        if (CollectionUtils.isEmpty(lst)) {
+            return;
+        }
+        ConfigNode actions = lst.get(0);
+        List<ConfigNode> actionList = actions.getChildren();
+        UIAction[] lstActions = new UIAction[actionList.size()];
+
+        UIAction action;
+        for (int i = 0; i < actionList.size(); i++) {
+            action = (UIAction) actionList.get(i).getElement();
+            if (StringUtils.isBlank(action.getType())) {
+                action.setType(actionList.get(i).getName());
+            }
+            lstActions[i] = action;
+        }
+        FormController formController = (FormController) node.getElement();
+        formController.setActions(lstActions);
     }
 
     public static Object getElementValue(Object element, String property) {
@@ -428,5 +459,22 @@ public class BuilderHelper {
             params[i] = uiParam;
         }
         return params;
+    }
+
+    /**
+     * If current edit of list view element doesnt have a view, create one and nested all elements except
+     * actions and scripts
+     *
+     * @return
+     */
+    public static void createDefaultView(ConfigNode root) {
+        if (ConfigNodeHelper.hasDescendantByTag(root, "view")) {
+            // it already has a form
+            return;
+        }
+        ConfigNode viewNode = new ConfigNode("view");
+        viewNode.setId("view" + root.getId());
+        viewNode.setChildren(root.getChildren());
+        root.setChildren(Arrays.asList(viewNode));
     }
 }

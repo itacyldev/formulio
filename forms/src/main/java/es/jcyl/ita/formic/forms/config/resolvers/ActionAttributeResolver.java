@@ -91,7 +91,7 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
 
     public Object resolveActionAtt(ConfigNode node, String attName) {
         String actionType = node.getAttribute(attName);
-        // check if threre's a nested <action/> element
+        // check if there's a nested <action/> element
         ConfigNode nestedAction = ConfigNodeHelper.getFirstChildrenByTag(node, "action");
         if (nestedAction != null) {
             throw new ConfigurationException(
@@ -103,10 +103,9 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
                             node.getName(), node.getId(), actionType)));
         }
         // check if the actionType is referring to a predefined action
-        try {
-            ActionType actTypeEnum = ActionType.valueOf(actionType.toUpperCase());
-            createActionNode(actTypeEnum, node);
-        } catch (Exception e) {
+        if(!ActionType.isCustomAction(actionType)){
+            createActionNode(actionType, node);
+        } else {
             // it is not a predefined action, it has to be a js action or a custom action
             registerUnresolvedAction(node);
         }
@@ -134,7 +133,7 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
         // No action defined but the router attribute is set
         if (!node.hasAttribute("action") && !hasNestedActions
                 && node.hasAttribute("route")) {
-            createActionNode(ActionType.NAV, node);
+            createActionNode(ActionType.NAV.name(), node);
         }
         // the action will be set by the actionBuilder
         return value;
@@ -148,9 +147,9 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
      * @param actionType
      * @param node
      */
-    private void createActionNode(ActionType actionType, ConfigNode node) {
+    private void createActionNode(String actionType, ConfigNode node) {
         ConfigNode actionNode = new ConfigNode("action");
-        actionNode.setAttribute(AttributeDef.TYPE.name, actionType.name().toLowerCase());
+        actionNode.setAttribute(AttributeDef.TYPE.name, actionType);
         // get additional action attributes from current node
         actionNode.setAttribute(AttributeDef.ROUTE.name,
                 node.getAttribute(AttributeDef.ROUTE.name));

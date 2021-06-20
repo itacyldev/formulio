@@ -46,7 +46,7 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
     protected void composeWidget(RenderingEnv env, Widget<UIButton> widget) {
         UIButton component = widget.getComponent();
 
-        Button addButton = widget.findViewById(R.id.btn_add);
+        Button addButton = widget.findViewById(R.id.btn);
 
         if (StringUtils.isNotBlank(component.getLabel())) {
             addButton.setText(component.getLabel());

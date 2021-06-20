@@ -29,7 +29,8 @@ public class DAGManagerTest {
      */
     @Test
     public void createDagWith2Branches() {
-        UIView view = new UIView("view");
+        UIView view = new UIView();
+        view.setId("view");
         UIForm form = createForm2Branches("form");
         form.setRoot(view);
         view.addChild(form);
@@ -57,7 +58,8 @@ public class DAGManagerTest {
      */
     @Test
     public void createDags() {
-        UIView view = new UIView("view");
+        UIView view = new UIView();
+        view.setId("view");
         UIForm form = createForm2Dags("form");
         form.setRoot(view);
         view.addChild(form);
@@ -125,7 +127,8 @@ public class DAGManagerTest {
     }
 
     private UIView createView(String viewId) {
-        UIView view = new UIView(viewId);
+        UIView view = new UIView();
+        view.setId(viewId);
         UIForm form = createForm("form");
         form.setRoot(view);
         view.addChild(form);
@@ -134,7 +137,8 @@ public class DAGManagerTest {
     }
 
     private UIView createViewWithCycle() {
-        UIView view = new UIView("view2");
+        UIView view = new UIView();
+        view.setId("view2");
         UIForm form = createFormWithCycle("form");
         form.setRoot(view);
         view.addChild(form);

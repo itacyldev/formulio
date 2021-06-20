@@ -68,7 +68,7 @@ public class UIRadioBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<es.jcyl.ita.formic.forms.components.radio.UIRadio> lstRadio = UIComponentHelper.findByClass(editCtl.getView(), es.jcyl.ita.formic.forms.components.radio.UIRadio.class);
+        List<es.jcyl.ita.formic.forms.components.radio.UIRadio> lstRadio = UIComponentHelper.getChildrenByClass(editCtl.getView(), es.jcyl.ita.formic.forms.components.radio.UIRadio.class);
         Assert.assertNotNull(lstRadio);
         assertTrue("One radio is expected, found: " + lstRadio.size(), lstRadio.size() == 1);
 
@@ -95,7 +95,7 @@ public class UIRadioBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UISelect> selects = UIComponentHelper.findByClass(editCtl.getView(), UISelect.class);
+        List<UISelect> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UISelect.class);
         Assert.assertNotNull(selects);
         assertTrue("One radio is expected, found: " + selects.size(), selects.size() == 1);
 

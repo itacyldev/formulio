@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JxltEngine;
+import org.apache.commons.lang3.ArrayUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.Serializable;
@@ -20,11 +21,16 @@ import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
+import es.jcyl.ita.formic.forms.components.link.UIButton;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -57,13 +63,44 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
 
     @Override
     protected void doRender(RenderingEnv renderingEnv) {
-        // add action buttons
-        ViewGroup toolBar = findViewById(R.id.form_toolbar);
-        renderToolBar(toolBar);
-
     }
 
+    protected void renderToolBars(RenderingEnv env) {
+        // configurar menu
+        UIView view = this.formController.getView();
+        renderBottombar(view.getBottomNav());
+        renderMenuBar(view.getMenuBar());
+        renderFabBar(view.getFabBar());
+    }
+
+    private void renderBottombar(UIButtonBar bottomNav) {
+        ViewGroup toolBar = findViewById(R.id.form_toolbar);
+        if(bottomNav == null || ArrayUtils.isEmpty(bottomNav.getChildren())){
+            toolBar.setVisibility(View.GONE);
+            return;
+        }
+        MainController mc = this.formController.getMc();
+        for(UIComponent c: bottomNav.getChildren()){
+            if(c instanceof UIButton){
+                Widget btnWidget = mc.renderComponent(c);
+                Button button = btnWidget.findViewById(R.id.btn);
+                setButtonStyle(button);
+                setLayoutParams(button);
+                ((ViewGroup) button.getParent()).removeView(button);
+                toolBar.addView(button);
+            }
+        }
+    }
+
+    private void renderFabBar(UIButtonBar menuBar) {
+    }
+
+    private void renderMenuBar(UIButtonBar menuBar) {
+    }
+
+
     private void renderToolBar(ViewGroup parentView) {
+
         if (this.formController.getActions() != null) {
             for (UIAction action : this.formController.getActions()) {
                 renderActionButton(this, parentView, action);
@@ -84,6 +121,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
         mc.getActionController().doUserAction(action);
         finish();
     }
+
 
     private Button renderActionButton(Context context, ViewGroup parent, UIAction formAction) {
         Button button = new Button(context);

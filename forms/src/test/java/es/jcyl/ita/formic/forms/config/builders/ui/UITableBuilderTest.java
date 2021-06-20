@@ -72,7 +72,7 @@ public class UITableBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITable> tables = UIComponentHelper.findByClass(editCtl.getView(), UITable.class);
+        List<UITable> tables = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITable.class);
         Assert.assertNotNull(tables);
         Assert.assertTrue("One table is expected, found: " + tables.size(), tables.size() == 1);
 
@@ -104,7 +104,7 @@ public class UITableBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITable> tables = UIComponentHelper.findByClass(editCtl.getView(), UITable.class);
+        List<UITable> tables = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITable.class);
 
         // repo must be set with parent value "contacts"
         UITable table = tables.get(0);
@@ -136,7 +136,7 @@ public class UITableBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITable> tables = UIComponentHelper.findByClass(editCtl.getView(), UITable.class);
+        List<UITable> tables = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITable.class);
 
         // repo must be set with parent value "contacts"
         UITable table = tables.get(0);

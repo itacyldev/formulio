@@ -86,7 +86,7 @@ public class UITabBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITab> tabs = UIComponentHelper.findByClass(editCtl.getView(), UITab.class);
+        List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 
         UITab tab = tabs.get(0);
@@ -142,7 +142,7 @@ public class UITabBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITab> tabs = UIComponentHelper.findByClass(editCtl.getView(), UITab.class);
+        List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 
         UITab tab = tabs.get(0);
@@ -185,7 +185,7 @@ public class UITabBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITab> tabs = UIComponentHelper.findByClass(editCtl.getView(), UITab.class);
+        List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 
         UITab tab = tabs.get(0);
@@ -221,7 +221,7 @@ public class UITabBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITab> tabs = UIComponentHelper.findByClass(editCtl.getView(), UITab.class);
+        List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 
         UITab tab = tabs.get(0);

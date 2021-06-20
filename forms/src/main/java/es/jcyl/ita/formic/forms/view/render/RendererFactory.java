@@ -18,18 +18,19 @@ package es.jcyl.ita.formic.forms.view.render;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteRenderer;
-import es.jcyl.ita.formic.forms.components.link.UIButtonRenderer;
+import es.jcyl.ita.formic.forms.components.base.UIGroupBaseRenderer;
 import es.jcyl.ita.formic.forms.components.card.UICardRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistitemRenderer;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatableRenderer;
-import es.jcyl.ita.formic.forms.components.form.UIFormRenderer;
 import es.jcyl.ita.formic.forms.components.image.UIImageRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.DateFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.TextAreaRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.TextFieldRenderer;
+import es.jcyl.ita.formic.forms.components.link.UIButtonRenderer;
 import es.jcyl.ita.formic.forms.components.link.UILinkRenderer;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisorRenderer;
 import es.jcyl.ita.formic.forms.components.placeholders.UIHeadingRenderer;
@@ -54,7 +55,7 @@ public class RendererFactory {
 
     private RendererFactory() {
         renderInstances.put("view", new UIViewRenderer());
-        renderInstances.put("form", new UIFormRenderer());
+        renderInstances.put("form", new UIGroupBaseRenderer(R.layout.widget_form));
         renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("textarea", new TextAreaRenderer());
         renderInstances.put("date", new DateFieldRenderer());
@@ -77,6 +78,7 @@ public class RendererFactory {
         renderInstances.put("head", new UIHeadingRenderer());
         renderInstances.put("divisor", new UIDivisorRenderer());
         renderInstances.put("button", new UIButtonRenderer());
+        renderInstances.put("buttonbar", new UIGroupBaseRenderer(R.layout.widget_buttonbar));
     }
 
     public static RendererFactory getInstance() {

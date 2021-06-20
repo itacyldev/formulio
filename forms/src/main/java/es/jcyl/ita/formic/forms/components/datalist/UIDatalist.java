@@ -17,9 +17,10 @@ package es.jcyl.ita.formic.forms.components.datalist;
 
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
+import es.jcyl.ita.formic.forms.components.EntitySelectorComponent;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
@@ -29,10 +30,12 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIDatalist extends AbstractUIComponent implements FilterableComponent {
+public class UIDatalist extends AbstractUIComponent implements FilterableComponent,
+        EntitySelectorComponent {
 
     private Repository repo;
     private Filter filter;
+    private String route;
     private String[] mandatoryFilters;
 
     private int numItems;
@@ -64,6 +67,14 @@ public class UIDatalist extends AbstractUIComponent implements FilterableCompone
     @Override
     public void setMandatoryFilters(String[] mandatoryFields) {
         this.mandatoryFilters = mandatoryFields;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
     }
 
     public void setRepo(Repository repo) {

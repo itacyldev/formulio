@@ -16,52 +16,33 @@ package es.jcyl.ita.formic.forms.view.render;
  */
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
-import es.jcyl.ita.formic.forms.builders.FieldDataBuilder;
-import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
-import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
-import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
-import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 import static org.mockito.Mockito.*;
 
@@ -106,7 +87,7 @@ public class ViewRenderIntegrationTest {
 
         UIView mainView = formConfig.getList().getView();
 
-        List<UIDatalist> datalists = UIComponentHelper.findByClass(mainView, UIDatalist.class);
+        List<UIDatalist> datalists = UIComponentHelper.getChildrenByClass(mainView, UIDatalist.class);
         Assert.assertNotNull(datalists);
 
         DAGManager dagManager = DAGManager.getInstance();

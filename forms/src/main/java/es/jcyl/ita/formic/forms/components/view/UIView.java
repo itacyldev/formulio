@@ -19,21 +19,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.UIGroupComponent;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIView extends AbstractUIComponent {
+public class UIView extends UIGroupComponent implements FilterableComponent {
 
     FormController formController;
     List<UIForm> forms;
+    // filterable component
+    private Repository repo;
+    private Filter filter;
+    private String[] mandatoryFilters;
 
-    public UIView(String id) {
-        setId(id);
+    // button bars
+    UIButtonBar bottomNav;
+    UIButtonBar menuBar;
+    UIButtonBar fabBar;
+
+    public UIView() {
         setRendererType("view");
         setRoot(this);
     }
@@ -42,41 +55,6 @@ public class UIView extends AbstractUIComponent {
     public boolean isRenderChildren() {
         return true;
     }
-
-//
-//    public UIForm getForm(String formId) {
-//        for (UIForm f : this.getForms()) {
-//            if (f.getId().equalsIgnoreCase(formId)) {
-//                return f;
-//            }
-//        }
-//        return null;
-//    }
-
-//    /**
-//     * Give and identifier with the expression formId.elementId, returns the component.
-//     *
-//     * @param id
-//     * @return
-//     */
-//    public UIComponent findFormElement(String id) {
-//        String[] splits = id.split("\\.");
-//        if (splits.length != 2) {
-//            throw new IllegalArgumentException(String.format("Unexpected id expression. The id must " +
-//                    "follow the rule: formId.elementId: [%s].", id));
-//        }
-//        UIForm f = this.getForm(splits[0]);
-//        if (f == null) {
-//            throw new IllegalArgumentException(String.format("Illegal form element expression. " +
-//                    "No form found with the id [%s].", splits[0]));
-//        }
-//        UIComponent c = f.getElement(splits[1]);
-//        if (c == null) {
-//            throw new IllegalArgumentException(String.format("Illegal form element expression. " +
-//                    "No element found with the id [%s] in the form[%s].", splits[1], splits[0]));
-//        }
-//        return c;
-//    }
 
     public List<UIForm> getForms() {
         if (this.forms == null) {
@@ -110,5 +88,60 @@ public class UIView extends AbstractUIComponent {
 
     public void setFormController(FormController formController) {
         this.formController = formController;
+    }
+
+    public UIButtonBar getBottomNav() {
+        return bottomNav;
+    }
+
+    public void setBottomNav(UIButtonBar bottomNav) {
+        this.bottomNav = bottomNav;
+    }
+
+    public UIButtonBar getMenuBar() {
+        return menuBar;
+    }
+
+    public void setMenuBar(UIButtonBar menuBar) {
+        this.menuBar = menuBar;
+    }
+
+    public UIButtonBar getFabBar() {
+        return fabBar;
+    }
+
+    public void setFabBar(UIButtonBar fabBar) {
+        this.fabBar = fabBar;
+    }
+
+
+    @Override
+    public Repository getRepo() {
+        return repo;
+    }
+
+    @Override
+    public void setRepo(Repository repo) {
+        this.repo = repo;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    @Override
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+    }
+
+    @Override
+    public String[] getMandatoryFilters() {
+        return mandatoryFilters;
+    }
+
+    @Override
+    public void setMandatoryFilters(String[] mandatoryFilters) {
+        this.mandatoryFilters = mandatoryFilters;
     }
 }

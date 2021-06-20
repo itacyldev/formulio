@@ -91,7 +91,7 @@ public class ActionAttributeResolverTest {
 
         Assert.assertNotNull(myButton);
         Assert.assertNotNull(myButton.getAction());
-        Assert.assertEquals(ActionType.NAV.name().toLowerCase(), myButton.getAction().getType());
+        Assert.assertEquals(ActionType.NAV.name(), myButton.getAction().getType());
     }
 
     private static final String XML_TEST_BUTTON_ACTION_PARAMS = "<button id=\"myButton\" action=\"nav\" route=\"aRouteToGo\" refresh=\"this\" registerInHistory=\"false\" />";

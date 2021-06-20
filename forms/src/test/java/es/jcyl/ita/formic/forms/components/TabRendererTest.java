@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.components;
 
 import android.content.Context;
 
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -55,8 +56,6 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class TabRendererTest {
 
-    Context ctx;
-
     ViewRenderer renderHelper = new ViewRenderer();
 
     @Before
@@ -65,8 +64,8 @@ public class TabRendererTest {
         FormEditController mockFC = mock(FormEditController.class);
         mainController.setFormController(mockFC, null);
 
-        ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
-        ctx.setTheme(R.style.FormudruidDark);
+//        ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
+//        ctx.setTheme(R.style.FormudruidDark);
     }
 
     /**
@@ -75,6 +74,8 @@ public class TabRendererTest {
      */
     @Test
     public void test2Tabs() {
+        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
+
         RenderingEnv env = mock(RenderingEnv.class);
         when(env.getAndroidContext()).thenReturn(ctx);
         when(env.getWidgetContext()).thenReturn(ContextTestUtils.createWidgetContext());

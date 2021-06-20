@@ -70,7 +70,7 @@ public class UIAutocompleteBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 
@@ -94,7 +94,7 @@ public class UIAutocompleteBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 
@@ -119,7 +119,7 @@ public class UIAutocompleteBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
 
         // repo must be set with parent value "contacts"
         UIAutoComplete select = selects.get(0);
@@ -147,7 +147,7 @@ public class UIAutocompleteBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
 
         // repo must be set with parent value "contacts"
         UIAutoComplete select = selects.get(0);

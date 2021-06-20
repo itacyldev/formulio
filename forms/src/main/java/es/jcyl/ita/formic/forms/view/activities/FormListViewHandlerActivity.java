@@ -1,6 +1,5 @@
 package es.jcyl.ita.formic.forms.view.activities;
 
-import android.content.Context;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +14,9 @@ import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
+import es.jcyl.ita.formic.forms.components.link.UIButton;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
@@ -36,43 +38,50 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
         setTitle(formController.getName());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        renderFAB(renderingEnv);
     }
 
+    @Override
+    protected void renderToolBars(RenderingEnv renderingEnv) {
+        UIView view = this.formController.getView();
+        renderFAB(view.getFabBar());
+    }
 
-    private void renderFAB(RenderingEnv renderingEnv) {
+    private void renderFAB(UIButtonBar buttonBar) {
         FloatingActionButton fab = findViewById(R.id.fab);
         if (ArrayUtils.isEmpty(this.formController.getActions())) {
             fab.hide();
-        } else {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    UserAction action;
-                    UIAction uiAction = formController.getAction("add");
-                    if (uiAction == null) {
-                        // get the first one until we refactorize this (FORMIC-229)
-                        uiAction = formController.getActions()[0];
-                        action = new UserAction(uiAction, formController);
-                        prepareActionParams(uiAction, action);
-                    } else {
-                        // default navigation
-                        action = UserAction.navigate(uiAction.getRoute(), formController);
-                    }
-                    // FAB new entity button, navigate to form view without entityId
-                    UserEventInterceptor interceptor = env.getUserActionInterceptor();
-                    if (interceptor != null) {
-                        // TODO: FORMIC-229 Terminar refactorización de acciones
-                        Event event = new Event(Event.EventType.CLICK, null, action);
-                        interceptor.notify(event);
-                    }
-                }
-            });
+            return;
         }
+        // por ahora solo la primera
+        UIButton fabButton = (UIButton) buttonBar.getChildren()[0];
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserAction action;
+                UIAction uiAction = fabButton.getAction();
+                if (uiAction == null) {
+                    // get the first one until we refactorize this (FORMIC-229)
+                    uiAction = formController.getActions()[0];
+                    action = new UserAction(uiAction, formController);
+                    prepareActionParams(uiAction, action);
+                } else {
+                    // default navigation
+                    action = UserAction.navigate(uiAction.getRoute(), formController);
+                }
+                // FAB new entity button, navigate to form view without entityId
+                UserEventInterceptor interceptor = env.getUserActionInterceptor();
+                if (interceptor != null) {
+                    // TODO: FORMIC-229 Terminar refactorización de acciones
+                    Event event = new Event(Event.EventType.CLICK, null, action);
+                    interceptor.notify(event);
+                }
+            }
+        });
     }
 
     /**
      * // TODO: remove this after FORMIC-229 Terminar refactorización de acciones
+     *
      * @return
      */
     private void prepareActionParams(UIAction uiAction, UserAction action) {
@@ -80,7 +89,7 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
             for (UIParam param : uiAction.getParams()) {
                 Object value = JexlFormUtils.eval(this.formController.getMc().getGlobalContext(),
                         param.getValue());
-                action.addParam(param.getName(),value);
+                action.addParam(param.getName(), value);
             }
         }
     }

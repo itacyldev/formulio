@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.config;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -277,13 +278,29 @@ public class ConfigNodeHelper {
 
     /**
      * Sets a value in node if the attribute is currently not set
+     *
      * @param node
      * @param attName
      * @param value
      */
     public static void setIfNull(ConfigNode node, String attName, String value) {
-        if(!node.hasAttribute("attName")){
+        if (!node.hasAttribute("attName")) {
             node.setAttribute(attName, value);
+        }
+    }
+
+    public static void removeFromParent(ConfigNode parent, ConfigNode... children) {
+        List lst = parent.getChildren();
+        if (lst == null) {
+            return;
+        }
+        for (ConfigNode kid : children) {
+            Iterator<ConfigNode> iter = lst.iterator();
+            while (iter.hasNext()) {
+                if (iter.next().equals(kid)) {
+                    iter.remove();
+                }
+            }
         }
     }
 }

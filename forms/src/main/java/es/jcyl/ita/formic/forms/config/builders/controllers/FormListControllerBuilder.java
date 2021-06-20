@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
@@ -35,6 +37,7 @@ import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.query.Filter;
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 import static es.jcyl.ita.formic.forms.config.DevConsole.info;
 
@@ -57,7 +60,6 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
     protected void doWithAttribute(FormListController element, String name, String value) {
     }
 
-
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<FormListController> node) {
         FormListController ctl = node.getElement();
@@ -71,22 +73,24 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
                 ctl.setFilter((Filter) repoFilters.get(0).getElement());
             }
         }
-        UIView listView = new UIView(ctl.getId() + ">view");
-        listView.setFormController(ctl);
-        ctl.setView(listView);
+        BuilderHelper.createDefaultView(node);
 
         // if no nested repo defined, inherit attribute from parent
         if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
             BuilderHelper.inheritAttribute(node, "repo");
         }
-        createDefaultSelector(node);
-        // setup actions must be configured at start of he subtree, so the can be
-        // used by nested elements to configure themselves if needed
-        createDefaultActionNodes(node);
+        // create default datatable if needed
+        createDefaultEntitySelector(node);
+        // create default fabButtonBar if needed
+        ConfigNode fabBar = findOrCreateFabButtonBar(node);
         BuilderHelper.addDefaultRepoNode(node);
         // if no repo configuration is defined, use parent
         BuilderHelper.setUpRepo(node, true);
+        if (fabBar != null) {
+            setupRouteOnSelector(node, fabBar);
+        }
     }
+
 
     /**
      * In case current formController doesn't have an entityList componente defined, it creates a
@@ -95,8 +99,10 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * @param root
      * @return
      */
-    private void createDefaultSelector(ConfigNode<FormListController> root) {
-        if (ConfigNodeHelper.hasDescendantByTag(root, ENTITY_SELECTOR_SET)) {
+    private void createDefaultEntitySelector(ConfigNode<FormListController> root) {
+        ConfigNode viewNode = root.getChildren().get(0);
+
+        if (ConfigNodeHelper.hasDescendantByTag(viewNode, ENTITY_SELECTOR_SET)) {
             // it already has a datatable
             return;
         }
@@ -105,7 +111,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         if (root.hasAttribute("repo")) {
             tableNode.setAttribute("repo", root.getAttribute("repo"));
         }
-        root.addChild(tableNode);
+        viewNode.addChild(tableNode);
     }
 
     /**
@@ -113,17 +119,29 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * it creates default action-nodes.
      *
      * @param node
+     * @return
      */
-    private void createDefaultActionNodes(ConfigNode<FormListController> node) {
-        if (ConfigNodeHelper.hasDescendantByTag(node, ACTION_SET)) {
-            return;
+    private ConfigNode findOrCreateFabButtonBar(ConfigNode<FormListController> node) {
+        ConfigNode viewNode = node.getChildren().get(0);
+
+        // look for buttonbars
+        List<ConfigNode> children = viewNode.getChildren();
+        boolean hasFabBar = false;
+        for (ConfigNode n : children) {
+            if (n.getName().toLowerCase().equals("buttonbar")) {
+                String type = n.getAttribute("type");
+                if (!StringUtils.isBlank(type)
+                        && type.toUpperCase().equals(UIButtonBar.ButtonBarType.FAB.name())) {
+                    return n;
+                }
+                ;
+                break;
+            }
         }
+        debug("No nested fabBar found, creating default one.");
+
         ConfigNode root = ConfigNodeHelper.getRoot(node);
         List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(root, "edit");
-
-        // add empty actions node
-        ConfigNode actionsNode = new ConfigNode("actions");
-        node.addChild(actionsNode);
 
         String editId;
         if (edits.size() > 1) {
@@ -131,47 +149,37 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
                     "and with no actions defined!. When you have more that one <edit/> in a form, " +
                     "you have to use <actions/> element in the <list/> to define which view will " +
                     "be navigated from the list, or use a <datatable/datalist> element.");
-            return;
+            return null;
         }
         // there must be at least one create by FormConfigBuilder
         editId = edits.get(0).getId();
         String listId = node.getId();
-        actionsNode.addChild(createActionNode("add", listId + "#add", "Add", editId));
-        actionsNode.addChild(createActionNode("update", listId + "#update", "Update", editId));
-        actionsNode.addChild(createActionNode("delete", listId + "#delete", "Delete", null));
+
+        // create default fabBar
+        ConfigNode buttonbar = new ConfigNode("buttonbar");
+        buttonbar.setAttribute("type", UIButtonBar.ButtonBarType.FAB.name());
+        viewNode.addChild(buttonbar);
+
+        buttonbar.addChild(createActionNode("nav", listId + "#add", "Add", editId));
+//        buttonbar.addChild(createActionNode("update", listId + "#update", "Update", editId));
+//        buttonbar.addChild(createActionNode("delete", listId + "#delete", "Delete", null));
+        return buttonbar;
     }
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<FormListController> node) {
-        // add nested ui elements
-        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
-        node.getElement().getView().setChildren(uiComponents);
-        node.getElement().getView().setRoot(node.getElement().getView());
+        // link view and controller
+        ConfigNode viewNode = node.getChildren().get(0);
+        UIView view = (UIView) viewNode.getElement();
+        FormListController fController = node.getElement();
+        view.setFormController(fController);
+        fController.setView(view);
 
-        setUpActions(node);
+        BuilderHelper.setUpActions(node);
         setUpEntityList(node); // see issue #203650
     }
 
-    /**
-     * Searchs for actions in nested configuration
-     *
-     * @param node
-     */
-    private void setUpActions(ConfigNode<FormListController> node) {
-        ConfigNode actions = ConfigNodeHelper.getFirstChildrenByTag(node, "actions");
-
-        List<ConfigNode> actionList = actions.getChildren();
-        if (CollectionUtils.isNotEmpty(actionList)) {
-            UIAction[] lstActions = new UIAction[actionList.size()];
-            for (int i = 0; i < actionList.size(); i++) {
-                lstActions[i] = (UIAction) actionList.get(i).getElement();
-                lstActions[i].setType(actionList.get(i).getName());
-            }
-            node.getElement().setActions(lstActions);
-        }
-    }
-
-    /**
+      /**
      * Looks for an inner element that implements an FilterableComponent interface, if no component
      * is found it creates a default dataTable. It also checks the attribute "entityList" is
      * properly set and references an instance of interface EntitySelector.
@@ -179,43 +187,62 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
      * @param node
      */
     private void setUpEntityList(ConfigNode<FormListController> node) {
-        Object selector = null;
+        Object selector;
         List<ConfigNode> entityList = ConfigNodeHelper.getDescendantByTag(node, ENTITY_SELECTOR_SET);
         String entityListId = node.getAttribute("entityList");
 
         if (StringUtils.isNotBlank(entityListId)) {
-//            // try to find the referenced component in the selectors list
-//            for (ConfigNode n : entityList) {
-//                if (n.getId().equals(entityListId)) {
-//                    Object element = n.getElement();
-//                    if (element != null && element instanceof FilterableComponent) {
-//                        throw new ConfigurationException(error(String.format("The attribute 'entityList' " +
-//                                "references an object that doesn't implements FilterableComponent interfaces. " +
-//                                "This attribute can be used to point to one of these components: [%s] ", ENTITY_SELECTOR_SET)));
-//                    } else {
-//                        selector = element;
-//                    }
-//                }
-//            }
             throw new UnsupportedOperationException("Not supported yet!");
         } else {// the attribute is not set
             int numSelectors = entityList.size();
             if (numSelectors == 1) {
                 // if there's just one filterableComponent use it
                 selector = entityList.get(0).getElement();
+                // setup route
             } else {
                 throw new ConfigurationException(error("The <list/> form defined in " +
                         "file '${file}' has more than one FilterableComponent, use the attribute 'entityList'" +
                         " to set the id of the main selector"));
             }
         }
-
         node.getElement().setEntityList((FilterableComponent) selector);
     }
 
+
+    /**
+     * Looks for an EntitySelector component and sets on it the default route using the first
+     * button from the fabButtonBar that has the route attribute set.
+     *
+     * @param root
+     * @param fabBar
+     */
+    private void setupRouteOnSelector(ConfigNode<FormListController> root, ConfigNode fabBar) {
+
+        List<ConfigNode> selectors = ConfigNodeHelper.getDescendantByTag(root, ENTITY_SELECTOR_SET);
+
+        // if there's just one and route attribute is not set
+        if (selectors == null || selectors.size() != 1
+                || selectors.get(0).hasAttribute("route")) {
+            return;
+        }
+        ConfigNode entitySelector = selectors.get(0);
+
+        String route = null;
+        List<ConfigNode> kids = fabBar.getChildren();
+        // find the first button with the route attribute set
+        for (ConfigNode c : kids) {
+            if (c.hasAttribute("route")) {
+                route = c.getAttribute("route");
+                break;
+            }
+        }
+        entitySelector.setAttribute("route", route);
+    }
+
     private ConfigNode createActionNode(String action, String id, String label, String route) {
-        ConfigNode node = new ConfigNode(action);
+        ConfigNode node = new ConfigNode("button");
         node.setId(id);
+        node.setAttribute("action", action);
         node.setAttribute("label", label);
         node.setAttribute("route", route);
         return node;

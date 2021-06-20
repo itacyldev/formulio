@@ -79,7 +79,7 @@ public class UIImageBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIImage> imgs = UIComponentHelper.findByClass(editCtl.getView(), UIImage.class);
+        List<UIImage> imgs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIImage.class);
         Assert.assertNotNull(imgs);
         Assert.assertTrue("One image is expected, found: " + imgs.size(), imgs.size() == 1);
 

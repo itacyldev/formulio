@@ -32,7 +32,6 @@ import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 
 
 /**
@@ -87,7 +86,7 @@ public class UIActionBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(configXML);
         // find the button
         UIAction[] actions = formConfig.getEdits().get(0).getActions();
-        List<UIButton> buttonList = UIComponentHelper.findByClass(formConfig.getEdits().get(0).getView(), UIButton.class);
+        List<UIButton> buttonList = UIComponentHelper.getChildrenByClass(formConfig.getEdits().get(0).getView(), UIButton.class);
         UIButton button = buttonList.get(0);
         Assert.assertNotNull(button);
         UIAction action = button.getAction();

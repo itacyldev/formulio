@@ -62,7 +62,7 @@ public class UIDatalistBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatalist> datalists = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatalist.class);
+        List<UIDatalist> datalists = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatalist.class);
         Assert.assertNotNull(datalists);
 
         // repo must be set with parent value "contacts"
@@ -80,7 +80,7 @@ public class UIDatalistBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_REPO);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatalist> datalists = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatalist.class);
+        List<UIDatalist> datalists = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatalist.class);
         Assert.assertNotNull(datalists);
 
         // repo must be set with parent value "contacts"
@@ -100,7 +100,7 @@ public class UIDatalistBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_WITH_DATALISTITEM);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatalist> datalists = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatalist.class);
+        List<UIDatalist> datalists = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatalist.class);
         Assert.assertNotNull(datalists);
 
         UIDatalist datalist = datalists.get(0);
@@ -123,7 +123,7 @@ public class UIDatalistBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_WITHOUT_DATALISTITEM);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDatalist> datalists = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDatalist.class);
+        List<UIDatalist> datalists = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatalist.class);
         Assert.assertNotNull(datalists);
 
         UIDatalist datalist = datalists.get(0);

@@ -84,7 +84,7 @@ public class ValidatorBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
         List<UIInputComponent> fields = forms.get(0).getFields();
@@ -120,7 +120,7 @@ public class ValidatorBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
         List<UIInputComponent> fields = forms.get(0).getFields();
@@ -156,7 +156,7 @@ public class ValidatorBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
         List<UIInputComponent> fields = forms.get(0).getFields();
@@ -190,7 +190,7 @@ public class ValidatorBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
         List<UIInputComponent> fields = forms.get(0).getFields();
 
@@ -226,7 +226,7 @@ public class ValidatorBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
         List<UIInputComponent> fields = forms.get(0).getFields();
 

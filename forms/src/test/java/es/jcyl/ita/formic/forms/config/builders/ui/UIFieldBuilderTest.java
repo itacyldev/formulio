@@ -59,7 +59,7 @@ public class UIFieldBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        UIField field = UIComponentHelper.findByClass(formConfig.getList().getView(), UIField.class).get(0);
+        UIField field = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIField.class).get(0);
 
         assertThat(field.getId(), equalTo("myId"));
         assertThat(ConvertUtils.convert(field.isReadonly(new BasicContext("bc")), Boolean.class), equalTo(true));
@@ -74,7 +74,7 @@ public class UIFieldBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEXT_AREA);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        UIField field = UIComponentHelper.findByClass(formConfig.getList().getView(), UIField.class).get(0);
+        UIField field = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIField.class).get(0);
 
         assertThat(field.getId(), equalTo("myId"));
         assertThat(ConvertUtils.convert(field.isReadonly(new BasicContext("bc")), Boolean.class), equalTo(true));

@@ -64,12 +64,8 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
         showMessages();
     }
 
-    protected void renderToolBars(RenderingEnv env) {
-        // configurar menu
+    protected abstract void renderToolBars(RenderingEnv renderingEnv);
 
-        // configurar fab
-
-    }
 
     protected void attachContentView() {
         int layoutId = getLayoutResource();

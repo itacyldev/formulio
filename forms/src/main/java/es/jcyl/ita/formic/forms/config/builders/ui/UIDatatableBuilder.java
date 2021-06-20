@@ -73,13 +73,13 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
     public void setupOnSubtreeEnds(ConfigNode<UIDatatable> node) {
         setUpColumns(node);
         setUpNumVisibleRows(node);
-        setUpRoute(node);
+//        setUpRoute(node);
 
         UIDatatable element = node.getElement();
 
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         UIAction uiAction = element.getAction();
-        // FORMIC-245 Crear atribute resolver para el attribute "route"
+        // FORMIC-245 Crear attribute resolver para el attribute "route"
         if (uiAction == null) { // default action
             uiAction = new UIAction();
             uiAction.setType("nav");
@@ -96,14 +96,11 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         if (node.hasAttribute("route")) {
             return; // already defined
         }
-        // get add action from list controller to define default route
-        ConfigNode listNode = ConfigNodeHelper.getAscendantByTag(node, "list");
-        if (listNode == null) {
-            // the table is not nested in the listController, doesn't have to be automatically set
-            return;
-        }
-        // find add or update action to configure the destination for when user click on table element
-        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(listNode, NAV_ACTIONS);
+        // get view node
+        ConfigNode viewNode = ConfigNodeHelper.getAscendantByTag(node, "view");
+
+        // find add or update action to configure the destination when user clicks on table elements
+        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(viewNode, NAV_ACTIONS);
         if (CollectionUtils.isEmpty(addActions)) {
             throw new ConfigurationException(DevConsole.error("Error trying to create default datatable for " +
                     "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +

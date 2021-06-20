@@ -128,7 +128,8 @@ public class DelegatedExpressionTest {
 
         // add fields to form
         form.addChild(f2, f3, f4);
-        UIView view = new UIView("view1");
+        UIView view = new UIView();
+        view.setId("view1");
         view.addChild(form);
 
         // create dependency tree

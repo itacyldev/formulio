@@ -62,7 +62,7 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
     public void setupOnSubtreeEnds(ConfigNode<UIDatalist> node) {
         super.setupOnSubtreeEnds(node);
         setNumItems(node);
-        setUpRoute(node);
+//        setUpRoute(node);
     }
 
     @Override
@@ -73,28 +73,28 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
         return super.getDefaultAttributeValue(element, node, attName);
     }
 
-    private void setUpRoute(ConfigNode<UIDatalist> node) {
-        if (node.hasAttribute("route")) {
-            return;
-        }
-        // get add action from list controller to define default route
-        ConfigNode listNode = ConfigNodeHelper.getAscendantByTag(node, "list");
-        if (listNode == null) {
-            // the table is not nested in the listController, doesn't have to be automatically set
-            return;
-        }
-        // find add or update action to configure the destination for when user click on table element
-        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(listNode, NAV_ACTIONS);
-        if (CollectionUtils.isEmpty(addActions)) {
-            throw new ConfigurationException(error("Error trying to create default datatable for " +
-                    "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
-                    "no 'add' action. use 'route' attribute on <datatable/> instead to set the id " +
-                    "of the destination form."));
-        } else {
-            ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
-            //node.getElement().setRoute(addAction.getAttribute("route"));
-        }
-    }
+//    private void setUpRoute(ConfigNode<UIDatalist> node) {
+//        if (node.hasAttribute("route")) {
+//            return;
+//        }
+//        // get add action from list controller to define default route
+//        ConfigNode listNode = ConfigNodeHelper.getAscendantByTag(node, "list");
+//        if (listNode == null) {
+//            // the table is not nested in the listController, doesn't have to be automatically set
+//            return;
+//        }
+//        // find add or update action to configure the destination for when user click on table element
+//        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(listNode, NAV_ACTIONS);
+//        if (CollectionUtils.isEmpty(addActions)) {
+//            throw new ConfigurationException(error("Error trying to create default datatable for " +
+//                    "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
+//                    "no 'add' action. use 'route' attribute on <datatable/> instead to set the id " +
+//                    "of the destination form."));
+//        } else {
+//            ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
+//            //node.getElement().setRoute(addAction.getAttribute("route"));
+//        }
+//    }
 
     private void setNumItems(ConfigNode<UIDatalist> node) {
         int numItems = 1; // Number of default visible items

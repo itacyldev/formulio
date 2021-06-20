@@ -66,7 +66,7 @@ public class UISelectBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UISelect> selects = UIComponentHelper.findByClass(editCtl.getView(), UISelect.class);
+        List<UISelect> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UISelect.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 
@@ -90,7 +90,7 @@ public class UISelectBuilderTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UISelect> selects = UIComponentHelper.findByClass(editCtl.getView(), UISelect.class);
+        List<UISelect> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UISelect.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 

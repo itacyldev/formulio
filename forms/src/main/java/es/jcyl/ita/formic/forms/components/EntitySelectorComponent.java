@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config.builders;
+package es.jcyl.ita.formic.forms.components;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,30 +15,11 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
- * Default class to create basic components
  */
-public class DefaultComponentBuilder extends AbstractComponentBuilder {
+public interface EntitySelectorComponent {
 
-    public DefaultComponentBuilder(String tagName, Class clazz) {
-        super(tagName, clazz);
-    }
-
-    @Override
-    protected void doWithAttribute(Object element, String name, String value) {
-    }
-
-    @Override
-    protected void setupOnSubtreeStarts(ConfigNode node) {
-    }
-
-    @Override
-    protected void setupOnSubtreeEnds(ConfigNode node) {
-    }
+    String getRoute();
+    void setRoute(String route);
 }

@@ -30,6 +30,7 @@ import es.jcyl.ita.formic.core.context.ContextAwareComponent;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -240,6 +241,13 @@ public class MainController implements ContextAwareComponent {
         return widget;
     }
 
+    public Widget renderComponent(UIComponent component){
+        renderingEnv.disableInterceptors();
+        Widget widget = viewRenderer.render(this.renderingEnv, component);
+        renderingEnv.enableInterceptors();
+        return widget;
+    }
+
     /**
      * Restore view previous state if needed
      *
@@ -266,9 +274,6 @@ public class MainController implements ContextAwareComponent {
         viewRenderer.replaceView(widget, newView);
         renderingEnv.enableInterceptors();
         return newView;
-//        if (!reactiveCall) {
-//            flowManager.execute(component.getAbsoluteId());
-//        }
     }
 
     /**

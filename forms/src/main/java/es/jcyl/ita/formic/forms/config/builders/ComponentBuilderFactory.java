@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
@@ -40,6 +41,7 @@ import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.UIActionBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.UIViewBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.EntityMappingBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.MemoRepoConfigBuilder;
@@ -114,6 +116,7 @@ public class ComponentBuilderFactory {
         registerBuilder("list", newBuilder(FormListControllerBuilder.class, "list"));
         registerBuilder("edit", newBuilder(FormEditControllerBuilder.class, "edit"));
         registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
+        registerBuilder("view", newBuilder(UIViewBuilder.class, "view"));
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
         registerBuilder("filerepo", newBuilder(FileRepoConfigBuilder.class, "fileRepo"));
@@ -136,6 +139,8 @@ public class ComponentBuilderFactory {
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
+        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
+        registerBuilder("buttonbar", newDefaultGroupBuilder(UIButtonBar.class, "buttonbar"));
 
         ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
         // same component builder with different aliases
@@ -173,7 +178,6 @@ public class ComponentBuilderFactory {
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
         registerBuilder("context", new ContextBuilder());
 
-        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
         registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
 
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
@@ -199,7 +203,7 @@ public class ComponentBuilderFactory {
         for (ComponentBuilder builder : _builders.values()) {
             if (builder instanceof ReadingProcessListener) {
                 // do not duplicated instance registering
-                if(!registeredBuilders.contains(builder)){
+                if (!registeredBuilders.contains(builder)) {
                     listeners.add((ReadingProcessListener) builder);
                     registeredBuilders.add(builder);
                 }
@@ -209,7 +213,7 @@ public class ComponentBuilderFactory {
         for (AttributeResolver resolver : _resolvers.values()) {
             if (resolver instanceof ReadingProcessListener) {
                 // do not duplicated instance registering
-                if(!registeredResolvers.contains(resolver)){
+                if (!registeredResolvers.contains(resolver)) {
                     listeners.add((ReadingProcessListener) resolver);
                     registeredResolvers.add(resolver);
                 }
@@ -247,6 +251,7 @@ public class ComponentBuilderFactory {
         try {
             builder = (ComponentBuilder) clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
+            error("Coundn't instantiate with default constructor: " + tagName, e);
         }
         // try with one String parameter
         if (builder == null) {
@@ -269,6 +274,12 @@ public class ComponentBuilderFactory {
 
     private ComponentBuilder newDefaultBuilder(Class elementType, String tag) {
         AbstractComponentBuilder builder = new DefaultComponentBuilder(tag, elementType);
+        builder.setFactory(this);
+        return builder;
+    }
+
+    private ComponentBuilder newDefaultGroupBuilder(Class elementType, String tag) {
+        AbstractComponentBuilder builder = new DefaultGroupComponentBuilder(tag, elementType);
         builder.setFactory(this);
         return builder;
     }

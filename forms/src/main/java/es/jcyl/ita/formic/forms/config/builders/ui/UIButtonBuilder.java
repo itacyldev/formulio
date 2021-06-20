@@ -43,21 +43,6 @@ public class UIButtonBuilder extends AbstractComponentBuilder<UIButton> {
     protected void setupOnSubtreeEnds(ConfigNode<UIButton> node) {
 
     }
-//
-//    @Override
-//    protected void setupOnSubtreeEnds(ConfigNode<UIButton> node) {
-//        //BuilderHelper.setUpValueExpressionType/(node);
-//
-//        UIButton element = node.getElement();
-//        // attach nested options
-//        UIAction uiAction = element.getAction();
-//        // TODO: FORMIC-229 Terminar refactorización de acciones
-//        if (uiAction == null) { // default action
-//            uiAction = new UIAction();
-//            uiAction.setType("nav");
-//            uiAction.setRoute(element.getRoute());
-//            element.setAction(uiAction);
-//        }
-//    }
+
 
 }

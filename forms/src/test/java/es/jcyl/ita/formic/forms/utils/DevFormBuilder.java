@@ -47,7 +47,8 @@ public class DevFormBuilder {
     static FormDataBuilder formBuilder = new FormDataBuilder();
 
     public static FormEditController createFormEditController(UIForm mainForm, UIForm... forms) {
-        UIView view = new UIView("v1");
+        UIView view = new UIView();
+        view.setId("v1");
         view.addChild(mainForm);
         if (forms != null) {
             for (UIForm form : forms) {

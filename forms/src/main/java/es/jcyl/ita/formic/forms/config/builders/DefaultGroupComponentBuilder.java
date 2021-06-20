@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.config.builders;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
@@ -24,21 +25,16 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
  *
  * Default class to create basic components
  */
-public class DefaultComponentBuilder extends AbstractComponentBuilder {
+public class DefaultGroupComponentBuilder extends DefaultComponentBuilder {
 
-    public DefaultComponentBuilder(String tagName, Class clazz) {
+    public DefaultGroupComponentBuilder(String tagName, Class clazz) {
         super(tagName, clazz);
     }
 
     @Override
-    protected void doWithAttribute(Object element, String name, String value) {
-    }
-
-    @Override
-    protected void setupOnSubtreeStarts(ConfigNode node) {
-    }
-
-    @Override
     protected void setupOnSubtreeEnds(ConfigNode node) {
+        UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);
+        UIGroupComponent element = (UIGroupComponent) node.getElement();
+        element.setChildren(uiComponents);
     }
 }

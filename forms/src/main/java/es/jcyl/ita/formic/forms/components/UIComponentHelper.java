@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.components;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -70,12 +71,41 @@ public class UIComponentHelper {
         }
     }
 
-    public static <T> List<T> findByClass(UIComponent root, Class<T> clazz) {
+    public static <T> List<T> getChildrenByClass(UIComponent root, Class<T> clazz) {
         List<T> lst = new ArrayList<>();
         _findByClass(root, clazz, lst);
         return lst;
     }
 
+    public static List getChildrenByClass(UIComponent root, Class... classes) {
+        List lst = new ArrayList<>();
+        _finByClassInList(root, lst, classes);
+        return lst;
+    }
+
+    private static boolean isInstanceOfAny(UIComponent o, Class... classes) {
+        for (Class c : classes) {
+            if (c.isInstance(o)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static <T> void _finByClassInList(UIComponent root, List<T> output, Class... classes) {
+        if (isInstanceOfAny(root, classes)) {
+            output.add((T) root);
+        } else {
+            if (!root.hasChildren()) {
+                return;
+            } else {
+                for (UIComponent kid : root.getChildren()) {
+                    _finByClassInList(kid, output, classes);
+                }
+                return;
+            }
+        }
+    }
 
     private static <T> void _findByClass(UIComponent root, Class<T> clazz, List<T> output) {
         if (clazz.isInstance(root)) {

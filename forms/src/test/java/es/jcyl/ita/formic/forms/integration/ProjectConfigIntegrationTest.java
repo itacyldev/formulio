@@ -26,13 +26,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -40,15 +38,8 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
@@ -130,7 +121,7 @@ public class ProjectConfigIntegrationTest {
 
     private void assertEditController(FormController ctl) {
         UIView view = ctl.getView();
-        List<UIForm> lst = UIComponentHelper.findByClass(view, UIForm.class);
+        List<UIForm> lst = UIComponentHelper.getChildrenByClass(view, UIForm.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
         UIForm form = lst.get(0);
         Assert.assertNotNull(form.getRepo());
@@ -138,7 +129,7 @@ public class ProjectConfigIntegrationTest {
 
     private void assertListController(FormController ctl) {
         UIView view = ctl.getView();
-        List<FilterableComponent> lst = UIComponentHelper.findByClass(view, FilterableComponent.class);
+        List<FilterableComponent> lst = UIComponentHelper.getChildrenByClass(view, FilterableComponent.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
         FilterableComponent filterableComponent = lst.get(0);
         Assert.assertNotNull(filterableComponent.getRepo());
