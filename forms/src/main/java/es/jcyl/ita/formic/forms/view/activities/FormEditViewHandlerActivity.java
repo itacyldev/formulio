@@ -80,6 +80,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
         super.onBackPressed();
         MainController mc = MainController.getInstance();
         UserAction action = new UserAction(ActionType.BACK.name(), "back", this.formController);
+        action.setRestoreView(true);
 //        action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
         finish();
