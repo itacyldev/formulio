@@ -15,30 +15,20 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
-import android.view.View;
 import android.view.ViewGroup;
 
-import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
-import es.jcyl.ita.formic.forms.repo.meta.Identificable;
-import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.ViewStateHolder;
-import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.query.Filter;
 
 
 /**
@@ -46,26 +36,20 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * <p>
  * Stores form configuration, view, permissions, etc. and provides operations to perform CRUD over and entity
  */
-public abstract class FormController implements Identificable {
+public abstract class ViewController {
     protected MainController mc;
     protected String id;
     protected String name;
     protected String description;
     protected UIView view;
+    private ViewWidget rootWidget;
     protected ViewGroup contentView; // Android view element where the UIView is rendered
     protected ViewStateHolder stateHolder = new ViewStateHolder();
 
     //    protected Repository repo;
     private FormEntityLoader entityLoader = new FormEntityLoader();
 
-    /**
-     * controller initialization actions
-     */
-    private String onBeforeRenderAction;
-    private String onAfterRenderAction;
-    private ViewWidget rootWidget;
-
-    public FormController(String id, String name) {
+    public ViewController(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -151,39 +135,6 @@ public abstract class FormController implements Identificable {
         this.contentView = contentView;
     }
 
-    /***
-     * LIFECYCLE HOOKS
-     */
-    public void onBeforeRender() {
-        if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
-            ScriptEngine engine = mc.getScriptEngine();
-            engine.callFunction(this.onBeforeRenderAction, this);
-        }
-    }
-
-    public void onAfterRender(View view) {
-        if (StringUtils.isNotBlank(this.onAfterRenderAction)) {
-            ScriptEngine engine = mc.getScriptEngine();
-            engine.callFunction(this.onAfterRenderAction, view);
-        }
-    }
-
-    public String getOnBeforeRenderAction() {
-        return onBeforeRenderAction;
-    }
-
-    public void setOnBeforeRenderAction(String onBeforeRenderAction) {
-        this.onBeforeRenderAction = onBeforeRenderAction;
-    }
-
-    public String getOnAfterRenderAction() {
-        return onAfterRenderAction;
-    }
-
-    public void setOnAfterRenderAction(String onAfterRenderAction) {
-        this.onAfterRenderAction = onAfterRenderAction;
-    }
-
     public MainController getMc() {
         return mc;
     }
@@ -198,13 +149,5 @@ public abstract class FormController implements Identificable {
 
     public ViewWidget getRootWidget() {
         return rootWidget;
-    }
-
-    public Map<String, UIAction> getActionMap(){
-        return this.view.getActionMap();
-    }
-
-    public UIAction[] getActions(){
-        return this.view.getActions();
     }
 }

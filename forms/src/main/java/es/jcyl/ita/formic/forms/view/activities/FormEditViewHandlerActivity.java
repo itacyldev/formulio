@@ -68,6 +68,9 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     protected void renderToolBars(RenderingEnv env) {
         // configurar menu
         UIView view = this.formController.getView();
+        if(view == null){
+            return; // just in testing cases
+        }
         renderBottombar(view.getBottomNav());
         renderMenuBar(view.getMenuBar());
         renderFabBar(view.getFabBar());

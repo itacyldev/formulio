@@ -141,10 +141,10 @@ public class XmlConfigReaderTest {
 
         // check every object has a repo value
         Assert.assertNotNull(formConfig.getRepo());
-        Assert.assertNotNull(formConfig.getList().getRepo());
+        Assert.assertNotNull(formConfig.getList().getView().getRepo());
         for (FormEditController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
-            Assert.assertNotNull(c.getRepo());
+            Assert.assertNotNull(c.getView().getRepo());
         }
     }
 

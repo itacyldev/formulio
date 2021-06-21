@@ -16,7 +16,9 @@ package es.jcyl.ita.formic.forms.components.view;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
@@ -25,6 +27,7 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -36,10 +39,19 @@ public class UIView extends UIGroupComponent implements FilterableComponent {
 
     FormController formController;
     List<UIForm> forms;
+
     // filterable component
     private Repository repo;
     private Filter filter;
     private String[] mandatoryFilters;
+    // form used to refer to the repository used to count entities
+    private FilterableComponent entityList;
+
+    // view actions
+    private UIAction[] actions; // form actions ids
+    private Map<String, UIAction> _actions;
+
+    private UIForm mainForm;
 
     // button bars
     UIButtonBar bottomNav;
@@ -90,6 +102,10 @@ public class UIView extends UIGroupComponent implements FilterableComponent {
         this.formController = formController;
     }
 
+    /****************/
+    /** ToolBars **/
+    /****************/
+
     public UIButtonBar getBottomNav() {
         return bottomNav;
     }
@@ -114,6 +130,47 @@ public class UIView extends UIGroupComponent implements FilterableComponent {
         this.fabBar = fabBar;
     }
 
+    /****************/
+    /** Actions **/
+    /****************/
+
+    public UIAction[] getActions() {
+        return actions;
+    }
+
+    public Map<String, UIAction> getActionMap() {
+        return _actions;
+    }
+
+    public void addAction(String actionId, UIAction action) {
+        if (_actions == null) {
+            _actions = new HashMap<>();
+        }
+        _actions.put(actionId, action);
+    }
+
+    public void setActions(UIAction[] actions) {
+        this.actions = actions;
+        for (UIAction action : actions) {
+            addAction(action.getId(), action);
+        }
+    }
+
+    public UIAction getAction(String name) {
+        if (this.actions == null) {
+            return null;
+        } else {
+            for (UIAction action : actions) {
+                if (name.equalsIgnoreCase(action.getType())) {
+                    return action;
+                }
+            }
+            return null;
+        }
+    }
+    /****************/
+    /** Filterable **/
+    /****************/
 
     @Override
     public Repository getRepo() {
@@ -143,5 +200,21 @@ public class UIView extends UIGroupComponent implements FilterableComponent {
     @Override
     public void setMandatoryFilters(String[] mandatoryFilters) {
         this.mandatoryFilters = mandatoryFilters;
+    }
+    public FilterableComponent getEntityList() {
+        return entityList;
+    }
+
+    public void setEntityList(FilterableComponent entityList) {
+        this.entityList = entityList;
+    }
+
+
+    public UIForm getMainForm() {
+        return mainForm;
+    }
+
+    public void setMainForm(UIForm mainForm) {
+        this.mainForm = mainForm;
     }
 }

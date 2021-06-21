@@ -35,7 +35,6 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
  * Implements entity edition actions using a edit-form.
  */
 public class FormEditController extends FormController {
-    private UIForm mainForm;
 
     private FormEntityPersister entityPersister = new FormEntityPersister();
     private FormValidator formValidator;
@@ -52,7 +51,7 @@ public class FormEditController extends FormController {
      * Save current entities
      */
     public void save(CompositeContext context) {
-        FormWidget widget = (FormWidget) ViewHelper.findComponentWidget(this.getRootWidget(), this.mainForm);
+        FormWidget widget = (FormWidget) ViewHelper.findComponentWidget(this.getRootWidget(), getMainForm());
         save(context, widget);
     }
 
@@ -76,7 +75,7 @@ public class FormEditController extends FormController {
 
 
     public void delete(CompositeContext context) {
-        this.delete(context, this.mainForm);
+        this.delete(context, this.getMainForm());
     }
 
     public boolean delete(CompositeContext context, UIForm form) {
@@ -128,11 +127,7 @@ public class FormEditController extends FormController {
     /****************************/
 
     public UIForm getMainForm() {
-        return mainForm;
-    }
-
-    public void setMainForm(UIForm mainForm) {
-        this.mainForm = mainForm;
+        return this.getView().getMainForm();
     }
 
     @Override

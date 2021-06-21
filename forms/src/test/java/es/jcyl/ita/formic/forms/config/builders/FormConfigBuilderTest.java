@@ -87,7 +87,7 @@ public class FormConfigBuilderTest {
         // check editController
         //////////////////////////
         FormEditController ctl = formConfig.getEdits().get(0);
-        Assert.assertNotNull(ctl.getRepo());
+        Assert.assertNotNull(ctl.getView().getRepo());
         Assert.assertNotNull(ctl.getMainForm());
         // check editActions
         UIAction[] actions = ctl.getActions();
@@ -111,7 +111,7 @@ public class FormConfigBuilderTest {
         // check listController
         //////////////////////////
         FormListController ctlList = formConfig.getList();
-        Assert.assertNotNull(ctlList.getRepo());
+        Assert.assertNotNull(ctlList.getView().getRepo());
         Assert.assertNotNull(ctlList.getView().getFabBar());
 
         // check listActions
@@ -159,11 +159,11 @@ public class FormConfigBuilderTest {
 
         // check every object has a repo value
         Assert.assertNotNull(formConfig.getRepo());
-        Assert.assertNotNull(formConfig.getList().getRepo());
+        Assert.assertNotNull(formConfig.getList().getView().getRepo());
 
         for (FormEditController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
-            Assert.assertNotNull(c.getRepo());
+            Assert.assertNotNull(c.getView().getRepo());
         }
 
         // check FormListController actions

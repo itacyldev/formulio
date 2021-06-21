@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
+import android.os.Build;
+
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.BeanUtilsBean;
@@ -28,13 +30,13 @@ import java.util.List;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -61,44 +63,20 @@ public class BuilderHelper {
             return;
         }
         // go upwards in the tree looking for a parent with the repo attribute set
-        ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
+        ConfigNode ascendant = BuilderHelper.findParentRepo(node);
         Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
         setElementValue(node.getElement(), "repo", repo);
     }
 
 
-    /**
-     * Searchs for actions in nested configuration
-     *
-     * @param node
-     */
-    public static void setUpActions(ConfigNode node) {
-        List<ConfigNode> lst = ConfigNodeHelper.getDescendantByTag(node, "actions");
-        if (CollectionUtils.isEmpty(lst)) {
-            return;
-        }
-        ConfigNode actions = lst.get(0);
-        List<ConfigNode> actionList = actions.getChildren();
-        UIAction[] lstActions = new UIAction[actionList.size()];
 
-        UIAction action;
-        for (int i = 0; i < actionList.size(); i++) {
-            action = (UIAction) actionList.get(i).getElement();
-            if (StringUtils.isBlank(action.getType())) {
-                action.setType(actionList.get(i).getName());
-            }
-            lstActions[i] = action;
-        }
-        FormController formController = (FormController) node.getElement();
-        formController.setActions(lstActions);
-    }
 
     public static Object getElementValue(Object element, String property) {
         try {
             return propUtils.getNestedProperty(element, property);
         } catch (Exception e) {
             throw new ConfigurationException(error(String.format("Error while trying to get " +
-                    "attribute '%s' in object [%s] ", property, element.getClass().getName())));
+                    "attribute '%s' in object [%s] ", property, element.getClass().getName())), e);
         }
     }
 
@@ -108,7 +86,7 @@ public class BuilderHelper {
         } catch (Exception e) {
             throw new ConfigurationException(error(String.format("Error while trying to set " +
                             "attribute '%s' with value [%s] in object [%s] ", property, value,
-                    element.getClass().getName())));
+                    element.getClass().getName())), e);
         }
     }
 
@@ -156,20 +134,20 @@ public class BuilderHelper {
      * If dbFile and dbTableName are defined, created nested <repo/> node to be
      * processed by RepoConfigBuilder
      *
-     * @param node
+     * @param viewNode
      */
-    public static void addDefaultRepoNode(ConfigNode node) {
-        String dbFile = node.getAttribute("dbFile");
-        String tableName = node.getAttribute("tableName");
+    public static void addDefaultRepoNode(ConfigNode viewNode) {
+        String dbFile = viewNode.getAttribute("dbFile");
+        String tableName = viewNode.getAttribute("tableName");
 
         if (StringUtils.isNotBlank(dbFile) && StringUtils.isNotBlank(tableName)) {
             ConfigNode repoNode = new ConfigNode("repo");
             repoNode.setAttribute("dbFile", dbFile);
             repoNode.setAttribute("tableName", tableName);
-            node.getChildren().add(0, repoNode);
+            viewNode.getChildren().add(0, repoNode);
         } else if (StringUtils.isNotBlank(dbFile) ^ StringUtils.isNotBlank(tableName)) {
             error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                    "must be set in tag ${tag} id[%s].", node.getId()));
+                    "must be set in tag ${tag} id[%s].", viewNode.getId()));
         }
     }
 
@@ -413,7 +391,10 @@ public class BuilderHelper {
             return null;
         } else {
             while (parent != null) {
-                if (TagDef.supportsAttribute(parent.getName(), "repo")) {
+                String tagName = parent.getName().toLowerCase();
+                if (TagDef.supportsAttribute(tagName, "repo") &&
+                        !tagName.equals("edit") &&
+                        !tagName.equals("list") ) {
                     return parent;
                 }
                 parent = parent.getParent();
@@ -462,19 +443,22 @@ public class BuilderHelper {
     }
 
     /**
-     * If current edit of list view element doesnt have a view, create one and nested all elements except
-     * actions and scripts
+     * If current edit of list view element doesn't have a view node, create one copying all the
+     * controller tag attributes (<list/> and <edit/>)  and nested all elements.
      *
      * @return
      */
-    public static void createDefaultView(ConfigNode root) {
-        if (ConfigNodeHelper.hasDescendantByTag(root, "view")) {
+    public static ConfigNode createDefaultView(ConfigNode root) {
+        ConfigNode viewNode = ConfigNodeHelper.getFirstChildrenByTag(root, "view");
+        if (viewNode != null) {
             // it already has a form
-            return;
+            return viewNode;
         }
-        ConfigNode viewNode = new ConfigNode("view");
+        viewNode = ConfigNode.clone(root);
+        viewNode.setName("view");
         viewNode.setId("view" + root.getId());
         viewNode.setChildren(root.getChildren());
         root.setChildren(Arrays.asList(viewNode));
+        return viewNode;
     }
 }

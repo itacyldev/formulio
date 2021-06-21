@@ -280,12 +280,13 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
     }
 
     /**
-     * Checks if the passed view node contains a nested element <script/>.
+     * Checks if the passed controller node contains a nested element <script/>.
      *
-     * @param viewNode
+     * @param controllerNode
      * @return
      */
-    private boolean checkExistsScript(ConfigNode viewNode) {
+    private boolean checkExistsScript(ConfigNode controllerNode) {
+        ConfigNode viewNode = (ConfigNode) controllerNode.getChildren().get(0);
         return ConfigNodeHelper.hasChildrenByTag(viewNode, "script");
     }
 

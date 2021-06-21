@@ -60,33 +60,13 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<FormEditController> node) {
-        FormEditController ctl = node.getElement();
-        // find nested filter if exists
-        List<ConfigNode> repoFilters = ConfigNodeHelper.getChildrenByTag(node, "repoFilter");
-        if (CollectionUtils.isNotEmpty(repoFilters)) {
-            if (repoFilters.size() > 1)
-                error(String.format("Just one nested repoFilter element can be defined in " +
-                        "<edit/>, found: []", repoFilters.size()));
-            else if (repoFilters.size() == 1) {
-                ctl.setFilter((Filter) repoFilters.get(0).getElement());
-            }
-        }
         BuilderHelper.createDefaultView(node);
-
-        // if no nested repo defined, inherit attribute from parent
-        if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
-            BuilderHelper.inheritAttribute(node, "repo");
-        }
 
         // if no nested form, create one
         createDefaultForm(node);
         // setup actions must be configured at start of he subtree, so the can be
         // used by nested elements to configure themselves if needed
         createDefaultButtonbar(node);
-
-        BuilderHelper.addDefaultRepoNode(node);
-        // if no repo configuration is defined, use parent
-        BuilderHelper.setUpRepo(node, true);
     }
 
     /**
@@ -139,48 +119,6 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         FormEditController fController = node.getElement();
         view.setFormController(fController);
         fController.setView(view);
-
-        BuilderHelper.setUpActions(node);
-        setUpForms(node);
-    }
-
-
-
-    private void setUpForms(ConfigNode<FormEditController> node) {
-        FormEditController ctl = node.getElement();
-        // get nested forms
-        List<ConfigNode> forms = ConfigNodeHelper.getDescendantByTag(node, "form");
-        int numForms = forms.size();
-        UIForm mainForm = null;
-        if (numForms == 1) {
-            mainForm = (UIForm) forms.get(0).getElement();
-        } else {
-            // if more that one form is defined, the mainForm att must be set
-            String mainFormId = node.getAttribute("mainForm");
-            if (StringUtils.isBlank(mainFormId)) {
-                throw new ConfigurationException(error(String.format("More than one form is defined in edit " +
-                        "view [%s] in file ${file}, use attribute 'mainForm' to refer the form to " +
-                        "be use to load main entity.", ctl.getId())));
-            } else {
-                // find main form by its id
-                boolean found = false;
-                for (ConfigNode n : forms) {
-                    if (mainFormId.equals(n.getId())) {
-                        mainForm = (UIForm) n.getElement();
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    throw new ConfigurationException(error(String.format("No form found with Id [%s]," +
-                                    " check the 'mainForm' attribute in edit view [%s] in file ${file}",
-                            mainFormId, ctl.getId())));
-                }
-            }
-
-        }
-        ctl.setMainForm(mainForm);
-        // add forms
     }
 
 

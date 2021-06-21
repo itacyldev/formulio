@@ -51,7 +51,7 @@ public class UIGroupComponentBuilder<E extends UIGroupComponent> extends BaseUIC
         }
 
         if (repo == null) {
-            ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
+            ConfigNode ascendant = BuilderHelper.findParentRepo(node);
             repo = (Repository) BuilderHelper.getElementValue(ascendant.getElement(), "repo");
         }
 

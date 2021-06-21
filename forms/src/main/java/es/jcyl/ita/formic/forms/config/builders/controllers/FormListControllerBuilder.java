@@ -40,6 +40,7 @@ import es.jcyl.ita.formic.repo.query.Filter;
 import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 import static es.jcyl.ita.formic.forms.config.DevConsole.info;
+import static es.jcyl.ita.formic.forms.config.builders.controllers.UIViewBuilder.ENTITY_SELECTOR_SET;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -49,8 +50,6 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.info;
  */
 public class FormListControllerBuilder extends AbstractComponentBuilder<FormListController> {
 
-    private static final Set<String> ACTION_SET = new HashSet<String>(Arrays.asList("add", "update", "cancel", "delete", "nav"));
-    private static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable", "datalist"));
 
     public FormListControllerBuilder(String tagName) {
         super(tagName, FormListController.class);
@@ -62,30 +61,11 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<FormListController> node) {
-        FormListController ctl = node.getElement();
-        // find nested filter if exists
-        List<ConfigNode> repoFilters = ConfigNodeHelper.getChildrenByTag(node, "repoFilter");
-        if (CollectionUtils.isNotEmpty(repoFilters)) {
-            if (repoFilters.size() > 1)
-                error(String.format("Just one nested repoFilter element can be defined in 'list', " +
-                        "found: []", repoFilters.size()));
-            else if (repoFilters.size() == 1) {
-                ctl.setFilter((Filter) repoFilters.get(0).getElement());
-            }
-        }
         BuilderHelper.createDefaultView(node);
-
-        // if no nested repo defined, inherit attribute from parent
-        if (!ConfigNodeHelper.hasChildrenByTag(node, "repo")) {
-            BuilderHelper.inheritAttribute(node, "repo");
-        }
         // create default datatable if needed
         createDefaultEntitySelector(node);
         // create default fabButtonBar if needed
         ConfigNode fabBar = findOrCreateFabButtonBar(node);
-        BuilderHelper.addDefaultRepoNode(node);
-        // if no repo configuration is defined, use parent
-        BuilderHelper.setUpRepo(node, true);
         if (fabBar != null) {
             setupRouteOnSelector(node, fabBar);
         }
@@ -93,7 +73,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
 
     /**
-     * In case current formController doesn't have an entityList componente defined, it creates a
+     * In case current formController doesn't have an entityList component defined, it creates a
      * default datatable connected to current repository.
      *
      * @param root
@@ -174,38 +154,6 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         FormListController fController = node.getElement();
         view.setFormController(fController);
         fController.setView(view);
-
-        BuilderHelper.setUpActions(node);
-        setUpEntityList(node); // see issue #203650
-    }
-
-      /**
-     * Looks for an inner element that implements an FilterableComponent interface, if no component
-     * is found it creates a default dataTable. It also checks the attribute "entityList" is
-     * properly set and references an instance of interface EntitySelector.
-     *
-     * @param node
-     */
-    private void setUpEntityList(ConfigNode<FormListController> node) {
-        Object selector;
-        List<ConfigNode> entityList = ConfigNodeHelper.getDescendantByTag(node, ENTITY_SELECTOR_SET);
-        String entityListId = node.getAttribute("entityList");
-
-        if (StringUtils.isNotBlank(entityListId)) {
-            throw new UnsupportedOperationException("Not supported yet!");
-        } else {// the attribute is not set
-            int numSelectors = entityList.size();
-            if (numSelectors == 1) {
-                // if there's just one filterableComponent use it
-                selector = entityList.get(0).getElement();
-                // setup route
-            } else {
-                throw new ConfigurationException(error("The <list/> form defined in " +
-                        "file '${file}' has more than one FilterableComponent, use the attribute 'entityList'" +
-                        " to set the id of the main selector"));
-            }
-        }
-        node.getElement().setEntityList((FilterableComponent) selector);
     }
 
 

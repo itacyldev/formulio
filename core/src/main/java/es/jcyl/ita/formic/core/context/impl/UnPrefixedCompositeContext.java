@@ -197,6 +197,9 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
      */
     @Override
     public void addContext(final Context context) {
+        if(context == null){
+            return;
+        }
         if (context instanceof CompositeContext) {
             addAllContext(((CompositeContext) context).getContexts());
         } else {

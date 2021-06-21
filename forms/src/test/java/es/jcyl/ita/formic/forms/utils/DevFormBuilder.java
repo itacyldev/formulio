@@ -58,7 +58,7 @@ public class DevFormBuilder {
         FormEditController fc = new FormEditController("c", "");
         fc.setView(view);
         view.setFormController(fc);
-        fc.setMainForm(mainForm);
+        view.setMainForm(mainForm);
         return fc;
     }
 
@@ -162,7 +162,7 @@ public class DevFormBuilder {
         public CreateOneFieldForm withRepo(EditableRepository repository) {
             checkInvokeHasBeenCalled();
             this.repo = repository;
-            this.mc.getFormController().setRepo(repository);
+            this.mc.getFormController().getView().setRepo(repository);
             this.form.setRepo(repo);
             return this;
         }

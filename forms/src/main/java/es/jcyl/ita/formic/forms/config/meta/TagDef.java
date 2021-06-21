@@ -119,7 +119,7 @@ public class TagDef {
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
-        register("view", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
+        register("view", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR, MAINFORM}));
         register("form", define(baseRepoAccessor, new Attribute[]{ON_SAVE}));
 
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, ACTION, ALLOWS_PARTIAL_RESTORE}));

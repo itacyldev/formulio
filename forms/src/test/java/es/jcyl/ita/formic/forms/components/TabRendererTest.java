@@ -38,9 +38,11 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.components.tab.UITabItem;
 import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -57,15 +59,15 @@ import static org.mockito.Mockito.when;
 public class TabRendererTest {
 
     ViewRenderer renderHelper = new ViewRenderer();
-
+    Context ctx;
     @Before
     public void setup() {
         MainController mainController = MainController.getInstance();
         FormEditController mockFC = mock(FormEditController.class);
         mainController.setFormController(mockFC, null);
 
-//        ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
-//        ctx.setTheme(R.style.FormudruidDark);
+        ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
+        ctx.setTheme(R.style.FormudruidDark);
     }
 
     /**
@@ -74,8 +76,6 @@ public class TabRendererTest {
      */
     @Test
     public void test2Tabs() {
-        Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         RenderingEnv env = mock(RenderingEnv.class);
         when(env.getAndroidContext()).thenReturn(ctx);
         when(env.getWidgetContext()).thenReturn(ContextTestUtils.createWidgetContext());
@@ -101,8 +101,12 @@ public class TabRendererTest {
         UITab tab = new UITab();
         tab.setId(RandomUtils.randomString(4));
         tab.setChildren(lstTabItem);
+        
+        UIView view = new UIView();
+        view.addChild(tab);
 
-        Widget tabView = (Widget) renderHelper.render(env, tab);
+        Widget viewWidget = renderHelper.render(env, view);
+        Widget tabView = ViewHelper.findComponentWidget(viewWidget, tab);
         // check there's a TextView element
         Assert.assertNotNull(tabView);
 
