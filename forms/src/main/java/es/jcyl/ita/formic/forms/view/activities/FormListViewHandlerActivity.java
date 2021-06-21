@@ -103,7 +103,6 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
         super.onBackPressed();
         MainController mc = MainController.getInstance();
         UserAction action = new UserAction(ActionType.BACK.name(), "back", this.formController);
-        action.setRestoreView(true);
         mc.getActionController().doUserAction(action);
         finish();
     }
