@@ -126,24 +126,28 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     }
 
     protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component) {
-        if (component.getHint() != null) {
+        if (component.getHint(env.getWidgetContext()) != null) {
             textInputLayout.setEndIconDrawable(R.drawable.ic_tool_info);
             TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
             textInputLayout.setEndIconTintList(ta.getColorStateList(0));
             textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-                    final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
-                    TextView titleView = view.findViewById(R.id.info);
-                    titleView.setText(component.getHint());
-                    builder.setCustomTitle(view)
-                            .setPositiveButton("OK", null);
-                    Dialog dialog = builder.create();
-                    dialog.show();
+                    createInfoDialog(env, component);
                 }
             });
         }
+    }
+
+    protected void createInfoDialog(RenderingEnv env, UIField component) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+        final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+        TextView titleView = view.findViewById(R.id.info);
+        titleView.setText(component.getHint(env.getWidgetContext()));
+        builder.setCustomTitle(view)
+                .setPositiveButton("OK", null);
+        Dialog dialog = builder.create();
+        dialog.show();
     }
 
     protected void adjustBounds() {
