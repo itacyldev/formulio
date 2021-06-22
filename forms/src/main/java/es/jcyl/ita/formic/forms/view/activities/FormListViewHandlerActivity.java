@@ -48,7 +48,7 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
 
     private void renderFAB(UIButtonBar buttonBar) {
         FloatingActionButton fab = findViewById(R.id.fab);
-        if (!buttonBar.hasChildren()) {
+        if (buttonBar == null || !buttonBar.hasChildren()) {
             fab.hide();
             return;
         }
