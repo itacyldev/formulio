@@ -38,9 +38,9 @@ import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
- * Tests to check commons-converters functionallity
+ * Tests FormListController creation from XML config files
  */
 @RunWith(RobolectricTestRunner.class)
 public class FormListControllerBuilderTest {
