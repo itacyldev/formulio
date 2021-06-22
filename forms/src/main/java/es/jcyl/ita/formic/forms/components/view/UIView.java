@@ -60,7 +60,6 @@ public class UIView extends UIGroupComponent implements FilterableComponent {
 
     public UIView() {
         setRendererType("view");
-        setRoot(null);
     }
 
     @Override

@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -82,6 +83,9 @@ public class UIViewBuilder extends AbstractComponentBuilder<UIView> {
         setUpActions(node);
         setUpEntityList(node); // see issue #203650
         setUpForms(node);
+        // set view as root element for all descendant
+        UIView view = node.getElement();
+        view.setRoot(view);
     }
 
     private void setupToolBars(ConfigNode<UIView> node) {

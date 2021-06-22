@@ -66,16 +66,11 @@ public class UIViewBuilderTest {
 
         Assert.assertNotNull(view);
         // check all nested children has the view as root
-
         walkAndAssert(view, view);
     }
 
     private void walkAndAssert(UIComponent root, UIView view) {
-        if(root instanceof UIView){
-            Assert.assertNull(root.getRoot());
-        } else {
-            Assert.assertEquals(view, root.getRoot());
-        }
+        Assert.assertEquals("checking on element " + root.toString(), view, root.getRoot());
         if(root.hasChildren()){
             for(UIComponent c: root.getChildren()){
                 walkAndAssert(c, view);
