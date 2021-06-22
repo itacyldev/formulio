@@ -140,7 +140,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         buttonbar.setAttribute("type", UIButtonBar.ButtonBarType.FAB.name());
         viewNode.addChild(buttonbar);
 
-        buttonbar.addChild(createActionNode("nav", listId + "#add", "Add", editId));
+        buttonbar.addChild(createButton("nav", listId + "#add", "Add", editId));
 //        buttonbar.addChild(createActionNode("update", listId + "#update", "Update", editId));
 //        buttonbar.addChild(createActionNode("delete", listId + "#delete", "Delete", null));
         return buttonbar;
@@ -179,21 +179,41 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
         List<ConfigNode> kids = fabBar.getChildren();
         // find the first button with the route attribute set
         for (ConfigNode c : kids) {
-            if (c.hasAttribute("route")) {
-                route = c.getAttribute("route");
-                break;
+            if (c.getName().equals("button")) {
+                // if it hast the route attribute use it, in other case look for a nested action
+                if(c.hasAttribute("route")){
+                    route = c.getAttribute("route");
+                } else if(c.hasChildren()){
+                    ConfigNode actionNode = (ConfigNode) c.getChildren().get(0);
+                    route = actionNode.getAttribute("route");
+                }
+                // get nested action
+                if(StringUtils.isNotBlank(route)){
+                    break; // stop looking
+                }
             }
         }
         entitySelector.setAttribute("route", route);
     }
 
-    private ConfigNode createActionNode(String action, String id, String label, String route) {
-        ConfigNode node = new ConfigNode("button");
-        node.setId(id);
-        node.setAttribute("action", action);
-        node.setAttribute("label", label);
-        node.setAttribute("route", route);
-        return node;
+    /**
+     * Creates a button and nested UserAction nodes for formList user default actions
+     * @param action
+     * @param id
+     * @param label
+     * @param route
+     * @return
+     */
+    private ConfigNode createButton(String action, String id, String label, String route) {
+        ConfigNode actionNode = new ConfigNode("action");
+        actionNode.setAttribute("route", route);
+        actionNode.setAttribute("type", action);
+
+        ConfigNode buttonNode = new ConfigNode("button");
+        buttonNode.setAttribute("label", label);
+        buttonNode.setId(id);
+        buttonNode.addChild(actionNode);
+        return buttonNode;
     }
 
     @Override

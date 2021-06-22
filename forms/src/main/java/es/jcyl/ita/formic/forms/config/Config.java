@@ -208,7 +208,7 @@ public class Config {
         this.globalContext.put("repos", new RepoAccessContext());
     }
 
-    private static final ProjectResource.ResourceType[] RESOURCE_ORDER =
+    private static final ProjectResource.ResourceType[] ORDERED_RESOURCES =
             {ProjectResource.ResourceType.CONTEXT, ProjectResource.ResourceType.REPO,
                     ProjectResource.ResourceType.FORM};
 
@@ -227,7 +227,7 @@ public class Config {
                             "check the folder.", project.getBaseFolder())));
         } else {
             // process files in RESOURCE_ORDER order (configuration flow)
-            for (ProjectResource.ResourceType resType : RESOURCE_ORDER) {
+            for (ProjectResource.ResourceType resType : ORDERED_RESOURCES) {
                 configFiles = project.getConfigFiles(resType);
 
                 // TODO: Create class ProjectResources to handle files, projectTemplates, etc. #204283

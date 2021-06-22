@@ -179,17 +179,27 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         }
     }
 
-
+    /**
+     * Creates a button and nested action to show in the form's bottom nav
+     * @param action
+     * @param id
+     * @param label
+     * @param route
+     * @return
+     */
     private ConfigNode createButton(String action, String id, String label, String route) {
-        ConfigNode node = new ConfigNode("button");
-        node.setId(id);
-        node.setAttribute("action", action);
-        node.setAttribute("label", label);
-        node.setAttribute("route", route);
-        node.setAttribute("registerInHistory", "false");
-        node.setAttribute("restoreView", "true");
-        node.setAttribute("popHistory", "1");
-        return node;
+        ConfigNode actionNode = new ConfigNode("action");
+        actionNode.setAttribute("route", route);
+        actionNode.setAttribute("type", action);
+        actionNode.setAttribute("registerInHistory", "false");
+        actionNode.setAttribute("restoreView", "true");
+        actionNode.setAttribute("popHistory", "1");
+
+        ConfigNode buttonNode = new ConfigNode("button");
+        buttonNode.setAttribute("label", label);
+        buttonNode.setId(id);
+        buttonNode.addChild(actionNode);
+        return buttonNode;
     }
 
     @Override

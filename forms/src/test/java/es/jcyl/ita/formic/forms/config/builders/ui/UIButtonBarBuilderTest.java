@@ -47,7 +47,9 @@ public class UIButtonBarBuilderTest {
         Assert.assertNotNull(bottomNav.getChildById("btn1"));
     }
 
-    private static final String XML_DEFAULT = "<buttonbar type=\"default\"><button id=\"btn1\" action=\"save\"/></buttonbar>";
+    private static final String XML_DEFAULT = "<buttonbar type=\"default\">" +
+            "<button id=\"btn1\" action=\"save\"/>" +
+            "</buttonbar>";
     @Test
     public void testDefaultButtonbar() throws Exception {
         String xml = XmlConfigUtils.createMainEdit(XML_DEFAULT);

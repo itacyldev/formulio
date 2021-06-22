@@ -48,11 +48,11 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
 
     private void renderFAB(UIButtonBar buttonBar) {
         FloatingActionButton fab = findViewById(R.id.fab);
-        if (ArrayUtils.isEmpty(this.formController.getActions())) {
+        if (!buttonBar.hasChildren()) {
             fab.hide();
             return;
         }
-        // por ahora solo la primera
+        // TODO: multi button fab-bar
         UIButton fabButton = (UIButton) buttonBar.getChildren()[0];
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

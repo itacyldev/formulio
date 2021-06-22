@@ -49,7 +49,7 @@ public class Router {
     }
 
     /**
-     * User this method just for inicial navigation, when you'r not coming from a formController
+     * User this method just for initial navigation, when you're not coming from a formController
      *
      * @param viewContext
      * @param action
