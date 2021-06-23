@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     @Override
-    public void onListFragmentInteraction(FormController form) {
+    public void onListFragmentInteraction(ViewController form) {
         MainController.getInstance().getRouter().navigate(this,
                 UserAction.navigate(form.getId()));
     }

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.components.form;
+package es.jcyl.ita.formic.forms.controllers.operations;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,20 +15,15 @@ package es.jcyl.ita.formic.forms.components.form;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface WidgetContextHolder {
+public interface WidgetValidator {
 
-    String getHolderId();
+    boolean validate(WidgetContextHolder widget);
 
-    Widget getWidget();
-
-    WidgetContext getWidgetContext();
-
-    void setWidgetContext(WidgetContext context);
-
+    boolean validate(InputWidget inputWidget);
 }

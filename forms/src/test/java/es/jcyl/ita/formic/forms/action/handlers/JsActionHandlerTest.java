@@ -78,14 +78,14 @@ public class JsActionHandlerTest {
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getFormController().getId(), JS_SOURCE);
-        scriptEngine.initScope(mc.getFormController().getId());
+        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();
         scriptEngine.putProperty("out", out);
         // act - execute action
         JsActionHandler handler = new JsActionHandler(mc, mc.getRouter());
-        handler.handle(new ActionContext(mc.getFormController(), ctx), userAction);
+        handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
 
         Assert.assertThat(out, not(empty()));
     }
@@ -105,14 +105,14 @@ public class JsActionHandlerTest {
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getFormController().getId(), JS_SOURCE);
-        scriptEngine.initScope(mc.getFormController().getId());
+        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();
         scriptEngine.putProperty("out", out);
         // act - execute action
         JsActionHandler handler = new JsActionHandler(mc, mc.getRouter());
-        handler.handle(new ActionContext(mc.getFormController(), ctx), userAction);
+        handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
 
         Assert.assertThat(out, hasSize(3));
     }
@@ -129,13 +129,13 @@ public class JsActionHandlerTest {
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getFormController().getId(), JS_SOURCE);
-        scriptEngine.initScope(mc.getFormController().getId());
+        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();
         scriptEngine.putProperty("out", out);
         // act - execute action
         JsActionHandler handler = new JsActionHandler(mc, mc.getRouter());
-        handler.handle(new ActionContext(mc.getFormController(), ctx), userAction);
+        handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
     }
 }

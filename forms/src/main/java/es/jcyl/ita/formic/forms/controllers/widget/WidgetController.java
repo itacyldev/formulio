@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.controllers.widget;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.controllers.operations.WidgetValidator;
 import es.jcyl.ita.formic.repo.EditableRepository;
 
 
@@ -52,5 +53,7 @@ public interface WidgetController {
      * Updates current ViewContext entity using the state of the view
      */
     void updateFromView();
+
+    WidgetValidator getValidator();
 }
 

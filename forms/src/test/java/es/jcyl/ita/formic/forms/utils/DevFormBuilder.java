@@ -29,7 +29,7 @@ import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -132,13 +132,13 @@ public class DevFormBuilder {
             this.field = form.getFields().get(0); // link the first field
             this.field.setParentForm(this.form); // make sure field and form are linked
 
-            FormController fc = DevFormBuilder.createFormEditController(form);
+            ViewController fc = DevFormBuilder.createFormEditController(form);
             fc.setMc(this.mc);
             withFormController(fc);
             return this;
         }
 
-        public CreateOneFieldForm withFormController(FormController formController) {
+        public CreateOneFieldForm withFormController(ViewController formController) {
             checkInvokeHasBeenCalled();
             mc.setFormController(formController, formController.getView());
             return this;
@@ -162,7 +162,7 @@ public class DevFormBuilder {
         public CreateOneFieldForm withRepo(EditableRepository repository) {
             checkInvokeHasBeenCalled();
             this.repo = repository;
-            this.mc.getFormController().getView().setRepo(repository);
+            this.mc.getViewController().getView().setRepo(repository);
             this.form.setRepo(repo);
             return this;
         }
@@ -173,7 +173,7 @@ public class DevFormBuilder {
                 throw new IllegalStateException("Call withRepo(repo) before you call the load method.");
             }
             // load entity using form controller
-            mc.getFormController().load(mc.getGlobalContext());
+            mc.getViewController().load(mc.getGlobalContext());
             return this;
         }
 

@@ -21,6 +21,7 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 
 import es.jcyl.ita.formic.forms.controllers.widget.BasicWidgetController;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
@@ -32,6 +33,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class FormWidget extends Widget<UIForm> implements WidgetContextHolder, ControllableWidget {
+
     private BasicWidgetController controller;
 
     public FormWidget(Context context) {

@@ -23,7 +23,7 @@ import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -31,7 +31,7 @@ import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class EntityChangeAction<F extends FormController> extends AbstractActionHandler
+public abstract class EntityChangeAction<F extends ViewController> extends AbstractActionHandler
         implements ActionHandler {
 
     public EntityChangeAction(MainController mc, Router router) {

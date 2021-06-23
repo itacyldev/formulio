@@ -24,7 +24,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseFormActivity<F extends FormController> extends BaseActivity
+public abstract class BaseFormActivity<F extends ViewController> extends BaseActivity
         implements FormActivity<F> {
 
     protected Router router;

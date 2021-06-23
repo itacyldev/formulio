@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.controllers.operations.BaseWidgetValidator;
 import es.jcyl.ita.formic.forms.controllers.widget.GroupWidgetController;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
@@ -37,8 +38,12 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  */
 
 public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, DatalistWidget> {
+
+    public BaseWidgetValidator validator;
+
     @Override
     protected void composeWidget(RenderingEnv env, DatalistWidget widget) {
+        validator =  new BaseWidgetValidator(env);
     }
 
     @Override
@@ -90,6 +95,7 @@ public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, Datali
                 items.toArray(new WidgetContextHolder[items.size()]);
 
         GroupWidgetController controller = new GroupWidgetController((DatalistWidget) root, holdersArr);
+        controller.setValidator(validator);
         ((DatalistWidget) root).setController(controller);
     }
 }

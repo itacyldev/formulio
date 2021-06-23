@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -202,7 +202,7 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
         // defined actions and if the actions exists, copy it and merge parameters
         // TODO: remove list/edit differences and use view as formController related element
 //        UIView view = (UIView) viewNode.getElement();
-        FormController formController = (FormController) viewNode.getElement();
+        ViewController formController = (ViewController) viewNode.getElement();
 
         Map<String, UIAction> actionMap = formController.getActionMap();
 

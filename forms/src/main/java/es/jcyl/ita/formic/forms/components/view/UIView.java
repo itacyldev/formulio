@@ -20,13 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
@@ -37,7 +36,7 @@ import es.jcyl.ita.formic.repo.query.Filter;
 
 public class UIView extends UIGroupComponent implements FilterableComponent {
 
-    FormController formController;
+    ViewController formController;
     List<UIForm> forms;
 
     // filterable component
@@ -93,11 +92,11 @@ public class UIView extends UIGroupComponent implements FilterableComponent {
         }
     }
 
-    public FormController getFormController() {
+    public ViewController getFormController() {
         return formController;
     }
 
-    public void setFormController(FormController formController) {
+    public void setFormController(ViewController formController) {
         this.formController = formController;
     }
 

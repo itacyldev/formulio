@@ -18,7 +18,10 @@ package es.jcyl.ita.formic.forms.actions.events;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.controllers.operations.WidgetValidator;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
+import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -30,18 +33,15 @@ public class OnInputChangeEventHandler
 
     private final MainController mc;
     private final ActionController ac;
-    private final FormValidator formValidator;
 
     public OnInputChangeEventHandler(MainController mc, ActionController actionController) {
         this.mc = mc;
         this.ac = actionController;
-        this.formValidator = new FormValidator(mc);
     }
 
     @Override
     public void handle(Event event) {
         Widget widget = event.getSource();
-
         // if the component has defined an UserAction for this event, use it
         UserAction action = event.getHandler();
         if (action != null) {
@@ -56,10 +56,19 @@ public class OnInputChangeEventHandler
             return;
         }
         InputWidget fieldView = (InputWidget) widget;
+        WidgetContextHolder holder = widget.getWidgetContext().getHolder();
+        WidgetValidator validator = null;
+        if (holder instanceof ControllableWidget) {
+            WidgetController controller = ((ControllableWidget) holder).getController();
+            validator = controller.getValidator();
+        }
+        boolean valid = true;
+        if (validator != null) {
+            valid = validator.validate(fieldView);
+        }
 
         // save view state
         Object state = fieldView.getValue();
-        boolean valid = formValidator.validate(fieldView);
         if (!valid) {
             // update the view to show messages
             InputWidget newFieldView = (InputWidget) mc.updateView(fieldView, false);

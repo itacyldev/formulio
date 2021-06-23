@@ -20,27 +20,27 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ActionContext {
-    private FormController fc;
+    private ViewController viewController;
     private android.content.Context viewContext;
     private Map<String, Object> flashCache;
 
-    public ActionContext(FormController fc, android.content.Context viewContext) {
-        this.fc = fc;
+    public ActionContext(ViewController viewController, android.content.Context viewContext) {
+        this.viewController = viewController;
         this.viewContext = viewContext;
     }
 
-    public FormController getFc() {
-        return fc;
+    public ViewController getViewController() {
+        return viewController;
     }
 
-    public void setFc(FormController fc) {
-        this.fc = fc;
+    public void setViewController(ViewController viewController) {
+        this.viewController = viewController;
     }
 
     public Context getViewContext() {

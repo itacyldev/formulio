@@ -17,23 +17,18 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.UserActionException;
-import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Predefined save action to persist changes in form's main entity.
@@ -48,20 +43,24 @@ public class SaveActionHandler extends AbstractActionHandler {
 
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
+        boolean valid = true;
         if (StringUtils.isNotBlank(action.getController())) {
             ViewWidget rootWidget = action.getWidget().getRootWidget();
             // check all controllers exits before method is executed
             List<WidgetController> ctrlList = ActionHandlerHelper.getControllers(rootWidget, action);
-            for (WidgetController controller : ctrlList) {
-                controller.save();
+            for (WidgetController widgetController : ctrlList) {
+                valid &= widgetController.save();
             }
         } else {
-            // TODO: refactorizar para que el guardado del form se haga como operación del widget
-            FormEditController formController = (FormEditController) actionContext.getFc();
-            formController.save(this.mc.getGlobalContext());
+            // Use main form controller
+            ViewController viewController = actionContext.getViewController();
+            WidgetController widgetController = viewController.getMainWidgetController();
+            valid = widgetController.save();
+        }
+        if (!valid) {
+            throw new ValidatorException("A error occurred during form validation.");
         }
     }
-
 
     @Override
     public String getSuccessMessage(ActionContext actionContext, UserAction action) {

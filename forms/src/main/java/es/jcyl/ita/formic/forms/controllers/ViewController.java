@@ -15,19 +15,28 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
+import android.view.View;
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
+import es.jcyl.ita.formic.forms.repo.meta.Identificable;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.ViewStateHolder;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.repo.Entity;
 
 
@@ -36,7 +45,7 @@ import es.jcyl.ita.formic.repo.Entity;
  * <p>
  * Stores form configuration, view, permissions, etc. and provides operations to perform CRUD over and entity
  */
-public abstract class ViewController {
+public class ViewController implements Identificable {
     protected MainController mc;
     protected String id;
     protected String name;
@@ -49,6 +58,12 @@ public abstract class ViewController {
     //    protected Repository repo;
     private FormEntityLoader entityLoader = new FormEntityLoader();
 
+    /**
+     * controller initialization actions
+     */
+    private String onBeforeRenderAction;
+    private String onAfterRenderAction;
+
     public ViewController(String id, String name) {
         this.id = id;
         this.name = name;
@@ -59,6 +74,7 @@ public abstract class ViewController {
      */
     public void load(CompositeContext globalCtx) {
         Entity entity;
+
         // load all forms included in the view
         for (UIForm form : this.view.getForms()) {
             entity = entityLoader.load(globalCtx, form);
@@ -70,6 +86,11 @@ public abstract class ViewController {
         // TODO: improve this
         List<UIForm> forms = this.getView().getForms();
         return (CollectionUtils.isEmpty(forms)) ? null : forms.get(0);
+    }
+
+    public WidgetController getMainWidgetController() {
+        ControllableWidget widget = (ControllableWidget) ViewHelper.findComponentWidget(this.getRootWidget(), getMainForm());
+        return widget.getController();
     }
 
     /****************************/
@@ -87,6 +108,24 @@ public abstract class ViewController {
 
     public void restoreViewPartialState() {
         stateHolder.restorePartialState(rootWidget);
+    }
+    /****************************/
+    /**  >>> Form List methods **/
+    /****************************/
+
+    /**
+     * Number of entities obtained with the main repository. Used in the form list to give
+     * information of the number of "form instances (table records)" registered
+     *
+     * @return
+     */
+    public long count() {
+        FilterableComponent entitySelector = this.getView().getEntityList();
+        return entitySelector.getRepo().count(entitySelector.getFilter());
+    }
+
+    public FilterableComponent getEntityList() {
+        return this.view.getEntityList();
     }
 
     /****************************/
@@ -135,6 +174,39 @@ public abstract class ViewController {
         this.contentView = contentView;
     }
 
+    /***
+     * LIFECYCLE HOOKS
+     */
+    public void onBeforeRender() {
+        if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
+            ScriptEngine engine = mc.getScriptEngine();
+            engine.callFunction(this.onBeforeRenderAction, this);
+        }
+    }
+
+    public void onAfterRender(View view) {
+        if (StringUtils.isNotBlank(this.onAfterRenderAction)) {
+            ScriptEngine engine = mc.getScriptEngine();
+            engine.callFunction(this.onAfterRenderAction, view);
+        }
+    }
+
+    public String getOnBeforeRenderAction() {
+        return onBeforeRenderAction;
+    }
+
+    public void setOnBeforeRenderAction(String onBeforeRenderAction) {
+        this.onBeforeRenderAction = onBeforeRenderAction;
+    }
+
+    public String getOnAfterRenderAction() {
+        return onAfterRenderAction;
+    }
+
+    public void setOnAfterRenderAction(String onAfterRenderAction) {
+        this.onAfterRenderAction = onAfterRenderAction;
+    }
+
     public MainController getMc() {
         return mc;
     }
@@ -149,5 +221,13 @@ public abstract class ViewController {
 
     public ViewWidget getRootWidget() {
         return rootWidget;
+    }
+
+    public Map<String, UIAction> getActionMap() {
+        return this.view.getActionMap();
+    }
+
+    public UIAction[] getActions() {
+        return this.view.getActions();
     }
 }

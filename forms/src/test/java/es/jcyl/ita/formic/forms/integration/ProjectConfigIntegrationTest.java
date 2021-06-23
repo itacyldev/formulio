@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
@@ -119,7 +119,7 @@ public class ProjectConfigIntegrationTest {
         return files.length;
     }
 
-    private void assertEditController(FormController ctl) {
+    private void assertEditController(ViewController ctl) {
         UIView view = ctl.getView();
         List<UIForm> lst = UIComponentHelper.getChildrenByClass(view, UIForm.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
@@ -127,7 +127,7 @@ public class ProjectConfigIntegrationTest {
         Assert.assertNotNull(form.getRepo());
     }
 
-    private void assertListController(FormController ctl) {
+    private void assertListController(ViewController ctl) {
         UIView view = ctl.getView();
         List<FilterableComponent> lst = UIComponentHelper.getChildrenByClass(view, FilterableComponent.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));

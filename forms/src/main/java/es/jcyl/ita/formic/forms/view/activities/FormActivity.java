@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.forms.view.activities;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface FormActivity<F extends FormController> {
+public interface FormActivity<F extends ViewController> {
 
     void setFormController(F formController);
 

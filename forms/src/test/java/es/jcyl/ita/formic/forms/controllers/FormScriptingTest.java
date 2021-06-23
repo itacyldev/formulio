@@ -116,35 +116,36 @@ public class FormScriptingTest {
         String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
 
         ScriptEngine engine = recipe.mc.getScriptEngine();
-        engine.store(recipe.mc.getFormController().getId(), source);
+        engine.store(recipe.mc.getViewController().getId(), source);
         engine.initEngine(null);
-        engine.initScope(recipe.mc.getFormController().getId());
+        engine.initScope(recipe.mc.getViewController().getId());
         engine.putProperty("out", System.out);
 
-        FormValidator formValidator = new FormValidator(recipe.mc);
+        FormValidator formValidator = new FormValidator(recipe.env);
         InputWidget inputWidget = (InputWidget) ViewHelper.findComponentWidget(recipe.viewWidget, "f1");
 
         // set field f1 to a value > 10
         ViewContext viewContext = recipe.env.getWidgetContext().getViewContext();
         viewContext.put("f1", "12345678910111213");
         // call save method to
-        boolean valid = formValidator.validate(inputWidget);
+        FormWidget formWidget = (FormWidget) inputWidget.getWidgetContext().getHolder();
+        boolean valid = formValidator.validate(formWidget);
         Assert.assertTrue(valid);
 
         // set a field shorter than 10, the validation has to throw an exception with message
         viewContext.put("f1", "12345");
-        valid = formValidator.validate(inputWidget);
+        valid = formValidator.validate(formWidget);
 
         Assert.assertFalse(valid);
-        String errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), "f1");
+        String errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
         Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
 
         // Try validating the full form
-        FormWidget formWidget = (FormWidget) ViewHelper.findComponentWidget(recipe.viewWidget, form.getId());
+//        FormWidget formWidget = (FormWidget) ViewHelper.findComponentWidget(recipe.viewWidget, form.getId());
         valid = formValidator.validate(formWidget);
         // check the message has been set from the validation function
         Assert.assertFalse(valid);
-        errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), "f1");
+        errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
         Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
     }
 }

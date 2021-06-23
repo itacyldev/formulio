@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -43,7 +43,7 @@ public class UserAction {
     private UIComponent component;
     private Widget widget;
 
-    private FormController origin;
+    private ViewController origin;
 
     public UserAction(ActionType actionType) {
         this(actionType.name(), null, null, null);
@@ -53,7 +53,7 @@ public class UserAction {
         this(actionType, null, component, null);
     }
 
-    public UserAction(String actionType, String route, FormController origin) {
+    public UserAction(String actionType, String route, ViewController origin) {
         this(actionType, route, null, origin);
     }
 
@@ -66,7 +66,7 @@ public class UserAction {
         this.setController(action.getController());
     }
 
-    public UserAction(UIAction action, FormController origin) {
+    public UserAction(UIAction action, ViewController origin) {
         this(action.getType(), action.getRoute(), null, origin);
         this.setRegisterInHistory(action.isRegisterInHistory());
         this.setRefresh(action.getRefresh());
@@ -83,7 +83,7 @@ public class UserAction {
         this(actionType, route, component, component.getRoot() == null ? null : component.getRoot().getFormController());
     }
 
-    private UserAction(String actionType, String route, UIComponent component, FormController origin) {
+    private UserAction(String actionType, String route, UIComponent component, ViewController origin) {
         this.type = actionType;
         this.route = route;
         this.component = component;
@@ -166,7 +166,7 @@ public class UserAction {
         this.component = component;
     }
 
-    public FormController getOrigin() {
+    public ViewController getOrigin() {
         return origin;
     }
 
@@ -230,12 +230,12 @@ public class UserAction {
         return action;
     }
 
-    public static UserAction navigate(String formId, FormController origin) {
+    public static UserAction navigate(String formId, ViewController origin) {
         UserAction action = new UserAction(ActionType.NAV.name(), formId, origin);
         return action;
     }
 
-    public static UserAction back(FormController origin) {
+    public static UserAction back(ViewController origin) {
         UserAction action = new UserAction(ActionType.BACK.name(), null, origin);
         return action;
     }

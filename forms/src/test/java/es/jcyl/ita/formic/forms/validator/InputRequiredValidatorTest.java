@@ -76,7 +76,7 @@ public class InputRequiredValidatorTest {
 
         // execute validation
         InputWidget fieldWidget = (InputWidget) ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
-        FormValidator formValidator = new FormValidator(recipe.mc);
+        FormValidator formValidator = new FormValidator(recipe.env);
         boolean valid = formValidator.validate(fieldWidget);
         assertFalse(valid);
 
@@ -99,7 +99,7 @@ public class InputRequiredValidatorTest {
 
         // execute validation
         InputWidget fieldWidget = (InputWidget) ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
-        FormValidator formValidator = new FormValidator(recipe.mc);
+        FormValidator formValidator = new FormValidator(recipe.env);
         boolean valid = formValidator.validate(fieldWidget);
         assertTrue(valid);
 

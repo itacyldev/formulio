@@ -36,7 +36,7 @@ public class MainControllerMock extends MainController {
 
     @Override
     protected void initActivity(Context context) {
-        Class activityClazz = getViewImpl(this.getFormController());
+        Class activityClazz = getViewImpl(this.getViewController());
         // Start activity to get Android context
         Intent intent = new Intent(context, activityClazz);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

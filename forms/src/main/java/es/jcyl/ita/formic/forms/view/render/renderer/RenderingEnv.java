@@ -28,10 +28,11 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
@@ -70,6 +71,7 @@ public class RenderingEnv {
     private UserEventInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private FormActivity formActivity;
+    private ScriptEngine scriptEngine;
     /**
      * User text typing delay controls
      */
@@ -247,6 +249,13 @@ public class RenderingEnv {
         this.rootWidget = rootWidget;
     }
 
+    public ScriptEngine getScriptEngine() {
+        return scriptEngine;
+    }
+
+    public void setScriptEngine(ScriptEngine scriptEngine) {
+        this.scriptEngine = scriptEngine;
+    }
 
     private void initEmptyWidgetCtx(CompositeContext gContxt) {
 

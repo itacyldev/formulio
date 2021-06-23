@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormException;
@@ -77,7 +77,7 @@ public class MainController implements ContextAwareComponent {
 
     // user action management
     private ActionController actionController;
-    private FormController formController;
+    private ViewController viewController;
     private FormControllerFactory formControllerFactory;
     private ReactivityFlowManager flowManager;
     private ScriptEngine scriptEngine;
@@ -136,14 +136,14 @@ public class MainController implements ContextAwareComponent {
         setupParamsContext(params);
         try {
             // get form configuration for given formId and load data
-            FormController controller = formControllerFactory.getController(formId);
+            ViewController controller = formControllerFactory.getController(formId);
             if (controller == null) {
                 throw new FormException(error(String.format("No form controller found with id [%s] " +
                                 "check route string. Available ids: %s", formId,
                         formControllerFactory.getControllerIds())));
             }
-            this.formController = controller;
-            this.formController.load(globalContext);
+            this.viewController = controller;
+            this.viewController.load(globalContext);
             this.scriptEngine.initScope(controller.getId());
         } catch (Exception e) {
             restoreMCState();
@@ -155,23 +155,23 @@ public class MainController implements ContextAwareComponent {
     }
 
     protected void initActivity(android.content.Context context) {
-        Class activityClazz = getViewImpl(formController);
+        Class activityClazz = getViewImpl(viewController);
         // Start activity to get Android context
         Intent intent = new Intent(context, activityClazz);
         context.startActivity(intent);
     }
 
     private void saveMCState() {
-        if (this.formController != null) {
-            this.state = new MCState(this.formController, globalContext.getContext("params"));
+        if (this.viewController != null) {
+            this.state = new MCState(this.viewController, globalContext.getContext("params"));
         }
     }
 
     private void restoreMCState() {
         if (state != null) {
-            this.formController = this.state.fc;
+            this.viewController = this.state.fc;
             globalContext.addContext(this.state.params);
-            this.formController.load(globalContext);
+            this.viewController.load(globalContext);
         }
     }
 
@@ -188,10 +188,10 @@ public class MainController implements ContextAwareComponent {
         // setups the activity during initialization to get reference to rendering and actions objects
         formActivity.setRenderingEnv(this.renderingEnv);
         formActivity.setRouter(this.router);
-        formActivity.setFormController(this.formController);
+        formActivity.setFormController(this.viewController);
         // set the View elements to controllers
         this.router.registerActivity(formActivity.getActivity());
-        this.formController.setContentView(formActivity.getContentView());
+        this.viewController.setContentView(formActivity.getContentView());
         this.renderingEnv.setFormActivity(formActivity);
     }
 
@@ -210,7 +210,7 @@ public class MainController implements ContextAwareComponent {
 
     }
 
-    protected Class getViewImpl(FormController formController) {
+    protected Class getViewImpl(ViewController formController) {
         return staticMap.get(formController.getClass());
     }
 
@@ -221,22 +221,23 @@ public class MainController implements ContextAwareComponent {
      * @return
      */
     public Widget renderView(Context viewContext) {
-        UIView uiView = this.formController.getView();
+        UIView uiView = this.viewController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
         renderingEnv.initialize();
         renderingEnv.setAndroidContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
+        renderingEnv.setScriptEngine(scriptEngine);
         renderingEnv.disableInterceptors();
 
         // render view Widget and restore partial state if needed
-        formController.onBeforeRender();
+        viewController.onBeforeRender();
         Widget widget = viewRenderer.render(renderingEnv, uiView);
-        formController.setRootWidget((ViewWidget) widget);
-        restorePrevState(formController);
+        viewController.setRootWidget((ViewWidget) widget);
+        restorePrevState(viewController);
 
         renderingEnv.enableInterceptors();
-        formController.onAfterRender(widget); //TODO: after or before enabling Interceptors?
+        viewController.onAfterRender(widget); //TODO: after or before enabling Interceptors?
 
         return widget;
     }
@@ -253,7 +254,7 @@ public class MainController implements ContextAwareComponent {
      *
      * @param formController
      */
-    private void restorePrevState(FormController formController) {
+    private void restorePrevState(ViewController formController) {
         UserAction action = actionController.getCurrentAction();
         if (action != null && action.isRestoreView()) {
             formController.restoreViewPartialState();
@@ -292,19 +293,19 @@ public class MainController implements ContextAwareComponent {
         // render again the form to show validation error
         renderingEnv.disableInterceptors();
         try {
-            Widget newRootWidget = viewRenderer.render(renderingEnv, formController.getView());
+            Widget newRootWidget = viewRenderer.render(renderingEnv, viewController.getView());
             // the View elements to replace hang from the content view of the formController
-            ViewGroup contentView = formController.getContentView();
+            ViewGroup contentView = viewController.getContentView();
             contentView.removeAllViews();
             contentView.addView(newRootWidget);
-            formController.setRootWidget((ViewWidget) newRootWidget);
+            viewController.setRootWidget((ViewWidget) newRootWidget);
         } finally {
             renderingEnv.enableInterceptors();
         }
     }
 
     public void saveViewState() {
-        formController.saveViewState();
+        viewController.saveViewState();
     }
 
     /**
@@ -313,17 +314,17 @@ public class MainController implements ContextAwareComponent {
     public void restoreViewState() {
         renderingEnv.disableInterceptors();
         try {
-            formController.restoreViewState();
+            viewController.restoreViewState();
         } finally {
             renderingEnv.enableInterceptors();
         }
     }
 
     public class MCState {
-        FormController fc;
+        ViewController fc;
         es.jcyl.ita.formic.core.context.Context params;
 
-        public MCState(FormController fc, es.jcyl.ita.formic.core.context.Context params) {
+        public MCState(ViewController fc, es.jcyl.ita.formic.core.context.Context params) {
             this.fc = fc;
             this.params = params;
         }
@@ -336,8 +337,8 @@ public class MainController implements ContextAwareComponent {
         return globalContext;
     }
 
-    public FormController getFormController() {
-        return formController;
+    public ViewController getViewController() {
+        return viewController;
     }
 
     public RenderingEnv getRenderingEnv() {
@@ -357,8 +358,8 @@ public class MainController implements ContextAwareComponent {
     }
 
     /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
-    public void setFormController(FormController fc, UIView view) {
-        this.formController = fc;
+    public void setFormController(ViewController fc, UIView view) {
+        this.viewController = fc;
     }
 
     @Override

@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.controllers.widget;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
+import es.jcyl.ita.formic.forms.controllers.operations.WidgetValidator;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.repo.EditableRepository;
@@ -30,6 +31,7 @@ import es.jcyl.ita.formic.repo.Entity;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public abstract class AbstractWidgetController implements WidgetController {
+    protected WidgetValidator validator;
 
     /**
      * Persist changes in current entity gathering data from Widgets
@@ -38,10 +40,16 @@ public abstract class AbstractWidgetController implements WidgetController {
      */
     protected boolean doSave(WidgetContext widgetContext, EditableRepository repo) {
         // transfer changes from view widgets to entity properties
-        updateFromView();
         Entity entity = widgetContext.getEntity();
-        repo.save(entity);
-        return true;
+        boolean valid = true;
+        if (validator != null) {
+            valid &= validator.validate(widgetContext.getHolder());
+        }
+        if (valid) {
+            updateFromView();
+            repo.save(entity);
+        }
+        return valid;
     }
 
     protected void doDelete(WidgetContext widgetContext, EditableRepository repo) {
@@ -82,5 +90,13 @@ public abstract class AbstractWidgetController implements WidgetController {
                 entityContext.put(entityProp, value);
             }
         }
+    }
+
+    public WidgetValidator getValidator() {
+        return validator;
+    }
+
+    public void setValidator(WidgetValidator validator) {
+        this.validator = validator;
     }
 }

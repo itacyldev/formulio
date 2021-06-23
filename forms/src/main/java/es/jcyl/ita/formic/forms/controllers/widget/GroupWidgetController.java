@@ -16,8 +16,8 @@ package es.jcyl.ita.formic.forms.controllers.widget;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.widget.RepoAccessWidget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.widget.WidgetException;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Repository;
@@ -44,10 +44,11 @@ public class GroupWidgetController extends AbstractWidgetController {
     @Override
     public boolean save() {
         EditableRepository repo = getEditableRepo();
+        boolean valid = true;
         for (WidgetContextHolder widget : widgets) {
-            doSave(widget.getWidgetContext(), repo);
+            valid &= doSave(widget.getWidgetContext(), repo);
         }
-        return true;
+        return valid;
     }
 
     @Override

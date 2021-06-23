@@ -76,7 +76,7 @@ public class CreateEntityActionHandlerTest {
         MainController mc = MockingUtils.mockMainController(ctx);
 
         // prepare user Action
-        UserAction userAction = new UserAction(ActionType.CREATE.name(), null, mc.getFormController());
+        UserAction userAction = new UserAction(ActionType.CREATE.name(), null, mc.getViewController());
         Map<String, Object> params = new HashMap<>();
         String entityType = "testRandomEntityType";
         params.put("repo", entityType);
@@ -96,7 +96,7 @@ public class CreateEntityActionHandlerTest {
 
             // act - execute action
             CreateEntityActionHandler handler = new CreateEntityActionHandler(mc, mc.getRouter());
-            handler.handle(new ActionContext(mc.getFormController(), ctx), userAction);
+            handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
 
             ArgumentCaptor<Entity> argument = ArgumentCaptor.forClass(Entity.class);
             verify(mockRepo).save(argument.capture());

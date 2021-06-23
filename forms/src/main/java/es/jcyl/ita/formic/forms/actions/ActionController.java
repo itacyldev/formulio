@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.EmptyActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
-import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -76,7 +76,7 @@ public class ActionController {
     }
 
     public synchronized void doUserAction(UserAction action) {
-        if (action.getOrigin() != null && action.getOrigin() != mc.getFormController()) {
+        if (action.getOrigin() != null && action.getOrigin() != mc.getViewController()) {
             // Make sure the formController referred by the action is the current form controller,
             // in other case dismiss action to prevent executing delayed actions
             return;
@@ -86,7 +86,7 @@ public class ActionController {
         ActionHandler handler;
         try {
             // create context for action execution
-            ActionContext actionContext = new ActionContext(mc.getFormController(),
+            ActionContext actionContext = new ActionContext(mc.getViewController(),
                     mc.getRenderingEnv().getAndroidContext());
             handler = actionMap.get(action.getType().toLowerCase());
             if (handler == null) {

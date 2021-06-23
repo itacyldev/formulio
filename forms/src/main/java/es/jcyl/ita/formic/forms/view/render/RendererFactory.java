@@ -23,8 +23,8 @@ import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteRenderer;
 import es.jcyl.ita.formic.forms.components.base.UIGroupBaseRenderer;
 import es.jcyl.ita.formic.forms.components.card.UICardRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistRenderer;
-import es.jcyl.ita.formic.forms.components.datalist.UIDatalistitemRenderer;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatableRenderer;
+import es.jcyl.ita.formic.forms.components.form.UIFormRender;
 import es.jcyl.ita.formic.forms.components.image.UIImageRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.DateFieldRenderer;
@@ -55,7 +55,7 @@ public class RendererFactory {
 
     private RendererFactory() {
         renderInstances.put("view", new UIViewRenderer());
-        renderInstances.put("form", new UIGroupBaseRenderer(R.layout.widget_form));
+        renderInstances.put("form", new UIFormRender());
         renderInstances.put("text", new TextFieldRenderer());
         renderInstances.put("textarea", new TextAreaRenderer());
         renderInstances.put("date", new DateFieldRenderer());
@@ -72,7 +72,7 @@ public class RendererFactory {
         renderInstances.put("row", new UIRowRenderer());
         renderInstances.put("image", new UIImageRenderer());
         renderInstances.put("datalist", new UIDatalistRenderer());
-        renderInstances.put("datalistitem", new UIDatalistitemRenderer());
+        renderInstances.put("datalistitem", new UIGroupBaseRenderer(R.layout.widget_datalistitem));
         renderInstances.put("card", new UICardRenderer());
         renderInstances.put("paragraph", new UIParagraphRenderer());
         renderInstances.put("head", new UIHeadingRenderer());

@@ -42,7 +42,7 @@ public class MockingUtils {
 
     public static MainController mockMainController(Context androidContext, CompositeContext globalContext) {
         MainController mc = mock(MainController.class);
-        when(mc.getFormController()).thenReturn(mock(FormEditController.class));
+        when(mc.getViewController()).thenReturn(mock(FormEditController.class));
         // set global context
         when(mc.getGlobalContext()).thenReturn(globalContext);
         // mock and set ActionController

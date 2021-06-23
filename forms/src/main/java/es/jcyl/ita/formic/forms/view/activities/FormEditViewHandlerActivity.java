@@ -71,12 +71,12 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
         if(view == null){
             return; // just in testing cases
         }
-        renderBottombar(view.getBottomNav());
+        renderBottomBar(view.getBottomNav());
         renderMenuBar(view.getMenuBar());
         renderFabBar(view.getFabBar());
     }
 
-    private void renderBottombar(UIButtonBar bottomNav) {
+    private void renderBottomBar(UIButtonBar bottomNav) {
         ViewGroup toolBar = findViewById(R.id.form_toolbar);
         if(bottomNav == null || ArrayUtils.isEmpty(bottomNav.getChildren())){
             toolBar.setVisibility(View.GONE);

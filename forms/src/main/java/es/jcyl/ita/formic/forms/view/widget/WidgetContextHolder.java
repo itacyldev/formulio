@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.controllers;
+package es.jcyl.ita.formic.forms.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,18 +15,20 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
- * Implements entity edition actions using a edit-form.
  */
-public class FormListController extends ViewController {
+public interface WidgetContextHolder {
 
-    public FormListController(String id, String name) {
-        super(id, name);
-    }
+    String getHolderId();
 
+    Widget getWidget();
+
+    WidgetContext getWidgetContext();
+
+    void setWidgetContext(WidgetContext context);
 
 }

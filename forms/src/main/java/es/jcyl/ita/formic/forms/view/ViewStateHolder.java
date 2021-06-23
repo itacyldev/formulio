@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.forms.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.form.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;

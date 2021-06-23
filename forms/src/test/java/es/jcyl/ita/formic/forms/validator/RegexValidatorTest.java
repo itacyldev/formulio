@@ -92,7 +92,7 @@ public class RegexValidatorTest {
 
         // execute validation
         Widget fieldWidget = ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
-        FormValidator validator = new FormValidator(recipe.mc);
+        FormValidator validator = new FormValidator(recipe.env);
         boolean valid = validator.validate((InputWidget) fieldWidget);
 
         Assert.assertTrue(valid);

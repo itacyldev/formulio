@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.MainController;
 public class FormControllerFactory {
 
     private static FormControllerFactory instance;
-    private Map<String, FormController> formInstances;
+    private Map<String, ViewController> formInstances;
     private MainController mc;
 
     public static FormControllerFactory getInstance() {
@@ -46,18 +46,18 @@ public class FormControllerFactory {
         formInstances = new HashMap<>();
     }
 
-    public void register(FormController controller) {
+    public void register(ViewController controller) {
         formInstances.put(controller.getId(), controller);
         controller.setMc(mc);
     }
 
-    public FormController getController(String id) {
+    public ViewController getController(String id) {
         return formInstances.get(id);
     }
 
     public List<FormListController> getListControllers() {
         List<FormListController> lst = new ArrayList<>();
-        for (FormController controller : formInstances.values()) {
+        for (ViewController controller : formInstances.values()) {
             if (controller instanceof FormListController) {
                 lst.add((FormListController) controller);
             }
@@ -68,7 +68,7 @@ public class FormControllerFactory {
         return formInstances.keySet();
     }
 
-    public Collection<FormController> getList() {
+    public Collection<ViewController> getList() {
         return formInstances.values();
     }
 

@@ -26,6 +26,7 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.router.Router;
 
@@ -48,9 +49,10 @@ public class DeleteActionHandler extends AbstractActionHandler {
                 controller.delete();
             }
         } else {
-            // TODO: refactorizar para que el guardado del form se haga como operación del widget
-            FormEditController formController = (FormEditController) actionContext.getFc();
-            formController.delete(mc.getGlobalContext());
+            // Use main form controller
+            ViewController viewController = actionContext.getViewController();
+            WidgetController widgetController = viewController.getMainWidgetController();
+            widgetController.delete();
         }
     }
     
