@@ -6,9 +6,9 @@
                 <tabitem label="Tab 1">
                     <link route="form1-list" value="Ir a Form Card Image" />
 
-                    <input label="1. Input: " value="${entity.input}" validator="required"  />
+                    <input label="1. Input: " value="${entity.input}" validator="required" hint="Hint 1. input" />
 
-                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required">
+                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required" hint="Hint 2. Radio">
                         <options>
                             <option label="Radio1" value="Radio1" />
                             <option label="Radio2" value="Radio2" />
@@ -17,24 +17,24 @@
                     </radio>
 
                     <textarea label="3. Textarea: " validator="required"
-                        value="${entity.textarea}" />
+                        value="${entity.textarea}" hint="Hint 3. Textarea"/>
 
-                    <switcher label="4. Switcher: " value="${entity.switcher}" />
+                    <switcher label="4. Switcher: " value="${entity.switcher}" hint="Hint 4. Switcher"/>
 
                     <date converter="string" label="5.1 Date con patrón yyyy/MM/dd: " validator="required"
-                        value="${entity.fecha}" pattern="yyyy/MM/dd"/>
+                        value="${entity.fecha}" pattern="yyyy/MM/dd" hint="Hint 5.1 Date con patrón yyyy/MM/dd"/>
 
                     <date converter="string" label="5.2 Date sin patrón: " validator="required"
-                        value="${entity.fecha}"/>
+                        value="${entity.fecha}" hint="Hint 5.2 Date sin patrón"/>
 
-                    <datetime converter="string" label="5.3 Datetime con patrón: " validator="required"
-                        value="${entity.fecha}" pattern="yyyy/MM/dd HH/mm/ss"/>
+                    <datetime converter="string" label="5.3 Datetme con patrón: " validator="required"
+                        value="${entity.fecha}" pattern="yyyy/MM/dd HH/mm/ss" hint="Hint 5.2 Date sin patrón"/>
 
                     <datetime converter="string" label="5.3 Datetime sin patrón: " validator="required"
-                        value="${entity.fecha}"/>
+                        value="${entity.fecha}" hint="Hint 5.3 Datetime sin patrón"/>
 
 
-                    <select label="6. Select: " validator="required" value="${entity.combo}">
+                    <select label="6. Select: " validator="required" value="${entity.combo}" hint="Hint 6. Select">
                         <options>
                             <option label="Combo1" value="Combo1" />
                             <option label="Combo2" value="Combo2" />
@@ -44,19 +44,19 @@
 
                     <autocomplete forceSelection="true" id="autocompletado_id"
                         label="7. Autocomplete: " repo="autocompletado"
-                        validator="required" value="${entity.autocompletado_id}">
+                        validator="required" value="${entity.autocompletado_id}" hint="Hint 7. Autocomplete">
                         <options labelExpression="${entity.valor}" labelFilteringProperty="valor"
                             valueProperty="autocompletado_id" />
                     </autocomplete>
 
                     <divisor color="#00766C" strokeWidth="4" />
 
-                    <image label="8. Imagen: " repo="superHImages" value="${entity.image}" />
+                    <image label="8. Imagen: " repo="superHImages" value="${entity.image}" hint="Hint 8. Imagen"/>
 
-                    <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" />
+                    <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" hint="Hint 9. Imagen"/>
 
                     <image converter="b64Image" embedded="true" label="10. Imagen: "
-                        value="${entity.image_thumb}" />
+                        value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
 
                 </tabitem>
                 <tabitem label="Tab 2: Table">

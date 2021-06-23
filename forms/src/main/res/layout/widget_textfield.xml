@@ -9,8 +9,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="10">
+        android:orientation="horizontal">
         <!-- Text Label -->
         <TextView
             android:id="@+id/label_view"
@@ -18,7 +17,11 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:paddingTop="5dp"
-            android:layout_weight="9.7"/>
+            android:layout_weight="9.4"/>
+        <ImageView
+            android:id="@+id/field_layout_info"
+            style="@style/Textfield_info_button"
+            android:layout_marginRight="2dp" />
         <ImageView
             android:id="@+id/field_layout_x"
             style="@style/Textfield_cancel_button"

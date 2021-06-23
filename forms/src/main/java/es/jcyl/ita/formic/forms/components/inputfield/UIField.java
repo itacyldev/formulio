@@ -20,7 +20,6 @@ public class UIField extends UIInputComponent {
 
     private TYPE type = TEXT;
     private Integer lines;
-    protected ValueBindingExpression hint;
 
     private String pattern;
     private String datePattern = "yyyy-MM-dd";
@@ -46,26 +45,6 @@ public class UIField extends UIInputComponent {
 
     public void setType(final TYPE type) {
         this.type = type;
-    }
-
-
-    public String getHint(Context context) {
-        String sHint = null;
-        if (this.hint != null) {
-            Object oHint = JexlFormUtils.eval(context, this.hint);
-            try {
-                sHint = (String) ConvertUtils.convert(oHint, String.class);
-            } catch (Exception e) {
-                throw new ViewConfigException(String.format("Invalid rendering expression in " +
-                                "component [%s] the resulting value couldn't be cast to String.",
-                        this.getId(), this.hint, e));
-            }
-        }
-        return StringUtils.isBlank(sHint)?null:sHint;
-    }
-
-    public void setHint(ValueBindingExpression hint) {
-        this.hint = hint;
     }
 
     public void setTypeStr(String type) {
