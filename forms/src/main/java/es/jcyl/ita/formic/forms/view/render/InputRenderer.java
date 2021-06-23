@@ -139,7 +139,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
                 ImageView.class);
         UIInputComponent component = (UIInputComponent) widget.getComponent();
-        if (component.getHint() == null) {
+        if (component.getHint(env.getWidgetContext()) == null) {
             infoButton.setVisibility(View.INVISIBLE);
         }
         infoButton.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +148,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
                 final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
                 TextView titleView = view.findViewById(R.id.info);
-                titleView.setText(component.getHint());
+                titleView.setText(component.getHint(env.getWidgetContext()));
                 builder.setCustomTitle(view)
                         .setPositiveButton("OK", null);
                 Dialog dialog = builder.create();
