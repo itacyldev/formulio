@@ -25,7 +25,6 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
@@ -68,7 +67,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
 
     protected void renderToolBars(RenderingEnv env) {
         // configurar menu
-        UIView view = this.formController.getView();
+        UIView view = this.viewController.getView();
         if(view == null){
             return; // just in testing cases
         }
@@ -83,7 +82,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
             toolBar.setVisibility(View.GONE);
             return;
         }
-        MainController mc = this.formController.getMc();
+        MainController mc = this.viewController.getMc();
         for(UIComponent c: bottomNav.getChildren()){
             if(c instanceof UIButton){
                 Widget btnWidget = mc.renderComponent(c);
@@ -110,7 +109,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = new UserAction(ActionType.BACK.name(), "back", this.formController);
+        UserAction action = new UserAction(ActionType.BACK.name(), "back", this.viewController);
         action.setRestoreView(true);
 //        action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
@@ -133,7 +132,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
                         strRoute = (String) ConvertUtils.convert(route, String.class);
                     }
 //                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
-                    UserAction action = new UserAction(formAction, formController);
+                    UserAction action = new UserAction(formAction, viewController);
                     action.setRegisterInHistory(formAction.isRegisterInHistory());
                     action.setRefresh(formAction.getRefresh());
                     action.setMessage(formAction.getMessage());

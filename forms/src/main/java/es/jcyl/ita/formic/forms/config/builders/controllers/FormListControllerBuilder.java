@@ -106,7 +106,6 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
         // look for buttonbars
         List<ConfigNode> children = viewNode.getChildren();
-        boolean hasFabBar = false;
         for (ConfigNode n : children) {
             if (n.getName().toLowerCase().equals("buttonbar")) {
                 String type = n.getAttribute("type");
@@ -114,7 +113,6 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
                         && type.toUpperCase().equals(UIButtonBar.ButtonBarType.FAB.name())) {
                     return n;
                 }
-                ;
                 break;
             }
         }

@@ -83,8 +83,8 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
         FormConfig existingFormConfig = formConfigRepo.findById(formConfig.getId());
         if (existingFormConfig != null) {
             throw new ConfigurationException(DevConsole.error(String.format("Duplicate id = [%s]," +
-                    " the id configured in <main/> in file ${file} is already used in the " +
-                    "file: [%s].", formConfig.getId(), existingFormConfig.getFilePath())));
+                    " the id configured in <main/> in file ${file} is already use.",
+                    formConfig.getId())));
         }
         formConfigRepo.save(formConfig);
 

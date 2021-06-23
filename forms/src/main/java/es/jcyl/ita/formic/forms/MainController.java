@@ -188,7 +188,7 @@ public class MainController implements ContextAwareComponent {
         // setups the activity during initialization to get reference to rendering and actions objects
         formActivity.setRenderingEnv(this.renderingEnv);
         formActivity.setRouter(this.router);
-        formActivity.setFormController(this.viewController);
+        formActivity.setViewController(this.viewController);
         // set the View elements to controllers
         this.router.registerActivity(formActivity.getActivity());
         this.viewController.setContentView(formActivity.getContentView());

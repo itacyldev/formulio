@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
  */
 public interface FormActivity<F extends ViewController> {
 
-    void setFormController(F formController);
+    void setViewController(F viewController);
 
     void setRouter(Router router);
 

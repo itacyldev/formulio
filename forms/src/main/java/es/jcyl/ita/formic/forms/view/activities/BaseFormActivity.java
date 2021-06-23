@@ -37,7 +37,7 @@ public abstract class BaseFormActivity<F extends ViewController> extends BaseAct
 
     protected Router router;
     protected RenderingEnv env;
-    protected F formController;
+    protected F viewController;
     /**
      * View element used to render the forms defined for this controller
      */
@@ -54,7 +54,7 @@ public abstract class BaseFormActivity<F extends ViewController> extends BaseAct
             View viewRoot = mc.renderView(this);
             contentView.addView(viewRoot);
         } catch (Exception e) {
-            DevConsole.error("Error trying to render view " + this.formController.getId(), e);
+            DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
             router.back(this, new String[]{"Sorry, there was an error while trying to render the view. " +
                     "See console for details."});
         }
@@ -83,8 +83,8 @@ public abstract class BaseFormActivity<F extends ViewController> extends BaseAct
     }
 
     @Override
-    public void setFormController(F formController) {
-        this.formController = formController;
+    public void setViewController(F viewController) {
+        this.viewController = viewController;
     }
 
     @Override
