@@ -35,7 +35,7 @@ import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
@@ -78,7 +78,7 @@ public class MainController implements ContextAwareComponent {
     // user action management
     private ActionController actionController;
     private ViewController viewController;
-    private FormControllerFactory formControllerFactory;
+    private ViewControllerFactory formControllerFactory;
     private ReactivityFlowManager flowManager;
     private ScriptEngine scriptEngine;
 
@@ -96,7 +96,7 @@ public class MainController implements ContextAwareComponent {
     }
 
     MainController() {
-        formControllerFactory = FormControllerFactory.getInstance();
+        formControllerFactory = ViewControllerFactory.getInstance();
         formControllerFactory.setMc(this);
         router = new Router(this);
         actionController = new ActionController(this, router);
@@ -205,6 +205,7 @@ public class MainController implements ContextAwareComponent {
     private void registerFormTypeViews() {
         staticMap = new HashMap<>(2);
         staticMap.put(FormEditController.class, FormEditViewHandlerActivity.class);
+        staticMap.put(ViewController.class, FormEditViewHandlerActivity.class);
         staticMap.put(FormListController.class, FormListViewHandlerActivity.class);
         // TODO: dynamic mapping for extensions
 

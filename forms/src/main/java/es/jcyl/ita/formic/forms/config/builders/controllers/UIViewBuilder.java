@@ -21,6 +21,7 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,9 +35,10 @@ import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -78,15 +80,37 @@ public class UIViewBuilder extends AbstractComponentBuilder<UIView> {
     }
 
     @Override
-    protected void setupOnSubtreeEnds(ConfigNode<UIView> node) {
+    protected void setupOnSubtreeEnds(ConfigNode node) {
         setupToolBars(node);
         setUpActions(node);
         setUpEntityList(node); // see issue #203650
         setUpForms(node);
         // set view as root element for all descendant
-        UIView view = node.getElement();
+        UIView view = (UIView) node.getElement();
         view.setRoot(view);
+        if (node.getParent() == null) {
+            // view is root, change the node element to set a FormConfig
+            String currentFile = this.getFactory().getInfo().getCurrentFile();
+            FormConfig formConfig = createDefaultFormConfig(view, currentFile);
+
+            // create node and set in tree.
+            ConfigNode newView = ConfigNode.clone(node);
+            newView.setChildren(node.getChildren());
+            node.setChildren(Collections.singletonList(node));
+            node.setElement(formConfig);
+        }
     }
+
+
+    private FormConfig createDefaultFormConfig(UIView view, String currenFile) {
+        ViewController viewController = new ViewController(view.getId(), view.getId());
+        viewController.setView(view);
+        FormConfig config = new FormConfig();
+        config.setFilePath(currenFile);
+        config.setEdits(Collections.singletonList(viewController)); // TODO: pending refactoring
+        return config;
+    }
+
 
     private void setupToolBars(ConfigNode<UIView> node) {
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);

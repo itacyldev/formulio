@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -76,7 +76,7 @@ public class Config {
     /**
      * Stores formControllers instances
      */
-    private FormControllerFactory formControllerFactory = FormControllerFactory.getInstance();
+    private ViewControllerFactory formControllerFactory = ViewControllerFactory.getInstance();
 
     private static ConfigReadingInfo readingListener = new ConfigReadingInfo();
 

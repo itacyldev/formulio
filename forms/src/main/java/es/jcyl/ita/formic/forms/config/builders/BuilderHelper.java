@@ -58,11 +58,11 @@ public class BuilderHelper {
         }
         // go upwards in the tree looking for a parent with the repo attribute set
         ConfigNode ascendant = BuilderHelper.findParentRepo(node);
-        Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
-        setElementValue(node.getElement(), "repo", repo);
+        if (ascendant != null) {
+            Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
+            setElementValue(node.getElement(), "repo", repo);
+        }
     }
-
-
 
 
     public static Object getElementValue(Object element, String property) {
@@ -388,7 +388,7 @@ public class BuilderHelper {
                 String tagName = parent.getName().toLowerCase();
                 if (TagDef.supportsAttribute(tagName, "repo") &&
                         !tagName.equals("edit") &&
-                        !tagName.equals("list") ) {
+                        !tagName.equals("list")) {
                     return parent;
                 }
                 parent = parent.getParent();

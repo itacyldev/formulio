@@ -29,20 +29,20 @@ import es.jcyl.ita.formic.forms.MainController;
  * <p>
  * Stores FormController instances.
  */
-public class FormControllerFactory {
+public class ViewControllerFactory {
 
-    private static FormControllerFactory instance;
+    private static ViewControllerFactory instance;
     private Map<String, ViewController> formInstances;
     private MainController mc;
 
-    public static FormControllerFactory getInstance() {
+    public static ViewControllerFactory getInstance() {
         if (instance == null) {
-            instance = new FormControllerFactory();
+            instance = new ViewControllerFactory();
         }
         return instance;
     }
 
-    private FormControllerFactory() {
+    private ViewControllerFactory() {
         formInstances = new HashMap<>();
     }
 

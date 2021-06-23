@@ -61,6 +61,10 @@ public class XmlConfigUtils {
             throw new RuntimeException(e);
         }
     }
+    public static final String BASE_VIEW = "<view>%s</view>";
+    public static String createView(String nestedXml) {
+        return String.format(BASE_VIEW, nestedXml);
+    }
 
     public static final String BASE = "<main repo=\"contacts\"><list>%s</list></main>";
 
@@ -113,5 +117,13 @@ public class XmlConfigUtils {
         ConfigNode root = reader.read(uri);
         return (FormConfig) root.getElement();
     }
+    public static FormConfig readViewConfig(String xml) {
+        ConfigReadingInfo readingInfo = new ConfigReadingInfo();
+        readingInfo.setProject(null);
+        readingInfo.fileStart("testFile");
+
+        return readFormConfig((Project) null, xml);
+    }
+
 
 }
