@@ -32,6 +32,7 @@ import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
@@ -75,7 +76,7 @@ public class EnvExecutionContextTest {
         UIForm f1 = createForm();
         UIForm f2 = createForm();
 
-        FormEditController fc = DevFormBuilder.createFormEditController(f1, f2);
+        ViewController fc = DevFormBuilder.createFormEditController(f1, f2);
 
         // render the view and check de resulting context
         CompositeContext globalContext = ContextTestUtils.createGlobalContext();

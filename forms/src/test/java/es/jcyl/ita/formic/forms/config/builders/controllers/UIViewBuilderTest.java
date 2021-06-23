@@ -34,6 +34,7 @@ import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
@@ -60,7 +61,7 @@ public class UIViewBuilderTest {
     public void testNestedChildren() throws Exception {
         String xml = XmlConfigUtils.createEditForm(XML_INPUT);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        FormEditController editController = formConfig.getEdits().get(0);
+        ViewController editController = formConfig.getEdits().get(0);
 
         UIView view = editController.getView();
 

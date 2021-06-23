@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.repo.EntityMapping;
@@ -78,7 +79,7 @@ public class UIImageBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_TEST_BASIC.replace("$$$", imgFile.getAbsolutePath()));
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIImage> imgs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIImage.class);
         Assert.assertNotNull(imgs);
         Assert.assertTrue("One image is expected, found: " + imgs.size(), imgs.size() == 1);

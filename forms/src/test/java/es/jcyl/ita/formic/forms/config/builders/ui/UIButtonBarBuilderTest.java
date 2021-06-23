@@ -16,6 +16,7 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
@@ -39,7 +40,7 @@ public class UIButtonBarBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_BOTTOMBAR);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIView view = editCtl.getView();
 
         UIButtonBar bottomNav = view.getBottomNav();
@@ -55,7 +56,7 @@ public class UIButtonBarBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_DEFAULT);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIView view = editCtl.getView();
 
         UIButtonBar bottomNav = view.getBottomNav();

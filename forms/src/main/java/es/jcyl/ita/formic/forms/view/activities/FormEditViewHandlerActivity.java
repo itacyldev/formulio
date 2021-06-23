@@ -28,6 +28,7 @@ import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -52,8 +53,8 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditController>
-        implements FormActivity<FormEditController> {
+public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController>
+        implements FormActivity<ViewController> {
 
 
     @Override
@@ -99,16 +100,6 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     }
 
     private void renderMenuBar(UIButtonBar menuBar) {
-    }
-
-
-    private void renderToolBar(ViewGroup parentView) {
-
-        if (this.formController.getActions() != null) {
-            for (UIAction action : this.formController.getActions()) {
-                renderActionButton(this, parentView, action);
-            }
-        }
     }
 
     protected void close() {

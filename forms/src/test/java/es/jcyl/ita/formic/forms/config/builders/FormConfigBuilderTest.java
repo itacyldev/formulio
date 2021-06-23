@@ -27,6 +27,7 @@ import java.util.List;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.link.UIButton;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ProjectUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -86,7 +87,7 @@ public class FormConfigBuilderTest {
         //////////////////////////
         // check editController
         //////////////////////////
-        FormEditController ctl = formConfig.getEdits().get(0);
+        ViewController ctl = formConfig.getEdits().get(0);
         Assert.assertNotNull(ctl.getView().getRepo());
         Assert.assertNotNull(ctl.getMainForm());
         // check editActions
@@ -161,7 +162,7 @@ public class FormConfigBuilderTest {
         Assert.assertNotNull(formConfig.getRepo());
         Assert.assertNotNull(formConfig.getList().getView().getRepo());
 
-        for (FormEditController c : formConfig.getEdits()) {
+        for (ViewController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
             Assert.assertNotNull(c.getView().getRepo());
         }
@@ -176,7 +177,7 @@ public class FormConfigBuilderTest {
         }
 
         // check editViews have a defaultForm nested
-        for (FormEditController edit : formConfig.getEdits()) {
+        for (ViewController edit : formConfig.getEdits()) {
             Assert.assertNotNull(edit.getMainForm());
             Assert.assertNotNull(edit.getView().getBottomNav());
         }

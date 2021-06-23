@@ -28,6 +28,7 @@ import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -114,7 +115,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
             throw new ConfigurationException(error("Each form file must contain at least " +
                     "one 'edit' element"));
         }
-        List<FormEditController> edits = new ArrayList<>();
+        List<ViewController> edits = new ArrayList<>();
         for (ConfigNode editNode : list) {
             edits.add((FormEditController) editNode.getElement());
         }

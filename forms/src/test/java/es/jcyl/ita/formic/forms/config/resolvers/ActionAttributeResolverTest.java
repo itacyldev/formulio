@@ -32,6 +32,7 @@ import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
@@ -68,7 +69,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -86,7 +87,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -104,7 +105,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -130,7 +131,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -176,7 +177,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -224,7 +225,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);

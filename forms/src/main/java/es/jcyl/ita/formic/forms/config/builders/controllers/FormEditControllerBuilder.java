@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
@@ -116,7 +117,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
         // link view and controller
         ConfigNode viewNode = node.getChildren().get(0);
         UIView view = (UIView) viewNode.getElement();
-        FormEditController fController = node.getElement();
+        ViewController fController = node.getElement();
         view.setFormController(fController);
         fController.setView(view);
     }

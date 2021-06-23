@@ -36,6 +36,7 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
@@ -142,7 +143,7 @@ public class XmlConfigReaderTest {
         // check every object has a repo value
         Assert.assertNotNull(formConfig.getRepo());
         Assert.assertNotNull(formConfig.getList().getView().getRepo());
-        for (FormEditController c : formConfig.getEdits()) {
+        for (ViewController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
             Assert.assertNotNull(c.getView().getRepo());
         }

@@ -24,6 +24,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
@@ -85,7 +86,7 @@ public class UITabBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_2_TABS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 
@@ -141,7 +142,7 @@ public class UITabBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_TABS_PROPERTIES);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 
@@ -184,7 +185,7 @@ public class UITabBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_TAB_ALL_PROPERTIES);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 
@@ -220,7 +221,7 @@ public class UITabBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_TAB_NO_PROPERTIES);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UITab> tabs = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITab.class);
         Assert.assertNotNull(tabs);
 

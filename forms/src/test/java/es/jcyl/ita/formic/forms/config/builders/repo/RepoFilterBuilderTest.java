@@ -25,6 +25,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -66,7 +67,7 @@ public class RepoFilterBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> formList = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(formList);
 
@@ -95,7 +96,7 @@ public class RepoFilterBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_DATA_LIST);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIDatalist> lst = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIDatalist.class);
         Assert.assertNotNull(lst);
 
@@ -121,7 +122,7 @@ public class RepoFilterBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_MANDATORY_FIELDS);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> formList = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(formList);
 
@@ -154,7 +155,7 @@ public class RepoFilterBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_NESTED_CRITERIA);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> formList = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(formList);
 

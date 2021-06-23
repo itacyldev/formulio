@@ -65,7 +65,7 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
         if (formList != null) {
             dagManager.generateDags(formList.getView());
         }
-        for (FormEditController f : config.getEdits()) {
+        for (ViewController f : config.getEdits()) {
             dagManager.generateDags(f.getView());
         }
     }
@@ -90,7 +90,7 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
 
         register(formConfig.getList());
         if (CollectionUtils.isNotEmpty(formConfig.getEdits())) {
-            for (FormEditController edit : formConfig.getEdits()) {
+            for (ViewController edit : formConfig.getEdits()) {
                 register(edit);
             }
         }

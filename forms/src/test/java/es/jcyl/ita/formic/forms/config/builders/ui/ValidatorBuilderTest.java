@@ -25,22 +25,22 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
-import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.forms.validation.CommonsValidatorWrapper;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.validation.Validator;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
+import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -83,7 +83,7 @@ public class ValidatorBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_REQUIRED_VALIDATOR);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
@@ -95,7 +95,6 @@ public class ValidatorBuilderTest {
         Validator validator = field.getValidators()[0];
         Assert.assertEquals(RequiredValidator.class, validator.getClass());
     }
-
 
 
     /**
@@ -119,7 +118,7 @@ public class ValidatorBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_ATTRIBUTE_VALIDATOR);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
@@ -136,7 +135,6 @@ public class ValidatorBuilderTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     private static final String XML_TEST_ATTRIBUTE_VOID_VALIDATOR = "<form repo=\"otherRepo\">" +
@@ -155,7 +153,7 @@ public class ValidatorBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_ATTRIBUTE_VOID_VALIDATOR);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
@@ -189,7 +187,7 @@ public class ValidatorBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_TAG_ATTRIBUTE_VALIDATOR);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
         List<UIInputComponent> fields = forms.get(0).getFields();
@@ -225,7 +223,7 @@ public class ValidatorBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_VALIDATOR_WITH_PARAMS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
         List<UIInputComponent> fields = forms.get(0).getFields();

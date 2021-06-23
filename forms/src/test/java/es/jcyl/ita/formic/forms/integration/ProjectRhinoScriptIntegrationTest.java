@@ -47,6 +47,7 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
@@ -119,7 +120,7 @@ public class ProjectRhinoScriptIntegrationTest {
 
         // create a form with a datatable, and set repo to datatable
         UIForm form = DevFormBuilder.createOneFieldForm();
-        FormEditController formController = DevFormBuilder.createFormEditController(form);
+        ViewController formController = DevFormBuilder.createFormEditController(form);
         UIDatatableBuilder dtBuilder = new UIDatatableBuilder("table");
         UIDatatable table = dtBuilder.createDataTableFromRepo(repo);
         form.addChild(table);

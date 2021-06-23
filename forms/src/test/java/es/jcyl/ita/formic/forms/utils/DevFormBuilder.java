@@ -46,7 +46,7 @@ public class DevFormBuilder {
     static FieldDataBuilder fBuilder = new FieldDataBuilder();
     static FormDataBuilder formBuilder = new FormDataBuilder();
 
-    public static FormEditController createFormEditController(UIForm mainForm, UIForm... forms) {
+    public static ViewController createFormEditController(UIForm mainForm, UIForm... forms) {
         UIView view = new UIView();
         view.setId("v1");
         view.addChild(mainForm);
@@ -55,7 +55,7 @@ public class DevFormBuilder {
                 view.addChild(form);
             }
         }
-        FormEditController fc = new FormEditController("c", "");
+        ViewController fc = new ViewController("c", "");
         fc.setView(view);
         view.setFormController(fc);
         view.setMainForm(mainForm);

@@ -40,6 +40,7 @@ import es.jcyl.ita.formic.forms.components.tab.UITabItem;
 import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -63,7 +64,7 @@ public class TabRendererTest {
     @Before
     public void setup() {
         MainController mainController = MainController.getInstance();
-        FormEditController mockFC = mock(FormEditController.class);
+        ViewController mockFC = mock(ViewController.class);
         mainController.setFormController(mockFC, null);
 
         ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
