@@ -28,8 +28,8 @@ import android.widget.TextView;
 
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 
 public abstract class InputTextRenderer<C extends UIInputComponent, I extends TextView>

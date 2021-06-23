@@ -83,9 +83,11 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 inputView.setText(null);
             }
         });
-        // set info button
-        setInfoButton(env, textInputLayout, component);
         setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
+
+        // set info button
+        //setInfoButton(env, textInputLayout, component);
+
     }
 
     protected void setLabel(EditText view, TextInputLayout labelView, UIField component) {
@@ -125,8 +127,8 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         }
     }
 
-    protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component) {
-        if (component.getHint(env.getWidgetContext()) != null) {
+   /*protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component) {
+        if (component.getHint() != null) {
             textInputLayout.setEndIconDrawable(R.drawable.ic_tool_info);
             TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
             textInputLayout.setEndIconTintList(ta.getColorStateList(0));
@@ -137,7 +139,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 }
             });
         }
-    }
+    }*/
 
     protected void createInfoDialog(RenderingEnv env, UIField component) {
         AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
