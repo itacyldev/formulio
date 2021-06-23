@@ -18,10 +18,16 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:paddingTop="5dp"
-            android:layout_weight="9.7"/>
+            android:layout_weight="9.6"/>
+       <ImageView
+           android:id="@+id/field_layout_info"
+           style="@style/Textfield_info_button"
+           android:layout_weight="0.2"
+           android:layout_marginRight="2dp" />
         <ImageView
             android:id="@+id/field_layout_x"
             style="@style/Textfield_cancel_button"
+            android:layout_weight="0.2"
             android:layout_marginRight="2dp" />
     </LinearLayout>
 

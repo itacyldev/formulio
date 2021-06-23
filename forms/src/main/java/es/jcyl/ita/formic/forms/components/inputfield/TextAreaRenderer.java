@@ -69,9 +69,10 @@ public class TextAreaRenderer extends TextFieldRenderer {
                 inputView.setText(null);
             }
         });
+        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
 
         // set info button
-        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
+       /* ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
                 ImageView.class);
         if (widget.getComponent().getHint(env.getWidgetContext()) == null) {
             infoButton.setVisibility(View.INVISIBLE);
@@ -81,8 +82,8 @@ public class TextAreaRenderer extends TextFieldRenderer {
             public void onClick(final View arg0) {
                 createInfoDialog(env, component);
             }
-        });
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
+        });*/
+
     }
 
 

@@ -144,15 +144,15 @@ public class TagDef {
         }));
 
         Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION, ALLOWS_PARTIAL_RESTORE};
-        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER, PATTERN};
+        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER, PATTERN, HINT};
         Map<String, Attribute> baseInput = define(base, input);
-        register("input", define(baseInput, new Attribute[]{HINT}));
+        register("input", baseInput);
         register("checkbox", baseInput);
         register("switcher", baseInput);
         register("text", baseInput);
         register("date", baseInput);
         register("datetime", baseInput);
-        register("textarea", define(base, input, new Attribute[]{LINES, HINT}));
+        register("textarea", define(base, input, new Attribute[]{LINES}));
         register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});

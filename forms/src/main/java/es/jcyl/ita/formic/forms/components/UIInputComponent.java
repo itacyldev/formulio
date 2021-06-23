@@ -15,12 +15,19 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.validation.Validator;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 
@@ -35,6 +42,8 @@ public class UIInputComponent extends AbstractUIComponent {
     private Integer inputType = null;
     protected boolean hasDeleteButton = true;
     protected boolean hasTodayButton = true;
+
+    protected ValueBindingExpression hint;
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
@@ -149,6 +158,25 @@ public class UIInputComponent extends AbstractUIComponent {
 
     public void setHasTodayButton(boolean hasTodayButton) {
         this.hasTodayButton = hasTodayButton;
+    }
+
+    public String getHint(Context context) {
+        String sHint = null;
+        if (this.hint != null) {
+            Object oHint = JexlFormUtils.eval(context, this.hint);
+            try {
+                sHint = (String) ConvertUtils.convert(oHint, String.class);
+            } catch (Exception e) {
+                throw new ViewConfigException(String.format("Invalid rendering expression in " +
+                                "component [%s] the resulting value couldn't be cast to String.",
+                        this.getId(), this.hint, e));
+            }
+        }
+        return StringUtils.isBlank(sHint)?null:sHint;
+    }
+
+    public void setHint(ValueBindingExpression hint) {
+        this.hint = hint;
     }
 
 }
