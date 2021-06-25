@@ -71,6 +71,25 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
         removeUnderline(env, component, textInputLayout);
 
+        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
+                ImageView.class);
+        if (component.getHint(env.getWidgetContext()) == null) {
+            infoButton.setVisibility(View.INVISIBLE);
+        }
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                TextView titleView = view.findViewById(R.id.info);
+                titleView.setText(component.getHint(env.getWidgetContext()));
+                builder.setCustomTitle(view)
+                        .setPositiveButton("OK", null);
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
@@ -83,8 +102,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 inputView.setText(null);
             }
         });
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
-
+        setVisibiltyButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton, infoButton);
         // set info button
         //setInfoButton(env, textInputLayout, component);
 

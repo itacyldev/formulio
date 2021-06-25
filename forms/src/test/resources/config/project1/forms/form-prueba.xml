@@ -8,7 +8,7 @@
 
                     <input label="1. Input: " value="${entity.input}" validator="required" hint="Hint 1. input" />
 
-                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required" hint="Hint 2. Radio">
+                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" hint="Hint 2. Radio">
                         <options>
                             <option label="Radio1" value="Radio1" />
                             <option label="Radio2" value="Radio2" />
@@ -16,13 +16,12 @@
                         </options>
                     </radio>
 
-                    <textarea label="3. Textarea: " validator="required"
-                        value="${entity.textarea}" hint="Hint 3. Textarea"/>
+                    <textarea label="3. Textarea: " validator="required" value="${entity.textarea}" hint="Hint 3. Textarea"/>
 
                     <switcher label="4. Switcher: " value="${entity.switcher}" hint="Hint 4. Switcher"/>
 
                     <date converter="string" label="5.1 Date con patrón yyyy/MM/dd: " validator="required"
-                        value="${entity.fecha}" pattern="yyyy/MM/dd" hint="Hint 5.1 Date con patrón yyyy/MM/dd"/>
+                        value="${entity.fecha}" pattern="yyyy/MM/dd" hint="Hint 5.1 Date con patrón yyyy/MM/dd" />
 
                     <date converter="string" label="5.2 Date sin patrón: " validator="required"
                         value="${entity.fecha}" hint="Hint 5.2 Date sin patrón"/>

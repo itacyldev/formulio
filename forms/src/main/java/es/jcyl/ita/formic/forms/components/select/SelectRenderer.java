@@ -1,5 +1,7 @@
 package es.jcyl.ita.formic.forms.components.select;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,11 +19,13 @@ import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+
+import static android.view.View.inflate;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -73,6 +77,25 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             }
         });
 
+        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
+                ImageView.class);
+        if (component.getHint(env.getWidgetContext()) == null) {
+            infoButton.setVisibility(View.INVISIBLE);
+        }
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                TextView titleView = view.findViewById(R.id.info);
+                titleView.setText(component.getHint(env.getWidgetContext()));
+                builder.setCustomTitle(view)
+                        .setPositiveButton("OK", null);
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
         if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
@@ -85,7 +108,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             }
         });
 
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+        setVisibiltyButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton, infoButton);
     }
 
     @Override

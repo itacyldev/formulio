@@ -15,8 +15,11 @@ package es.jcyl.ita.formic.forms.components.autocomplete;
  * limitations under the License.
  */
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
@@ -26,6 +29,8 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static android.view.View.inflate;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -47,6 +52,26 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
                 ImageView.class);
         input.initialize(env, widget, arrowDropDown);
 
+        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
+                ImageView.class);
+        UIAutoComplete component = widget.getComponent();
+        if (component.getHint(env.getWidgetContext()) == null) {
+            infoButton.setVisibility(View.INVISIBLE);
+        }
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                TextView titleView = view.findViewById(R.id.info);
+                titleView.setText(component.getHint(env.getWidgetContext()));
+                builder.setCustomTitle(view)
+                        .setPositiveButton("OK", null);
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
         if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
@@ -59,7 +84,7 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
             }
         });
 
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+        setVisibiltyButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton, infoButton);
 
         arrowDropDown.setOnClickListener(new View.OnClickListener() {
             @Override
