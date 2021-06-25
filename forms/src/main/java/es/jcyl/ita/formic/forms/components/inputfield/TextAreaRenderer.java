@@ -1,8 +1,11 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -13,6 +16,8 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static android.view.View.inflate;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -56,6 +61,25 @@ public class TextAreaRenderer extends TextFieldRenderer {
         TextInputLayout textInputLayout = (TextInputLayout) ViewHelper.findViewAndSetId(widget, R.id.text_input_layout);
         removeUnderline(env, component, textInputLayout);
 
+        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
+                ImageView.class);
+        if (component.getHint(env.getWidgetContext()) == null) {
+            infoButton.setVisibility(View.INVISIBLE);
+        }
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                TextView titleView = view.findViewById(R.id.info);
+                titleView.setText(component.getHint(env.getWidgetContext()));
+                builder.setCustomTitle(view)
+                        .setPositiveButton("OK", null);
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         // set clear button
         ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
                 ImageView.class);
@@ -69,7 +93,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
                 inputView.setText(null);
             }
         });
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
+        setVisibiltyButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton, infoButton);
 
         // set info button
        /* ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
