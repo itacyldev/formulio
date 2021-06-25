@@ -21,14 +21,15 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
@@ -39,6 +40,7 @@ import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -67,7 +69,7 @@ public class RenderingEnv {
      * view rendering
      */
     private ViewDAG viewDAG;
-    private Map<String, DeferredView> deferredViews;
+    private Map<String, List<DeferredView>> deferredViews;
     private UserEventInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private FormActivity formActivity;
@@ -84,10 +86,10 @@ public class RenderingEnv {
         userActionInterceptor = new UserEventInterceptor(actionController);
     }
 
-    protected RenderingEnv(){
+    protected RenderingEnv() {
     }
 
-    public static RenderingEnv clone(RenderingEnv env){
+    public static RenderingEnv clone(RenderingEnv env) {
         RenderingEnv newEnv = new RenderingEnv();
         newEnv.globalContext = env.globalContext;
         newEnv.widgetContext = env.widgetContext;
@@ -154,15 +156,17 @@ public class RenderingEnv {
         return userActionInterceptor;
     }
 
-
     public void addDeferred(String componentId, DeferredView view) {
         if (this.deferredViews == null) {
             this.deferredViews = new HashMap<>();
         }
-        this.deferredViews.put(componentId, view);
+        if (!this.deferredViews.containsKey(componentId)) {
+            this.deferredViews.put(componentId, new ArrayList<>());
+        }
+        this.deferredViews.get(componentId).add(view);
     }
 
-    public Map<String, DeferredView> getDeferredViews() {
+    public Map<String, List<DeferredView>> getDeferredViews() {
         return deferredViews;
     }
 
@@ -232,7 +236,7 @@ public class RenderingEnv {
         this.globalContext.addContext(new EntityContext(entity));
         // register
         this.entity = entity;
-        if(this.getWidgetContext() == EMPTY_WIDGET_CTX){
+        if (this.getWidgetContext() == EMPTY_WIDGET_CTX) {
             EMPTY_WIDGET_CTX.setEntity(entity);
         }
     }

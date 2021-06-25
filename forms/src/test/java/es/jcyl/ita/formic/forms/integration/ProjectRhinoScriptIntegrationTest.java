@@ -96,7 +96,7 @@ public class ProjectRhinoScriptIntegrationTest {
         Config.getInstance().setCurrentProject(prj);
 
         // mock main controller
-        MainController mc = new MainControllerMock();
+        MainControllerMock mc = new MainControllerMock();
         mc.setContext(config.getGlobalContext());
 
         // navigate to form

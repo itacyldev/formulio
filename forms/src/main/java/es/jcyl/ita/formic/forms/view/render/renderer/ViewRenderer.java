@@ -31,7 +31,6 @@ import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItemProxy;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -47,6 +46,7 @@ import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -242,28 +242,32 @@ public class ViewRenderer {
     private void processDeferredViews(RenderingEnv env) {
         // use dag to walk the tree just one time per node
         ViewDAG viewDAG = env.getViewDAG();
-        Map<String, DeferredView> deferredViews = env.getDeferredViews();
+        Map<String, List<DeferredView>> deferredViews = env.getDeferredViews();
         if (viewDAG == null || deferredViews == null) {
             return;
         }
         // Until all deferred views has been processed
+        int lastNumDefViews = deferredViews.size();
         while (MapUtils.isNotEmpty(deferredViews)) {
             for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
                 // follow dag evaluating expressions and rendering views
                 for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
                     DAGNode node = it.next();
                     // find deferredView for this component
-                    Widget defView = deferredViews.remove(node.getComponent().getAbsoluteId());
-                    if (defView != null) {
-                        // render the view and replace deferred element
-                        RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
-                        widgetRendEnv.setWidgetContext(defView.getWidgetContext());
-                        Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
-                        registerWidget(env, newWidget);
-                        replaceView(defView, newWidget);
+                    List<DeferredView> defViewList = deferredViews.remove(node.getComponent().getAbsoluteId());
+                    if (defViewList != null) {
+                        for (DeferredView defView : defViewList) {
+                            // render the view and replace deferred element
+                            RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
+                            widgetRendEnv.setWidgetContext(defView.getWidgetContext());
+                            Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
+                            registerWidget(env, newWidget);
+                            replaceView(defView, newWidget);
+                        }
                     }
                 }
             }
+            // all dags has been check but there's a deffered view that cannot be resolved, avoid inf-loop
         }
     }
 

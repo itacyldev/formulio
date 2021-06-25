@@ -1,0 +1,18 @@
+<main name="basicForm" description="Basic CRUD" id="formlist" repo="contacts">
+    <edit>
+        <datalist id="contactList">
+            <datalistitem>
+                <text id="it_profile" label="it_profile"
+                    value="${entity.it_profile}" />
+                <textarea label="textarea" render="${not(empty(view.it_profile))}"
+                    value="${entity.it_profile}" />
+            </datalistitem>
+        </datalist>
+        <buttonbar type="bottom">
+            <button label="save">
+                <action controller="contactList" type="save" />
+            </button>
+            <button label="cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

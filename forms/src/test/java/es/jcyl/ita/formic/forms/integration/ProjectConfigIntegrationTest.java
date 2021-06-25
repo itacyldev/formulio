@@ -92,24 +92,9 @@ public class ProjectConfigIntegrationTest {
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
         int expectedNumForms = getNunFilesInFolder(TestUtils.findFile("config/project1/forms"));
         assertEquals(expectedNumForms, formConfigs.size());
-
-        //  Just for manual testing
-//        // Check all list and edit controller have been loaded
-//        FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
-//        Collection<FormController> ctlList = fctlFacotry.getList();
-//        assertEquals(14, ctlList.size());
-//        assertEquals(7, fctlFacotry.getListControllers().size());
-//
-//        // check list controller
-//        for (FormController ctl : fctlFacotry.getList()) {
-//            if (ctl instanceof FormListController) {
-//                assertListController(ctl);
-//            } else {
-//                assertEditController(ctl);
-//            }
-//        }
     }
-    private int getNunFilesInFolder(File folder){
+
+    private int getNunFilesInFolder(File folder) {
         File[] files = folder.listFiles(new FileFilter() {
             @Override
             public boolean accept(File f) {

@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,12 +138,7 @@ public class MainController implements ContextAwareComponent {
         setupParamsContext(params);
         try {
             // get form configuration for given formId and load data
-            ViewController controller = formControllerFactory.getController(formId);
-            if (controller == null) {
-                throw new FormException(error(String.format("No form controller found with id [%s] " +
-                                "check route string. Available ids: %s", formId,
-                        formControllerFactory.getControllerIds())));
-            }
+            ViewController controller = getViewController(formId);
             this.viewController = controller;
             this.viewController.load(globalContext);
             this.scriptEngine.initScope(controller.getId());
@@ -152,6 +149,16 @@ public class MainController implements ContextAwareComponent {
 
         // get the activity class for current controller
         initActivity(andContext);
+    }
+
+    protected ViewController getViewController(String formId) {
+        ViewController controller = formControllerFactory.getController(formId);
+        if (controller == null) {
+            throw new FormException(error(String.format("No form controller found with id [%s] " +
+                            "check route string. Available ids: %s", formId,
+                    formControllerFactory.getControllerIds())));
+        }
+        return controller;
     }
 
     protected void initActivity(android.content.Context context) {
@@ -358,11 +365,6 @@ public class MainController implements ContextAwareComponent {
         return scriptEngine;
     }
 
-    /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
-    public void setFormController(ViewController fc, UIView view) {
-        this.viewController = fc;
-    }
-
     @Override
     public void setContext(es.jcyl.ita.formic.core.context.Context ctx) {
         if (!(ctx instanceof CompositeContext)) {
@@ -374,5 +376,10 @@ public class MainController implements ContextAwareComponent {
         // add state and message context
         globalContext.addContext(new BasicContext("messages"));
         globalContext.addContext(new BasicContext("state"));
+    }
+
+    /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
+    public void setFormController(ViewController viewController) {
+        this.viewController = viewController;
     }
 }

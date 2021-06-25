@@ -140,7 +140,7 @@ public class DevFormBuilder {
 
         public CreateOneFieldForm withFormController(ViewController formController) {
             checkInvokeHasBeenCalled();
-            mc.setFormController(formController, formController.getView());
+            mc.setFormController(formController);
             return this;
         }
 

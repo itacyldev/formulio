@@ -60,7 +60,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 TextView.class);
         if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
             setLabel(fieldLabel, component);
-        }else{
+        } else {
             fieldLabel.setVisibility(View.GONE);
         }
 
@@ -128,8 +128,8 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
     }
 
-    protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton){
-        if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && !hasLabel){
+    protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton) {
+        if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && !hasLabel) {
             ViewGroup layout = (ViewGroup) resetButton.getParent();
             layout.setVisibility(View.GONE);
         }
@@ -139,22 +139,24 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
                 ImageView.class);
         UIInputComponent component = (UIInputComponent) widget.getComponent();
-        if (component.getHint(env.getWidgetContext()) == null) {
+        String hint = component.getHint(env.getWidgetContext());
+        if (StringUtils.isBlank(hint)){
             infoButton.setVisibility(View.INVISIBLE);
+        } else {
+            infoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View arg0) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                    final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                    TextView titleView = view.findViewById(R.id.info);
+                    titleView.setText(hint);
+                    builder.setCustomTitle(view)
+                            .setPositiveButton("OK", null);
+                    Dialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
         }
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
-                TextView titleView = view.findViewById(R.id.info);
-                titleView.setText(component.getHint(env.getWidgetContext()));
-                builder.setCustomTitle(view)
-                        .setPositiveButton("OK", null);
-                Dialog dialog = builder.create();
-                dialog.show();
-            }
-        });
     }
 
     /************************************/

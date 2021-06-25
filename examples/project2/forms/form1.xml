@@ -1,0 +1,7 @@
+<main name="formEdti" description="formEdti" id="formedit" repo="contacts">
+    <edit>
+        <text hint="${entity.last_name}" id="mitext" label="input" value="${entity.last_name}" />
+        <textarea label="textarea" render="${not(empty(view.mitext))}"
+            value="${entity.last_name}" />
+    </edit>
+</main>
