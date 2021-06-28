@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
+import android.widget.ImageView;
+
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
@@ -47,6 +49,9 @@ public class UIInputComponent extends AbstractUIComponent {
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
+
+    protected ImageView resetButton;
+    protected ImageView infoButton;
 
     public void addValidator(Validator validator) {
         if (validator == null) {
@@ -179,4 +184,19 @@ public class UIInputComponent extends AbstractUIComponent {
         this.hint = hint;
     }
 
+    public ImageView getResetButton() {
+        return resetButton;
+    }
+
+    public void setResetButton(ImageView resetButton) {
+        this.resetButton = resetButton;
+    }
+
+    public ImageView getInfoButton() {
+        return infoButton;
+    }
+
+    public void setInfoButton(ImageView infoButton) {
+        this.infoButton = infoButton;
+    }
 }

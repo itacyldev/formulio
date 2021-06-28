@@ -23,6 +23,8 @@ package es.jcyl.ita.formic.forms.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,13 +75,76 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         widget.setInputView(inputView);
         setInputView(env, widget);
 
+        //Info button
+        setInfoButton(env, widget);
+        setVisibilityInfoButton(env, widget);
+        setOnClickListenerInfoButton(env, widget);
+
+        //Clear button
+        setResetButton(env, widget);
+        setVisibilityResetButton(env, widget);
+
         // implement specific component rendering
         composeInputView(env, widget);
+
+        //Visibilty Button Layout
+        setVisibiltyButtonLayout(StringUtils.isNotBlank(component.getLabel()), component.getResetButton(), component.getInfoButton());
 
         // set value and error messages
         setValueInView(env, widget);
         setMessages(env, widget);
 
+    }
+
+    protected void setInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+        I infoButton = (I) ViewHelper.findViewAndSetId(widget, getInfoButtonId());
+        C component = widget.getComponent();
+        component.setInfoButton((ImageView) infoButton);
+    }
+
+    protected void setOnClickListenerInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+        C component = widget.getComponent();
+        ImageView infoButton = component.getInfoButton();
+        String hint = component.getHint(env.getWidgetContext());
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = ViewHelper.inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                TextView titleView = view.findViewById(R.id.info);
+                titleView.setText(hint);
+                builder.setCustomTitle(view)
+                        .setPositiveButton("OK", null);
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+    }
+
+    protected void setVisibilityInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+        C component = widget.getComponent();
+        String hint = component.getHint(env.getWidgetContext());
+        if (StringUtils.isBlank(hint)){
+            component.getInfoButton().setVisibility(View.INVISIBLE);
+        }
+    }
+
+    protected void setResetButton(RenderingEnv env, InputWidget<C, I> widget){
+        // set clear button
+        I resetButton = (I) ViewHelper.findViewAndSetId(widget, getResetButtonId());
+        C component = widget.getComponent();
+        //UIInputComponent component = (UIInputComponent) widget.getComponent();
+        component.setResetButton((ImageView) resetButton);
+    }
+
+    protected void setVisibilityResetButton(RenderingEnv env, InputWidget<C, I> widget){
+        C component = widget.getComponent();
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)
+                || !component.hasDeleteButton()) {
+            component.getResetButton().setVisibility(View.GONE);
+        }
     }
 
     protected void setValueInView(RenderingEnv env, InputWidget<C, I> widget) {
@@ -93,6 +158,14 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
 
     protected int getInputViewId() {
         return R.id.input_view;
+    }
+
+    protected int getInfoButtonId() {
+        return R.id.field_layout_info;
+    }
+
+    protected int getResetButtonId() {
+        return R.id.field_layout_x;
     }
 
 
@@ -124,10 +197,18 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
     }
 
     protected void setVisibiltyButtonLayout(boolean hasLabel, ImageView resetButton, ImageView infoButton){
-        if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && (infoButton.getVisibility() == View.INVISIBLE || infoButton.getVisibility() == View.GONE) && !hasLabel){
+        if (!isInfoButtonVisible(infoButton) && !isResetButtonVisible(resetButton) && !hasLabel){
             ViewGroup layout = (ViewGroup) resetButton.getParent();
             layout.setVisibility(View.GONE);
         }
+    }
+
+    private boolean isInfoButtonVisible(ImageView infoButton){
+        return infoButton != null && infoButton.getVisibility() != View.INVISIBLE && infoButton.getVisibility() != View.GONE;
+    }
+
+    private boolean isResetButtonVisible(ImageView resetButton){
+        return resetButton != null && resetButton.getVisibility() != View.INVISIBLE && resetButton.getVisibility() != View.GONE;
     }
 
     /************************************/

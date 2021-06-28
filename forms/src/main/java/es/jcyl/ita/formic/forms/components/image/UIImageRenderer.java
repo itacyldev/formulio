@@ -15,32 +15,23 @@ package es.jcyl.ita.formic.forms.components.image;
  * limitations under the License.
  */
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-
-import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EntityMapping;
-
-import static android.view.View.inflate;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -79,54 +70,34 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
             //inputView.setAdjustViewBounds(true);
         }
 
-        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
-                ImageView.class);
-        if (component.getHint(env.getWidgetContext()) == null) {
-            infoButton.setVisibility(View.INVISIBLE);
-        }
-        infoButton.setOnClickListener(new View.OnClickListener() {
+        setOnClickListenerResetButton(env, (ImageWidget) widget);
+    }
+
+    private void setOnClickListenerResetButton(RenderingEnv env, ImageWidget widget) {
+        UIImage component = widget.getComponent();
+        ImageResourceView inputView = widget.getInputView();
+        ImageView resetButton = component.getResetButton();
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
-                TextView titleView = view.findViewById(R.id.info);
-                titleView.setText(component.getHint(env.getWidgetContext()));
-                builder.setCustomTitle(view)
-                        .setPositiveButton("OK", null);
-                Dialog dialog = builder.create();
-                dialog.show();
+                Drawable noImage = ContextCompat
+                        .getDrawable(env.getAndroidContext(), R.drawable.
+                                no_image);
+                inputView.setImageDrawable(noImage);
+
+                UIForm form = (UIForm) component.getParentForm();
+                String entityProp = null;
+                if (component.getRepo() != null) {
+                    entityProp = getEntityProp(component, form);
+                    form.getEntity().set(entityProp.substring(entityProp.indexOf(".") + 1, entityProp.length() - 1), null);
+                } else if (component.getEmbedded()) { // the image is stored as an entity property
+                    Bitmap bitmap = ((BitmapDrawable) noImage).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                    ((ImageWidget) widget).updateRelatedEntity(stream.toByteArray());
+                }
             }
         });
-
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        Boolean isReadOnly = (Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class);
-        if (isReadOnly || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.GONE);
-        } else {
-            resetButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View arg0) {
-                    Drawable noImage = ContextCompat
-                            .getDrawable(env.getAndroidContext(), R.drawable.
-                                    no_image);
-                    inputView.setImageDrawable(noImage);
-
-                    UIForm form = (UIForm) component.getParentForm();
-                    String entityProp = null;
-                    if (component.getRepo() != null) {
-                        entityProp = getEntityProp(component, form);
-                        form.getEntity().set(entityProp.substring(entityProp.indexOf(".") + 1, entityProp.length() - 1), null);
-                    } else if (component.getEmbedded()) { // the image is stored as an entity property
-                        Bitmap bitmap = ((BitmapDrawable) noImage).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-                        ((ImageWidget) widget).updateRelatedEntity(stream.toByteArray());
-                    }
-                }
-            });
-        }
-        setVisibiltyButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton, infoButton);
     }
 
     @Override

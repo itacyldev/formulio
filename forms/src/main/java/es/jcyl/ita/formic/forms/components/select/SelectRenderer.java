@@ -1,17 +1,12 @@
 package es.jcyl.ita.formic.forms.components.select;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
@@ -19,13 +14,10 @@ import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
-
-import static android.view.View.inflate;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -77,38 +69,19 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             }
         });
 
-        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
-                ImageView.class);
-        if (component.getHint(env.getWidgetContext()) == null) {
-            infoButton.setVisibility(View.INVISIBLE);
-        }
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
-                TextView titleView = view.findViewById(R.id.info);
-                titleView.setText(component.getHint(env.getWidgetContext()));
-                builder.setCustomTitle(view)
-                        .setPositiveButton("OK", null);
-                Dialog dialog = builder.create();
-                dialog.show();
-            }
-        });
 
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.GONE);
-        }
+        setOnClickListenerResetButton(component, input);
+
+    }
+
+    private void setOnClickListenerResetButton(UISelect component, Spinner input) {
+        ImageView resetButton = component.getResetButton();
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
                 input.setSelection(0);
             }
         });
-
-        setVisibiltyButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton, infoButton);
     }
 
     @Override
@@ -121,7 +94,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
         UIInputComponent component = widget.getComponent();
         String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
         if (message != null) {
-            ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
+            ((TextView)((ViewGroup)widget.getChildAt(0)).getChildAt(0)).setError(message);
         }
     }
 

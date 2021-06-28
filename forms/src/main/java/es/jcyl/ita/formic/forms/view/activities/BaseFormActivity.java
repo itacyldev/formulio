@@ -52,6 +52,7 @@ public abstract class BaseFormActivity<F extends ViewController> extends BaseAct
         // render edit view content and link content view
         try {
             View viewRoot = mc.renderView(this);
+            contentView.setFocusable(false);
             contentView.addView(viewRoot);
         } catch (Exception e) {
             DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
