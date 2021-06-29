@@ -23,9 +23,11 @@ import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.mini2Dx.collections.MapUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.components.EntityHolder;
@@ -35,6 +37,7 @@ import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItemProxy;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -253,7 +256,8 @@ public class ViewRenderer {
             return;
         }
         // Until all deferred views has been processed
-        int lastNumDefViews = deferredViews.size();
+        int currentNumDefViews = deferredViews.size();
+        int iters = 0;
         while (MapUtils.isNotEmpty(deferredViews)) {
             for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
                 // follow dag evaluating expressions and rendering views
@@ -273,10 +277,17 @@ public class ViewRenderer {
                     }
                 }
             }
-            // all dags has been check but there's a deffered view that cannot be resolved, avoid inf-loop
-
+            // all dags has been check but there's a deferred view that cannot be resolved, avoid inf-loop
+            if (currentNumDefViews != deferredViews.size()) {
+                currentNumDefViews = deferredViews.size();
+            } else {
+                StringBuilder stb = printDeferredViewInfo(deferredViews);
+                throw new ViewConfigException(String.format("One of this expressions cannot be resolved: %s.\n Make sure " +
+                        "the id of the view components are correctly referenced.", stb.toString()));
+            }
         }
     }
+
 
     /**
      * Given an element in current view, renders all the dependant elements
@@ -356,4 +367,23 @@ public class ViewRenderer {
         public void onViewEnd(ViewWidget viewWidget) {
         }
     }
+
+    private StringBuilder printDeferredViewInfo(Map<String, List<DeferredView>> deferredViews) {
+        StringBuilder stb = new StringBuilder();
+        Collection<List<DeferredView>> values = deferredViews.values();
+        for (List<DeferredView> refs : values) {
+            for (DeferredView view : refs) {
+                UIComponent c = view.getComponent();
+                stb.append(String.format("component [%s] ", c.getId()));
+                Set<ValueBindingExpression> valueBindingExpressions = c.getValueBindingExpressions();
+                StringBuilder stbExpr = new StringBuilder();
+                for (ValueBindingExpression exp : c.getValueBindingExpressions()) {
+                    stbExpr.append(exp.getExpression().toString() + ", ");
+                }
+                stb.append("Expressions: " + stbExpr + "\n");
+            }
+        }
+        return stb;
+    }
+
 }

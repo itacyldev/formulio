@@ -2,7 +2,7 @@
     <edit>
         <tab>
             <tabitem>
-                <text hint="${entity.first_name}" id="mitext1" label="input"
+                <text hint="${entity.first_name}" id="mitext1" label="input" render="${view.nonono}"
                     validator="required" value="${entity.first_name}" />
             </tabitem>
             <tabitem>

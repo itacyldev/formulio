@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.view.render;
+package es.jcyl.ita.formic.forms.integration;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -23,26 +23,37 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
+import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.DagTestUtils;
+import es.jcyl.ita.formic.forms.utils.DevFormNav;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
+import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 
 import static org.mockito.Mockito.*;
 
@@ -107,7 +118,42 @@ public class ViewRenderIntegrationTest {
         // walk the tree executing expressions
         Widget viewWidget = renderHelper.render(env, mainView);
         Assert.assertNotNull(viewWidget);
+    }
 
+    private static final String XML_INPUT = "<text  id=\"mitext1\" label=\"input\"  value=\"${entity.first_name}\" render=\"${view.noneExistingElement}\"/>";
+
+    /**
+     * Define a render expression that depends on a none existing element and check the renderer
+     * doesn't keep looking for the missing.
+     *
+     * @throws Exception
+     */
+    @Test(expected = ViewConfigException.class)
+    public void testRenderLoop() throws Exception {
+        CompositeContext globalContext = Config.getInstance().getGlobalContext();
+
+        // read XML config
+        String xml = XmlConfigUtils.createEditForm(XML_INPUT);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        ViewController viewController = formConfig.getEdits().get(0);
+        DagTestUtils.registerDags(formConfig);
+
+        // mock main controller
+        MainControllerMock mc = new MainControllerMock();
+        mc.setContext(globalContext);
+        mc.setViewController(viewController); // set test viewController
+
+        // Create Android context and navigate to form
+        Context ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
+        ctx.setTheme(R.style.FormudruidLight);
+        DevFormNav formNav = new DevFormNav(ctx, mc);
+
+        // navigate to test viewController
+
+        formNav.nav("");
+
+        // get a widget a put some data on the view
+        DatalistWidget widget = formNav.getWidget("mitext1", DatalistWidget.class);
 
     }
 }
