@@ -69,7 +69,7 @@ public class TextAreaRenderer extends TextFieldRenderer {
                 inputView.setText(null);
             }
         });
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
+        setVisibilityResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
 
         // set info button
        /* ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,

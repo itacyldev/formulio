@@ -59,7 +59,7 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
             }
         });
 
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+        setVisibilityResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
 
         arrowDropDown.setOnClickListener(new View.OnClickListener() {
             @Override

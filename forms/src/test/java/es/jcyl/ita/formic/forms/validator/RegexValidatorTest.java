@@ -42,7 +42,7 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -98,7 +98,7 @@ public class RegexValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     /**

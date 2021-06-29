@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.validation.NumberValidator;
@@ -81,7 +81,7 @@ public class NumberValidatorTest {
         Assert.assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class NumberValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class NumberValidatorTest {
         Assert.assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -153,7 +153,7 @@ public class NumberValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class NumberValidatorTest {
         Assert.assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class NumberValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -225,7 +225,7 @@ public class NumberValidatorTest {
         Assert.assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -249,7 +249,7 @@ public class NumberValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -273,7 +273,7 @@ public class NumberValidatorTest {
         Assert.assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -297,6 +297,6 @@ public class NumberValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 }

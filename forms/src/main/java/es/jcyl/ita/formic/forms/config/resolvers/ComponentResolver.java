@@ -24,8 +24,6 @@ import java.util.Set;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -36,11 +34,14 @@ public class ComponentResolver {
     private Map<String, Set<String>> tags = new HashMap<String, Set<String>>();
 
     public void addComponentId(String tagName, String id) {
+        tagName = tagName.toLowerCase();
+        id = id.toLowerCase();
         if (!tags.containsKey(tagName)) {
             tags.put(tagName, new HashSet<String>());
         }
-        if (tags.get(tagName).contains(id.toLowerCase())) {
-            throw new ConfigurationException(DevConsole.error("Duplicate id for component {tag} in {form}: " + id));
+        if (tags.get(tagName).contains(id)) {
+            throw new ConfigurationException(DevConsole.error(
+                    String.format("Duplicate id for component [%s] id=[%s].", tagName, id)));
         }
         tags.get(tagName).add(id);
     }

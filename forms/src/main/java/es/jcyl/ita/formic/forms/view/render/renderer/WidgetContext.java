@@ -2,6 +2,7 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
@@ -32,10 +33,14 @@ import es.jcyl.ita.formic.repo.Entity;
 
 public class WidgetContext extends UnPrefixedCompositeContext {
 
-    private final WidgetContextHolder holder;
+    private WidgetContextHolder holder;
 
     private ViewContext viewContext;
     private EntityContext entityContext;
+    private BasicContext messageContext;
+
+    public WidgetContext(){
+    }
 
     public WidgetContext(WidgetContextHolder holder) {
         this.holder = holder;
@@ -99,6 +104,13 @@ public class WidgetContext extends UnPrefixedCompositeContext {
         return this.viewContext.getStatefulWidgets();
     }
 
+    public BasicContext getMessageContext() {
+        return messageContext;
+    }
+
+    public void setMessageContext(BasicContext messageContext) {
+        this.messageContext = messageContext;
+    }
 }
 
 

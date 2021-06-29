@@ -102,7 +102,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
                 }
             });
         }
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+        setVisibilityResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
     }
 
     @Override

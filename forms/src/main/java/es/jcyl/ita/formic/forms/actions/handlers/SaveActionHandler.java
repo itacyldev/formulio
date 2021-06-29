@@ -45,7 +45,7 @@ public class SaveActionHandler extends AbstractActionHandler {
     public void handle(ActionContext actionContext, UserAction action) {
         boolean valid = true;
         if (StringUtils.isNotBlank(action.getController())) {
-            ViewWidget rootWidget = action.getWidget().getRootWidget();
+            ViewWidget rootWidget = actionContext.getViewController().getRootWidget();
             // check all controllers exits before method is executed
             List<WidgetController> ctrlList = ActionHandlerHelper.getControllers(rootWidget, action);
             for (WidgetController widgetController : ctrlList) {

@@ -2,10 +2,10 @@
     <edit>
         <datalist id="contactList">
             <datalistitem>
-                <text id="it_profile" label="it_profile"
-                    value="${entity.it_profile}" />
-                <textarea label="textarea" render="${not(empty(view.it_profile))}"
-                    value="${entity.it_profile}" />
+                <text id="id" label="id"
+                    value="${entity.contact_id}" />
+                <text id="email" label="email"
+                    value="${entity.email}"  validator="required"/>
             </datalistitem>
         </datalist>
         <buttonbar type="bottom">

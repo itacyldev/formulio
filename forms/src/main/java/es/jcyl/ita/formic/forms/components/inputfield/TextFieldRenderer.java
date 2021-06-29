@@ -83,7 +83,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
                 inputView.setText(null);
             }
         });
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
+        setVisibilityResetButtonLayout(StringUtils.isNotBlank(component.getLabel()), resetButton);
 
         // set info button
         //setInfoButton(env, textInputLayout, component);

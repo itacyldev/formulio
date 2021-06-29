@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.controllers.ViewController;
 
 public class MainControllerMock extends MainController {
 
-    private ViewController viewController;
+    private ViewController testViewController;
 
     public MainControllerMock() {
     }
@@ -54,17 +54,18 @@ public class MainControllerMock extends MainController {
      */
     @Override
     protected ViewController getViewController(String formId) {
-        if (viewController != null) {
-            return viewController;
+        if (testViewController != null) {
+            return testViewController;
         } else {
             return super.getViewController(formId);
         }
     }
 
     public void setViewController(ViewController viewController) {
-        this.viewController = viewController;
+        this.testViewController = viewController;
         MainController mc = MainController.getInstance();
-        this.viewController.setMc(mc);
-        mc.setFormController(viewController);
+        this.testViewController.setMc(mc);
+        mc.setViewController(viewController);
     }
+
 }

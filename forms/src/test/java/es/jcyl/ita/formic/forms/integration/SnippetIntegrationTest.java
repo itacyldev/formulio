@@ -16,11 +16,10 @@ package es.jcyl.ita.formic.forms.integration;
  */
 
 import android.content.Context;
-import android.view.ViewGroup;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -31,8 +30,8 @@ import java.util.List;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.datalist.DatalistItemWidget;
 import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
-import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -40,14 +39,13 @@ import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.DagTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
-import es.jcyl.ita.formic.forms.utils.WidgetTestUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
+import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 import static org.mockito.Mockito.*;
 
@@ -62,27 +60,30 @@ import static org.mockito.Mockito.*;
 public class SnippetIntegrationTest {
 
     private static Repository contacts;
+    private static EntityMeta meta;
 
     @BeforeClass
     public static void setUp() {
         Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
-        // register repos
-        contacts = RepositoryUtils.registerMock("contacts");
+        // Create entity Meta with a property called "email"
+        EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
+        metaBuilder.withRandomData().addProperty("email", String.class);
+        meta = metaBuilder.build();
+        contacts = RepositoryUtils.registerMock("contacts", meta);
     }
 
-    //    private static final String XML_SNIPPET = "<text id=\"input1\"/>";
     private static final String XML_SNIPPET =
             " <datalist>\n" +
                     "            <datalistitem repo=\"contacts\">\n" +
-                    "                <text id=\"mitext\" hint=\"${entity.last_name}\" label=\"input\" value=\"${entity.last_name}\" />\n" +
-                    "                <textarea label=\"textarea\" value=\"${entity.last_name}\" render=\"${not(empty(view.mitext))}\" />\n" +
+                    "                <text id=\"email\" value=\"${entity.email}\" validator=\"required\" />\n" +
                     "            </datalistitem>\n" +
                     "</datalist>";
 
+    @Ignore("Template test case to check errors on view")
     @Test
-    public void testFormConfig() throws Exception {
+    public void testRunViewXML() throws Exception {
         CompositeContext globalContext = Config.getInstance().getGlobalContext();
 
         // read XML config
@@ -94,33 +95,40 @@ public class SnippetIntegrationTest {
         // mock main controller
         MainControllerMock mc = new MainControllerMock();
         mc.setContext(globalContext);
-        mc.setViewController(viewController);
+        mc.setViewController(viewController); // set test viewController
 
         // add entities to the repo mock
-        List<Entity> entities = DevDbBuilder.buildEntities(contacts.getMeta(), 2);
+        List<Entity> entities = DevDbBuilder.buildEntities(meta, 2);
         when(contacts.find(any())).thenReturn(entities);
 
         // Create Android context and navigate to form
         Context ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
         ctx.setTheme(R.style.FormudruidLight);
         DevFormNav formNav = new DevFormNav(ctx, mc);
+
+        // navigate to test viewController
         formNav.nav("");
 
-        // Get content view and check against Android Views
-        UIView uiView = viewController.getView();
-        ViewGroup contentView = viewController.getContentView();
-//        Widget widget = ViewHelper.findComponentWidget(contentView, "input1");
-        DatalistWidget widget = (DatalistWidget) ViewHelper.findComponentWidget(contentView, "datalist1");
-        Assert.assertNotNull(widget);
+        // get a widget a put some data on the view
+        DatalistWidget widget = formNav.getWidget("datalist1", DatalistWidget.class);
 
-        // traverse the view tree looking for deferred views
-        WidgetTestUtils.LayoutTraverser traverser = WidgetTestUtils.buildViewTraverser(view -> {
-            Assert.assertFalse("Deferred view found with id: " + view.getTag(),
-                    (view instanceof DeferredView));
-            return null;
-        });
-        traverser.traverse(widget);
+        // set all the email inputs to null to trigger validators
+        for (DatalistItemWidget item : widget.getItems()) {
+            item.getWidgetContext().put("view.email", null);
+        }
+
+        // execute save() on a controller
+        formNav.clickSave("datalist1");
+        // or click save on the form with:
+        // formNav.clickSave();
+
+        // Get the widgets from view and check all item widgetContext have an error message
+        widget = formNav.getWidget("datalist1", DatalistWidget.class);
+
+        // assert something about the widget....
+
     }
+
 
     @AfterClass
     public static void tearDown() {

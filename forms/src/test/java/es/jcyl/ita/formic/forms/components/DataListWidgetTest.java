@@ -118,7 +118,7 @@ public class DataListWidgetTest {
         Object value = RandomUtils.randomObject(entityProperty.type);
         widgetContext.put("view.myField", value);
         // call update from view method and check then entity has been modified (position = 0)
-        controller.updateFromView();
+        controller.updateEntityFromView();
         Entity entity = entities.get(0);
 
         Assert.assertEquals(value, entity.get(entityProperty.name));

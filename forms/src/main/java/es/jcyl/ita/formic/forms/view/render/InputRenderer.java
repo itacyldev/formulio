@@ -128,7 +128,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
     }
 
-    protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton) {
+    protected void setVisibilityResetButtonLayout(boolean hasLabel, ImageView resetButton) {
         if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && !hasLabel) {
             ViewGroup layout = (ViewGroup) resetButton.getParent();
             layout.setVisibility(View.GONE);

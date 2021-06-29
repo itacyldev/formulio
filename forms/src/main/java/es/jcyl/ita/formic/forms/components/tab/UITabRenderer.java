@@ -17,7 +17,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -135,7 +135,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
         }
         int pos = 0;
         for (UIComponent tabItem : kids) {
-            String message = WidgetContextHelper.getMessage(env.getWidgetContext(), tabItem.getId());
+            String message = MessageHelper.getMessage(env, tabItem);
             if (!StringUtils.isBlank(message)) {
                 tabLayout.getTabAt(pos).setIcon(R.drawable.ic_input_error);
             }

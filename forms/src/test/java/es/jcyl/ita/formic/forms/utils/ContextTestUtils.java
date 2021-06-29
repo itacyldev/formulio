@@ -32,7 +32,6 @@ public class ContextTestUtils {
 
     public static CompositeContext createGlobalContext() {
         CompositeContext ctx = new UnPrefixedCompositeContext();
-        ctx.addContext(new BasicContext("messages"));
         ctx.addContext(new BasicContext("state"));
         return ctx;
     }

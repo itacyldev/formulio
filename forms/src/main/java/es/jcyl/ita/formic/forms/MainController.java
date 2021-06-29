@@ -229,7 +229,7 @@ public class MainController implements ContextAwareComponent {
      * @return
      */
     public Widget renderView(Context viewContext) {
-        UIView uiView = this.viewController.getView();
+        UIView uiView = viewController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
         renderingEnv.initialize();
@@ -306,14 +306,14 @@ public class MainController implements ContextAwareComponent {
             ViewGroup contentView = viewController.getContentView();
             contentView.removeAllViews();
             contentView.addView(newRootWidget);
-            viewController.setRootWidget((ViewWidget) newRootWidget);
+            getViewController().setRootWidget((ViewWidget) newRootWidget);
         } finally {
             renderingEnv.enableInterceptors();
         }
     }
 
     public void saveViewState() {
-        viewController.saveViewState();
+        getViewController().saveViewState();
     }
 
     /**
@@ -374,12 +374,11 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setGlobalContext(this.globalContext);
         setupScriptingEnv(globalContext);
         // add state and message context
-        globalContext.addContext(new BasicContext("messages"));
-        globalContext.addContext(new BasicContext("state"));
+        globalContext.addContext(new BasicContext("state"));// TODO: sobra?
     }
 
     /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
-    public void setFormController(ViewController viewController) {
+    public void setViewController(ViewController viewController) {
         this.viewController = viewController;
     }
 }

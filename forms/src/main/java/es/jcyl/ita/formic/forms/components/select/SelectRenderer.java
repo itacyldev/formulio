@@ -17,9 +17,9 @@ import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
@@ -85,7 +85,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             }
         });
 
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+        setVisibilityResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
     }
 
     @Override
@@ -96,9 +96,9 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
+        String message = MessageHelper.getMessage(env, component);
         if (message != null) {
-            ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
+            ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
         }
     }
 

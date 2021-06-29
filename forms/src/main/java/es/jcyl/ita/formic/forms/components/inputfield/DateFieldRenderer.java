@@ -141,7 +141,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             }
         });
 
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+        setVisibilityResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
     }
 
     protected void setValueInView(RenderingEnv env, InputWidget<UIField, Button> widget) {

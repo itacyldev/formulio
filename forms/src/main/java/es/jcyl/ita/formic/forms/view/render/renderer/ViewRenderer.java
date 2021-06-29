@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
@@ -81,6 +82,7 @@ public class ViewRenderer {
             // insert a delegated view component as placeholder to render later
             widget = createDeferredView(env, component);
         } else {
+            env.setCurrentMessageContext(component);
             widget = renderer.render(env, component);
         }
         // link root widget to current widget
@@ -113,7 +115,8 @@ public class ViewRenderer {
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         eventHandler.onEntityContextChanged(entity);
-                        View view = render(env, proxify(iter, component.getChildren()[0], entity));
+                        UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
+                        Widget view = render(env, componentProxy);
                         viewList.add(view);
                         iter++;
                     }
@@ -169,8 +172,11 @@ public class ViewRenderer {
             WidgetContext wCtx = new WidgetContext((WidgetContextHolder) widget);
             // set the entity used to render this widget in its context
             wCtx.setEntity(env.getEntity());
+            // set message context
+            BasicContext msgCtx = env.getMessageContext(widget.getComponentId());
+            wCtx.setMessageContext(msgCtx);
             // add global context
-            wCtx.addContext(env.getContext());
+            wCtx.addContext(env.getGlobalContext());
             widget.setWidgetContext(wCtx);
             // set as current WidgetContext so nested elements will use it
             env.setWidgetContext(wCtx);
@@ -253,7 +259,7 @@ public class ViewRenderer {
                 // follow dag evaluating expressions and rendering views
                 for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
                     DAGNode node = it.next();
-                    // find deferredView for this component
+                    // find deferredViews for this component
                     List<DeferredView> defViewList = deferredViews.remove(node.getComponent().getAbsoluteId());
                     if (defViewList != null) {
                         for (DeferredView defView : defViewList) {
@@ -268,6 +274,7 @@ public class ViewRenderer {
                 }
             }
             // all dags has been check but there's a deffered view that cannot be resolved, avoid inf-loop
+
         }
     }
 
