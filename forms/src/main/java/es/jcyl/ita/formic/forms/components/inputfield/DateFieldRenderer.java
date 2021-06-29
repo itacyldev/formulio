@@ -1,6 +1,5 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -8,10 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.text.SimpleDateFormat;
@@ -23,14 +20,11 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-
-import static android.view.View.inflate;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -67,32 +61,6 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         }
         if (widget.getComponent().getType().equals(UIField.TYPE.DATETIME.name())) {
             today.setText(R.string.now);
-        }
-
-        ImageView infoButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_info,
-                ImageView.class);
-        UIField component = widget.getComponent();
-        if (component.getHint(env.getWidgetContext()) == null) {
-            infoButton.setVisibility(View.INVISIBLE);
-        }
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
-                TextView titleView = view.findViewById(R.id.info);
-                titleView.setText(component.getHint(env.getWidgetContext()));
-                builder.setCustomTitle(view)
-                        .setPositiveButton("OK", null);
-                Dialog dialog = builder.create();
-                dialog.show();
-            }
-        });
-
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.GONE);
         }
 
         Button input = widget.getInputView();
@@ -159,6 +127,11 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             }
         });
 
+        setOnClickListenerResetButton(widget.getComponent(), input);
+    }
+
+    private void setOnClickListenerResetButton(UIField component, Button input) {
+        ImageView resetButton = component.getResetButton();
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
@@ -166,7 +139,6 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             }
         });
 
-        setVisibiltyButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton, infoButton);
     }
 
     protected void setValueInView(RenderingEnv env, InputWidget<UIField, Button> widget) {
