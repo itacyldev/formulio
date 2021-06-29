@@ -18,8 +18,10 @@ package es.jcyl.ita.formic.forms.config.builders.controllers;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -49,20 +51,25 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<FormConfig> node) {
         FormConfig formConfig = node.getElement();
-        List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
-        if (list.size() == 0) {
-            // if no nested List, create one node and attach to current node
-            addDefaultNode(formConfig, node, "list");
-        } else {
-            // setup form id
-            setupChildrenIds(formConfig, "list", list);
-        }
-        List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(node, "edit");
-        if (edits.size() == 0) {
-            // if no nested Edit, create one node and attach to current node
-            addDefaultNode(formConfig, node, "edit");
-        }else{
-            setupChildrenIds(formConfig, "edit", edits);
+        List<ConfigNode> viewList = ConfigNodeHelper.getChildrenByTag(node, "view");
+
+        if (viewList.size() == 0) {
+            // if main has no views, create default list and edit elements
+            List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
+            if (list.size() == 0) {
+                // if no nested List, create one node and attach to current node
+                addDefaultNode(formConfig, node, "list");
+            } else {
+                // setup form id
+                setupChildrenIds(formConfig, "list", list);
+            }
+            List<ConfigNode> edits = ConfigNodeHelper.getChildrenByTag(node, "edit");
+            if (edits.size() == 0) {
+                // if no nested Edit, create one node and attach to current node
+                addDefaultNode(formConfig, node, "edit");
+            } else {
+                setupChildrenIds(formConfig, "edit", edits);
+            }
         }
         BuilderHelper.addDefaultRepoNode(node);
     }
@@ -72,15 +79,15 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         String id = formConfig.getId() + "-" + tag;
         newNode.setName(tag);
         newNode.setId(id);
-        if(node.hasAttribute("repo")){
+        if (node.hasAttribute("repo")) {
             newNode.setAttribute("repo", node.getAttribute("repo"));
         }
         node.addChild(newNode);
         return newNode;
     }
 
-    private void setupChildrenIds(FormConfig formConfig, String tag, List<ConfigNode> nodes){
-        for(ConfigNode n: nodes){
+    private void setupChildrenIds(FormConfig formConfig, String tag, List<ConfigNode> nodes) {
+        for (ConfigNode n : nodes) {
             String id = formConfig.getId() + "-" + n.getId();
             n.setId(id);
         }
@@ -88,11 +95,11 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<FormConfig> node) {
-        // attach list and edit controllers to current formConfig
+        // Attach list and edit controllers to current formConfig
         setUpListController(node);
         setUpEditControllers(node);
+        setUpViewControllers(node);
     }
-
 
     /**
      * Finds nested list Element and sets to FormConfig
@@ -102,18 +109,15 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
     private void setUpListController(ConfigNode<FormConfig> node) {
         List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "list");
         if (CollectionUtils.isEmpty(list)) {
-            throw new ConfigurationException(error("Each form file must contain just " +
-                    "one 'list' element"));
+            return;
         }
         node.getElement().setList((FormListController) list.get(0).getElement());
     }
 
-
     private void setUpEditControllers(ConfigNode<FormConfig> node) {
         List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "edit");
         if (CollectionUtils.isEmpty(list)) {
-            throw new ConfigurationException(error("Each form file must contain at least " +
-                    "one 'edit' element"));
+            return;
         }
         List<ViewController> edits = new ArrayList<>();
         for (ConfigNode editNode : list) {
@@ -122,5 +126,25 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
         node.getElement().setEdits(edits);
     }
 
+    private void setUpViewControllers(ConfigNode<FormConfig> node) {
+        List<ConfigNode> list = ConfigNodeHelper.getChildrenByTag(node, "view");
+        if (CollectionUtils.isEmpty(list)) {
+            return; // no nested <view/>
+        }
 
+        FormConfig formConfig = node.getElement();
+        List edits = node.getElement().getEdits();
+        if (edits == null) {
+            edits = new ArrayList<>();
+        }
+        for (ConfigNode viewNode : list) {
+            UIView view = (UIView) viewNode.getElement();
+            String id = formConfig.getId() + "-" + view.getId();
+            ViewController viewController = new ViewController(id, id);
+            viewController.setView(view);
+
+            edits.add(viewController);
+        }
+        node.getElement().setEdits(edits);
+    }
 }

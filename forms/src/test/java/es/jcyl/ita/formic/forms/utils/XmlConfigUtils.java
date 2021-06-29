@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URI;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -66,13 +65,18 @@ public class XmlConfigUtils {
         return String.format(BASE_VIEW, nestedXml);
     }
 
-    public static final String BASE = "<main repo=\"contacts\"><list>%s</list></main>";
+    public static final String BASE = "<main repo=\"contacts\">%s</main>";
+    public static final String BASE_LIST = "<main repo=\"contacts\"><list>%s</list></main>";
+    public static final String BASE_EDIT = "<main repo=\"contacts\"><edit>%s</edit></main>";
 
-    public static String createMainList(String nestedXml) {
+    public static String createMain(String nestedXml) {
         return String.format(BASE, nestedXml);
     }
 
-    public static final String BASE_EDIT = "<main repo=\"contacts\"><edit>%s</edit></main>";
+    public static String createMainList(String nestedXml) {
+        return String.format(BASE_LIST, nestedXml);
+    }
+
 
     public static String createMainEdit(String nestedXml) {
         return String.format(BASE_EDIT, nestedXml);

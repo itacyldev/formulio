@@ -88,29 +88,7 @@ public class UIViewBuilder extends AbstractComponentBuilder<UIView> {
         // set view as root element for all descendant
         UIView view = (UIView) node.getElement();
         view.setRoot(view);
-        if (node.getParent() == null) {
-            // view is root, change the node element to set a FormConfig
-            String currentFile = this.getFactory().getInfo().getCurrentFile();
-            FormConfig formConfig = createDefaultFormConfig(view, currentFile);
-
-            // create node and set in tree.
-            ConfigNode newView = ConfigNode.clone(node);
-            newView.setChildren(node.getChildren());
-            node.setChildren(Collections.singletonList(node));
-            node.setElement(formConfig);
-        }
     }
-
-
-    private FormConfig createDefaultFormConfig(UIView view, String currenFile) {
-        ViewController viewController = new ViewController(view.getId(), view.getId());
-        viewController.setView(view);
-        FormConfig config = new FormConfig();
-        config.setFilePath(currenFile);
-        config.setEdits(Collections.singletonList(viewController)); // TODO: pending refactoring
-        return config;
-    }
-
 
     private void setupToolBars(ConfigNode<UIView> node) {
         UIComponent[] uiComponents = ConfigNodeHelper.getUIChildren(node);

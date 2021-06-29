@@ -12,7 +12,7 @@
     </list>
     <edit id="edit1">
         <buttonbar type="bottom">
-            <button label="goView" route="view1" />
+            <button label="goView" route="view1-view1" />
         </buttonbar>
     </edit>
 </main>

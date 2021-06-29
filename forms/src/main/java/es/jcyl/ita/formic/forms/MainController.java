@@ -22,10 +22,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
@@ -36,11 +35,11 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.controllers.ViewController;
-import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
@@ -156,7 +155,7 @@ public class MainController implements ContextAwareComponent {
         if (controller == null) {
             throw new FormException(error(String.format("No form controller found with id [%s] " +
                             "check route string. Available ids: %s", formId,
-                    formControllerFactory.getControllerIds())));
+                    new TreeSet<>(formControllerFactory.getControllerIds()))));
         }
         return controller;
     }
@@ -250,7 +249,7 @@ public class MainController implements ContextAwareComponent {
         return widget;
     }
 
-    public Widget renderComponent(UIComponent component){
+    public Widget renderComponent(UIComponent component) {
         renderingEnv.disableInterceptors();
         Widget widget = viewRenderer.render(this.renderingEnv, component);
         renderingEnv.enableInterceptors();
