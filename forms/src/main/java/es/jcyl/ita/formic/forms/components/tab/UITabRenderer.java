@@ -2,6 +2,7 @@ package es.jcyl.ita.formic.forms.components.tab;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -95,6 +96,21 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
                             viewPager.requestLayout();
                             viewPager.getRootView().findViewById(R.id.scroll).setScrollY(widget.getPositionScrollY());
                         }
+                    }
+                });
+            }
+        });
+
+        ViewTreeObserver vto = viewPager.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                viewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(viewPager.getCurrentItem());
+                        updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
+                        viewPager.requestLayout();
                     }
                 });
             }
