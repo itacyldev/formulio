@@ -1,8 +1,5 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -10,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -24,9 +20,6 @@ import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-
-import static android.view.View.inflate;
-import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -103,51 +96,6 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
         labelView.setHint(labelComponent);
         labelView.setHintTextAppearance(R.style.TextInputLabel_label);
-    }
-
-    protected void setClearButton(RenderingEnv env, EditText view, TextInputLayout textInputLayout, UIField component) {
-        // set clear button
-        if (!(Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-            textInputLayout.setEndIconActivated(true);
-            textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
-            TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
-            textInputLayout.setEndIconTintList(ta.getColorStateList(0));
-            textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    view.setText(null);
-                }
-            });
-        }
-    }
-
-   /*protected void setInfoButton(RenderingEnv env, TextInputLayout textInputLayout, UIField component) {
-        if (component.getHint() != null) {
-            textInputLayout.setEndIconDrawable(R.drawable.ic_tool_info);
-            TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor});
-            textInputLayout.setEndIconTintList(ta.getColorStateList(0));
-            textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    createInfoDialog(env, component);
-                }
-            });
-        }
-    }*/
-
-    protected void createInfoDialog(RenderingEnv env, UIField component) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-        final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
-        TextView titleView = view.findViewById(R.id.info);
-        titleView.setText(component.getHint(env.getWidgetContext()));
-        builder.setCustomTitle(view)
-                .setPositiveButton("OK", null);
-        Dialog dialog = builder.create();
-        dialog.show();
-    }
-
-    protected void adjustBounds() {
-
     }
 
     private void executeUserAction(RenderingEnv env, Widget widget) {
