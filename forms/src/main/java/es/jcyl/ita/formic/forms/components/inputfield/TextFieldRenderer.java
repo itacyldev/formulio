@@ -98,6 +98,10 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
         labelView.setHintTextAppearance(R.style.TextInputLabel_label);
     }
 
+    protected void adjustBounds() {
+
+    }
+
     private void executeUserAction(RenderingEnv env, Widget widget) {
         UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {

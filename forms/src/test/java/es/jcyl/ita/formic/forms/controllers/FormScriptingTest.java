@@ -39,7 +39,7 @@ import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -137,7 +137,7 @@ public class FormScriptingTest {
         valid = formValidator.validate(formWidget);
 
         Assert.assertFalse(valid);
-        String errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
+        String errorMessage = MessageHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
         Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
 
         // Try validating the full form
@@ -145,7 +145,7 @@ public class FormScriptingTest {
         valid = formValidator.validate(formWidget);
         // check the message has been set from the validation function
         Assert.assertFalse(valid);
-        errorMessage = WidgetContextHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
+        errorMessage = MessageHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
         Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
     }
 }

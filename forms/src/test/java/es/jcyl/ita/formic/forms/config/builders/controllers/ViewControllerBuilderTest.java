@@ -59,11 +59,25 @@ public class ViewControllerBuilderTest {
     private static final String EMPTY_VIEW = "<view/>";
     @Test
     public void testEmptyView() throws Exception {
-        FormConfig formConfig = XmlConfigUtils.readFormConfig(EMPTY_VIEW);
-        Assert.assertNotNull(formConfig.getEdits());
+        String xml = XmlConfigUtils.createMain(EMPTY_VIEW);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         Assert.assertNotNull(formConfig.getEdits());
         ViewController viewController = formConfig.getEdits().get(0);
         Assert.assertNotNull(viewController.getView());
+    }
+
+    private static final String MULTIPLE_VIEW = "<view/><view/><view/>";
+    @Test
+    public void testMultipleViewsInFile() throws Exception {
+        String xml = XmlConfigUtils.createMain(MULTIPLE_VIEW);
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        Assert.assertNotNull(formConfig.getEdits());
+        Assert.assertEquals(3, formConfig.getEdits().size());
+        for(ViewController viewController: formConfig.getEdits()){
+            Assert.assertNotNull(viewController.getView());
+            Assert.assertNotNull(viewController.getView().getId());
+            Assert.assertNotNull(viewController.getId());
+        }
     }
 
     @AfterClass

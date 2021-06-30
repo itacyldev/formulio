@@ -71,9 +71,9 @@ public class GroupWidgetController extends AbstractWidgetController {
     }
 
     @Override
-    public void updateFromView() {
+    public void updateEntityFromView() {
         for (WidgetContextHolder widget : widgets) {
-            doUpdateEntity(widget.getWidgetContext());
+            doUpdateEntityFromView(widget.getWidgetContext());
         }
     }
 }

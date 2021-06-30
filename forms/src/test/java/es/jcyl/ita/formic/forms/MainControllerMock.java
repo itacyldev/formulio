@@ -19,7 +19,7 @@ package es.jcyl.ita.formic.forms;
 import android.content.Context;
 import android.content.Intent;
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -31,8 +31,11 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  */
 
 public class MainControllerMock extends MainController {
-    public MainControllerMock(){}
 
+    private ViewController testViewController;
+
+    public MainControllerMock() {
+    }
 
     @Override
     protected void initActivity(Context context) {
@@ -40,5 +43,29 @@ public class MainControllerMock extends MainController {
         // Start activity to get Android context
         Intent intent = new Intent(context, activityClazz);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);    }
+        context.startActivity(intent);
+    }
+
+    /**
+     * Overrides MainController method to return a hardcoded instance
+     *
+     * @param formId
+     * @return
+     */
+    @Override
+    protected ViewController getViewController(String formId) {
+        if (testViewController != null) {
+            return testViewController;
+        } else {
+            return super.getViewController(formId);
+        }
+    }
+
+    public void setViewController(ViewController viewController) {
+        this.testViewController = viewController;
+        MainController mc = MainController.getInstance();
+        this.testViewController.setMc(mc);
+        mc.setViewController(viewController);
+    }
+
 }

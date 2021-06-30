@@ -16,12 +16,16 @@ package es.jcyl.ita.formic.forms.utils;
  */
 
 import android.graphics.Bitmap;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.junit.Assert;
 
+import java.util.function.Function;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Got from https://android.googlesource.com/platform/cts/+/c94170d4ad510feca70f768548ab76ea9dd1a606/tests/src/android/widget/cts/WidgetTestUtils.java
  */
 public class WidgetTestUtils {
@@ -53,6 +57,37 @@ public class WidgetTestUtils {
             if (pixels1[i] != pixels2[i]) {
                 Assert.fail("the bitmaps are not equal");
             }
+        }
+    }
+
+    public static LayoutTraverser buildViewTraverser(Function<View, Void> function) {
+        return new LayoutTraverser(function);
+    }
+
+    public static class LayoutTraverser {
+
+        private final Function<View, Void> function;
+
+        private LayoutTraverser(Function<View, Void> function) {
+            this.function = function;
+        }
+
+        public static LayoutTraverser build(Function function) {
+            return new LayoutTraverser(function);
+        }
+
+        public View traverse(ViewGroup root) {
+            function.apply(root);
+
+            final int childCount = root.getChildCount();
+            for (int i = 0; i < childCount; ++i) {
+                final View child = root.getChildAt(i);
+
+                if (child instanceof ViewGroup) {
+                    traverse((ViewGroup) child);
+                }
+            }
+            return null;
         }
     }
 }

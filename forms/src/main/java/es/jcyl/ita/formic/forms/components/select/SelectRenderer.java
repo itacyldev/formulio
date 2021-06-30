@@ -15,9 +15,10 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -92,7 +93,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
+        String message = MessageHelper.getMessage(env, component);
         if (message != null) {
             ((TextView)((ViewGroup)widget.getChildAt(0)).getChildAt(0)).setError(message);
         }

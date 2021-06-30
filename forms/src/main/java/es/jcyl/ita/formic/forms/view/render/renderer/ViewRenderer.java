@@ -23,18 +23,21 @@ import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.mini2Dx.collections.MapUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItemProxy;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -47,6 +50,7 @@ import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -81,6 +85,7 @@ public class ViewRenderer {
             // insert a delegated view component as placeholder to render later
             widget = createDeferredView(env, component);
         } else {
+            env.setCurrentMessageContext(component);
             widget = renderer.render(env, component);
         }
         // link root widget to current widget
@@ -113,7 +118,8 @@ public class ViewRenderer {
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         eventHandler.onEntityContextChanged(entity);
-                        View view = render(env, proxify(iter, component.getChildren()[0], entity));
+                        UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
+                        Widget view = render(env, componentProxy);
                         viewList.add(view);
                         iter++;
                     }
@@ -169,8 +175,11 @@ public class ViewRenderer {
             WidgetContext wCtx = new WidgetContext((WidgetContextHolder) widget);
             // set the entity used to render this widget in its context
             wCtx.setEntity(env.getEntity());
+            // set message context
+            BasicContext msgCtx = env.getMessageContext(widget.getComponentId());
+            wCtx.setMessageContext(msgCtx);
             // add global context
-            wCtx.addContext(env.getContext());
+            wCtx.addContext(env.getGlobalContext());
             widget.setWidgetContext(wCtx);
             // set as current WidgetContext so nested elements will use it
             env.setWidgetContext(wCtx);
@@ -242,30 +251,43 @@ public class ViewRenderer {
     private void processDeferredViews(RenderingEnv env) {
         // use dag to walk the tree just one time per node
         ViewDAG viewDAG = env.getViewDAG();
-        Map<String, DeferredView> deferredViews = env.getDeferredViews();
+        Map<String, List<DeferredView>> deferredViews = env.getDeferredViews();
         if (viewDAG == null || deferredViews == null) {
             return;
         }
         // Until all deferred views has been processed
+        int currentNumDefViews = deferredViews.size();
+        int iters = 0;
         while (MapUtils.isNotEmpty(deferredViews)) {
             for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
                 // follow dag evaluating expressions and rendering views
                 for (Iterator<DAGNode> it = dag.iterator(); it.hasNext(); ) {
                     DAGNode node = it.next();
-                    // find deferredView for this component
-                    Widget defView = deferredViews.remove(node.getComponent().getAbsoluteId());
-                    if (defView != null) {
-                        // render the view and replace deferred element
-                        RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
-                        widgetRendEnv.setWidgetContext(defView.getWidgetContext());
-                        Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
-                        registerWidget(env, newWidget);
-                        replaceView(defView, newWidget);
+                    // find deferredViews for this component
+                    List<DeferredView> defViewList = deferredViews.remove(node.getComponent().getAbsoluteId());
+                    if (defViewList != null) {
+                        for (DeferredView defView : defViewList) {
+                            // render the view and replace deferred element
+                            RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
+                            widgetRendEnv.setWidgetContext(defView.getWidgetContext());
+                            Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
+                            registerWidget(env, newWidget);
+                            replaceView(defView, newWidget);
+                        }
                     }
                 }
             }
+            // all dags has been check but there's a deferred view that cannot be resolved, avoid inf-loop
+            if (currentNumDefViews != deferredViews.size()) {
+                currentNumDefViews = deferredViews.size();
+            } else {
+                StringBuilder stb = printDeferredViewInfo(deferredViews);
+                throw new ViewConfigException(String.format("One of this expressions cannot be resolved: %s.\n Make sure " +
+                        "the id of the view components are correctly referenced.", stb.toString()));
+            }
         }
     }
+
 
     /**
      * Given an element in current view, renders all the dependant elements
@@ -345,4 +367,23 @@ public class ViewRenderer {
         public void onViewEnd(ViewWidget viewWidget) {
         }
     }
+
+    private StringBuilder printDeferredViewInfo(Map<String, List<DeferredView>> deferredViews) {
+        StringBuilder stb = new StringBuilder();
+        Collection<List<DeferredView>> values = deferredViews.values();
+        for (List<DeferredView> refs : values) {
+            for (DeferredView view : refs) {
+                UIComponent c = view.getComponent();
+                stb.append(String.format("component [%s] ", c.getId()));
+                Set<ValueBindingExpression> valueBindingExpressions = c.getValueBindingExpressions();
+                StringBuilder stbExpr = new StringBuilder();
+                for (ValueBindingExpression exp : c.getValueBindingExpressions()) {
+                    stbExpr.append(exp.getExpression().toString() + ", ");
+                }
+                stb.append("Expressions: " + stbExpr + "\n");
+            }
+        }
+        return stb;
+    }
+
 }

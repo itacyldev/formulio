@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.forms.components;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -39,7 +38,6 @@ import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.components.tab.UITabItem;
 import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
@@ -65,7 +63,7 @@ public class TabRendererTest {
     public void setup() {
         MainController mainController = MainController.getInstance();
         ViewController mockFC = mock(ViewController.class);
-        mainController.setFormController(mockFC, null);
+        mainController.setViewController(mockFC);
 
         ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
         ctx.setTheme(R.style.FormudruidDark);

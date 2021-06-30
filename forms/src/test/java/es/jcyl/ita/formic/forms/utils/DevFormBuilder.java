@@ -30,7 +30,6 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.EditableRepository;
@@ -140,7 +139,7 @@ public class DevFormBuilder {
 
         public CreateOneFieldForm withFormController(ViewController formController) {
             checkInvokeHasBeenCalled();
-            mc.setFormController(formController, formController.getView());
+            mc.setViewController(formController);
             return this;
         }
 

@@ -19,11 +19,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetException;
 import es.jcyl.ita.formic.repo.EditableRepository;
-import es.jcyl.ita.formic.repo.Repository;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 
 /**
@@ -53,15 +49,17 @@ public class BasicWidgetController extends AbstractWidgetController {
         doDelete(widgetContext, getEditableRepo());
     }
 
-    public void updateFromView() {
-        doUpdateEntity(widgetContext);
-    }
 
     public EditableRepository getEditableRepo(WidgetContext widgetContext) {
         // TODO: hay que mejorar esto cuando se refactorice el acceso a la entidad desde el form
         FilterableComponent component = (FilterableComponent) widgetContext.getHolder().getWidget().getComponent();
         EditableRepository repo = (EditableRepository) component.getRepo();
         return repo;
+    }
+
+    @Override
+    public void updateEntityFromView() {
+        doUpdateEntityFromView(widgetContext);
     }
 
 }

@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /**
  * Stateless class that implements WidgetContext validation
@@ -50,7 +50,8 @@ public class BaseWidgetValidator implements WidgetValidator {
     @Override
     public final boolean validate(WidgetContextHolder ctxHolder) {
         WidgetContext widgetContext = ctxHolder.getWidgetContext();
-        WidgetContextHelper.clearMessages(widgetContext);
+        // remove all messages from current widgetContext
+        MessageHelper.clearMessages(widgetContext);
 
         boolean valid = true;
         List<StatefulWidget> statefulWidgets = widgetContext.getStatefulWidgets();
@@ -78,7 +79,7 @@ public class BaseWidgetValidator implements WidgetValidator {
         // get user input using view context and check all validators.
         String value = viewContext.getString(field.getId());
         boolean valid = true;
-        WidgetContextHelper.clearMessage(widgetContext, field.getId());
+        MessageHelper.clearMessage(widgetContext, field.getId());
         for (Validator validator : field.getValidators()) {
             try {
                 if (inputWidget.isVisible()) {
@@ -86,7 +87,7 @@ public class BaseWidgetValidator implements WidgetValidator {
                 }
             } catch (ValidatorException e) {
                 // get the error and put it in form context
-                WidgetContextHelper.setMessage(widgetContext, field.getId(), e.getMessage());
+                MessageHelper.setMessage(widgetContext, field.getId(), e.getMessage());
                 valid = false;
             }
         }

@@ -55,7 +55,6 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController>
         implements FormActivity<ViewController> {
 
-
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_form_edit_view_handler;

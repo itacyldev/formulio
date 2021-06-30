@@ -21,14 +21,16 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
@@ -38,7 +40,7 @@ import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -59,7 +61,7 @@ public class RenderingEnv {
      * Wrapper for globalContext, used in case contxt is accesed before first WidgetContextHolder
      * has been renderer. Testing purposes mainly.
      */
-    private static WidgetContext EMPTY_WIDGET_CTX;
+    private static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
     private ViewWidget rootWidget;
 
     private SelectionManager selectionManager = new SelectionManager();
@@ -67,7 +69,7 @@ public class RenderingEnv {
      * view rendering
      */
     private ViewDAG viewDAG;
-    private Map<String, DeferredView> deferredViews;
+    private Map<String, List<DeferredView>> deferredViews;
     private UserEventInterceptor userActionInterceptor;
     private Context viewContext; // current view Android Context
     private FormActivity formActivity;
@@ -79,15 +81,22 @@ public class RenderingEnv {
     private boolean inputDelayDisabled = false;
     // current entity in context
     private Entity entity;
+    /**
+     * Keeps the message errors to show messages during re-rendering
+     */
+    private Map<String, BasicContext> messageMap = new HashMap<>();
+    private BasicContext currentMessageContext;
+
 
     public RenderingEnv(ActionController actionController) {
         userActionInterceptor = new UserEventInterceptor(actionController);
     }
 
-    protected RenderingEnv(){
+
+    protected RenderingEnv() {
     }
 
-    public static RenderingEnv clone(RenderingEnv env){
+    public static RenderingEnv clone(RenderingEnv env) {
         RenderingEnv newEnv = new RenderingEnv();
         newEnv.globalContext = env.globalContext;
         newEnv.widgetContext = env.widgetContext;
@@ -116,11 +125,8 @@ public class RenderingEnv {
         this.initEmptyWidgetCtx(globalContext);
     }
 
-    public void clearMessages() {
-        WidgetContextHelper.clearMessages(this.globalContext);
-    }
 
-    CompositeContext getContext() {
+    CompositeContext getGlobalContext() {
         return globalContext;
     }
 
@@ -154,15 +160,17 @@ public class RenderingEnv {
         return userActionInterceptor;
     }
 
-
     public void addDeferred(String componentId, DeferredView view) {
         if (this.deferredViews == null) {
             this.deferredViews = new HashMap<>();
         }
-        this.deferredViews.put(componentId, view);
+        if (!this.deferredViews.containsKey(componentId)) {
+            this.deferredViews.put(componentId, new ArrayList<>());
+        }
+        this.deferredViews.get(componentId).add(view);
     }
 
-    public Map<String, DeferredView> getDeferredViews() {
+    public Map<String, List<DeferredView>> getDeferredViews() {
         return deferredViews;
     }
 
@@ -213,7 +221,6 @@ public class RenderingEnv {
 
     public void setGlobalContext(CompositeContext globalContext) {
         this.globalContext = globalContext;
-        this.globalContext.addContext(new BasicContext("messages"));
         initEmptyWidgetCtx(globalContext);
     }
 
@@ -232,7 +239,7 @@ public class RenderingEnv {
         this.globalContext.addContext(new EntityContext(entity));
         // register
         this.entity = entity;
-        if(this.getWidgetContext() == EMPTY_WIDGET_CTX){
+        if (this.getWidgetContext() == EMPTY_WIDGET_CTX) {
             EMPTY_WIDGET_CTX.setEntity(entity);
         }
     }
@@ -283,5 +290,29 @@ public class RenderingEnv {
         EMPTY_WIDGET_CTX.addContext(gContxt);
     }
 
+
+    public Map<String, BasicContext> getMessageMap() {
+        return messageMap;
+    }
+
+    public BasicContext getMessageContext(String id) {
+        if (!messageMap.containsKey(id)) {
+            messageMap.put(id, new BasicContext("messages"));
+        }
+        return messageMap.get(id);
+    }
+
+    public void clearMessages() {
+        this.messageMap.clear();
+    }
+
+    public void setCurrentMessageContext(UIComponent component) {
+        BasicContext messageContext = getMessageContext(component.getId());
+        this.currentMessageContext = messageContext;
+    }
+
+    public BasicContext getCurrentMessageContext() {
+        return currentMessageContext;
+    }
 }
 

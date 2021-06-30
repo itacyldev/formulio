@@ -1,0 +1,18 @@
+<main name="basicForm" description="Basic CRUD" id="formlist" repo="contacts">
+    <edit>
+        <datalist id="contactList">
+            <datalistitem>
+                <text id="id" label="id"
+                    value="${entity.contact_id}" />
+                <text id="email" label="email"
+                    value="${entity.email}"  validator="required"/>
+            </datalistitem>
+        </datalist>
+        <buttonbar type="bottom">
+            <button label="save">
+                <action controller="contactList" type="save" />
+            </button>
+            <button label="cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

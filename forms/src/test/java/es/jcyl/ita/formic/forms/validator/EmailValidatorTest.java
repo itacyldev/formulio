@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -82,7 +82,7 @@ public class EmailValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class EmailValidatorTest {
         Assert.assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 
 
@@ -131,6 +131,6 @@ public class EmailValidatorTest {
         Assert.assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(WidgetContextHelper.getMessage(widgetContext, recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 }

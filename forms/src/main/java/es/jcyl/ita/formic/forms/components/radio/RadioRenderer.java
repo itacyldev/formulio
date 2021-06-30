@@ -19,7 +19,7 @@ import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -110,7 +110,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UIRadio, RadioGroup> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
+        String message = MessageHelper.getMessage(env, component);
         if (message != null) {
             ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
         }

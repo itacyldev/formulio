@@ -4,7 +4,13 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 
 public class UIButtonBar extends UIGroupComponent {
 
-    public enum ButtonBarType { BOTTOM, MENU, FAB, DEFAULT};
+    public UIButtonBar() {
+        setRendererType("buttonbar");
+    }
+
+    public enum ButtonBarType {BOTTOM, MENU, FAB, DEFAULT}
+
+    ;
     /**
      * button Bar types: bottom, menu, fab
      */

@@ -49,11 +49,8 @@ public interface WidgetController {
     void delete();
 
 
-    /**
-     * Updates current ViewContext entity using the state of the view
-     */
-    void updateFromView();
-
     WidgetValidator getValidator();
+
+    void updateEntityFromView();
 }
 

@@ -108,11 +108,11 @@ public class ActionController {
                 handler.onError(actionContext, action, e);
             }
         } catch (Exception e) {
+            String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
+            error(msg, e);
             mc.renderBack();
             mc.restoreViewState();
             // show error message
-            String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
-            error(msg, e);
             UserMessagesHelper.toast(mc.getRenderingEnv().getAndroidContext(), msg);
         }
     }

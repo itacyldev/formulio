@@ -46,7 +46,7 @@ public abstract class AbstractWidgetController implements WidgetController {
             valid &= validator.validate(widgetContext.getHolder());
         }
         if (valid) {
-            updateFromView();
+            doUpdateEntityFromView(widgetContext);
             repo.save(entity);
         }
         return valid;
@@ -56,10 +56,12 @@ public abstract class AbstractWidgetController implements WidgetController {
         repo.delete(widgetContext.getEntity());
     }
 
+    public abstract void updateEntityFromView();
+
     /**
      * Updates current ViewContext entity using the state of the view
      */
-    protected void doUpdateEntity(WidgetContext widgetContext) {
+    protected void doUpdateEntityFromView(WidgetContext widgetContext) {
         ViewContext viewContext = widgetContext.getViewContext();
         EntityContext entityContext = widgetContext.getEntityContext();
         // go over all the input components looking for bindings that are not readonly

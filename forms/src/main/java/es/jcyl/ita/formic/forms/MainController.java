@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
@@ -34,11 +35,11 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.controllers.ViewController;
-import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
@@ -136,12 +137,7 @@ public class MainController implements ContextAwareComponent {
         setupParamsContext(params);
         try {
             // get form configuration for given formId and load data
-            ViewController controller = formControllerFactory.getController(formId);
-            if (controller == null) {
-                throw new FormException(error(String.format("No form controller found with id [%s] " +
-                                "check route string. Available ids: %s", formId,
-                        formControllerFactory.getControllerIds())));
-            }
+            ViewController controller = getViewController(formId);
             this.viewController = controller;
             this.viewController.load(globalContext);
             this.scriptEngine.initScope(controller.getId());
@@ -152,6 +148,16 @@ public class MainController implements ContextAwareComponent {
 
         // get the activity class for current controller
         initActivity(andContext);
+    }
+
+    protected ViewController getViewController(String formId) {
+        ViewController controller = formControllerFactory.getController(formId);
+        if (controller == null) {
+            throw new FormException(error(String.format("No form controller found with id [%s] " +
+                            "check route string. Available ids: %s", formId,
+                    new TreeSet<>(formControllerFactory.getControllerIds()))));
+        }
+        return controller;
     }
 
     protected void initActivity(android.content.Context context) {
@@ -222,7 +228,7 @@ public class MainController implements ContextAwareComponent {
      * @return
      */
     public Widget renderView(Context viewContext) {
-        UIView uiView = this.viewController.getView();
+        UIView uiView = viewController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
         renderingEnv.initialize();
@@ -243,7 +249,7 @@ public class MainController implements ContextAwareComponent {
         return widget;
     }
 
-    public Widget renderComponent(UIComponent component){
+    public Widget renderComponent(UIComponent component) {
         renderingEnv.disableInterceptors();
         Widget widget = viewRenderer.render(this.renderingEnv, component);
         renderingEnv.enableInterceptors();
@@ -299,14 +305,14 @@ public class MainController implements ContextAwareComponent {
             ViewGroup contentView = viewController.getContentView();
             contentView.removeAllViews();
             contentView.addView(newRootWidget);
-            viewController.setRootWidget((ViewWidget) newRootWidget);
+            getViewController().setRootWidget((ViewWidget) newRootWidget);
         } finally {
             renderingEnv.enableInterceptors();
         }
     }
 
     public void saveViewState() {
-        viewController.saveViewState();
+        getViewController().saveViewState();
     }
 
     /**
@@ -358,11 +364,6 @@ public class MainController implements ContextAwareComponent {
         return scriptEngine;
     }
 
-    /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
-    public void setFormController(ViewController fc, UIView view) {
-        this.viewController = fc;
-    }
-
     @Override
     public void setContext(es.jcyl.ita.formic.core.context.Context ctx) {
         if (!(ctx instanceof CompositeContext)) {
@@ -372,7 +373,11 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setGlobalContext(this.globalContext);
         setupScriptingEnv(globalContext);
         // add state and message context
-        globalContext.addContext(new BasicContext("messages"));
-        globalContext.addContext(new BasicContext("state"));
+        globalContext.addContext(new BasicContext("state"));// TODO: sobra?
+    }
+
+    /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/
+    public void setViewController(ViewController viewController) {
+        this.viewController = viewController;
     }
 }

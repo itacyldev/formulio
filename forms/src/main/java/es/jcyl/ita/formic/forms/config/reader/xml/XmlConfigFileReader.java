@@ -188,10 +188,6 @@ public class XmlConfigFileReader {
         for (int i = 0; i < xpp.getAttributeCount(); i++) {
             String attName = xpp.getAttributeName(i);
             String value = xpp.getAttributeValue(i);
-            if ("id".equals(attName.toLowerCase())) {
-                // register current component id
-                idResolver.addComponentId(value, xpp.getName());
-            }
             node.getAttributes().put(attName, value);
         }
     }

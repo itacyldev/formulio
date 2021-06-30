@@ -1,0 +1,14 @@
+<main name="formEdti" description="formEdti" id="formedit" repo="contacts">
+    <edit>
+        <tab>
+            <tabitem>
+                <text hint="${entity.first_name}" id="mitext1" label="input" render="${view.nonono}"
+                    validator="required" value="${entity.first_name}" />
+            </tabitem>
+            <tabitem>
+                <text hint="${entity.last_name}" id="mitext2" label="input"
+                    validator="required" value="${entity.last_name}" />
+            </tabitem>
+        </tab>
+    </edit>
+</main>

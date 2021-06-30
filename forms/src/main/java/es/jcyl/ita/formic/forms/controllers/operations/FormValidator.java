@@ -23,7 +23,7 @@ import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /**
  * Form validator that adds js validation functionality
@@ -52,7 +52,7 @@ public class FormValidator extends BaseWidgetValidator {
 
             Map result = (Map) scriptEngine.callFunction(form.getOnValidate());
             if (result.containsKey("error")) {
-                WidgetContextHelper.setMessage(widgetContext, form.getId(), (String) result.get("message"));
+                MessageHelper.setMessage(widgetContext, form.getId(), (String) result.get("message"));
                 valid = false;
             }
         }

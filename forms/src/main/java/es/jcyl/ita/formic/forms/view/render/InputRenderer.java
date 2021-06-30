@@ -42,6 +42,8 @@ import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
+import static android.view.View.inflate;
+
 
 public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         extends AbstractRenderer<C, InputWidget<C, I>> {
@@ -58,7 +60,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 TextView.class);
         if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
             setLabel(fieldLabel, component);
-        }else{
+        } else {
             fieldLabel.setVisibility(View.GONE);
         }
 
@@ -88,7 +90,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         composeInputView(env, widget);
 
         //Visibilty Button Layout
-        setVisibiltyButtonLayout(StringUtils.isNotBlank(component.getLabel()), component.getResetButton(), component.getInfoButton());
+        setVisibiltyButtonLayout(widget, StringUtils.isNotBlank(component.getLabel()), component.getResetButton(), component.getInfoButton());
 
         // set value and error messages
         setValueInView(env, widget);
@@ -111,7 +113,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
             @Override
             public void onClick(final View arg0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-                final View view = ViewHelper.inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
                 TextView titleView = view.findViewById(R.id.info);
                 titleView.setText(hint);
                 builder.setCustomTitle(view)
@@ -168,6 +170,11 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         return R.id.field_layout_x;
     }
 
+    protected int getButtonsLayoutId() {
+        return R.id.label_buttons_layout;
+    }
+
+
 
     /**
      * Calculates the String to tag the view component that stores the user input
@@ -196,9 +203,10 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
     }
 
-    protected void setVisibiltyButtonLayout(boolean hasLabel, ImageView resetButton, ImageView infoButton){
+    protected void setVisibiltyButtonLayout(InputWidget<C, I> widget, boolean hasLabel, ImageView resetButton, ImageView infoButton){
         if (!isInfoButtonVisible(infoButton) && !isResetButtonVisible(resetButton) && !hasLabel){
-            ViewGroup layout = (ViewGroup) resetButton.getParent();
+            ViewGroup layout = (ViewGroup) ViewHelper.findViewAndSetId(widget, getButtonsLayoutId(), ViewGroup.class);
+            //ViewGroup layout = (ViewGroup) resetButton.getParent();
             layout.setVisibility(View.GONE);
         }
     }

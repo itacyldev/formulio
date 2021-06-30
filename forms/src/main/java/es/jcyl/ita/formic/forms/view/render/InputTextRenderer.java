@@ -21,12 +21,15 @@ package es.jcyl.ita.formic.forms.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHelper;
 
 
 public abstract class InputTextRenderer<C extends UIInputComponent, I extends TextView>
@@ -37,9 +40,16 @@ public abstract class InputTextRenderer<C extends UIInputComponent, I extends Te
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<C, I> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = WidgetContextHelper.getMessage(env.getWidgetContext(), component.getId());
+        String message = MessageHelper.getMessage(env, component);
         if (message != null) {
             widget.getInputView().setError(message);
+        }
+    }
+
+    protected void setVisibilityResetButtonLayout(boolean hasLabel, ImageView resetButton){
+        if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && !hasLabel){
+            LinearLayout linearLayout = (LinearLayout) resetButton.getParent();
+            linearLayout.setVisibility(View.GONE);
         }
     }
 
