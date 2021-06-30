@@ -42,7 +42,6 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.column.UIColumnFilter;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
@@ -57,6 +56,7 @@ import es.jcyl.ita.formic.forms.view.converters.TextViewConverter;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelectorWidget;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
@@ -542,7 +542,7 @@ public class DatatableWidget extends Widget<UIDatatable>
     public void setState(Object value) {
         this.filter = ((DatatableState) value).getFilter();
         this.sort = ((DatatableState) value).getSort();
-        int offset = (((DatatableState) value).getOffset());
+        int offset = (((DatatableState) value).getOffset()) < this.offset? this.offset:(((DatatableState) value).getOffset());
         AndViewContext andViewContext = ((DatatableState) value).getThisViewCtx();
 
         //Data
@@ -564,7 +564,7 @@ public class DatatableWidget extends Widget<UIDatatable>
         for (UIColumn column : this.getComponent().getColumns()) {
             if (column.isFiltering()) {
 
-                hasHeaderTextValue = setHeaderTextValue(column, andViewContext);
+                hasHeaderTextValue = hasHeaderTextValue || setHeaderTextValue(column, andViewContext);
 
                 setColumnOrderProperty(i, column);
             }
