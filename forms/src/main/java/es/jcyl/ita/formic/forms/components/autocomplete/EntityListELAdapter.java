@@ -32,13 +32,14 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
-import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.query.Condition;
 import es.jcyl.ita.formic.repo.query.Criteria;
+import es.jcyl.ita.formic.repo.query.Expression;
 import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
 
 /**
@@ -72,10 +73,20 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         }
     }
 
-    public void load(CompositeContext context) {
+    /**
+     * Load the values matching the filter
+     *
+     * @param context
+     * @param isNullValue
+     */
+    public void load(CompositeContext context, boolean isNullValue) {
         dataList.clear();
-
-        es.jcyl.ita.formic.repo.query.Filter filter = setupFilter(context);
+        es.jcyl.ita.formic.repo.query.Filter filter;
+        if (!isNullValue) {
+            filter = setupFilter(context);
+        } else {
+            filter = setupDefaultFilter(context);
+        }
         List entities = component.getRepo().find(filter);
         dataList.addAll(entities);
     }
@@ -83,6 +94,8 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
     /**
      * Get the definition filter from the dataTable and construct an effective filter using the
      * context information.
+     * <p>
+     * .
      *
      * @param context
      * @return
@@ -94,6 +107,41 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         if (defFilter != null) {
             FilterHelper.evaluateFilter(context, defFilter, f, component.getMandatoryFilters());
         }
+        f.setOffset(0);
+        f.setPageSize(10);
+        return f;
+    }
+
+    /**
+     * Get the filter from the component and construct an effective filter without "this.value"
+     * condition using the context information.
+     * <p>
+     * .
+     *
+     * @return
+     */
+    private es.jcyl.ita.formic.repo.query.Filter setupDefaultFilter(CompositeContext context) {
+        es.jcyl.ita.formic.repo.query.Filter f = FilterRepoUtils.createInstance(component.getRepo());
+
+        if (defFilter != null) {
+            Criteria criteria = (Criteria) defFilter.getExpression();
+            Expression[] oldCriteriaChildren = criteria.getChildren();
+            List<Expression> newCriteriaChildren = new ArrayList<>();
+            // remove expression with "this.value"
+            for (Expression child : oldCriteriaChildren) {
+                if (child instanceof Condition) {
+                    if (!THIS_VALUE.equals(((Condition) child).getValue())) {
+                        newCriteriaChildren.add(child);
+                    }
+                }
+            }
+
+            criteria.setChildren(newCriteriaChildren.toArray(new Expression[newCriteriaChildren.size()]));
+            FilterHelper.evaluateFilter(context, defFilter, f, component.getMandatoryFilters());
+            // restore criteria expressions
+            criteria.setChildren(oldCriteriaChildren);
+        }
+
         f.setOffset(0);
         f.setPageSize(10);
         return f;
@@ -143,23 +191,17 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            if (constraint != null) {
-                AndViewContext thisContxt = (AndViewContext) globalContext.getContext("this");
-//                thisContxt.put("value", constraint.toString());
-                load(globalContext);
+            FilterResults filterResults = new FilterResults();
 
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = dataList;
-                filterResults.count = dataList.size();
-                return filterResults;
-            } else {
-                return new FilterResults();
-            }
+            load(globalContext, constraint == null);
+            filterResults.values = dataList;
+            filterResults.count = dataList.size();
+
+            return filterResults;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-//            addAll(dataList);
             notifyDataSetChanged();
         }
 
@@ -170,12 +212,14 @@ public class EntityListELAdapter extends ArrayAdapter<UIOption> {
         private String cachedValue;
         private String cachedLabel;
 
+
         public EntityToUIOptionWrapper(String label, String value) {
             super(label, value);
         }
 
         public EntityToUIOptionWrapper(Entity entity) {
-            super("", "");
+            super((String) ConvertUtils.convert(entity.get(component.getOptionLabelFilteringProperty()), String.class),
+                    (String) ConvertUtils.convert(entity.get(component.getOptionValueProperty()), String.class));
             this.entity = entity;
         }
 

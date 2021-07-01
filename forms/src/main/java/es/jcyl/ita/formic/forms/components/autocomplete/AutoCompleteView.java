@@ -68,6 +68,8 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
     private Object value;
     private boolean selectionInProgress = false;
 
+    private Object initValue;
+
     public AutoCompleteView(Context context) {
         super(context);
     }
@@ -86,7 +88,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
         }
         // Create local "this" context for current element and link to the Adapter
         CompositeContext ctx = setupThisContext(env);
-        ((EntityListELAdapter) this.getAdapter()).load(ctx);
+        ((EntityListELAdapter) this.getAdapter()).load(ctx, value == null);
     }
 
     private CompositeContext setupThisContext(RenderingEnv env) {
@@ -132,7 +134,10 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                 selectionInProgress = true;
                 setSelection(position);
                 selectionInProgress = false;
-                executeUserAction(env, widget);
+                if (hasValueChanged()) {
+                    initValue = value;
+                    executeUserAction(env, widget);
+                }
             }
         });
     }
@@ -149,21 +154,26 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                     if (value == null) {
                         setText(null);
                     }
+
+                    if (hasValueChanged()) {
+                        executeUserAction(env, widget);
+                    }
                 }
             }
         });
     }
 
-    private void addTextChangeListener(RenderingEnv env, Widget widget) {
+    private void addTextChangeListener(final RenderingEnv env, final Widget widget) {
         Handler handler = new Handler(Looper.getMainLooper() /*UI thread*/);
 
         this.addTextChangedListener(new TextWatcher() {
             Runnable workRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    boolean found = findCurrentSelection();
-                    if (found) {
-                        // if text matches an option
+                    findCurrentSelection();
+
+                    if (hasValueChanged()) {
+                        initValue = value;
                         executeUserAction(env, widget);
                     }
                 }
@@ -187,9 +197,8 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                 }
                 if (!env.isInterceptorDisabled()) {
                     if (env.isInputDelayDisabled()) {
-                        boolean found = findCurrentSelection();
-                        if (found) {
-                            // if text matches an option
+                        findCurrentSelection();
+                        if (hasValueChanged()) {
                             executeUserAction(env, widget);
                         }
                     } else {
@@ -198,6 +207,19 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                 }
             }
         });
+    }
+
+    /**
+     * Checks if the value has changed
+     *
+     * @return
+     */
+    private boolean hasValueChanged() {
+        if (this.initValue != null && !this.initValue.equals(this.value)
+                || this.initValue == null && this.value != null) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -241,6 +263,8 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
     }
 
     public void setValue(Object value) {
+        this.initValue = value;
+
         if (value == null) {
             this.value = null;
             setText(null);
