@@ -57,9 +57,15 @@ public class ExpressionInterpreter {
             Property property = dao.getPropertyByName(e.getProperty());
             if (property == null) {
                 EntityMeta meta = dao.entityConfig().getMeta();
+                String expanded = "";
+                if (e.getProperty().startsWith("entity.")) {
+                    expanded = " Don't use 'entity.' as prefix for the property name in the attribute " +
+                            "'property', use just the name of the property: " +
+                            "<eq property=\"myproperty\" value=\"value1\"/>";
+                }
                 throw new RepositoryException(String.format("Error while trying to interpret repoFilter expression. " +
-                                "Invalid property name: [%s], in doesn't exist in repo [%s].", e.getProperty(),
-                        meta.getName()));
+                                "Invalid property name: [%s], in doesn't exist in repo [%s].[%s]", e.getProperty(),
+                        meta.getName(), expanded));
             }
             return PropertyConditionHelper.create(e, property);
         }
