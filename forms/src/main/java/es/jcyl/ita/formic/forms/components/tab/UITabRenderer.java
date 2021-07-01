@@ -84,13 +84,13 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
 
         viewPager.getParent().requestChildFocus(viewPager, viewPager);
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 viewPager.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (viewPagerAdapter.getTabFragments().size() > position){
+                        if (viewPagerAdapter.getTabFragments().size() > position) {
                             TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
                             updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
                             viewPager.requestLayout();
@@ -139,6 +139,8 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
             adapter.addView(view, fragCount);
             fragCount++;
         }
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -159,15 +161,15 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
         }
     }
 
-    private int getCurrentItem(RenderingEnv env, UITab component){
+    private int getCurrentItem(RenderingEnv env, UITab component) {
         int currentItem = -1;
         boolean isSelected = false;
-        for (int i=0; i<component.getChildren().length && !isSelected; i++){
+        for (int i = 0; i < component.getChildren().length && !isSelected; i++) {
             UITabItem tabItem = (UITabItem) component.getChildren()[i];
             isSelected = tabItem.isSelected(env.getWidgetContext());
             currentItem++;
         }
-        return isSelected?currentItem:0;
+        return isSelected ? currentItem : 0;
     }
 
 }

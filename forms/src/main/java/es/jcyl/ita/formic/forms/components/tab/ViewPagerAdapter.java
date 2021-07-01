@@ -50,11 +50,14 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         return tabFragments.size();
     }
 
+    /**
+     * @param view
+     * @param position
+     */
     public void addView(View view, int position) {
         TabFragment fragment = new TabFragment();
         tabFragments.add(position, fragment);
         fragment.setTabView(view);
-        this.notifyDataSetChanged();
     }
 
     public List<TabFragment> getTabFragments() {
