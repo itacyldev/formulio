@@ -1,9 +1,36 @@
 <main name="dtExample" description="dtExample" id="dtExample" repo="contacts">
-    <list>
-        <datatable id="mydatatable" repo="assignaments">
-            <action route="dtExample-edit" type="nav">
-                <param name="entityId" value="${entity.contact_id}" />
-            </action>
-        </datatable>
-    </list>
+    <edit>
+        <form>
+            <tab>
+                <tabitem  label="aaa">
+                    <input value="${entity.first_name}" />
+                </tabitem>
+                <tabitem label="bbb">
+                    <datalist repo="assignaments">
+                        <repofilter>
+                            <ge property="provmuni" value="4"/>
+                        </repofilter>
+                        <datalistitem>
+                            <input value="${entity.provmuni}" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+                <tabitem label="ccc">
+                    <datalist repo="assignaments">
+                        <repofilter>
+                            <lt property="provmuni" value="4"/>
+                        </repofilter>
+                        <datalistitem>
+                            <input value="${entity.provmuni}" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+            </tab >
+        </form >
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action controller="form1,datalist1,datalist2" type="save" />
+            </button>
+        </buttonbar>
+    </edit>
 </main>
