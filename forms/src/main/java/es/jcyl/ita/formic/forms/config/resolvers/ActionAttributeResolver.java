@@ -77,8 +77,6 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
 
     private List<ConfigNode> unresolvedActions = new ArrayList<>();
 
-    BindingExpressionAttResolver bindinExprResolver = new BindingExpressionAttResolver();
-
     @Override
     public Object resolve(ConfigNode node, String attName) {
         if (attName.toLowerCase().equals(AttributeDef.ACTION.name)) {

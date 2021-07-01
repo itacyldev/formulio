@@ -24,17 +24,17 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
-import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
+import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
+import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -173,6 +173,34 @@ public class UIDatatableBuilderTest {
                         "property [%s] but not found.", name, meta.getPropertyByName(name)));
             }
         }
+    }
+
+    private static final String XML_NESTED_ACTION =
+            "        <datatable id=\"mydatatable\"  repo=\"contacts\">\n" +
+                    "            <action type=\"create\" route=\"aRouteToForm\">\n" +
+                    "                <param name=\"param1\" value=\"value1\"/>\n" +
+                    "                <param name=\"param2\" value=\"value2\"/>\n" +
+                    "            </action>\n" +
+                    "        </datatable>\n";
+
+    @Test
+    public void testNestedAction() throws Exception {
+
+        String xml = XmlConfigUtils.createMainList(XML_NESTED_ACTION);
+
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+        List<UIDatatable> dtList = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDatatable.class);
+
+        // repo must be set with parent value "contacts"
+        UIDatatable datatable = dtList.get(0);
+
+        Assert.assertNotNull(datatable.getAction());
+        Assert.assertEquals("aRouteToForm", datatable.getAction().getRoute());
+        Assert.assertEquals("create", datatable.getAction().getType());
+        Assert.assertNotNull(datatable.getAction().getParams());
+        Assert.assertEquals(2, datatable.getAction().getParams().length);
+        Assert.assertEquals("param1", datatable.getAction().getParams()[0].getName());
+        Assert.assertEquals("value1", datatable.getAction().getParams()[0].getValue().toString());
     }
 
     @AfterClass

@@ -251,7 +251,7 @@ public class ComponentBuilderFactory {
         try {
             builder = (ComponentBuilder) clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            error("Coundn't instantiate with default constructor: " + tagName, e);
+            // keep on trying
         }
         // try with one String parameter
         if (builder == null) {

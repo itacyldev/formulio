@@ -73,13 +73,10 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
     public void setupOnSubtreeEnds(ConfigNode<UIDatatable> node) {
         setUpColumns(node);
         setUpNumVisibleRows(node);
-//        setUpRoute(node);
 
         UIDatatable element = node.getElement();
-
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         UIAction uiAction = element.getAction();
-        // FORMIC-245 Crear attribute resolver para el attribute "route"
         if (uiAction == null) { // default action
             uiAction = new UIAction();
             uiAction.setType("nav");
@@ -89,26 +86,6 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
         if (CollectionUtils.isNotEmpty(paramNodes)) {
             UIParam[] params = BuilderHelper.getParams(paramNodes);
             uiAction.setParams(params);
-        }
-    }
-
-    private void setUpRoute(ConfigNode<UIDatatable> node) {
-        if (node.hasAttribute("route")) {
-            return; // already defined
-        }
-        // get view node
-        ConfigNode viewNode = ConfigNodeHelper.getAscendantByTag(node, "view");
-
-        // find add or update action to configure the destination when user clicks on table elements
-        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(viewNode, NAV_ACTIONS);
-        if (CollectionUtils.isEmpty(addActions)) {
-            throw new ConfigurationException(DevConsole.error("Error trying to create default datatable for " +
-                    "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
-                    "no 'add' action. Use 'route' attribute on <datatable/> instead to set the id " +
-                    "of the destination form."));
-        } else {
-            ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
-            node.getElement().setRoute(addAction.getAttribute("route"));
         }
     }
 
