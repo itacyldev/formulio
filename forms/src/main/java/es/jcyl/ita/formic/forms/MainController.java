@@ -22,8 +22,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.android.dx.stock.ProxyBuilder;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeSet;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
@@ -34,6 +42,7 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormException;
@@ -103,10 +112,39 @@ public class MainController implements ContextAwareComponent {
         actionController = new ActionController(this, router);
         renderingEnv = new RenderingEnv(actionController);
         scriptEngine = ScriptEngine.getInstance();
-        flowManager = ReactivityFlowManager.getInstance();
+//        flowManager = ReactivityFlowManager.getInstance();
         registerFormTypeViews();
     }
+    private void initProxy(){
+        InvocationHandler handler = buildInvocationHandler();
 
+        try {
+            File dx = Config.getInstance().getAndroidContext().getDir("dx", Context.MODE_PRIVATE);
+            Random debugRandom = ProxyBuilder.forClass(Random.class)
+                    .dexCache(dx)
+                    .handler(handler)
+                    .build();
+            int i = debugRandom.nextInt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private InvocationHandler buildInvocationHandler() {
+        InvocationHandler handler = new InvocationHandler() {
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                if (method.getName().equals("nextInt")) {
+                    // Chosen by fair dice roll, guaranteed to be random.
+                    return 4;
+                }
+                Object result = ProxyBuilder.callSuper(proxy, method, args);
+                System.out.println("Method: " + method.getName() + " args: "
+                        + Arrays.toString(args) + " result: " + result);
+                return result;
+            }
+        };
+        return handler;
+    }
     private void setupScriptingEnv(es.jcyl.ita.formic.core.context.Context ctx) {
         Map<String, Object> props = new HashMap<>();
         props.put("ctx", ctx);
@@ -132,6 +170,7 @@ public class MainController implements ContextAwareComponent {
      */
     public void navigate(android.content.Context andContext, String formId,
                          Map<String, Object> params) {
+        initProxy();
         saveMCState();
 
         setupParamsContext(params);

@@ -144,22 +144,12 @@ public class ComponentBuilderFactory {
 
         ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
         // same component builder with different aliases
-        registerBuilder("action", actionBuilder);
-        registerBuilder("nav", actionBuilder);
-        registerBuilder("add", actionBuilder);
-        registerBuilder("create", actionBuilder);
-        registerBuilder("update", actionBuilder);
-        registerBuilder("delete", actionBuilder);
-        registerBuilder("save", actionBuilder);
-        registerBuilder("cancel", actionBuilder);
+        registerBuilder(new String[]{"action", "nav", "add", "create", "update",
+                "delete", "save", "cancel"}, actionBuilder);
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
-        registerBuilder("input", inputFieldBuilder);
-        registerBuilder("text", inputFieldBuilder);
-        registerBuilder("textarea", newBuilder(UIFieldBuilder.class, "textarea"));
-        registerBuilder("switcher", inputFieldBuilder);
-        registerBuilder("date", inputFieldBuilder);
-        registerBuilder("datetime", inputFieldBuilder);
+        registerBuilder(new String[]{"input", "text", "textarea", "switcher", "date", "datetime"},
+                inputFieldBuilder);
         registerBuilder("image", newBuilder(UIImageBuilder.class, "image"));
 
         registerBuilder("select", newBuilder(UIMultiOptionBuilder.class, "select", UISelect.class));
@@ -225,6 +215,12 @@ public class ComponentBuilderFactory {
 
     public void registerBuilder(String tagName, ComponentBuilder builder) {
         _builders.put(tagName.toLowerCase(), builder);
+    }
+
+    public void registerBuilder(String[] alias, ComponentBuilder builder) {
+        for (String tagName : alias) {
+            _builders.put(tagName.toLowerCase(), builder);
+        }
     }
 
     public void registerAttResolver(String resolverId, AbstractAttributeResolver resolver) {

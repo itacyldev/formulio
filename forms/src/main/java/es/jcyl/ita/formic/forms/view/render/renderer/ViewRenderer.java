@@ -61,6 +61,8 @@ import es.jcyl.ita.formic.repo.Entity;
  */
 public class ViewRenderer {
 
+    ThreadLocal<RenderingEnv> renderingEnvTL = new ThreadLocal<>();
+
     private ViewRendererEventHandler eventHandler = new NoOpHandler();
 
     public Widget render(RenderingEnv env, UIComponent component) {
@@ -68,6 +70,7 @@ public class ViewRenderer {
     }
 
     private Widget render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
+        renderingEnvTL.set(env);
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 

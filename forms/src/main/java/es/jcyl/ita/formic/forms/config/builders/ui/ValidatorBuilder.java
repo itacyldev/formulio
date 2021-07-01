@@ -26,7 +26,8 @@ public class ValidatorBuilder extends AbstractComponentBuilder<Validator> {
         ValidatorFactory factory = ValidatorFactory.getInstance();
         Validator element = factory.getValidator(type, params);
 
-        setAttributes(element, node);
+        Map<String, String> expressionAtts = new HashMap<>();
+        setAttributes(element, node, expressionAtts);
         node.setElement(element);
 
         // attach to parent element

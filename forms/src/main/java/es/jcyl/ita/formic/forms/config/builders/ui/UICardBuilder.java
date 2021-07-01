@@ -72,7 +72,7 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
             attributes.remove(SUBTITLE.name);
         }
 
-        super.setAttributes(card, node);
+        super.setAttributes(card, node, null); // TODO: refactorizar y utilizar builders con atributos como en el resto de casos
     }
 
     @Override

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.controllers;
+package es.jcyl.ita.formic.forms.config.builders.proxy;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,13 +15,12 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
- * Implements entity edition actions using a edit-form.
  */
-public class FormListController extends ViewController {
-    public FormListController(String id, String name) {
-        super(id, name);
-    }
+public interface UIComponentProxyBuilder {
+
+    UIComponent proxify(Class componentClass);
 }

@@ -18,11 +18,15 @@ package es.jcyl.ita.formic.forms.config.builders;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.proxy.UIComponentProxyBuilder;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
@@ -40,6 +44,8 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected Map<String, Attribute> attributeDefs;
     private Class<? extends E> elementType;
     private ComponentBuilderFactory factory;
+    private UIComponentProxyBuilder proxyBuilder;
+
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
         this.attributeDefs = TagDef.getDefinition(tagName);
@@ -53,11 +59,19 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     @Override
     public E build(ConfigNode<E> node) {
         E element = instantiate();
+        Map<String, String> expressionAtts = new HashMap<>();
         if (element != null) {
-            setAttributes(element, node);
+            setAttributes(element, node, expressionAtts);
+        }
+        if(!expressionAtts.isEmpty()){
+            element = proxify(element);
         }
         node.setElement(element);
         setupOnSubtreeStarts(node);
+        return element;
+    }
+
+    private E proxify(E element) {
         return element;
     }
 
@@ -91,7 +105,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
-    protected void setAttributes(E element, ConfigNode node) {
+    protected void setAttributes(E element, ConfigNode node, Map<String, String> expressionAtts) {
         Map<String, Attribute> attributes = TagDef.getDefinition(node.getName());
 
         if (attributes == null) {
@@ -102,6 +116,11 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
             Attribute attribute = entry.getValue();
             String attValue = node.getAttribute(attName);
             try {
+                if (isExpression(attValue) && !AttributeDef.VALUE.equals(attribute)) {
+                    // add expressions to map to resolve then through component proxy
+                    expressionAtts.put("get" + attribute.name.toLowerCase(), attValue);
+                    continue;
+                }
                 if (attribute.assignable) {
                     Object value;
                     String setter = (attribute.setter == null) ? attribute.name : attribute.setter;
@@ -132,6 +151,10 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
                         "attribute '%s' on element <%s/>.", attName, node.getName()), e), e);
             }
         }
+    }
+
+    private boolean isExpression(String value) {
+        return value.contains("${") || value.contains("#{");
     }
 
     protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName) {
