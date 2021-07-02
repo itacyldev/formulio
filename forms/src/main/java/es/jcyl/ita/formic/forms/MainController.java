@@ -103,7 +103,7 @@ public class MainController implements ContextAwareComponent {
         actionController = new ActionController(this, router);
         renderingEnv = new RenderingEnv(actionController);
         scriptEngine = ScriptEngine.getInstance();
-        flowManager = ReactivityFlowManager.getInstance();
+//        flowManager = ReactivityFlowManager.getInstance();
         registerFormTypeViews();
     }
 
