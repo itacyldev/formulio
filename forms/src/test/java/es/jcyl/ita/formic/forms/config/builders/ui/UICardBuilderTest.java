@@ -108,7 +108,7 @@ public class UICardBuilderTest {
      *
      * @throws Exception
      */
-    private static final String XML_TEST_CARD_WITH_ATTS = "<card template=\"template\" title=\"titleValue\" subtitle=\"subtitleValue \" image=\"$entity.image\" />";
+    private static final String XML_TEST_CARD_WITH_ATTS = "<card template=\"template\" title=\"titleValue\" subtitle=\"subtitleValue \" image=\"${entity.image}\" />";
 
 
     @Test

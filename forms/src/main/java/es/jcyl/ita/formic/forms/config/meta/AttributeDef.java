@@ -54,13 +54,9 @@ public class AttributeDef {
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
     public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
     public static Attribute LINES = new Attribute("lines", Integer.class);
-
-    public static Attribute HINT = new Attribute("hint", "hint", "binding");
-
+    public static Attribute HINT = new Attribute("hint", String.class);
     public static Attribute HAS_DELETE_BUTTON = new Attribute("hasDeleteButton", Boolean.class);
-
     public static Attribute HAS_TODAY_BUTTON = new Attribute("hasTodayButton", Boolean.class);
-
     public static Attribute PATTERN = new Attribute("pattern", String.class);
 
     // repository definition

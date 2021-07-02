@@ -107,7 +107,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
     protected void setOnClickListenerInfoButton(RenderingEnv env, InputWidget<C, I> widget){
         C component = widget.getComponent();
         ImageView infoButton = component.getInfoButton();
-        String hint = component.getHint(env.getWidgetContext());
+        String hint = component.getHint();
 
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +127,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
 
     protected void setVisibilityInfoButton(RenderingEnv env, InputWidget<C, I> widget){
         C component = widget.getComponent();
-        String hint = component.getHint(env.getWidgetContext());
+        String hint = component.getHint();
         if (StringUtils.isBlank(hint)){
             component.getInfoButton().setVisibility(View.INVISIBLE);
         }

@@ -82,14 +82,11 @@ public class ProxyTest {
         String expectedPattern = "pattern-abcde";
         uiDelegate.setPattern(expectedPattern);
 
-
-        RenderingEnv renderingEnv = MainController.getInstance().getRenderingEnv();
         WidgetContext widgetContext = ContextTestUtils.createWidgetContext();
         widgetContext.addContext(ctx);
-        renderingEnv.setWidgetContext(widgetContext);
 
         UIComponentProxyFactory factory = UIComponentProxyFactory.getInstance();
-        factory.setEnv(renderingEnv);
+        factory.setWidgetContext(widgetContext);
 
         UIField proxy = (UIField) factory.create(uiDelegate,
                 new String[]{"gethint", "isrendered"},
@@ -97,7 +94,7 @@ public class ProxyTest {
                 new ValueBindingExpression[]{expressionFactory.create("${test.valor}"),
                         expressionFactory.create("${not(empty(test.valor))}")});
 
-        Assert.assertEquals(expectedHint, proxy.getHint(null));
+        Assert.assertEquals(expectedHint, proxy.getHint());
         Assert.assertEquals(true, proxy.isRendered(null));
         Assert.assertEquals(expectedPattern, proxy.getPattern());
         Assert.assertEquals(3, proxy.getValueBindingExpressions().size());

@@ -26,12 +26,13 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
+import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -40,10 +41,11 @@ public class UIComponentProxyFactory {
 
     public static final String PROP_CLASS_LOADING_STRATEGY = "formic.classLoading";
     public static final String PROP_CLASS_CACHE = "formic.classCache";
+
     private static UIComponentProxyFactory _instance;
-    private static Field handlerField;
+
     private ClassLoadingStrategy strategy;
-    private static RenderingEnv env;
+    private WidgetContext context;
     private ByteBuddy byteBuddy;
 
     public static UIComponentProxyFactory getInstance() {
@@ -58,6 +60,10 @@ public class UIComponentProxyFactory {
         initClassLoadingStrategy();
     }
 
+    public void setAndroidClassLoadingStrategy(File folder) {
+        this.strategy = new AndroidClassLoadingStrategy.Wrapping(folder);
+    }
+
     private void initClassLoadingStrategy() {
         String property = System.getProperty(PROP_CLASS_LOADING_STRATEGY);
         if (property != null && property.contains("android")) {
@@ -66,29 +72,37 @@ public class UIComponentProxyFactory {
         }
     }
 
-    public UIComponent create(Object delegate, String[] methodNames, Attribute[] attributes, ValueBindingExpression[] expressions) {
+    public <T extends UIComponent> T create(Object delegate,
+                                            String[] methodNames, Attribute[] attributes,
+                                            ValueBindingExpression[] expressions) {
         try {
-
             Object instance = instantiateProxy(delegate.getClass());
-
-            UIComponentInvocationHandler handler = new UIComponentInvocationHandler(delegate, methodNames, attributes, expressions);
+            UIComponentInvocationHandler handler = new UIComponentInvocationHandler(delegate,
+                    methodNames, expressions);
             handler.setFactory(this);
-//            this.handlerField = instance.getClass()
-//                    .getDeclaredField("handler");
-//            handlerField.setAccessible(true);
-//            handlerField.set(instance, handler);
 
-            if (handlerField == null) {
-                this.handlerField = instance.getClass()
-                        .getDeclaredField("handler");
-            }
+            Field handlerField = instance.getClass()
+                    .getDeclaredField("handler");
             handlerField.setAccessible(true);
             handlerField.set(instance, handler);
 
-            return (UIComponent) instance;
+            return (T) instance;
         } catch (Exception e) {
             throw new ConfigurationException("Cannot create dynamic proxy for delegate: " + delegate, e);
         }
+    }
+
+    public <T extends UIComponent> T create(Object delegate,
+                                            List<ExpressionMethodRef> expressionMethods) {
+        int size = expressionMethods.size();
+        String[] methodNames = new String[size];
+        Attribute[] attributes = new Attribute[size];
+        ValueBindingExpression[] expressions = new ValueBindingExpression[size];
+        for (int i = 0; i < expressionMethods.size(); i++) {
+            methodNames[i] = expressionMethods.get(i).getter;
+            expressions[i] = expressionMethods.get(i).expression;
+        }
+        return create(delegate, methodNames, attributes, expressions);
     }
 
     private Object instantiateProxy(Class clazz) throws InstantiationException, IllegalAccessException {
@@ -108,11 +122,11 @@ public class UIComponentProxyFactory {
         return instance;
     }
 
-    public RenderingEnv getEnv() {
-        return env;
+    public WidgetContext getWidgetContext() {
+        return context;
     }
 
-    public void setEnv(RenderingEnv env) {
-        UIComponentProxyFactory.env = env;
+    public void setWidgetContext(WidgetContext context) {
+        this.context = context;
     }
 }

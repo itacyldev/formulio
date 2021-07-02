@@ -49,7 +49,7 @@ public class UIDatatable extends AbstractUIComponent implements FilterableCompon
     private int numVisibleRows = 10;
 
     public UIDatatable() {
-        setRendererType("datatable");
+        rendererType ="datatable";
     }
 
     public Repository getRepo() {

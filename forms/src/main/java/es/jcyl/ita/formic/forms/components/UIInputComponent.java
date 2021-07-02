@@ -44,8 +44,7 @@ public class UIInputComponent extends AbstractUIComponent {
     private Integer inputType = null;
     protected boolean hasDeleteButton = true;
     protected boolean hasTodayButton = true;
-
-    protected ValueBindingExpression hint;
+    protected String hint;
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
@@ -165,22 +164,11 @@ public class UIInputComponent extends AbstractUIComponent {
         this.hasTodayButton = hasTodayButton;
     }
 
-    public String getHint(Context context) {
-        String sHint = null;
-        if (this.hint != null) {
-            Object oHint = JexlFormUtils.eval(context, this.hint);
-            try {
-                sHint = (String) ConvertUtils.convert(oHint, String.class);
-            } catch (Exception e) {
-                throw new ViewConfigException(String.format("Invalid rendering expression in " +
-                                "component [%s] the resulting value couldn't be cast to String.",
-                        this.getId(), this.hint, e));
-            }
-        }
-        return StringUtils.isBlank(sHint)?null:sHint;
+    public String getHint() {
+        return hint;
     }
 
-    public void setHint(ValueBindingExpression hint) {
+    public void setHint(String hint) {
         this.hint = hint;
     }
 

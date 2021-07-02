@@ -28,8 +28,8 @@ public class UITable extends UIGroupComponent {
     private boolean border = true;
 
     public UITable(){
-        this.setRendererType("table");
-        this.setRenderChildren(true);
+        rendererType ="table";
+        renderChildren = true;
     }
 
     public boolean isBorder() {

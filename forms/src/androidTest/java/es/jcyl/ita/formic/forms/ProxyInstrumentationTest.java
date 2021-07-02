@@ -50,6 +50,10 @@ public class ProxyInstrumentationTest {
     @BeforeClass
     public static void init() {
         System.setProperty("formic.classLoading", "android");
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String path = appContext.getCacheDir().getPath();
+        System.setProperty("formic.classCache", path);
+
         Config.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
@@ -57,9 +61,6 @@ public class ProxyInstrumentationTest {
 
     @Test
     public void testComponent() throws InstantiationException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        String path = appContext.getCacheDir().getPath();
-        System.setProperty("formic.classCache", path);
 
         String expectedHint = RandomStringUtils.randomAlphanumeric(10);
         BasicContext ctx = new BasicContext("test");
@@ -70,13 +71,11 @@ public class ProxyInstrumentationTest {
         String expectedPattern = "pattern-abcde";
         uiDelegate.setPattern(expectedPattern);
 
-        RenderingEnv renderingEnv = MainController.getInstance().getRenderingEnv();
         WidgetContext widgetContext = new WidgetContext();
         widgetContext.addContext(ctx);
-        renderingEnv.setWidgetContext(widgetContext);
 
         UIComponentProxyFactory factory = UIComponentProxyFactory.getInstance();
-        factory.setEnv(renderingEnv);
+        factory.setWidgetContext(widgetContext);
 
         UIField proxy = (UIField)factory.create(uiDelegate,
                 new String[]{"gethint", "isrendered"},
@@ -90,7 +89,7 @@ public class ProxyInstrumentationTest {
 //                new ValueBindingExpression[]{expressionFactory.create("${test.valor}"),
 //                        expressionFactory.create("${not(empty(test.valor))}")});
 
-        Assert.assertEquals(expectedHint, proxy.getHint(null));
+        Assert.assertEquals(expectedHint, proxy.getHint());
         Assert.assertEquals(true, proxy.isRendered(null));
         Assert.assertEquals(expectedPattern, proxy.getPattern());
         Assert.assertEquals(3, proxy.getValueBindingExpressions().size());
@@ -132,7 +131,7 @@ public class ProxyInstrumentationTest {
 
             Object instance = dynamicType.newInstance();
 
-            UIComponentInvocationHandler handler = new UIComponentInvocationHandler(delegate, methodNames, attributes, expressions);
+            UIComponentInvocationHandler handler = new UIComponentInvocationHandler(delegate, methodNames, expressions);
             handler.setFactory(factory);
 
             Field handlerField = instance.getClass()

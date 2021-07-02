@@ -25,7 +25,7 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 public class UIDatalistItem extends UIGroupComponent {
 
     public UIDatalistItem() {
-        this.setRendererType("datalistitem");
-        this.setRenderChildren(true);
+        rendererType ="datalistitem";
+        renderChildren = true;
     }
 }

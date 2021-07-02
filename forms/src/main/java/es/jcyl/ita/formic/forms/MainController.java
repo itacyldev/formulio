@@ -22,6 +22,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import net.bytebuddy.android.AndroidClassLoadingStrategy;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
@@ -34,7 +37,10 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.builders.proxy.ProxyViewRendererEventHandler;
+import es.jcyl.ita.formic.forms.config.builders.proxy.UIComponentProxyFactory;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
@@ -49,7 +55,6 @@ import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
-import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -105,6 +110,18 @@ public class MainController implements ContextAwareComponent {
         scriptEngine = ScriptEngine.getInstance();
 //        flowManager = ReactivityFlowManager.getInstance();
         registerFormTypeViews();
+
+        // initialize uiComponent proxy factory
+        UIComponentProxyFactory proxyFactory = UIComponentProxyFactory.getInstance();
+        if (System.getProperty("java.vendor").toLowerCase().contains("android")) {
+            // if context is already availate in Config, use it to get the cache directory
+            // if not, relay on factory falback solution through system properties
+            Context androidContext = Config.getInstance().getAndroidContext();
+            if (androidContext != null) {
+                proxyFactory.setAndroidClassLoadingStrategy(androidContext.getCacheDir());
+            }
+        }
+        viewRenderer.addEventHandler(new ProxyViewRendererEventHandler(proxyFactory));
     }
 
     private void setupScriptingEnv(es.jcyl.ita.formic.core.context.Context ctx) {
@@ -114,8 +131,7 @@ public class MainController implements ContextAwareComponent {
         props.put("console", new DevConsole());
         scriptEngine.initEngine(props);
         // add event handler to execute scripts during component rendering
-        ViewRendererEventHandler handler = new RhinoViewRenderHandler(scriptEngine);
-        this.viewRenderer.setEventHandler(handler);
+        this.viewRenderer.addEventHandler(new RhinoViewRenderHandler(scriptEngine));
     }
 
 

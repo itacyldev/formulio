@@ -32,8 +32,8 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
     protected EntityHolder entityHolder;
     protected UIComponent[] children;
 
-    private String rendererType;
-    private boolean renderChildren;
+    protected String rendererType;
+    protected boolean renderChildren;
     private boolean allowsPartialRestore = true;
 
     protected ValueBindingExpression readonly;

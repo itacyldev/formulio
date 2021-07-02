@@ -26,42 +26,39 @@ public class Attribute {
     public final Class type;
     public String resolver;
     public String setter;
-
+    public boolean allowsExpression;
 
     public Attribute(String name) {
-        this(name, String.class);
+        this(name, true);
     }
 
     public Attribute(String name, boolean assignable) {
-        this.name = name;
-        this.assignable = assignable;
-        this.type = String.class;
-        this.setter = null;
-        this.resolver = null;
+        this(name, assignable, String.class, null, null, true);
     }
 
     public Attribute(String name, Class type) {
-        this.name = name;
-        this.assignable = true;
-        this.type = type;
-        this.setter = null;
-        this.resolver = null;
+        this(name, true, type, null, null, true);
+    }
+
+    public Attribute(String name, Class type, boolean allowsExpression) {
+        this(name, true, type, null, null, allowsExpression);
     }
 
     public Attribute(String name, String setter, Class type) {
-        this.name = name;
-        this.assignable = true;
-        this.setter = setter;
-        this.type = type;
-        this.resolver = null;
+        this(name, true, type, null, setter, true);
     }
 
     public Attribute(String name, String setter, String resolver) {
+        this(name, true, String.class, resolver, setter, false);
+    }
+
+    public Attribute(String name, boolean assignable, Class type, String resolver, String setter, boolean allowsExpression) {
         this.name = name;
-        this.assignable = true; // by resolver
-        this.setter = setter;
-        this.type = null;
+        this.assignable = assignable;
+        this.type = type;
         this.resolver = resolver;
+        this.setter = setter;
+        this.allowsExpression = allowsExpression;
     }
 
     @NonNull

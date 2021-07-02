@@ -5,7 +5,7 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 public class UIButtonBar extends UIGroupComponent {
 
     public UIButtonBar() {
-        setRendererType("buttonbar");
+        rendererType ="buttonbar";
     }
 
     public enum ButtonBarType {BOTTOM, MENU, FAB, DEFAULT}

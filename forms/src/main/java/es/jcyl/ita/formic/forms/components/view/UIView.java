@@ -58,7 +58,7 @@ public class UIView extends UIGroupComponent implements FilterableComponent {
     UIButtonBar fabBar;
 
     public UIView() {
-        setRendererType("view");
+        rendererType ="view";
     }
 
     @Override

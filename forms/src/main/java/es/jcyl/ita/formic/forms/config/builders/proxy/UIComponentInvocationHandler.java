@@ -22,13 +22,14 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.meta.Attribute;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * Handler that receives UIComponent method invocations to dynamically evaluate expressions
@@ -44,19 +45,27 @@ public class UIComponentInvocationHandler implements InvocationHandler {
     private final Object delegate;
     private Method staticMethod = null;
     private String[] methodNames;
-    private Attribute[] attributes;
+    //    private Attribute[] attributes;
     private ValueBindingExpression[] expressions;
 
-    public UIComponentInvocationHandler(Object delegate, String[] methodNames, Attribute[] attributes,
-                                        ValueBindingExpression[] expressions) {
+    public UIComponentInvocationHandler(Object delegate, List<ExpressionMethodRef> expressionMethods) {
+        this.delegate = delegate;
+
+        try {
+            staticMethod = UIComponent.class.getMethod("getValueExpression");
+        } catch (NoSuchMethodException e) {
+            throw new ConfigurationException("Cannot find method getValueExpression in UIComponent", e);
+        }
+    }
+
+    public UIComponentInvocationHandler(Object delegate, String[] methodNames, ValueBindingExpression[] expressions) {
         this.delegate = delegate;
         this.methodNames = methodNames;
-        this.attributes = attributes;
         this.expressions = expressions;
         try {
             staticMethod = UIComponent.class.getMethod("getValueExpression");
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new ConfigurationException("Cannot find method getValueExpression in UIComponent", e);
         }
     }
 
@@ -69,16 +78,17 @@ public class UIComponentInvocationHandler implements InvocationHandler {
             return calculateBindingExpressions(proxy);
         } else {
             int arraysPos = findMethodByName(methodName);
-            if (arraysPos == -1) {
+            if (arraysPos == -1 || isIgnoredMethod(methodName)) {
                 // call delegate
                 return method.invoke(delegate, args);
             } else {
-                Attribute attribute = attributes[arraysPos];
                 ValueBindingExpression expression = expressions[arraysPos];
-                RenderingEnv renderingEnv = factory.getEnv();
-                Object attValue = JexlFormUtils.eval(renderingEnv.getWidgetContext(), expression);
-                return (attribute.type == null) ? attValue :
-                        ConvertUtils.convert(attValue, attribute.type);
+                WidgetContext widgetContext = factory.getWidgetContext();
+
+                Object attValue = (widgetContext == null) ? expression :
+                        JexlFormUtils.eval(widgetContext, expression);
+                // convert object value to the method return type
+                return ConvertUtils.convert(attValue, method.getReturnType());
             }
         }
     }
@@ -94,6 +104,12 @@ public class UIComponentInvocationHandler implements InvocationHandler {
             expressions.add(expr);
         }
         return expressions;
+    }
+
+    private boolean isIgnoredMethod(String methodName) {
+        return methodName.startsWith("set") ||
+                methodName.equals("getvalue")
+                || methodName.equals("getid");
     }
 
 

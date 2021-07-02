@@ -18,16 +18,21 @@ package es.jcyl.ita.formic.forms.config.builders;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.builders.proxy.UIComponentProxyBuilder;
+import es.jcyl.ita.formic.forms.config.builders.proxy.ExpressionMethodRef;
+import es.jcyl.ita.formic.forms.config.builders.proxy.UIComponentProxyFactory;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -43,7 +48,10 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected Map<String, Attribute> attributeDefs;
     private Class<? extends E> elementType;
     private ComponentBuilderFactory factory;
-    private UIComponentProxyBuilder proxyBuilder;
+    private UIComponentProxyFactory proxyFactory = UIComponentProxyFactory.getInstance();
+    private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
+
+    private boolean allowProxifyComponentes = true;
 
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
@@ -56,21 +64,17 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     }
 
     @Override
-    public E build(ConfigNode<E> node) {
-        E element = instantiate();
-        Map<String, String> expressionAtts = new HashMap<>();
+    public final E build(ConfigNode<E> node) {
+        E element = instantiate(node);
+        List<ExpressionMethodRef> expressionMethods = new ArrayList<>();
         if (element != null) {
-            setAttributes(element, node, expressionAtts);
+            setAttributes(element, node, expressionMethods);
         }
-        if (!expressionAtts.isEmpty()) {
-            element = proxify(element);
+        if (!expressionMethods.isEmpty() && allowProxifyComponentes) {
+            element = proxyFactory.create(element, expressionMethods);
         }
         node.setElement(element);
         setupOnSubtreeStarts(node);
-        return element;
-    }
-
-    private E proxify(E element) {
         return element;
     }
 
@@ -89,7 +93,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected abstract void setupOnSubtreeEnds(ConfigNode<E> node);
 
 
-    protected E instantiate() {
+    protected E instantiate(ConfigNode<E> node) {
         if (this.elementType == null) {
             // no instance needed
             return null;
@@ -104,7 +108,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
-    protected void setAttributes(E element, ConfigNode node, Map<String, String> expressionAtts) {
+    protected void setAttributes(E element, ConfigNode node, List<ExpressionMethodRef> expressionAtts) {
         Map<String, Attribute> attributes = TagDef.getDefinition(node.getName());
 
         if (attributes == null) {
@@ -115,9 +119,14 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
             Attribute attribute = entry.getValue();
             String attValue = node.getAttribute(attName);
             try {
-                if (isExpression(attValue) && !AttributeDef.VALUE.equals(attribute)) {
+                if (isExpression(attValue) && !AttributeDef.VALUE.equals(attribute)
+                        && attribute.allowsExpression
+                        && (element instanceof UIComponent)) // exclude configuration elements
+                {
                     // add expressions to map to resolve then through component proxy
-                    expressionAtts.put("get" + attribute.name.toLowerCase(), attValue);
+                    ValueBindingExpression expression = expressionFactory.create(attValue);
+                    ExpressionMethodRef ref = new ExpressionMethodRef("get" + attribute.name.toLowerCase(), expression);
+                    expressionAtts.add(ref);
                     continue;
                 }
                 if (attribute.assignable) {
