@@ -1,22 +1,18 @@
 package es.jcyl.ita.formic.forms.controllers;
 
+import android.content.Context;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.android.dx.stock.ProxyBuilder;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.implementation.FixedValue;
+import net.bytebuddy.matcher.ElementMatchers;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Random;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.MainController;
@@ -30,6 +26,9 @@ import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.*;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -38,38 +37,38 @@ import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 @RunWith(RobolectricTestRunner.class)
 public class ProxyTest {
     ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
-
-    private InvocationHandler buildInvocationHandler() {
-        InvocationHandler handler = new InvocationHandler() {
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                if (method.getName().equals("nextInt")) {
-                    // Chosen by fair dice roll, guaranteed to be random.
-                    return 4;
-                }
-                Object result = ProxyBuilder.callSuper(proxy, method, args);
-                System.out.println("Method: " + method.getName() + " args: "
-                        + Arrays.toString(args) + " result: " + result);
-                return result;
-            }
-        };
-        return handler;
-    }
-
-    @Test
-    @Ignore("tests with dexmaker")
-    public void testCreateProxy() throws IOException {
-        String path = InstrumentationRegistry.getInstrumentation().getTargetContext().getCacheDir().getPath();
-        System.setProperty("dexmaker.dexcache", path);
-        path = new File("/tmp").getPath();
-
-        InvocationHandler handler = buildInvocationHandler();
-
-        Random debugRandom = ProxyBuilder.forClass(Random.class)
-                .dexCache(new File(path))
-                .parentClassLoader(this.getClass().getClassLoader())
-                .handler(handler)
-                .build();
-    }
+//
+//    private InvocationHandler buildInvocationHandler() {
+//        InvocationHandler handler = new InvocationHandler() {
+//            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+//                if (method.getName().equals("nextInt")) {
+//                    // Chosen by fair dice roll, guaranteed to be random.
+//                    return 4;
+//                }
+//                Object result = ProxyBuilder.callSuper(proxy, method, args);
+//                System.out.println("Method: " + method.getName() + " args: "
+//                        + Arrays.toString(args) + " result: " + result);
+//                return result;
+//            }
+//        };
+//        return handler;
+//    }
+//
+//    @Test
+//    @Ignore("tests with dexmaker")
+//    public void testCreateProxy() throws IOException {
+//        String path = InstrumentationRegistry.getInstrumentation().getTargetContext().getCacheDir().getPath();
+//        System.setProperty("dexmaker.dexcache", path);
+//        path = new File("/tmp").getPath();
+//
+//        InvocationHandler handler = buildInvocationHandler();
+//
+//        Random debugRandom = ProxyBuilder.forClass(Random.class)
+//                .dexCache(new File(path))
+//                .parentClassLoader(this.getClass().getClassLoader())
+//                .handler(handler)
+//                .build();
+//    }
 
     @Test
     public void testCreateUIFieldProxy() throws InstantiationException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
@@ -105,4 +104,18 @@ public class ProxyTest {
     }
 
 
+    @Test
+    public void testCreateProxyBBuddy() throws InstantiationException, IllegalAccessException {
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String path = appContext.getCacheDir().getPath();
+
+        Class<?> dynamicType = new ByteBuddy()
+                .subclass(Object.class)
+                .method(ElementMatchers.named("toString"))
+                .intercept(FixedValue.value("Hello World!"))
+                .make()
+                .load(getClass().getClassLoader())
+                .getLoaded();
+        assertThat(dynamicType.newInstance().toString(), is("Hello World!"));
+    }
 }

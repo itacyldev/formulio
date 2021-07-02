@@ -28,7 +28,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -39,10 +38,13 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
  */
 public class UIComponentProxyFactory {
 
+    public static final String PROP_CLASS_LOADING_STRATEGY = "formic.classLoading";
+    public static final String PROP_CLASS_CACHE = "formic.classCache";
     private static UIComponentProxyFactory _instance;
     private static Field handlerField;
     private ClassLoadingStrategy strategy;
     private static RenderingEnv env;
+    private ByteBuddy byteBuddy;
 
     public static UIComponentProxyFactory getInstance() {
         if (_instance == null) {
@@ -52,35 +54,29 @@ public class UIComponentProxyFactory {
     }
 
     private UIComponentProxyFactory() {
+        byteBuddy = new ByteBuddy();
         initClassLoadingStrategy();
     }
 
     private void initClassLoadingStrategy() {
-        if (System.getProperty("java.vendor").toLowerCase().contains("android") ||
-                System.getProperty("formic.classLoading").contains("android")) {
-            String path = System.getProperty("formic.classCache");
+        String property = System.getProperty(PROP_CLASS_LOADING_STRATEGY);
+        if (property != null && property.contains("android")) {
+            String path = System.getProperty(PROP_CLASS_CACHE);
             this.strategy = new AndroidClassLoadingStrategy.Wrapping(new File(path));
         }
     }
 
     public UIComponent create(Object delegate, String[] methodNames, Attribute[] attributes, ValueBindingExpression[] expressions) {
-        Class clazz = delegate.getClass();
         try {
-            DynamicType.Unloaded builder = new ByteBuddy()
-                    .subclass(clazz)
-                    .defineField("handler", InvocationHandler.class, Visibility.PUBLIC)
-                    //                .implement(HandlerSetter.class)
-                    .method(ElementMatchers.any())
-                    .intercept(InvocationHandlerAdapter.toField("handler"))
-                    .make();
-            if (strategy != null) {
-                builder.load(getClass().getClassLoader(), strategy);
-            } else {
-                builder.load(getClass().getClassLoader());
-            }
-            Object instance = builder.load(clazz.getClassLoader()).getLoaded().newInstance();
+
+            Object instance = instantiateProxy(delegate.getClass());
+
             UIComponentInvocationHandler handler = new UIComponentInvocationHandler(delegate, methodNames, attributes, expressions);
             handler.setFactory(this);
+//            this.handlerField = instance.getClass()
+//                    .getDeclaredField("handler");
+//            handlerField.setAccessible(true);
+//            handlerField.set(instance, handler);
 
             if (handlerField == null) {
                 this.handlerField = instance.getClass()
@@ -93,6 +89,23 @@ public class UIComponentProxyFactory {
         } catch (Exception e) {
             throw new ConfigurationException("Cannot create dynamic proxy for delegate: " + delegate, e);
         }
+    }
+
+    private Object instantiateProxy(Class clazz) throws InstantiationException, IllegalAccessException {
+        DynamicType.Unloaded unloaded = new ByteBuddy()
+                .subclass(clazz)
+                .defineField("handler", InvocationHandler.class, Visibility.PUBLIC)
+                .method(ElementMatchers.any())
+                .intercept(InvocationHandlerAdapter.toField("handler"))
+                .make();
+        Class dynamicType;
+        if (strategy != null) {
+            dynamicType = unloaded.load(getClass().getClassLoader(), strategy).getLoaded();
+        } else {
+            dynamicType = unloaded.load(getClass().getClassLoader()).getLoaded();
+        }
+        Object instance = dynamicType.newInstance();
+        return instance;
     }
 
     public RenderingEnv getEnv() {

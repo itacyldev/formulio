@@ -83,9 +83,8 @@ dependencies {
 
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.2'
 
-    implementation 'com.linkedin.dexmaker:dexmaker:2.28.1'
-    implementation  "net.bytebuddy:byte-buddy:1.11.5"
-    implementation  "net.bytebuddy:byte-buddy-android:1.11.5"
+    implementation  "net.bytebuddy:byte-buddy:1.11.2"
+    implementation  "net.bytebuddy:byte-buddy-android:1.11.2"
 
     api 'commons-collections:commons-collections:20040616'
     api "commons-validator:commons-validator:1.6"

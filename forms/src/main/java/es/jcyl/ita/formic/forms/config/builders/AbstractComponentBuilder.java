@@ -19,7 +19,6 @@ import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
@@ -63,7 +62,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         if (element != null) {
             setAttributes(element, node, expressionAtts);
         }
-        if(!expressionAtts.isEmpty()){
+        if (!expressionAtts.isEmpty()) {
             element = proxify(element);
         }
         node.setElement(element);
@@ -154,7 +153,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     }
 
     private boolean isExpression(String value) {
-        return value.contains("${") || value.contains("#{");
+        return value != null && (value.contains("${") || value.contains("#{"));
     }
 
     protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName) {
