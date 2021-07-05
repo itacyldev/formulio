@@ -53,11 +53,13 @@
         <activity
             android:name="es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity"
             android:label="FormEditView"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan"/>
 
         <uses-library
