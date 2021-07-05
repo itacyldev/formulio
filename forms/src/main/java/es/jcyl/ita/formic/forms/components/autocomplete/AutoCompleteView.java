@@ -46,6 +46,7 @@ import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -150,7 +151,9 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                 TypedArray ta = env.getAndroidContext().obtainStyledAttributes(new int[]{R.attr.onSurfaceColor, R.attr.primaryColor});
                 arrowDropDown.setImageTintList(ta.getColorStateList(v.hasFocus() ? 1 : 0));
 
-                if (!v.hasFocus() && StringUtils.isNotBlank(getText())) {
+                if (v.hasFocus()) {
+                    showDropDown();
+                } else if (StringUtils.isNotBlank(getText())) {
                     if (value == null) {
                         setText(null);
                     }
@@ -170,7 +173,11 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
             Runnable workRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    findCurrentSelection();
+                    boolean found = findCurrentSelection();
+                    if (!found) {
+                        Context ctx = widget.getContext();
+                        UserMessagesHelper.toast(ctx, ctx.getString(R.string.not_found), Toast.LENGTH_LONG);
+                    }
 
                     if (hasValueChanged()) {
                         initValue = value;
@@ -197,7 +204,12 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
                 }
                 if (!env.isInterceptorDisabled()) {
                     if (env.isInputDelayDisabled()) {
-                        findCurrentSelection();
+                        boolean found = findCurrentSelection();
+                        if (!found) {
+                            Context ctx = widget.getContext();
+                            UserMessagesHelper.toast(ctx, ctx.getString(R.string.not_found), Toast.LENGTH_LONG);
+                        }
+
                         if (hasValueChanged()) {
                             executeUserAction(env, widget);
                         }
