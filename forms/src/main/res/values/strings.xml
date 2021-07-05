@@ -69,4 +69,5 @@
     <string name="action_generic_success">Entity successfully updated.</string>
     <string name="action_generic_error">Error while trying to perform user action. Check dev. console for details.</string>
 
+    <string name="not_found">Value not found</string>
 </resources>
