@@ -50,17 +50,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity"
-            android:label="FormEditView"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"/>
 
         <uses-library
             android:name="org.apache.http.legacy"

@@ -69,7 +69,7 @@ public class Router {
             }
             mc.navigate(actionContext.getViewContext(), action.getRoute(), action.getParams());
             if (action.isRegisterInHistory()) {
-                recordHistory(action.getRoute(), action);
+                recordHistory(action);
             }
         }
     }
@@ -126,11 +126,11 @@ public class Router {
     }
 
 
-    private void recordHistory(String formId, UserAction action) {
+    private void recordHistory(UserAction action) {
         if (current != null) {
             this.memento.add(current);
         }
-        this.current = new State(formId, action);
+        this.current = new State(action.getRoute(), action);
         if (DevConsole.isDebugEnabled()) {
             debugHistory();
         }
@@ -176,10 +176,12 @@ public class Router {
     }
 
     private void debugHistory() {
+        debug("----------------------------------------");
         if (CollectionUtils.isNotEmpty(memento)) {
             for (State state : memento) {
                 debug(state.toString());
             }
         }
+        debug("----------------------------------------");
     }
 }
