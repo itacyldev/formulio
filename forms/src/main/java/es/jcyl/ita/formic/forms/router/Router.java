@@ -61,8 +61,10 @@ public class Router {
 
     public void navigate(ActionContext actionContext, UserAction action, String... messages) {
         this.currentViewMessages = messages;
-        if ("back".equalsIgnoreCase(action.getRoute())) {
-            this.back(actionContext.getViewContext());
+        String route = action.getRoute().toLowerCase();
+        if (route.startsWith("back")) {
+            int numHops = getBackHops(route);
+            this.back(actionContext.getViewContext(), null, numHops);
         } else {
             if (action.getPopHistory() > 0) {
                 popHistory(action.getPopHistory());
@@ -71,6 +73,19 @@ public class Router {
             if (action.isRegisterInHistory()) {
                 recordHistory(action);
             }
+        }
+    }
+
+    private int getBackHops(String route) {
+        if (!route.contains("-")) {
+            return 1;
+        }
+        String[] splits = route.split("-");
+        try {
+            return Integer.valueOf(splits[1]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Invalid hop number for route 'back': " +
+                    "[%s], the syntax for history navigation routes is 'back-<integer>'", splits[1]));
         }
     }
 
@@ -83,12 +98,19 @@ public class Router {
     }
 
     public void back(android.content.Context context) {
-        back(context, null);
+        back(context, null, 1);
     }
 
     public void back(android.content.Context context, String[] messages) {
+        back(context, messages, 1);
+    }
+
+    public void back(android.content.Context context, String[] messages, int numHops) {
         this.currentViewMessages = messages;
-        State lastState = popHistory();
+        State lastState = null;
+        for (int i = 0; i < numHops; i++) {
+            lastState = popHistory();
+        }
         if (lastState != null) {
             mc.navigate(context, lastState.formId, lastState.action.getParams());
         }
