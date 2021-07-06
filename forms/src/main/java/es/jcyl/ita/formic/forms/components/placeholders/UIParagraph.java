@@ -26,7 +26,7 @@ public class UIParagraph extends AbstractUIComponent {
     int numLines;
 
     public UIParagraph(){
-        rendererType = "paragrapah";
+        rendererType = "paragraph";
     }
 
     public int getNumLines() {
