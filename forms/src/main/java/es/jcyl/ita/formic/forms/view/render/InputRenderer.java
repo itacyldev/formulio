@@ -105,24 +105,23 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
     }
 
     protected void setOnClickListenerInfoButton(RenderingEnv env, InputWidget<C, I> widget){
-        c component = widget.getcomponent();
-        imageview infobutton = component.getinfobutton();
-        string hint = component.gethint();
+        C component = widget.getComponent();
+        ImageView infoButton = component.getInfoButton();
+        String hint = component.getHint();
 
-        infobutton.setonclicklistener(new view.onclicklistener() {
-            @override
-            public void onclick(final view arg0) {
-                alertdialog.builder builder = new alertdialog.builder(env.getandroidcontext(), r.style.dialogstyle);
-                final view view = inflate(env.getandroidcontext(), r.layout.info_dialog, null);
-                textview titleview = view.findviewbyid(r.id.info);
-                titleview.settext(hint);
-                builder.setcustomtitle(view)
-                        .setpositivebutton("ok", null);
-                dialog dialog = builder.create();
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                TextView titleView = view.findViewById(R.id.info);
+                titleView.setText(hint);
+                builder.setCustomTitle(view)
+                        .setPositiveButton("OK", null);
+                Dialog dialog = builder.create();
                 dialog.show();
             }
         });
-
     }
 
     protected void setVisibilityInfoButton(RenderingEnv env, InputWidget<C, I> widget){
