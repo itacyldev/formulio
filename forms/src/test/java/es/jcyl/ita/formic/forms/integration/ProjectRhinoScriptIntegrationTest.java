@@ -137,7 +137,7 @@ public class ProjectRhinoScriptIntegrationTest {
 
         // add event handler to execute scripts during component rendering
         ViewRenderer renderer = new ViewRenderer();
-        renderer.setEventHandler(new RhinoViewRenderHandler(ScriptEngine.getInstance()));
+        renderer.addEventHandler(new RhinoViewRenderHandler(ScriptEngine.getInstance()));
 
         // render form
         engine.initScope(formController.getId());

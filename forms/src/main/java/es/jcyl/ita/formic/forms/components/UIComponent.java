@@ -85,7 +85,6 @@ public interface UIComponent {
 
     ValueBindingExpression getPlaceHolder();
 
-
     /**
      * Returns the first UIComponent capable of holding an Entity, the corresponding widget
      * will be a WidgetContextHolder

@@ -16,7 +16,6 @@ package es.jcyl.ita.formic.forms.config.builders.controllers;
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
@@ -34,9 +32,7 @@ import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
-import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -204,7 +200,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
     }
 
     @Override
-    protected FormEditController instantiate() {
+    protected FormEditController instantiate(ConfigNode<FormEditController> node) {
         return new FormEditController("", "");
     }
 

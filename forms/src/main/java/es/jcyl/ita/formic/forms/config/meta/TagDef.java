@@ -136,7 +136,7 @@ public class TagDef {
         register("meta", define(new Attribute[]{PROPERTIES}));
         register("property", define(new Attribute[]{NAME, EXPRESSION, COLUMN_NAME, EXPRESSION_TYPE, CONVERTER, EVAL_ON}));
         register("mapping", define(new Attribute[]{ID, REPO, PROPERTY,
-                new Attribute("fk", String.class),
+                new Attribute("fk", String.class, false),
                 new Attribute("insertable", Boolean.class),
                 new Attribute("updatable", Boolean.class),
                 new Attribute("deletable", Boolean.class),

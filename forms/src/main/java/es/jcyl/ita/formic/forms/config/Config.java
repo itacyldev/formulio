@@ -130,6 +130,9 @@ public class Config {
         }
     }
 
+
+
+
     /**
      * Create globalContext and set it to all ContextAwareComponents
      * //TODO: manage with dependency injection

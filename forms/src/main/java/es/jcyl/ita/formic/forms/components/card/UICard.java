@@ -43,8 +43,8 @@ public class UICard extends AbstractUIComponent {
     String imagePosition = ImagePosition.TOP.getPosition();
 
     public UICard() {
-        setRendererType("card");
-        this.setRenderChildren(true);
+        rendererType ="card";
+        renderChildren = true;
     }
 
     public UIHeading getTitle() {

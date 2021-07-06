@@ -29,8 +29,8 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Ent
     private String[] mandatoryFilters;
 
     public UIForm() {
-        this.setRendererType("form");
-        this.setRenderChildren(true);
+        rendererType ="form";
+        renderChildren = true;
     }
 
     public List<UIInputComponent> getFields() {

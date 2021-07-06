@@ -41,8 +41,8 @@ public class UIDatalist extends AbstractUIComponent implements FilterableCompone
     private int numItems;
 
     public UIDatalist() {
-        setRendererType("datalist");
-        this.setRenderChildren(true);
+        rendererType ="datalist";
+        renderChildren = true;
     }
 
     public Repository getRepo() {

@@ -1,7 +1,6 @@
-package es.jcyl.ita.formic.forms.components.placeholders;
-
+package es.jcyl.ita.formic.forms.config.builders.proxy;
 /*
- * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +15,15 @@ package es.jcyl.ita.formic.forms.components.placeholders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class UIParagraph extends AbstractUIComponent {
+public class JavaDynamicProxyBuilder implements UIComponentProxyBuilder{
 
-    int numLines;
-
-    public UIParagraph(){
-        rendererType = "paragrapah";
+    @Override
+    public UIComponent proxify(Class componentClass) {
+        return null;
     }
-
-    public int getNumLines() {
-        return numLines;
-    }
-
-    public void setNumLines(int numLines) {
-        this.numLines = numLines;
-    }
-
 }

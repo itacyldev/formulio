@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.mini2Dx.collections.MapUtils;
@@ -61,7 +62,7 @@ import es.jcyl.ita.formic.repo.Entity;
  */
 public class ViewRenderer {
 
-    private ViewRendererEventHandler eventHandler = new NoOpHandler();
+    private ViewRendererEventHandler[] eventHandlers = new ViewRendererEventHandler[]{new NoOpHandler()};
 
     public Widget render(RenderingEnv env, UIComponent component) {
         return render(env, component, true);
@@ -71,13 +72,13 @@ public class ViewRenderer {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
-        eventHandler.onBeforeRenderComponent(component);
+        onBeforeRenderComponent(component);
         // setup entity in context
         if (component instanceof EntityHolder) {
             // enrich the execution environment with current component entity
             Entity entity = ((EntityHolder) component).getEntity();
             env.setEntity(entity);
-            eventHandler.onEntityContextChanged(entity);
+            onEntityContextChanged(entity);
         }
         // render android view
         Widget widget;
@@ -93,7 +94,7 @@ public class ViewRenderer {
             env.setRootWidget((ViewWidget) widget);
         }
         registerWidget(env, widget);
-        eventHandler.onAfterRenderComponent(widget);
+        onAfterRenderComponent(widget);
 
         // if current view is not visible or is pending of evaluation, don't render children
         if (!ViewHelper.isVisible(widget) || (widget instanceof DeferredView)) {
@@ -117,7 +118,7 @@ public class ViewRenderer {
                     // TODO: FORMIC-249 Refactorizar viewRenderer
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
-                        eventHandler.onEntityContextChanged(entity);
+                        onEntityContextChanged(entity);
                         UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
                         Widget view = render(env, componentProxy);
                         viewList.add(view);
@@ -183,7 +184,7 @@ public class ViewRenderer {
             widget.setWidgetContext(wCtx);
             // set as current WidgetContext so nested elements will use it
             env.setWidgetContext(wCtx);
-            eventHandler.onWidgetContextChange(wCtx);
+            onWidgetContextChange(wCtx);
             // register current widget in view
             if (env.getRootWidget() != null) {
                 env.getRootWidget().registerContextHolder((WidgetContextHolder) widget);
@@ -338,14 +339,38 @@ public class ViewRenderer {
         }
     }
 
-    public void setEventHandler(ViewRendererEventHandler handler) {
-        this.eventHandler = handler;
+    private StringBuilder printDeferredViewInfo(Map<String, List<DeferredView>> deferredViews) {
+        StringBuilder stb = new StringBuilder();
+        Collection<List<DeferredView>> values = deferredViews.values();
+        for (List<DeferredView> refs : values) {
+            for (DeferredView view : refs) {
+                UIComponent c = view.getComponent();
+                stb.append(String.format("component [%s] ", c.getId()));
+                Set<ValueBindingExpression> valueBindingExpressions = c.getValueBindingExpressions();
+                StringBuilder stbExpr = new StringBuilder();
+                for (ValueBindingExpression exp : c.getValueBindingExpressions()) {
+                    stbExpr.append(exp.getExpression().toString() + ", ");
+                }
+                stb.append("Expressions: " + stbExpr + "\n");
+            }
+        }
+        return stb;
+    }
+
+    /*********************************/
+    /** Event Handlers **/
+    /*********************************/
+
+    public void setEventHandlers(ViewRendererEventHandler[] handlers) {
+        this.eventHandlers = handlers;
+    }
+    public void addEventHandler(ViewRendererEventHandler handler) {
+        this.eventHandlers = ArrayUtils.add( eventHandlers, handler );
     }
 
     private class NoOpHandler implements ViewRendererEventHandler {
         @Override
-        public void onViewStart(UIView view) {
-        }
+        public void onViewStart(UIView view) {}
 
         @Override
         public void onEntityContextChanged(Entity entity) {
@@ -368,22 +393,34 @@ public class ViewRenderer {
         }
     }
 
-    private StringBuilder printDeferredViewInfo(Map<String, List<DeferredView>> deferredViews) {
-        StringBuilder stb = new StringBuilder();
-        Collection<List<DeferredView>> values = deferredViews.values();
-        for (List<DeferredView> refs : values) {
-            for (DeferredView view : refs) {
-                UIComponent c = view.getComponent();
-                stb.append(String.format("component [%s] ", c.getId()));
-                Set<ValueBindingExpression> valueBindingExpressions = c.getValueBindingExpressions();
-                StringBuilder stbExpr = new StringBuilder();
-                for (ValueBindingExpression exp : c.getValueBindingExpressions()) {
-                    stbExpr.append(exp.getExpression().toString() + ", ");
-                }
-                stb.append("Expressions: " + stbExpr + "\n");
-            }
+    public void onViewStart(UIView view) {
+        for(ViewRendererEventHandler handler: eventHandlers){
+            handler.onViewStart(view);
         }
-        return stb;
     }
-
+    public void onEntityContextChanged(Entity entity) {
+        for(ViewRendererEventHandler handler: eventHandlers){
+            handler.onEntityContextChanged(entity);
+        }
+    }
+    public void onWidgetContextChange(WidgetContext context) {
+        for(ViewRendererEventHandler handler: eventHandlers){
+            handler.onWidgetContextChange(context);
+        }
+    }
+    public void onBeforeRenderComponent(UIComponent component) {
+        for(ViewRendererEventHandler handler: eventHandlers){
+            handler.onBeforeRenderComponent(component);
+        }
+    }
+    public void onAfterRenderComponent(Widget widget) {
+        for(ViewRendererEventHandler handler: eventHandlers){
+            handler.onAfterRenderComponent(widget);
+        }
+    }
+    public void onViewEnd(ViewWidget viewWidget) {
+        for(ViewRendererEventHandler handler: eventHandlers){
+            handler.onViewEnd(viewWidget);
+        }
+    }
 }

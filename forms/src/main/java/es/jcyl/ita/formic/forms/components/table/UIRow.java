@@ -27,8 +27,8 @@ public class UIRow extends UIGroupComponent {
     private String weights;
 
     public UIRow() {
-        this.setRendererType("row");
-        this.setRenderChildren(true);
+        rendererType ="row";
+        renderChildren = true;
     }
 
     @Override

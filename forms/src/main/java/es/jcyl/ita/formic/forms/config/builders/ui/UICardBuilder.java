@@ -41,14 +41,17 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.TITLE;
  */
 public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
 
-
     public UICardBuilder(String tagName) {
         super(tagName, UICard.class);
     }
 
-    protected void setAttributes(UICard card, ConfigNode node) {
-        // TODO: esto tiene que estar en el substreestarts en lugar de modificar la lectura de la superclase
-        // FORMIC-287 Refactorizar CardBuilder
+    @Override
+    protected UICard instantiate(ConfigNode<UICard> node) {
+        createNestedNodes(node);
+        return super.instantiate(node);
+    }
+
+    private void createNestedNodes(ConfigNode<UICard> node) {
         Map<String, String> attributes = node.getAttributes();
 
         String attValue = attributes.get(IMAGE.name);
@@ -57,28 +60,28 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
             node.addChild(imageNode);
             attributes.remove(IMAGE.name);
         }
-
         attValue = attributes.get(TITLE.name);
         if (attValue != null) {
             ConfigNode titleNode = BuilderHelper.createNodeFromAttribute(TITLE, attValue, "head");
             node.addChild(titleNode);
             attributes.remove(TITLE.name);
         }
-
         attValue = attributes.get(SUBTITLE.name);
         if (attValue != null) {
             ConfigNode subtitleNode = BuilderHelper.createNodeFromAttribute(SUBTITLE, attValue, "head");
             node.addChild(subtitleNode);
             attributes.remove(SUBTITLE.name);
         }
+    }
 
-        super.setAttributes(card, node);
+    @Override
+    public void setupOnSubtreeStarts(ConfigNode<UICard> node) {
+        processHeader(node);
     }
 
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UICard> node) {
         UICard card = node.getElement();
-
         for (ConfigNode child : node.getChildren()) {
             if (TITLE.name.equals(child.getAttribute(NAME.name))) {
                 card.setTitle((UIHeading) child.getElement());
@@ -90,16 +93,10 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
                 card.setChildren(new UIComponent[]{(UIImage) child.getElement()});
             }
         }
-
-    }
-
-    @Override
-    public void setupOnSubtreeStarts(ConfigNode<UICard> node) {
-        processHeader(node);
     }
 
     protected Object getDefaultAttributeValue(UIDatalist element, ConfigNode node, String attName) {
-        if(AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)){
+        if (AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)) {
             return Boolean.TRUE;
         }
         return null;
@@ -110,17 +107,11 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
         if (node.getAttributes().containsKey(LABEL.name)) {
             card.setLabel(node.getAttribute(LABEL.name));
         }
-
         if (node.getAttributes().containsKey(EXPANDED.name)) {
             card.setExpanded(Boolean.parseBoolean(node.getAttribute(EXPANDED.name)));
         }
-
         if (node.getAttributes().containsKey(EXPANDABLE.name)) {
             card.setExpandable(Boolean.parseBoolean(node.getAttribute(EXPANDABLE.name)));
         }
-
-
     }
-
-
 }
