@@ -1,8 +1,8 @@
 package es.jcyl.ita.formic.forms.components.radio;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -17,9 +17,9 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -112,7 +112,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         UIInputComponent component = widget.getComponent();
         String message = MessageHelper.getMessage(env, component);
         if (message != null) {
-            ((TextView) ((LinearLayout) widget.getChildAt(0)).getChildAt(0)).setError(message);
+            ((TextView) ((ViewGroup) widget.getChildAt(0)).getChildAt(0)).setError(message);
         }
     }
 
