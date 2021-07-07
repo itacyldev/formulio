@@ -109,6 +109,7 @@ public class RenderingEnv {
         newEnv.inputTypingDelay = env.inputTypingDelay;
         newEnv.inputDelayDisabled = env.inputDelayDisabled;
         newEnv.entity = env.entity;
+        newEnv.messageMap = env.messageMap;
         return newEnv;
     }
 
