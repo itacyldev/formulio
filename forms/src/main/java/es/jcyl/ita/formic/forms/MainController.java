@@ -22,9 +22,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
-import net.bytebuddy.android.AndroidClassLoadingStrategy;
-
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;

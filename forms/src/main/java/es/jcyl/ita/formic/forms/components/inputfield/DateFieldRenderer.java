@@ -9,6 +9,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TimePicker;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.text.SimpleDateFormat;
@@ -143,7 +144,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     protected void setValueInView(RenderingEnv env, InputWidget<UIField, Button> widget) {
         String value = getComponentValue(env, widget.getComponent(), String.class);
-        widget.getConverter().setViewValue(widget.getInputView(), formatDate(value, widget));
+        widget.getConverter().setViewValue(widget.getInputView(), StringUtils.isNotEmpty(value)?formatDate(value, widget):value);
     }
 
     private String formatDate(String value, InputWidget<UIField, Button> widget) {
