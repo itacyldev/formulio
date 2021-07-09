@@ -9,17 +9,21 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.List;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.EntityMapping;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -83,23 +87,41 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
             }
         });
 
-        setOnClickListenerResetButton(component, radioGroup);
+        setOnClickListenerResetButton(widget);
+
+
 
     }
 
-    private void setOnClickListenerResetButton(UIRadio component, RadioGroup radioGroup) {
+    private void setOnClickListenerResetButton(InputWidget<UIRadio, RadioGroup> widget) {
+        RadioGroup radioGroup = widget.getInputView();
+        UIRadio component = widget.getComponent();
         ImageView resetButton = component.getResetButton();
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
                 // uncheck all options
+
                 for (int index = 0; index < radioGroup.getChildCount(); index++) {
                     RadioButtonWidget option = (RadioButtonWidget) radioGroup.getChildAt(index);
                     option.setChecked(false);
                 }
+                widget.getConverter().setViewValue(widget.getInputView(), "");
                 radioGroup.clearCheck();
             }
         });
+    }
+
+    private String getEntityProp(UIRadio component, UIForm form) {
+        String entityProp = null;
+
+        List<EntityMapping> mappings = form.getRepo().getMappings();
+        for (EntityMapping mapping : mappings) {
+            if (mapping.getProperty().equals(component.getId())) {
+                entityProp = mapping.getFk();
+            }
+        }
+        return entityProp;
     }
 
     @Override
