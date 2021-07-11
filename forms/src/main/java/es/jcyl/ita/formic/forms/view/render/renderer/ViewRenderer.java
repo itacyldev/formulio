@@ -67,15 +67,15 @@ public class ViewRenderer {
 
     public Widget render(RenderingEnv env, UIComponent component) {
         env.clearDeferredViews();
-        return render(env, component, component.getRoot(), true);
+        return doRender(env, component, component.getRoot(), true);
     }
 
     public Widget renderSubtree(RenderingEnv env, UIComponent component) {
         env.clearDeferredViews();
-        return render(env, component, component, false);
+        return doRender(env, component, component, false);
     }
 
-    private Widget render(RenderingEnv env, UIComponent component, UIComponent root, boolean checkDeferred) {
+    private Widget doRender(RenderingEnv env, UIComponent component, UIComponent root, boolean checkDeferred) {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
@@ -133,7 +133,7 @@ public class ViewRenderer {
                         // create an EntityContext to render each entity
                         onEntityContextChanged(entity);
                         UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
-                        Widget view = render(env, componentProxy, root, checkDeferred);
+                        Widget view = doRender(env, componentProxy, root, checkDeferred);
                         viewList.add(view);
                         iter++;
                     }
@@ -143,7 +143,7 @@ public class ViewRenderer {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
                     for (int i = 0; i < numKids; i++) {
-                        View view = render(env, kids[i]);
+                        View view = doRender(env, kids[i], root, checkDeferred);
                         viewList.add(view);
                     }
                 }
@@ -283,7 +283,7 @@ public class ViewRenderer {
                             // render the view and replace deferred element
                             RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
                             widgetRendEnv.setWidgetContext(defView.getWidgetContext());
-                            Widget newWidget = this.render(widgetRendEnv, node.getComponent(), null, false);
+                            Widget newWidget = this.doRender(widgetRendEnv, node.getComponent(), null, false);
                             registerWidget(env, newWidget);
                             replaceView(defView, newWidget);
                         }
@@ -342,7 +342,7 @@ public class ViewRenderer {
                     RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
                     if (dependantWidget != null) {
                         widgetRendEnv.setWidgetContext(dependantWidget.getWidgetContext());
-                        Widget newWidget = this.render(widgetRendEnv, node.getComponent(), null, false);
+                        Widget newWidget = this.doRender(widgetRendEnv, node.getComponent(), null, false);
                         registerWidget(env, newWidget);
                         replaceView(dependantWidget, newWidget);
                     }
