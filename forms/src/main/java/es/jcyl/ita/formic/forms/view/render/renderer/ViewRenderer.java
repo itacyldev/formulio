@@ -50,6 +50,7 @@ import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
@@ -65,10 +66,16 @@ public class ViewRenderer {
     private ViewRendererEventHandler[] eventHandlers = new ViewRendererEventHandler[]{new NoOpHandler()};
 
     public Widget render(RenderingEnv env, UIComponent component) {
-        return render(env, component, true);
+        env.clearDeferredViews();
+        return render(env, component, component.getRoot(), true);
     }
 
-    private Widget render(RenderingEnv env, UIComponent component, boolean checkDeferred) {
+    public Widget renderSubtree(RenderingEnv env, UIComponent component) {
+        env.clearDeferredViews();
+        return render(env, component, component, false);
+    }
+
+    private Widget render(RenderingEnv env, UIComponent component, UIComponent root, boolean checkDeferred) {
         String rendererType = component.getRendererType();
         Renderer renderer = this.getRenderer(rendererType);
 
@@ -96,9 +103,15 @@ public class ViewRenderer {
         registerWidget(env, widget);
         onAfterRenderComponent(widget);
 
-        // if current view is not visible or is pending of evaluation, don't render children
-        if (!ViewHelper.isVisible(widget) || (widget instanceof DeferredView)) {
+        // if current view is not visible or is pending of evaluation, don't render children if
+        // current element is not the root (forces deferred views to be evaluated)
+        if ((!ViewHelper.isVisible(widget) || (widget instanceof DeferredView))
+                && (component != root)) {
             return widget;
+        }
+        // restore view State
+        if(widget instanceof StatefulWidget){
+            env.getStateHolder().restoreState((StatefulWidget) widget);
         }
 
         // render children if needed
@@ -120,7 +133,7 @@ public class ViewRenderer {
                         // create an EntityContext to render each entity
                         onEntityContextChanged(entity);
                         UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
-                        Widget view = render(env, componentProxy);
+                        Widget view = render(env, componentProxy, root, checkDeferred);
                         viewList.add(view);
                         iter++;
                     }
@@ -138,7 +151,7 @@ public class ViewRenderer {
             }
             gRenderer.endGroup(env, groupView);
         }
-        if (checkDeferred && component.getParent() == null) {
+        if (checkDeferred && component == root) {
             // last step in the tree walk, process delegates when we're back on the view root
             processDeferredViews(env);
         }
@@ -258,7 +271,6 @@ public class ViewRenderer {
         }
         // Until all deferred views has been processed
         int currentNumDefViews = deferredViews.size();
-        int iters = 0;
         while (MapUtils.isNotEmpty(deferredViews)) {
             for (DirectedAcyclicGraph<DAGNode, DefaultEdge> dag : viewDAG.getDags().values()) {
                 // follow dag evaluating expressions and rendering views
@@ -271,7 +283,7 @@ public class ViewRenderer {
                             // render the view and replace deferred element
                             RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
                             widgetRendEnv.setWidgetContext(defView.getWidgetContext());
-                            Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
+                            Widget newWidget = this.render(widgetRendEnv, node.getComponent(), null, false);
                             registerWidget(env, newWidget);
                             replaceView(defView, newWidget);
                         }
@@ -330,7 +342,7 @@ public class ViewRenderer {
                     RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
                     if (dependantWidget != null) {
                         widgetRendEnv.setWidgetContext(dependantWidget.getWidgetContext());
-                        Widget newWidget = this.render(widgetRendEnv, node.getComponent(), false);
+                        Widget newWidget = this.render(widgetRendEnv, node.getComponent(), null, false);
                         registerWidget(env, newWidget);
                         replaceView(dependantWidget, newWidget);
                     }
@@ -364,13 +376,15 @@ public class ViewRenderer {
     public void setEventHandlers(ViewRendererEventHandler[] handlers) {
         this.eventHandlers = handlers;
     }
+
     public void addEventHandler(ViewRendererEventHandler handler) {
-        this.eventHandlers = ArrayUtils.add( eventHandlers, handler );
+        this.eventHandlers = ArrayUtils.add(eventHandlers, handler);
     }
 
     private class NoOpHandler implements ViewRendererEventHandler {
         @Override
-        public void onViewStart(UIView view) {}
+        public void onViewStart(UIView view) {
+        }
 
         @Override
         public void onEntityContextChanged(Entity entity) {
@@ -394,32 +408,37 @@ public class ViewRenderer {
     }
 
     public void onViewStart(UIView view) {
-        for(ViewRendererEventHandler handler: eventHandlers){
+        for (ViewRendererEventHandler handler : eventHandlers) {
             handler.onViewStart(view);
         }
     }
+
     public void onEntityContextChanged(Entity entity) {
-        for(ViewRendererEventHandler handler: eventHandlers){
+        for (ViewRendererEventHandler handler : eventHandlers) {
             handler.onEntityContextChanged(entity);
         }
     }
+
     public void onWidgetContextChange(WidgetContext context) {
-        for(ViewRendererEventHandler handler: eventHandlers){
+        for (ViewRendererEventHandler handler : eventHandlers) {
             handler.onWidgetContextChange(context);
         }
     }
+
     public void onBeforeRenderComponent(UIComponent component) {
-        for(ViewRendererEventHandler handler: eventHandlers){
+        for (ViewRendererEventHandler handler : eventHandlers) {
             handler.onBeforeRenderComponent(component);
         }
     }
+
     public void onAfterRenderComponent(Widget widget) {
-        for(ViewRendererEventHandler handler: eventHandlers){
+        for (ViewRendererEventHandler handler : eventHandlers) {
             handler.onAfterRenderComponent(widget);
         }
     }
+
     public void onViewEnd(ViewWidget viewWidget) {
-        for(ViewRendererEventHandler handler: eventHandlers){
+        for (ViewRendererEventHandler handler : eventHandlers) {
             handler.onViewEnd(viewWidget);
         }
     }

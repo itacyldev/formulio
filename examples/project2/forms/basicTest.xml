@@ -3,56 +3,9 @@
         <datatable route="form5-edit1" />
     </list>
     <edit>
-        <input value="edit1" />
-        <form />
-        <buttonbar type="bottom">
-            <button action="nav" label="go-2" route="form5-edit2">
-                <param name="entityId" value="${entity.id}" />
-            </button>
-            <button action="nav" label="back" route="back" />
-        </buttonbar>
-    </edit>
-    <edit>
-        <input value="edit2" />
-        <form />
-        <!-- guardamos y saltamos un paso atrás-->
-        <buttonbar type="bottom">
-            <button action="save" label="save" route="back" />
-            <button action="nav" label="back" route="back" />
-            <button action="nav" label="go-3" route="form5-edit3">
-                <param name="entityId" value="${entity.id}" />
-            </button>
-        </buttonbar>
-    </edit>
-    <edit>
-        <input value="edit3" />
-        <form />
-        <!-- Guardamos y saltamos dos pasos atrás. crear accion a parte para poder configurar
-        registerInHistory y PopHistory. Evitar registro de la navegación y eliminar del historial
-        edit2 y edit 1  en lugar de solo edit2 -->
-        <buttonbar type="bottom">
-            <button label="Save and Go-1">
-                <action popHistory="2" registerInHistory="false" route="form5-edit1" type="save">
-                    <param name="entityId" value="${entity.id}" />
-                </action>
-            </button>
-            <button label="go-1">
-                <action popHistory="2" registerInHistory="false" route="form5-edit1" type="nav">
-                    <param name="entityId" value="${entity.id}" />
-                </action>
-            </button>
-            <button label="go-4" route="form5-edit4" type="nav">
-                <param name="entityId" value="${entity.id}" />
-            </button>
-        </buttonbar>
-    </edit>
-    <edit>
-        <input value="edit4" />
-        <form />
-        <!-- Guardamos y saltamos tres pasos para atrás utilizando el historial-->
-        <buttonbar type="bottom">
-            <button action="save" label="save go-1" route="back-3" />
-            <button action="nav" label="back-1" route="back-3" />
-        </buttonbar>
+        <form>
+            <input id="fn" validator="required" value="${entity.first_name}" />
+            <input validator="required" value="${entity.bio}" render="${view.fn.length() > 3}" />
+        </form>
     </edit>
 </main>

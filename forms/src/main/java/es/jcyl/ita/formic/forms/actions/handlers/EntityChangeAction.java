@@ -56,7 +56,6 @@ public abstract class EntityChangeAction<F extends ViewController> extends Abstr
     }
     public void onError(ActionContext actionContext, UserAction action, Exception e) {
         mc.renderBack();
-        mc.restoreViewState();
         String msg = getErrorMessage(action, e);
         if (StringUtils.isNotBlank(msg)) {
             UserMessagesHelper.toast(actionContext.getViewContext(), msg);

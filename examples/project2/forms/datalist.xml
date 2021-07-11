@@ -1,18 +1,20 @@
-<main name="basicForm" description="Basic CRUD" id="formlist" repo="contacts">
+<main name="BasicList" description="Basic CRUD" id="form7" repo="contacts">
+    <list name="BasicList">
+        <datatable route="form7-edit1" />
+    </list>
     <edit>
         <datalist id="contactList">
             <datalistitem>
-                <text id="id" label="id"
-                    value="${entity.contact_id}" />
-                <text id="email" label="email"
-                    value="${entity.email}"  validator="required"/>
+                <input id="fn" label="first_name" validator="required" value="${entity.first_name}" />
+                <input label="bio" render="${view.fn.length() > 3}" validator="required"
+                    value="${entity.bio}" />
             </datalistitem>
         </datalist>
         <buttonbar type="bottom">
             <button label="save">
                 <action controller="contactList" type="save" />
             </button>
-            <button label="cancel" route="back"/>
+            <button label="cancel" route="back" />
         </buttonbar>
     </edit>
 </main>

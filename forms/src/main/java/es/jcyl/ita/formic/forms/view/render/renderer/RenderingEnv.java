@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.view.ViewStateHolder;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
@@ -63,6 +64,7 @@ public class RenderingEnv {
      */
     private static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
     private ViewWidget rootWidget;
+    private ViewStateHolder stateHolder; // curren View state holder
 
     private SelectionManager selectionManager = new SelectionManager();
     /**
@@ -110,6 +112,7 @@ public class RenderingEnv {
         newEnv.inputDelayDisabled = env.inputDelayDisabled;
         newEnv.entity = env.entity;
         newEnv.messageMap = env.messageMap;
+        newEnv.stateHolder = env.stateHolder;
         return newEnv;
     }
 
@@ -159,6 +162,12 @@ public class RenderingEnv {
 
     public UserEventInterceptor getUserActionInterceptor() {
         return userActionInterceptor;
+    }
+
+    public void clearDeferredViews(){
+        if(this.deferredViews!=null){
+            this.deferredViews.clear();
+        }
     }
 
     public void addDeferred(String componentId, DeferredView view) {
@@ -314,6 +323,14 @@ public class RenderingEnv {
 
     public BasicContext getCurrentMessageContext() {
         return currentMessageContext;
+    }
+
+    public ViewStateHolder getStateHolder() {
+        return stateHolder;
+    }
+
+    public void setStateHolder(ViewStateHolder stateHolder) {
+        this.stateHolder = stateHolder;
     }
 }
 

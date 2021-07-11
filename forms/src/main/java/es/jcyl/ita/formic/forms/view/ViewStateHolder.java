@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.view;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
@@ -41,7 +42,12 @@ public class ViewStateHolder {
     private Map<String, Map<String, Object>> state = new HashMap();
 
     public void clear() {
-        this.state.clear();
+        if (this.state != null) {
+            for (Map substate : this.state.values()) {
+                substate.clear();
+            }
+            this.state.clear();
+        }
     }
 
     /**
@@ -85,6 +91,14 @@ public class ViewStateHolder {
                     widget.setState(holderState.get(widget.getComponent().getId()));
                 }
             }
+        }
+    }
+
+    public void restoreState(StatefulWidget widget) {
+        String holderId = widget.getHolder().getHolderId();
+        Map<String, Object> holderState = this.state.get(holderId);
+        if (holderState != null) {
+            widget.setState(holderState.get(widget.getComponent().getId()));
         }
     }
 
