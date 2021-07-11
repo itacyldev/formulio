@@ -20,6 +20,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.controllers.operations.BaseWidgetValidator;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.controllers.operations.WidgetValidator;
@@ -38,10 +39,12 @@ public class OnInputChangeEventHandler
 
     private final MainController mc;
     private final ActionController ac;
+    private final BaseWidgetValidator widgetValidator;
 
     public OnInputChangeEventHandler(MainController mc, ActionController actionController) {
         this.mc = mc;
         this.ac = actionController;
+        this.widgetValidator = new BaseWidgetValidator();
     }
 
     @Override
@@ -62,16 +65,17 @@ public class OnInputChangeEventHandler
                 return;
             }
             InputWidget fieldView = (InputWidget) widget;
-            WidgetContextHolder holder = widget.getWidgetContext().getHolder();
-            WidgetValidator validator = null;
-            if (holder instanceof ControllableWidget) {
-                WidgetController controller = ((ControllableWidget) holder).getController();
-                validator = controller.getValidator();
-            }
-            boolean valid = true;
-            if (validator != null) {
-                valid = validator.validate(fieldView);
-            }
+//            WidgetContextHolder holder = widget.getWidgetContext().getHolder();
+//            WidgetValidator validator = null;
+//            if (holder instanceof ControllableWidget) {
+//                WidgetController controller = ((ControllableWidget) holder).getController();
+//                validator = controller.getValidator();
+//            }
+//            boolean valid = true;
+//            if (validator != null) {
+//                valid = validator.validate(fieldView);
+//            }
+            boolean valid = widgetValidator.validate(fieldView);
 
             // save view state
             Object state = fieldView.getValue();

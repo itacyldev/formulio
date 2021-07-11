@@ -32,8 +32,10 @@ import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
  */
 public class FormValidator extends BaseWidgetValidator {
 
+    private final RenderingEnv env;
+
     public FormValidator(RenderingEnv env) {
-        super(env);
+        this.env = env;
     }
 
     @Override

@@ -34,10 +34,8 @@ import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
  */
 public class BaseWidgetValidator implements WidgetValidator {
 
-    protected final RenderingEnv env;
 
-    public BaseWidgetValidator(RenderingEnv env){
-        this.env = env;
+    public BaseWidgetValidator(){
     }
 
     /**
