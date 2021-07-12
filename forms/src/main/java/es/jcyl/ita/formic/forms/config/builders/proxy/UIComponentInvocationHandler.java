@@ -15,7 +15,6 @@ package es.jcyl.ita.formic.forms.config.builders.proxy;
  * limitations under the License.
  */
 
-import org.jetbrains.annotations.NotNull;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.lang.reflect.InvocationHandler;
@@ -93,7 +92,6 @@ public class UIComponentInvocationHandler implements InvocationHandler {
         }
     }
 
-    @NotNull
     private Set<ValueBindingExpression> calculateBindingExpressions(Object proxy) throws IllegalAccessException, InvocationTargetException {
         Set<ValueBindingExpression> expressions = new HashSet<>();
         ValueBindingExpression valueBindingExpression = (ValueBindingExpression) staticMethod.invoke(delegate, new Object[]{});
