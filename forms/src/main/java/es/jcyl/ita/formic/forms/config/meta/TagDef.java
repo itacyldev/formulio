@@ -19,17 +19,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ACTION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ALLOWS_PARTIAL_RESTORE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BOLD;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONTROLLER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBFILE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBTABLE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DEFAULT_EXTENSION;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DEFAULT_VALUE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DESCRIPTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.EMBEDDED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ENTITYSELECTOR;
@@ -43,7 +44,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FOLDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_REFRESH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_DELETE_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_TODAY_BUTTON;
@@ -68,15 +68,19 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_BEFORE_RENDER
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_SAVE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORDERING;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ORIENTATION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PATTERN;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PLACEHOLDER;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.POP_HISTORY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTIES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.READONLY_MESSAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REFRESH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REGISTER_IN_HISTORY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RENDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO_PROPERTY;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RESTORE_VIEW;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SELECTED;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SRC;
@@ -106,24 +110,23 @@ public class TagDef {
         initialize();
     }
 
+    private static String ACTION_TAGS[] = {"action", "add", "create", "update", "save", "cancel", "delete", "nav"};
+
     private static void initialize() {
         Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
 
-        Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE, ON_BEFORE_RENDER, ON_AFTER_RENDER};
+        Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ALLOWS_PARTIAL_RESTORE};
         register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
+        register("view", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR, MAINFORM}));
         register("form", define(baseRepoAccessor, new Attribute[]{ON_SAVE}));
 
-        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, ACTION}));
-        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE, ACTION}));
+        register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, ACTION, ALLOWS_PARTIAL_RESTORE}));
+        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE, ACTION, ALLOWS_PARTIAL_RESTORE}));
         register("datalistitem", define(scriptHooks, new Attribute[]{ID}));
-        register("card", define(scriptHooks, new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE, IMAGE_POSITION, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION}));
-
-        Attribute[] text = new Attribute[]{FONT_SIZE, FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, ITALIC, BOLD, UPPERCASE, UNDERLINED};
-        register("head", define(text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
-        register("paragraph", define(new Attribute[]{ID, NAME, VALUE}));
-        register("divisor", define(new Attribute[]{ID, NAME, COLOR, STROKE_WIDTH}));
+        register("card", define(scriptHooks, new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE,
+                IMAGE_POSITION, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION, ALLOWS_PARTIAL_RESTORE}));
 
         register("repo", define(new Attribute[]{ID, DBFILE, DBTABLE}));
         register("fileRepo", define(new Attribute[]{ID, FOLDER, DEFAULT_EXTENSION}));
@@ -133,21 +136,23 @@ public class TagDef {
         register("meta", define(new Attribute[]{PROPERTIES}));
         register("property", define(new Attribute[]{NAME, EXPRESSION, COLUMN_NAME, EXPRESSION_TYPE, CONVERTER, EVAL_ON}));
         register("mapping", define(new Attribute[]{ID, REPO, PROPERTY,
-                new Attribute("fk", String.class),
+                new Attribute("fk", String.class, false),
                 new Attribute("insertable", Boolean.class),
                 new Attribute("updatable", Boolean.class),
                 new Attribute("deletable", Boolean.class),
                 new Attribute("retrieveMeta", Boolean.class)
         }));
 
-        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION};
-        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, DEFAULT_VALUE, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER};
+        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION, ALLOWS_PARTIAL_RESTORE};
+        Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, HAS_DELETE_BUTTON, HAS_TODAY_BUTTON, PLACEHOLDER, PATTERN, HINT};
         Map<String, Attribute> baseInput = define(base, input);
-        register("input", define(baseInput, new Attribute[]{HINT}));
+        register("input", baseInput);
         register("checkbox", baseInput);
+        register("switcher", baseInput);
         register("text", baseInput);
         register("date", baseInput);
-        register("textarea", define(base, input, new Attribute[]{LINES, HINT}));
+        register("datetime", baseInput);
+        register("textarea", define(base, input, new Attribute[]{LINES}));
         register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
@@ -159,20 +164,22 @@ public class TagDef {
         Attribute optionValue = new Attribute("value");
         register("option", define(new Attribute[]{ID, optionValue, LABEL}, scriptHooks));
 
+        register("buttonbar", define(base, new Attribute[]{TYPE}));
         register("button", define(baseInput, new Attribute[]{ROUTE, ACTION}));
         register("link", define(baseInput, new Attribute[]{ROUTE, ACTION}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
-                REGISTER_IN_HISTORY, FORCE_REFRESH, MESSAGE});
+                CONTROLLER, REGISTER_IN_HISTORY, REFRESH, RESTORE_VIEW, MESSAGE, POP_HISTORY});
         register("action", actionAttributes);
         register("add", actionAttributes);
+        register("create", actionAttributes);
         register("update", actionAttributes);
         register("save", actionAttributes);
         register("cancel", actionAttributes);
         register("delete", actionAttributes);
         register("nav", actionAttributes);
 
-        register("tab", define(base, new Attribute[]{ID}));
+        register("tab", define(base, new Attribute[]{ID, ALLOWS_PARTIAL_RESTORE}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));
 
         register("table", define(base, new Attribute[]{ID, HEADER_TEXT, WEIGHTS, BORDER}));
@@ -183,6 +190,12 @@ public class TagDef {
         register("param", define(base, new Attribute[]{NAME, VALUE}));
 
         register("script", define(new Attribute[]{SRC}));
+
+        Attribute[] text = new Attribute[]{FONT_SIZE, FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, ITALIC, BOLD, UPPERCASE, UNDERLINED};
+        register("head", define(base, text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
+        register("paragraph", define(base));
+        register("divisor", define(base, new Attribute[]{NAME, COLOR, STROKE_WIDTH}));
+
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {
@@ -211,15 +224,15 @@ public class TagDef {
     }
 
     public static void register(String name, Map<String, Attribute> atts) {
-        registry.put(name, atts);
+        registry.put(name.toUpperCase(), atts);
     }
 
     public static Map<String, Attribute> getDefinition(String name) {
-        return registry.get(name);
+        return registry.get(name.toUpperCase());
     }
 
     public static boolean isDefinedTag(String tagName) {
-        return registry.containsKey(tagName);
+        return registry.containsKey(tagName.toUpperCase());
     }
 
     public static boolean supportsAttribute(String tagName, String attName) {
@@ -227,6 +240,15 @@ public class TagDef {
             return false;
         }
         return getDefinition(tagName).containsKey(attName);
+    }
+
+    public static boolean isActionTag(String tagName) {
+        for (String tag : ACTION_TAGS) {
+            if (tagName.toLowerCase().equals(tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -35,7 +35,7 @@ public class UIHeading extends AbstractUIComponent {
     private boolean underlined;
 
     public UIHeading() {
-        setRendererType("head");
+        rendererType = "head";
     }
 
     public String getStyle() {

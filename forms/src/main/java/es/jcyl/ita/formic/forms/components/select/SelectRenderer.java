@@ -1,15 +1,12 @@
 package es.jcyl.ita.formic.forms.components.select;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
@@ -17,11 +14,11 @@ import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -52,7 +49,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
         UISelect component = widget.getComponent();
 
         // setup adapter and event handler
-        ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getViewContext(),
+        ArrayAdapter<UIOption> arrayAdapter = UIOptionsAdapterHelper.createAdapterFromOptions(env.getAndroidContext(),
                 component.getOptions(), component.hasNullOption(), android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         arrayAdapter.notifyDataSetChanged();
@@ -64,7 +61,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
                 // notify action
                 UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    interceptor.notify(Event.inputChange(widget.getComponent()));
+                    interceptor.notify(Event.inputChange(widget));
                 }
             }
 
@@ -73,19 +70,19 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
             }
         });
 
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.GONE);
-        }
+
+        setOnClickListenerResetButton(component, input);
+
+    }
+
+    private void setOnClickListenerResetButton(UISelect component, Spinner input) {
+        ImageView resetButton = component.getResetButton();
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
                 input.setSelection(0);
             }
         });
-
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
     }
 
     @Override
@@ -96,9 +93,9 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UISelect, Spinner> widget) {
         UIInputComponent component = widget.getComponent();
-        String message = FormContextHelper.getMessage(env.getComponentContext(), component.getId());
+        String message = MessageHelper.getMessage(env, component);
         if (message != null) {
-            ((TextView)((LinearLayout)widget.getChildAt(0)).getChildAt(0)).setError(message);
+            ((TextView)((ViewGroup)widget.getChildAt(0)).getChildAt(0)).setError(message);
         }
     }
 

@@ -24,8 +24,8 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 public class UITab extends UIGroupComponent {
 
     public UITab() {
-        this.setRendererType("tab");
-        this.setRenderChildren(true);
+        rendererType ="tab";
+        renderChildren = true;
     }
 
 }

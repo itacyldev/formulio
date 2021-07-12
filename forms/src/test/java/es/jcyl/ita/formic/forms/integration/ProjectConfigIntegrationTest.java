@@ -26,29 +26,20 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.project.FormConfigRepository;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
@@ -101,24 +92,9 @@ public class ProjectConfigIntegrationTest {
         List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
         int expectedNumForms = getNunFilesInFolder(TestUtils.findFile("config/project1/forms"));
         assertEquals(expectedNumForms, formConfigs.size());
-
-        //  Just for manual testing
-//        // Check all list and edit controller have been loaded
-//        FormControllerFactory fctlFacotry = FormControllerFactory.getInstance();
-//        Collection<FormController> ctlList = fctlFacotry.getList();
-//        assertEquals(14, ctlList.size());
-//        assertEquals(7, fctlFacotry.getListControllers().size());
-//
-//        // check list controller
-//        for (FormController ctl : fctlFacotry.getList()) {
-//            if (ctl instanceof FormListController) {
-//                assertListController(ctl);
-//            } else {
-//                assertEditController(ctl);
-//            }
-//        }
     }
-    private int getNunFilesInFolder(File folder){
+
+    private int getNunFilesInFolder(File folder) {
         File[] files = folder.listFiles(new FileFilter() {
             @Override
             public boolean accept(File f) {
@@ -128,17 +104,17 @@ public class ProjectConfigIntegrationTest {
         return files.length;
     }
 
-    private void assertEditController(FormController ctl) {
+    private void assertEditController(ViewController ctl) {
         UIView view = ctl.getView();
-        List<UIForm> lst = UIComponentHelper.findByClass(view, UIForm.class);
+        List<UIForm> lst = UIComponentHelper.getChildrenByClass(view, UIForm.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
         UIForm form = lst.get(0);
         Assert.assertNotNull(form.getRepo());
     }
 
-    private void assertListController(FormController ctl) {
+    private void assertListController(ViewController ctl) {
         UIView view = ctl.getView();
-        List<FilterableComponent> lst = UIComponentHelper.findByClass(view, FilterableComponent.class);
+        List<FilterableComponent> lst = UIComponentHelper.getChildrenByClass(view, FilterableComponent.class);
         Assert.assertTrue(CollectionUtils.isNotEmpty(lst));
         FilterableComponent filterableComponent = lst.get(0);
         Assert.assertNotNull(filterableComponent.getRepo());

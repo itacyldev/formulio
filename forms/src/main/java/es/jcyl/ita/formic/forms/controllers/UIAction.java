@@ -27,9 +27,15 @@ public class UIAction {
     private String id;
     private String label;
     private String type;
+    private String controller;
     private String route;
+    private boolean restoreView = false;
     private boolean registerInHistory = true;
-    private boolean forceRefresh = false;
+    private int popHistory = 0;
+    /**
+     * What has to be refreshed after action execution
+     */
+    private String refresh;
     private UIParam[] params;
     private String message;
 
@@ -44,7 +50,7 @@ public class UIAction {
 
     public UIAction(UIAction action) {
         this(action.type, action.label, action.route);
-        this.forceRefresh = action.isForceRefresh();
+        this.refresh = action.getRefresh();
         this.registerInHistory = action.isRegisterInHistory();
         this.message = action.getMessage();
         // clone parameters
@@ -86,6 +92,14 @@ public class UIAction {
         this.type = type;
     }
 
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
+    }
+
     public void setRoute(String route) {
         this.route = route;
     }
@@ -96,6 +110,14 @@ public class UIAction {
 
     public void setRegisterInHistory(boolean registerInHistory) {
         this.registerInHistory = registerInHistory;
+    }
+
+    public int getPopHistory() {
+        return popHistory;
+    }
+
+    public void setPopHistory(int popHistory) {
+        this.popHistory = popHistory;
     }
 
     public UIParam[] getParams() {
@@ -110,19 +132,27 @@ public class UIAction {
         return this.params != null && this.params.length > 0;
     }
 
-    public boolean isForceRefresh() {
-        return forceRefresh;
-    }
-
-    public void setForceRefresh(boolean forceRefresh) {
-        this.forceRefresh = forceRefresh;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(String refresh) {
+        this.refresh = refresh;
+    }
+
+    public boolean isRestoreView() {
+        return restoreView;
+    }
+
+    public void setRestoreView(boolean restoreView) {
+        this.restoreView = restoreView;
     }
 }

@@ -161,4 +161,15 @@ public class ConfigNode<E> {
     public String toString() {
         return String.format("<%s - %s/>]", this.name, this.attributes);
     }
+
+    /**
+     * Clones passed node without the relations
+     * @param node
+     * @return
+     */
+    public static ConfigNode clone(ConfigNode node){
+        ConfigNode newNode = new ConfigNode(node.getName());
+        newNode.attributes = new HashMap(node.getAttributes());
+        return newNode;
+    }
 }

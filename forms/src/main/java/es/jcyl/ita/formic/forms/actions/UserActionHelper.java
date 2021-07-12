@@ -49,7 +49,7 @@ public class UserActionHelper {
         UserAction action = new UserAction(actionTemplate.getType(), strRoute, component);
         action.setRegisterInHistory(actionTemplate.isRegisterInHistory());
 
-        action.setForceRefresh(actionTemplate.isForceRefresh());
+        action.setRefresh(actionTemplate.getRefresh());
         if (actionTemplate.hasParams()) {
             for (UIParam param : actionTemplate.getParams()) {
                 Object value = JexlFormUtils.eval(context, param.getValue());

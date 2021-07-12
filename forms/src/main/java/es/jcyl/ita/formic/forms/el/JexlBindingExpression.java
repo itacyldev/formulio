@@ -38,7 +38,7 @@ public class JexlBindingExpression implements ValueBindingExpression {
     private final JxltEngine.Expression expression;
     private Class expectedType;
     private boolean isLiteral;
-    private boolean isReadOnly;
+    private boolean isReadonly;
 
     public JexlBindingExpression(JxltEngine.Expression expression) {
         this(expression, null);
@@ -67,13 +67,13 @@ public class JexlBindingExpression implements ValueBindingExpression {
      *
      * @return
      */
-    public boolean isReadOnly() {
-        return isReadOnly;
+    public boolean isReadonly() {
+        return isReadonly;
 
     }
 
     public String getBindingProperty() {
-        if (isReadOnly()) {
+        if (isReadonly()) {
             throw new IllegalStateException(String.format("The expression defined in field is readonly and " +
                     "cannot be used as binding with an entity property." +
                     " The expression [%s] must contain exactly one entity property.", this.expression));
@@ -114,28 +114,28 @@ public class JexlBindingExpression implements ValueBindingExpression {
 
     private void setIsReadonly() {
         if (this.isLiteral) {
-            this.isReadOnly = true;
+            this.isReadonly = true;
             return;
         }
         // immediate expressions define a direct reference to a bean method
         String className = this.expression.getClass().getName();
         if (!className.equals(IMMEDIATE_EXPRESSION) && !className.equals(COMPOSITE_EXPRESSION)) {
-            this.isReadOnly = true;
+            this.isReadonly = true;
             return;
         } else {
             // there's just one variable in the expression and it depends on one of the
             // entity properties without submethods call on the property
             // TODO:
             List<String> vars = getDependingVariables();
-            this.isReadOnly = vars.size() > 1;
-            if (!isReadOnly) {
+            this.isReadonly = vars.size() > 1;
+            if (!isReadonly) {
                 // check the property is not used to access a method ex: entity.property.method()
                 String accessedProperty = vars.get(0);
-                this.isReadOnly = !accessedProperty.contains("entity")
+                this.isReadonly = !accessedProperty.contains("entity")
                         || hasNestedMethodCall(this.expression.asString(), accessedProperty);
             }
-            if (!isReadOnly) {
-                this.isReadOnly = isExpressionInString(this.expression.asString());
+            if (!isReadonly) {
+                this.isReadonly = isExpressionInString(this.expression.asString());
             }
         }
     }

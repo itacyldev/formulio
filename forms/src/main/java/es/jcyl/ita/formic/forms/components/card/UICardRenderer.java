@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -86,7 +86,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
      */
     @Override
     protected Widget<UICard> createWidget(RenderingEnv env, UICard component) {
-        Widget<UICard> widget = ViewHelper.inflate(env.getViewContext(), getWidgetLayoutId(component), Widget.class);
+        Widget<UICard> widget = ViewHelper.inflate(env.getAndroidContext(), getWidgetLayoutId(component), Widget.class);
         // set unique id and tag
         widget.setId(RandomUtils.nextInt());
         widget.setTag(getWidgetViewTag(component));
@@ -157,7 +157,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         TextView titleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_title");
         String titleValue = null;
         if (title != null) {
-            titleValue = (String) ConvertUtils.convert(title.getValue(env.getComponentContext()), String.class);
+            titleValue = (String) ConvertUtils.convert(title.getValue(env.getWidgetContext()), String.class);
         }
         if (StringUtils.isNotEmpty(titleValue)) {
             titleView.setText(titleValue);
@@ -169,7 +169,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         TextView subtitleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_subtitle");
         String subtitleValue = null;
         if (subtitle != null) {
-            subtitleValue = (String) ConvertUtils.convert(subtitle.getValue(env.getComponentContext()), String.class);
+            subtitleValue = (String) ConvertUtils.convert(subtitle.getValue(env.getWidgetContext()), String.class);
         }
         if (StringUtils.isNotEmpty(subtitleValue)) {
             subtitleView.setText(subtitleValue);
@@ -181,7 +181,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
         TextView descriptionView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_text");
         String descriptionValue = null;
         if (description != null) {
-            descriptionValue = (String) ConvertUtils.convert(description.getValue(env.getComponentContext()), String.class);
+            descriptionValue = (String) ConvertUtils.convert(description.getValue(env.getWidgetContext()), String.class);
         }
         if (StringUtils.isNotEmpty(descriptionValue)) {
             descriptionView.setText(descriptionValue);
@@ -192,7 +192,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
 
     private void setupHeader(View cardView, UICard card, RenderingEnv env) {
 
-        String headerLabel = card.getLabelValue(env.getContext());
+        String headerLabel = card.getLabelValue(env.getWidgetContext());
         if (StringUtils.isNotEmpty(headerLabel)) {
             TextView headerLabelView = (TextView) ViewHelper.findViewAndSetId(cardView, R.id.card_header_label);
             headerLabelView.setText(headerLabel);
@@ -252,7 +252,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UICard> root, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UICard> root, Widget[] views) {
         for (View view : views) {
             if (view instanceof ImageWidget) {
                 View imageView = ((ImageWidget) view).getInputView();

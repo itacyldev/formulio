@@ -10,20 +10,27 @@ import android.widget.LinearLayout;
 
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JxltEngine;
+import org.apache.commons.lang3.ArrayUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
-import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
+import es.jcyl.ita.formic.forms.components.link.UIButton;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -45,9 +52,8 @@ import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 
-public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditController>
-        implements FormActivity<FormEditController> {
-
+public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController>
+        implements FormActivity<ViewController> {
 
     @Override
     protected int getLayoutResource() {
@@ -56,18 +62,42 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
 
     @Override
     protected void doRender(RenderingEnv renderingEnv) {
-        // add action buttons
-        ViewGroup toolBar = findViewById(R.id.form_toolbar);
-        renderToolBar(toolBar);
-
     }
 
-    private void renderToolBar(ViewGroup parentView) {
-        if (this.formController.getActions() != null) {
-            for (UIAction action : this.formController.getActions()) {
-                renderActionButton(this, parentView, action);
+    protected void renderToolBars(RenderingEnv env) {
+        // configurar menu
+        UIView view = this.viewController.getView();
+        if(view == null){
+            return; // just in testing cases
+        }
+        renderBottomBar(view.getBottomNav());
+        renderMenuBar(view.getMenuBar());
+        renderFabBar(view.getFabBar());
+    }
+
+    private void renderBottomBar(UIButtonBar bottomNav) {
+        ViewGroup toolBar = findViewById(R.id.form_toolbar);
+        if(bottomNav == null || ArrayUtils.isEmpty(bottomNav.getChildren())){
+            toolBar.setVisibility(View.GONE);
+            return;
+        }
+        MainController mc = this.viewController.getMc();
+        for(UIComponent c: bottomNav.getChildren()){
+            if(c instanceof UIButton){
+                Widget btnWidget = mc.renderComponent(c);
+                Button button = btnWidget.findViewById(R.id.btn);
+                setButtonStyle(button);
+                setLayoutParams(button);
+                ((ViewGroup) button.getParent()).removeView(button);
+                toolBar.addView(button);
             }
         }
+    }
+
+    private void renderFabBar(UIButtonBar menuBar) {
+    }
+
+    private void renderMenuBar(UIButtonBar menuBar) {
     }
 
     protected void close() {
@@ -78,11 +108,13 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = UserAction.back(this.formController);
+        UserAction action = new UserAction(ActionType.BACK.name(), "back", this.viewController);
+        action.setRestoreView(true);
 //        action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
         finish();
     }
+
 
     private Button renderActionButton(Context context, ViewGroup parent, UIAction formAction) {
         Button button = new Button(context);
@@ -95,16 +127,18 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<FormEditContro
                     String strRoute = "";
                     if (formAction.getRoute() != null) {
                         JxltEngine.Expression e = JexlFormUtils.createExpression(formAction.getRoute());
-                        Object route = e.evaluate((JexlContext) env.getContext());
+                        Object route = e.evaluate((JexlContext) env.getWidgetContext());
                         strRoute = (String) ConvertUtils.convert(route, String.class);
                     }
-                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
+//                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
+                    UserAction action = new UserAction(formAction, viewController);
                     action.setRegisterInHistory(formAction.isRegisterInHistory());
-                    action.setForceRefresh(formAction.isForceRefresh());
+                    action.setRefresh(formAction.getRefresh());
                     action.setMessage(formAction.getMessage());
+                    action.setRoute(strRoute);
                     if (formAction.hasParams()) {
                         for (UIParam param : formAction.getParams()) {
-                            Object value = JexlFormUtils.eval(env.getContext(), param.getValue());
+                            Object value = JexlFormUtils.eval(env.getWidgetContext(), param.getValue());
                             if (value != null) {
                                 action.addParam(param.getName(), (Serializable) value);
                             }

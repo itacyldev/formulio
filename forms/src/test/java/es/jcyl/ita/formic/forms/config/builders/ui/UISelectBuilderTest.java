@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.select.UISelect;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
@@ -65,8 +66,8 @@ public class UISelectBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_TEST_BASIC);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UISelect> selects = UIComponentHelper.findByClass(editCtl.getView(), UISelect.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UISelect> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UISelect.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 
@@ -89,8 +90,8 @@ public class UISelectBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_OPTIONS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UISelect> selects = UIComponentHelper.findByClass(editCtl.getView(), UISelect.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UISelect> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UISelect.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 

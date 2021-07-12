@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -27,9 +28,8 @@ import java.util.Set;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
@@ -54,21 +54,26 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIDatatable> node) {
-//        BuilderHelper.inheritAttribute(node, "repo");
         BuilderHelper.setUpRepo(node, true);
+        // default att values
+    }
+
+    @Override
+    protected Object getDefaultAttributeValue(UIDatatable element, ConfigNode node, String attName) {
+        if(AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)){
+            return Boolean.TRUE;
+        }
+        return super.getDefaultAttributeValue(element, node, attName);
     }
 
     @Override
     public void setupOnSubtreeEnds(ConfigNode<UIDatatable> node) {
         setUpColumns(node);
         setUpNumVisibleRows(node);
-        setUpRoute(node);
 
         UIDatatable element = node.getElement();
-
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         UIAction uiAction = element.getAction();
-        // TODO: FORMIC-229 Terminar refactorización de acciones
         if (uiAction == null) { // default action
             uiAction = new UIAction();
             uiAction.setType("nav");
@@ -76,31 +81,8 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
             element.setAction(uiAction);
         }
         if (CollectionUtils.isNotEmpty(paramNodes)) {
-            UIParam[] params = getParams(paramNodes);
+            UIParam[] params = BuilderHelper.getParams(paramNodes);
             uiAction.setParams(params);
-        }
-    }
-
-    private void setUpRoute(ConfigNode<UIDatatable> node) {
-        if (node.hasAttribute("route")) {
-            return; // already defined
-        }
-        // get add action from list controller to define default route
-        ConfigNode listNode = ConfigNodeHelper.getAscendantByTag(node, "list");
-        if (listNode == null) {
-            // the table is not nested in the listController, doesn't have to be automatically set
-            return;
-        }
-        // find add or update action to configure the destination for when user click on table element
-        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(listNode, NAV_ACTIONS);
-        if (CollectionUtils.isEmpty(addActions)) {
-            throw new ConfigurationException(DevConsole.error("Error trying to create default datatable for " +
-                    "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
-                    "no 'add' action. Use 'route' attribute on <datatable/> instead to set the id " +
-                    "of the destination form."));
-        } else {
-            ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
-            node.getElement().setRoute(addAction.getAttribute("route"));
         }
     }
 
@@ -169,6 +151,7 @@ public class UIDatatableBuilder extends BaseUIComponentBuilder<UIDatatable> {
      */
     public UIDatatable createDataTableFromRepo(Repository repo, String[] properties) {
         UIDatatable datatable = new UIDatatable();
+        datatable.setId(String.valueOf(RandomUtils.nextInt()));
         datatable.setRepo(repo);
         List<UIColumn> lstCols = createDefaultColumns(repo, properties);
         datatable.setColumns(lstCols.toArray(new UIColumn[lstCols.size()]));

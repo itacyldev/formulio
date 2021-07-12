@@ -39,7 +39,6 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
     /**
      * related UIComponents
      */
-    private String formId;
     private String inputId;
 
     public InputWidget(Context context) {
@@ -87,6 +86,11 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
         return getValue();
     }
 
+    @Override
+    public boolean allowsPartialRestore() {
+        return this.component.getAllowsPartialRestore();
+    }
+
     /**
      * method called after related elements are bound to current InputFieldView.
      */
@@ -113,10 +117,6 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
         this.converter = converter;
     }
 
-    public String getFormId() {
-        return formId;
-    }
-
     public String getInputId() {
         return inputId;
     }
@@ -124,9 +124,6 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
     /******/
     /** Form and field ids are set during the rendering process */
     /*******/
-    public void setFormId(String formId) {
-        this.formId = formId;
-    }
 
     public void setInputId(String inputId) {
         this.inputId = inputId;

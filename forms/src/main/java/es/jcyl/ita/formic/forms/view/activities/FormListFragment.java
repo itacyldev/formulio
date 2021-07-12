@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.project.Project;
 
 /**
@@ -34,14 +34,14 @@ public class FormListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
-    FormControllerFactory formControllerFactory;
+    ViewControllerFactory formControllerFactory;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public FormListFragment() {
-        formControllerFactory = FormControllerFactory.getInstance();
+        formControllerFactory = ViewControllerFactory.getInstance();
     }
 
     // TODO: Customize parameter initialization
@@ -148,6 +148,6 @@ public class FormListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(FormController form);
+        void onListFragmentInteraction(ViewController form);
     }
 }

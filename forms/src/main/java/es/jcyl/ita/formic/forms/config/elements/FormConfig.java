@@ -19,6 +19,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -38,7 +39,7 @@ public class FormConfig extends Entity implements Identificable {
     private String description;
     private String filePath;
     private FormListController list;
-    private List<FormEditController> edits;
+    private List<ViewController> edits;
     private Repository repo;
 
     public FormConfig(){
@@ -65,11 +66,11 @@ public class FormConfig extends Entity implements Identificable {
         this.list = list;
     }
 
-    public List<FormEditController> getEdits() {
+    public List<ViewController> getEdits() {
         return edits;
     }
 
-    public void setEdits(List<FormEditController> edits) {
+    public void setEdits(List<ViewController> edits) {
         this.edits = edits;
     }
 

@@ -42,7 +42,7 @@ public class LiteralBindingExpression implements ValueBindingExpression, JxltEng
     }
 
     @Override
-    public boolean isReadOnly() {
+    public boolean isReadonly() {
         return true;
     }
 

@@ -15,13 +15,21 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
+import es.jcyl.ita.formic.forms.actions.ActionHandler;
+import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class AbstractActionHandler {
+public abstract class AbstractActionHandler implements ActionHandler {
 
     protected final Router router;
     protected final MainController mc;
@@ -31,4 +39,27 @@ public abstract class AbstractActionHandler {
         this.mc = mc;
     }
 
+    public UserAction prepareNavigation(ActionContext actionContext, UserAction action){
+        return action;
+    }
+
+    public void onError(ActionContext actionContext, UserAction action, Exception e) {
+        String msg = getErrorMessage(action, e);
+        if (StringUtils.isNotBlank(msg)) {
+            UserMessagesHelper.toast(actionContext.getViewContext(), msg);
+        }
+    }
+
+    /**
+     * Default messages
+     * @param action
+     * @RETURN
+     */
+    public String getSuccessMessage(ActionContext actionContext, UserAction action) {
+        return null;
+    }
+
+    protected String getErrorMessage(UserAction action, Exception e) {
+        return Config.getInstance().getStringResource(R.string.action_generic_error);
+    }
 }

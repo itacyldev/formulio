@@ -69,7 +69,7 @@ public class DateTimeContext extends AbstractMapContext implements Context {
     private DateFormat getFormatter(String key) {
         String pattern = key.replace("now.", "");
         if (!_formatters.containsKey(pattern)) {
-            DateFormat df = null;
+            DateFormat df;
             try {
                 df = new SimpleDateFormat(pattern);
 

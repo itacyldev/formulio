@@ -15,12 +15,21 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
+import android.widget.ImageView;
+
+import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.validation.Validator;
+import es.jcyl.ita.formic.forms.view.ViewConfigException;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 
@@ -35,10 +44,13 @@ public class UIInputComponent extends AbstractUIComponent {
     private Integer inputType = null;
     protected boolean hasDeleteButton = true;
     protected boolean hasTodayButton = true;
-
+    protected String hint;
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
+
+    protected ImageView resetButton;
+    protected ImageView infoButton;
 
     public void addValidator(Validator validator) {
         if (validator == null) {
@@ -75,10 +87,8 @@ public class UIInputComponent extends AbstractUIComponent {
 
     @Override
     public String toString() {
-        return String.format("[%s]: %s/%s", this.getClass(), this.id, this.getLabel());
+        return String.format("[%s]: %s/%s", this.getClass().getSimpleName(), this.id, this.getLabel());
     }
-
-
 
     public boolean isNestedProperty() {
         List<String> dependingVariables = this.getValueExpression().getDependingVariables();
@@ -94,7 +104,7 @@ public class UIInputComponent extends AbstractUIComponent {
      * @return
      */
     public boolean isBound() {
-        return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
+        return (getValueExpression() == null) ? false : !getValueExpression().isReadonly();
     }
 
     public String getLabel() {
@@ -152,5 +162,29 @@ public class UIInputComponent extends AbstractUIComponent {
 
     public void setHasTodayButton(boolean hasTodayButton) {
         this.hasTodayButton = hasTodayButton;
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
+    public ImageView getResetButton() {
+        return resetButton;
+    }
+
+    public void setResetButton(ImageView resetButton) {
+        this.resetButton = resetButton;
+    }
+
+    public ImageView getInfoButton() {
+        return infoButton;
+    }
+
+    public void setInfoButton(ImageView infoButton) {
+        this.infoButton = infoButton;
     }
 }

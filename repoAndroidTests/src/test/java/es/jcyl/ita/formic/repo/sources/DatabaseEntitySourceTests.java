@@ -74,7 +74,7 @@ public class DatabaseEntitySourceTests {
             // use same string for sourceId and entityId
             DBTableEntitySource eSource = createDBSource(entityType, entityType, source);
             // create random Meta and create related table to persist data
-            EntityMeta meta = DevDbBuilder.createRandomMeta(entityType);
+            EntityMeta meta = DevDbBuilder.buildRandomMeta(entityType);
             DevDbBuilder.createTable(db, meta);
             DevDbBuilder.setDefaultConverters(meta);
 

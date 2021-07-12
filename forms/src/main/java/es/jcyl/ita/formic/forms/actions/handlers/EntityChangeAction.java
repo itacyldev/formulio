@@ -23,15 +23,15 @@ import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class EntityChangeAction<F extends FormController> extends AbstractActionHandler
+public abstract class EntityChangeAction<F extends ViewController> extends AbstractActionHandler
         implements ActionHandler {
 
     public EntityChangeAction(MainController mc, Router router) {
@@ -40,43 +40,23 @@ public abstract class EntityChangeAction<F extends FormController> extends Abstr
 
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
-        // save view state for each form
-        FormController formController = actionContext.getFc();
-        formController.saveViewState();
+        // save view state for each WidgetContextHolder (forms, list-items, ..)
+        mc.saveViewState();
         try {
             doAction(actionContext, action);
             String msg = getSuccessMessage(action);
             // resolve after-action navigation
-            resolveNavigation(actionContext, action, msg);
         } catch (Exception e) {
             // re-render form content
             onError(actionContext, action, e);
-            throw e;
+            if (!(e instanceof ValidatorException)) {
+                throw e;
+            }
         }
     }
-
-    protected void resolveNavigation(ActionContext actionContext, UserAction action, String msg) {
-        if (action.isForceRefresh()) {
-            // Postback action
-            mc.renderBack();
-            if (StringUtils.isNotBlank(msg)) {
-                UserMessagesHelper.toast(actionContext.getViewContext(), msg);
-            }
-        } else if (StringUtils.isBlank(action.getRoute())) {
-            // no navigation, stay in form
-            if (StringUtils.isNotBlank(msg)) {
-                UserMessagesHelper.toast(actionContext.getViewContext(), msg);
-            }
-        } else {
-            // don't want to go back to form detail if user presses back button
-            router.popHistory(1);
-            router.navigate(actionContext, action, msg);
-        }
-    }
-
-    protected void onError(ActionContext actionContext, UserAction action, Exception e) {
-        DevConsole.error("Error while execute user action: " + action.toString(), e);
+    public void onError(ActionContext actionContext, UserAction action, Exception e) {
         mc.renderBack();
+        mc.restoreViewState();
         String msg = getErrorMessage(action, e);
         if (StringUtils.isNotBlank(msg)) {
             UserMessagesHelper.toast(actionContext.getViewContext(), msg);

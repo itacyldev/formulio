@@ -36,8 +36,8 @@ import es.jcyl.ita.formic.forms.components.table.UIRow;
 import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 import static org.mockito.Mockito.mock;
@@ -57,7 +57,6 @@ public class UITableRendererTest {
     public void setup() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
-
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
     }
@@ -70,10 +69,11 @@ public class UITableRendererTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // create an entity with 10 properties and gather then into a 2 rows x 5 columns
         UITable table = new UITable();
+
         Widget tableView = (Widget) renderHelper.render(env, table);
         // check there's a TextView element
         Assert.assertNotNull(tableView);
@@ -87,7 +87,7 @@ public class UITableRendererTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // create an entity with 10 properties and gather then into a 2 rows x 5 columns
         UITable table = new UITable();
@@ -109,7 +109,7 @@ public class UITableRendererTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // create an entity with 10 properties and gather then into a 2 rows x 5 columns
         UITable table = new UITable();
@@ -145,7 +145,7 @@ public class UITableRendererTest {
         ActionController mcAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // create an entity with 10 properties and gather then into a 2 rows x 5 columns
         UITable table = new UITable();

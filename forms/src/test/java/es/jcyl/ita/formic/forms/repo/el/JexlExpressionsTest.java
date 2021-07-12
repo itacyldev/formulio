@@ -127,11 +127,11 @@ public class JexlExpressionsTest {
     }
 
     /**
-     * Checks the expression is correctly interpreted as readOnly (no two-way binding uicomponent-entityProperty
+     * Checks the expression is correctly interpreted as readonly (no two-way binding uicomponent-entityProperty
      * is possible
      */
     @Test
-    public void testReadOnlyExpressions() {
+    public void testReadonlyExpressions() {
 
         String[] expressions = new String[]{
                 "${entity.property}",
@@ -151,7 +151,7 @@ public class JexlExpressionsTest {
         for (String expr : expressions) {
             System.out.println("Tested expression: " + expr);
             ValueBindingExpression vbExpression = expressionFactory.create(expr);
-            Assert.assertEquals(expr, expected[i], vbExpression.isReadOnly());
+            Assert.assertEquals(expr, expected[i], vbExpression.isReadonly());
             i++;
         }
     }

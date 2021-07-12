@@ -17,33 +17,47 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
-import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class DeleteActionHandler extends EntityChangeAction {
+public class DeleteActionHandler extends AbstractActionHandler {
 
     public DeleteActionHandler(MainController mc, Router router) {
         super(mc, router);
     }
 
     @Override
-    protected void doAction(ActionContext actionContext, UserAction action) {
-        FormEditController formController = (FormEditController) actionContext.getFc();
-        formController.delete(mc.getGlobalContext());
+    public void handle(ActionContext actionContext, UserAction action) {
+        if (StringUtils.isNotBlank(action.getController())) {
+            ViewWidget rootWidget = action.getWidget().getRootWidget();
+            // check all controllers exits before method is executed
+            List<WidgetController> ctrlList = ActionHandlerHelper.getControllers(rootWidget, action);
+            for (WidgetController controller : ctrlList) {
+                controller.delete();
+            }
+        } else {
+            // Use main form controller
+            ViewController viewController = actionContext.getViewController();
+            WidgetController widgetController = viewController.getMainWidgetController();
+            widgetController.delete();
+        }
     }
-
+    
     @Override
-    protected String getSuccessMessage(UserAction action) {
+    public String getSuccessMessage(ActionContext actionContext, UserAction action) {
         return Config.getInstance().getStringResource(R.string.action_delete_success);
     }
 

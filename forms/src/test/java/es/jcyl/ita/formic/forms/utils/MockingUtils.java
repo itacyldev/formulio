@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 import static org.mockito.Mockito.*;
 
@@ -42,7 +42,7 @@ public class MockingUtils {
 
     public static MainController mockMainController(Context androidContext, CompositeContext globalContext) {
         MainController mc = mock(MainController.class);
-        when(mc.getFormController()).thenReturn(mock(FormEditController.class));
+        when(mc.getViewController()).thenReturn(mock(FormEditController.class));
         // set global context
         when(mc.getGlobalContext()).thenReturn(globalContext);
         // mock and set ActionController
@@ -53,7 +53,7 @@ public class MockingUtils {
         when(mc.getRouter()).thenReturn(mock(Router.class));
         // mock and set Rendering environment
         RenderingEnv env = mock(RenderingEnv.class);
-        when(env.getViewContext()).thenReturn(androidContext);
+        when(env.getAndroidContext()).thenReturn(androidContext);
         when(mc.getRenderingEnv()).thenReturn(env);
 
         // create script engine and set to Mc

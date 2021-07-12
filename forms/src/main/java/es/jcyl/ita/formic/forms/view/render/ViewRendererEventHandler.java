@@ -20,19 +20,23 @@ package es.jcyl.ita.formic.forms.view.render;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
+import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.repo.Entity;
 
 public interface ViewRendererEventHandler {
 
-    void onNewFormFound(UIForm form);
+    void onViewStart(UIView view);
 
-    void onEntityContextChanged(ComponentContext fContext);
+    void onEntityContextChanged(Entity entity);
 
-    void onViewContextChanged(ComponentContext fContext);
+    void onWidgetContextChange(WidgetContext context);
 
     void onBeforeRenderComponent(UIComponent component);
 
     void onAfterRenderComponent(Widget widget);
+
+    void onViewEnd(ViewWidget viewWidget);
 }

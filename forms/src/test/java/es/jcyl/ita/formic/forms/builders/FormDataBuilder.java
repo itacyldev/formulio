@@ -142,13 +142,15 @@ public class FormDataBuilder extends AbstractDataBuilder<UIForm> {
             }
 
             field.setValueExpression(ve);
+            field.setParent(this.baseModel);
+            field.setParentForm(this.baseModel);
             fields.add(field);
         }
 
         this.baseModel.setId("form" + RandomStringUtils.randomAlphanumeric(4));
         this.baseModel.setLabel(RandomStringUtils.randomAlphanumeric(8));
         this.baseModel.setChildren(fields);
-        this.baseModel.setReadOnly(false);
+        this.baseModel.setReadonly(false);
         return this;
     }
 
@@ -160,7 +162,7 @@ public class FormDataBuilder extends AbstractDataBuilder<UIForm> {
             throw new DataBuilderException("An error occurred while trying to copy data from the model: "
                     + model.toString(), e);
         }
-        model.setReadOnly(false);
+        model.setReadonly(false);
         return model;
     }
 }

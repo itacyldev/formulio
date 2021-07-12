@@ -16,14 +16,11 @@ package es.jcyl.ita.formic.forms.router;
  */
 
 import android.app.Activity;
-import android.content.Context;
 
 import org.mini2Dx.collections.CollectionUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
@@ -52,7 +49,7 @@ public class Router {
     }
 
     /**
-     * User this method just for inicial navigation, when you'r not coming from a formController
+     * User this method just for initial navigation, when you're not coming from a formController
      *
      * @param viewContext
      * @param action
@@ -64,13 +61,31 @@ public class Router {
 
     public void navigate(ActionContext actionContext, UserAction action, String... messages) {
         this.currentViewMessages = messages;
-        if ("back".equalsIgnoreCase(action.getRoute())) {
-            this.back(actionContext.getViewContext());
+        String route = action.getRoute().toLowerCase();
+        if (route.startsWith("back")) {
+            int numHops = getBackHops(route);
+            this.back(actionContext.getViewContext(), null, numHops);
         } else {
+            if (action.getPopHistory() > 0) {
+                popHistory(action.getPopHistory());
+            }
             mc.navigate(actionContext.getViewContext(), action.getRoute(), action.getParams());
             if (action.isRegisterInHistory()) {
-                recordHistory(action.getRoute(), action.getParams());
+                recordHistory(action);
             }
+        }
+    }
+
+    private int getBackHops(String route) {
+        if (!route.contains("-")) {
+            return 1;
+        }
+        String[] splits = route.split("-");
+        try {
+            return Integer.valueOf(splits[1]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Invalid hop number for route 'back': " +
+                    "[%s], the syntax for history navigation routes is 'back-<integer>'", splits[1]));
         }
     }
 
@@ -83,19 +98,22 @@ public class Router {
     }
 
     public void back(android.content.Context context) {
-        back(context, null);
+        back(context, null, 1);
     }
 
     public void back(android.content.Context context, String[] messages) {
-        this.currentViewMessages = messages;
-        State lastState = popHistory();
-        if (lastState != null) {
-            doNavigate(context, lastState);
-        }
+        back(context, messages, 1);
     }
 
-    private void doNavigate(Context context, State state) {
-        mc.navigate(context, state.formId, state.params);
+    public void back(android.content.Context context, String[] messages, int numHops) {
+        this.currentViewMessages = messages;
+        State lastState = null;
+        for (int i = 0; i < numHops; i++) {
+            lastState = popHistory();
+        }
+        if (lastState != null) {
+            mc.navigate(context, lastState.formId, lastState.action.getParams());
+        }
     }
 
     /**
@@ -105,8 +123,10 @@ public class Router {
      */
     private State popHistory() {
         this.current = null;
-        this.currentActivity.finish();
-        this.currentActivity = null;
+        if (this.currentActivity != null) {
+            this.currentActivity.finish();
+            this.currentActivity = null;
+        }
         if (hasHistory()) {
             // get last state from history
             int lastPos = this.memento.size() - 1;
@@ -128,11 +148,11 @@ public class Router {
     }
 
 
-    private void recordHistory(String formId, Map<String, Serializable> params) {
+    private void recordHistory(UserAction action) {
         if (current != null) {
             this.memento.add(current);
         }
-        this.current = new State(formId, params);
+        this.current = new State(action.getRoute(), action);
         if (DevConsole.isDebugEnabled()) {
             debugHistory();
         }
@@ -165,23 +185,25 @@ public class Router {
 
     public class State {
         String formId;
-        Map<String, Serializable> params;
+        UserAction action;
 
-        public State(String formId, Map<String, Serializable> params) {
+        public State(String formId, UserAction action) {
             this.formId = formId;
-            this.params = params;
+            this.action = action;
         }
 
         public String toString() {
-            return String.format("%s - %s", formId, params);
+            return String.format("%s - %s", formId, action);
         }
     }
 
     private void debugHistory() {
+        debug("----------------------------------------");
         if (CollectionUtils.isNotEmpty(memento)) {
             for (State state : memento) {
                 debug(state.toString());
             }
         }
+        debug("----------------------------------------");
     }
 }

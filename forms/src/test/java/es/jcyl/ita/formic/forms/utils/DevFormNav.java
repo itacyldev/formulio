@@ -15,12 +15,18 @@ package es.jcyl.ita.formic.forms.utils;
  * limitations under the License.
  */
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.events.Event;
+import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * Utility class to simulate form navigation in tests
@@ -31,17 +37,20 @@ public class DevFormNav {
 
     private final android.content.Context context;
     private final MainController mc;
+    private final UserEventInterceptor eventInterceptor;
 
     public DevFormNav(android.content.Context context, MainController mc) {
-        this.context = context;
         this.mc = mc;
+        RenderingEnv renderingEnv = mc.getRenderingEnv();
+        this.context = context;
+        this.eventInterceptor = renderingEnv.getUserActionInterceptor();
     }
 
     public void nav(String formControllerId) {
         nav(formControllerId, null);
     }
 
-    public void nav(String formControllerId, Map<String, Serializable> params) {
+    public void nav(String formControllerId, Map<String, Object> params) {
         UserAction navAction = UserAction.navigate(formControllerId);
         if (params != null) {
             navAction.setParams(params);
@@ -52,9 +61,36 @@ public class DevFormNav {
     }
 
     public void navToEntity(String formControllerId, String entityId) {
-        Map<String, Serializable> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("entityId", entityId);
         nav(formControllerId, params);
+    }
+
+    public void clickSave() {
+        UserAction action = new UserAction("save", null);
+        Event event = new Event(Event.EventType.CLICK, null, action);
+        eventInterceptor.notify(event);
+    }
+
+    public void clickSave(String controller) {
+        UserAction action = new UserAction("save", null);
+        action.setController(controller);
+        Event event = new Event(Event.EventType.CLICK, null, action);
+        eventInterceptor.notify(event);
+    }
+
+    public ViewController getViewController() {
+        return mc.getViewController();
+    }
+    public ViewWidget getRootWidget() {
+        return mc.getViewController().getRootWidget();
+    }
+
+    public <T> T getWidget(String componentId, Class<T> widgetClass) {
+        ViewController viewController = mc.getViewController();
+        ViewWidget rootWidget = viewController.getRootWidget();
+        Widget widget = ViewHelper.findComponentWidget(rootWidget, componentId);
+        return (widget == null) ? null : (T) widget;
     }
 
 }

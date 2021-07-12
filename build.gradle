@@ -45,18 +45,18 @@ allprojects {
 //            url "$androidHome/extras/google/m2repository/"
 //        }
 
-        maven {
-            name "ITACyL - snapshots"
-            url "http://repo.itacyl.es/archiva/repository/snapshots/"
-        }
-        maven {
-            name "ITACyL - internal"
-            url "http://repo.itacyl.es/archiva/repository/internal/"
-        }
-        maven {
-            name "ITACyL - thirdparty"
-            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
-        }
+//        maven {
+//            name "ITACyL - snapshots"
+//            url "http://repo.itacyl.es/archiva/repository/snapshots/"
+//        }
+//        maven {
+//            name "ITACyL - internal"
+//            url "http://repo.itacyl.es/archiva/repository/internal/"
+//        }
+//        maven {
+//            name "ITACyL - thirdparty"
+//            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
+//        }
     }
 
     configurations.all {
@@ -80,8 +80,8 @@ task clean(type: Delete) {
 
 
 ext {
-    versionCode = 12
-    versionName = '0.3.0'
+    versionCode = 14
+    versionName = '0.4.0'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
     targetSdkVersion = 29
@@ -90,7 +90,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.3.0'
+    version = '0.4.0'
     artifactId = 'Formic'
 
     sharedDeps = [

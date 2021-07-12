@@ -25,6 +25,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -69,8 +70,8 @@ public class UIAutocompleteBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_TEST_BASIC);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 
@@ -93,8 +94,8 @@ public class UIAutocompleteBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_OPTIONS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
         Assert.assertNotNull(selects);
         Assert.assertTrue("One select is expected, found: " + selects.size(), selects.size() == 1);
 
@@ -118,8 +119,8 @@ public class UIAutocompleteBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_OPTIONS_FROM_REPO);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
 
         // repo must be set with parent value "contacts"
         UIAutoComplete select = selects.get(0);
@@ -146,8 +147,8 @@ public class UIAutocompleteBuilderTest {
         String xml = XmlConfigUtils.createEditForm(String.format(XML_OPTIONS_FROM_REPO_ATTS, pName1,pName2));
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIAutoComplete> selects = UIComponentHelper.findByClass(editCtl.getView(), UIAutoComplete.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIAutoComplete> selects = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIAutoComplete.class);
 
         // repo must be set with parent value "contacts"
         UIAutoComplete select = selects.get(0);

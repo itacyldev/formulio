@@ -25,15 +25,15 @@ public class AttributeDef {
     public static Attribute ID = new Attribute("id");
     public static Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     public static Attribute RENDER = new Attribute("render", "renderExpression", "binding");
-    public static Attribute READONLY = new Attribute("readOnly", "readOnly", "binding");
-    public static Attribute READONLY_MESSAGE = new Attribute("readOnlyMessage", "readOnlyMessage", String.class);
+    public static Attribute READONLY = new Attribute("readonly", "readonly", "binding");
+    public static Attribute READONLY_MESSAGE = new Attribute("readonlyMessage", "readonlyMessage", String.class);
+    public static Attribute ALLOWS_PARTIAL_RESTORE = new Attribute("allowsPartialRestore", Boolean.class);
 
     // common input fields
     public static Attribute TYPE = new Attribute("type", "type", String.class);
     public static Attribute TYPE_STR = new Attribute("type", "typeStr", String.class);
     public static Attribute LABEL = new Attribute("label");
     public static Attribute PLACEHOLDER = new Attribute("placeHolder", "placeHolder", "binding");
-
 
     public static Attribute CONVERTER = new Attribute("converter", "valueConverter", String.class);
     // component description
@@ -54,20 +54,10 @@ public class AttributeDef {
     public static Attribute INPUT_TYPE = new Attribute("inputType", Integer.class);
     public static Attribute VALIDATOR = new Attribute("validator", "validator", "validator");
     public static Attribute LINES = new Attribute("lines", Integer.class);
-
-    public static Attribute DEFAULT_VALUE = new Attribute("defaultValue", String.class);
-
-    public static Attribute HINT = new Attribute("hint");
-
+    public static Attribute HINT = new Attribute("hint", String.class);
     public static Attribute HAS_DELETE_BUTTON = new Attribute("hasDeleteButton", Boolean.class);
-
     public static Attribute HAS_TODAY_BUTTON = new Attribute("hasTodayButton", Boolean.class);
-
-    // common trasversal parameters
-    public static Attribute ROUTE = new Attribute("route", "route", "binding");
-    public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
-    public static Attribute FORCE_REFRESH = new Attribute("forceRefresh", Boolean.class);
-    public static Attribute MESSAGE = new Attribute("message", "message", String.class);
+    public static Attribute PATTERN = new Attribute("pattern", String.class);
 
     // repository definition
     public static Attribute REPO = new Attribute("repo", "repo", "repo");
@@ -129,12 +119,19 @@ public class AttributeDef {
     public static Attribute COLOR = new Attribute("color", "color", "color");
     public static Attribute STROKE_WIDTH = new Attribute("strokeWidth", Integer.class);
 
+    // Action parameters
+    public static Attribute ACTION = new Attribute("action", "action", "action");
+    public static Attribute ROUTE = new Attribute("route", "route", "binding-route");
+    public static Attribute CONTROLLER = new Attribute("controller", String.class);
+    public static Attribute REGISTER_IN_HISTORY = new Attribute("registerInHistory", Boolean.class);
+    public static Attribute REFRESH = new Attribute("refresh", String.class);
+    public static Attribute RESTORE_VIEW = new Attribute("restoreView", Boolean.class);
+    public static Attribute POP_HISTORY = new Attribute("popHistory", Integer.class);
+    public static Attribute MESSAGE = new Attribute("message", "message", String.class);
+
     // scripting
     public static Attribute ON_SAVE = new Attribute("onsave", true);
     public static Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);
     public static Attribute ON_AFTER_RENDER = new Attribute("onAfterRender", "onAfterRenderAction", String.class);
-    public static Attribute ACTION = new Attribute("action", "action", "action");
     public static Attribute SRC = new Attribute("src", "src", "pathResolver");
-
-
 }

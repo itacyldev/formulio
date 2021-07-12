@@ -23,9 +23,9 @@ import org.apache.commons.lang3.RandomUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.selection.EntitySelectorWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -37,11 +37,11 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
 
     public final Widget<C> render(RenderingEnv env, C component) {
         W widget = createWidget(env, component);
-        if (widget instanceof EntitySelector) {
-            ((EntitySelector) widget).setSelectionManager(env.getSelectionManager());
+        if (widget instanceof EntitySelectorWidget) {
+            ((EntitySelectorWidget) widget).setSelectionManager(env.getSelectionManager());
         }
         // check render condition
-        boolean isRendered = component.isRendered(env.getContext());
+        boolean isRendered = component.isRendered(env.getWidgetContext());
         widget.setVisibility(isRendered ? View.VISIBLE : View.GONE);
         if (!isRendered) {
             return widget;
@@ -66,7 +66,10 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
      * @return
      */
     protected W createWidget(RenderingEnv env, C component) {
-        Widget widget = ViewHelper.inflate(env.getViewContext(), getWidgetLayoutId(component), Widget.class);
+//        if(component instanceof EntityHolderProxy){
+//            component = (C) ((EntityHolderProxy) component).getDelegate();
+//        }
+        Widget widget = ViewHelper.inflate(env.getAndroidContext(), getWidgetLayoutId(component), Widget.class);
         // set unique id and tag
         widget.setId(RandomUtils.nextInt());
         widget.setTag(getWidgetViewTag(component));
@@ -94,9 +97,7 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
      * @return
      */
     protected String getWidgetViewTag(C c) {
-        UIForm form = c.getParentForm();
-        String formId = (form == null) ? "root" : form.getId();
-        return formId + ":" + c.getId();
+        return c.getId();
     }
 
     /**
@@ -108,7 +109,7 @@ public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C
      * @return
      */
     protected <T> T getComponentValue(RenderingEnv env, C component, @Nullable Class<T> clazz) {
-        Object value = component.getValue(env.getContext());
+        Object value = component.getValue(env.getWidgetContext());
         if (value == null) {
             value = handleNullValue(component);
         }

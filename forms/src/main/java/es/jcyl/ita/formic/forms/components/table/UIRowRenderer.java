@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.components.table;
 
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -13,7 +14,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*
@@ -49,7 +50,7 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UIRow> root, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UIRow> root, Widget[] views) {
         TableRow rowView = root.findViewById(R.id.row_layout);
         UIRow component = root.getComponent();
 
@@ -96,6 +97,37 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
             }
 
             i++;
+        }
+
+        rowView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout()
+            {
+                adjustRowHeight(rowView);
+            }
+        });
+
+    }
+
+    private int gatMaxRowHeight(TableRow rowView){
+        int maxRowHeight = 0;
+        Integer nChild = rowView.getChildCount();
+        for (int i = 0; i < nChild; i++) {
+            View cellView = rowView.getChildAt(i);
+            if (maxRowHeight < cellView.getHeight()){
+                maxRowHeight = cellView.getHeight();
+            }
+        }
+        return maxRowHeight;
+    }
+
+    private void adjustRowHeight(TableRow rowView){
+        int maxRowHeight = gatMaxRowHeight(rowView);
+        Integer nChild = rowView.getChildCount();
+        for (int i = 0; i < nChild; i++) {
+            View cellView = rowView.getChildAt(i);
+            cellView.setMinimumHeight(maxRowHeight);
         }
     }
 

@@ -10,6 +10,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
@@ -46,7 +47,7 @@ public class ScriptSourceBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_INLINE_TEST);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
 
         // check there's a script related to current form
         Script script = ScriptEngine.getInstance().getScript(editCtl.getId());
@@ -63,7 +64,7 @@ public class ScriptSourceBuilderTest {
         when(prjMock.getFormsFolder()).thenReturn(TestUtils.findFile("scripts").getAbsolutePath());
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(prjMock, xml);
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
 
         // check there's a script related to current form
         Script script = ScriptEngine.getInstance().getScript(editCtl.getId());

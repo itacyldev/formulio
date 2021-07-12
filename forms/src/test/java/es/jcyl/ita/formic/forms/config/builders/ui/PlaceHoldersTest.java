@@ -65,7 +65,7 @@ public class PlaceHoldersTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC_HEAD);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIHeading> headings = UIComponentHelper.findByClass(formConfig.getList().getView(), UIHeading.class);
+        List<UIHeading> headings = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIHeading.class);
         Assert.assertNotNull(headings);
         UIHeading heading = headings.get(0);
         Assert.assertNotNull(heading.getId());
@@ -87,7 +87,7 @@ public class PlaceHoldersTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_HEAD_WITH_ATTRIBUTES);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIHeading> headings = UIComponentHelper.findByClass(formConfig.getList().getView(), UIHeading.class);
+        List<UIHeading> headings = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIHeading.class);
         Assert.assertNotNull(headings);
 
         UIHeading heading = headings.get(0);
@@ -107,7 +107,7 @@ public class PlaceHoldersTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_DIVISOR);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UIDivisor> divisors = UIComponentHelper.findByClass(formConfig.getList().getView(), UIDivisor.class);
+        List<UIDivisor> divisors = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIDivisor.class);
         Assert.assertNotNull(divisors);
         UIDivisor divisor = divisors.get(0);
         Assert.assertNotNull(divisor.getId());

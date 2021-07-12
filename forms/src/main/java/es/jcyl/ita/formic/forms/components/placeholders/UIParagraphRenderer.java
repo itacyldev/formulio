@@ -21,7 +21,7 @@ import android.widget.TextView;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -39,7 +39,7 @@ public class UIParagraphRenderer extends AbstractRenderer<UIParagraph, Widget<UI
     protected void composeWidget(RenderingEnv env, Widget<UIParagraph> widget) {
         UIParagraph paragraph = widget.getComponent();
 
-        String value = (String) paragraph.getValue(env.getContext());
+        String value = (String) paragraph.getValue(env.getWidgetContext());
 
         TextView textView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.paragraph_text);
 

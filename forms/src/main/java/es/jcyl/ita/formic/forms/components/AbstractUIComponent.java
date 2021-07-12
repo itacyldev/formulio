@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.components.form.ContextHolder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -22,6 +20,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 public abstract class AbstractUIComponent implements Identificable, UIComponent {
 
     protected String id;
+    private String absoluteId;
     protected String label;
 
     protected ValueBindingExpression valueExpression;
@@ -29,15 +28,16 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     protected UIView root;
     protected UIComponent parent;
-    protected UIComponent[] children;
     protected UIForm parentForm;
-    protected ComponentContext parentContext;
+    protected EntityHolder entityHolder;
+    protected UIComponent[] children;
 
-    private String rendererType;
-    private boolean renderChildren;
+    protected String rendererType;
+    protected boolean renderChildren;
+    private boolean allowsPartialRestore = true;
 
-    protected ValueBindingExpression readOnly;
-    protected String readOnlyMessage;
+    protected ValueBindingExpression readonly;
+    protected String readonlyMessage;
 
     protected ValueBindingExpression placeHolder;
     /**
@@ -67,6 +67,13 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
      * @return
      */
     public String getAbsoluteId() {
+        if (this.absoluteId == null) {
+            this.absoluteId = calculateAbsoluteId();
+        }
+        return this.absoluteId;
+    }
+
+    private String calculateAbsoluteId() {
         String completeId = id;
         if (parent != null) {
             completeId = parent.getAbsoluteId() + "." + id;
@@ -86,6 +93,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     public void setId(final String id) {
         this.id = id;
+        this.absoluteId = this.calculateAbsoluteId();
     }
 
     public UIComponent getParent() {
@@ -94,9 +102,11 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     public void setParent(UIComponent parent) {
         this.parent = parent;
+        this.parentForm = null;//force recalculate on next access
         if (parent != null) {
             this.root = parent.getRoot();
         }
+        this.absoluteId = calculateAbsoluteId();
     }
 
     public UIComponent[] getChildren() {
@@ -176,7 +186,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
     }
 
     public UIForm getParentForm() {
-        if (this.parentContext == null) {
+        if (this.parentForm == null) {
             // find
             UIComponent node = this.getParent();
             // climb up the tree until you find a form
@@ -188,18 +198,20 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
         return this.parentForm;
     }
 
-    public ComponentContext getParentContext() {
-        if (this.parentContext == null) {
+    @Override
+    public EntityHolder getEntityHolder() {
+        if (entityHolder == null) {
             // find
             UIComponent node = this.getParent();
             // climb up the tree until you find a form
-            while ((node != null) && !(node instanceof ContextHolder)) {
+            while ((node != null) && !(node instanceof EntityHolder)) {
                 node = node.getParent();
             }
-            this.parentContext = (node == null) ? null : ((ContextHolder) node).getContext();
+            this.entityHolder = (node instanceof EntityHolder) ? (EntityHolder) node : null;
         }
-        return this.parentContext;
+        return entityHolder;
     }
+
 
     public void setParentForm(UIForm parentForm) {
         this.parentForm = parentForm;
@@ -297,7 +309,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     @Override
     public String toString() {
-        return this.getClass().getName() + "{" +
+        return this.getClass().getSimpleName() + "{" +
                 "id='" + id + '\'' +
                 ", label='" + label + '\'' +
                 ", valueExpr=" + valueExpression +
@@ -319,29 +331,29 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
         isEntityMapping = entityMapping;
     }
 
-    public String getReadOnlyMessage() {
-        return readOnlyMessage;
+    public String getReadonlyMessage() {
+        return readonlyMessage;
     }
 
-    public void setReadOnlyMessage(String readOnlyMessage) {
-        this.readOnlyMessage = readOnlyMessage;
+    public void setReadonlyMessage(String readonlyMessage) {
+        this.readonlyMessage = readonlyMessage;
     }
 
-    public Object isReadOnly(Context context) {
-        if (this.readOnly == null) {
+    public boolean isReadonly(Context context) {
+        if (this.readonly == null) {
             return false;
         } else {
             try {
-                return JexlFormUtils.eval(context, this.readOnly);
+                return (Boolean) ConvertUtils.convert(JexlFormUtils.eval(context, this.readonly), Boolean.class);
             } catch (Exception e) {
-                error("Error while trying to evaluate JEXL expression: " + this.readOnly.toString(), e);
-                return null;
+                error("Error while trying to evaluate JEXL expression: " + this.readonly.toString(), e);
+                return false;
             }
         }
     }
 
-    public void setReadOnly(ValueBindingExpression readOnly) {
-        this.readOnly = readOnly;
+    public void setReadonly(ValueBindingExpression readonly) {
+        this.readonly = readonly;
     }
 
     public ValueBindingExpression getPlaceHolder() {
@@ -352,4 +364,11 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
         this.placeHolder = placeHolder;
     }
 
+    public Boolean getAllowsPartialRestore() {
+        return allowsPartialRestore;
+    }
+
+    public void setAllowsPartialRestore(Boolean allowsPartialRestore) {
+        this.allowsPartialRestore = allowsPartialRestore;
+    }
 }

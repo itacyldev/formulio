@@ -43,8 +43,8 @@ public class UICard extends AbstractUIComponent {
     String imagePosition = ImagePosition.TOP.getPosition();
 
     public UICard() {
-        setRendererType("card");
-        this.setRenderChildren(true);
+        rendererType ="card";
+        renderChildren = true;
     }
 
     public UIHeading getTitle() {
@@ -138,7 +138,8 @@ public class UICard extends AbstractUIComponent {
     public String getLabelValue(Context context) {
         String labelValue = null;
         if (StringUtils.isNotEmpty(label)) {
-            labelValue = JexlFormUtils.eval(context, label).toString();
+            Object value = JexlFormUtils.eval(context, label);
+            labelValue = (value == null) ? "" : value.toString();
         }
         return labelValue;
     }

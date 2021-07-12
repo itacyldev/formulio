@@ -18,13 +18,10 @@ package es.jcyl.ita.formic.forms.components.autocomplete;
 import android.view.View;
 import android.widget.ImageView;
 
-import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
-
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
 /**
@@ -35,7 +32,7 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, AutoCompleteView> {
 
     @Override
-    protected AutoCompleteWidget  createWidget(RenderingEnv env, UIAutoComplete component) {
+    protected AutoCompleteWidget createWidget(RenderingEnv env, UIAutoComplete component) {
         AutoCompleteWidget widget = (AutoCompleteWidget) super.createWidget(env, component);
         return widget;
     }
@@ -45,21 +42,7 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
         AutoCompleteView input = widget.getInputView();
         ImageView arrowDropDown = ViewHelper.findViewAndSetId(widget, R.id.input_view_image,
                 ImageView.class);
-        input.initialize(env, widget.getComponent(), arrowDropDown);
-
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        if ((Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.GONE);
-        }
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                input.setSelection(-1);
-            }
-        });
-
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+        input.initialize(env, widget, arrowDropDown);
 
         arrowDropDown.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +51,19 @@ public class AutoCompleteRenderer extends InputTextRenderer<UIAutoComplete, Auto
             }
         });
 
+        setOnClickListenerResetButton(widget.getComponent(), input);
+
+
+    }
+
+    private void setOnClickListenerResetButton(UIAutoComplete component, AutoCompleteView input) {
+        ImageView resetButton = component.getResetButton();
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                input.setSelection(-1);
+            }
+        });
     }
 
     @Override

@@ -32,6 +32,7 @@ import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
@@ -68,7 +69,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -76,8 +77,47 @@ public class ActionAttributeResolverTest {
         Assert.assertEquals(ActionType.DELETE.name().toLowerCase(), myButton.getAction().getType());
     }
 
+    private static final String XML_TEST_BUTTON_ROUTE = "<button id=\"myButton\" route=\"aRouteToGo\" />";
+
+    @Test
+    public void testActionWithRouteParam() {
+        // prepare
+        String xml = XmlConfigUtils.createEditForm(XML_TEST_BUTTON_ROUTE);
+        // act
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+
+        // find myButton
+        ViewController editCtl = formConfig.getEdits().get(0);
+        UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
+
+        Assert.assertNotNull(myButton);
+        Assert.assertNotNull(myButton.getAction());
+        Assert.assertEquals(ActionType.NAV.name(), myButton.getAction().getType());
+    }
+
+    private static final String XML_TEST_BUTTON_ACTION_PARAMS = "<button id=\"myButton\" action=\"nav\" route=\"aRouteToGo\" refresh=\"this\" registerInHistory=\"false\" />";
+
+    @Test
+    public void testActionButtonWithActionParams() {
+        // prepare
+        String xml = XmlConfigUtils.createEditForm(XML_TEST_BUTTON_ACTION_PARAMS);
+        // act
+        FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
+
+        // find myButton
+        ViewController editCtl = formConfig.getEdits().get(0);
+        UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
+
+        Assert.assertNotNull(myButton);
+        Assert.assertNotNull(myButton.getAction());
+        Assert.assertEquals(ActionType.NAV.name().toLowerCase(), myButton.getAction().getType());
+        Assert.assertEquals("this", myButton.getAction().getRefresh());
+        Assert.assertEquals(false, myButton.getAction().isRegisterInHistory());
+        Assert.assertEquals("aRouteToGo", myButton.getAction().getRoute());
+    }
+
     private static final String XML_NESTED_ACTION = "<button id=\"myButton\" >" +
-            "<action type=\"save\" forceRefresh=\"true\">" +
+            "<action type=\"save\" refresh=\"all\">" +
             "<param name=\"param1\" value=\"valor1\"/>" +
             "<param name=\"param2\" value=\"valor2\"/>" +
             "</action>" +
@@ -91,7 +131,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -99,7 +139,7 @@ public class ActionAttributeResolverTest {
         Assert.assertNotNull(action);
 
         Assert.assertEquals(ActionType.SAVE.name().toLowerCase(), action.getType());
-        Assert.assertEquals(true, action.isForceRefresh());
+        Assert.assertEquals("all", action.getRefresh());
         // check parameters
         UIParam[] params = action.getParams();
         Assert.assertThat(params, not(emptyArray()));
@@ -107,7 +147,7 @@ public class ActionAttributeResolverTest {
     }
 
     private static final String XML_NESTED_WITH_ERROR = "<button id=\"myButton\" action=\"nav\">" +
-            "<action type=\"delete\" forceRefresh=\"true\"/>" +
+            "<action type=\"delete\" refresh=\"all\"/>" +
             "</button>";
 
     /**
@@ -137,7 +177,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -167,7 +207,9 @@ public class ActionAttributeResolverTest {
 
 
     private static final String XML_JS_METHOD_REFERENCE = "<form>" +
-            "<button id=\"myButton\" action=\"myJsMethod\"/>" +
+            "<button id=\"myButton\" action=\"myJsMethod\">" +
+            "<param name=\"param1\" value=\"value1\"/>" +
+            "</button>" +
             "</form>" +
             "<script> var message='Some js here!'; </script>";
 
@@ -183,7 +225,7 @@ public class ActionAttributeResolverTest {
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
         // find myButton
-        FormEditController editCtl = formConfig.getEdits().get(0);
+        ViewController editCtl = formConfig.getEdits().get(0);
         UIComponent myButton = UIComponentHelper.findChild(editCtl.getView(), "myButton");
 
         Assert.assertNotNull(myButton);
@@ -193,7 +235,8 @@ public class ActionAttributeResolverTest {
         Assert.assertEquals(ActionType.JS.name(), action.getType());
         UIParam[] params = action.getParams();
         Assert.assertThat(params, not(emptyArray()));
-        Assert.assertThat(params, arrayWithSize(1));
+        Assert.assertThat(params, arrayWithSize(2));
         Assert.assertThat(params[0].getValue().toString(), equalTo("myJsMethod"));
+        Assert.assertThat(params[1].getValue().toString(), equalTo("value1"));
     }
 }

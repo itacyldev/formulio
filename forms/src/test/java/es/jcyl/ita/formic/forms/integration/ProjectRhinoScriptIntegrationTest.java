@@ -47,15 +47,17 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
 import es.jcyl.ita.formic.repo.memo.MemoRepository;
@@ -94,7 +96,7 @@ public class ProjectRhinoScriptIntegrationTest {
         Config.getInstance().setCurrentProject(prj);
 
         // mock main controller
-        MainController mc = new MainControllerMock();
+        MainControllerMock mc = new MainControllerMock();
         mc.setContext(config.getGlobalContext());
 
         // navigate to form
@@ -118,7 +120,7 @@ public class ProjectRhinoScriptIntegrationTest {
 
         // create a form with a datatable, and set repo to datatable
         UIForm form = DevFormBuilder.createOneFieldForm();
-        FormEditController formController = DevFormBuilder.createFormEditController(form);
+        ViewController formController = DevFormBuilder.createFormEditController(form);
         UIDatatableBuilder dtBuilder = new UIDatatableBuilder("table");
         UIDatatable table = dtBuilder.createDataTableFromRepo(repo);
         form.addChild(table);
@@ -135,9 +137,10 @@ public class ProjectRhinoScriptIntegrationTest {
 
         // add event handler to execute scripts during component rendering
         ViewRenderer renderer = new ViewRenderer();
-        renderer.setEventHandler(new RhinoViewRenderHandler(ScriptEngine.getInstance()));
+        renderer.addEventHandler(new RhinoViewRenderHandler(ScriptEngine.getInstance()));
 
         // render form
+        engine.initScope(formController.getId());
         View formView = renderer.render(env, form);
 
         // The script will insert new entities in the memory repo, the number of rows
@@ -145,7 +148,7 @@ public class ProjectRhinoScriptIntegrationTest {
         long count = repo.count(null);
         Assert.assertEquals(10, count);
 
-        View dtView = ViewHelper.findComponentView(formView, table);
+        View dtView = ViewHelper.findComponentWidget(formView, table);
         Assert.assertNotNull(dtView);
         Assert.assertNotNull(((DatatableWidget) dtView).getEntities());
         Assert.assertEquals(10, ((DatatableWidget) dtView).getEntities().size());
@@ -153,14 +156,14 @@ public class ProjectRhinoScriptIntegrationTest {
 
     private RenderingEnv prepareRenderingEnv(Context ctx, ScriptEngine engine) {
         // Prepare global CONTEXT
-        CompositeContext globalContext = new UnPrefixedCompositeContext();
+        CompositeContext globalContext = ContextTestUtils.createGlobalContext();
         globalContext.put("repos", new RepoAccessContext());
         ActionController mcAC = mock(ActionController.class);
 
         // Prepare rendering environment
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(globalContext);
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         // init scripting environment with common objects
         Map<String, Object> props = new HashMap<>();

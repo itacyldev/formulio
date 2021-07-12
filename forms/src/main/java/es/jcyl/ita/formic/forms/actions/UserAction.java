@@ -17,13 +17,13 @@ package es.jcyl.ita.formic.forms.actions;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -32,14 +32,18 @@ public class UserAction {
 
     private String type;
     private String name;
+    private String controller;
     private String route;
-    private boolean forceRefresh = false;
+    private String refresh;
+    private boolean restoreView = false;
     private boolean registerInHistory = true;
+    private int popHistory = 0;
     private String message;
-    private Map<String, Serializable> params;
+    private Map<String, Object> params;
     private UIComponent component;
+    private Widget widget;
 
-    private FormController origin;
+    private ViewController origin;
 
     public UserAction(ActionType actionType) {
         this(actionType.name(), null, null, null);
@@ -49,19 +53,37 @@ public class UserAction {
         this(actionType, null, component, null);
     }
 
-    public UserAction(String actionType, String route, FormController origin) {
+    public UserAction(String actionType, String route, ViewController origin) {
         this(actionType, route, null, origin);
     }
 
     public UserAction(UIAction action, UIComponent component) {
         this(action.getType(), action.getRoute(), component);
+        this.setRegisterInHistory(action.isRegisterInHistory());
+        this.setRefresh(action.getRefresh());
+        this.setRestoreView(action.isRestoreView());
+        this.setPopHistory(action.getPopHistory());
+        this.setController(action.getController());
+    }
+
+    public UserAction(UIAction action, ViewController origin) {
+        this(action.getType(), action.getRoute(), null, origin);
+        this.setRegisterInHistory(action.isRegisterInHistory());
+        this.setRefresh(action.getRefresh());
+        this.setRestoreView(action.isRestoreView());
+        this.setPopHistory(action.getPopHistory());
+        this.setController(action.getController());
+    }
+
+    public void setRefresh(String refresh) {
+        this.refresh = refresh;
     }
 
     public UserAction(String actionType, String route, UIComponent component) {
         this(actionType, route, component, component.getRoot() == null ? null : component.getRoot().getFormController());
     }
 
-    private UserAction(String actionType, String route, UIComponent component, FormController origin) {
+    private UserAction(String actionType, String route, UIComponent component, ViewController origin) {
         this.type = actionType;
         this.route = route;
         this.component = component;
@@ -93,12 +115,8 @@ public class UserAction {
         this.route = route;
     }
 
-    public boolean isForceRefresh() {
-        return forceRefresh;
-    }
-
-    public void setForceRefresh(boolean forceRefresh) {
-        this.forceRefresh = forceRefresh;
+    public String getRefresh() {
+        return refresh;
     }
 
     public boolean isRegisterInHistory() {
@@ -109,15 +127,31 @@ public class UserAction {
         this.registerInHistory = registerInHistory;
     }
 
-    public Map<String, Serializable> getParams() {
+    public int getPopHistory() {
+        return popHistory;
+    }
+
+    public void setPopHistory(int popHistory) {
+        this.popHistory = popHistory;
+    }
+
+    public boolean isRestoreView() {
+        return restoreView;
+    }
+
+    public void setRestoreView(boolean restoreView) {
+        this.restoreView = restoreView;
+    }
+
+    public Map<String, Object> getParams() {
         return params;
     }
 
-    public void setParams(Map<String, Serializable> params) {
+    public void setParams(Map<String, Object> params) {
         this.params = params;
     }
 
-    public void addParam(String param, Serializable value) {
+    public void addParam(String param, Object value) {
         if (this.params == null) {
             this.params = new HashMap<>();
         }
@@ -132,7 +166,7 @@ public class UserAction {
         this.component = component;
     }
 
-    public FormController getOrigin() {
+    public ViewController getOrigin() {
         return origin;
     }
 
@@ -145,13 +179,42 @@ public class UserAction {
     }
 
     /**
-     * Indicates if current action is going to provoke a change in the view due to a forceRefresh or
+     * Indicates if current action is going to provoke a change in the view due to a refresh or
      * because it makes the action controller to perform a navigation.
      *
      * @return
      */
     public boolean isViewChangeAction() {
-        return this.forceRefresh || StringUtils.isNotBlank(this.route);
+        return StringUtils.isNotBlank(this.refresh) || StringUtils.isNotBlank(this.route);
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
+    }
+
+    /**
+     * Creates a new action copying all the attributes but the action parameters
+     * from the passed UserAction.
+     *
+     * @param action
+     * @return
+     */
+    public static UserAction clone(UserAction action) {
+        UserAction newAction = new UserAction(action.getType(), action.getComponent());
+        newAction.name = action.name;
+        newAction.controller = action.controller;
+        newAction.route = action.route;
+        newAction.refresh = action.refresh;
+        newAction.restoreView = action.restoreView;
+        newAction.registerInHistory = action.registerInHistory;
+        newAction.popHistory = action.popHistory;
+        newAction.message = action.message;
+        newAction.widget = action.widget;
+        return newAction;
     }
 
     /*********************************/
@@ -167,15 +230,24 @@ public class UserAction {
         return action;
     }
 
-    public static UserAction navigate(String formId, FormController origin) {
+    public static UserAction navigate(String formId, ViewController origin) {
         UserAction action = new UserAction(ActionType.NAV.name(), formId, origin);
         return action;
     }
 
-    public static UserAction back(FormController origin) {
+    public static UserAction back(ViewController origin) {
         UserAction action = new UserAction(ActionType.BACK.name(), null, origin);
         return action;
     }
+
+    public Widget getWidget() {
+        return widget;
+    }
+
+    public void setWidget(Widget widget) {
+        this.widget = widget;
+    }
+
 
     @Override
     public String toString() {
@@ -185,5 +257,14 @@ public class UserAction {
                 ", component='" + component + '\'' +
                 ", params=" + params +
                 '}';
+    }
+
+    /**
+     * Indicates if current action has set the value of attribute refresh
+     *
+     * @return
+     */
+    public boolean isRefreshSet() {
+        return StringUtils.isNotBlank(this.refresh);
     }
 }

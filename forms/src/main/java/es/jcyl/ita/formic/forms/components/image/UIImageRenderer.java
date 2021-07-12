@@ -23,17 +23,13 @@ import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
 
-import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
-
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EntityMapping;
 
@@ -74,34 +70,34 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
             //inputView.setAdjustViewBounds(true);
         }
 
-        ImageView resetButton = ViewHelper.findViewAndSetId(widget, R.id.field_layout_x,
-                ImageView.class);
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class) || !widget.getComponent().hasDeleteButton()) {
-            resetButton.setVisibility(View.GONE);
-        } else {
-            resetButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View arg0) {
-                    Drawable noImage = ContextCompat
-                            .getDrawable(env.getViewContext(), R.drawable.
-                                    no_image);
-                    inputView.setImageDrawable(noImage);
+        setOnClickListenerResetButton(env, (ImageWidget) widget);
+    }
 
-                    UIForm form = (UIForm) component.getParentForm();
-                    String entityProp = null;
-                    if (component.getRepo() != null) {
-                        entityProp = getEntityProp(component, form);
-                        form.getEntity().set(entityProp.substring(entityProp.indexOf(".") + 1, entityProp.length() - 1), null);
-                    } else if (component.getEmbedded()) { // the image is stored as an entity property
-                        Bitmap bitmap = ((BitmapDrawable) noImage).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-                        ((ImageWidget) widget).updateRelatedEntity(stream.toByteArray());
-                    }
+    private void setOnClickListenerResetButton(RenderingEnv env, ImageWidget widget) {
+        UIImage component = widget.getComponent();
+        ImageResourceView inputView = widget.getInputView();
+        ImageView resetButton = component.getResetButton();
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                Drawable noImage = ContextCompat
+                        .getDrawable(env.getAndroidContext(), R.drawable.
+                                no_image);
+                inputView.setImageDrawable(noImage);
+
+                UIForm form = (UIForm) component.getParentForm();
+                String entityProp = null;
+                if (component.getRepo() != null) {
+                    entityProp = getEntityProp(component, form);
+                    form.getEntity().set(entityProp.substring(entityProp.indexOf(".") + 1, entityProp.length() - 1), null);
+                } else if (component.getEmbedded()) { // the image is stored as an entity property
+                    Bitmap bitmap = ((BitmapDrawable) noImage).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                    ((ImageWidget) widget).updateRelatedEntity(stream.toByteArray());
                 }
-            });
-        }
-        setVisibiltyResetButtonLayout(StringUtils.isNotBlank(widget.getComponent().getLabel()), resetButton);
+            }
+        });
     }
 
     @Override
@@ -121,7 +117,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
         String entityProp = null;
 
         List<EntityMapping> mappings = form.getRepo().getMappings();
-        for (EntityMapping mapping: mappings) {
+        for (EntityMapping mapping : mappings) {
             if (mapping.getProperty().equals(component.getId())) {
                 entityProp = mapping.getFk();
             }

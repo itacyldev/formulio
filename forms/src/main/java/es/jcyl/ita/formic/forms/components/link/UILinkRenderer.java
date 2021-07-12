@@ -25,7 +25,7 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -54,7 +54,7 @@ public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
             public void onClick(View v) {
                 UserEventInterceptor interceptor = env.getUserActionInterceptor();
                 if (interceptor != null) {
-                    Event event = new Event(Event.EventType.CLICK, component);
+                    Event event = new Event(Event.EventType.CLICK, widget);
                     interceptor.notify(event);
                 }
             }

@@ -6,9 +6,9 @@
                 <tabitem label="Tab 1">
                     <link route="form1-list" value="Ir a Form Card Image" />
 
-                    <input label="1. Input: " value="${entity.input}" validator="required"  />
+                    <input label="1. Input: " value="${entity.input}" validator="required" hint="Hint 1. input" />
 
-                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" validator="required">
+                    <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" hint="Hint 2. Radio">
                         <options>
                             <option label="Radio1" value="Radio1" />
                             <option label="Radio2" value="Radio2" />
@@ -16,15 +16,24 @@
                         </options>
                     </radio>
 
-                    <textarea label="3. Textarea: " validator="required"
-                        value="${entity.textarea}" />
+                    <textarea label="3. Textarea: " validator="required" value="${entity.textarea}" hint="Hint 3. Textarea"/>
 
-                    <switcher label="4. Switcher: " value="${entity.switcher}" />
+                    <switcher label="4. Switcher: " value="${entity.switcher}" hint="Hint 4. Switcher"/>
 
-                    <date converter="string" label="5. Date: " validator="required"
-                        value="${entity.fecha}" />
+                    <date converter="string" label="5.1 Date con patrón yyyy/MM/dd: " validator="required"
+                        value="${entity.fecha}" pattern="yyyy/MM/dd" hint="Hint 5.1 Date con patrón yyyy/MM/dd" />
 
-                    <select label="6. Select: " validator="required" value="${entity.combo}">
+                    <date converter="string" label="5.2 Date sin patrón: " validator="required"
+                        value="${entity.fecha}" hint="Hint 5.2 Date sin patrón"/>
+
+                    <datetime converter="string" label="5.3 Datetme con patrón: " validator="required"
+                        value="${entity.fecha}" pattern="yyyy/MM/dd HH/mm/ss" hint="Hint 5.2 Date sin patrón"/>
+
+                    <datetime converter="string" label="5.3 Datetime sin patrón: " validator="required"
+                        value="${entity.fecha}" hint="Hint 5.3 Datetime sin patrón"/>
+
+
+                    <select label="6. Select: " validator="required" value="${entity.combo}" hint="Hint 6. Select">
                         <options>
                             <option label="Combo1" value="Combo1" />
                             <option label="Combo2" value="Combo2" />
@@ -34,19 +43,19 @@
 
                     <autocomplete forceSelection="true" id="autocompletado_id"
                         label="7. Autocomplete: " repo="autocompletado"
-                        validator="required" value="${entity.autocompletado_id}">
+                        validator="required" value="${entity.autocompletado_id}" hint="Hint 7. Autocomplete">
                         <options labelExpression="${entity.valor}" labelFilteringProperty="valor"
                             valueProperty="autocompletado_id" />
                     </autocomplete>
 
                     <divisor color="#00766C" strokeWidth="4" />
 
-                    <image label="8. Imagen: " repo="superHImages" value="${entity.image}" />
+                    <image label="8. Imagen: " repo="superHImages" value="${entity.image}" hint="Hint 8. Imagen"/>
 
-                    <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" />
+                    <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" hint="Hint 9. Imagen"/>
 
                     <image converter="b64Image" embedded="true" label="10. Imagen: "
-                        value="${entity.image_thumb}" />
+                        value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
 
                 </tabitem>
                 <tabitem label="Tab 2: Table">
@@ -56,9 +65,9 @@
                             <paragraph value="Descripción de la tabla en un paragraph" />
                         </row>
                         <row>
-                            <textarea readOnly="true" value="1. " />
-                            <textarea readOnly="true" value="Input " />
-                            <textarea readOnly="true" value="${entity.input}" />
+                            <textarea readonly="true" value="1. " />
+                            <textarea readonly="true" value="Input " />
+                            <textarea readonly="true" value="${entity.input}" />
                         </row>
                     </table>
 
@@ -67,9 +76,9 @@
                             <paragraph value="Descripción de la tabla en un paragraph" />
                         </row>
                         <row>
-                            <textarea readOnly="true" value="1.  " />
-                            <textarea readOnly="true" value="Input " />
-                            <textarea readOnly="true" value="${entity.input}" />
+                            <textarea readonly="true" value="1.  " />
+                            <textarea readonly="true" value="Input " />
+                            <textarea readonly="true" value="${entity.input}" />
                         </row>
                     </table>
 
@@ -79,24 +88,24 @@
                                 value="1: 20-30-50, 2: 20-30, 3: 20-30-50-70, 4: 40-40-80, 5: 30-80 6: asdfla" />
                         </row>
                         <row weights="20, 30, 50">
-                            <textarea readOnly="true" value="1.  " />
-                            <textarea readOnly="true" value="Input " />
+                            <textarea readonly="true" value="1.  " />
+                            <textarea readonly="true" value="Input " />
                             <input hasDeleteButton="false" value="${entity.input}" />
                         </row>
                         <row weights="20, 30">
-                            <textarea readOnly="true" value="2.  " />
-                            <textarea readOnly="true" value="Textarea: " />
+                            <textarea readonly="true" value="2.  " />
+                            <textarea readonly="true" value="Textarea: " />
                             <textarea hasDeleteButton="false" value="${entity.textarea}" />
                         </row>
                         <row weights="20, 30, 50, 70">
-                            <textarea readOnly="true" value="3.  " />
-                            <textarea readOnly="true" value="Date: " />
+                            <textarea readonly="true" value="3.  " />
+                            <textarea readonly="true" value="Date: " />
                             <date converter="string" hasDeleteButton="false"
                                 value="${entity.fecha}" />
                         </row>
                         <row weights="40, 40, 80">
-                            <textarea readOnly="true" value="4.  " />
-                            <textarea readOnly="true" value="Select: " />
+                            <textarea readonly="true" value="4.  " />
+                            <textarea readonly="true" value="Select: " />
                             <select hasDeleteButton="false" value="${entity.combo}">
                                 <options>
                                     <option label="Combo1" value="Combo1" />
@@ -106,20 +115,31 @@
                             </select>
                         </row>
                         <row weights="30, 80">
-                            <textarea readOnly="true" value="5.  " />
-                            <textarea readOnly="true" value="Switcher: " />
+                            <textarea readonly="true" value="5.  " />
+                            <textarea readonly="true" value="Switcher: " />
                             <switcher value="${entity.switcher}" />
                         </row>
                         <row weights="asdfla">
-                            <textarea readOnly="true" value="6.  " />
-                            <textarea readOnly="true" value="Autocomplete: " />
-                            <textarea readOnly="true" value="${entity.autocompletado_id}" />
+                            <textarea readonly="true" value="6.  " />
+                            <textarea readonly="true" value="Autocomplete: " />
+                            <textarea readonly="true" value="${entity.autocompletado_id}" />
                         </row>
                         <row>
-                            <textarea readOnly="true" value="7.  " />
-                            <textarea readOnly="true" value="Image: " />
+                            <textarea readonly="true" value="7.  " />
+                            <textarea readonly="true" value="Image: " />
                             <image hasDeleteButton="false" repo="superHImages"
                                 value="${entity.image}" />
+                        </row>
+                        <row>
+                            <textarea readonly="true" value="8.  " />
+                            <textarea readonly="true" value="Radio: " />
+                            <radio orientation="horizontal" value="Radio1" hasDeleteButton="false">
+                                <options>
+                                    <option id="optRadio1" label="Radio1" value="Radio1" />
+                                    <option id="optRadio2" label="Radio2" value="Radio2" />
+                                    <option id="optRadio3" label="Radio3" value="Radio3" />
+                                </options>
+                            </radio>
                         </row>
                     </table>
                 </tabitem>
@@ -150,6 +170,15 @@
                     </radio>
 
                     <radio label="4. Radio con weights weights=20, 20:" orientation="horizontal" value="${entity.radio}" validator="required" weights="20, 20">
+                        <options>
+                            <option label="Radio1" value="Radio1" />
+                            <option label="Radio2" value="Radio2" />
+                            <option label="Radio3" value="Radio3" />
+                            <option label="Radio4" value="Radio4" />
+                        </options>
+                    </radio>
+
+                    <radio label="5. Radio vertical:" orientation="vertical" value="${entity.radio}" validator="required" weights="20, 20">
                         <options>
                             <option label="Radio1" value="Radio1" />
                             <option label="Radio2" value="Radio2" />

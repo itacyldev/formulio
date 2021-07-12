@@ -44,6 +44,7 @@
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.builders.RepositoryBuilder {*;}
 -keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractRepositoryBuilder {*;}
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
+-keepclassmembers class com.android.dx.dex.cf.** {*;}
 
 
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder

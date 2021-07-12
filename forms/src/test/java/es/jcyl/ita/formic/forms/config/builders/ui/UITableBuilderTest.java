@@ -28,6 +28,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
@@ -71,8 +72,8 @@ public class UITableBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_EMPTY_TABLE);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITable> tables = UIComponentHelper.findByClass(editCtl.getView(), UITable.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UITable> tables = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITable.class);
         Assert.assertNotNull(tables);
         Assert.assertTrue("One table is expected, found: " + tables.size(), tables.size() == 1);
 
@@ -103,8 +104,8 @@ public class UITableBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_TWO_ROWS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITable> tables = UIComponentHelper.findByClass(editCtl.getView(), UITable.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UITable> tables = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITable.class);
 
         // repo must be set with parent value "contacts"
         UITable table = tables.get(0);
@@ -135,8 +136,8 @@ public class UITableBuilderTest {
         String xml = XmlConfigUtils.createEditForm(XML_ROW_PROPERTIES);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UITable> tables = UIComponentHelper.findByClass(editCtl.getView(), UITable.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UITable> tables = UIComponentHelper.getChildrenByClass(editCtl.getView(), UITable.class);
 
         // repo must be set with parent value "contacts"
         UITable table = tables.get(0);

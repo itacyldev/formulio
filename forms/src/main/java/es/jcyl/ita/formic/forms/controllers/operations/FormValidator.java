@@ -17,83 +17,45 @@ package es.jcyl.ita.formic.forms.controllers.operations;
 
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.MainController;
-import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.form.FormWidget;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
-import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
-import es.jcyl.ita.formic.forms.validation.Validator;
-import es.jcyl.ita.formic.forms.validation.ValidatorException;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /**
+ * Form validator that adds js validation functionality
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class FormValidator {
+public class FormValidator extends BaseWidgetValidator {
 
-    private final MainController mc;
-
-    public FormValidator(MainController mc) {
-        this.mc = mc;
+    public FormValidator(RenderingEnv env) {
+        super(env);
     }
 
-    /**
-     * Runs validation on the given element
-     *
-     * @param field
-     * @return
-     */
-    public boolean validate(UIForm form, UIInputComponent field) {
-        ComponentContext context = form.getContext();
-        ViewContext viewContext = context.getViewContext();
+    @Override
+    protected boolean customValidate(WidgetContextHolder ctxHolder) {
+        FormWidget widget = (FormWidget) ctxHolder.getWidget();
+        WidgetContext widgetContext = ctxHolder.getWidgetContext();
+        UIForm form = widget.getComponent();
 
-        // get user input using view context and check all validators.
-        String value = viewContext.getString(field.getId());
         boolean valid = true;
-        for (Validator validator : field.getValidators()) {
-            try {
-                if (isVisible(context, field)) {
-                    validator.validate(context, field, value);
-                }
-            } catch (ValidatorException e) {
-                // get the error and put it in form context
-                FormContextHelper.setMessage(context, field.getId(), e.getMessage());
-                valid = false;
-            }
-        }
         // call validation function
-        if (form.getOnValidate() != null) {
-            ScriptEngine srcEngine = mc.getScriptEngine();
-            FormController fc = form.getRoot().getFormController();
+        if (form != null && form.getOnValidate() != null) {
+            ScriptEngine scriptEngine = env.getScriptEngine();
+            // setup validation context
+            scriptEngine.putProperty("view", widgetContext.getViewContext());
+            scriptEngine.putProperty("entity", widgetContext.getEntity());
 
-            // TODO: we have to pass a combination of globalContext + formContext
-            Map result = (Map) srcEngine.callFunction(fc.getId(), form.getOnValidate());
+            Map result = (Map) scriptEngine.callFunction(form.getOnValidate());
             if (result.containsKey("error")) {
-                FormContextHelper.setMessage(context, form.getId(), (String) result.get("message"));
+                MessageHelper.setMessage(widgetContext, form.getId(), (String) result.get("message"));
                 valid = false;
             }
         }
         return valid;
-    }
-
-    public boolean validate(UIForm form) {
-        boolean valid = true;
-        form.getContext().clearMessages();
-        for (UIInputComponent field : form.getFields()) {
-            // validate
-            valid &= validate(form, field);
-        }
-        return valid;
-    }
-
-
-    public boolean isVisible(ComponentContext context, UIInputComponent field) {
-        ViewContext viewContext = context.getViewContext();
-        // TODO: replace with field.isRendered(context);
-        InputWidget fieldView = viewContext.findInputFieldViewById(field.getId());
-        return fieldView.isVisible();
     }
 }

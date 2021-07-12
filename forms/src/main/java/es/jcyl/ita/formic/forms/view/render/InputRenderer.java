@@ -23,6 +23,8 @@ package es.jcyl.ita.formic.forms.view.render;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,10 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static android.view.View.inflate;
 
 
 public abstract class InputRenderer<C extends UIInputComponent, I extends View>
@@ -48,9 +53,6 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         C component = widget.getComponent();
         // find and attach label and input
         widget.setConverter(component.getConverter());
-        if (component.getParentForm() != null) {
-            widget.setFormId(component.getParentForm().getId());
-        }
         widget.setInputId(component.getId());
 
         // find label and setup
@@ -58,6 +60,8 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 TextView.class);
         if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
             setLabel(fieldLabel, component);
+        } else {
+            fieldLabel.setVisibility(View.GONE);
         }
 
         // get input view and set Tag and Value
@@ -73,13 +77,75 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         widget.setInputView(inputView);
         setInputView(env, widget);
 
+        //Info button
+        setInfoButton(env, widget);
+        setVisibilityInfoButton(env, widget);
+        setOnClickListenerInfoButton(env, widget);
+
+        //Clear button
+        setResetButton(env, widget);
+        setVisibilityResetButton(env, widget);
+
         // implement specific component rendering
         composeInputView(env, widget);
 
+        //Visibilty Button Layout
+        setVisibiltyButtonLayout(widget, StringUtils.isNotBlank(component.getLabel()), component.getResetButton(), component.getInfoButton());
+
         // set value and error messages
         setValueInView(env, widget);
-
         setMessages(env, widget);
+
+    }
+
+    protected void setInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+        I infoButton = (I) ViewHelper.findViewAndSetId(widget, getInfoButtonId());
+        C component = widget.getComponent();
+        component.setInfoButton((ImageView) infoButton);
+    }
+
+    protected void setOnClickListenerInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+        C component = widget.getComponent();
+        ImageView infoButton = component.getInfoButton();
+        String hint = component.getHint();
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+                TextView titleView = view.findViewById(R.id.info);
+                titleView.setText(hint);
+                builder.setCustomTitle(view)
+                        .setPositiveButton("OK", null);
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    protected void setVisibilityInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+        C component = widget.getComponent();
+        String hint = component.getHint();
+        if (StringUtils.isBlank(hint)){
+            component.getInfoButton().setVisibility(View.INVISIBLE);
+        }
+    }
+
+    protected void setResetButton(RenderingEnv env, InputWidget<C, I> widget){
+        // set clear button
+        I resetButton = (I) ViewHelper.findViewAndSetId(widget, getResetButtonId());
+        C component = widget.getComponent();
+        //UIInputComponent component = (UIInputComponent) widget.getComponent();
+        component.setResetButton((ImageView) resetButton);
+    }
+
+    protected void setVisibilityResetButton(RenderingEnv env, InputWidget<C, I> widget){
+        C component = widget.getComponent();
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)
+                || !component.hasDeleteButton()) {
+            component.getResetButton().setVisibility(View.GONE);
+        }
     }
 
     protected void setValueInView(RenderingEnv env, InputWidget<C, I> widget) {
@@ -94,6 +160,19 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
     protected int getInputViewId() {
         return R.id.input_view;
     }
+
+    protected int getInfoButtonId() {
+        return R.id.field_layout_info;
+    }
+
+    protected int getResetButtonId() {
+        return R.id.field_layout_x;
+    }
+
+    protected int getButtonsLayoutId() {
+        return R.id.label_buttons_layout;
+    }
+
 
 
     /**
@@ -120,14 +199,23 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         I inputView = widget.getInputView();
         String inputTag = getInputTag(component);
         inputView.setTag(inputTag);
-        inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadOnly(env.getContext()), Boolean.class));
+        inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
     }
 
-    protected void setVisibiltyResetButtonLayout(boolean hasLabel, ImageView resetButton){
-        if ((resetButton.getVisibility() == View.INVISIBLE || resetButton.getVisibility() == View.GONE) && !hasLabel){
-            ViewGroup layout = (ViewGroup) resetButton.getParent();
+    protected void setVisibiltyButtonLayout(InputWidget<C, I> widget, boolean hasLabel, ImageView resetButton, ImageView infoButton){
+        if (!isInfoButtonVisible(infoButton) && !isResetButtonVisible(resetButton) && !hasLabel){
+            ViewGroup layout = (ViewGroup) ViewHelper.findViewAndSetId(widget, getButtonsLayoutId(), ViewGroup.class);
+            //ViewGroup layout = (ViewGroup) resetButton.getParent();
             layout.setVisibility(View.GONE);
         }
+    }
+
+    private boolean isInfoButtonVisible(ImageView infoButton){
+        return infoButton != null && infoButton.getVisibility() != View.INVISIBLE && infoButton.getVisibility() != View.GONE;
+    }
+
+    private boolean isResetButtonVisible(ImageView resetButton){
+        return resetButton != null && resetButton.getVisibility() != View.INVISIBLE && resetButton.getVisibility() != View.GONE;
     }
 
     /************************************/

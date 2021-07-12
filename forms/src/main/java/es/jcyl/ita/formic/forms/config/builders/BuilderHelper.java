@@ -32,7 +32,9 @@ import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
@@ -55,17 +57,20 @@ public class BuilderHelper {
             return;
         }
         // go upwards in the tree looking for a parent with the repo attribute set
-        ConfigNode ascendant = ConfigNodeHelper.findAscendantWithAttribute(node, "repo");
-        Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
-        setElementValue(node.getElement(), "repo", repo);
+        ConfigNode ascendant = BuilderHelper.findParentRepo(node);
+        if (ascendant != null) {
+            Repository repo = (Repository) getElementValue(ascendant.getElement(), "repo");
+            setElementValue(node.getElement(), "repo", repo);
+        }
     }
+
 
     public static Object getElementValue(Object element, String property) {
         try {
             return propUtils.getNestedProperty(element, property);
         } catch (Exception e) {
             throw new ConfigurationException(error(String.format("Error while trying to get " +
-                    "attribute '%s' in object [%s] ", property, element.getClass().getName())));
+                    "attribute '%s' in object [%s] ", property, element.getClass().getName())), e);
         }
     }
 
@@ -75,7 +80,7 @@ public class BuilderHelper {
         } catch (Exception e) {
             throw new ConfigurationException(error(String.format("Error while trying to set " +
                             "attribute '%s' with value [%s] in object [%s] ", property, value,
-                    element.getClass().getName())));
+                    element.getClass().getName())), e);
         }
     }
 
@@ -123,20 +128,20 @@ public class BuilderHelper {
      * If dbFile and dbTableName are defined, created nested <repo/> node to be
      * processed by RepoConfigBuilder
      *
-     * @param node
+     * @param viewNode
      */
-    public static void addDefaultRepoNode(ConfigNode node) {
-        String dbFile = node.getAttribute("dbFile");
-        String tableName = node.getAttribute("tableName");
+    public static void addDefaultRepoNode(ConfigNode viewNode) {
+        String dbFile = viewNode.getAttribute("dbFile");
+        String tableName = viewNode.getAttribute("tableName");
 
         if (StringUtils.isNotBlank(dbFile) && StringUtils.isNotBlank(tableName)) {
             ConfigNode repoNode = new ConfigNode("repo");
             repoNode.setAttribute("dbFile", dbFile);
             repoNode.setAttribute("tableName", tableName);
-            node.getChildren().add(0, repoNode);
+            viewNode.getChildren().add(0, repoNode);
         } else if (StringUtils.isNotBlank(dbFile) ^ StringUtils.isNotBlank(tableName)) {
             error(String.format("Incorrect repository definition, both 'dbFile' and 'dbTable' " +
-                    "must be set in tag ${tag} id[%s].", node.getId()));
+                    "must be set in tag ${tag} id[%s].", viewNode.getId()));
         }
     }
 
@@ -160,7 +165,7 @@ public class BuilderHelper {
         // set converter if needed
         UIInputComponent element = node.getElement();
         ValueBindingExpression expr = element.getValueExpression();
-        if (expr != null && !expr.isReadOnly()) {
+        if (expr != null && !expr.isReadonly()) {
             String propertyName = expr.getBindingProperty();
             EntityMeta meta = null;
             try {
@@ -380,7 +385,10 @@ public class BuilderHelper {
             return null;
         } else {
             while (parent != null) {
-                if (TagDef.supportsAttribute(parent.getName(), "repo")) {
+                String tagName = parent.getName().toLowerCase();
+                if (TagDef.supportsAttribute(tagName, "repo") &&
+                        !tagName.equals("edit") &&
+                        !tagName.equals("list")) {
                     return parent;
                 }
                 parent = parent.getParent();
@@ -409,5 +417,42 @@ public class BuilderHelper {
             }
             return null;
         }
+    }
+
+    public static UIParam[] getParams(List<ConfigNode> paramNodes) {
+        UIParam[] params = new UIParam[paramNodes.size()];
+        for (int i = 0; i < paramNodes.size(); i++) {
+            UIParam uiParam = new UIParam();
+            ConfigNode paramNode = paramNodes.get(i);
+            if (paramNode.hasAttribute("name")) {
+                uiParam.setName(paramNode.getAttribute("name"));
+            }
+            if (paramNode.hasAttribute("value")) {
+                ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
+                uiParam.setValue(exprFactory.create(paramNodes.get(i).getAttribute("value")));
+            }
+            params[i] = uiParam;
+        }
+        return params;
+    }
+
+    /**
+     * If current edit of list view element doesn't have a view node, create one copying all the
+     * controller tag attributes (<list/> and <edit/>)  and nested all elements.
+     *
+     * @return
+     */
+    public static ConfigNode createDefaultView(ConfigNode root) {
+        ConfigNode viewNode = ConfigNodeHelper.getFirstChildrenByTag(root, "view");
+        if (viewNode != null) {
+            // it already has a form
+            return viewNode;
+        }
+        viewNode = ConfigNode.clone(root);
+        viewNode.setName("view");
+        viewNode.setId("view" + root.getId());
+        viewNode.setChildren(root.getChildren());
+        root.setChildren(Arrays.asList(viewNode));
+        return viewNode;
     }
 }

@@ -20,12 +20,14 @@ import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.RepositoryException;
+import es.jcyl.ita.formic.repo.db.query.RawWhereCondition;
 import es.jcyl.ita.formic.repo.db.sqlite.greendao.EntityDao;
 import es.jcyl.ita.formic.repo.db.sqlite.greendao.PropertyConditionHelper;
+import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.query.Condition;
 import es.jcyl.ita.formic.repo.query.Criteria;
 import es.jcyl.ita.formic.repo.query.Expression;
-import es.jcyl.ita.formic.repo.db.query.RawWhereCondition;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -53,6 +55,18 @@ public class ExpressionInterpreter {
         @Override
         public WhereCondition interpret(EntityDao dao, QueryBuilder<Entity> qBuilder, Condition e) {
             Property property = dao.getPropertyByName(e.getProperty());
+            if (property == null) {
+                EntityMeta meta = dao.entityConfig().getMeta();
+                String expanded = "";
+                if (e.getProperty().startsWith("entity.")) {
+                    expanded = " Don't use 'entity.' as prefix for the property name in the attribute " +
+                            "'property', use just the name of the property: " +
+                            "<eq property=\"myproperty\" value=\"value1\"/>";
+                }
+                throw new RepositoryException(String.format("Error while trying to interpret repoFilter expression. " +
+                                "Invalid property name: [%s], in doesn't exist in repo [%s].[%s]", e.getProperty(),
+                        meta.getName(), expanded));
+            }
             return PropertyConditionHelper.create(e, property);
         }
     }
@@ -60,7 +74,7 @@ public class ExpressionInterpreter {
     static class RawWhereExpression extends AbstractInterExpression<RawWhereCondition> {
         @Override
         public WhereCondition interpret(EntityDao dao, QueryBuilder<Entity> qBuilder, RawWhereCondition e) {
-            return  e.getWhereCondition();
+            return e.getWhereCondition();
         }
     }
 

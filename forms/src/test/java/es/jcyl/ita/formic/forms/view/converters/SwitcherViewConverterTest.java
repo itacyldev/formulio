@@ -42,7 +42,7 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -90,7 +90,7 @@ public class SwitcherViewConverterTest {
 
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
         for (int i = 0; i < values.length; i++) {
-            InputWidget widget = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+            InputWidget widget = ViewHelper.findInputWidget(env.getRootWidget(), field);
             Switch inputView = (Switch) widget.getInputView();
 
             // transform the value using the converter and check the result against the original value
@@ -119,7 +119,7 @@ public class SwitcherViewConverterTest {
 
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
         for (int i = 0; i < values.length; i++) {
-            InputWidget widget = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+            InputWidget widget = ViewHelper.findInputWidget(env.getRootWidget(), field);
             Switch inputView = (Switch) widget.getInputView();
 
             // transform the value using the converter and check the result against the original value
@@ -176,7 +176,7 @@ public class SwitcherViewConverterTest {
         SwitcherFieldViewConverter conv = new SwitcherFieldViewConverter();
         for (Class clazz : clazzez) {
             Object expected = RandomUtils.randomObject(clazz);
-            InputWidget widget = ViewHelper.findInputFieldViewById(env.getViewRoot(), field);
+            InputWidget widget = ViewHelper.findInputWidget(env.getRootWidget(), field);
             Switch inputView = (Switch) widget.getInputView();
             boolean hasFailed = false;
             try {

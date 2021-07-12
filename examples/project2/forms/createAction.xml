@@ -1,0 +1,18 @@
+<main id="form7" repo="contacts">
+    <list name="createActionForm" description="createActionForm">
+        <datatable />
+        <buttonbar type="fab">
+            <button action="create" route="form7-edit1">
+                <param name="repo" value="contacts" />
+                <param name="fecha" value="${date.now}" />
+                <param name="first_name" value="aaaaa" />
+                <param name="last_name" value="bbbbb" />
+            </button>
+        </buttonbar>
+    </list>
+    <edit id="edit1">
+        <buttonbar type="bottom">
+            <button label="goView" route="view1-view1" />
+        </buttonbar>
+    </edit>
+</main>

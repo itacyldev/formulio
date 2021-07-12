@@ -64,7 +64,7 @@ public class UIColumnBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         List<UIDatatable> datatables =
-                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                UIComponentHelper.getChildrenByClass(formConfig.getList().getView(),
                         UIDatatable.class);
         UIDatatable datatable = datatables.get(0);
         UIColumn[] columns = datatable.getColumns();
@@ -85,7 +85,7 @@ public class UIColumnBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         List<UIDatatable> datatables =
-                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                UIComponentHelper.getChildrenByClass(formConfig.getList().getView(),
                         UIDatatable.class);
         UIDatatable datatable = datatables.get(0);
         UIColumn[] columns = datatable.getColumns();
@@ -120,7 +120,7 @@ public class UIColumnBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         List<UIDatatable> datatables =
-                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                UIComponentHelper.getChildrenByClass(formConfig.getList().getView(),
                         UIDatatable.class);
         UIDatatable datatable = datatables.get(0);
         UIColumn[] columns = datatable.getColumns();
@@ -157,7 +157,7 @@ public class UIColumnBuilderTest {
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         List<UIDatatable> datatables =
-                UIComponentHelper.findByClass(formConfig.getList().getView(),
+                UIComponentHelper.getChildrenByClass(formConfig.getList().getView(),
                         UIDatatable.class);
         UIDatatable datatable = datatables.get(0);
         UIColumn[] columns = datatable.getColumns();

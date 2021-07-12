@@ -14,34 +14,18 @@ import es.jcyl.ita.formic.forms.validation.ValidatorFactory;
 
 public class ValidatorBuilder extends AbstractComponentBuilder<Validator> {
 
+    ValidatorFactory factory = ValidatorFactory.getInstance();
+
     public ValidatorBuilder() {
         super("validator", Validator.class);
     }
 
     @Override
-    public Validator build(ConfigNode<Validator> node) {
+    protected Validator instantiate(ConfigNode<Validator> node) {
         String type = node.getAttribute("type");
         Map<String, String> params = getParams(node);
-
-        ValidatorFactory factory = ValidatorFactory.getInstance();
         Validator element = factory.getValidator(type, params);
-
-        setAttributes(element, node);
-        node.setElement(element);
-
-        // attach to parent element
-        UIComponent component = (UIComponent) node.getParent().getElement();
-        if (!(component instanceof UIInputComponent)) {
-            throw new ConfigurationException(DevConsole.error(String.format("The <validator/> tag " +
-                    "must be nested in an UIInputComponent, found: [%s].", node.getName())));
-        }
-        ((UIInputComponent) component).addValidator(element);
-
         return element;
-    }
-
-    @Override
-    protected void setAttributes(Validator element, ConfigNode node) {
     }
 
     private Map<String, String> getParams(ConfigNode<Validator> node) {
@@ -59,13 +43,19 @@ public class ValidatorBuilder extends AbstractComponentBuilder<Validator> {
     }
 
     @Override
-    protected void setupOnSubtreeStarts(ConfigNode node) {
+    protected void setupOnSubtreeStarts(ConfigNode<Validator> node) {
     }
 
     @Override
-    protected void setupOnSubtreeEnds(ConfigNode node) {
-
+    protected void setupOnSubtreeEnds(ConfigNode<Validator> node) {
+        Validator element = node.getElement();
+        // attach to parent element
+        UIComponent component = (UIComponent) node.getParent().getElement();
+        if (!(component instanceof UIInputComponent)) {
+            throw new ConfigurationException(DevConsole.error(String.format("The <validator/> tag " +
+                    "must be nested in an UIInputComponent, found: [%s].", node.getName())));
+        }
+        ((UIInputComponent) component).addValidator(element);
     }
-
 
 }

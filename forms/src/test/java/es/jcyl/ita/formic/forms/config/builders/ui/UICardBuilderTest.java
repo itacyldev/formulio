@@ -62,7 +62,7 @@ public class UICardBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_BASIC);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        List<UICard> cards = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UICard.class);
         Assert.assertNotNull(cards);
         UICard card = cards.get(0);
         Assert.assertNotNull(card.getId());
@@ -87,7 +87,7 @@ public class UICardBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_WITH_CHILDREN);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        List<UICard> cards = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UICard.class);
         Assert.assertNotNull(cards);
 
         UICard card = cards.get(0);
@@ -108,7 +108,7 @@ public class UICardBuilderTest {
      *
      * @throws Exception
      */
-    private static final String XML_TEST_CARD_WITH_ATTS = "<card template=\"template\" title=\"titleValue\" subtitle=\"subtitleValue \" image=\"$entity.image\" />";
+    private static final String XML_TEST_CARD_WITH_ATTS = "<card template=\"template\" title=\"titleValue\" subtitle=\"subtitleValue \" image=\"${entity.image}\" />";
 
 
     @Test
@@ -116,7 +116,7 @@ public class UICardBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_WITH_ATTS);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        List<UICard> cards = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UICard.class);
         Assert.assertNotNull(cards);
 
         UICard card = cards.get(0);
@@ -145,7 +145,7 @@ public class UICardBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_WITH_HEADER);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        List<UICard> cards = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UICard.class);
         Assert.assertNotNull(cards);
 
         UICard card = cards.get(0);
@@ -168,7 +168,7 @@ public class UICardBuilderTest {
         String xml = XmlConfigUtils.createMainList(XML_TEST_CARD_IMAGE_POSITION);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
-        List<UICard> cards = UIComponentHelper.findByClass(formConfig.getList().getView(), UICard.class);
+        List<UICard> cards = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UICard.class);
         Assert.assertNotNull(cards);
 
         UICard card = cards.get(0);

@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config.resolvers;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.ConvertUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -24,11 +25,15 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
+import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -70,13 +75,21 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.info;
  */
 public class ActionAttributeResolver extends AbstractAttributeResolver implements ReadingProcessListener {
 
-
     private List<ConfigNode> unresolvedActions = new ArrayList<>();
 
     @Override
     public Object resolve(ConfigNode node, String attName) {
+        if (attName.toLowerCase().equals(AttributeDef.ACTION.name)) {
+            return resolveActionAtt(node, attName);
+        } else {
+            // route
+            return resolveRouteAtt(node, attName);
+        }
+    }
+
+    public Object resolveActionAtt(ConfigNode node, String attName) {
         String actionType = node.getAttribute(attName);
-        // check if threre's a nested <action/> element
+        // check if there's a nested <action/> element
         ConfigNode nestedAction = ConfigNodeHelper.getFirstChildrenByTag(node, "action");
         if (nestedAction != null) {
             throw new ConfigurationException(
@@ -88,10 +101,9 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
                             node.getName(), node.getId(), actionType)));
         }
         // check if the actionType is referring to a predefined action
-        try {
-            ActionType actTypeEnum = ActionType.valueOf(actionType.toUpperCase());
-            createActionNode(actTypeEnum, node);
-        } catch (Exception e) {
+        if(!ActionType.isCustomAction(actionType)){
+            createActionNode(actionType, node);
+        } else {
             // it is not a predefined action, it has to be a js action or a custom action
             registerUnresolvedAction(node);
         }
@@ -100,15 +112,50 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
     }
 
     /**
+     * In case the component has been set with the attribute "route" but not action is defined, a
+     * default navigation action is set to the value set in parameter "route"
+     *
+     * @param node
+     * @param attName
+     * @return
+     */
+    public Object resolveRouteAtt(ConfigNode node, String attName) {
+        AttributeResolver bindingResolver = this.factory.getAttributeResolver("binding");
+        Object value = bindingResolver.resolve(node, attName);
+
+        if (TagDef.isActionTag(node.getName())) {
+            return value; // action will be created by action builder
+        }
+        ConfigNode nestedAction = ConfigNodeHelper.getFirstChildrenByTag(node, "action");
+        boolean hasNestedActions = nestedAction != null;
+        // No action defined but the router attribute is set
+        if (!node.hasAttribute("action") && !hasNestedActions
+                && node.hasAttribute("route")) {
+            createActionNode(ActionType.NAV.name(), node);
+        }
+        // the action will be set by the actionBuilder
+        return value;
+    }
+
+
+    /**
      * Creates a nested config node for the 'action' attributed so the ActionBuilder will pick up
      * the node and create the action
      *
      * @param actionType
      * @param node
      */
-    private void createActionNode(ActionType actionType, ConfigNode node) {
+    private void createActionNode(String actionType, ConfigNode node) {
         ConfigNode actionNode = new ConfigNode("action");
-        actionNode.setAttribute("type", actionType.name().toLowerCase());
+        actionNode.setAttribute(AttributeDef.TYPE.name, actionType);
+        // get additional action attributes from current node
+        actionNode.setAttribute(AttributeDef.ROUTE.name,
+                node.getAttribute(AttributeDef.ROUTE.name));
+        actionNode.setAttribute(AttributeDef.REFRESH.name,
+                node.getAttribute(AttributeDef.REFRESH.name));
+        actionNode.setAttribute(AttributeDef.REGISTER_IN_HISTORY.name,
+                node.getAttribute(AttributeDef.REGISTER_IN_HISTORY.name));
+
         // if node has "param" nested nodes, assign them to the action
         List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
         for (ConfigNode pNode : paramNodes) {
@@ -153,7 +200,7 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
         // defined actions and if the actions exists, copy it and merge parameters
         // TODO: remove list/edit differences and use view as formController related element
 //        UIView view = (UIView) viewNode.getElement();
-        FormController formController = (FormController) viewNode.getElement();
+        ViewController formController = (ViewController) viewNode.getElement();
 
         Map<String, UIAction> actionMap = formController.getActionMap();
 
@@ -188,13 +235,41 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
      */
     private void setupJsAction(ConfigNode node) {
         UIComponent component = (UIComponent) node.getElement();
+        UIParam[] existingParams = null;
+        if (component.getAction() != null && component.getAction().hasParams()) {
+            existingParams = component.getAction().getParams();
+        }
         UIAction componentAction = new UIAction();
         componentAction.setType(ActionType.JS.name());
-        componentAction.setRegisterInHistory(false);
-        componentAction.setForceRefresh(true);
+        if (node.hasAttribute(AttributeDef.REGISTER_IN_HISTORY.name)) {
+            componentAction.setRegisterInHistory((Boolean) ConvertUtils.convert(
+                    node.getAttribute(AttributeDef.REGISTER_IN_HISTORY.name), Boolean.class));
+        } else {
+            componentAction.setRegisterInHistory(false);
+        }
+        if (node.hasAttribute(AttributeDef.REFRESH.name)) {
+            componentAction.setRefresh(node.getAttribute(AttributeDef.REFRESH.name));
+        } else { // re-render the hole view
+            componentAction.setRefresh("all");
+        }
 
-        // create param "method" with the name of the js function
-        UIParam[] params = new UIParam[1];
+        /* Add param "method" with the name of the js function */
+        // check existing parameters
+        UIParam[] params;
+        List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
+        if (existingParams != null) {
+            params = new UIParam[existingParams.length + 1];
+            System.arraycopy(existingParams, 0, params, 1, existingParams.length);
+        } else if (CollectionUtils.isNotEmpty(paramNodes)) {
+            existingParams = BuilderHelper.getParams(paramNodes);
+            // add one gap and copy leaving the first position empty (destpos=1)
+            params = new UIParam[existingParams.length + 1];
+            System.arraycopy(existingParams, 0, params, 1, existingParams.length);
+        } else {
+            // has existing action params
+            params = new UIParam[1];
+        }
+        // add 'method' parameter
         ValueBindingExpression paramValue = this.factory.getExpressionFactory().create(node.getAttribute("action"));
         params[0] = new UIParam("method", paramValue);
         componentAction.setParams(params);
@@ -203,12 +278,13 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
     }
 
     /**
-     * Checks if the passed view node contains a nested element <script/>.
+     * Checks if the passed controller node contains a nested element <script/>.
      *
-     * @param viewNode
+     * @param controllerNode
      * @return
      */
-    private boolean checkExistsScript(ConfigNode viewNode) {
+    private boolean checkExistsScript(ConfigNode controllerNode) {
+        ConfigNode viewNode = (ConfigNode) controllerNode.getChildren().get(0);
         return ConfigNodeHelper.hasChildrenByTag(viewNode, "script");
     }
 

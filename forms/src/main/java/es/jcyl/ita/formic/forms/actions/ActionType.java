@@ -20,5 +20,15 @@ package es.jcyl.ita.formic.forms.actions;
  */
 public enum ActionType {
 
-    SAVE, DELETE, DELETE_LIST, CANCEL, NAV, BACK, CREATE, JS
+    SAVE, DELETE, DELETE_LIST, CANCEL, NAV, BACK, CREATE, JS;
+
+    public static boolean isCustomAction(String type) {
+        try {
+            ActionType.valueOf(type.toUpperCase());
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+
+    }
 }

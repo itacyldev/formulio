@@ -18,11 +18,12 @@ package es.jcyl.ita.formic.forms.scripts;
 import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.repo.Entity;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -38,22 +39,18 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
     }
 
     @Override
-    public void onNewFormFound(UIForm form) {
-        ComponentContext fContext = form.getContext();
-        engine.putProperty("form", form);
-        engine.putProperty("entity", fContext.getEntity());
+    public void onViewStart(UIView view) {
     }
 
     @Override
-    public void onEntityContextChanged(ComponentContext context) {
-        engine.putProperty("entity", context.getEntity());
+    public void onEntityContextChanged(Entity entity) {
+        engine.putProperty("entity", entity);
     }
 
     @Override
-    public void onViewContextChanged(ComponentContext context) {
+    public void onWidgetContextChange(WidgetContext context) {
         engine.putProperty("view", context.getViewContext());
     }
-
 
     @Override
     public void onBeforeRenderComponent(UIComponent component) {
@@ -61,14 +58,8 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
             return;
         }
         try {
-            // get current  form
-            UIForm form;
-            if (component instanceof UIForm) {
-                form = (UIForm) component;
-            } else {
-                form = component.getParentForm();
-            }
-            engine.callFunction(currentCtrl(form).getId(), component.getOnBeforeRenderAction(), component);
+            // get current controller
+            engine.callFunction(component.getOnBeforeRenderAction(), component);
         } catch (Exception e) {
             error(String.format("Error while executing onBeforeRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);
@@ -83,14 +74,15 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
             return;
         }
         try {
-            engine.callFunction(currentCtrl(component).getId(), component.getOnAfterRenderAction(), widget);
+            engine.callFunction(component.getOnAfterRenderAction(), widget);
         } catch (Exception e) {
             error(String.format("Error while executing onAfterRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);
         }
     }
 
-    private FormController currentCtrl(UIComponent form) {
-        return form.getRoot().getFormController();
+    @Override
+    public void onViewEnd(ViewWidget viewWidget) {
+        engine.putProperty("root", viewWidget);
     }
 }

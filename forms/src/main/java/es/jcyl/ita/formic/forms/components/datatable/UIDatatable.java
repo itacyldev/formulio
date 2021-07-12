@@ -17,9 +17,10 @@ package es.jcyl.ita.formic.forms.components.datatable;
 
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
+import es.jcyl.ita.formic.forms.components.EntitySelectorComponent;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
@@ -29,7 +30,8 @@ import es.jcyl.ita.formic.repo.query.Filter;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIDatatable extends AbstractUIComponent implements FilterableComponent {
+public class UIDatatable extends AbstractUIComponent implements FilterableComponent,
+        EntitySelectorComponent {
 
     Repository repo;
 
@@ -47,7 +49,7 @@ public class UIDatatable extends AbstractUIComponent implements FilterableCompon
     private int numVisibleRows = 10;
 
     public UIDatatable() {
-        setRendererType("datatable");
+        rendererType ="datatable";
     }
 
     public Repository getRepo() {

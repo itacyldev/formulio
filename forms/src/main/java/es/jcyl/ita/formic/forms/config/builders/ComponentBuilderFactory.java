@@ -19,9 +19,12 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
@@ -34,10 +37,11 @@ import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
-import es.jcyl.ita.formic.forms.config.builders.controllers.UIActionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormEditControllerBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormListControllerBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.UIActionBuilder;
+import es.jcyl.ita.formic.forms.config.builders.controllers.UIViewBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.EntityMappingBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.FileRepoConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.repo.MemoRepoConfigBuilder;
@@ -112,6 +116,7 @@ public class ComponentBuilderFactory {
         registerBuilder("list", newBuilder(FormListControllerBuilder.class, "list"));
         registerBuilder("edit", newBuilder(FormEditControllerBuilder.class, "edit"));
         registerBuilder("form", newBuilder(UIFormBuilder.class, "form"));
+        registerBuilder("view", newBuilder(UIViewBuilder.class, "view"));
 
         registerBuilder("repo", newBuilder(RepoConfigBuilder.class, "repo"));
         registerBuilder("filerepo", newBuilder(FileRepoConfigBuilder.class, "fileRepo"));
@@ -134,12 +139,15 @@ public class ComponentBuilderFactory {
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
+        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
+        registerBuilder("buttonbar", newDefaultGroupBuilder(UIButtonBar.class, "buttonbar"));
 
         ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
         // same component builder with different aliases
         registerBuilder("action", actionBuilder);
         registerBuilder("nav", actionBuilder);
         registerBuilder("add", actionBuilder);
+        registerBuilder("create", actionBuilder);
         registerBuilder("update", actionBuilder);
         registerBuilder("delete", actionBuilder);
         registerBuilder("save", actionBuilder);
@@ -151,6 +159,7 @@ public class ComponentBuilderFactory {
         registerBuilder("textarea", newBuilder(UIFieldBuilder.class, "textarea"));
         registerBuilder("switcher", inputFieldBuilder);
         registerBuilder("date", inputFieldBuilder);
+        registerBuilder("datetime", inputFieldBuilder);
         registerBuilder("image", newBuilder(UIImageBuilder.class, "image"));
 
         registerBuilder("select", newBuilder(UIMultiOptionBuilder.class, "select", UISelect.class));
@@ -169,7 +178,6 @@ public class ComponentBuilderFactory {
         registerBuilder("validator", newBuilder(ValidatorBuilder.class, "validator"));
         registerBuilder("context", new ContextBuilder());
 
-        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
         registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
 
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
@@ -178,8 +186,9 @@ public class ComponentBuilderFactory {
         registerAttResolver("pathResolver", new RelativePathAttResolver());
         registerAttResolver("validator", new ValidatorAttResolver());
         registerAttResolver("color", new ColorAttributeResolver());
-
-        registerAttResolver("action", new ActionAttributeResolver());
+        ActionAttributeResolver attResolver = new ActionAttributeResolver();
+        registerAttResolver("action", attResolver);
+        registerAttResolver("binding-route", attResolver);
     }
 
     /**
@@ -189,14 +198,25 @@ public class ComponentBuilderFactory {
      */
     public List<ReadingProcessListener> getListeners() {
         List<ReadingProcessListener> listeners = new ArrayList<>();
-        for (ComponentBuilder builder: _builders.values()){
-            if(builder instanceof ReadingProcessListener){
-                listeners.add((ReadingProcessListener)builder);
+        // get unique instances
+        Set<ComponentBuilder> registeredBuilders = new HashSet<>();
+        for (ComponentBuilder builder : _builders.values()) {
+            if (builder instanceof ReadingProcessListener) {
+                // do not duplicated instance registering
+                if (!registeredBuilders.contains(builder)) {
+                    listeners.add((ReadingProcessListener) builder);
+                    registeredBuilders.add(builder);
+                }
             }
         }
-        for (AttributeResolver resolver: _resolvers.values()){
-            if(resolver instanceof ReadingProcessListener){
-                listeners.add((ReadingProcessListener)resolver);
+        Set<AttributeResolver> registeredResolvers = new HashSet<>();
+        for (AttributeResolver resolver : _resolvers.values()) {
+            if (resolver instanceof ReadingProcessListener) {
+                // do not duplicated instance registering
+                if (!registeredResolvers.contains(resolver)) {
+                    listeners.add((ReadingProcessListener) resolver);
+                    registeredResolvers.add(resolver);
+                }
             }
         }
         return listeners;
@@ -231,6 +251,7 @@ public class ComponentBuilderFactory {
         try {
             builder = (ComponentBuilder) clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
+            // keep on trying
         }
         // try with one String parameter
         if (builder == null) {
@@ -253,6 +274,12 @@ public class ComponentBuilderFactory {
 
     private ComponentBuilder newDefaultBuilder(Class elementType, String tag) {
         AbstractComponentBuilder builder = new DefaultComponentBuilder(tag, elementType);
+        builder.setFactory(this);
+        return builder;
+    }
+
+    private ComponentBuilder newDefaultGroupBuilder(Class elementType, String tag) {
+        AbstractComponentBuilder builder = new DefaultGroupComponentBuilder(tag, elementType);
         builder.setFactory(this);
         return builder;
     }

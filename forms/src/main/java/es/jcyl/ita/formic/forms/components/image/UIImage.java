@@ -94,7 +94,7 @@ public class UIImage extends UIInputComponent {
     }
 
     public boolean isBound() {
-        return (getValueExpression() == null) ? false : !getValueExpression().isReadOnly();
+        return (getValueExpression() == null) ? false : !getValueExpression().isReadonly();
     }
 
     public boolean isCameraActive() {

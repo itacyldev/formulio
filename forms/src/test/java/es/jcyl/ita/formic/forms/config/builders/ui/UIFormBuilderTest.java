@@ -24,6 +24,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
@@ -69,8 +70,8 @@ public class UIFormBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_BASIC);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
         Assert.assertNotNull(forms);
         Assert.assertTrue("One form is expected, found: " + forms.size(), forms.size() == 1);
 
@@ -99,8 +100,8 @@ public class UIFormBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_ATTS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
         // repo must be set with parent value "contacts"
         UIForm form = forms.get(0);
@@ -134,8 +135,8 @@ public class UIFormBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_INPUTS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
         // repo must be set with parent value "contacts"
         UIForm form = forms.get(0);
@@ -190,8 +191,8 @@ public class UIFormBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_FORM_WITH_TABS_AND_FIELDS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
         UIForm form = forms.get(0);
@@ -232,8 +233,8 @@ public class UIFormBuilderTest {
         String xml = XmlConfigUtils.createMainEdit(XML_TEST_FORM_WITH_TAB);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
 
-        FormEditController editCtl = formConfig.getEdits().get(0);
-        List<UIForm> forms = UIComponentHelper.findByClass(editCtl.getView(), UIForm.class);
+        ViewController editCtl = formConfig.getEdits().get(0);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(editCtl.getView(), UIForm.class);
 
 
         UIForm form = forms.get(0);

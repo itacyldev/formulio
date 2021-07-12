@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
@@ -19,18 +21,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -177,27 +182,42 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                     if (uiAction == null) {
                         return;
                     }
-                    UserAction action = UserAction.navigate(dtLayout.getComponent().getRoute(),
-                            dtLayout.getComponent());
-                    if (uiAction.hasParams()) {
-                        CompositeContext gContext = dtLayout.getRenderingEnv().getContext();
-                        gContext.addContext(new EntityContext(currentEntity));
-                        for (UIParam param : uiAction.getParams()) {
-                            Object value = JexlFormUtils.eval(gContext, param.getValue());
-                            action.addParam(param.getName(), (Serializable) value);
-                        }
-                        gContext.removeContext("entity");
+                    WidgetContext widgetContext = dtLayout.getWidgetContext();
+                    widgetContext.addContext(new EntityContext(currentEntity));
+
+                    UserAction action = UserActionHelper.evaluate(uiAction, widgetContext, dtLayout.getComponent());
+                    Map<String, Object> params = action.getParams();
+                    if (params == null || !params.containsKey("entityId")) {
+                        // add current entityId as default param if it's not already set
+                        action.addParam("entityId", (Serializable) currentEntity.getId());
                     }
-                    action.addParam("entityId", (Serializable) currentEntity.getId());
-                    // TODO: FORMIC-229 Terminar refactorización de acciones
-                    // La cración de la accinó se tiene que hacer en el interceptor como en otros componentes
-                    // el datatable tiene que tener creado un UIAction desde los builders con la información
-                    // de navegación/acción a realizar al clickar en un item
                     Event event = new Event(Event.EventType.CLICK, null, action);
                     interceptor.notify(event);
                 }
             }
         });
+    }
+
+    public static UserAction evaluate(UIAction actionTemplate, es.jcyl.ita.formic.core.context.Context context, UIComponent component) {
+        String strRoute = "";
+        if (actionTemplate.getRoute() != null) {
+            JxltEngine.Expression e = JexlFormUtils.createExpression(actionTemplate.getRoute());
+            Object route = e.evaluate((JexlContext) context);
+            strRoute = (String) ConvertUtils.convert(route, String.class);
+        }
+        UserAction action = new UserAction(actionTemplate.getType(), strRoute, component);
+        action.setRegisterInHistory(actionTemplate.isRegisterInHistory());
+
+        action.setRefresh(actionTemplate.getRefresh());
+        if (actionTemplate.hasParams()) {
+            for (UIParam param : actionTemplate.getParams()) {
+                Object value = JexlFormUtils.eval(context, param.getValue());
+                if (value != null) {
+                    action.addParam(param.getName(), (Serializable) value);
+                }
+            }
+        }
+        return action;
     }
 
     private void setViewsLayout(final ViewColumnHolder holder, Entity entity) {

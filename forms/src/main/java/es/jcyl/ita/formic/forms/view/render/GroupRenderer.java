@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.view.render;
 import android.view.View;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -28,7 +29,7 @@ public interface GroupRenderer<C extends UIComponent> {
 
     void initGroup(RenderingEnv env, Widget<C> root);
 
-    void addViews(RenderingEnv env, Widget<C> root, View[] views);
+    void addViews(RenderingEnv env, Widget<C> root, Widget[] widgets);
 
     void endGroup(RenderingEnv env, Widget<C> root);
 

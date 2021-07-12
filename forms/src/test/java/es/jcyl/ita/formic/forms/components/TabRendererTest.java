@@ -37,11 +37,13 @@ import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.components.tab.UITabItem;
 import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.components.view.UIView;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
@@ -55,15 +57,13 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class TabRendererTest {
 
-    Context ctx;
-
     ViewRenderer renderHelper = new ViewRenderer();
-
+    Context ctx;
     @Before
     public void setup() {
         MainController mainController = MainController.getInstance();
-        FormEditController mockFC = mock(FormEditController.class);
-        mainController.setFormController(mockFC, null);
+        ViewController mockFC = mock(ViewController.class);
+        mainController.setViewController(mockFC);
 
         ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
         ctx.setTheme(R.style.FormudruidDark);
@@ -76,8 +76,8 @@ public class TabRendererTest {
     @Test
     public void test2Tabs() {
         RenderingEnv env = mock(RenderingEnv.class);
-        when(env.getViewContext()).thenReturn(ctx);
-        when(env.getContext()).thenReturn(ContextTestUtils.createGlobalContext());
+        when(env.getAndroidContext()).thenReturn(ctx);
+        when(env.getWidgetContext()).thenReturn(ContextTestUtils.createWidgetContext());
 
         UITabItem tabItem1 = new UITabItem();
         tabItem1.setLabel("tab 1");
@@ -100,8 +100,12 @@ public class TabRendererTest {
         UITab tab = new UITab();
         tab.setId(RandomUtils.randomString(4));
         tab.setChildren(lstTabItem);
+        
+        UIView view = new UIView();
+        view.addChild(tab);
 
-        Widget tabView = (Widget) renderHelper.render(env, tab);
+        Widget viewWidget = renderHelper.render(env, view);
+        Widget tabView = ViewHelper.findComponentWidget(viewWidget, tab);
         // check there's a TextView element
         Assert.assertNotNull(tabView);
 

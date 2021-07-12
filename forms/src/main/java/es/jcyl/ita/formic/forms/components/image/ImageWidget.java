@@ -34,7 +34,7 @@ import java.io.ByteArrayOutputStream;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.media.MediaResource;
 import es.jcyl.ita.formic.forms.view.activities.ActivityResultCallBack;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -66,7 +66,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     public void setup(RenderingEnv env) {
         // check components to show
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if ((Boolean) ConvertUtils.convert(component.isReadOnly(env.getContext()), Boolean.class)) {
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             cameraButton.setEnabled(false);
         } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
             cameraButton.setVisibility(View.INVISIBLE);
@@ -94,7 +94,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
                 }
             });
         }*/
-        this.mainEntity = env.getComponentContext().getEntity();
+        this.mainEntity = env.getWidgetContext().getEntity();
     }
 
     public GallerySelector getGallerySelector() {

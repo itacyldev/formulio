@@ -23,14 +23,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
-import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
+import es.jcyl.ita.formic.forms.controllers.widget.GroupWidgetController;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.selection.EntitySelectorWidget;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
+import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -42,12 +45,13 @@ import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class DatalistWidget extends Widget<UIDatalist> implements DynamicComponent,
-        EntityListProvider, EntitySelector {
+public class DatalistWidget extends Widget<UIDatalist> implements EntityListProviderWidget,
+        EntitySelectorWidget, ControllableWidget {
 
     private Repository repo;
     private RenderingEnv renderingEnv;
     private List<Entity> entities = new ArrayList<>();
+    private GroupWidgetController controller;
 
     // view filtering criteria
     private Filter filter;
@@ -55,6 +59,7 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
     private AndViewContext thisViewCtx = new AndViewContext(this);
     private LinearLayout contentView;
     private SelectionManager selectionMgr;
+    private List<DatalistItemWidget> items;
 
     @Override
     public void setup(RenderingEnv env) {
@@ -74,13 +79,10 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
         super(context, attrs, defStyle);
     }
 
-    @Override
     public void load(RenderingEnv env) {
         this.renderingEnv = env;
-
         // set filter to repo using current view data
         this.entities.clear();
-
         CompositeContext ctx = setupThisContext(env);
         this.filter = setupFilter(ctx, this.getComponent().getFilter());
         // read first page to render data
@@ -107,7 +109,10 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
 
     private CompositeContext setupThisContext(RenderingEnv env) {
         thisViewCtx.setPrefix("this");
-        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        // use default widgetContext for initialRendering
+        WidgetContext widgetContext = (this.getWidgetContext() != null)
+                ? this.getWidgetContext() : env.getWidgetContext();
+        CompositeContext ctx = ContextUtils.combine(widgetContext, thisViewCtx);
         return ctx;
     }
 
@@ -127,13 +132,17 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
     }
 
     @Override
-    public void setEntities(List<Entity> entities) {
-
+    public List<Entity> getEntities() {
+        return this.entities;
     }
 
     @Override
-    public List<Entity> getEntities() {
-        return this.entities;
+    public WidgetController getController() {
+        return this.controller;
+    }
+
+    public void setController(GroupWidgetController controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -141,4 +150,21 @@ public class DatalistWidget extends Widget<UIDatalist> implements DynamicCompone
         this.selectionMgr = manager;
     }
 
+    @Override
+    public Widget getWidget() {
+        return this;
+    }
+
+    @Override
+    public Repository getRepository() {
+        return this.component.getRepo();
+    }
+
+    public void setItems(List<DatalistItemWidget> widgets) {
+        this.items = widgets;
+    }
+
+    public List<DatalistItemWidget> getItems() {
+        return items;
+    }
 }

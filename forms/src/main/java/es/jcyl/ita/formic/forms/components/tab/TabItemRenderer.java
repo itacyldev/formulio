@@ -1,10 +1,8 @@
 package es.jcyl.ita.formic.forms.components.tab;
 
-import com.google.android.material.tabs.TabLayout;
-
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*

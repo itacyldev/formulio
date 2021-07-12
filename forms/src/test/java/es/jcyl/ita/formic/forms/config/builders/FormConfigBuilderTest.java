@@ -25,6 +25,9 @@ import java.io.File;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
+import es.jcyl.ita.formic.forms.components.link.UIButton;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ProjectUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -84,59 +87,53 @@ public class FormConfigBuilderTest {
         //////////////////////////
         // check editController
         //////////////////////////
-        FormEditController ctl = formConfig.getEdits().get(0);
-        Assert.assertNotNull(ctl.getRepo());
+        ViewController ctl = formConfig.getEdits().get(0);
+        Assert.assertNotNull(ctl.getView().getRepo());
         Assert.assertNotNull(ctl.getMainForm());
-        Assert.assertNotNull(ctl.getActions());
-        Assert.assertTrue(ctl.getActions().length > 0);
         // check editActions
         UIAction[] actions = ctl.getActions();
         String listCtlId = formConfig.getList().getId(); // id of related listController
-        for (UIAction action : actions) {
-            if (action.getType().equalsIgnoreCase("save")) {
-                Assert.assertEquals(listCtlId, action.getRoute());
-            } else if (action.getType().equalsIgnoreCase("cancel")) {
-                Assert.assertEquals("back", action.getRoute());
+        UIView view = ctl.getView();
+        UIButtonBar btbar = view.getBottomNav();
+        for(UIComponent c: btbar.getChildren()){
+            if(!(c instanceof UIButton)){ continue;}
+            UIButton btn = (UIButton)c;
+            if (btn.getLabel().equalsIgnoreCase("save")) {
+                Assert.assertEquals(listCtlId, btn.getAction().getRoute());
+            } else if (btn.getLabel().equalsIgnoreCase("cancel")) {
+                Assert.assertEquals("back", btn.getAction().getRoute());
             }
         }
         // check FormEditController has a form
-        List<UIForm> forms = UIComponentHelper.findByClass(ctl.getView(), UIForm.class);
+        List<UIForm> forms = UIComponentHelper.getChildrenByClass(ctl.getView(), UIForm.class);
         Assert.assertTrue("No default FORM found for FormEditController", forms.size() == 1);
-        assertRootIsLinked(ctl.getView());
 
         //////////////////////////
         // check listController
         //////////////////////////
         FormListController ctlList = formConfig.getList();
-        Assert.assertNotNull(ctlList.getRepo());
-        Assert.assertNotNull(ctlList.getActions());
-        Assert.assertTrue(ctlList.getActions().length > 0);
-        assertRootIsLinked(ctlList.getView());
-        // list.add/edit must point to editController
+        Assert.assertNotNull(ctlList.getView().getRepo());
+        Assert.assertNotNull(ctlList.getView().getFabBar());
 
         // check listActions
-        actions = ctl.getActions();
         String editCtrlId = ctl.getId(); // id of related editController
-        for (UIAction action : actions) {
+        UIView listView = ctlList.getView();
+        UIButtonBar fabBar = listView.getFabBar();
+
+        for(UIComponent c: fabBar.getChildren()){
+            if(!(c instanceof UIButton)){ continue;}
+            UIButton btn = (UIButton)c;
+            UIAction action = btn.getAction();
             if (action.getType().equalsIgnoreCase("add")
                     || action.getType().equalsIgnoreCase("update")) {
                 Assert.assertEquals(editCtrlId, action.getRoute());
             }
         }
         // check listAction has a table
-        List<UIDatatable> tables = UIComponentHelper.findByClass(ctlList.getView(), UIDatatable.class);
+        List<UIDatatable> tables = UIComponentHelper.getChildrenByClass(ctlList.getView(), UIDatatable.class);
         Assert.assertTrue("No default table found for FormListController", tables.size() == 1);
     }
 
-    /**
-     * check every element in the tree is linked to the root
-     *
-     * @param view
-     */
-    private void assertRootIsLinked(UIView view) {
-        assertComponent(view, view);
-
-    }
 
     public static void assertComponent(UIComponent root, UIView view) {
         if (!root.hasChildren()) {
@@ -159,18 +156,15 @@ public class FormConfigBuilderTest {
         Assert.assertNotNull(formConfig.getEdits());
         Assert.assertEquals(2, formConfig.getEdits().size());
         Assert.assertNotNull(formConfig.getEdits().get(0));
-        assertRootIsLinked(formConfig.getEdits().get(0).getView());
         Assert.assertNotNull(formConfig.getEdits().get(1));
-        assertRootIsLinked(formConfig.getEdits().get(1).getView());
 
         // check every object has a repo value
         Assert.assertNotNull(formConfig.getRepo());
-        Assert.assertNotNull(formConfig.getList().getRepo());
-        assertRootIsLinked(formConfig.getList().getView());
+        Assert.assertNotNull(formConfig.getList().getView().getRepo());
 
-        for (FormEditController c : formConfig.getEdits()) {
+        for (ViewController c : formConfig.getEdits()) {
             Assert.assertNotNull(c.getId());
-            Assert.assertNotNull(c.getRepo());
+            Assert.assertNotNull(c.getView().getRepo());
         }
 
         // check FormListController actions
@@ -183,14 +177,9 @@ public class FormConfigBuilderTest {
         }
 
         // check editViews have a defaultForm nested
-        for (FormEditController edit : formConfig.getEdits()) {
+        for (ViewController edit : formConfig.getEdits()) {
             Assert.assertNotNull(edit.getMainForm());
-            Assert.assertNotNull(edit.getActions());
-            for (UIAction action : edit.getActions()) {
-                Assert.assertNotNull(action.getType());
-            }
-            Assert.assertNotNull(edit.getAction("cancel"));
-            Assert.assertNotNull(edit.getAction("save"));
+            Assert.assertNotNull(edit.getView().getBottomNav());
         }
     }
 

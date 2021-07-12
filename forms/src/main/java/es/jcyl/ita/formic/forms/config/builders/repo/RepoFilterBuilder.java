@@ -18,15 +18,17 @@ package es.jcyl.ita.formic.forms.config.builders.repo;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.repo.query.Criteria;
-import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.forms.config.elements.RepoFilter;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.repo.filter.RepoFilterVisitor;
-import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.repo.query.Criteria;
+import es.jcyl.ita.formic.repo.query.Filter;
 import es.jcyl.ita.formic.repo.query.FilterRepoUtils;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -46,6 +48,11 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoFilter> node) {
         ConfigNode<FilterableComponent> parent = node.getParent();
+        if (!(parent.getElement() instanceof FilterableComponent)) {
+            throw new ConfigurationException(error("An error occurred while trying to configure " +
+                    "<repoFilter/>, make sure the element is a direct child of a filterable component " +
+                    "(datalist, datatable, etc).  In file [${file}]."));
+        }
         FilterableComponent parentComponent = parent.getElement();
 
         RepoFilterVisitor visitor = new RepoFilterVisitor();
@@ -54,9 +61,7 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
 
 
         Filter filter = FilterRepoUtils.createInstance(parentComponent.getRepo());
-
         filter.setExpression(criteria);
-
         parentComponent.setFilter(filter);
 
         if (mandatoryFields.size() > 0) {

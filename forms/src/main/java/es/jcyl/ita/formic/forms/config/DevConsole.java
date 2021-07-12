@@ -203,14 +203,14 @@ public class DevConsole {
         }
         String effMsg = String.valueOf(JexlFormUtils.eval(devContext, msg));
 
-        if (errorLevel == Log.ERROR) {
-            System.err.println(effMsg);
-        } else {
-            System.out.println(effMsg);
-        }
-        if (t != null) {
-            System.err.println(t.getMessage());
-        }
+//        if (errorLevel == Log.ERROR) {
+//            System.err.println(effMsg);
+//        } else {
+//            System.out.println(effMsg);
+//        }
+//        if (t != null) {
+//            System.err.println(t.getMessage());
+//        }
         return effMsg;
     }
 

@@ -15,54 +15,13 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.repo.query.Filter;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  * Implements entity edition actions using a edit-form.
  */
-public class FormListController extends FormController {
-
-    // form used to refer to the repository used to count entities
-    private FilterableComponent entityList;
-
+public class FormListController extends ViewController {
     public FormListController(String id, String name) {
         super(id, name);
-    }
-
-    /****************************/
-    /**  >>> Form List methods **/
-    /****************************/
-
-    /**
-     * Number of entities obtained with the main repository. Used in the form list to give
-     * information of the number of "form instances (table records)" registered
-     *
-     * @return
-     */
-    public long count() {
-        return this.getEntityList().getRepo().count(this.getEntityList().getFilter());
-    }
-
-    /****************************/
-    /** GETTER/SETTERS **/
-    /****************************/
-
-    public Filter getFilter() {
-        return filter;
-    }
-
-    public void setFilter(Filter filter) {
-        this.filter = filter;
-    }
-
-    public FilterableComponent getEntityList() {
-        return entityList;
-    }
-
-    public void setEntityList(FilterableComponent entityList) {
-        this.entityList = entityList;
     }
 }

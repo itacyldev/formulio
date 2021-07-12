@@ -16,67 +16,55 @@ package es.jcyl.ita.formic.forms.components.view;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
+import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.components.UIGroupComponent;
+import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.query.Filter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class UIView extends AbstractUIComponent {
+public class UIView extends UIGroupComponent implements FilterableComponent {
 
-    FormController formController;
+    ViewController formController;
     List<UIForm> forms;
 
-    public UIView(String id) {
-        setId(id);
-        setRendererType("view");
-        setRoot(this);
+    // filterable component
+    private Repository repo;
+    private Filter filter;
+    private String[] mandatoryFilters;
+    // form used to refer to the repository used to count entities
+    private FilterableComponent entityList;
+
+    // view actions
+    private UIAction[] actions; // form actions ids
+    private Map<String, UIAction> _actions;
+
+    private UIForm mainForm;
+
+    // button bars
+    UIButtonBar bottomNav;
+    UIButtonBar menuBar;
+    UIButtonBar fabBar;
+
+    public UIView() {
+        rendererType ="view";
     }
 
     @Override
     public boolean isRenderChildren() {
         return true;
     }
-
-//
-//    public UIForm getForm(String formId) {
-//        for (UIForm f : this.getForms()) {
-//            if (f.getId().equalsIgnoreCase(formId)) {
-//                return f;
-//            }
-//        }
-//        return null;
-//    }
-
-//    /**
-//     * Give and identifier with the expression formId.elementId, returns the component.
-//     *
-//     * @param id
-//     * @return
-//     */
-//    public UIComponent findFormElement(String id) {
-//        String[] splits = id.split("\\.");
-//        if (splits.length != 2) {
-//            throw new IllegalArgumentException(String.format("Unexpected id expression. The id must " +
-//                    "follow the rule: formId.elementId: [%s].", id));
-//        }
-//        UIForm f = this.getForm(splits[0]);
-//        if (f == null) {
-//            throw new IllegalArgumentException(String.format("Illegal form element expression. " +
-//                    "No form found with the id [%s].", splits[0]));
-//        }
-//        UIComponent c = f.getElement(splits[1]);
-//        if (c == null) {
-//            throw new IllegalArgumentException(String.format("Illegal form element expression. " +
-//                    "No element found with the id [%s] in the form[%s].", splits[1], splits[0]));
-//        }
-//        return c;
-//    }
 
     public List<UIForm> getForms() {
         if (this.forms == null) {
@@ -104,11 +92,127 @@ public class UIView extends AbstractUIComponent {
         }
     }
 
-    public FormController getFormController() {
+    public ViewController getFormController() {
         return formController;
     }
 
-    public void setFormController(FormController formController) {
+    public void setFormController(ViewController formController) {
         this.formController = formController;
+    }
+
+    /****************/
+    /** ToolBars **/
+    /****************/
+
+    public UIButtonBar getBottomNav() {
+        return bottomNav;
+    }
+
+    public void setBottomNav(UIButtonBar bottomNav) {
+        this.bottomNav = bottomNav;
+    }
+
+    public UIButtonBar getMenuBar() {
+        return menuBar;
+    }
+
+    public void setMenuBar(UIButtonBar menuBar) {
+        this.menuBar = menuBar;
+    }
+
+    public UIButtonBar getFabBar() {
+        return fabBar;
+    }
+
+    public void setFabBar(UIButtonBar fabBar) {
+        this.fabBar = fabBar;
+    }
+
+    /****************/
+    /** Actions **/
+    /****************/
+
+    public UIAction[] getActions() {
+        return actions;
+    }
+
+    public Map<String, UIAction> getActionMap() {
+        return _actions;
+    }
+
+    public void addAction(String actionId, UIAction action) {
+        if (_actions == null) {
+            _actions = new HashMap<>();
+        }
+        _actions.put(actionId, action);
+    }
+
+    public void setActions(UIAction[] actions) {
+        this.actions = actions;
+        for (UIAction action : actions) {
+            addAction(action.getId(), action);
+        }
+    }
+
+    public UIAction getAction(String name) {
+        if (this.actions == null) {
+            return null;
+        } else {
+            for (UIAction action : actions) {
+                if (name.equalsIgnoreCase(action.getType())) {
+                    return action;
+                }
+            }
+            return null;
+        }
+    }
+    /****************/
+    /** Filterable **/
+    /****************/
+
+    @Override
+    public Repository getRepo() {
+        return repo;
+    }
+
+    @Override
+    public void setRepo(Repository repo) {
+        this.repo = repo;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    @Override
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+    }
+
+    @Override
+    public String[] getMandatoryFilters() {
+        return mandatoryFilters;
+    }
+
+    @Override
+    public void setMandatoryFilters(String[] mandatoryFilters) {
+        this.mandatoryFilters = mandatoryFilters;
+    }
+    public FilterableComponent getEntityList() {
+        return entityList;
+    }
+
+    public void setEntityList(FilterableComponent entityList) {
+        this.entityList = entityList;
+    }
+
+
+    public UIForm getMainForm() {
+        return mainForm;
+    }
+
+    public void setMainForm(UIForm mainForm) {
+        this.mainForm = mainForm;
     }
 }

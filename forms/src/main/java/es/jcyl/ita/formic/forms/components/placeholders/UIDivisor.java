@@ -8,7 +8,7 @@ public class UIDivisor extends AbstractUIComponent {
     private Integer strokeWidth;
 
     public UIDivisor() {
-        setRendererType("divisor");
+        rendererType ="divisor";
     }
 
     public Integer getColor() {

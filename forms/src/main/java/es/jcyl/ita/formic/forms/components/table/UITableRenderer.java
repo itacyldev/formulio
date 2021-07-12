@@ -14,7 +14,7 @@ import es.jcyl.ita.formic.forms.components.util.ComponentUtils;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /*
@@ -65,7 +65,7 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
             int i=0;
             for (String h : splits) {
                 // inflate header cell from resource
-                Widget headerLayout = ViewHelper.inflate(env.getViewContext(),
+                Widget headerLayout = ViewHelper.inflate(env.getAndroidContext(),
                         R.layout.widget_table_header, Widget.class);
                 TextView headerCell = ViewHelper.findViewAndSetId(headerLayout, R.id.header_view, TextView.class);
                 headerLayout.removeView(headerCell);
@@ -85,12 +85,14 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UITable> widget, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UITable> widget, Widget[] views) {
         TableLayout tableView = widget.findViewById(R.id.table_layout);
         UITable component = widget.getComponent();
 
         View row = null;
         int i = 0;
+
+        boolean hasChildren = false;
         for (View view : views) {
             // look for nested row widget
             if (view instanceof Widget) {
@@ -106,9 +108,17 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
             }
             boolean isLastRow = i == views.length -1;
             setBorderRow(widget, component, row, isLastRow);
+            if (((TableRow) row).getChildCount() > 0){
+                hasChildren = true;
+            }
             tableView.addView(row);
             i++;
+        }
 
+        if (!hasChildren){
+            tableView.setStretchAllColumns(false);
+            DevConsole.warn(String.format("\n" +
+                    "Tablerow [%s] does not contain any views to add", widget.getId()));
         }
     }
 

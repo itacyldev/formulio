@@ -24,20 +24,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseFormActivity<F extends FormController> extends BaseActivity
+public abstract class BaseFormActivity<F extends ViewController> extends BaseActivity
         implements FormActivity<F> {
 
     protected Router router;
     protected RenderingEnv env;
-    protected F formController;
+    protected F viewController;
     /**
      * View element used to render the forms defined for this controller
      */
@@ -52,9 +52,10 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
         // render edit view content and link content view
         try {
             View viewRoot = mc.renderView(this);
+            contentView.setFocusable(false);
             contentView.addView(viewRoot);
         } catch (Exception e) {
-            DevConsole.error("Error trying to render view " + this.formController.getId(), e);
+            DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
             router.back(this, new String[]{"Sorry, there was an error while trying to render the view. " +
                     "See console for details."});
         }
@@ -64,12 +65,8 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
         showMessages();
     }
 
-    protected void renderToolBars(RenderingEnv env) {
-        // configurar menu
+    protected abstract void renderToolBars(RenderingEnv renderingEnv);
 
-        // configurar fab
-
-    }
 
     protected void attachContentView() {
         int layoutId = getLayoutResource();
@@ -87,8 +84,8 @@ public abstract class BaseFormActivity<F extends FormController> extends BaseAct
     }
 
     @Override
-    public void setFormController(F formController) {
-        this.formController = formController;
+    public void setViewController(F viewController) {
+        this.viewController = viewController;
     }
 
     @Override

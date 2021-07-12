@@ -1,0 +1,25 @@
+<main name="dtExample" description="dtExample" id="dtExample" repo="contacts">
+    <edit>
+        <tab>
+            <tabitem label="${entity.first_name}">
+                <textarea hint="Hello mr: ${entity.last_name}" id="email"
+                    label="${entity.first_name} + ${entity.last_name}" lines="${entity.it_profile}"
+                    value="${entity.contact_id}" />
+            </tabitem>
+            <tabitem label="${entity.last_name}">
+                <textarea hint="Hello mr: ${entity.last_name}" id="email2"
+                    label="${entity.first_name} + ${entity.last_name}" lines="${entity.it_profile}"
+                    value="${entity.contact_id}" />
+            </tabitem>
+            <tabitem label="list">
+                <datalist repo="contacts">
+                    <datalistitem>
+                        <textarea hint="Hello mr: ${entity.last_name}" id="email3"
+                            label="${entity.first_name}" lines="${entity.it_profile}"
+                            value="${entity.contact_id}" />
+                    </datalistitem>
+                </datalist>
+            </tabitem>
+        </tab>
+    </edit>
+</main>

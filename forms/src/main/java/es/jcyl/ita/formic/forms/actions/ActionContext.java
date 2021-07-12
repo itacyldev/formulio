@@ -17,26 +17,30 @@ package es.jcyl.ita.formic.forms.actions;
 
 import android.content.Context;
 
-import es.jcyl.ita.formic.forms.controllers.FormController;
+import java.util.HashMap;
+import java.util.Map;
+
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ActionContext {
-    private FormController fc;
+    private ViewController viewController;
     private android.content.Context viewContext;
+    private Map<String, Object> flashCache;
 
-    public ActionContext(FormController fc, android.content.Context viewContext) {
-        this.fc = fc;
+    public ActionContext(ViewController viewController, android.content.Context viewContext) {
+        this.viewController = viewController;
         this.viewContext = viewContext;
     }
 
-    public FormController getFc() {
-        return fc;
+    public ViewController getViewController() {
+        return viewController;
     }
 
-    public void setFc(FormController fc) {
-        this.fc = fc;
+    public void setViewController(ViewController viewController) {
+        this.viewController = viewController;
     }
 
     public Context getViewContext() {
@@ -47,4 +51,14 @@ public class ActionContext {
         this.viewContext = viewContext;
     }
 
+    public void setAttribute(String attName, Object value) {
+        if (this.flashCache == null) {
+            this.flashCache = new HashMap<>();
+        }
+        this.flashCache.put(attName, value);
+    }
+
+    public Object getAttribute(String attName) {
+        return (this.flashCache == null) ? null : this.flashCache.get(attName);
+    }
 }

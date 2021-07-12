@@ -18,15 +18,20 @@ package es.jcyl.ita.formic.forms.config.builders;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.controllers.UIParam;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.proxy.ExpressionMethodRef;
+import es.jcyl.ita.formic.forms.config.builders.proxy.UIComponentProxyFactory;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -43,6 +48,11 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected Map<String, Attribute> attributeDefs;
     private Class<? extends E> elementType;
     private ComponentBuilderFactory factory;
+    private UIComponentProxyFactory proxyFactory = UIComponentProxyFactory.getInstance();
+    private ValueExpressionFactory expressionFactory = ValueExpressionFactory.getInstance();
+
+    private boolean allowProxifyComponentes = true;
+
 
     public AbstractComponentBuilder(String tagName, Class<? extends E> clazz) {
         this.attributeDefs = TagDef.getDefinition(tagName);
@@ -54,10 +64,14 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     }
 
     @Override
-    public E build(ConfigNode<E> node) {
-        E element = instantiate();
+    public final E build(ConfigNode<E> node) {
+        E element = instantiate(node);
+        List<ExpressionMethodRef> expressionMethods = new ArrayList<>();
         if (element != null) {
-            setAttributes(element, node);
+            setAttributes(element, node, expressionMethods);
+        }
+        if (!expressionMethods.isEmpty() && allowProxifyComponentes) {
+            element = proxyFactory.create(element, expressionMethods);
         }
         node.setElement(element);
         setupOnSubtreeStarts(node);
@@ -79,7 +93,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
     protected abstract void setupOnSubtreeEnds(ConfigNode<E> node);
 
 
-    protected E instantiate() {
+    protected E instantiate(ConfigNode<E> node) {
         if (this.elementType == null) {
             // no instance needed
             return null;
@@ -94,36 +108,51 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
-    protected void setAttributes(E element, ConfigNode node) {
-        Map<String, String> attributes = node.getAttributes();
+    protected void setAttributes(E element, ConfigNode node, List<ExpressionMethodRef> expressionAtts) {
+        Map<String, Attribute> attributes = TagDef.getDefinition(node.getName());
 
-        for (Map.Entry<String, String> entry : attributes.entrySet()) {
+        if (attributes == null) {
+            throw new ConfigurationException(error("Invalid tagName found: " + node.getName()));
+        }
+        for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
             String attName = entry.getKey();
+            Attribute attribute = entry.getValue();
+            String attValue = node.getAttribute(attName);
             try {
-                Attribute attribute = this.attributeDefs.get(attName);
-                if (attribute == null) {
-                    error(String.format("Invalid attribute found in tag <%s/>: [%s].", node.getName(), attName));
-                } else if (attribute.assignable) {
-                    String setter = (attribute.setter == null) ? attribute.name : attribute.setter;
+                if (isExpression(attValue) && !AttributeDef.VALUE.equals(attribute)
+                        && attribute.allowsExpression
+                        && (element instanceof UIComponent)) // exclude configuration elements
+                {
+                    // add expressions to map to resolve then through component proxy
+                    ValueBindingExpression expression = expressionFactory.create(attValue);
+                    ExpressionMethodRef ref = new ExpressionMethodRef("get" + attribute.name.toLowerCase(), expression);
+                    expressionAtts.add(ref);
+                    continue;
+                }
+                if (attribute.assignable) {
                     Object value;
-                    if (attribute.resolver == null) {
-                        // convert value if needed
-                        value = (attribute.type == null) ? entry.getValue() :
-                                ConvertUtils.convert(entry.getValue(), attribute.type);
-                    } else {
-                        // use resolver to set attribute
-                        AttributeResolver resolver = getAttributeResolver(attribute.resolver);
-                        value = resolver.resolve(node, attribute.name);
-                    }
-                    if (value == null) {
+                    String setter = (attribute.setter == null) ? attribute.name : attribute.setter;
+                    if (!node.hasAttribute(attName)) {
+                        // att hasn't been set
                         value = getDefaultAttributeValue(element, node, attName);
+                    } else {
+                        if (attribute.resolver == null) {
+                            // convert value if needed
+                            value = (attribute.type == null) ? attValue :
+                                    ConvertUtils.convert(attValue, attribute.type);
+                        } else {
+                            // use resolver to set attribute
+                            AttributeResolver resolver = getAttributeResolver(attribute.resolver);
+                            value = resolver.resolve(node, attribute.name);
+                        }
                     }
-                    // set attribute using reflection
-                    BeanUtils.setProperty(element, setter, value);
+                    if (value != null) {
+                        BeanUtils.setProperty(element, setter, value);
+                    }
                 } else {
                     //TODO: create strategies per attribute?
                     // for now let the builder assume this responsibility and reuse with helpers
-                    doWithAttribute(element, attName, entry.getValue());
+                    doWithAttribute(element, attName, attValue);
                 }
             } catch (Exception e) {
                 throw new ConfigurationException(error(String.format("Error while trying to set " +
@@ -132,23 +161,9 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
-    protected UIParam[] getParams(List<ConfigNode> paramNodes) {
-        UIParam[] params = new UIParam[paramNodes.size()];
-        for (int i = 0; i < paramNodes.size(); i++) {
-            UIParam uiParam = new UIParam();
-            ConfigNode paramNode = paramNodes.get(i);
-            if (paramNode.hasAttribute("name")) {
-                uiParam.setName(paramNode.getAttribute("name"));
-            }
-            if (paramNode.hasAttribute("value")) {
-                ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
-                uiParam.setValue(exprFactory.create(paramNodes.get(i).getAttribute("value")));
-            }
-            params[i] = uiParam;
-        }
-        return params;
+    private boolean isExpression(String value) {
+        return value != null && (value.contains("${") || value.contains("#{"));
     }
-
 
     protected Object getDefaultAttributeValue(E element, ConfigNode node, String attName) {
         return null;

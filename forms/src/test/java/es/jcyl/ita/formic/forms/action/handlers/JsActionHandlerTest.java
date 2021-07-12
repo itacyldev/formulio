@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +35,7 @@ import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.JsActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionException;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
@@ -58,33 +58,84 @@ public class JsActionHandlerTest {
     }
 
     private static final String JS_SOURCE =
-            "function myJsFunction(){\n" +
+            "function myJsFunction(parameter1, parameter2){\n" +
                     "	out.add('someValue');\n" +
-                    "   console.log(out);\n"+
+                    "	out.add(parameter1);\n" +
+                    "	out.add(parameter2);\n" +
+                    "   console.log(out);\n" +
                     "}";
 
     @Test
-    public void testExecuteJsFunction() throws Exception {
+    public void testExecuteJsFunctionEmptyParams() throws Exception {
         // mock main controller and prepare action controller
         MainController mc = MockingUtils.mockMainController(ctx);
 
         // prepare user Action
         UserAction userAction = new UserAction(ActionType.JS);
-        Map<String, Serializable> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("method", "myJsFunction");
         userAction.setParams(params);
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getFormController().getId(), JS_SOURCE);
-        scriptEngine.initScope();
+        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();
         scriptEngine.putProperty("out", out);
         // act - execute action
         JsActionHandler handler = new JsActionHandler(mc, mc.getRouter());
-        handler.handle(new ActionContext(mc.getFormController(), ctx), userAction);
+        handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
 
-        Assert.assertThat(out, hasSize(1));
+        Assert.assertThat(out, not(empty()));
+    }
+
+    @Test
+    public void testExecuteJsFunctionWithParams() throws Exception {
+        // mock main controller and prepare action controller
+        MainController mc = MockingUtils.mockMainController(ctx);
+
+        // prepare user Action
+        UserAction userAction = new UserAction(ActionType.JS);
+        Map<String, Object> params = new HashMap<>();
+        params.put("method", "myJsFunction");
+        params.put("param1", "value1");
+        params.put("param2", "value2");
+        userAction.setParams(params);
+
+        // create engine and store js function
+        ScriptEngine scriptEngine = mc.getScriptEngine();
+        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.initScope(mc.getViewController().getId());
+
+        List<String> out = new ArrayList();
+        scriptEngine.putProperty("out", out);
+        // act - execute action
+        JsActionHandler handler = new JsActionHandler(mc, mc.getRouter());
+        handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
+
+        Assert.assertThat(out, hasSize(3));
+    }
+
+    @Test(expected = UserActionException.class)
+    public void testExecuteJsFunctionNoMethodParam() throws Exception {
+        // mock main controller and prepare action controller
+        MainController mc = MockingUtils.mockMainController(ctx);
+
+        // prepare user Action
+        UserAction userAction = new UserAction(ActionType.JS);
+        Map<String, Object> params = new HashMap<>();
+        userAction.setParams(params);
+
+        // create engine and store js function
+        ScriptEngine scriptEngine = mc.getScriptEngine();
+        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.initScope(mc.getViewController().getId());
+
+        List<String> out = new ArrayList();
+        scriptEngine.putProperty("out", out);
+        // act - execute action
+        JsActionHandler handler = new JsActionHandler(mc, mc.getRouter());
+        handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
     }
 }

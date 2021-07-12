@@ -33,8 +33,8 @@ public class UITabItem extends UIGroupComponent {
     private ValueBindingExpression selected;
 
     public UITabItem() {
-        this.setRendererType("tabitem");
-        this.setRenderChildren(true);
+        rendererType = "tabitem";
+        renderChildren  = true;
     }
 
     public boolean isSelected(Context context) {

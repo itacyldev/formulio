@@ -16,12 +16,20 @@ package es.jcyl.ita.formic.forms.components.datalist;
  */
 
 import android.annotation.SuppressLint;
-import android.view.View;
 import android.widget.LinearLayout;
 
+import org.mini2Dx.collections.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.controllers.operations.BaseWidgetValidator;
+import es.jcyl.ita.formic.forms.controllers.widget.GroupWidgetController;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.DeferredView;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 
@@ -30,9 +38,12 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  */
 
 public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, DatalistWidget> {
+
+    public BaseWidgetValidator validator;
+
     @Override
     protected void composeWidget(RenderingEnv env, DatalistWidget widget) {
-
+        validator =  new BaseWidgetValidator(env);
     }
 
     @Override
@@ -59,9 +70,32 @@ public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, Datali
 
     @SuppressLint("ResourceType")
     @Override
-    public void addViews(RenderingEnv env, Widget<UIDatalist> root, View[] views) {
-        for (View view : views) {
-            ((DatalistWidget) root).getContentView().addView(view);
+    public void addViews(RenderingEnv env, Widget<UIDatalist> root, Widget[] widgets) {
+        DatalistWidget dataListWidget = (DatalistWidget) root;
+        List<DatalistItemWidget> itemWidgets = new ArrayList<>();
+        for (Widget widget : widgets) {
+            if (root instanceof DeferredView) {
+                root.addView(widget);
+            } else {
+                ((DatalistWidget) root).getContentView().addView(widget);
+                itemWidgets.add((DatalistItemWidget) widget);
+            }
         }
+        dataListWidget.setItems(itemWidgets);
+    }
+
+    @Override
+    public void endGroup(RenderingEnv env, Widget<UIDatalist> root) {
+        super.endGroup(env, root);
+
+        DatalistWidget dataListWidget = (DatalistWidget) root;
+        List<DatalistItemWidget> items = dataListWidget.getItems();
+
+        WidgetContextHolder[] holdersArr = (CollectionUtils.isEmpty(items)) ? new WidgetContextHolder[0] :
+                items.toArray(new WidgetContextHolder[items.size()]);
+
+        GroupWidgetController controller = new GroupWidgetController((DatalistWidget) root, holdersArr);
+        controller.setValidator(validator);
+        ((DatalistWidget) root).setController(controller);
     }
 }

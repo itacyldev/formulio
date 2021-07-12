@@ -15,7 +15,9 @@ package es.jcyl.ita.formic.app.projects;
  * limitations under the License.
  */
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,37 +46,28 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
 
     private static List<Project> projectList = new ArrayList<>();
 
+    private static Context context;
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView project_nameTextView;
         private final TextView project_descriptionTextView;
+        int count = 1;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = project_nameTextView.getContext();
-                    // TODO: extract Project View Helper to FORMIC-27
-                    Project prj = projectList.get(getAdapterPosition());
-                    String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
-                    DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-                    try {
-                        Config.getInstance().setCurrentProject(prj);
 
-                        UserMessagesHelper.toast(context,
-                                DevConsole.info(context.getString(R.string.project_opening_finish, (String) prj.getId())),
-                                Toast.LENGTH_LONG);
-                        ((MainActivity) context).loadFragment(new FormListFragment());
-                    } catch (Exception e) {
-                        UserMessagesHelper.toast(context,
-                                DevConsole.info(context.getString(R.string.project_opening_error, (String) prj.getId())),
-                                Toast.LENGTH_LONG);
-                    }
+                    context = project_nameTextView.getContext();
+                    new MyTask(context).execute(10);
+
                 }
             });
 
             project_nameTextView = (TextView) itemView.findViewById(R.id.projectName);
             project_descriptionTextView = (TextView) itemView.findViewById(R.id.projectDescription);
+
         }
 
         public TextView getProject_nameTextView() {
@@ -83,6 +76,58 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
 
         public TextView getProject_descriptionTextView() {
             return project_descriptionTextView;
+        }
+
+        class MyTask extends AsyncTask<Integer, Integer, String> {
+            AlertDialog dialog;
+            boolean projectOpeningFinish = true;
+            Project prj;
+            Context currentContext;
+
+            public MyTask(Context context) {
+                currentContext =  context;
+            }
+
+            @Override
+            protected String doInBackground(Integer... params) {
+                // TODO: extract Project View Helper to FORMIC-27
+                prj = projectList.get(getAdapterPosition());
+                String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
+                DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
+                return "Task Completed.";
+            }
+            @Override
+            protected void onPostExecute(String result) {
+                try {
+                    Config.getInstance().setCurrentProject(prj);
+                    ((MainActivity) currentContext).loadFragment(new FormListFragment());
+                } catch (Exception e) {
+                    projectOpeningFinish = false;
+
+                }
+                dialog.dismiss(); // to hide this dialog
+                if (!projectOpeningFinish){
+                    UserMessagesHelper.toast(currentContext,
+                            DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) prj.getId())),
+                            Toast.LENGTH_LONG);
+                }else{
+                    UserMessagesHelper.toast(currentContext,
+                            DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) prj.getId())),
+                            Toast.LENGTH_LONG);
+                }
+            }
+            @Override
+            protected void onPreExecute() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+                builder.setCancelable(false); // if you want user to wait for some process to finish,
+                builder.setView(R.layout.layout_loading_dialog);
+                dialog = builder.create();
+                dialog.show(); // to show this dialog
+
+            }
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+            }
         }
     }
 
@@ -108,4 +153,5 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
     public int getItemCount() {
         return projectList.size();
     }
+
 }

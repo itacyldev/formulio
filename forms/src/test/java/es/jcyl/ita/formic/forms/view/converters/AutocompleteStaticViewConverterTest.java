@@ -39,8 +39,8 @@ import es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView;
 import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 
 import static org.mockito.Mockito.mock;
 
@@ -71,7 +71,7 @@ public class AutocompleteStaticViewConverterTest {
         ActionController mockAC = mock(ActionController.class);
         RenderingEnv env = new RenderingEnv(mockAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
-        env.setViewContext(ctx);
+        env.setAndroidContext(ctx);
 
         String[] options = RandomUtils.randomObjectArray(5, String.class);
         List<String> lstValues = new ArrayList<>();

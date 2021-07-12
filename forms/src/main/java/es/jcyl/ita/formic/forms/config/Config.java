@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -76,7 +76,7 @@ public class Config {
     /**
      * Stores formControllers instances
      */
-    private FormControllerFactory formControllerFactory = FormControllerFactory.getInstance();
+    private ViewControllerFactory formControllerFactory = ViewControllerFactory.getInstance();
 
     private static ConfigReadingInfo readingListener = new ConfigReadingInfo();
 
@@ -130,12 +130,16 @@ public class Config {
         }
     }
 
+
+
+
     /**
      * Create globalContext and set it to all ContextAwareComponents
      * //TODO: manage with dependency injection
      */
     private void initContext() {
         globalContext = new UnPrefixedCompositeContext();
+        globalContext.addContext(new DateTimeContext());
         MainController.getInstance().setContext(globalContext);
         RepositoryFactory.getInstance().setContext(globalContext);
     }
@@ -207,7 +211,7 @@ public class Config {
         this.globalContext.put("repos", new RepoAccessContext());
     }
 
-    private static final ProjectResource.ResourceType[] RESOURCE_ORDER =
+    private static final ProjectResource.ResourceType[] ORDERED_RESOURCES =
             {ProjectResource.ResourceType.CONTEXT, ProjectResource.ResourceType.REPO,
                     ProjectResource.ResourceType.FORM};
 
@@ -226,7 +230,7 @@ public class Config {
                             "check the folder.", project.getBaseFolder())));
         } else {
             // process files in RESOURCE_ORDER order (configuration flow)
-            for (ProjectResource.ResourceType resType : RESOURCE_ORDER) {
+            for (ProjectResource.ResourceType resType : ORDERED_RESOURCES) {
                 configFiles = project.getConfigFiles(resType);
 
                 // TODO: Create class ProjectResources to handle files, projectTemplates, etc. #204283

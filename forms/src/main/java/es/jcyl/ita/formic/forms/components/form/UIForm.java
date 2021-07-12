@@ -3,14 +3,11 @@ package es.jcyl.ita.formic.forms.components.form;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.context.impl.EntityContext;
-import es.jcyl.ita.formic.forms.context.impl.ComponentContext;
-import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.context.impl.ViewStateHolder;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -18,14 +15,12 @@ import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 
-public class UIForm extends UIGroupComponent implements FilterableComponent, ContextHolder {
+public class UIForm extends UIGroupComponent implements FilterableComponent, EntityHolder {
 
-    private ComponentContext context;
-    private final ViewStateHolder memento;
     private String entityId = "params.entityId";
     private Entity currentEntity;
     private String onValidate; // js function to call on validation
-    private boolean readOnly;
+    private boolean readonly;
     /**
      * filterable component
      **/
@@ -34,19 +29,14 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Con
     private String[] mandatoryFilters;
 
     public UIForm() {
-        this.setRendererType("form");
-        this.setRenderChildren(true);
-        this.context = new ComponentContext(this);
-        this.memento = new ViewStateHolder();
+        rendererType ="form";
+        renderChildren = true;
     }
 
     public List<UIInputComponent> getFields() {
         return this.fields;
     }
 
-    public ComponentContext getContext() {
-        return context;
-    }
 
     public Repository getRepo() {
         return repo;
@@ -69,15 +59,6 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Con
         return "Form:" + this.getId();
     }
 
-    public void saveViewState() {
-        memento.saveState(this.getContext().getViewContext());
-    }
-
-    public void restoreViewState() {
-        memento.restoreState(this.getContext().getViewContext());
-    }
-
-    @Override
     public String getAbsoluteId() {
         return id;
     }
@@ -91,8 +72,8 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Con
     }
 
 
-    public boolean isReadOnly() {
-        return this.readOnly || !(this.repo instanceof EditableRepository);
+    public boolean isReadonly() {
+        return this.readonly || !(this.repo instanceof EditableRepository);
     }
 
 
@@ -114,13 +95,12 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Con
         this.filter = filter;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
     }
 
     public void setEntity(Entity currentEntity) {
         this.currentEntity = currentEntity;
-        this.getContext().setEntity(currentEntity);
     }
 
     public Entity getEntity() {
@@ -136,18 +116,4 @@ public class UIForm extends UIGroupComponent implements FilterableComponent, Con
         }
         return expressions;
     }
-    /**
-     * ContextHolder interface
-     */
-    @Override
-    public ViewContext getViewContext() {
-        return null;
-    }
-
-    @Override
-    public EntityContext getEntityContext() {
-        return null;
-    }
-
-
 }

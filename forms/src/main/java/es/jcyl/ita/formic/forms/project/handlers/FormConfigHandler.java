@@ -19,14 +19,16 @@ import android.net.Uri;
 
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.Collections;
+
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.controllers.FormController;
-import es.jcyl.ita.formic.forms.controllers.FormControllerFactory;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
@@ -38,9 +40,8 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.info;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class FormConfigHandler extends AbstractProjectResourceHandler {
-    FormControllerFactory formFactory = FormControllerFactory.getInstance();
+    ViewControllerFactory viewControllerFactory = ViewControllerFactory.getInstance();
     FormConfigRepository formConfigRepo;
-
 
     @Override
     public void handle(ProjectResource resource) {
@@ -65,13 +66,9 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
         if (formList != null) {
             dagManager.generateDags(formList.getView());
         }
-        for (FormEditController f : config.getEdits()) {
+        for (ViewController f : config.getEdits()) {
             dagManager.generateDags(f.getView());
         }
-    }
-
-    private void register(FormController form) {
-        formFactory.register(form);
     }
 
     /**
@@ -83,15 +80,17 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
         FormConfig existingFormConfig = formConfigRepo.findById(formConfig.getId());
         if (existingFormConfig != null) {
             throw new ConfigurationException(DevConsole.error(String.format("Duplicate id = [%s]," +
-                    " the id configured in <main/> in file ${file} is already used in the " +
-                    "file: [%s].", formConfig.getId(), existingFormConfig.getFilePath())));
+                            " the id configured in <main/> in file ${file} is already use.",
+                    formConfig.getId())));
         }
         formConfigRepo.save(formConfig);
 
-        register(formConfig.getList());
+        if (formConfig.getList() != null) {
+            viewControllerFactory.register(formConfig.getList());
+        }
         if (CollectionUtils.isNotEmpty(formConfig.getEdits())) {
-            for (FormEditController edit : formConfig.getEdits()) {
-                register(edit);
+            for (ViewController edit : formConfig.getEdits()) {
+                viewControllerFactory.register(edit);
             }
         }
     }

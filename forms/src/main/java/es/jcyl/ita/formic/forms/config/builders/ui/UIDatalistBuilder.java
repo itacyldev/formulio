@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,7 @@ import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
@@ -60,30 +62,15 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
     public void setupOnSubtreeEnds(ConfigNode<UIDatalist> node) {
         super.setupOnSubtreeEnds(node);
         setNumItems(node);
-        setUpRoute(node);
+//        setUpRoute(node);
     }
 
-    private void setUpRoute(ConfigNode<UIDatalist> node) {
-        if (node.hasAttribute("route")) {
-            return;
+    @Override
+    protected Object getDefaultAttributeValue(UIDatalist element, ConfigNode node, String attName) {
+        if (AttributeDef.ALLOWS_PARTIAL_RESTORE.name.equals(attName)) {
+            return Boolean.TRUE;
         }
-        // get add action from list controller to define default route
-        ConfigNode listNode = ConfigNodeHelper.getAscendantByTag(node, "list");
-        if (listNode == null) {
-            // the table is not nested in the listController, doesn't have to be automatically set
-            return;
-        }
-        // find add or update action to configure the destination for when user click on table element
-        List<ConfigNode> addActions = ConfigNodeHelper.getDescendantByTag(listNode, NAV_ACTIONS);
-        if (CollectionUtils.isEmpty(addActions)) {
-            throw new ConfigurationException(error("Error trying to create default datatable for " +
-                    "<list/> in file '${file}'. \nCan't create navigation from table to form if there's " +
-                    "no 'add' action. use 'route' attribute on <datatable/> instead to set the id " +
-                    "of the destination form."));
-        } else {
-            ConfigNode addAction = addActions.get(0); // TODO: xml validation to make sure there's just one
-            //node.getElement().setRoute(addAction.getAttribute("route"));
-        }
+        return super.getDefaultAttributeValue(element, node, attName);
     }
 
     private void setNumItems(ConfigNode<UIDatalist> node) {
@@ -126,15 +113,30 @@ public class UIDatalistBuilder extends BaseUIComponentBuilder<UIDatalist> {
      */
     private void addItemNode(ConfigNode<UIDatalist> node) {
         String tag = "datalistitem";
-        List<ConfigNode> itemNodes = BuilderHelper.findChildrenByTag(node, tag);
-        if (itemNodes.size() == 0) {
-            ConfigNode<UICard> itemNode = new ConfigNode<>(tag);
-            itemNode.setId(node.getId() + "_" + tag);
-            List<ConfigNode> children = node.getChildren();
-            itemNode.setChildren(children);
+        List<ConfigNode> dataListKids = BuilderHelper.findChildrenByTag(node, tag);
+        if (dataListKids.size() == 0) {
+            ConfigNode<UICard> dataListItemNode = new ConfigNode<>(tag);
+            dataListItemNode.setId(node.getId() + "_" + tag);
+            // add all nested elements as children of the template datalistItem excluding repo tags
+            List<ConfigNode> children = new ArrayList<ConfigNode>();
 
-            itemNodes.add(itemNode);
-            node.setChildren(itemNodes);
+            for (ConfigNode n : node.getChildren()) {
+                if (!isRepoTag(n.getName())) {
+                    children.add(n);
+                } else {
+                    // keep within datalist
+                    dataListKids.add(n);
+                }
+            }
+            dataListItemNode.setChildren(children);
+            dataListKids.add(dataListItemNode);
+            node.setChildren(dataListKids);
         }
     }
+
+    private boolean isRepoTag(String name) {
+        name = name.toLowerCase();
+        return name.equals("repo") || name.equals("repofilter") || name.equals("meta");
+    }
+
 }

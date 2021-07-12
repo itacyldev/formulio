@@ -7,6 +7,7 @@
     <string name="action_light_theme">Light Theme</string>
 
     <string name="today">Today</string>
+    <string name="now">Now</string>
 
     <!-- common no-data messages -->
 
@@ -65,7 +66,8 @@
     <string name="action_delete_error">An error occurred while deleting the entity. Check dev. console for details.</string>
 
     <string name="action_generic_invalid_form">Form validation error, check entered data.</string>
-    <string name="action_generic_success">Entity successfully deleted.</string>
+    <string name="action_generic_success">Entity successfully updated.</string>
     <string name="action_generic_error">Error while trying to perform user action. Check dev. console for details.</string>
 
+    <string name="not_found">Value not found</string>
 </resources>

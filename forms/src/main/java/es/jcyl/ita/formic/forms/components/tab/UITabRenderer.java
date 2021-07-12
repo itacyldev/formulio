@@ -2,6 +2,7 @@ package es.jcyl.ita.formic.forms.components.tab;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -14,10 +15,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -38,7 +39,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
+public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
 
     @Override
     protected int getWidgetLayoutId(UITab component) {
@@ -46,23 +47,26 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, Widget<UITab> widget) {
+    protected void composeWidget(RenderingEnv env, TabWidget widget) {
         UITab component = widget.getComponent();
-        FragmentActivity fragmentActivity = (FragmentActivity) env.getViewContext();
+        FragmentActivity fragmentActivity = (FragmentActivity) env.getAndroidContext();
 
         TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
         ViewPager2 viewPager = widget.findViewById(R.id.viewPager);
 
+        widget.setTabLayout(tabLayout);
+        widget.setViewPager(viewPager);
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
 
-        viewPager.post(new Runnable(){
+        /*viewPager.post(new Runnable(){
             @Override
             public void run(){
                 int currentItem = getCurrentItem(env, component);
                 viewPager.setCurrentItem(currentItem, false);
             }
-        });
+        });*/
 
         viewPagerAdapter.notifyDataSetChanged();
 
@@ -80,17 +84,33 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
 
         viewPager.getParent().requestChildFocus(viewPager, viewPager);
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 viewPager.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (viewPagerAdapter.getTabFragments().size() > position){
+                        if (viewPagerAdapter.getTabFragments().size() > position) {
                             TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
                             updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
                             viewPager.requestLayout();
+                            viewPager.getRootView().findViewById(R.id.scroll).setScrollY(widget.getPositionScrollY());
                         }
+                    }
+                });
+            }
+        });
+
+        ViewTreeObserver vto = viewPager.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                viewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(viewPager.getCurrentItem());
+                        updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
+                        viewPager.requestLayout();
                     }
                 });
             }
@@ -110,7 +130,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<UITab> root, View[] views) {
+    public void addViews(RenderingEnv env, Widget<UITab> root, Widget[] views) {
         ViewPager2 viewPager = root.findViewById(R.id.viewPager);
         ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
 
@@ -119,6 +139,8 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
             adapter.addView(view, fragCount);
             fragCount++;
         }
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -131,7 +153,7 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         }
         int pos = 0;
         for (UIComponent tabItem : kids) {
-            String message = FormContextHelper.getMessage(env.getComponentContext(), tabItem.getId());
+            String message = MessageHelper.getMessage(env, tabItem);
             if (!StringUtils.isBlank(message)) {
                 tabLayout.getTabAt(pos).setIcon(R.drawable.ic_input_error);
             }
@@ -139,15 +161,15 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, Widget<UITab>> {
         }
     }
 
-    private int getCurrentItem(RenderingEnv env, UITab component){
+    private int getCurrentItem(RenderingEnv env, UITab component) {
         int currentItem = -1;
         boolean isSelected = false;
-        for (int i=0; i<component.getChildren().length && !isSelected; i++){
+        for (int i = 0; i < component.getChildren().length && !isSelected; i++) {
             UITabItem tabItem = (UITabItem) component.getChildren()[i];
-            isSelected = tabItem.isSelected(env.getContext());
+            isSelected = tabItem.isSelected(env.getWidgetContext());
             currentItem++;
         }
-        return isSelected?currentItem:0;
+        return isSelected ? currentItem : 0;
     }
 
 }

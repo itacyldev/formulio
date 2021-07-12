@@ -22,7 +22,9 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * Base class to implement view components.
@@ -33,6 +35,8 @@ import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
 public class Widget<C extends UIComponent> extends LinearLayout {
 
     protected C component;
+    private ViewWidget rootWidget;
+    private WidgetContext widgetContext;
 
     public Widget(Context context) {
         super(context);
@@ -50,6 +54,10 @@ public class Widget<C extends UIComponent> extends LinearLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    public String getComponentId() {
+        return this.component.getId();
+    }
+
     public C getComponent() {
         return component;
     }
@@ -60,8 +68,23 @@ public class Widget<C extends UIComponent> extends LinearLayout {
 
     public void setup(RenderingEnv env) {
     }
-
     public boolean isVisible() {
         return this.getVisibility() == VISIBLE;
+    }
+
+    public ViewWidget getRootWidget() {
+        return rootWidget;
+    }
+
+    public void setRootWidget(ViewWidget getRootWidget) {
+        this.rootWidget = getRootWidget;
+    }
+
+    public WidgetContext getWidgetContext() {
+        return widgetContext;
+    }
+
+    public void setWidgetContext(WidgetContext widgetContext) {
+        this.widgetContext = widgetContext;
     }
 }

@@ -15,12 +15,14 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  *
- * Supportting class to hold configu
+ * Default class to create basic components
  */
 public class DefaultComponentBuilder extends AbstractComponentBuilder {
 

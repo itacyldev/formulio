@@ -18,26 +18,16 @@ package es.jcyl.ita.formic.forms.components.autocomplete;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
-import es.jcyl.ita.formic.forms.context.ContextUtils;
-import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
-import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.query.Filter;
-import es.jcyl.ita.formic.repo.query.Sort;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class AutoCompleteWidget extends InputWidget<UIAutoComplete, AutoCompleteView>
-        implements DynamicComponent {
+        implements DynamicWidget {
 
     public AutoCompleteWidget(Context context) {
         super(context);

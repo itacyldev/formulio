@@ -27,11 +27,17 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
+import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -65,14 +71,17 @@ public class InputRequiredValidatorTest {
         recipe.field.addValidator(new RequiredValidator());
 
         // get the view context to access data
-        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        ViewContext viewContext = recipe.env.getWidgetContext().getViewContext();
         viewContext.put(recipe.field.getId(), "");
 
         // execute validation
-        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
+        InputWidget fieldWidget = (InputWidget) ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
+        FormValidator formValidator = new FormValidator(recipe.env);
+        boolean valid = formValidator.validate(fieldWidget);
+        assertFalse(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNotNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
+        Assert.assertNotNull(MessageHelper.getMessage(fieldWidget.getWidgetContext(), recipe.field.getId()));
     }
 
     @Test
@@ -84,13 +93,17 @@ public class InputRequiredValidatorTest {
         recipe.field.addValidator(new RequiredValidator());
 
         // get the view context to access data
-        ViewContext viewContext = recipe.form.getContext().getViewContext();
+        WidgetContext widgetContext = recipe.env.getWidgetContext();
+        ViewContext viewContext = widgetContext.getViewContext();
         viewContext.put(recipe.field.getId(), "xxxxxxxxx");
 
         // execute validation
-        ((FormEditController) recipe.mc.getFormController()).validate(recipe.field);
+        InputWidget fieldWidget = (InputWidget) ViewHelper.findComponentWidget(recipe.viewWidget, recipe.field);
+        FormValidator formValidator = new FormValidator(recipe.env);
+        boolean valid = formValidator.validate(fieldWidget);
+        assertTrue(valid);
 
         // assert there's a message in the context for this field
-        Assert.assertNull(FormContextHelper.getMessage(recipe.form.getContext(), recipe.field.getId()));
+        Assert.assertNull(MessageHelper.getMessage(widgetContext, recipe.field.getId()));
     }
 }

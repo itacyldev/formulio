@@ -42,21 +42,22 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.DynamicComponent;
-import es.jcyl.ita.formic.forms.components.EntityListProvider;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.column.UIColumnFilter;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
+import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.repo.query.ConditionBinding;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.util.DataUtils;
 import es.jcyl.ita.formic.forms.view.converters.TextViewConverter;
-import es.jcyl.ita.formic.forms.view.render.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.selection.EntitySelector;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.selection.EntitySelectorWidget;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -71,7 +72,7 @@ import es.jcyl.ita.formic.repo.query.Sort;
  */
 
 public class DatatableWidget extends Widget<UIDatatable>
-        implements DynamicComponent, EntityListProvider, EntitySelector {
+        implements DynamicWidget, EntitySelectorWidget, StatefulWidget {
 
     private final String HEADER_FILTER_SUFIX = "_header_filter";
     private final String HEADER_ORDER_SUFIX = "header_order";
@@ -85,6 +86,7 @@ public class DatatableWidget extends Widget<UIDatatable>
     // view sorting and filtering criteria
     private Filter filter;
     private Sort sort;
+    private WidgetController controller;
 
     private AndViewContext thisViewCtx = new AndViewContext(this);
 
@@ -195,6 +197,7 @@ public class DatatableWidget extends Widget<UIDatatable>
 
     private void addData() {
         this.entities.addAll(this.repo.find(this.filter));
+        long count = repo.count(null);
 
         //notify that the model changedA
         ListEntityAdapter adapter = (ListEntityAdapter) bodyView.getAdapter();
@@ -203,7 +206,9 @@ public class DatatableWidget extends Widget<UIDatatable>
         }
         addNoResults();
 
-        this.offset += this.pageSize;
+        if (this.offset < count) {
+            this.offset += this.pageSize;
+        }
     }
 
     private void addNoResults() {
@@ -231,8 +236,10 @@ public class DatatableWidget extends Widget<UIDatatable>
         final ImageView searchView = output
                 .findViewById(R.id.list_header_img);
 
-        if (column.isFiltering()) {
-            addHeaderFilterLayout(column, output, fieldNameView, searchView);
+        addHeaderFilterLayout(column, output, fieldNameView, searchView);
+
+        if (!column.isFiltering()) {
+            searchView.setVisibility(INVISIBLE);
         }
 
         return output;
@@ -351,9 +358,11 @@ public class DatatableWidget extends Widget<UIDatatable>
     private void resetFilter() {
         sort = null;
         for (UIColumn column : this.getComponent().getColumns()) {
-            EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
-            if (StringUtils.isNotEmpty(filterText.getText().toString())) {
-                filterText.setText("");
+            if (column.isFiltering()) {
+                EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
+                if (StringUtils.isNotEmpty(filterText.getText().toString())) {
+                    filterText.setText("");
+                }
             }
         }
         disableOrderImages(null);
@@ -389,6 +398,26 @@ public class DatatableWidget extends Widget<UIDatatable>
             View header_item = this.headerView.getChildAt(i);
             View header_filter = header_item.findViewById(R.id.list_header_filter_layout);
             header_filter.setVisibility(visibility);
+
+            setFilterSearchVisibility(header_item, this.getComponent().getColumn(i));
+            setFilterOrderVisibility(header_item, this.getComponent().getColumn(i));
+
+        }
+    }
+
+    private void setFilterSearchVisibility(View header_item, UIColumn column) {
+        if (!column.isFiltering()) {
+            ImageView filterSearch = header_item.findViewById(R.id.list_header_filter_search);
+            filterSearch.setVisibility(INVISIBLE);
+            EditText filterText = header_item.findViewById(R.id.list_header_filter_text);
+            filterText.setVisibility(INVISIBLE);
+        }
+    }
+
+    private void setFilterOrderVisibility(View header_item, UIColumn column) {
+        if (!column.isOrdering()) {
+            ImageView filterOrder = header_item.findViewById(R.id.list_header_filter_order);
+            filterOrder.setVisibility(INVISIBLE);
         }
     }
 
@@ -402,10 +431,12 @@ public class DatatableWidget extends Widget<UIDatatable>
         ConditionBinding[] conditions = new ConditionBinding[this.getComponent().getColumns().length];
         int i = 0;
         for (UIColumn c : this.getComponent().getColumns()) {
-            String headerTextValue = thisViewCtx.getString(c.getId());
-            if (StringUtils.isNotEmpty(headerTextValue)) {
-                conditions[i] = createHeaderCondition(c);
-                i++;
+            if (c.isFiltering()) {
+                String headerTextValue = thisViewCtx.getString(c.getId());
+                if (StringUtils.isNotEmpty(headerTextValue)) {
+                    conditions[i] = createHeaderCondition(c);
+                    i++;
+                }
             }
         }
 
@@ -472,7 +503,7 @@ public class DatatableWidget extends Widget<UIDatatable>
 
     private CompositeContext setupThisContext(RenderingEnv env) {
         thisViewCtx.setPrefix("this");
-        CompositeContext ctx = ContextUtils.combine(env.getContext(), thisViewCtx);
+        CompositeContext ctx = ContextUtils.combine(env.getWidgetContext(), thisViewCtx);
         return ctx;
     }
 
@@ -498,11 +529,6 @@ public class DatatableWidget extends Widget<UIDatatable>
         return this.headerView;
     }
 
-    @Override
-    public void setEntities(List<Entity> entities) {
-    }
-
-    @Override
     public List<Entity> getEntities() {
         return this.entities;
     }
@@ -511,4 +537,93 @@ public class DatatableWidget extends Widget<UIDatatable>
     public void setSelectionManager(SelectionManager manager) {
         this.selectionMgr = manager;
     }
+
+    @Override
+    public void setState(Object value) {
+        this.filter = ((DatatableState) value).getFilter();
+        this.sort = ((DatatableState) value).getSort();
+        int offset = (((DatatableState) value).getOffset()) < this.offset? this.offset:(((DatatableState) value).getOffset());
+        AndViewContext andViewContext = ((DatatableState) value).getThisViewCtx();
+
+        //Data
+        this.offset = 0;
+        this.entities.clear();
+
+        while (offset != this.offset) {
+            this.filter.setOffset(this.offset);
+            addData();
+        }
+
+        //Scroll
+        this.bodyView.smoothScrollToPositionFromTop(((DatatableState) value).getFirstVisiblePosition(), this.offset);
+
+        //Header text and column order
+        boolean hasHeaderTextValue = false;
+        int i = 0;
+
+        for (UIColumn column : this.getComponent().getColumns()) {
+            if (column.isFiltering()) {
+
+                hasHeaderTextValue = hasHeaderTextValue || setHeaderTextValue(column, andViewContext);
+
+                setColumnOrderProperty(i, column);
+            }
+            i++;
+        }
+
+        if (hasHeaderTextValue || this.sort != null) {
+            setHeaderFilterVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void setColumnOrderProperty(int i, UIColumn column) {
+        String columnOrderProperty = column.getHeaderFilter().getOrderProperty();
+
+        if (sort != null && columnOrderProperty.equals(sort.getProperty())) {
+            Drawable orderImage = null;
+            Sort.SortType type = sort.getType();
+            sort = createHeaderSort(column, type);
+            orderImage = getOrderIcon(type);
+
+
+            View header_item = this.headerView.getChildAt(i);
+            ImageView filterOrder = header_item.findViewById(R.id.list_header_filter_order);
+            filterOrder.setImageDrawable(orderImage);
+
+            //sets a noorder image for the rest of the columns
+            disableOrderImages(column.getId());
+        }
+    }
+
+    private boolean setHeaderTextValue(UIColumn column, AndViewContext andViewContext) {
+        boolean hasHeaderTextValue = false;
+
+        String headerTextValue = andViewContext.getString(column.getId());
+        if (StringUtils.isNotEmpty(headerTextValue)) {
+            thisViewCtx.set(column.getId(), headerTextValue);
+            addHeaderToCtx(column.getId(), column.getId() + HEADER_FILTER_SUFIX);
+            EditText filterText = this.findViewWithTag(column.getId() + HEADER_FILTER_SUFIX);
+            filterText.setText(headerTextValue);
+            hasHeaderTextValue = true;
+        }
+        return hasHeaderTextValue;
+    }
+
+    @Override
+    public Object getState() {
+        DatatableState dataTableState = new DatatableState();
+        dataTableState.setFilter(this.filter);
+        dataTableState.setSort(this.sort);
+        dataTableState.setThisViewCtx(thisViewCtx);
+        dataTableState.setFirstVisiblePosition(this.bodyView.getFirstVisiblePosition());
+        dataTableState.setOffset(this.offset);
+        return dataTableState;
+    }
+
+    @Override
+    public boolean allowsPartialRestore() {
+        return this.component.getAllowsPartialRestore();
+    }
+
 }

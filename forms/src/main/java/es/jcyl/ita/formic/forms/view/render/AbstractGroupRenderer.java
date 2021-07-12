@@ -15,10 +15,9 @@ package es.jcyl.ita.formic.forms.view.render;
  * limitations under the License.
  */
 
-import android.view.View;
-
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.context.FormContextHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -34,17 +33,17 @@ public abstract class AbstractGroupRenderer<C extends UIComponent, W extends Wid
     }
 
     @Override
-    public void addViews(RenderingEnv env, Widget<C> root, View[] views) {
-        for (View view : views) {
-            root.addView(view);
+    public void addViews(RenderingEnv env, Widget<C> root, Widget[] widgets) {
+        for (Widget widget : widgets) {
+            root.addView(widget);
         }
     }
 
     @Override
     public void endGroup(RenderingEnv env, Widget<C> root) {
         // check if any of the nested elements has an error message
-        if (FormContextHelper.hasNestedMessages(env.getComponentContext(), root.getComponent())) {
-            FormContextHelper.setMessage(env.getComponentContext(), root.getComponent().getId(), "error");
+        if (MessageHelper.hasNestedMessages(env, root.getComponent())) {
+            MessageHelper.setMessage(env, root.getComponent(), "error");
             setNestedMessage(env, root);
         }
     }
