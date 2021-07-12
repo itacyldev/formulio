@@ -36,4 +36,6 @@ public interface StatefulWidget {
 
     WidgetContextHolder getHolder();
 
+    Widget getWidget();
+
 }

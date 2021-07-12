@@ -67,11 +67,18 @@ public class ViewRenderer {
 
     public Widget render(RenderingEnv env, UIComponent component) {
         env.clearDeferredViews();
-        return doRender(env, component, component.getRoot(), true);
+        return doRender(env, component, component, true);
     }
 
-    public Widget renderSubtree(RenderingEnv env, UIComponent component) {
+    public Widget renderSubtree(RenderingEnv env, Widget widget) {
         env.clearDeferredViews();
+        // find current widget context holder and set context in rendering environment
+        WidgetContext wCtx = widget.getWidgetContext();
+        env.setWidgetContext(wCtx);
+        BasicContext msgCtx = env.getMessageContext(wCtx.getHolderId());
+        env.getWidgetContext().setMessageContext(msgCtx);
+        UIComponent component = widget.getComponent();
+        // render element subtree
         return doRender(env, component, component, false);
     }
 
@@ -105,13 +112,12 @@ public class ViewRenderer {
 
         // if current view is not visible or is pending of evaluation, don't render children if
         // current element is not the root (forces deferred views to be evaluated)
-        if ((!ViewHelper.isVisible(widget) || (widget instanceof DeferredView))
-                && (component != root)) {
+        if (!ViewHelper.isVisible(widget) || (widget instanceof DeferredView)) {
             return widget;
         }
         // restore view State
-        if(widget instanceof StatefulWidget){
-            env.getStateHolder().restoreState((StatefulWidget) widget);
+        if (widget instanceof StatefulWidget) {
+            env.restoreState((StatefulWidget) widget);
         }
 
         // render children if needed
@@ -151,7 +157,7 @@ public class ViewRenderer {
             }
             gRenderer.endGroup(env, groupView);
         }
-        if (checkDeferred && component == root) {
+        if (checkDeferred && (component == root || component.getParent() == null)) {
             // last step in the tree walk, process delegates when we're back on the view root
             processDeferredViews(env);
         }

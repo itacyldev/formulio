@@ -143,4 +143,9 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
     public void setInputView(V inputView) {
         this.inputView = inputView;
     }
+
+    @Override
+    public Widget getWidget() {
+        return this;
+    }
 }

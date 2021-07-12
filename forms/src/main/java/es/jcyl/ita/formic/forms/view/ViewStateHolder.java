@@ -18,7 +18,6 @@ package es.jcyl.ita.formic.forms.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
@@ -39,14 +38,15 @@ public class ViewStateHolder {
      * A map for each WidgetContextHolder in which is stored the the state of each StateFull item of
      * the context
      */
-    private Map<String, Map<String, Object>> state = new HashMap();
+    private Map<String, Map<String, Object>> viewState = new HashMap();
+    private Map<String, Map<String, Object>> persistentViewState = new HashMap();
 
-    public void clear() {
-        if (this.state != null) {
-            for (Map substate : this.state.values()) {
+    public void clearViewState() {
+        if (this.viewState != null) {
+            for (Map substate : this.viewState.values()) {
                 substate.clear();
             }
-            this.state.clear();
+            this.viewState.clear();
         }
     }
 
@@ -54,7 +54,7 @@ public class ViewStateHolder {
      * Gets all the inputFields and stores their state in the context "state"
      */
     public void saveState(ViewWidget rootWidget) {
-        clear();
+        clearViewState();
         if (rootWidget.getContextHolders() != null) {
             for (WidgetContextHolder holder : rootWidget.getContextHolders()) {
                 saveState(holder);
@@ -67,14 +67,18 @@ public class ViewStateHolder {
      */
     private void saveState(WidgetContextHolder holder) {
         String holderId = holder.getHolderId();  // unique formId, dataitemId, ...
-        Map<String, Object> holderState = this.state.get(holderId);
-        if (holderState == null) {
-            holderState = new HashMap<>();
-            this.state.put(holderId, holderState);
+        if (!viewState.containsKey(holderId)) {
+            this.viewState.put(holderId, new HashMap<>());
+            this.persistentViewState.put(holderId, new HashMap<>());
         }
+        Map<String, Object> holderState = this.viewState.get(holderId);
+        Map<String, Object> persistentHolderState = this.persistentViewState.get(holderId);
         ViewContext viewContext = holder.getWidgetContext().getViewContext();
         for (StatefulWidget widget : viewContext.getStatefulWidgets()) {
             holderState.put(widget.getComponent().getId(), widget.getState());
+            if (widget.allowsPartialRestore()) {
+                persistentHolderState.put(widget.getComponent().getId(), widget.getState());
+            }
         }
     }
 
@@ -83,7 +87,10 @@ public class ViewStateHolder {
      */
     private void restoreState(WidgetContextHolder holder, boolean partial) {
         String holderId = holder.getHolderId(); // unique formId, dataitemId, ...
-        Map<String, Object> holderState = this.state.get(holderId);
+
+        Map<String, Object> holderState = (partial) ? this.persistentViewState.get(holderId) :
+                this.viewState.get(holderId);
+
         if (holderState != null) {
             ViewContext viewContext = holder.getWidgetContext().getViewContext();
             for (StatefulWidget widget : viewContext.getStatefulWidgets()) {
@@ -96,7 +103,7 @@ public class ViewStateHolder {
 
     public void restoreState(StatefulWidget widget) {
         String holderId = widget.getHolder().getHolderId();
-        Map<String, Object> holderState = this.state.get(holderId);
+        Map<String, Object> holderState = this.viewState.get(holderId);
         if (holderState != null) {
             widget.setState(holderState.get(widget.getComponent().getId()));
         }

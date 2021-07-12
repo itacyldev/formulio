@@ -99,4 +99,9 @@ public class TabWidget extends Widget<UITab>
                 this.getWidgetContext().getHolder();
     }
 
+    @Override
+    public Widget getWidget() {
+        return this;
+    }
+
 }

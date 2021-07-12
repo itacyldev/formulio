@@ -248,7 +248,7 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setAndroidContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.setScriptEngine(scriptEngine);
-        viewController.getStateHolder().clear();
+        viewController.getStateHolder().clearViewState();
         renderingEnv.setStateHolder(viewController.getStateHolder());
         renderingEnv.disableInterceptors();
 
@@ -293,7 +293,7 @@ public class MainController implements ContextAwareComponent {
     public Widget updateView(Widget widget, boolean reactiveCall) {
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
-        Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget.getComponent());
+        Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
         viewRenderer.replaceView(widget, newView);
         renderingEnv.enableInterceptors();
         return newView;

@@ -105,7 +105,7 @@ public class DelegatedExpressionTest {
         env.setViewDAG(viewDAG);
 
         // walk the tree executing expressions
-        View baseFormView = renderHelper.render(env, form.getParent());
+        View baseFormView = renderHelper.render(env, form);
 
         // check dependencies chain f1, f2, f3 and f4 must have the same value
         Object expectedValue = entity.get(propertyName);
@@ -116,6 +116,7 @@ public class DelegatedExpressionTest {
     }
 
     private Object[] createDepsTree(Context ctx) {
+
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
@@ -131,6 +132,7 @@ public class DelegatedExpressionTest {
         UIView view = new UIView();
         view.setId("view1");
         view.addChild(form);
+        form.setRoot(view);
 
         // create dependency tree
         DAGManager dagManager = DAGManager.getInstance();

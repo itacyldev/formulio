@@ -1,25 +1,8 @@
 <main name="dtExample" description="dtExample" id="dtExample" repo="contacts">
     <edit>
-        <tab>
-            <tabitem label="${entity.first_name}">
-                <textarea hint="Hello mr: ${entity.last_name}" id="email"
-                    label="${entity.first_name} + ${entity.last_name}" lines="${entity.it_profile}"
-                    value="${entity.contact_id}" />
-            </tabitem>
-            <tabitem label="${entity.last_name}">
-                <textarea hint="Hello mr: ${entity.last_name}" id="email2"
-                    label="${entity.first_name} + ${entity.last_name}" lines="${entity.it_profile}"
-                    value="${entity.contact_id}" />
-            </tabitem>
-            <tabitem label="list">
-                <datalist repo="contacts">
-                    <datalistitem>
-                        <textarea hint="Hello mr: ${entity.last_name}" id="email3"
-                            label="${entity.first_name}" lines="${entity.it_profile}"
-                            value="${entity.contact_id}" />
-                    </datalistitem>
-                </datalist>
-            </tabitem>
-        </tab>
+        <input id="f1" value="${entity.first_name}"/>
+        <input id="f2" value="${view.f1}"/>
+        <input id="f3" value="${view.f2.substring(0,2)}" validator="required"/>
+        <input id="f4" value="${view.f2.substring(2,4)}"/>
     </edit>
 </main>

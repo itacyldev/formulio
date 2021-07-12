@@ -40,6 +40,7 @@ import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
@@ -164,8 +165,8 @@ public class RenderingEnv {
         return userActionInterceptor;
     }
 
-    public void clearDeferredViews(){
-        if(this.deferredViews!=null){
+    public void clearDeferredViews() {
+        if (this.deferredViews != null) {
             this.deferredViews.clear();
         }
     }
@@ -325,9 +326,12 @@ public class RenderingEnv {
         return currentMessageContext;
     }
 
-    public ViewStateHolder getStateHolder() {
-        return stateHolder;
+    public void restoreState(StatefulWidget widget) {
+        if (stateHolder != null) {
+            stateHolder.restoreState(widget);
+        }
     }
+
 
     public void setStateHolder(ViewStateHolder stateHolder) {
         this.stateHolder = stateHolder;

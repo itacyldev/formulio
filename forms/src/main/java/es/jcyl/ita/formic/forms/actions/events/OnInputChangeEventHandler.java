@@ -65,16 +65,6 @@ public class OnInputChangeEventHandler
                 return;
             }
             InputWidget fieldView = (InputWidget) widget;
-//            WidgetContextHolder holder = widget.getWidgetContext().getHolder();
-//            WidgetValidator validator = null;
-//            if (holder instanceof ControllableWidget) {
-//                WidgetController controller = ((ControllableWidget) holder).getController();
-//                validator = controller.getValidator();
-//            }
-//            boolean valid = true;
-//            if (validator != null) {
-//                valid = validator.validate(fieldView);
-//            }
             boolean valid = widgetValidator.validate(fieldView);
 
             // save view state

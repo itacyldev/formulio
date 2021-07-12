@@ -633,4 +633,9 @@ public class DatatableWidget extends Widget<UIDatatable>
                 this.getWidgetContext().getHolder();
     }
 
+    @Override
+    public Widget getWidget() {
+        return this;
+    }
+
 }
