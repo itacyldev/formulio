@@ -284,12 +284,32 @@ public class RenderingEnv {
             }
 
             @Override
+            public int getId() {
+                return 0;
+            }
+
+            @Override
+            public UIComponent getComponent() {
+                return null;
+            }
+
+            @Override
+            public String getComponentId() {
+                return null;
+            }
+
+            @Override
             public Widget getWidget() {
                 return null;
             }
 
             @Override
             public WidgetContext getWidgetContext() {
+                return null;
+            }
+
+            @Override
+            public WidgetContextHolder getHolder() {
                 return null;
             }
 

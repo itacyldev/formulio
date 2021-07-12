@@ -19,6 +19,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
@@ -52,6 +53,21 @@ public class ContextTestUtils {
             }
 
             @Override
+            public int getId() {
+                return 0;
+            }
+
+            @Override
+            public UIComponent getComponent() {
+                return null;
+            }
+
+            @Override
+            public String getComponentId() {
+                return null;
+            }
+
+            @Override
             public Widget getWidget() {
                 return widget;
             }
@@ -59,6 +75,11 @@ public class ContextTestUtils {
             @Override
             public WidgetContext getWidgetContext() {
                 return ctx;
+            }
+
+            @Override
+            public WidgetContextHolder getHolder() {
+                return null;
             }
 
             @Override

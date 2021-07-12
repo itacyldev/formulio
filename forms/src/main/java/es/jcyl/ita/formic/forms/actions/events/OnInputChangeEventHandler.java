@@ -68,13 +68,13 @@ public class OnInputChangeEventHandler
             boolean valid = widgetValidator.validate(fieldView);
 
             // save view state
-            Object state = fieldView.getValue();
             if (!valid) {
                 // update the view to show messages
                 InputWidget newFieldView = (InputWidget) mc.updateView(fieldView, false);
                 mc.getRenderingEnv().disableInterceptors();
                 // set values in new View
                 try {
+                    Object state = fieldView.getValue();
                     newFieldView.setValue(state);
                     newFieldView.setFocus(true);
                 } finally {

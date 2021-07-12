@@ -15,10 +15,16 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
  * limitations under the License.
  */
 
+import java.util.List;
+
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIGroupComponent;
+import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
 /**
  * Provides methods for renderes and validators to access component error messages.
@@ -78,6 +84,37 @@ public class MessageHelper {
                 }
             }
             return hasMessage;
+        }
+    }
+
+    public static boolean hasNestedMessages(RenderingEnv env, Widget widget) {
+        if (widget instanceof WidgetContextHolder) {
+            // get message context for this widget
+            BasicContext msgCtx = env.getMessageContext(widget.getComponentId());
+            return (msgCtx == null) ? false : !msgCtx.isEmpty();
+        } else {
+            // get all nested widgetContext holders and check if any of them
+            // has not empty messageContext
+            List<WidgetContextHolder> list = ViewHelper.findNestedWidgetsByClass(widget, WidgetContextHolder.class);
+
+            for(WidgetContextHolder holder: list){
+                // find MessageContext and check if there area errors
+                BasicContext msgCtx = env.getMessageContext(holder.getHolderId());
+                if(msgCtx != null && !msgCtx.isEmpty()){
+                    return true;
+                }
+            }
+            // Use upper WidgetContextHolder to find nested elements
+            // try directly attached statefull elements using their
+            String holderId = widget.getWidgetContext().getHolderId();
+            BasicContext msgCtx = env.getMessageContext(holderId);
+            List<StatefulWidget> lstStatefull = ViewHelper.findNestedWidgetsByClass(widget, StatefulWidget.class);
+            for(StatefulWidget stWidget: lstStatefull){
+                if(msgCtx.containsKey(stWidget.getComponentId())){
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

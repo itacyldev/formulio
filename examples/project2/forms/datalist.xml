@@ -3,13 +3,22 @@
         <datatable route="form7-edit1" />
     </list>
     <edit>
-        <datalist id="contactList">
-            <datalistitem>
-                <input id="fn" label="first_name" validator="required" value="${entity.first_name}" />
-                <input label="bio" render="${view.fn.length() > 3}" validator="required"
-                    value="${entity.bio}" />
-            </datalistitem>
-        </datalist>
+        <tab>
+            <tabitem label="1">
+                <input id="fn22" label="first_name" validator="required"
+                    value="${entity.first_name}" />
+            </tabitem>
+            <tabitem label="2">
+                <datalist id="contactList">
+                    <datalistitem>
+                        <input id="fn" label="first_name" validator="required"
+                            value="${entity.first_name}" />
+                        <input label="bio" render="${view.fn.length() > 3}" validator="required"
+                            value="${entity.bio}" />
+                    </datalistitem>
+                </datalist>
+            </tabitem>
+        </tab>
         <buttonbar type="bottom">
             <button label="save">
                 <action controller="contactList" type="save" />

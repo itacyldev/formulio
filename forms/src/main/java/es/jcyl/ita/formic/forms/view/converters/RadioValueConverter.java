@@ -31,7 +31,7 @@ class RadioValueConverter implements ViewValueConverter<RadioGroup> {
             return null;
         } else {
             RadioButtonWidget radioBtn = view.findViewById(buttonPosId);
-            return radioBtn.getOption().getValue();
+            return (!radioBtn.isChecked()) ? null : radioBtn.getOption().getValue();
         }
     }
 

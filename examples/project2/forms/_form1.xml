@@ -1,0 +1,32 @@
+<main name="BasicListRosi" description="Basic CRUD Rosi" id="formDataListRosi" repo="contacts">
+    <edit>
+        <tab>
+            <tabitem label="1">
+                <datalist id="contactList">
+                    <datalistitem>
+                        <radio id="radioFirstName" label="First name" orientation="horizontal"
+                            validator="required" value="${entity.first_name}">
+                            <options>
+                                <option id="optionFirstNameJQAMBGBOTE" label="JQAMBGBOTE"
+                                    value="aaaaa" />
+                                <option id="optionFirstNameKDNBQDXOWF" label="KDNBQDXOWF"
+                                    value="aaaaaa" />
+                                <option id="optionFirstNameLGSPZCIYOQ" label="LGSPZCIYOQ"
+                                    value="asdfasdf" />
+                            </options>
+                        </radio>
+                        <textarea id="observacionesFirstName" label="Observaciones"
+                            render="${view.radioFirstName eq 'aaaaaa'}" validator="required"
+                            value="${entity.bio}" />
+                    </datalistitem>
+                </datalist>
+            </tabitem>
+        </tab>
+        <buttonbar type="bottom">
+            <button label="save">
+                <action controller="contactList" type="save" route="back" />
+            </button>
+            <button label="cancel" route="back" />
+        </buttonbar>
+    </edit>
+</main>

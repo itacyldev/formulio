@@ -19,11 +19,11 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Interface for componentes that need data loading during the rendering process.
  */
 
-public interface DynamicWidget {
+public interface DynamicWidget extends IWidget {
 
     void load(RenderingEnv env);
 

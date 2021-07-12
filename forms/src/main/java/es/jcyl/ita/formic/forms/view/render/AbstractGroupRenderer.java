@@ -42,7 +42,7 @@ public abstract class AbstractGroupRenderer<C extends UIComponent, W extends Wid
     @Override
     public void endGroup(RenderingEnv env, Widget<C> root) {
         // check if any of the nested elements has an error message
-        if (MessageHelper.hasNestedMessages(env, root.getComponent())) {
+        if (MessageHelper.hasNestedMessages(env, root)) {
             MessageHelper.setMessage(env, root.getComponent(), "error");
             setNestedMessage(env, root);
         }

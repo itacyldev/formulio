@@ -1,8 +1,25 @@
-<main name="dtExample" description="dtExample" id="dtExample" repo="contacts">
+<main name="BasicListRosi" description="Basic CRUD Rosi" id="formDataListRosi" repo="contacts">
     <edit>
-        <input id="f1" value="${entity.first_name}"/>
-        <input id="f2" value="${view.f1}"/>
-        <input id="f3" value="${view.f2.substring(0,2)}" validator="required"/>
-        <input id="f4" value="${view.f2.substring(2,4)}"/>
+        <form id="form1">
+
+            <tab>
+                <tabitem label="0">
+                    <input id="fn1" validator="required" value="${entity.first_name}" />
+                </tabitem>
+                <tabitem label="1">
+                    <datalist id="contactList">
+                        <datalistitem>
+                            <input id="fn" validator="required" value="${entity.first_name}" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+            </tab>
+        </form>
+        <buttonbar type="bottom">
+            <button label="save">
+                <action controller="contactList, form1" route="back" type="save" />
+            </button>
+            <button label="cancel" route="back" />
+        </buttonbar>
     </edit>
 </main>

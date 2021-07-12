@@ -2,7 +2,7 @@ package es.jcyl.ita.formic.forms.view.widget;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
- * Licensed under the Apache License, Version 2.0 (tintegerhe "License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -15,17 +15,25 @@ package es.jcyl.ita.formic.forms.view.widget;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+
 /**
- * Defines operations to retrieve and set state in view widgets.
+ * Common functionality for Widget interfaces.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface StatefulWidget extends IWidget {
+public interface IWidget {
 
-    void setState(Object value);
+    int getId();
 
-    Object getState();
+    Widget getWidget();
 
-    boolean allowsPartialRestore();
+    UIComponent getComponent();
 
+    String getComponentId();
+
+    WidgetContext getWidgetContext();
+
+    WidgetContextHolder getHolder();
 }
