@@ -72,6 +72,7 @@ public class UIRadioRendererTest {
         RenderingEnv env = new RenderingEnv(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
+        env.disableInterceptors();
 
         UIRadio radio = new UIRadio();
         int expectedOptions = RandomUtils.randomInt(0, 5);
