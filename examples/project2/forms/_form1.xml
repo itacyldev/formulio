@@ -4,27 +4,22 @@
             <tabitem label="1">
                 <datalist id="contactList">
                     <datalistitem>
-                        <radio id="radioFirstName" label="First name" orientation="horizontal"
-                            validator="required" value="${entity.first_name}">
+                        <radio id="radioFirstName" label="First name" value="${entity.first_name}" orientation="horizontal" validator="required">
                             <options>
-                                <option id="optionFirstNameJQAMBGBOTE" label="JQAMBGBOTE"
-                                    value="aaaaa" />
-                                <option id="optionFirstNameKDNBQDXOWF" label="KDNBQDXOWF"
-                                    value="aaaaaa" />
-                                <option id="optionFirstNameLGSPZCIYOQ" label="LGSPZCIYOQ"
-                                    value="asdfasdf" />
+                                <option id="optionFirstNameJQAMBGBOTE" label="JQAMBGBOTE" value="JQAMBGBOTE" />
+                                <option id="optionFirstNameKDNBQDXOWF" label="KDNBQDXOWF" value="KDNBQDXOWF" />
+                                <option id="optionFirstNameLGSPZCIYOQ" label="LGSPZCIYOQ" value="LGSPZCIYOQ" />
                             </options>
                         </radio>
-                        <textarea id="observacionesFirstName" label="Observaciones"
-                            render="${view.radioFirstName eq 'aaaaaa'}" validator="required"
-                            value="${entity.bio}" />
+                        <textarea id="observacionesFirstName" label="Observaciones" value="${entity.bio}" render="${view.radioFirstName eq 'JQAMBGBOTE'}" validator="required"/>
                     </datalistitem>
                 </datalist>
             </tabitem>
         </tab>
+        ​
         <buttonbar type="bottom">
             <button label="save">
-                <action controller="contactList" type="save" route="back" />
+                <action controller="contactList" type="save" />
             </button>
             <button label="cancel" route="back" />
         </buttonbar>
