@@ -1,4 +1,4 @@
-<main name="BasicListRosi" description="Basic CRUD Rosi" id="formDataListRosi" repo="contacts">
+<main name="formTabs" description="Basic CRUD Rosi" id="formTabs" repo="contacts">
     <edit>
         <form id="form1">
 

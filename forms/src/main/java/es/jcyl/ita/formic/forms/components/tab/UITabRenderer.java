@@ -166,15 +166,4 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
         }
     }
 
-    private int getCurrentItem(RenderingEnv env, UITab component) {
-        int currentItem = -1;
-        boolean isSelected = false;
-        for (int i = 0; i < component.getChildren().length && !isSelected; i++) {
-            UITabItem tabItem = (UITabItem) component.getChildren()[i];
-            isSelected = tabItem.isSelected(env.getWidgetContext());
-            currentItem++;
-        }
-        return isSelected ? currentItem : 0;
-    }
-
 }

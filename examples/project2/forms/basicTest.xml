@@ -3,9 +3,13 @@
         <datatable route="form5-edit1" />
     </list>
     <edit>
-        <form>
-            <input id="fn" validator="required" value="${entity.first_name}" />
-            <input validator="required" value="${entity.bio}" render="${view.fn.length() > 3}" />
-        </form>
+        <radio id="radio" label="it_profile" orientation="horizontal" validator="required"
+            value="${entity.it_profile}" converter="long">
+            <options>
+                <option label="1" value="1" />
+                <option label="2" value="2" />
+                <option label="3" value="3" />
+            </options>
+        </radio>
     </edit>
 </main>

@@ -36,4 +36,8 @@ public class TabItemRenderer extends AbstractGroupRenderer<UITabItem, Widget<UIT
     protected void composeWidget(RenderingEnv env, Widget<UITabItem> widget) {
     }
 
+    @Override
+    protected boolean isAbleToShowNestedMessages() {
+        return true;
+    }
 }

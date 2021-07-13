@@ -90,7 +90,6 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         setOnClickListenerResetButton(widget);
 
 
-
     }
 
     private void setOnClickListenerResetButton(InputWidget<UIRadio, RadioGroup> widget) {
@@ -101,13 +100,12 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
             @Override
             public void onClick(final View arg0) {
                 // uncheck all options
-
+                radioGroup.clearCheck();
                 for (int index = 0; index < radioGroup.getChildCount(); index++) {
                     RadioButtonWidget option = (RadioButtonWidget) radioGroup.getChildAt(index);
                     option.setChecked(false);
                 }
-                widget.getConverter().setViewValue(widget.getInputView(), "");
-                radioGroup.clearCheck();
+//                widget.getConverter().setViewValue(widget.getInputView(), "");
             }
         });
     }
@@ -142,7 +140,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
         if (weigthts != null && i < weigthts.length) {
             if (orientationType == RadioGroup.HORIZONTAL) {
                 view.setLayoutParams(new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT, weigthts[i]));
-            }else{
+            } else {
                 view.setLayoutParams(new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, 0, weigthts[i]));
             }
         }

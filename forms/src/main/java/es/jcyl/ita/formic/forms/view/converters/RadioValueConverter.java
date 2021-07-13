@@ -31,14 +31,15 @@ class RadioValueConverter implements ViewValueConverter<RadioGroup> {
             return null;
         } else {
             RadioButtonWidget radioBtn = view.findViewById(buttonPosId);
-            return (!radioBtn.isChecked()) ? null : radioBtn.getOption().getValue();
+            return radioBtn.getOption().getValue();
         }
     }
 
     @Override
     public void setViewValue(RadioGroup view, Object value) {
         // iterate over the options and set as checked the one with the given value
-        for (int index = 0; index < (view).getChildCount(); index++) {
+        view.clearCheck();
+        for (int index = 0; index < view.getChildCount(); index++) {
             RadioButtonWidget option = (RadioButtonWidget) view.getChildAt(index);
             if (option.getOption().getValue().equals(value)) {
                 option.setChecked(true);
