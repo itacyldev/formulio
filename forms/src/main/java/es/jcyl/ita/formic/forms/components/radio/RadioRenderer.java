@@ -86,10 +86,7 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
                 }
             }
         });
-
         setOnClickListenerResetButton(widget);
-
-
     }
 
     private void setOnClickListenerResetButton(InputWidget<UIRadio, RadioGroup> widget) {

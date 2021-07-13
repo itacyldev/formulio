@@ -1,23 +1,25 @@
-<main name="formTabs" description="Basic CRUD Rosi" id="formTabs" repo="contacts">
+<main name="BasicListRosi" description="Basic CRUD Rosi" id="formDataListRosi" repo="contacts">
     <edit>
-        <form id="form1">
-
-            <tab>
-                <tabitem label="0">
-                    <input id="fn1" validator="required" value="${entity.first_name}" />
-                </tabitem>
-                <tabitem label="1">
-                    <datalist id="contactList">
-                        <datalistitem>
-                            <input id="fn" validator="required" value="${entity.first_name}" />
-                        </datalistitem>
-                    </datalist>
-                </tabitem>
-            </tab>
-        </form>
+        <tab>
+            <tabitem label="1">
+                <datalist id="contactList">
+                    <datalistitem>
+                        <radio id="radioFirstName" label="First name" value="${entity.first_name}" orientation="horizontal" validator="required">
+                            <options>
+                                <option id="optionFirstNameJQAMBGBOTE" label="JQAMBGBOTE" value="JQAMBGBOTE" />
+                                <option id="optionFirstNameKDNBQDXOWF" label="KDNBQDXOWF" value="KDNBQDXOWF" />
+                                <option id="optionFirstNameLGSPZCIYOQ" label="LGSPZCIYOQ" value="LGSPZCIYOQ" />
+                            </options>
+                        </radio>
+                        <textarea id="observacionesFirstName" label="Observaciones" value="${entity.bio}" render="${view.radioFirstName eq 'JQAMBGBOTE'}" validator="required"/>
+                    </datalistitem>
+                </datalist>
+            </tabitem>
+        </tab>
+        ​
         <buttonbar type="bottom">
             <button label="save">
-                <action controller="contactList, form1" route="back" type="save" />
+                <action controller="contactList" type="save" />
             </button>
             <button label="cancel" route="back" />
         </buttonbar>

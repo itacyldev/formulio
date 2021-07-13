@@ -1,0 +1,24 @@
+<main name="formTabs" description="Basic CRUD Rosi" id="formTabs" repo="contacts">
+    <edit>
+        <form id="form1">
+            <tab>
+                <tabitem label="0">
+                    <input id="fn1" validator="required" value="${entity.first_name}" />
+                </tabitem>
+                <tabitem label="1">
+                    <datalist id="contactList">
+                        <datalistitem>
+                            <input id="fn" validator="required" value="${entity.first_name}" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+            </tab>
+        </form>
+        <buttonbar type="bottom">
+            <button label="save">
+                <action controller="contactList, form1" route="back" type="save" />
+            </button>
+            <button label="cancel" route="back" />
+        </buttonbar>
+    </edit>
+</main>

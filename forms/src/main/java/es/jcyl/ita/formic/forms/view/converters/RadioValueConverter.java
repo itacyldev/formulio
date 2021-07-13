@@ -38,6 +38,7 @@ class RadioValueConverter implements ViewValueConverter<RadioGroup> {
     @Override
     public void setViewValue(RadioGroup view, Object value) {
         // iterate over the options and set as checked the one with the given value
+        view.clearCheck();
         for (int index = 0; index < view.getChildCount(); index++) {
             RadioButtonWidget option = (RadioButtonWidget) view.getChildAt(index);
             if (option.getOption().getValue().equals(value)) {
