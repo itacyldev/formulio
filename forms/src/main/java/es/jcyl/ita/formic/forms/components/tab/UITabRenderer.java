@@ -144,6 +144,11 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
     }
 
     @Override
+    protected boolean isAbleToShowNestedMessages() {
+        return true;
+    }
+
+    @Override
     protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {
         TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
         // find which tabs has error messages
