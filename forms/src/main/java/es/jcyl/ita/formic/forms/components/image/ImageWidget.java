@@ -150,7 +150,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     @Override
     public Object getState() {
-        return this.getInputView().getResource();
+        return this.getInputView()!=null?this.getInputView().getResource():null;
     }
 
     @Override
