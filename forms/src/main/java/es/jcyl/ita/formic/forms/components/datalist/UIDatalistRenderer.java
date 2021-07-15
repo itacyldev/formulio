@@ -43,7 +43,7 @@ public class UIDatalistRenderer extends AbstractGroupRenderer<UIDatalist, Datali
 
     @Override
     protected void composeWidget(RenderingEnv env, DatalistWidget widget) {
-        validator =  new BaseWidgetValidator(env);
+        validator =  new BaseWidgetValidator();
     }
 
     @Override

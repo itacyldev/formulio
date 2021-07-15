@@ -32,6 +32,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
+import es.jcyl.ita.formic.forms.components.util.LayoutTraverser;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
@@ -111,7 +112,7 @@ public class DefferedViewsIntegrationTest {
         Assert.assertNotNull(widget);
 
         // traverse the view tree looking for deferred views
-        WidgetTestUtils.LayoutTraverser traverser = WidgetTestUtils.buildViewTraverser(view -> {
+        LayoutTraverser traverser = WidgetTestUtils.buildViewTraverser(view -> {
             Assert.assertFalse("Deferred view found with id: " + view.getTag(),
                     (view instanceof DeferredView));
             return null;

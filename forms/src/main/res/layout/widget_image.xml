@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <es.jcyl.ita.formic.forms.components.image.ImageWidget xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/field_layout_layout"
     android:layout_width="fill_parent"
     android:layout_height="200dp"
     android:orientation="vertical"
-    android:paddingLeft="12dp"
-    android:paddingTop="5dp"
-    android:paddingRight="2dp"
-    android:paddingBottom="5dp">
+    style="@style/Widget_padding">
     <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -63,55 +61,55 @@
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:orientation="horizontal"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="left"
+            style="@style/Component_background"
+            >
+            <es.jcyl.ita.formic.forms.components.image.ImageResourceView
+                android:id="@+id/input_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2.3"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:gravity="center"
-                    style="@style/Component_background"
-                    >
-                        <es.jcyl.ita.formic.forms.components.image.ImageResourceView
-                            android:id="@+id/input_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal|center_vertical"
-                            android:src="@drawable/no_image"
-                            android:scaleType="fitCenter"
-                            />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:orientation="vertical">
-                    <Button
-                        android:id="@+id/btn_camera"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_margin="15dp"
-                        android:paddingLeft="12dp"
-                        android:drawableLeft="@drawable/ic_action_camera"
-                        android:background="@drawable/roundbutton"/>
-                    <Button
-                        android:id="@+id/btn_gallery"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_margin="15dp"
-                        android:paddingLeft="12dp"
-                        android:gravity="center"
-                        android:drawableLeft="@drawable/ic_action_picture"
-                        android:background="@drawable/roundbutton"
-                        />
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:src="@drawable/no_image"
+                android:scaleType="fitCenter"
+                android:layout_marginRight="10dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="28dp"
+                app:icon="@drawable/ic_action_camera"
+                android:background="@drawable/roundbutton"/>
+            <Button
+                android:id="@+id/btn_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="15dp"
+                android:paddingLeft="12dp"
+                android:gravity="center"
+                android:drawableLeft="@drawable/ic_action_picture"
+                android:background="@drawable/roundbutton"
+                android:visibility="invisible"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
 </es.jcyl.ita.formic.forms.components.image.ImageWidget>

@@ -24,6 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
@@ -92,4 +93,15 @@ public class TabWidget extends Widget<UITab>
     public void setPositionScrollY(int positionScrollY) {
         this.positionScrollY = positionScrollY;
     }
+    @Override
+    public WidgetContextHolder getHolder() {
+        return (this.getWidgetContext() == null) ? null :
+                this.getWidgetContext().getHolder();
+    }
+
+    @Override
+    public Widget getWidget() {
+        return this;
+    }
+
 }

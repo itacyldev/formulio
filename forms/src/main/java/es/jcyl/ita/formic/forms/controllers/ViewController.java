@@ -109,6 +109,11 @@ public class ViewController implements Identificable {
     public void restoreViewPartialState() {
         stateHolder.restorePartialState(rootWidget);
     }
+
+    public ViewStateHolder getStateHolder() {
+        return stateHolder;
+    }
+
     /****************************/
     /**  >>> Form List methods **/
     /****************************/

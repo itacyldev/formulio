@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class Widget<C extends UIComponent> extends LinearLayout {
+public class Widget<C extends UIComponent> extends LinearLayout implements IWidget{
 
     protected C component;
     private ViewWidget rootWidget;
@@ -62,12 +62,18 @@ public class Widget<C extends UIComponent> extends LinearLayout {
         return component;
     }
 
+    @Override
+    public Widget getWidget() {
+        return this;
+    }
+
     public void setComponent(C component) {
         this.component = component;
     }
 
     public void setup(RenderingEnv env) {
     }
+
     public boolean isVisible() {
         return this.getVisibility() == VISIBLE;
     }
@@ -82,6 +88,10 @@ public class Widget<C extends UIComponent> extends LinearLayout {
 
     public WidgetContext getWidgetContext() {
         return widgetContext;
+    }
+
+    public WidgetContextHolder getHolder() {
+        return (widgetContext == null) ? null : widgetContext.getHolder();
     }
 
     public void setWidgetContext(WidgetContext widgetContext) {
