@@ -31,7 +31,7 @@ import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class InputWidget<C extends UIInputComponent, V extends View> extends Widget<C> implements StatefulWidget{
+public class InputWidget<C extends UIInputComponent, V extends View> extends Widget<C> implements StatefulWidget {
 
     private ViewValueConverter converter;
     private V inputView;
@@ -91,6 +91,12 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
         return this.component.getAllowsPartialRestore();
     }
 
+    @Override
+    public WidgetContextHolder getHolder() {
+        return (this.getWidgetContext() == null) ? null :
+                this.getWidgetContext().getHolder();
+    }
+
     /**
      * method called after related elements are bound to current InputFieldView.
      */
@@ -136,5 +142,10 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
 
     public void setInputView(V inputView) {
         this.inputView = inputView;
+    }
+
+    @Override
+    public Widget getWidget() {
+        return this;
     }
 }

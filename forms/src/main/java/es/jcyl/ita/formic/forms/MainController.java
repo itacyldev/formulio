@@ -248,6 +248,8 @@ public class MainController implements ContextAwareComponent {
         renderingEnv.setAndroidContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.setScriptEngine(scriptEngine);
+        viewController.getStateHolder().clearViewState();
+        renderingEnv.setStateHolder(viewController.getStateHolder());
         renderingEnv.disableInterceptors();
 
         // render view Widget and restore partial state if needed
@@ -291,7 +293,7 @@ public class MainController implements ContextAwareComponent {
     public Widget updateView(Widget widget, boolean reactiveCall) {
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
-        Widget newView = viewRenderer.render(this.renderingEnv, widget.getComponent());
+        Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
         viewRenderer.replaceView(widget, newView);
         renderingEnv.enableInterceptors();
         return newView;
@@ -303,7 +305,12 @@ public class MainController implements ContextAwareComponent {
      * @param widget: ui component that fires the changes in the View.
      */
     public void updateDependants(Widget widget) {
-        viewRenderer.renderDeps(this.renderingEnv, widget);
+        renderingEnv.disableInterceptors();
+        try {
+            viewRenderer.renderDeps(this.renderingEnv, widget);
+        } finally {
+            renderingEnv.enableInterceptors();
+        }
     }
 
     /**
@@ -319,6 +326,7 @@ public class MainController implements ContextAwareComponent {
             contentView.removeAllViews();
             contentView.addView(newRootWidget);
             getViewController().setRootWidget((ViewWidget) newRootWidget);
+//            viewController.restoreViewState();
         } finally {
             renderingEnv.enableInterceptors();
         }
@@ -326,18 +334,6 @@ public class MainController implements ContextAwareComponent {
 
     public void saveViewState() {
         getViewController().saveViewState();
-    }
-
-    /**
-     * Disables user events and restore values to the view
-     */
-    public void restoreViewState() {
-        renderingEnv.disableInterceptors();
-        try {
-            viewController.restoreViewState();
-        } finally {
-            renderingEnv.enableInterceptors();
-        }
     }
 
     public class MCState {

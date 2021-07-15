@@ -59,6 +59,7 @@ import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Criteria;
@@ -542,7 +543,7 @@ public class DatatableWidget extends Widget<UIDatatable>
     public void setState(Object value) {
         this.filter = ((DatatableState) value).getFilter();
         this.sort = ((DatatableState) value).getSort();
-        int offset = (((DatatableState) value).getOffset()) < this.offset? this.offset:(((DatatableState) value).getOffset());
+        int offset = (((DatatableState) value).getOffset()) < this.offset ? this.offset : (((DatatableState) value).getOffset());
         AndViewContext andViewContext = ((DatatableState) value).getThisViewCtx();
 
         //Data
@@ -624,6 +625,17 @@ public class DatatableWidget extends Widget<UIDatatable>
     @Override
     public boolean allowsPartialRestore() {
         return this.component.getAllowsPartialRestore();
+    }
+
+    @Override
+    public WidgetContextHolder getHolder() {
+        return (this.getWidgetContext() == null) ? null :
+                this.getWidgetContext().getHolder();
+    }
+
+    @Override
+    public Widget getWidget() {
+        return this;
     }
 
 }

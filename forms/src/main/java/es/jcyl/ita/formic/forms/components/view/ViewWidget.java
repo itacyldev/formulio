@@ -21,14 +21,15 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -76,7 +77,12 @@ public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
     }
 
     public WidgetController getWidgetController(String widgetId) {
-        return this.widgetControllers.get(widgetId).getController();
+        ControllableWidget controllableWidget = this.widgetControllers.get(widgetId);
+        return (controllableWidget == null) ? null : controllableWidget.getController();
+    }
+
+    public Collection<ControllableWidget> getControllableWidgets() {
+        return this.widgetControllers.values();
     }
 
     public void registerControllableWidget(ControllableWidget widget) {

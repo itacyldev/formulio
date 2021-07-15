@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
@@ -211,6 +212,10 @@ public class ConditionalRenderingTest {
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;
+        UIView view = new UIView();
+        view.addChild(form);
+        form.setRoot(view);
+
         UIInputComponent field = recipe.field;
 
         // create meta with one field for pk and additional Floats to test different conditions

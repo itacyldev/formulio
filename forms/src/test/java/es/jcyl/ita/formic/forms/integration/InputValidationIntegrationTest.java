@@ -33,6 +33,7 @@ import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.datalist.DatalistItemWidget;
 import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
+import es.jcyl.ita.formic.forms.components.form.FormWidget;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -135,8 +136,8 @@ public class InputValidationIntegrationTest {
 
         // check each widgetContext has a different message Context
         Assert.assertFalse("Each widgetContext must have a different messageContext",
-                items.get(0).getWidgetContext().getMessageContext()==
-                items.get(1).getWidgetContext().getMessageContext());
+                items.get(0).getWidgetContext().getMessageContext() ==
+                        items.get(1).getWidgetContext().getMessageContext());
 
         /************/
         /** CASE 2:  modify first item-email to set a valid value and keep null in the second
@@ -169,7 +170,6 @@ public class InputValidationIntegrationTest {
         Assert.assertNull(items.get(0).getWidgetContext().getMessageContext().get("email"));
         Assert.assertNull(items.get(1).getWidgetContext().getMessageContext().get("email"));
     }
-
 
     @AfterClass
     public static void tearDown() {

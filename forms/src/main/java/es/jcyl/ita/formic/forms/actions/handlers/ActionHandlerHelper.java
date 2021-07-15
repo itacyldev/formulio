@@ -18,12 +18,14 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
+import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
@@ -47,10 +49,22 @@ public class ActionHandlerHelper {
             }
         }
         if (notFoundIds.length() > 0) {
-            notFoundIds = notFoundIds.substring(0,notFoundIds.length()-2);
+            notFoundIds = notFoundIds.substring(0, notFoundIds.length() - 2);
+//            String availableControllers =
+            Collection<ControllableWidget> controllableWidgets = rootWidget.getControllableWidgets();
+            String availableControllers = "";
+            if (controllableWidgets.size() == 0) {
+                availableControllers = "<No controllers>";
+            } else {
+                for (ControllableWidget c : controllableWidgets) {
+                    availableControllers += c.getComponentId() + ", ";
+                }
+                availableControllers = availableControllers.substring(0, availableControllers.length() - 2);
+            }
             throw new UserActionException(error(String.format("An attempt to execute save() on " +
-                    "WidgetController(s) [%s] was made but it/they cannot be found in current view." +
-                    "Check the 'controller' attribute in action [%s].", notFoundIds, action)));
+                            "WidgetController(s) [%s] was made but %s cannot be found in current view." +
+                            "Check the 'controller' attribute in action [%s]. Available controllers: [%s]",
+                    notFoundIds, (notFoundIds.length() == 1 ? "it" : "they"), action, availableControllers)));
         }
         return lst;
     }

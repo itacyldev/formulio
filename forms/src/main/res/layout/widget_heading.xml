@@ -6,5 +6,6 @@
         android:id="@+id/heading_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         />
 </es.jcyl.ita.formic.forms.view.widget.Widget>

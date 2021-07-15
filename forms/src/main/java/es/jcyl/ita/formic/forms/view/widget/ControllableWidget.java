@@ -20,10 +20,7 @@ import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface ControllableWidget {
+public interface ControllableWidget extends IWidget {
 
     WidgetController getController();
-
-    Widget getWidget();
-
 }

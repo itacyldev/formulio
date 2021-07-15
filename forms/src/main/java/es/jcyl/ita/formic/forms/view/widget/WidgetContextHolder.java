@@ -21,13 +21,9 @@ import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface WidgetContextHolder {
+public interface WidgetContextHolder extends IWidget{
 
     String getHolderId();
-
-    Widget getWidget();
-
-    WidgetContext getWidgetContext();
 
     void setWidgetContext(WidgetContext context);
 

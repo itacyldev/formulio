@@ -35,10 +35,12 @@ import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.view.ViewStateHolder;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
@@ -63,6 +65,7 @@ public class RenderingEnv {
      */
     private static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
     private ViewWidget rootWidget;
+    private ViewStateHolder stateHolder; // curren View state holder
 
     private SelectionManager selectionManager = new SelectionManager();
     /**
@@ -110,6 +113,7 @@ public class RenderingEnv {
         newEnv.inputDelayDisabled = env.inputDelayDisabled;
         newEnv.entity = env.entity;
         newEnv.messageMap = env.messageMap;
+        newEnv.stateHolder = env.stateHolder;
         return newEnv;
     }
 
@@ -159,6 +163,12 @@ public class RenderingEnv {
 
     public UserEventInterceptor getUserActionInterceptor() {
         return userActionInterceptor;
+    }
+
+    public void clearDeferredViews() {
+        if (this.deferredViews != null) {
+            this.deferredViews.clear();
+        }
     }
 
     public void addDeferred(String componentId, DeferredView view) {
@@ -274,12 +284,32 @@ public class RenderingEnv {
             }
 
             @Override
+            public int getId() {
+                return 0;
+            }
+
+            @Override
+            public UIComponent getComponent() {
+                return null;
+            }
+
+            @Override
+            public String getComponentId() {
+                return null;
+            }
+
+            @Override
             public Widget getWidget() {
                 return null;
             }
 
             @Override
             public WidgetContext getWidgetContext() {
+                return null;
+            }
+
+            @Override
+            public WidgetContextHolder getHolder() {
                 return null;
             }
 
@@ -314,6 +344,17 @@ public class RenderingEnv {
 
     public BasicContext getCurrentMessageContext() {
         return currentMessageContext;
+    }
+
+    public void restoreState(StatefulWidget widget) {
+        if (stateHolder != null) {
+            stateHolder.restoreState(widget);
+        }
+    }
+
+
+    public void setStateHolder(ViewStateHolder stateHolder) {
+        this.stateHolder = stateHolder;
     }
 }
 

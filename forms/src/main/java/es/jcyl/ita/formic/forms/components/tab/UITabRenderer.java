@@ -144,6 +144,11 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
     }
 
     @Override
+    protected boolean isAbleToShowNestedMessages() {
+        return true;
+    }
+
+    @Override
     protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {
         TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
         // find which tabs has error messages
@@ -159,17 +164,6 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
             }
             pos++;
         }
-    }
-
-    private int getCurrentItem(RenderingEnv env, UITab component) {
-        int currentItem = -1;
-        boolean isSelected = false;
-        for (int i = 0; i < component.getChildren().length && !isSelected; i++) {
-            UITabItem tabItem = (UITabItem) component.getChildren()[i];
-            isSelected = tabItem.isSelected(env.getWidgetContext());
-            currentItem++;
-        }
-        return isSelected ? currentItem : 0;
     }
 
 }

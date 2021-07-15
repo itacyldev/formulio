@@ -23,6 +23,8 @@ import org.junit.Assert;
 
 import java.util.function.Function;
 
+import es.jcyl.ita.formic.forms.components.util.LayoutTraverser;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -64,30 +66,5 @@ public class WidgetTestUtils {
         return new LayoutTraverser(function);
     }
 
-    public static class LayoutTraverser {
 
-        private final Function<View, Void> function;
-
-        private LayoutTraverser(Function<View, Void> function) {
-            this.function = function;
-        }
-
-        public static LayoutTraverser build(Function function) {
-            return new LayoutTraverser(function);
-        }
-
-        public View traverse(ViewGroup root) {
-            function.apply(root);
-
-            final int childCount = root.getChildCount();
-            for (int i = 0; i < childCount; ++i) {
-                final View child = root.getChildAt(i);
-
-                if (child instanceof ViewGroup) {
-                    traverse((ViewGroup) child);
-                }
-            }
-            return null;
-        }
-    }
 }

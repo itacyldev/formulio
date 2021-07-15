@@ -23,6 +23,7 @@ import android.view.animation.Transformation;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,6 +37,8 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.tab.TabFragment;
+import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -89,6 +92,62 @@ public class ViewHelper {
         rootView.findViewsWithText(viewList, text, View.FIND_VIEWS_WITH_TEXT);
         viewSet.addAll(viewList);
         return viewSet;
+    }
+
+    public static <T> List<T> findNestedWidgetsByClass(View rootView, Class<? extends T> clazz) {
+        List<T> list = new ArrayList<>();
+        _findWidgetsByClass(rootView, clazz, list);
+        return list;
+    }
+
+    private static <T> void _findWidgetsByClass(View rootView, Class<? extends T> clazz, List<T> lst) {
+        // same name rule followed by FileRenderer to tag the BaseView of
+        // the InputFileView: formId:elementId
+
+        //if rootView is an object of type ViewPager2,
+        // must search in all fragments of the ViewPager2's adapter
+        if (clazz.isInstance(rootView)) {
+            lst.add((T) rootView);
+        }
+        if (rootView instanceof ViewPager2) {
+            ViewPagerAdapter adapter = (ViewPagerAdapter) ((ViewPager2) rootView).getAdapter();
+            for (TabFragment fragment : adapter.getTabFragments()) {
+                _findWidgetsByClass(fragment.getTabView(), clazz, lst);
+            }
+        } else if (rootView instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) rootView;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                View child = group.getChildAt(i);
+                _findWidgetsByClass(child, clazz, lst);
+            }
+        }
+    }
+
+    public static Widget findNestedWidgetsById(View rootView, String id) {
+        Widget view = findComponentWidget(rootView, id);
+        if (view == null) {
+            //if rootView is an object of type ViewPager2,
+            // must search in all fragments of the ViewPager2's adapter
+            if (rootView instanceof ViewPager2) {
+                ViewPagerAdapter adapter = (ViewPagerAdapter) ((ViewPager2) rootView).getAdapter();
+                for (TabFragment fragment : adapter.getTabFragments()) {
+                    view = findNestedWidgetsById(fragment.getTabView(), id);
+                    if (view != null) {
+                        break;
+                    }
+                }
+            } else if (rootView instanceof ViewGroup) {
+                ViewGroup group = (ViewGroup) rootView;
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    View child = group.getChildAt(i);
+                    view = findNestedWidgetsById(child, id);
+                    if (view != null) {
+                        break;
+                    }
+                }
+            }
+        }
+        return view;
     }
 
     public static <T> Set<T> findViewsContainingText(@NonNull View rootView, @NonNull String text,
