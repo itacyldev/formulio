@@ -111,7 +111,7 @@ public class AttributeDef {
     public static Attribute FONT_SIZE = new Attribute("fontSize", String.class);
     public static Attribute FONT_COLOR = new Attribute("fontColor", "fontColor", "color");
     public static Attribute FONT_FAMILY = new Attribute("fontFamily", String.class);
-    public static Attribute BACKGROUND_COLOR = new Attribute("backGroundColor", String.class);
+    public static Attribute BACKGROUND_COLOR = new Attribute("backgroundColor", "backgroundColor", "color");
     public static Attribute BOLD = new Attribute("bold", Boolean.class);
     public static Attribute ITALIC = new Attribute("italic", Boolean.class);
     public static Attribute UPPERCASE = new Attribute("uppercase", Boolean.class);

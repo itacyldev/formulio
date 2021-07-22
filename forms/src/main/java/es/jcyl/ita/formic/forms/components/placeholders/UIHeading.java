@@ -27,7 +27,8 @@ public class UIHeading extends AbstractUIComponent {
 
     private String style;
     private int fontSize;
-    private int fontColor = Color.BLACK;
+    private int fontColor;;
+    private int backgroundColor = Color.TRANSPARENT;
     private boolean uppercase;
 
     private boolean bold;
@@ -60,6 +61,14 @@ public class UIHeading extends AbstractUIComponent {
 
     public void setFontColor(int fontColor) {
         this.fontColor = fontColor;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public boolean isUppercase() {

@@ -45,7 +45,11 @@ public class UIHeadingRenderer extends AbstractRenderer<UIHeading, Widget<UIHead
 
         TextView textView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.heading_text);
 
-        textView.setTextColor(heading.getFontColor());
+        if (heading.getFontColor() != 0) {
+            textView.setTextColor(heading.getFontColor());
+        }
+
+        textView.setBackgroundColor(heading.getBackgroundColor());
 
         if (heading.getFontSize() > 0) {
             textView.setTextSize(heading.getFontSize());
