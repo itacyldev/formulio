@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
-import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -28,25 +27,24 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIParagraphRenderer extends AbstractRenderer<UIParagraph, Widget<UIParagraph>> {
+public class UIParagraphRenderer extends UIHeadingRenderer {
 
     @Override
-    protected int getWidgetLayoutId(UIParagraph component) {
+    protected int getWidgetLayoutId(UIText component) {
         return R.layout.widget_paragraph;
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, Widget<UIParagraph> widget) {
-        UIParagraph paragraph = widget.getComponent();
-
-        String value = (String) paragraph.getValue(env.getWidgetContext());
+    protected void composeWidget(RenderingEnv env, Widget<UIText> widget) {
+        UIParagraph paragraph = (UIParagraph) widget.getComponent();
 
         TextView textView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.paragraph_text);
+
+        setTextAppearance(env, paragraph, textView);
 
         if (paragraph.getNumLines() > 0) {
             textView.setLines(paragraph.getNumLines());
         } 
-        textView.setText(value);
 
     }
 
