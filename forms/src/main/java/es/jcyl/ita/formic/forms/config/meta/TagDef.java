@@ -193,7 +193,7 @@ public class TagDef {
 
         Attribute[] text = new Attribute[]{FONT_SIZE, FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, ITALIC, BOLD, UPPERCASE, UNDERLINED};
         register("head", define(base, text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
-        register("paragraph", define(base));
+        register("paragraph", define(base, text));
         register("divisor", define(base, new Attribute[]{NAME, COLOR, STROKE_WIDTH}));
 
     }

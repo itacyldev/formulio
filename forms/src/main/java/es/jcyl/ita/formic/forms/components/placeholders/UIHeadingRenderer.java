@@ -30,49 +30,53 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIHeadingRenderer extends AbstractRenderer<UIHeading, Widget<UIHeading>> {
+public class UIHeadingRenderer extends AbstractRenderer<UIText, Widget<UIText>> {
 
     @Override
-    protected int getWidgetLayoutId(UIHeading component) {
+    protected int getWidgetLayoutId(UIText component) {
         return R.layout.widget_heading;
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, Widget<UIHeading> widget) {
-        UIHeading heading = widget.getComponent();
-
-        String value = (String) heading.getValue(env.getWidgetContext());
+    protected void composeWidget(RenderingEnv env, Widget<UIText> widget) {
+        UIText heading = widget.getComponent();
 
         TextView textView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.heading_text);
 
-        if (heading.getFontColor() != 0) {
-            textView.setTextColor(heading.getFontColor());
+        setTextAppearance(env, heading, textView);
+    }
+
+    protected void setTextAppearance(RenderingEnv env, UIText text, TextView textView){
+        if (text.getFontColor() != 0) {
+            textView.setTextColor(text.getFontColor());
         }
 
-        textView.setBackgroundColor(heading.getBackgroundColor());
+        textView.setBackgroundColor(text.getBackgroundColor());
 
-        if (heading.getFontSize() > 0) {
-            textView.setTextSize(heading.getFontSize());
+        if (text.getFontSize() > 0) {
+            textView.setTextSize(text.getFontSize());
         }
 
-        if (heading.isUppercase()) {
+        String value = (String) text.getValue(env.getWidgetContext());
+        if (text.isUppercase()) {
             value = value.toUpperCase();
         }
 
         int typeFace = 0;
-        if (heading.isBold()) {
+        if (text.isBold()) {
             typeFace = typeFace + Typeface.BOLD;
         }
 
-        if (heading.isItalic()) {
+        if (text.isItalic()) {
             typeFace = typeFace + Typeface.ITALIC;
         }
         textView.setTypeface(null, typeFace);
 
-        if (heading.isUnderlined()) {
+        if (text.isUnderlined()) {
             textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         }
 
         textView.setText(value);
     }
+
 }

@@ -16,18 +16,20 @@ package es.jcyl.ita.formic.forms.components.placeholders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
-
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIParagraph extends AbstractUIComponent {
+public class UIParagraph extends UIText {
+
+    private static final String PARAGRAPH = "paragraph";
 
     int numLines;
 
-    public UIParagraph(){
-        rendererType = "paragraph";
+    @Override
+    public String getRendererType() {
+        return PARAGRAPH;
     }
+
 
     public int getNumLines() {
         return numLines;
