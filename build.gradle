@@ -35,28 +35,28 @@ allprojects {
                 targetCompatibility = 1.8
             }
         }
-//        def androidHome = System.getenv("ANDROID_HOME")
-//        maven {
-//            name "sdk android extras"
-//            url "$androidHome/extras/android/m2repository/"
-//        }
-//        maven {
-//            name "sdk google extras"
-//            url "$androidHome/extras/google/m2repository/"
-//        }
+       def androidHome = System.getenv("ANDROID_HOME")
+       maven {
+           name "sdk android extras"
+           url "$androidHome/extras/android/m2repository/"
+       }
+       maven {
+           name "sdk google extras"
+           url "$androidHome/extras/google/m2repository/"
+       }
 
-//        maven {
-//            name "ITACyL - snapshots"
-//            url "http://repo.itacyl.es/archiva/repository/snapshots/"
-//        }
-//        maven {
-//            name "ITACyL - internal"
-//            url "http://repo.itacyl.es/archiva/repository/internal/"
-//        }
-//        maven {
-//            name "ITACyL - thirdparty"
-//            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
-//        }
+       maven {
+           name "ITACyL - snapshots"
+           url "http://repo.itacyl.es/archiva/repository/snapshots/"
+       }
+       maven {
+           name "ITACyL - internal"
+           url "http://repo.itacyl.es/archiva/repository/internal/"
+       }
+       maven {
+           name "ITACyL - thirdparty"
+           url "http://repo.itacyl.es/archiva/repository/thirdparty/"
+       }
     }
 
     configurations.all {
