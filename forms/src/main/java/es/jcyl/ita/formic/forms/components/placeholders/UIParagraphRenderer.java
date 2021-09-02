@@ -16,10 +16,13 @@ package es.jcyl.ita.formic.forms.components.placeholders;
  * limitations under the License.
  */
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.widget.TextView;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -27,15 +30,15 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-public class UIParagraphRenderer extends UIHeadingRenderer {
+public class UIParagraphRenderer extends AbstractRenderer<UIParagraph, Widget<UIParagraph>> {
 
     @Override
-    protected int getWidgetLayoutId(UIText component) {
+    protected int getWidgetLayoutId(UIParagraph component) {
         return R.layout.widget_paragraph;
     }
 
     @Override
-    protected void composeWidget(RenderingEnv env, Widget<UIText> widget) {
+    protected void composeWidget(RenderingEnv env, Widget<UIParagraph> widget) {
         UIParagraph paragraph = (UIParagraph) widget.getComponent();
 
         TextView textView = (TextView) ViewHelper.findViewAndSetId(widget, R.id.paragraph_text);
@@ -46,6 +49,39 @@ public class UIParagraphRenderer extends UIHeadingRenderer {
             textView.setLines(paragraph.getNumLines());
         } 
 
+    }
+
+    private void setTextAppearance(RenderingEnv env, UIParagraph paragraph, TextView textView){
+        if (paragraph.getFontColor() != 0) {
+            textView.setTextColor(paragraph.getFontColor());
+        }
+
+        textView.setBackgroundColor(paragraph.getBackgroundColor());
+
+        if (paragraph.getFontSize() > 0) {
+            textView.setTextSize(paragraph.getFontSize());
+        }
+
+        String value = (String) paragraph.getValue(env.getWidgetContext());
+        if (paragraph.isUppercase()) {
+            value = value.toUpperCase();
+        }
+
+        int typeFace = 0;
+        if (paragraph.isBold()) {
+            typeFace = typeFace + Typeface.BOLD;
+        }
+
+        if (paragraph.isItalic()) {
+            typeFace = typeFace + Typeface.ITALIC;
+        }
+        textView.setTypeface(null, typeFace);
+
+        if (paragraph.isUnderlined()) {
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
+
+        textView.setText(value);
     }
 
 

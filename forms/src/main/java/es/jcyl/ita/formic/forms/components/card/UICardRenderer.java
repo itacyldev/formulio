@@ -32,7 +32,6 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.image.ImageWidget;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
@@ -153,7 +152,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             }
         }
 
-        UIHeading title = card.getTitle();
+        UIParagraph title = card.getTitle();
         TextView titleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_title");
         String titleValue = null;
         if (title != null) {
@@ -165,7 +164,7 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
             titleView.setVisibility(View.GONE);
         }
 
-        UIHeading subtitle = card.getSubtitle();
+        UIParagraph subtitle = card.getSubtitle();
         TextView subtitleView = (TextView) ViewHelper.findViewByTagAndSetId(widget, "card_subtitle");
         String subtitleValue = null;
         if (subtitle != null) {

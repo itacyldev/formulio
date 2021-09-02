@@ -16,20 +16,32 @@ package es.jcyl.ita.formic.forms.components.placeholders;
  * limitations under the License.
  */
 
+import android.graphics.Color;
+
+import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
+
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIParagraph extends UIText {
+public class UIParagraph extends AbstractUIComponent {
 
-    private static final String PARAGRAPH = "paragraph";
+    private static final String PARAGRAPH = "p";
 
     int numLines;
+    private String style;
+    private int fontSize;
+    private int fontColor;;
+    private int backgroundColor = Color.TRANSPARENT;
+    private boolean uppercase;
+
+    private boolean bold;
+    private boolean italic;
+    private boolean underlined;
 
     @Override
     public String getRendererType() {
         return PARAGRAPH;
     }
-
 
     public int getNumLines() {
         return numLines;
@@ -37,6 +49,70 @@ public class UIParagraph extends UIText {
 
     public void setNumLines(int numLines) {
         this.numLines = numLines;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public int getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(int fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public boolean isUppercase() {
+        return uppercase;
+    }
+
+    public void setUppercase(boolean uppercase) {
+        this.uppercase = uppercase;
+    }
+
+    public boolean isBold() {
+        return bold;
+    }
+
+    public void setBold(boolean bold) {
+        this.bold = bold;
+    }
+
+    public boolean isItalic() {
+        return italic;
+    }
+
+    public void setItalic(boolean italic) {
+        this.italic = italic;
+    }
+
+    public boolean isUnderlined() {
+        return underlined;
+    }
+
+    public void setUnderlined(boolean underlined) {
+        this.underlined = underlined;
     }
 
 }
