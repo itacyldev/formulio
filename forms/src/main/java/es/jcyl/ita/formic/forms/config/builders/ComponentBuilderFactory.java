@@ -28,7 +28,6 @@ import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
@@ -134,8 +133,7 @@ public class ComponentBuilderFactory {
         registerBuilder("datalistitem", newBasicBuilder(UIDatalistItem.class, "datalistitem"));
 
         registerBuilder("card", newBuilder(UICardBuilder.class, "card"));
-        registerBuilder("head", newDefaultBuilder(UIHeading.class, "head"));
-        registerBuilder("paragraph", newDefaultBuilder(UIParagraph.class, "paragraph"));
+        registerBuilder("p", newDefaultBuilder(UIParagraph.class, "p"));
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));

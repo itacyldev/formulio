@@ -27,7 +27,7 @@ import java.util.List;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.card.UICard;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
+import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -75,9 +75,9 @@ public class UICardBuilderTest {
      * @throws Exception
      */
     private static final String XML_TEST_CARD_WITH_CHILDREN = "<card template=\"template\">" +
-            "<head name=\"title\" value=\"value_title\"/>" +
-            "<head name=\"subtitle\" value=\"value_subtitle\"/>" +
-            "<paragraph name=\"description\" value=\"value_description\"/>" +
+            "<p name=\"title\" value=\"value_title\"/>" +
+            "<p name=\"subtitle\" value=\"value_subtitle\"/>" +
+            "<p name=\"description\" value=\"value_description\"/>" +
             "<image name=\"image\" id=\"card_image\" value=\"$entity.image\"/>" +
             "</card>";
 
@@ -92,10 +92,10 @@ public class UICardBuilderTest {
 
         UICard card = cards.get(0);
 
-        UIHeading title = card.getTitle();
+        UIParagraph title = card.getTitle();
         Assert.assertNotNull(title);
 
-        UIHeading subtitle = card.getSubtitle();
+        UIParagraph subtitle = card.getSubtitle();
         Assert.assertNotNull(subtitle);
 
         UIImage image = (UIImage) card.getChildren()[0];
@@ -121,10 +121,10 @@ public class UICardBuilderTest {
 
         UICard card = cards.get(0);
 
-        UIHeading title = card.getTitle();
+        UIParagraph title = card.getTitle();
         Assert.assertNotNull(title);
 
-        UIHeading subtitle = card.getSubtitle();
+        UIParagraph subtitle = card.getSubtitle();
         Assert.assertNotNull(subtitle);
 
         UIImage image = (UIImage) card.getChildren()[0];

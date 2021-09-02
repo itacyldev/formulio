@@ -38,7 +38,7 @@
 
 					<table weights="40, 60">
 						<row colspans="2">
-							<paragraph value="Comprobar inscripción en los Registros del C.R."/>
+							<p value="Comprobar inscripción en los Registros del C.R."/>
 						</row>
 						<row>
                             <textarea readonly="true" value="Fecha 1: "/>
@@ -78,7 +78,7 @@
 					
 					<table weights="40, 60">
 						<row colspans="2">
-							<paragraph value="Comprobar inscripción en el RGSEAA (puede hacerse vía AESAN o IREA) o solicitud de inscripción junto con declaración responsable del solicitante. Comprobar último acta de inspección emitido por la Administración." />
+							<p value="Comprobar inscripción en el RGSEAA (puede hacerse vía AESAN o IREA) o solicitud de inscripción junto con declaración responsable del solicitante. Comprobar último acta de inspección emitido por la Administración." />
 						</row>
 						<row>
 							<textarea readonly="true" value="Nº RGSEAA:" />
@@ -322,7 +322,7 @@
 					
 					<table headerText=" Cosecha, Vino DPO, TOTAL" weights="26, 37, 37">
 						<row colspans="3">
-							<paragraph value="Comprobar Declaración de Producción de vino del CRDOP. Comprobar coincidencia con Declaración de Producción de la Administración y asiento en libros-registro. Comprobar Rendimiento extracción para vino amparado  ≤ 70 (ó 72) litros de vino / 100 kg de uva."/>
+							<p value="Comprobar Declaración de Producción de vino del CRDOP. Comprobar coincidencia con Declaración de Producción de la Administración y asiento en libros-registro. Comprobar Rendimiento extracción para vino amparado  ≤ 70 (ó 72) litros de vino / 100 kg de uva."/>
 						</row>
 						<row>
 							<textarea readonly="true" value="Tinto"/>
@@ -456,7 +456,7 @@
                     </radio>
 					<table weights="40, 60">
 						<row colspans="2">
-							<paragraph value="Comprobar inscripción en el Registro de Envasadores y Embotelladores de Vino y Bebidas Alcohólicas. Se comprobará igualmente su inscripción como instalación embotelladora en los Registros del CRDO." />
+							<p value="Comprobar inscripción en el Registro de Envasadores y Embotelladores de Vino y Bebidas Alcohólicas. Se comprobará igualmente su inscripción como instalación embotelladora en los Registros del CRDO." />
 						</row>
 						<row>
 							<textarea readonly="true" value="Nº RE:" />

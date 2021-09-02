@@ -33,7 +33,6 @@ import es.jcyl.ita.formic.forms.components.inputfield.TextFieldRenderer;
 import es.jcyl.ita.formic.forms.components.link.UIButtonRenderer;
 import es.jcyl.ita.formic.forms.components.link.UILinkRenderer;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisorRenderer;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeadingRenderer;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraphRenderer;
 import es.jcyl.ita.formic.forms.components.radio.RadioRenderer;
 import es.jcyl.ita.formic.forms.components.select.SelectRenderer;
@@ -74,8 +73,7 @@ public class RendererFactory {
         renderInstances.put("datalist", new UIDatalistRenderer());
         renderInstances.put("datalistitem", new UIGroupBaseRenderer(R.layout.widget_datalistitem));
         renderInstances.put("card", new UICardRenderer());
-        renderInstances.put("paragraph", new UIParagraphRenderer());
-        renderInstances.put("head", new UIHeadingRenderer());
+        renderInstances.put("p", new UIParagraphRenderer());
         renderInstances.put("divisor", new UIDivisorRenderer());
         renderInstances.put("button", new UIButtonRenderer());
         renderInstances.put("buttonbar", new UIGroupBaseRenderer(R.layout.widget_buttonbar));

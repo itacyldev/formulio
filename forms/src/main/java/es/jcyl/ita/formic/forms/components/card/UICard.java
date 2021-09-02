@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
@@ -31,8 +30,8 @@ import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 public class UICard extends AbstractUIComponent {
 
     String template;
-    UIHeading title;
-    UIHeading subtitle;
+    UIParagraph title;
+    UIParagraph subtitle;
     UIParagraph description;
     UIImage image;
 
@@ -47,11 +46,11 @@ public class UICard extends AbstractUIComponent {
         renderChildren = true;
     }
 
-    public UIHeading getTitle() {
+    public UIParagraph getTitle() {
         return title;
     }
 
-    public void setTitle(UIHeading title) {
+    public void setTitle(UIParagraph title) {
         this.title = title;
     }
 
@@ -64,11 +63,11 @@ public class UICard extends AbstractUIComponent {
     }
 
 
-    public UIHeading getSubtitle() {
+    public UIParagraph getSubtitle() {
         return subtitle;
     }
 
-    public void setSubtitle(UIHeading subtitle) {
+    public void setSubtitle(UIParagraph subtitle) {
         this.subtitle = subtitle;
     }
 

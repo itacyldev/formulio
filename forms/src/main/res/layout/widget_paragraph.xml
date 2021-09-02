@@ -12,5 +12,6 @@
         android:overScrollMode="ifContentScrolls"
         android:scrollbarStyle="insideInset"
         android:scrollbars="vertical"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:textColor="?attr/onAppBackgroundColor"/>
 </es.jcyl.ita.formic.forms.view.widget.Widget>
