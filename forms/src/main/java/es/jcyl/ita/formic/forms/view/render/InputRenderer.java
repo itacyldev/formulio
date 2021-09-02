@@ -47,6 +47,7 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
@@ -68,8 +69,6 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 TextView.class);
         if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
             setLabel(fieldLabel, component);
-        } else {
-            fieldLabel.setVisibility(View.GONE);
         }
 
         // get input view and set Tag and Value
@@ -103,6 +102,10 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         // set value and error messages
         setValueInView(env, widget);
         setMessages(env, widget);
+
+        if ((fieldLabel == null || StringUtils.isNotEmpty(component.getLabel())) && MessageHelper.getMessage(env, component)==null) {
+            fieldLabel.setVisibility(View.GONE);
+        }
 
     }
 
