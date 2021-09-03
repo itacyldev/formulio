@@ -26,6 +26,7 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
+import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
@@ -50,7 +51,6 @@ import es.jcyl.ita.formic.forms.config.builders.repo.RepoMetaConfigBuilder;
 import es.jcyl.ita.formic.forms.config.builders.scripts.ScriptSourceBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.BaseUIComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIAutocompleteBuilder;
-import es.jcyl.ita.formic.forms.config.builders.ui.UIButtonBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UICardBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIColumnBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatalistBuilder;
@@ -137,7 +137,9 @@ public class ComponentBuilderFactory {
         registerBuilder("divisor", newDefaultBuilder(UIDivisor.class, "divisor"));
 
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
-        registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
+        //registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
+        registerBuilder("button", newDefaultBuilder(UIButton.class, "button"));
+
         registerBuilder("buttonbar", newDefaultGroupBuilder(UIButtonBar.class, "buttonbar"));
 
         ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
