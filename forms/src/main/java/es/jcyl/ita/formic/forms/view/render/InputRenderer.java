@@ -103,7 +103,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         setValueInView(env, widget);
         setMessages(env, widget);
 
-        if ((fieldLabel == null || StringUtils.isNotEmpty(component.getLabel())) && MessageHelper.getMessage(env, component)==null) {
+        if ((fieldLabel == null || StringUtils.isEmpty(component.getLabel())) && MessageHelper.getMessage(env, component)==null) {
             fieldLabel.setVisibility(View.GONE);
         }
 
