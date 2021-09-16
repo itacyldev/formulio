@@ -56,7 +56,10 @@
             android:id="@+id/input_view_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="0dp"
             android:layout_alignParentRight="true"
             android:tint="?attr/onSurfaceColor"
             android:src="@drawable/ic_action_expand"/>
