@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
+
 
 def globalConf = rootProject.ext
 
@@ -40,6 +42,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             applicationIdSuffix ".debug"
+            testCoverageEnabled true
         }
         release {
             resValue "string", "app_name", "Formic"
@@ -106,6 +109,8 @@ dependencies {
 
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.2'
 
+    implementation 'com.airbnb.android:paris:1.7.3'
+
     //implementation 'com.opencsv:opencsv:4.1'
 
     //SLF4J - API
@@ -153,6 +158,5 @@ dependencies {
     testImplementation('androidx.test:rules:1.2.0') {
         exclude group: 'androidx.test', module: ''
     }
-
 }
 
