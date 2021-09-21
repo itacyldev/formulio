@@ -20,7 +20,6 @@ buildscript {
         classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
         classpath 'org.jacoco:org.jacoco.core:0.8.6'
-
     }
 }
 
@@ -80,6 +79,8 @@ allprojects {
     }
 }
 
+def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/jsqlite/**/*.*']
+
 task codeCoverageReport(type: JacocoReport) {
     executionData fileTree(project.rootDir.absolutePath).include('**/build/jacoco/*.exec')
 
@@ -90,7 +91,6 @@ task codeCoverageReport(type: JacocoReport) {
         html.destination file("${buildDir}/reports/html")
     }
 
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
 
     def coverageMainSrc = ["${rootDir}/app/src/main/java",
                            "${rootDir}/forms/src/main/java"
@@ -104,7 +104,6 @@ task codeCoverageReport(type: JacocoReport) {
     getClassDirectories().setFrom(files(coverageDebugTree))
     //getExecutionData().setFrom(files(["app/build/jacoco/testDebugUnitTest.exec",
       //                                "forms/build/jacoco/testDebugUnitTest.exec"
-
 }
 
 sonarqube {
@@ -117,11 +116,7 @@ sonarqube {
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.test.inclusions", "**/*Test*/**"
         property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.exclusions", '**/*Test*/**,' +
-                '*.json,' +
-                '**/*test*/**,' +
-                '**/.gradle/**,' +
-                '**/R.class,' + '**/R$*.class'
+        property "sonar.exclusions", fileFilter
     }
 }
 
