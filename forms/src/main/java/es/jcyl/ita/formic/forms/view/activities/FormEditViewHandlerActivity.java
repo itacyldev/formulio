@@ -169,7 +169,8 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
      */
     private void setButtonStyle(Button button) {
 
-        int[] attrs = new int[]{R.attr.buttonNormalColor};
+        //int[] attrs = new int[]{R.attr.primaryColor};
+        int[] attrs = new int[]{R.attr.primaryColor};
         TypedArray ta = this.obtainStyledAttributes(attrs);
         int normalColor = ta.getColor(0, Color.GRAY);
         button.setBackgroundColor(normalColor);

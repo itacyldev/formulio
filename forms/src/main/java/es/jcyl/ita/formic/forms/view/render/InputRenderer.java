@@ -26,6 +26,12 @@ package es.jcyl.ita.formic.forms.view.render;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,11 +40,14 @@ import android.widget.TextView;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
+import java.io.File;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
+import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 
@@ -60,8 +69,6 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 TextView.class);
         if (fieldLabel != null && StringUtils.isNotEmpty(component.getLabel())) {
             setLabel(fieldLabel, component);
-        } else {
-            fieldLabel.setVisibility(View.GONE);
         }
 
         // get input view and set Tag and Value
@@ -96,6 +103,10 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         setValueInView(env, widget);
         setMessages(env, widget);
 
+        if ((fieldLabel == null || StringUtils.isEmpty(component.getLabel())) && MessageHelper.getMessage(env, component)==null) {
+            fieldLabel.setVisibility(View.GONE);
+        }
+
     }
 
     protected void setInfoButton(RenderingEnv env, InputWidget<C, I> widget){
@@ -115,7 +126,26 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
                 AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
                 final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
                 TextView titleView = view.findViewById(R.id.info);
-                titleView.setText(hint);
+
+                titleView.setText(Html.fromHtml(hint, new Html.ImageGetter() {
+
+                    @Override
+                    public Drawable getDrawable(String source) {
+
+                        /*int resourceId = env.getAndroidContext().getResources().getIdentifier(source, "drawable", env.getAndroidContext().getApplicationContext().getPackageName());
+                        Drawable drawable = env.getAndroidContext().getResources().getDrawable(resourceId);*/
+
+                        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                        File file = new File(path + File.separator + source);
+
+                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                        Drawable drawable = new BitmapDrawable(env.getAndroidContext().getResources(), bitmap);
+                        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+
+                        return drawable;
+                    }
+                }, null));
+
                 builder.setCustomTitle(view)
                         .setPositiveButton("OK", null);
                 Dialog dialog = builder.create();

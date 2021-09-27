@@ -50,8 +50,7 @@
             android:textColor="#fff"
             android:textOff="No"
             android:textOn="Si"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="top|right"
             style="@style/SwitchStyle"/>
     </LinearLayout>
 

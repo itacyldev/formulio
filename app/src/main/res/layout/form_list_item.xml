@@ -22,7 +22,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/layout_entities"/>
 
             <TextView
                 android:id="@+id/item_number"
@@ -30,9 +32,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@+id/content" />
+                android:layout_below="@+id/content"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/layout_entities"/>
 
             <LinearLayout
+                android:id="@+id/layout_entities"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

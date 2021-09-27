@@ -21,7 +21,6 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.card.UICard;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.components.image.UIImage;
-import es.jcyl.ita.formic.forms.components.placeholders.UIHeading;
 import es.jcyl.ita.formic.forms.components.placeholders.UIParagraph;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
@@ -62,13 +61,13 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
         }
         attValue = attributes.get(TITLE.name);
         if (attValue != null) {
-            ConfigNode titleNode = BuilderHelper.createNodeFromAttribute(TITLE, attValue, "head");
+            ConfigNode titleNode = BuilderHelper.createNodeFromAttribute(TITLE, attValue, "p");
             node.addChild(titleNode);
             attributes.remove(TITLE.name);
         }
         attValue = attributes.get(SUBTITLE.name);
         if (attValue != null) {
-            ConfigNode subtitleNode = BuilderHelper.createNodeFromAttribute(SUBTITLE, attValue, "head");
+            ConfigNode subtitleNode = BuilderHelper.createNodeFromAttribute(SUBTITLE, attValue, "p");
             node.addChild(subtitleNode);
             attributes.remove(SUBTITLE.name);
         }
@@ -84,9 +83,9 @@ public class UICardBuilder extends BaseUIComponentBuilder<UICard> {
         UICard card = node.getElement();
         for (ConfigNode child : node.getChildren()) {
             if (TITLE.name.equals(child.getAttribute(NAME.name))) {
-                card.setTitle((UIHeading) child.getElement());
+                card.setTitle((UIParagraph) child.getElement());
             } else if (SUBTITLE.name.equals(child.getAttribute(NAME.name))) {
-                card.setSubtitle((UIHeading) child.getElement());
+                card.setSubtitle((UIParagraph) child.getElement());
             } else if (DESCRIPTION.name.equals(child.getAttribute(NAME.name))) {
                 card.setDescription((UIParagraph) child.getElement());
             } else if (child.getElement() instanceof UIImage) {

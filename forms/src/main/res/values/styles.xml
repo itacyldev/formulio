@@ -189,11 +189,20 @@
 
     <!-- Component dialog -->
     <style name="DialogStyle" parent="ThemeOverlay.AppCompat.Dialog">
-        <item name="colorAccent">?attr/primaryColorVariant</item>                   <!--header background-->
+
+        <item name="android:colorAccent">?attr/primaryColorVariant</item>                   <!--header background-->
         <item name="android:windowBackground">?attr/surfaceColor</item>     <!--calendar background-->
         <item name="android:colorControlActivated">?attr/primaryColorVariant</item> <!--selected day-->
         <item name="android:textColorPrimary">?attr/onSurfaceColor</item> <!--days of the month-->
         <item name="android:textColorSecondary">?attr/primaryColorVariant</item>    <!--days of the week-->
+
+        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerButtonStyle</item>
+    </style>
+
+    <style name="DatePickerButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">?attr/onPrimaryColor</item>
+        <item name="android:backgroundTint">?attr/primaryColorVariant</item>
     </style>
 
     <!-- Component tab -->
