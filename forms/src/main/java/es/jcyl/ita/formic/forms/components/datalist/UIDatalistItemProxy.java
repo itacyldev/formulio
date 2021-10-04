@@ -32,7 +32,6 @@ import es.jcyl.ita.formic.repo.Entity;
  */
 public class UIDatalistItemProxy extends UIDatalistItem implements EntityHolder {
 
-    private String id;
     private final UIComponent delegate;
     private Entity entity;
 
@@ -54,16 +53,6 @@ public class UIDatalistItemProxy extends UIDatalistItem implements EntityHolder 
 
     public void setEntity(Entity entity) {
         this.entity = entity;
-    }
-
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-
-    public String getId() {
-        return this.id;
     }
 
 

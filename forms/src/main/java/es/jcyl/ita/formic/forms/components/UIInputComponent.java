@@ -17,19 +17,12 @@ package es.jcyl.ita.formic.forms.components;
 
 import android.widget.ImageView;
 
-import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
-
 import java.util.Arrays;
 import java.util.List;
 
-import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
-import es.jcyl.ita.formic.forms.el.JexlFormUtils;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.validation.Validator;
-import es.jcyl.ita.formic.forms.view.ViewConfigException;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 
@@ -39,7 +32,6 @@ import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 public class UIInputComponent extends AbstractUIComponent {
     private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
-    protected String label;
     private String valueConverter;
     private Integer inputType = null;
     protected boolean hasDeleteButton = true;
@@ -105,14 +97,6 @@ public class UIInputComponent extends AbstractUIComponent {
      */
     public boolean isBound() {
         return (getValueExpression() == null) ? false : !getValueExpression().isReadonly();
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(final String label) {
-        this.label = label;
     }
 
     public String getValueConverter() {
