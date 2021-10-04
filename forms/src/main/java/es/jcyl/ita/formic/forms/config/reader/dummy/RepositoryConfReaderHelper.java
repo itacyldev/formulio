@@ -150,12 +150,12 @@ public class RepositoryConfReaderHelper extends AbstractRepoConfigurationReader 
 
     private void createDBSource() {
         File dbFile = new File("/sdcard/test/ribera.sqlite");
-        SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+        SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new jsqlite.Database());
         this.sourceFactory.registerSource(new Source<>("ribera", dbFile.getAbsolutePath(), db));
 
         dbFile = new File("/sdcard/test/dbTest.sqlite");
-        sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+        SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         this.sourceFactory.registerSource(new Source<>("dbTest", dbFile.getAbsolutePath(), new StandardDatabase(sqDb)));
     }
 }
