@@ -21,32 +21,12 @@ import es.jcyl.ita.formic.forms.components.UIGroupComponent;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UIRow extends UIGroupComponent {
-    private String label;
-    private String[] properties;
     private String colspans;
     private String weights;
 
     public UIRow() {
         rendererType ="row";
         renderChildren = true;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
-    }
-
-    @Override
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String[] getProperties() {
-        return properties;
-    }
-
-    public void setProperties(String[] properties) {
-        this.properties = properties;
     }
 
     public String getColspans() {
