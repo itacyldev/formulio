@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.forms.MainController;
@@ -108,11 +109,21 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
+        if (id == R.id.action_about) {
+            showAbout();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     private void openDevConsole() {
         Intent intent = new Intent(this, DevConsoleActivity.class);
+        startActivity(intent);
+    }
+
+    protected final void showAbout() {
+        final Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
