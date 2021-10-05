@@ -2,7 +2,6 @@ package es.jcyl.ita.formic.app.dev;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -20,7 +19,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
 
 import ch.qos.logback.classic.Level;
@@ -28,8 +26,9 @@ import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.radio.RadioButtonStyleHolder;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 
-public class DevConsoleActivity extends AppCompatActivity {
+public class DevConsoleActivity extends BaseActivity {
 
     int logLevel;
 
@@ -39,10 +38,11 @@ public class DevConsoleActivity extends AppCompatActivity {
     public static final int COLOR_DEBUG = Color.BLUE;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setTheme();
+    protected void doOnCreate() {
         setContentView(R.layout.activity_dev_console);
+        //setTheme();
+
+        setToolbar(getString(R.string.action_dev_console));
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         logLevel = sharedPreferences.getInt("log_level", Log.DEBUG);
