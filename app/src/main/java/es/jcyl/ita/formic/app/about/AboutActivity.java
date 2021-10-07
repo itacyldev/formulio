@@ -20,6 +20,9 @@ import android.os.Build;
 import android.text.Html;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 
@@ -41,7 +44,11 @@ public class AboutActivity extends BaseActivity {
         String version = "";
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            version += " v" + pInfo.versionName + "_" + pInfo.versionCode;
+            long lastUpdateTime = pInfo.lastUpdateTime;
+            String datePattern = "dd-MMM-yyyy";
+            String dateFormat = new SimpleDateFormat(datePattern).format(new Date(lastUpdateTime));
+
+            version += " v" + pInfo.versionName + "_" + pInfo.versionCode + " ("+dateFormat+")";
         } catch (Exception e) {
             version += " vXXX";
         }

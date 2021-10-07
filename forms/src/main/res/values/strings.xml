@@ -74,7 +74,7 @@
 
     <!-- About -->
     <string name="copyright">\u00A9 2016 - Instituto Tecnológico Agrario de Castilla y León. All rights reserved</string>
-    <string name="description">Con Formic podrás crear formularios personalizados con gran cantidad de tipos de controles para introducir datos.</string>
+    <string name="description">With Formic you can create custom forms with a large number of types of controls to enter data.</string>
 
     <string name="usedmemory">Used memory: &lt;b>%1$s MB.&lt;/b></string>
     <string name="maxheapsize">Max. heap size: &lt;b>%1$s MB.&lt;/b></string>
