@@ -30,8 +30,6 @@ import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 
 public class DevConsoleActivity extends BaseActivity {
 
-    int logLevel;
-
     public static final int COLOR_ERROR = Color.RED;
     public static final int COLOR_INFO = Color.GREEN;
     public static final int COLOR_WARN = Color.YELLOW;
