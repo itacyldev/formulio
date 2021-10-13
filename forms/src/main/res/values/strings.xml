@@ -82,5 +82,6 @@
     <string name="formicversion">Formic version: &lt;b>%1$s&lt;/b></string>
     <string name="androidversion">Android version: &lt;b>%1$s (%2$s)&lt;/b></string>
     <string name="deviceinfo">Device: &lt;b>%1$s / %2$s / %3$s / %4$s&lt;/b></string>
+    <string name="searchforupdates">Search for updates</string>
 
 </resources>
