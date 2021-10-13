@@ -107,6 +107,9 @@ public class AttributeDef {
     public static final Attribute WEIGHTS = new Attribute("weights", String.class);
     public static final Attribute BORDER = new Attribute("border", Boolean.class);
 
+    // image
+    public static final Attribute CAPTURE_SIGNATURE = new Attribute("captureSignature", Boolean.class);
+
     // text style
     public static final Attribute FONT_SIZE = new Attribute("fontSize", String.class);
     public static final Attribute FONT_COLOR = new Attribute("fontColor", "fontColor", "color");
