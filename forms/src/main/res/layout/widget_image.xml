@@ -95,17 +95,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="28dp"
-                app:icon="@drawable/ic_action_camera"
+                android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_action_camera"
+                android:drawableTint="?attr/onPrimaryColor"
                 android:background="@drawable/roundbutton"/>
+            <Button
+                android:id="@+id/btn_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="28dp"
+                android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_action_edit"
+                android:drawableTint="?attr/onPrimaryColor"
+                android:background="@drawable/roundbutton"
+                />
             <Button
                 android:id="@+id/btn_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="15dp"
-                android:paddingLeft="12dp"
-                android:gravity="center"
+                android:paddingLeft="28dp"
+                android:layout_margin="10dp"
                 android:drawableLeft="@drawable/ic_action_picture"
+                android:drawableTint="?attr/onPrimaryColor"
                 android:background="@drawable/roundbutton"
                 android:visibility="invisible"
                 />
