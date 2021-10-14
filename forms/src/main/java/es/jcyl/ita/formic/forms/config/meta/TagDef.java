@@ -23,6 +23,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ALLOWS_PARTIAL_R
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BOLD;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CAPTURE_SIGNATURE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
@@ -153,7 +154,7 @@ public class TagDef {
         register("date", baseInput);
         register("datetime", baseInput);
         register("textarea", define(base, input, new Attribute[]{LINES}));
-        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY}));
+        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY, CAPTURE_SIGNATURE}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);

@@ -42,6 +42,7 @@ public class UIImage extends UIInputComponent {
     private Integer height;
     private boolean embedded;
     private String repoProperty;
+    private boolean captureSignature = true;
 
     public Integer getWidth() {
         return width;
@@ -62,6 +63,14 @@ public class UIImage extends UIInputComponent {
     @Override
     public String getRendererType() {
         return IMAGE;
+    }
+
+    public boolean isCaptureSignature() {
+        return captureSignature;
+    }
+
+    public void setCaptureSignature(boolean captureSignature) {
+        this.captureSignature = captureSignature;
     }
 
     /**

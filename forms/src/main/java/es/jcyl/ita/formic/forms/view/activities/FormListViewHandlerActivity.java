@@ -2,8 +2,6 @@ package es.jcyl.ita.formic.forms.view.activities;
 
 import android.view.View;
 
-import androidx.appcompat.widget.Toolbar;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import es.jcyl.ita.formic.forms.MainController;
@@ -34,8 +32,7 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
     protected void doRender(RenderingEnv renderingEnv) {
         // action buttons
         setTitle(viewController.getName());
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setToolbar(viewController.getName());
     }
 
     @Override

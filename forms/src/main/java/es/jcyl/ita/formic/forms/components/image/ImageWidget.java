@@ -17,7 +17,10 @@ package es.jcyl.ita.formic.forms.components.image;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -65,19 +68,16 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     public void setup(RenderingEnv env) {
         // check components to show
-        Button cameraButton = this.findViewById(R.id.btn_camera);
-        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-            cameraButton.setEnabled(false);
-        } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
-            cameraButton.setVisibility(View.INVISIBLE);
-        } else {
-            cameraButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    launcher.launch(null);
-                }
-            });
-        }
+        setCameraButton(env);
+
+        setGalleryButton();
+
+        setSignButton(env);
+
+        this.mainEntity = env.getWidgetContext().getEntity();
+    }
+
+    private void setGalleryButton() {
         Button galleryButton = this.findViewById(R.id.btn_gallery);
         galleryButton.setEnabled(false);
         // TODO::
@@ -94,7 +94,55 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
                 }
             });
         }*/
-        this.mainEntity = env.getWidgetContext().getEntity();
+    }
+
+    private void setCameraButton(RenderingEnv env) {
+        Button cameraButton = this.findViewById(R.id.btn_camera);
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
+            cameraButton.setEnabled(false);
+        } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
+            cameraButton.setVisibility(View.INVISIBLE);
+        } else {
+            cameraButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    launcher.launch(null);
+                }
+            });
+        }
+    }
+
+    private void setSignButton(RenderingEnv env) {
+        Button signButton = this.findViewById(R.id.btn_sign);
+        ImageResourceView inputView = this.getInputView();
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
+            signButton.setEnabled(false);
+        } else if (!component.isCaptureSignature()) {// TODO: or device has no camera (check throw context.device)
+                signButton.setVisibility(View.INVISIBLE);
+        } else {
+            signButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    CaptureSignatureDialog capturaFirma = new
+                            CaptureSignatureDialog(env.getFormActivity().getActivity(), inputView);
+                    capturaFirma.getWindow().setBackgroundDrawable(new ColorDrawable
+                            (Color.TRANSPARENT));
+                    capturaFirma.show();
+
+                    capturaFirma.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            Bitmap imageData = capturaFirma.getBitmap();
+                            if (imageData != null) {
+                                setImageBitmap(imageData);
+                            }
+                        }
+                    });
+                }
+            });
+        }
     }
 
     public GallerySelector getGallerySelector() {
@@ -117,6 +165,10 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         if (imageData == null) {
             return;// no image captured
         }
+        setImageBitmap(imageData);
+    }
+
+    private void setImageBitmap(Bitmap imageData){
         // extract image content
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageData.compress(Bitmap.CompressFormat.PNG, 90, stream);

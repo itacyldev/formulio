@@ -29,6 +29,7 @@
 -keepclassmembers class ** implements es.jcyl.ita.formic.forms.repo.meta.Identificable {*;}
 -keep class es.jcyl.ita.formic.forms.config.elements.** {*;}
 -keep class es.jcyl.ita.formic.forms.controllers.** {*;}
+-keep class es.jcyl.ita.formic.forms.scripts.** {*;}
 
 #repo
 -keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder {*;}

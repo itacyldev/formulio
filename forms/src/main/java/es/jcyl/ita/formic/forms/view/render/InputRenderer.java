@@ -230,6 +230,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         String inputTag = getInputTag(component);
         inputView.setTag(inputTag);
         inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
+        //inputView.setFocusableInTouchMode(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
     }
 
     protected void setVisibiltyButtonLayout(InputWidget<C, I> widget, boolean hasLabel, ImageView resetButton, ImageView infoButton){

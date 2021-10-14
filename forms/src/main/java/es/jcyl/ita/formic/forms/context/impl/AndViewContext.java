@@ -163,16 +163,15 @@ public class AndViewContext extends AbstractBaseContext {
     @Nullable
     @Override
     public Object put(String name, Object value) {
-        if (aliases == null) {
-            return null;
+        if (aliases != null) {
+            Alias alias = aliases.get(name);
+            if (alias == null) {
+                throw new IllegalArgumentException(String.format("No view element " +
+                        "registered with name [%s], call method register(name, elementId).", name));
+            }
+            View elementView = findElement(alias);
+            alias.converter.setViewValue(elementView, value);
         }
-        Alias alias = aliases.get(name);
-        if (alias == null) {
-            throw new IllegalArgumentException(String.format("No view element " +
-                    "registered with name [%s], call method register(name, elementId).", name));
-        }
-        View elementView = findElement(alias);
-        alias.converter.setViewValue(elementView, value);
         return null; // don't return previous value
     }
 

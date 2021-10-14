@@ -108,8 +108,10 @@ task codeCoverageReport(type: JacocoReport) {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "d247ac449f25eb8e8852380dabf101956f1d1a1b"
-        property "sonar.projectName", "YourProject"
+        property "sonar.projectKey", "Formic"
+        property "sonar.login", "d247ac449f25eb8e8852380dabf101956f1d1a1b"
+        property "sonar.projectName", "Formic"
+        property 'sonar.host.url', "https://servicios.itacyl.es/sonarqube"
         property 'sonar.java.coveragePlugin', "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${rootDir}/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
         property "sonar.language", "java"
@@ -127,8 +129,8 @@ task clean(type: Delete) {
 
 
 ext {
-    versionCode = 17
-    versionName = '0.5.2'
+    versionCode = 18
+    versionName = '0.5.3'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
     targetSdkVersion = 29
@@ -137,7 +139,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.5.2'
+    version = '0.5.3'
     artifactId = 'Formic'
 
     sharedDeps = [
