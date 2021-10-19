@@ -117,15 +117,15 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         ImageResourceView inputView = this.getInputView();
         if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             signButton.setEnabled(false);
-        } else if (!component.isCaptureSignature()) {// TODO: or device has no camera (check throw context.device)
+        } else if (!component.isSketch()) {// TODO: or device has no camera (check throw context.device)
                 signButton.setVisibility(View.INVISIBLE);
         } else {
             signButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    CaptureSignatureDialog capturaFirma = new
-                            CaptureSignatureDialog(env.getFormActivity().getActivity(), inputView);
+                    SketchDialog capturaFirma = new
+                            SketchDialog(env.getFormActivity().getActivity(), inputView);
                     capturaFirma.getWindow().setBackgroundDrawable(new ColorDrawable
                             (Color.TRANSPARENT));
                     capturaFirma.show();
