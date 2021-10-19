@@ -108,7 +108,7 @@ public class AttributeDef {
     public static final Attribute BORDER = new Attribute("border", Boolean.class);
 
     // image
-    public static final Attribute CAPTURE_SIGNATURE = new Attribute("captureSignature", Boolean.class);
+    public static final Attribute SKETCH = new Attribute("sketch", Boolean.class);
 
     // text style
     public static final Attribute FONT_SIZE = new Attribute("fontSize", String.class);
