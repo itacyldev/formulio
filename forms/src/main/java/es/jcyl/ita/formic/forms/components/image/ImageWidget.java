@@ -72,7 +72,7 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
         setGalleryButton();
 
-        setSignButton(env);
+        setEditButton(env);
 
         this.mainEntity = env.getWidgetContext().getEntity();
     }
@@ -112,29 +112,29 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         }
     }
 
-    private void setSignButton(RenderingEnv env) {
-        Button signButton = this.findViewById(R.id.btn_sign);
+    private void setEditButton(RenderingEnv env) {
+        Button editButton = this.findViewById(R.id.btn_edit);
         ImageResourceView inputView = this.getInputView();
         if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-            signButton.setEnabled(false);
-        } else if (!component.isCaptureSignature()) {// TODO: or device has no camera (check throw context.device)
-                signButton.setVisibility(View.INVISIBLE);
+            editButton.setEnabled(false);
+        } else if (!component.isSketch()) {// TODO: or device has no camera (check throw context.device)
+            editButton.setVisibility(View.INVISIBLE);
         } else {
-            signButton.setOnClickListener(new OnClickListener() {
+            editButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    CaptureSignatureDialog capturaFirma = new
-                            CaptureSignatureDialog(env.getFormActivity().getActivity(), inputView);
-                    capturaFirma.getWindow().setBackgroundDrawable(new ColorDrawable
+                    SketchDialog sketchDialog = new
+                            SketchDialog(env.getFormActivity().getActivity(), inputView);
+                    sketchDialog.getWindow().setBackgroundDrawable(new ColorDrawable
                             (Color.TRANSPARENT));
-                    capturaFirma.show();
+                    sketchDialog.show();
 
-                    capturaFirma.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    sketchDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            Bitmap imageData = capturaFirma.getBitmap();
+                            Bitmap imageData = sketchDialog.getBitmap();
                             if (imageData != null) {
                                 setImageBitmap(imageData);
                             }

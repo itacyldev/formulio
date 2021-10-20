@@ -24,6 +24,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,25 +41,15 @@ public class AboutActivity extends BaseActivity {
     protected void doOnCreate() {
         setContentView(R.layout.activity_about);
         setToolbar(getString(R.string.action_about));
-        setVersion();
+        setFormicVersion();
         setButtonUpdates();
         setStats();
 
     }
 
     @SuppressLint("StringFormatMatches")
-    private void setVersion() {
-        String version = "";
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            long lastUpdateTime = pInfo.lastUpdateTime;
-            String datePattern = "dd-MMM-yyyy";
-            String dateFormat = new SimpleDateFormat(datePattern).format(new Date(lastUpdateTime));
-
-            version += " v" + pInfo.versionName + "_" + pInfo.versionCode + " ("+dateFormat+")";
-        } catch (Exception e) {
-            version += " vXXX";
-        }
+    private void setFormicVersion() {
+        String version = getVersion();
 
         TextView formicVersion = (TextView) findViewById(R.id.about_formicversion);
         TextView androidVersion = (TextView) findViewById(R.id.about_androidversion);
@@ -72,6 +64,22 @@ public class AboutActivity extends BaseActivity {
         deviceInfo.setText(Html.fromHtml(
                 getResources().getString(R.string.deviceinfo,
                         Build.MANUFACTURER, Build.MODEL, Build.PRODUCT, Build.ID)));
+    }
+
+    @NotNull
+    public String getVersion() {
+        String version = "";
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            long lastUpdateTime = pInfo.lastUpdateTime;
+            String datePattern = "dd-MMM-yyyy";
+            String dateFormat = new SimpleDateFormat(datePattern).format(new Date(lastUpdateTime));
+
+            version += " v" + pInfo.versionName + "_" + pInfo.versionCode + " ("+dateFormat+")";
+        } catch (Exception e) {
+            version += " vXXX";
+        }
+        return version;
     }
 
     private void setButtonUpdates(){

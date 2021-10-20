@@ -26,11 +26,11 @@ import es.jcyl.ita.formic.forms.R;
  * Created by cuedieje on 20/05/2019.
  */
 
-public class CaptureSignatureDialog extends Dialog {
+public class SketchDialog extends Dialog {
     private LinearLayout mContent, mDialog;
     private View view;
     public Activity activity;
-    private Signature mSignature;
+    private Sketch mSketch;
     public Bitmap bitmap;
     private ImageResourceView firm;
     private Button cancelButton, clearButton, saveButton;
@@ -43,7 +43,7 @@ public class CaptureSignatureDialog extends Dialog {
         this.bitmap = bitmap;
     }
 
-    public CaptureSignatureDialog(Activity activity, ImageResourceView firm){
+    public SketchDialog(Activity activity, ImageResourceView firm){
         super(activity);
         this.activity = activity;
         this.bitmap = null;
@@ -56,7 +56,7 @@ public class CaptureSignatureDialog extends Dialog {
 
         DisplayMetrics dm = activity.getApplicationContext().getResources()
                 .getDisplayMetrics();
-        this.setContentView(R.layout.sign_dialog);
+        this.setContentView(R.layout.sketch_dialog);
 
         mContent = (LinearLayout) findViewById(R.id.canvasLayout);
         mDialog = (LinearLayout) findViewById(R.id.field_layout_layout);
@@ -66,9 +66,9 @@ public class CaptureSignatureDialog extends Dialog {
         saveButton = (Button) findViewById(R.id.getsign);
         saveButton.setEnabled(false);
 
-        mSignature = new Signature(activity.getApplicationContext(), null);
-        mSignature.setBackgroundColor(Color.WHITE);
-        mContent.addView(mSignature, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mSketch = new Sketch(activity.getApplicationContext(), null);
+        mSketch.setBackgroundColor(Color.WHITE);
+        mContent.addView(mSketch, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         view = mContent;
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +81,7 @@ public class CaptureSignatureDialog extends Dialog {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                mSignature.clear();
+                mSketch.clear();
                 saveButton.setEnabled(false);
             }
         });
@@ -90,14 +90,14 @@ public class CaptureSignatureDialog extends Dialog {
             @Override
             public void onClick(final View v) {
                     view.setDrawingCacheEnabled(true);
-                    mSignature.save(view);
+                    mSketch.save(view);
                     dismiss();
             }
         });
     }
 
 
-    public class Signature extends View {
+    public class Sketch extends View {
 
         private static final float STROKE_WIDTH = 5f;
         private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
@@ -107,7 +107,7 @@ public class CaptureSignatureDialog extends Dialog {
         private float lastTouchY;
         private final RectF dirtyRect = new RectF();
 
-        public Signature(Context context, AttributeSet attrs) {
+        public Sketch(Context context, AttributeSet attrs) {
             super(context, attrs);
             paint.setAntiAlias(true);
             paint.setColor(Color.BLACK);
