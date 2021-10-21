@@ -10,6 +10,7 @@ pipeline {
         stage("Test") {
             steps {
                 script {
+                    echo $ANDROID_HOME
                     export ANDROID_SDK_ROOT=$ANDROID_HOME
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
