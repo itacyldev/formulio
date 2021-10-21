@@ -7,11 +7,12 @@ pipeline {
                 git branch: 'develop', credentialsId: 'jenkins-gitea-user', url: 'https://servicios.itacyl.es/gitea/ITACyL/FRMDRD.git'
             }
         }
+        environment {
+            ANDROID_SDK_ROOT = "${env.ANDROID_HOME}"
+        }
         stage("Test") {
             steps {
                 script {
-                    echo ${env.ANDROID_HOME}
-                    export ANDROID_SDK_ROOT=$ANDROID_HOME
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
                     sh './gradlew test --stacktrace'
