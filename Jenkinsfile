@@ -10,6 +10,7 @@ pipeline {
         stage("Test") {
             steps {
                 script {
+                    export ANDROID_SDK_ROOT=$ANDROID_HOME
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
                     sh './gradlew test --stacktrace'
