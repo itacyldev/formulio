@@ -10,30 +10,37 @@ pipeline {
         stage("Test") {
             steps {
                 script {
-                    dir("$env.WORKSPACE/FRMDRD/")
-                    sh 'gradlew clean'
-                    sh 'gradlew test --stacktrace'
+                    dir("${env.WORKSPACE}/FRMDRD/"){
+                        sh 'gradlew clean'
+                        sh 'gradlew test --stacktrace'
+                    }
                 }
-                }
+            }
         }
         stage("Build") {
             steps {
                 script {
-                    sh 'gradlew build'
+                    dir("${env.WORKSPACE}/FRMDRD/"){
+                        sh 'gradlew build'
+                    }
                 }
             }
         }
         stage("Report Jacoco") {
             steps {
                 script {
-                    sh 'gradlew codeCoverageReport'
+                    dir("${env.WORKSPACE}/FRMDRD/"){
+                        sh 'gradlew codeCoverageReport'
+                    }
                 }
             }
         }
         stage("Sonarqube") {
             steps {
                 script {
-                    sh 'gradlew sonarqube'
+                    dir("${env.WORKSPACE}/FRMDRD/"){
+                        sh 'gradlew sonarqube'
+                    }
                 }
             }
         }
