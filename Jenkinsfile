@@ -1,14 +1,15 @@
 pipeline {
     agent any
 
+    environment {
+        ANDROID_SDK_ROOT = "${env.ANDROID_HOME}"
+    }
+
     stages {
         stage("Git") {
             steps {
                 git branch: 'develop', credentialsId: 'jenkins-gitea-user', url: 'https://servicios.itacyl.es/gitea/ITACyL/FRMDRD.git'
             }
-        }
-        environment {
-            ANDROID_SDK_ROOT = "${env.ANDROID_HOME}"
         }
         stage("Test") {
             steps {
