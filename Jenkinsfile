@@ -8,24 +8,32 @@ pipeline {
             }
         }
         stage("Test") {
-            script {
-                sh 'gradlew clean'
-                sh 'gradlew test --stacktrace'
-            }
+            steps {
+                script {
+                    sh 'gradlew clean'
+                    sh 'gradlew test --stacktrace'
+                }
+                }
         }
         stage("Build") {
-            script {
-                sh 'gradlew build'
+            steps {
+                script {
+                    sh 'gradlew build'
+                }
             }
         }
         stage("Report Jacoco") {
-            script {
-                sh 'gradlew codeCoverageReport'
+            steps {
+                script {
+                    sh 'gradlew codeCoverageReport'
+                }
             }
         }
         stage("Sonarqube") {
-            script {
-                sh 'gradlew sonarqube'
+            steps {
+                script {
+                    sh 'gradlew sonarqube'
+                }
             }
         }
     }   
