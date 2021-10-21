@@ -11,8 +11,8 @@ pipeline {
             steps {
                 script {
                     dir("${env.WORKSPACE}/"){
-                        sh 'gradlew clean'
-                        sh 'gradlew test --stacktrace'
+                        sh './gradlew clean'
+                        sh './gradlew test --stacktrace'
                     }
                 }
             }
@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     dir("${env.WORKSPACE}/"){
-                        sh 'gradlew build'
+                        sh './gradlew build'
                     }
                 }
             }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     dir("${env.WORKSPACE}/"){
-                        sh 'gradlew codeCoverageReport'
+                        sh './gradlew codeCoverageReport'
                     }
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     dir("${env.WORKSPACE}/"){
-                        sh 'gradlew sonarqube'
+                        sh './gradlew sonarqube'
                     }
                 }
             }
