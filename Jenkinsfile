@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage("Git") {
             steps {
-                git branch: 'develop', credentialsId: 'GIT', url: 'https://servicios.itacyl.es/gitea/ITACyL/FRMDRD.git'
+                git branch: 'develop', credentialsId: 'jenkins-gitea-user', url: 'https://servicios.itacyl.es/gitea/ITACyL/FRMDRD.git'
             }
         }
         stage("Test") {
