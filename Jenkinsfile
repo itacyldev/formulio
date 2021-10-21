@@ -10,37 +10,30 @@ pipeline {
         stage("Test") {
             steps {
                 script {
-                    dir("${env.WORKSPACE}/"){
-                        sh './gradlew clean'
-                        sh './gradlew test --stacktrace'
-                    }
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean'
+                    sh './gradlew test --stacktrace'
                 }
             }
         }
         stage("Build") {
             steps {
                 script {
-                    dir("${env.WORKSPACE}/"){
-                        sh './gradlew build'
-                    }
+                    sh './gradlew build'
                 }
             }
         }
         stage("Report Jacoco") {
             steps {
                 script {
-                    dir("${env.WORKSPACE}/"){
-                        sh './gradlew codeCoverageReport'
-                    }
+                    sh './gradlew codeCoverageReport'
                 }
             }
         }
         stage("Sonarqube") {
             steps {
                 script {
-                    dir("${env.WORKSPACE}/"){
-                        sh './gradlew sonarqube'
-                    }
+                    sh './gradlew sonarqube'
                 }
             }
         }
