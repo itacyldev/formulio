@@ -108,7 +108,7 @@ task codeCoverageReport(type: JacocoReport) {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "Formic"
+        property "sonar.projectKey", "FRMDRD"
         property "sonar.login", "d247ac449f25eb8e8852380dabf101956f1d1a1b"
         property "sonar.projectName", "Formic"
         property 'sonar.host.url', "https://servicios.itacyl.es/sonarqube"
@@ -129,8 +129,8 @@ task clean(type: Delete) {
 
 
 ext {
-    versionCode = 22
-    versionName = '0.5.7'
+    versionCode = 23
+    versionName = '0.6.1'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 29
     targetSdkVersion = 29
@@ -139,7 +139,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.5.7'
+    version = '0.6.1'
     artifactId = 'Formic'
 
     sharedDeps = [
