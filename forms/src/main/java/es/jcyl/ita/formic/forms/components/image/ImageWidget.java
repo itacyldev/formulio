@@ -84,8 +84,10 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         /*if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
             galleryButton.setVisibility(View.INVISIBLE);
         }
-        if (component.isReadOnly()) {
+        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             galleryButton.setEnabled(false);
+        } else if (!component.hasGalleryButton()) {
+            galleryButton.setVisibility(View.GONE);
         } else {
             galleryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,8 +102,8 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         Button cameraButton = this.findViewById(R.id.btn_camera);
         if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             cameraButton.setEnabled(false);
-        } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
-            cameraButton.setVisibility(View.INVISIBLE);
+        } else if (!component.isCameraActive() || !component.hasCameraButton()) {// TODO: or device has no camera (check throw context.device)
+            cameraButton.setVisibility(View.GONE);
         } else {
             cameraButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,8 +119,8 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         ImageResourceView inputView = this.getInputView();
         if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
             editButton.setEnabled(false);
-        } else if (!component.isSketch()) {// TODO: or device has no camera (check throw context.device)
-            editButton.setVisibility(View.INVISIBLE);
+        } else if (!component.hasSketchButton()) {
+            editButton.setVisibility(View.GONE);
         } else {
             editButton.setOnClickListener(new OnClickListener() {
                 @Override
