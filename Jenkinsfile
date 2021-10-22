@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        ANDROID_SDK_ROOT = "${env.ANDROID_HOME}"
-    }
-
     stages {
         stage("Git") {
             steps {
