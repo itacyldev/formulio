@@ -42,7 +42,9 @@ public class UIImage extends UIInputComponent {
     private Integer height;
     private boolean embedded;
     private String repoProperty;
-    private boolean sketch = true;
+    private boolean hasSketchButton = true;
+    private boolean hasCameraButton = true;
+    private boolean hasGalleryButton = true;
 
     public Integer getWidth() {
         return width;
@@ -60,12 +62,28 @@ public class UIImage extends UIInputComponent {
         this.height = height;
     }
 
-    public boolean isSketch() {
-        return sketch;
+    public boolean hasSketchButton() {
+        return hasSketchButton;
     }
 
-    public void setSketch(boolean sketch) {
-        this.sketch = sketch;
+    public void setHasSketchButton(boolean hasSketchButton) {
+        this.hasSketchButton = hasSketchButton;
+    }
+
+    public boolean hasCameraButton() {
+        return hasCameraButton;
+    }
+
+    public void setHasCameraButton(boolean hasCameraButton) {
+        this.hasCameraButton = hasCameraButton;
+    }
+
+    public boolean hasGalleryButton() {
+        return hasGalleryButton;
+    }
+
+    public void setHasGalleryButton(boolean hasGalleryButton) {
+        this.hasGalleryButton = hasGalleryButton;
     }
 
     @Override

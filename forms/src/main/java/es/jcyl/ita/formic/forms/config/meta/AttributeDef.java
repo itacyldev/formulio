@@ -108,7 +108,9 @@ public class AttributeDef {
     public static final Attribute BORDER = new Attribute("border", Boolean.class);
 
     // image
-    public static final Attribute SKETCH = new Attribute("sketch", Boolean.class);
+    public static final Attribute HAS_SKETCH_BUTTON = new Attribute("hasSketchButton", Boolean.class);
+    public static final Attribute HAS_CAMERA_BUTTON = new Attribute("hasCameraButton", Boolean.class);
+    public static final Attribute HAS_GALLERY_BUTTON = new Attribute("hasGalleryButton", Boolean.class);
 
     // text style
     public static final Attribute FONT_SIZE = new Attribute("fontSize", String.class);
