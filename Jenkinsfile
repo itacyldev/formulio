@@ -6,6 +6,9 @@ pipeline {
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
         ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
         ANDROID_AVD_HOME='${ANDROID_EMULATOR_HOME}/avd'
+
+        ADB="${ANDROID_HOME}/platform-tools"
+        EMULATOR="{$ANDROID_HOME}/emulator"
     }
 
     stages {
@@ -30,16 +33,14 @@ pipeline {
         stage("Test") {
             steps {
                 script {
-                    def ADB="$ANDROID_HOME/platform-tools"
-                    def EMULATOR="$ANDROID_HOME/emulator"
+                    echo ${ADB}
 
-                    echo $ADB
-                    dir ('$ADB') {
+                    dir ('${ADB}') {
                         def num_devices=sh "adb devices|wc -l" -2
                     }
 
-                    echo $ADB
-                    echo $EMULATOR
+                    echo ${ADB}
+                    echo ${EMULATOR}
                     echo $num_devices
 
                     sh 'chmod +x gradlew'
