@@ -43,12 +43,6 @@ pipeline {
                 }
             }
         }
-        stage("Integration Test") {
-            steps {
-                script {
-                }
-            }
-        }
         stage("Build") {
             steps {
                 script {
