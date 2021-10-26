@@ -33,6 +33,7 @@ pipeline {
                     def ADB="$ANDROID_HOME/platform-tools"
                     def EMULATOR="$ANDROID_HOME/emulator"
 
+                    echo $ADB
                     dir ('$ADB') {
                         def num_devices=sh "adb devices|wc -l" -2
                     }
