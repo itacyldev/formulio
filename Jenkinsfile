@@ -4,6 +4,8 @@ pipeline {
     environment {
         PROJECT_NAME = 'FRMDRD'
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
+        ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
+        ANDROID_AVD_HOME='${ANDROID_EMULATOR_HOME}/avd'
     }
 
     stages {
@@ -31,6 +33,25 @@ pipeline {
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
                     sh './gradlew test --stacktrace'
+                }
+            }
+        }
+        stage("Integration Test") {
+            steps {
+                script {
+
+                    def num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+
+                    if [ $num_devices -eq 0 ]; then
+                        sh 'echo "Arrancando emulador...."'
+
+                    	sh '$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
+                    	sh '$ANDROID_HOME/platform-tools/adb wait-for-device shell "while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82"'
+                    fi
+
+                    sh '$ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite'
+
+                    sh '$ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1'
                 }
             }
         }
