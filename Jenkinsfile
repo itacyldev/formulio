@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
 
-                    def num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+                    def num_devices=$(env.ANDROID_HOME/platform-tools/adb devices|wc -l-2))
 
                     if [ $num_devices -eq 0 ]; then
                         sh 'echo "Arrancando emulador...."'
