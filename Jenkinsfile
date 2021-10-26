@@ -26,7 +26,8 @@ pipeline {
             }
         }
         stage("Test") {
-            steps
+            steps {
+                script {
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
                     sh './gradlew test --stacktrace'
