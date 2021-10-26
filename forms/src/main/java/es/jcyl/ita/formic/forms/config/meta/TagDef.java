@@ -45,10 +45,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_FAMILY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FONT_SIZE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.FORCE_SELECTION;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_CAMERA_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_DELETE_BUTTON;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_GALLERY_BUTTON;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_SKETCH_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HAS_TODAY_BUTTON;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEADER_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HEIGHT;
@@ -156,7 +153,7 @@ public class TagDef {
         register("date", baseInput);
         register("datetime", baseInput);
         register("textarea", define(base, input, new Attribute[]{LINES}));
-        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY, HAS_SKETCH_BUTTON, HAS_CAMERA_BUTTON, HAS_GALLERY_BUTTON}));
+        register("image", define(baseInput, new Attribute[]{REPO, EMBEDDED, WIDTH, HEIGHT, REPO_PROPERTY}));
 
         Map<String, Attribute> select = define(base, input, new Attribute[]{REPO, FORCE_SELECTION});
         register("select", select);
