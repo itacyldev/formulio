@@ -39,19 +39,21 @@ pipeline {
         stage("Integration Test") {
             steps {
                 script {
+                    def ADB="$ANDROID_HOME/platform-tools/adb"
+                    def EMULATOR="$ANDROID_HOME/emulator/emulator"
 
-                    def num_devices=$(env.ANDROID_HOME/platform-tools/adb devices|wc -l-2))
+                    def num_devices=sh "$ADB devices|wc -l-2"
 
                     if [ $num_devices -eq 0 ]; then
                         sh 'echo "Arrancando emulador...."'
 
-                    	sh '$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
-                    	sh '$ANDROID_HOME/platform-tools/adb wait-for-device shell "while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82"'
+                    	sh '$EMULATOR -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
+                    	sh '$ADB wait-for-device shell "while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82"'
                     fi
 
-                    sh '$ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite'
+                    sh '$ADB push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite'
 
-                    sh '$ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1'
+                    sh '$ADB push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1'
                 }
             }
         }
