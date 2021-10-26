@@ -20,13 +20,11 @@ pipeline {
                 }
             }
         }
-
         stage("Clone sources"){
             steps {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
-
         stage("Test") {
             steps {
                 script {
@@ -36,7 +34,6 @@ pipeline {
                 }
             }
         }
-
         stage("Build") {
             steps {
                 script {
@@ -44,7 +41,6 @@ pipeline {
                 }
             }
         }
-
         stage("Report Jacoco") {
             steps {
                 script {
@@ -52,7 +48,6 @@ pipeline {
                 }
             }
         }
-        
         stage("Sonarqube") {
             when {
                 // solo se lanza análisis de sonarQube en rama develop
