@@ -2,20 +2,33 @@ pipeline {
     agent any
 
     environment {
-        ANDROID_SDK_ROOT = "${env.ANDROID_HOME}"
+        PROJECT_NAME = 'FRMDRD'
+        GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
     }
 
     stages {
-        stage("Git") {
+        stage("Milestone check") {
             steps {
-                git branch: 'develop', credentialsId: 'jenkins-gitea-user', url: 'https://servicios.itacyl.es/gitea/ITACyL/FRMDRD.git'
+                script {
+                    // Posibles builds en ejecución (se comprueban solo tres anteriores)
+                    def buildNumber = env.BUILD_NUMBER as int
+                    for (int i = buildNumber-3; i < buildNumber; i++){
+                        echo ("Cancelando build: ${i}")
+                        milestone(i)
+                    }
+                    milestone(buildNumber)
+                }
+            }
+        }
+        stage("Clone sources"){
+            steps {
+                git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
         stage("Test") {
-            steps {
-                script {
+            steps
                     sh 'chmod +x gradlew'
-                    sh './gradlew clean'
+                    sh './gradlew clean
                     sh './gradlew test --stacktrace'
                 }
             }
@@ -35,6 +48,10 @@ pipeline {
             }
         }
         stage("Sonarqube") {
+            when {
+                // solo se lanza análisis de sonarQube en rama develop
+                expression{BRANCH_NAME == 'develop'}
+            }
             steps {
                 script {
                     sh './gradlew sonarqube'
