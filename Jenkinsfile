@@ -30,6 +30,13 @@ pipeline {
         stage("Test") {
             steps {
                 script {
+                    def ADB="$ANDROID_HOME/platform-tools/adb"
+                    def EMULATOR="$ANDROID_HOME/emulator/emulator"
+
+                    def num_devices=sh "$ADB devices|wc -l-2"
+                                        echo $ADB
+                                        echo $EMULATOR
+                                        echo $num_devices
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
                     sh './gradlew test --stacktrace'
@@ -39,13 +46,6 @@ pipeline {
         stage("Integration Test") {
             steps {
                 script {
-                    def ADB="$ANDROID_HOME/platform-tools/adb"
-                    def EMULATOR="$ANDROID_HOME/emulator/emulator"
-
-                    def num_devices=sh "$ADB devices|wc -l-2"
-                    echo $ADB
-                    echo $EMULATOR
-                    echo $num_devices
                 }
             }
         }
