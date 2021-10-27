@@ -2,6 +2,8 @@
 def PLATFORM_TOOL_DIRECTORY
 // -- Directory where the Android Emulator is located
 def EMULATOR_DIRECTORY
+// -- Devices
+def NUM_DEVICES
 
 
 pipeline {
@@ -20,6 +22,7 @@ pipeline {
                     ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
                     PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
                     EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
+                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices|wc -l', returnStdout: true)
                 }
             }
         }
@@ -49,11 +52,8 @@ pipeline {
                     echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        def num_devices=sh "./adb devices|wc -l" -2
+                        echo "NUM_DEVICES = ${NUM_DEVICES}"
                     """
-
-                    echo "num_devices: ${num_devices}"
 
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
