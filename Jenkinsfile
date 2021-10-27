@@ -56,11 +56,13 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
+                    sh(returnStdout: true, script: 'export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test')
+                                        sh(returnStdout: true, script: 'export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd')
+
                     sh """
+                        chmod +x adb
                         cd ${PLATFORM_TOOL_DIRECTORY}
                     """
-                    sh(returnStdout: true, script: 'export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test')
-                    sh(returnStdout: true, script: 'export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd')
 
                     NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
                     echo "NUM_DEVICES: ${NUM_DEVICES}"
