@@ -72,45 +72,11 @@ pipeline {
 
                             sh """
                                 cd ${PLATFORM_TOOL_DIRECTORY}
-                                
+
                             """
                         }
                     }
                 }
-        stage("Test") {
-            steps {
-                script {
-                    sh 'chmod +x gradlew'
-                    sh './gradlew clean'
-                    sh './gradlew test --stacktrace'
-                }
-            }
-        }
-        stage("Build") {
-            steps {
-                script {
-                    sh './gradlew build'
-                }
-            }
-        }
 
-        stage("Report Jacoco") {
-            steps {
-                script {
-                    sh './gradlew codeCoverageReport'
-                }
-            }
-        }
-        stage("Sonarqube") {
-            when {
-                // solo se lanza análisis de sonarQube en rama develop
-                expression{BRANCH_NAME == 'develop'}
-            }
-            steps {
-                script {
-                    sh './gradlew sonarqube'
-                }
-            }
-        }
     }   
 }
