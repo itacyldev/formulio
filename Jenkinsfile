@@ -85,7 +85,9 @@ pipeline {
         stage("Build") {
             steps {
                 script {
-                    sh './gradlew build'
+                    sh """
+                        ./gradlew build
+                    """
                 }
             }
         }
@@ -93,7 +95,9 @@ pipeline {
         stage("Report Jacoco") {
             steps {
                 script {
-                    sh './gradlew codeCoverageReport'
+                    sh """
+                        ./gradlew codeCoverageReport
+                    """
                 }
             }
         }
@@ -104,7 +108,9 @@ pipeline {
             }
             steps {
                 script {
-                    sh './gradlew sonarqube'
+                    sh """
+                        ./gradlew sonarqube
+                    """
                 }
             }
         }
