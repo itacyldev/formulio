@@ -60,8 +60,8 @@ pipeline {
                                         sh(returnStdout: true, script: 'export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd')
 
                     sh """
-                        chmod +x adb
                         cd ${PLATFORM_TOOL_DIRECTORY}
+                        chmod +x adb
                     """
 
                     NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
