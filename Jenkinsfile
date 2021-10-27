@@ -59,7 +59,7 @@ pipeline {
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
                         pwd
-                        adb devices
+                        ./adb devices
                     """
                 }
             }
