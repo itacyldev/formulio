@@ -54,7 +54,7 @@ pipeline {
                             sh """
                                 echo "NUM_DEVICES = ${NUM_DEVICES}"
                             """
-                            if (NUM_DEVICES <= 2){
+                            if (NUM_DEVICES.toInteger() <= 2){
                                 echo "Arrancando emulador...."
                                 sh """
                                     cd ${EMULATOR_DIRECTORY}
