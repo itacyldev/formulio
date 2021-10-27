@@ -56,14 +56,8 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
-                    dir("${PLATFORM_TOOL_DIRECTORY}") {
-                        NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true)
-                        echo "NUM_DEVICES: ${NUM_DEVICES}"
-                    }
-
-
-
-
+                    NUM_DEVICES = sh(script: '${PLATFORM_TOOL_DIRECTORY}/adb devices|wc -l', returnStdout: true)
+                    echo "NUM_DEVICES: ${NUM_DEVICES}"
                 }
             }
         }
