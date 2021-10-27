@@ -75,12 +75,12 @@ pipeline {
                         echo "Arrancando emulador...."
                         sh """
                             cd ${EMULATOR_DIRECTORY}
-                           './emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
+                           ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
                         """
-                        sh """
+                        sh '''
                             cd ${PLATFORM_TOOL_DIRECTORY}
                             ./adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
-                        """
+                        '''
                     }
 
                     sh """
