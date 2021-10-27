@@ -44,6 +44,36 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
+        stage("Integration Test") {
+                    steps {
+                        script {
+                            echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
+                            echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
+                            echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
+                            echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
+                            sh """
+                                echo "NUM_DEVICES = ${NUM_DEVICES}"
+                            """
+                            if (${NUM_DEVICES} <= 2){
+                                echo "Arrancando emulador...."
+                                sh """
+                                    cd ${EMULATOR_DIRECTORY}
+                                   ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+                                """
+                                sh '''
+                                    cd ${PLATFORM_TOOL_DIRECTORY}
+                                    ./adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                                '''
+                            }
+
+                            sh """
+                                cd ${PLATFORM_TOOL_DIRECTORY}
+                                ./adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+                                ./adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                            """
+                        }
+                    }
+                }
         stage("Test") {
             steps {
                 script {
@@ -57,37 +87,6 @@ pipeline {
             steps {
                 script {
                     sh './gradlew build'
-                }
-            }
-        }
-
-        stage("Integration Test") {
-            steps {
-                script {
-                    echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
-                    echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
-                    echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
-                    echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
-                    sh """
-                        echo "NUM_DEVICES = ${NUM_DEVICES}"
-                    """
-                    if (${NUM_DEVICES} <= 2){
-                        echo "Arrancando emulador...."
-                        sh """
-                            cd ${EMULATOR_DIRECTORY}
-                           ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-                        """
-                        sh '''
-                            cd ${PLATFORM_TOOL_DIRECTORY}
-                            ./adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
-                        '''
-                    }
-
-                    sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        ./adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
-                        ./adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
-                    """
                 }
             }
         }
