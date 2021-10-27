@@ -61,7 +61,7 @@ pipeline {
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
                         pwd
-                        NUM_DEVICES = ./adb devices'
+                        NUM_DEVICES = ./adb devices
                         echo "NUM_DEVICES: ${NUM_DEVICES}"
                     """
                 }
