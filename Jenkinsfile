@@ -8,8 +8,8 @@ pipeline {
         ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
         ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
 
-        ADB="${env.ANDROID_HOME}/platform-tools"
-        EMULATOR="${env.ANDROID_HOME}/emulator"
+        ADB="${env.ANDROID_HOME}platform-tools"
+        EMULATOR="${env.ANDROID_HOME}emulator"
     }
 
     stages {
