@@ -63,14 +63,10 @@ pipeline {
 
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
+                        echo ./adb devices
                         ./adb push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
                         ./adb push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
                     """
-
-
-
-
-
                 }
             }
         }
