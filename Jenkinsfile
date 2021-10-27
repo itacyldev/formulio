@@ -61,8 +61,10 @@ pipeline {
                                     ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
 
                                 sh """
-                                    cd ${PLATFORM_TOOL_DIRECTORY}
-                                    ./adb start-server&
+                                    timeout(time: 20, unit: 'SECONDS') {
+                                        cd ${PLATFORM_TOOL_DIRECTORY}
+                                        ./adb wait-for-device
+                                    }
                                 """
 
                             }
