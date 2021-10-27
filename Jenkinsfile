@@ -56,6 +56,7 @@ pipeline {
                     sh """
                         echo "NUM_DEVICES = ${NUM_DEVICES}"
                     """
+                    echo adb devices|wc -l
                     if (NUM_DEVICES == '2'){
                         echo "Arrancando emulador...."
                         sh """
