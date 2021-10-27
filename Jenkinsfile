@@ -22,7 +22,8 @@ pipeline {
                     ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
                     PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
                     EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
-                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices|wc -l', returnStdout: true)
+                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices', returnStdout: true)
+
                 }
             }
         }
@@ -44,23 +45,6 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
-        stage("Test") {
-            steps {
-                script {
-                    sh 'chmod +x gradlew'
-                    sh './gradlew clean'
-                    sh './gradlew test --stacktrace'
-                }
-            }
-        }
-        stage("Build") {
-            steps {
-                script {
-                    sh './gradlew build'
-                }
-            }
-        }
-
         stage("Integration Test") {
             steps {
                 script {
@@ -68,20 +52,53 @@ pipeline {
                     echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
                     echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
+                    echo "WORKSPACE: ${env.WORKSPACE}"
                     sh """
-                        echo "NUM_DEVICES = ${NUM_DEVICES}"
-                    """
-                    if (${NUM_DEVICES} -eq 2){
-                        echo "Arrancando emulador...."
-                        cd ${EMULATOR_DIRECTORY}
-                        sh './emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
                         cd ${PLATFORM_TOOL_DIRECTORY}
-                        sh './adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
-                    }
+                        LIST = sh(returnStdout: true, script: './adb devices')
+                        echo "LIST: ${LIST}"
+                    """
 
-                    cd ${PLATFORM_TOOL_DIRECTORY}
-                    sh './adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite'
-                    sh './adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1'
+                    sh 'echo NUM_DEVICES = ${NUM_DEVICES}'
+                    if (NUM_DEVICES == 2){
+                        echo "Arrancando emulador...."
+                        sh """
+                            cd ${EMULATOR_DIRECTORY}
+                            ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+
+                        """
+                        timeout(time: 20, unit: 'SECONDS') {
+                            sh """
+                                cd ${PLATFORM_TOOL_DIRECTORY}
+                                ./adb wait-for-device
+                            """
+                        }
+                    }
+                    sh """
+                        cd ${PLATFORM_TOOL_DIRECTORY}
+                        ./adb push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+                        ./adb push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                    """
+                }
+            }
+        }
+        stage("Test") {
+            steps {
+                script {
+                    sh """
+                        chmod +x gradlew
+                        ./gradlew clean
+                        ./gradlew test --stacktrace
+                    """
+                }
+            }
+        }
+        stage("Build") {
+            steps {
+                script {
+                    sh """
+                        ./gradlew build
+                    """
                 }
             }
         }
@@ -89,20 +106,23 @@ pipeline {
         stage("Report Jacoco") {
             steps {
                 script {
-                    sh './gradlew codeCoverageReport'
+                    sh """
+                        ./gradlew codeCoverageReport
+                    """
                 }
             }
         }
         stage("Sonarqube") {
             when {
-                // solo se lanza análisis de sonarQube en rama develop
                 expression{BRANCH_NAME == 'develop'}
             }
             steps {
                 script {
-                    sh './gradlew sonarqube'
+                    sh """
+                        ./gradlew sonarqube
+                    """
                 }
             }
         }
-    }   
+    }
 }
