@@ -77,7 +77,7 @@ pipeline {
                     sh """
                         chmod +x gradlew
                         ./gradlew clean
-                        ./gradlew test --stacktrace'
+                        ./gradlew test --stacktrace
                     """
                 }
             }
@@ -113,5 +113,5 @@ pipeline {
                 }
             }
         }
-    }   
+    }
 }
