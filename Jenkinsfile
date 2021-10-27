@@ -57,7 +57,7 @@ pipeline {
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
                     dir("${PLATFORM_TOOL_DIRECTORY}") {
-                        NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true).trim() as Integer
+                        NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true)
                         echo "NUM_DEVICES: ${NUM_DEVICES}"
                     }
 
