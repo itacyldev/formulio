@@ -61,7 +61,6 @@ pipeline {
 
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
-                        chmod +x ./adb
                     """
 
                     NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
