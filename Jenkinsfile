@@ -56,9 +56,11 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
-                    sh 'cd ${PLATFORM_TOOL_DIRECTORY}'
-                    sh 'pwd'
-
+                    sh """
+                        cd ${PLATFORM_TOOL_DIRECTORY}
+                        pwd
+                        adb devices
+                    """
                 }
             }
         }
