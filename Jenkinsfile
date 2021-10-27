@@ -54,7 +54,7 @@ pipeline {
                             sh """
                                 echo "NUM_DEVICES = ${NUM_DEVICES}"
                             """
-                            if (${NUM_DEVICES} <= 2){
+                            if (NUM_DEVICES <= 2){
                                 echo "Arrancando emulador...."
                                 sh """
                                     cd ${EMULATOR_DIRECTORY}
@@ -62,7 +62,7 @@ pipeline {
                                 """
                                 sh '''
                                     cd ${PLATFORM_TOOL_DIRECTORY}
-                                    ./adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                                    ./adb wait-for-device shell "while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82"
                                 '''
                             }
 
