@@ -51,6 +51,7 @@ pipeline {
                             echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
                             echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
                             echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
+                            echo "WORKSPACE: ${WORKSPACE}"
                             sh """
                                 echo "NUM_DEVICES = ${NUM_DEVICES}"
                             """
