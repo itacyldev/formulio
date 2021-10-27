@@ -54,6 +54,12 @@ pipeline {
                     echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
+                    sh """
+                        cd ${PLATFORM_TOOL_DIRECTORY}
+                        LIST = sh(returnStdout: true, script: './adb devices')
+                        echo "LIST: ${LIST}"
+                    """
+
                     sh 'echo NUM_DEVICES = ${NUM_DEVICES}'
                     if (NUM_DEVICES == 2){
                         echo "Arrancando emulador...."
