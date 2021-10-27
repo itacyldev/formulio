@@ -74,6 +74,7 @@ pipeline {
         stage("Test") {
             steps {
                 script {
+                    sh 'cd ${env.WORKSPACE}'
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
                     sh './gradlew test --stacktrace'
