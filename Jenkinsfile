@@ -22,7 +22,7 @@ pipeline {
                     ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
                     PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
                     EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
-                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && adb devices', returnStdout: true)
+
 
                 }
             }
@@ -53,32 +53,6 @@ pipeline {
                     echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
-                    sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        LIST = sh(returnStdout: true, script: 'adb devices')
-                        echo "LIST: ${LIST}"
-                    """
-
-                    sh 'echo NUM_DEVICES = ${NUM_DEVICES}'
-                    if (NUM_DEVICES == 2){
-                        echo "Arrancando emulador...."
-                        sh """
-                            cd ${EMULATOR_DIRECTORY}
-                            ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-
-                        """
-                        timeout(time: 20, unit: 'SECONDS') {
-                            sh """
-                                cd ${PLATFORM_TOOL_DIRECTORY}
-                                ./adb wait-for-device
-                            """
-                        }
-                    }
-                    sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        ./adb push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
-                        ./adb push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
-                    """
                 }
             }
         }
