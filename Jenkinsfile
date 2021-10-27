@@ -23,7 +23,7 @@ pipeline {
                     PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
                     EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
                     echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
-                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices|wc -l', returnStdout: true).trim() as Integer
+                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices', returnStdout: true)
 
                 }
             }
