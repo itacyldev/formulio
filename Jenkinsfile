@@ -6,6 +6,8 @@ def EMULATOR_DIRECTORY
 def NUM_DEVICES
 
 
+
+
 pipeline {
     agent any
 
@@ -56,8 +58,8 @@ pipeline {
 
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
-                        LIST = sh(returnStdout: true, script: './adb devices')
-                        echo "LIST: ${LIST}"
+                        NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
+                        echo "NUM_DEVICES: ${NUM_DEVICES}"
                     """
                 }
             }
