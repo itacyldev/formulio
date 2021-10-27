@@ -60,13 +60,11 @@ pipeline {
 
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
+                        PWD = sh(returnStdout: true, script: 'pwd')
+                        echo "PWD: ${PWD}"
+                        NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
+                        echo "NUM_DEVICES: ${NUM_DEVICES}"
                     """
-
-                    PWD = sh(returnStdout: true, script: 'pwd')
-                    echo "PWD: ${PWD}"
-
-                    NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
-                    echo "NUM_DEVICES: ${NUM_DEVICES}"
                 }
             }
         }
