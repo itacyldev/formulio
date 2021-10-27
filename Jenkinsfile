@@ -56,7 +56,7 @@ pipeline {
                     sh """
                         echo "NUM_DEVICES = ${NUM_DEVICES}"
                     """
-                    echo ./adb devices|wc -l
+                    echo sh(returnStdout: true, script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices|wc -l')
                     if (NUM_DEVICES == '2'){
                         echo "Arrancando emulador...."
                         sh """
