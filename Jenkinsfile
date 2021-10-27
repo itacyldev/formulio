@@ -59,7 +59,7 @@ pipeline {
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
                     """
-                    NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
+                    NUM_DEVICES = sh(returnStdout: true, script: 'adb devices')
                     echo "NUM_DEVICES: ${NUM_DEVICES}"
                 }
             }
