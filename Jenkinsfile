@@ -1,18 +1,28 @@
+// -- Directory where the Platform Tools is located
+def PLATFORM_TOOL_DIRECTORY
+// -- Directory where the Android Emulator is located
+def EMULATOR_DIRECTORY
+
+
 pipeline {
     agent any
 
     environment {
         PROJECT_NAME = 'FRMDRD'
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
-
-        ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
-        ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
-
-        ADB="${env.ANDROID_HOME}platform-tools"
-        EMULATOR="${env.ANDROID_HOME}emulator"
     }
 
     stages {
+        stage("Initial Configuration") {
+            steps {
+                script {
+                    ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
+                    ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
+                    PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
+                    EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
+                }
+            }
+        }
         stage("Milestone check") {
             steps {
                 script {
@@ -36,12 +46,12 @@ pipeline {
                 script {
                     echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
                     echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
-                    echo "ADB: ${ADB}"
-                    echo "EMULATOR: ${EMULATOR}"
-
-                    dir ('${ADB}') {
-                        def num_devices=sh "adb devices|wc -l" -2
-                    }
+                    echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
+                    echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
+                    sh """
+                        cd ${PLATFORM_TOOL_DIRECTORY}
+                        def num_devices=sh "./adb devices|wc -l" -2
+                    """
 
                     echo "num_devices: ${num_devices}"
 
