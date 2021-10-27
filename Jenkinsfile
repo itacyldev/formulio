@@ -71,7 +71,7 @@ pipeline {
                     sh """
                         echo "NUM_DEVICES = ${NUM_DEVICES}"
                     """
-                    if (${NUM_DEVICES} -eq 2){
+                    if (${NUM_DEVICES} <= 2){
                         echo "Arrancando emulador...."
                         cd ${EMULATOR_DIRECTORY}
                         sh './emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
