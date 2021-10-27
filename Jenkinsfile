@@ -23,7 +23,8 @@ pipeline {
                     PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
                     EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
                     echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
-                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices|wc -l', returnStdout: true).trim()
+                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices|wc -l', returnStdout: true).trim() as Integer
+
                 }
             }
         }
@@ -54,7 +55,7 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
                     sh 'echo NUM_DEVICES = ${NUM_DEVICES}'
-                    if (NUM_DEVICES == '2'){
+                    if (NUM_DEVICES == 2){
                         echo "Arrancando emulador...."
                         sh """
                             cd ${EMULATOR_DIRECTORY}
