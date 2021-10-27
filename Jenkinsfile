@@ -47,14 +47,6 @@ pipeline {
         stage("Test") {
             steps {
                 script {
-                    echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
-                    echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
-                    echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
-                    echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
-                    sh """
-                        echo "NUM_DEVICES = ${NUM_DEVICES}"
-                    """
-
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
                     sh './gradlew test --stacktrace'
@@ -68,6 +60,32 @@ pipeline {
                 }
             }
         }
+
+        stage("Integration Test") {
+            steps {
+                script {
+                    echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
+                    echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
+                    echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
+                    echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
+                    sh """
+                        echo "NUM_DEVICES = ${NUM_DEVICES}"
+                    """
+                    if (${NUM_DEVICES} -eq 2){
+                        echo "Arrancando emulador...."
+                        cd ${EMULATOR_DIRECTORY}
+                        sh './emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
+                        cd ${PLATFORM_TOOL_DIRECTORY}
+                        sh './adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                    }
+
+                    cd ${PLATFORM_TOOL_DIRECTORY}
+                    sh './adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite'
+                    sh './adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1'
+                }
+            }
+        }
+
         stage("Report Jacoco") {
             steps {
                 script {
