@@ -55,7 +55,7 @@ pipeline {
                     echo "WORKSPACE: ${env.WORKSPACE}"
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
-                        LIST = sh(returnStdout: true, script: './adb devices')
+                        LIST = sh(returnStdout: true, script: 'adb devices')
                         echo "LIST: ${LIST}"
                     """
 
