@@ -73,17 +73,22 @@ pipeline {
                     """
                     if (${NUM_DEVICES} <= 2){
                         echo "Arrancando emulador...."
-                        cd ${EMULATOR_DIRECTORY}
-                        sh './emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
-                        cd ${PLATFORM_TOOL_DIRECTORY}
                         sh """
+                            cd ${EMULATOR_DIRECTORY}
+                           './emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
+                        """
+
+                        sh """
+                            cd ${PLATFORM_TOOL_DIRECTORY}
                             ./adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
                         """
                     }
 
-                    cd ${PLATFORM_TOOL_DIRECTORY}
-                    sh './adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite'
-                    sh './adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1'
+                    sh """
+                        cd ${PLATFORM_TOOL_DIRECTORY}
+                        ./adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+                        ./adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                    """
                 }
             }
         }
