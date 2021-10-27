@@ -32,9 +32,6 @@ pipeline {
             }
         }
         stage("Test") {
-            environment {
-
-            }
             steps {
                 script {
                     echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
