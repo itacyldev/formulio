@@ -103,7 +103,6 @@ pipeline {
         }
         stage("Sonarqube") {
             when {
-                // solo se lanza análisis de sonarQube en rama develop
                 expression{BRANCH_NAME == 'develop'}
             }
             steps {
