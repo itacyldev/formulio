@@ -5,6 +5,8 @@ def EMULATOR_DIRECTORY
 // -- Devices
 def NUM_DEVICES
 
+def PWD
+
 
 
 
@@ -56,12 +58,12 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
-                    sh(returnStdout: true, script: 'export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test')
-                                        sh(returnStdout: true, script: 'export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd')
-
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
                     """
+
+                    PWD = sh(returnStdout: true, script: 'pwd')
+                    echo "PWD: ${PWD}"
 
                     NUM_DEVICES = sh(returnStdout: true, script: './adb devices')
                     echo "NUM_DEVICES: ${NUM_DEVICES}"
