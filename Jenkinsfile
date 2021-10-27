@@ -56,12 +56,10 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
-                    sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        pwd
-                        ./adb devices|wc -l > NUM_DEVICES
-                        echo "NUM_DEVICES: ${NUM_DEVICES}"
-                    """
+                    NUM_DEVICES = sh(returnStdout: true, script: cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices|wc -l).trim() as Integer
+                    echo "NUM_DEVICES: ${NUM_DEVICES}"
+
+
                 }
             }
         }
