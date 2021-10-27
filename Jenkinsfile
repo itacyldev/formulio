@@ -45,38 +45,66 @@ pipeline {
             }
         }
         stage("Integration Test") {
-                    steps {
-                        script {
-                            echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
-                            echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
-                            echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
-                            echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
-                            echo "WORKSPACE: ${env.WORKSPACE}"
-                            sh """
-                                echo "NUM_DEVICES = ${NUM_DEVICES}"
-                            """
-                            if (NUM_DEVICES.toInteger() <= 2){
-                                echo "Arrancando emulador...."
-                                sh """
-                                    cd ${EMULATOR_DIRECTORY}
-                                    ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+            steps {
+                script {
+                    echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
+                    echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
+                    echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
+                    echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
+                    echo "WORKSPACE: ${env.WORKSPACE}"
+                    sh """
+                        echo "NUM_DEVICES = ${NUM_DEVICES}"
+                    """
+                    if (NUM_DEVICES.toInteger() <= 2){
+                        echo "Arrancando emulador...."
+                        sh """
+                            cd ${EMULATOR_DIRECTORY}
+                            ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
 
-                                sh """
-                                    timeout(time: 20, unit: 'SECONDS') {
-                                        cd ${PLATFORM_TOOL_DIRECTORY}
-                                        ./adb wait-for-device
-                                    }
-                                """
-
-                            }
-
-                            sh """
+                        sh """
+                            timeout(time: 20, unit: 'SECONDS') {
                                 cd ${PLATFORM_TOOL_DIRECTORY}
-
-                            """
-                        }
+                                ./adb wait-for-device
+                            }
+                        """
                     }
                 }
+            }
+        }
+        stage("Test") {
+            steps {
+                script {
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean'
+                    sh './gradlew test --stacktrace'
+                }
+            }
+        }
+        stage("Build") {
+            steps {
+                script {
+                    sh './gradlew build'
+                }
+            }
+        }
 
+        stage("Report Jacoco") {
+            steps {
+                script {
+                    sh './gradlew codeCoverageReport'
+                }
+            }
+        }
+        stage("Sonarqube") {
+            when {
+                // solo se lanza análisis de sonarQube en rama develop
+                expression{BRANCH_NAME == 'develop'}
+            }
+            steps {
+                script {
+                    sh './gradlew sonarqube'
+                }
+            }
+        }
     }   
 }
