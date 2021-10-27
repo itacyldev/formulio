@@ -26,7 +26,7 @@ pipeline {
                     ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
                     PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
                     EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
-
+                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices', returnStdout: true)
 
                 }
             }
@@ -58,12 +58,7 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
-                    sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        pwd
-                        NUM_DEVICES = ./adb devices
-                        echo "NUM_DEVICES: ${NUM_DEVICES}"
-                    """
+                    sh 'echo NUM_DEVICES = ${NUM_DEVICES}'
                 }
             }
         }
