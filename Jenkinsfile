@@ -7,8 +7,8 @@ pipeline {
         ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
         ANDROID_AVD_HOME='${ANDROID_EMULATOR_HOME}/avd'
 
-        ADB="${ANDROID_HOME}/platform-tools"
-        EMULATOR="{$ANDROID_HOME}/emulator"
+        ADB='${ANDROID_HOME}/platform-tools'
+        EMULATOR='${ANDROID_HOME}/emulator'
     }
 
     stages {
@@ -33,15 +33,14 @@ pipeline {
         stage("Test") {
             steps {
                 script {
-                    echo ${ADB}
+                    echo "ADB: ${ADB}"
+                    echo "EMULATOR: ${EMULATOR}"
 
                     dir ('${ADB}') {
                         def num_devices=sh "adb devices|wc -l" -2
                     }
 
-                    echo ${ADB}
-                    echo ${EMULATOR}
-                    echo $num_devices
+                    echo "num_devices: ${num_devices}"
 
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
