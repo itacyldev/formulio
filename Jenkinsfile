@@ -59,7 +59,8 @@ pipeline {
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
                         pwd
-                        ./adb devices
+                        ./adb devices|wc -l > NUM_DEVICES
+                        echo "NUM_DEVICES: ${NUM_DEVICES}"
                     """
                 }
             }
