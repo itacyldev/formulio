@@ -76,7 +76,7 @@ pipeline {
                         cd ${EMULATOR_DIRECTORY}
                         sh './emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &'
                         cd ${PLATFORM_TOOL_DIRECTORY}
-                        sh './adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                        sh "'./adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'"
                     }
 
                     cd ${PLATFORM_TOOL_DIRECTORY}
