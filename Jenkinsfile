@@ -7,10 +7,17 @@ pipeline {
     environment {
         PROJECT_NAME = 'FRMDRD'
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
-        PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
     }
 
     stages {
+        stage("Initial Configuration") {
+            steps {
+                script {
+                    PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
+                }
+            }
+        }
+
         stage("Milestone check") {
             steps {
                 script {
@@ -97,10 +104,10 @@ pipeline {
     }
     post {
         failure {
-            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-            recipientProviders: [culprits()],
-            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            mimeType: 'text/html'
+            //emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            //recipientProviders: [culprits()],
+            //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            //mimeType: 'text/html'
             sh """
                 cd ${PLATFORM_TOOL_DIRECTORY}
                 ./adb emu kill
