@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        //chmod +x gradlew
+                        chmod +x gradlew
                         ./gradlew clean
                         ./gradlew build
                     """
