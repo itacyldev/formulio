@@ -110,11 +110,11 @@ pipeline {
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo num_devices
-
-            sh """
-                cd ${PLATFORM_TOOL_DIRECTORY}
-                ./adb emu kill
-            """
+            '''
+            //sh """
+             //   cd ${PLATFORM_TOOL_DIRECTORY}
+              //  ./adb emu kill
+            //"""
         }
     }
 }
