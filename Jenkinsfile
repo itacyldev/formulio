@@ -17,7 +17,6 @@ pipeline {
                 }
             }
         }
-
         stage("Milestone check") {
             steps {
                 script {
