@@ -56,21 +56,41 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
-                    dir("${PLATFORM_TOOL_DIRECTORY}") {
-                        NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true)
-                        echo "NUM_DEVICES: ${NUM_DEVICES}"
-                    }
+                    sh '''#!/bin/bash
+                        export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
+                        export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
+
+                        num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+
+                        if [ $num_devices -eq 0 ]; then
+                        	echo "Arrancando emulador...."
+                        	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+                        	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                        fi
+
+                        # Copiar bd tests
+                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+
+                        # Copiar proyectos tests
+                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                    '''
+
+
+                    //dir("${PLATFORM_TOOL_DIRECTORY}") {
+                     //   NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true)
+                     //   echo "NUM_DEVICES: ${NUM_DEVICES}"
+                    //}
 
                     //adb devices | grep "emulator-" | while read -r emulator device; do
 //                      adb -s $emulator emu kill
   //                  done
 
-                    sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        ./adb devices | wc - l
-                        ./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
-                        ./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
-                    """
+                    //sh """
+                     //   cd ${PLATFORM_TOOL_DIRECTORY}
+                      //  ./adb devices | wc - l
+                       // ./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+                        //./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                    //"""
                 }
             }
         }
