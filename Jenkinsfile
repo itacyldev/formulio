@@ -1,15 +1,3 @@
-// -- Directory where the Platform Tools is located
-def PLATFORM_TOOL_DIRECTORY
-// -- Directory where the Android Emulator is located
-def EMULATOR_DIRECTORY
-// -- Devices
-def NUM_DEVICES
-
-def PWD
-
-
-
-
 pipeline {
     agent any
 
@@ -19,16 +7,6 @@ pipeline {
     }
 
     stages {
-        stage("Initial Configuration") {
-            steps {
-                script {
-                    ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
-                    ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
-                    PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
-                    EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
-                }
-            }
-        }
         stage("Milestone check") {
             steps {
                 script {
@@ -50,20 +28,12 @@ pipeline {
         stage("Integration Test") {
             steps {
                 script {
-                    echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
-                    echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
-                    echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
-                    echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
-                    echo "WORKSPACE: ${env.WORKSPACE}"
-
                     sh '''#!/bin/bash
                         export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
                         export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
 
                         num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
 
-                        $ANDROID_HOME/platform-tools/adb -s emulator-5554 emu kill
-                        
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador...."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
@@ -76,23 +46,6 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
                     '''
-
-
-                    //dir("${PLATFORM_TOOL_DIRECTORY}") {
-                     //   NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true)
-                     //   echo "NUM_DEVICES: ${NUM_DEVICES}"
-                    //}
-
-                    //adb devices | grep "emulator-" | while read -r emulator device; do
-//                      adb -s $emulator emu kill
-  //                  done
-
-                    //sh """
-                     //   cd ${PLATFORM_TOOL_DIRECTORY}
-                      //  ./adb devices | wc - l
-                       // ./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
-                        //./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
-                    //"""
                 }
             }
         }
