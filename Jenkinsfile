@@ -39,6 +39,8 @@ pipeline {
             steps {
                 script {
                     sh """
+                        chmod +x gradlew
+                        ./gradlew clean
                         ./gradlew build
                     """
                 }
@@ -48,8 +50,6 @@ pipeline {
             steps {
                 script {
                     sh """
-                        chmod +x gradlew
-                        ./gradlew clean
                         ./gradlew test --stacktrace
                     """
                 }
@@ -107,6 +107,10 @@ pipeline {
             //recipientProviders: [culprits()],
             //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
             //mimeType: 'text/html'
+            sh '''#!/bin/bash
+                num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+                echo num_devices
+
             sh """
                 cd ${PLATFORM_TOOL_DIRECTORY}
                 ./adb emu kill
