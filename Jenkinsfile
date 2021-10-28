@@ -56,14 +56,18 @@ pipeline {
                     echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
                     echo "WORKSPACE: ${env.WORKSPACE}"
 
-                    //dir("${PLATFORM_TOOL_DIRECTORY}") {
-                     //   NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true)
-                      //  echo "NUM_DEVICES: ${NUM_DEVICES}"
-                    //}
+                    dir("${PLATFORM_TOOL_DIRECTORY}") {
+                        NUM_DEVICES = sh(script: './adb devices|wc -l', returnStdout: true)
+                        echo "NUM_DEVICES: ${NUM_DEVICES}"
+                    }
+
+                    //adb devices | grep "emulator-" | while read -r emulator device; do
+//                      adb -s $emulator emu kill
+  //                  done
 
                     sh """
                         cd ${PLATFORM_TOOL_DIRECTORY}
-                        ./adb devices
+                        ./adb devices | wc - l
                         ./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
                         ./adb -s emulator-5554 push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
                     """
