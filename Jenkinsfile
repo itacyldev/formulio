@@ -62,8 +62,8 @@ pipeline {
 
                         num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
 
-                        $ANDROID_HOME/platform-tools/adb devices
-
+                        $ANDROID_HOME/platform-tools/adb -s emulator-5554 emu kill
+                        
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador...."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
