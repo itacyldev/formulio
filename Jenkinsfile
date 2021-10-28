@@ -25,6 +25,26 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
+        stage("Build") {
+            steps {
+                script {
+                    sh """
+                        ./gradlew build
+                    """
+                }
+            }
+        }
+        stage("Test") {
+            steps {
+                script {
+                    sh """
+                        chmod +x gradlew
+                        ./gradlew clean
+                        ./gradlew test --stacktrace
+                    """
+                }
+            }
+        }
         stage("Integration Test") {
             steps {
                 script {
@@ -49,27 +69,6 @@ pipeline {
                 }
             }
         }
-        stage("Test") {
-            steps {
-                script {
-                    sh """
-                        chmod +x gradlew
-                        ./gradlew clean
-                        ./gradlew test --stacktrace
-                    """
-                }
-            }
-        }
-        stage("Build") {
-            steps {
-                script {
-                    sh """
-                        ./gradlew build
-                    """
-                }
-            }
-        }
-
         stage("Report Jacoco") {
             steps {
                 script {
@@ -90,6 +89,15 @@ pipeline {
                     """
                 }
             }
+        }
+    }
+    post {
+        failure {
+            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            recipientProviders: [culprits()],
+            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            mimeType: 'text/html'
+            sh 'adb emu kill'
         }
     }
 }
