@@ -1,9 +1,13 @@
+// -- Directory where the Platform Tools is located
+def PLATFORM_TOOL_DIRECTORY
+
 pipeline {
     agent any
 
     environment {
         PROJECT_NAME = 'FRMDRD'
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
+        PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
     }
 
     stages {
@@ -97,7 +101,10 @@ pipeline {
             recipientProviders: [culprits()],
             subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
             mimeType: 'text/html'
-            sh 'adb emu kill'
+            sh """
+                cd ${PLATFORM_TOOL_DIRECTORY}
+                ./adb emu kill
+            """
         }
     }
 }
