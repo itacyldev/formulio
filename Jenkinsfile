@@ -46,8 +46,6 @@ pipeline {
 
                         echo "num_devices: ${num_devices}"
                         $ANDROID_HOME/platform-tools/adb devices
-                        $ANDROID_HOME/platform-tools/adb -s emulator-5554 emu kill
-                        $ANDROID_HOME/platform-tools/adb -s emulator-5556 emu kill
 
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
