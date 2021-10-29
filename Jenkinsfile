@@ -49,17 +49,17 @@ pipeline {
                         $ANDROID_HOME/platform-tools/adb -s emulator-5554 emu kill
                         $ANDROID_HOME/platform-tools/adb -s emulator-5556 emu kill
 
-                        //if [ $num_devices -eq 0 ]; then
-                        //	echo "Arrancando emulador..."
-                        //	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-                        //	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
-                        //fi
+                        if [ $num_devices -eq 0 ]; then
+                        	echo "Arrancando emulador..."
+                        	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+                        	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                        fi
 
                         # Copiar bd tests
-                        //$ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
 
                         # Copiar proyectos tests
-                        //$ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
                     '''
                 }
             }
