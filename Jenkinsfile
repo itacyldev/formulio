@@ -75,8 +75,8 @@ pipeline {
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo "num_devices: ${num_devices}"
                 $ANDROID_HOME/platform-tools/adb devices
-                if [ $num_devices -eq 0 ]; then
-                    echo "Arrancando emulador..."
+                if [ $num_devices -gt 0 ]; then
+                    echo "Parando emulador..."
                     cd ${PLATFORM_TOOL_DIRECTORY}
                     adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
                 fi
