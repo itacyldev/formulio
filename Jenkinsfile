@@ -72,7 +72,8 @@ pipeline {
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo "num_devices: ${num_devices}"
-                $ANDROID_HOME/platform-tools/adb devices
+                cd $ANDROID_HOME/platform-tools/
+                adb devices
                     for device in `adb devices | awk '{print $1}'`; do
                       if [ ! "$device" = "" ] && [ ! "$device" = "List" ]
                       then
