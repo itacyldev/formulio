@@ -1,10 +1,3 @@
-// -- Directory where the Platform Tools is located
-def PLATFORM_TOOL_DIRECTORY
-// -- Directory where the Android Emulator is located
-def EMULATOR_DIRECTORY
-// -- Devices
-def NUM_DEVICES
-
 
 pipeline {
     agent any
@@ -15,18 +8,6 @@ pipeline {
     }
 
     stages {
-        stage("Initial Configuration") {
-            steps {
-                script {
-                    ANDROID_EMULATOR_HOME= '/apps/android-sdk-linux/test'
-                    ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
-                    PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
-                    EMULATOR_DIRECTORY = "${env.ANDROID_HOME}"+"emulator/"
-                    NUM_DEVICES = sh(script: 'cd ${PLATFORM_TOOL_DIRECTORY} && ./adb devices', returnStdout: true)
-
-                }
-            }
-        }
         stage("Milestone check") {
             steps {
                 script {
@@ -45,39 +26,13 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
-        stage("Integration Test") {
+        stage("Build") {
             steps {
                 script {
-                    echo "ANDROID_EMULATOR_HOME: ${ANDROID_EMULATOR_HOME}"
-                    echo "ANDROID_AVD_HOME: ${ANDROID_AVD_HOME}"
-                    echo "PLATFORM_TOOL_DIRECTORY: ${PLATFORM_TOOL_DIRECTORY}"
-                    echo "EMULATOR_DIRECTORY: ${EMULATOR_DIRECTORY}"
-                    echo "WORKSPACE: ${env.WORKSPACE}"
                     sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        LIST = sh(returnStdout: true, script: './adb devices')
-                        echo "LIST: ${LIST}"
-                    """
-
-                    sh 'echo NUM_DEVICES = ${NUM_DEVICES}'
-                    if (NUM_DEVICES == 2){
-                        echo "Arrancando emulador...."
-                        sh """
-                            cd ${EMULATOR_DIRECTORY}
-                            ./emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-
-                        """
-                        timeout(time: 20, unit: 'SECONDS') {
-                            sh """
-                                cd ${PLATFORM_TOOL_DIRECTORY}
-                                ./adb wait-for-device
-                            """
-                        }
-                    }
-                    sh """
-                        cd ${PLATFORM_TOOL_DIRECTORY}
-                        ./adb push ${env.WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
-                        ./adb push ${env.WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                        chmod +x gradlew
+                        ./gradlew clean
+                        ./gradlew build
                     """
                 }
             }
@@ -86,23 +41,38 @@ pipeline {
             steps {
                 script {
                     sh """
-                        chmod +x gradlew
-                        ./gradlew clean
                         ./gradlew test --stacktrace
                     """
                 }
             }
         }
-        stage("Build") {
+        stage("Integration Test") {
             steps {
                 script {
-                    sh """
-                        ./gradlew build
-                    """
+                    sh '''#!/bin/bash
+                        export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
+                        export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
+
+                        num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+
+                        echo "num_devices: ${num_devices}"
+                        $ANDROID_HOME/platform-tools/adb devices
+
+                        if [ $num_devices -eq 0 ]; then
+                        	echo "Arrancando emulador..."
+                        	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+                        	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                        fi
+
+                        # Copiar bd tests
+                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+
+                        # Copiar proyectos tests
+                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                    '''
                 }
             }
         }
-
         stage("Report Jacoco") {
             steps {
                 script {
@@ -123,6 +93,30 @@ pipeline {
                     """
                 }
             }
+        }
+    }
+    post {
+        failure {
+            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            recipientProviders: [culprits()],
+            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            mimeType: 'text/html'
+
+
+            sh '''#!/bin/bash
+                num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+                echo "num_devices: ${num_devices}"
+                $ANDROID_HOME/platform-tools/adb devices
+                if [ $num_devices -gt 0 ]; then
+                    echo "Parando emulador..."
+                    for device in `$ANDROID_HOME/platform-tools/adb devices`; do
+                        if [[ $device = emulator* ]]; then
+                            echo "adb -s $device $@"
+                            `$ANDROID_HOME/platform-tools/adb -s $device $@ emu kill`
+                        fi
+                    done
+                fi
+            '''
         }
     }
 }
