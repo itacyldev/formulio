@@ -78,7 +78,7 @@ pipeline {
                 if [ $num_devices -gt 0 ]; then
                     echo "Parando emulador..."
                     for device in `$ANDROID_HOME/platform-tools/adb devices`; do
-                        if [ ! "$device" = "" ] && [ ! "$device" = "List" ]  && [ ! "$device" = "of" ] && [ ! "$device" = "devices" ] && [ ! "$device" = "attached " ]
+                        if [ "$device" = "device" ] 
                             echo "adb -s $device $@"
                         fi
                     done
