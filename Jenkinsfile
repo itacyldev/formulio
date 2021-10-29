@@ -45,9 +45,10 @@ pipeline {
                         num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
 
                         echo "num_devices: ${num_devices}"
+                        $ANDROID_HOME/platform-tools/adb devices
 
                         if [ $num_devices -eq 0 ]; then
-                        	echo "Arrancando emulador...."
+                        	echo "Arrancando emulador..."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
                         	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
                         fi
@@ -71,9 +72,10 @@ pipeline {
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo "num_devices: ${num_devices}"
+                $ANDROID_HOME/platform-tools/adb devices
                 if [ $num_devices -gt 0 ]; then
-                    cd ${PLATFORM_TOOL_DIRECTORY}
-                    ./adb emu kill
+                    echo "Parando emulador..."
+                    $ANDROID_HOME/platform-tools/adb emu kill
                fi
             '''
         }
