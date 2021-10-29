@@ -47,6 +47,7 @@ pipeline {
                         echo "num_devices: ${num_devices}"
                         $ANDROID_HOME/platform-tools/adb devices
 
+                        $ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
