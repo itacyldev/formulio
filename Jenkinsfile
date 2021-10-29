@@ -74,10 +74,19 @@ pipeline {
                 echo "num_devices: ${num_devices}"
                 $ANDROID_HOME/platform-tools/adb devices
                 if [ $num_devices -gt 0 ]; then
-                    echo "Parando emulador..."
+                    for device in `adb devices | awk '{print $1}'`; do
+                      if [ ! "$device" = "" ] && [ ! "$device" = "List" ]
+                      then
+                        echo " "
+                        echo "adb -s $device $@"
+                        echo "------------------------------------------------------"
+                        adb -s $device $@ emu kill
+                      fi
+                    done
+                    //echo "Parando emulador..."
                     //$ANDROID_HOME/platform-tools/adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
                     //$ANDROID_HOME/platform-tools/adb kill-server
-                    $ANDROID_HOME/platform-tools/adb emu kill
+                    //$ANDROID_HOME/platform-tools/adb emu kill
                fi
             '''
         }
