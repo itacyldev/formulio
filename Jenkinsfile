@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        chmod +x gradlew
+                        //chmod +x gradlew
                         ./gradlew clean
                         ./gradlew build
                     """
@@ -63,6 +63,8 @@ pipeline {
                         export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
 
                         num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+
+                        echo num_devices
 
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador...."
@@ -103,14 +105,18 @@ pipeline {
     }
     post {
         failure {
-            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-            recipientProviders: [culprits()],
-            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            mimeType: 'text/html'
-            //sh """
-             //   cd ${PLATFORM_TOOL_DIRECTORY}
-              //  ./adb emu kill
-            //"""
+            //emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            //recipientProviders: [culprits()],
+            //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            //mimeType: 'text/html'
+            sh '''#!/bin/bash
+                num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+                echo num_devices
+                if [ $num_devices -gt 0 ]; then
+                    cd ${PLATFORM_TOOL_DIRECTORY}
+                    ./adb emu kill
+               fi
+            '''
         }
     }
 }
