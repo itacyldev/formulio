@@ -77,12 +77,13 @@ pipeline {
                 $ANDROID_HOME/platform-tools/adb devices
                 if [ $num_devices -gt 0 ]; then
                     echo "Parando emulador..."
-                    for device in `$ANDROID_HOME/platform-tools/adb devices`; do
-                         if [ ! "$device" = "" ] && [ ! "$device" = "List" ] && [ ! "$device" = "of" ] && [ ! "$device" = "device " ] && [ ! "$device" = "attached" ]; then
-                            echo "adb -s $device $@"
-                            `$ANDROID_HOME/platform-tools/adb -s $device $@ emu kill`
-                        fi
-                    done
+                    `$ANDROID_HOME/platform-tools/adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done`
+                    //for device in `$ANDROID_HOME/platform-tools/adb devices`; do
+                    //     if [ ! "$device" = "" ] && [ ! "$device" = "List" ] && [ ! "$device" = "of" ] && [ ! "$device" = "device " ] && [ ! "$device" = "attached" ]; then
+                    //        echo "adb -s $device $@"
+                    //        `$ANDROID_HOME/platform-tools/adb -s $device $@ emu kill`
+                    //    fi
+                    //done
                 fi
             '''
                                 //cd ${PLATFORM_TOOL_DIRECTORY}
