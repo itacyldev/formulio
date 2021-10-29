@@ -48,6 +48,13 @@ pipeline {
                         $ANDROID_HOME/platform-tools/adb devices
 
                         $ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+                        $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+
+                        num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+
+                                                echo "num_devices: ${num_devices}"
+                                                $ANDROID_HOME/platform-tools/adb devices
+
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
@@ -64,32 +71,5 @@ pipeline {
             }
         }
     }
-    post {
-        failure {
-            //emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-            //recipientProviders: [culprits()],
-            //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            //mimeType: 'text/html'
 
-
-            
-                                //cd ${PLATFORM_TOOL_DIRECTORY}
-                                //adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
-
-                //for device in `adb devices | awk '{print $1}'`; do
-                 //     if [ ! "$device" = "" ] && [ ! "$device" = "List" ]
-                  //    then
-                   //     echo " "
-                    //    echo "adb -s $device $@"
-                     //   echo "------------------------------------------------------"
-                      //  adb -s $device $@ emu kill
-                     // fi
-                    //done
-                    //echo "Parando emulador..."
-                    //$ANDROID_HOME/platform-tools/adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
-                    //$ANDROID_HOME/platform-tools/adb kill-server
-                    //$ANDROID_HOME/platform-tools/adb emu kill
-            //'''
-        }
-    }
 }
