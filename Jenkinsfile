@@ -69,23 +69,19 @@ pipeline {
             //recipientProviders: [culprits()],
             //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
             //mimeType: 'text/html'
-            sh '''#!/bin/bash
-                for device in `adb devices | awk '{print $1}'`; do
-                  if [ ! "$device" = "" ] && [ ! "$device" = "List" ]
-                  then
-                    echo " "
-                    echo "adb -s $device $@"
-                    echo "------------------------------------------------------"
-                    adb -s $device $@
-                fi
-               done
-             '''
 
-            //sh '''#!/bin/bash
-             //   num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
-              //  echo "num_devices: ${num_devices}"
-               // $ANDROID_HOME/platform-tools/adb devices
-                //    for device in `adb devices | awk '{print $1}'`; do
+
+            sh '''#!/bin/bash
+                num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+                echo "num_devices: ${num_devices}"
+                $ANDROID_HOME/platform-tools/adb devices
+                if [ $num_devices -eq 0 ]; then
+                    echo "Arrancando emulador..."
+                    cd ${PLATFORM_TOOL_DIRECTORY}
+                    adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
+                fi
+            '''
+                //for device in `adb devices | awk '{print $1}'`; do
                  //     if [ ! "$device" = "" ] && [ ! "$device" = "List" ]
                   //    then
                    //     echo " "
