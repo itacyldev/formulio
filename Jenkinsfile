@@ -1,5 +1,3 @@
-// -- Directory where the Platform Tools is located
-def PLATFORM_TOOL_DIRECTORY
 
 pipeline {
     agent any
@@ -10,13 +8,6 @@ pipeline {
     }
 
     stages {
-        stage("Initial Configuration") {
-            steps {
-                script {
-                    PLATFORM_TOOL_DIRECTORY = "${env.ANDROID_HOME}"+"platform-tools/"
-                }
-            }
-        }
         stage("Milestone check") {
             steps {
                 script {
@@ -33,6 +24,26 @@ pipeline {
         stage("Clone sources"){
             steps {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
+            }
+        }
+        stage("Build") {
+            steps {
+                script {
+                    sh """
+                        chmod +x gradlew
+                        ./gradlew clean
+                        ./gradlew build
+                    """
+                }
+            }
+        }
+        stage("Test") {
+            steps {
+                script {
+                    sh """
+                        ./gradlew test --stacktrace
+                    """
+                }
             }
         }
         stage("Integration Test") {
@@ -62,13 +73,34 @@ pipeline {
                 }
             }
         }
+        stage("Report Jacoco") {
+            steps {
+                script {
+                    sh """
+                        ./gradlew codeCoverageReport
+                    """
+                }
+            }
+        }
+        stage("Sonarqube") {
+            when {
+                expression{BRANCH_NAME == 'develop'}
+            }
+            steps {
+                script {
+                    sh """
+                        ./gradlew sonarqube
+                    """
+                }
+            }
+        }
     }
     post {
         failure {
-            //emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-            //recipientProviders: [culprits()],
-            //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            //mimeType: 'text/html'
+            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            recipientProviders: [culprits()],
+            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            mimeType: 'text/html'
 
 
             sh '''#!/bin/bash
@@ -85,23 +117,6 @@ pipeline {
                     done
                 fi
             '''
-                                //cd ${PLATFORM_TOOL_DIRECTORY}
-                                //adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
-
-                //for device in `adb devices | awk '{print $1}'`; do
-                 //     if [ ! "$device" = "" ] && [ ! "$device" = "List" ]
-                  //    then
-                   //     echo " "
-                    //    echo "adb -s $device $@"
-                     //   echo "------------------------------------------------------"
-                      //  adb -s $device $@ emu kill
-                     // fi
-                    //done
-                    //echo "Parando emulador..."
-                    //$ANDROID_HOME/platform-tools/adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
-                    //$ANDROID_HOME/platform-tools/adb kill-server
-                    //$ANDROID_HOME/platform-tools/adb emu kill
-            //'''
         }
     }
 }
