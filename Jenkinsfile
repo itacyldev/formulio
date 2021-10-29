@@ -35,26 +35,6 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
-        stage("Build") {
-            steps {
-                script {
-                    sh """
-                        chmod +x gradlew
-                        ./gradlew clean
-                        ./gradlew build
-                    """
-                }
-            }
-        }
-        stage("Test") {
-            steps {
-                script {
-                    sh """
-                        ./gradlew test --stacktrace
-                    """
-                }
-            }
-        }
         stage("Integration Test") {
             steps {
                 script {
@@ -64,7 +44,7 @@ pipeline {
 
                         num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
 
-                        echo num_devices
+                        echo "num_devices: ${num_devices}"
 
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador...."
@@ -81,27 +61,6 @@ pipeline {
                 }
             }
         }
-        stage("Report Jacoco") {
-            steps {
-                script {
-                    sh """
-                        ./gradlew codeCoverageReport
-                    """
-                }
-            }
-        }
-        stage("Sonarqube") {
-            when {
-                expression{BRANCH_NAME == 'develop'}
-            }
-            steps {
-                script {
-                    sh """
-                        ./gradlew sonarqube
-                    """
-                }
-            }
-        }
     }
     post {
         failure {
@@ -111,7 +70,7 @@ pipeline {
             //mimeType: 'text/html'
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
-                echo num_devices
+                echo "num_devices: ${num_devices}"
                 if [ $num_devices -gt 0 ]; then
                     cd ${PLATFORM_TOOL_DIRECTORY}
                     ./adb emu kill
