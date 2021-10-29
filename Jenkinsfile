@@ -80,8 +80,7 @@ pipeline {
                 if [ $num_devices -gt 0 ]; then
                     echo "Parando emulador..."
                     for device in `$ANDROID_HOME/platform-tools/adb devices`; do
-                        prefix=emulator
-                        if [ ! "$device" = "$prefix"* ];then
+                        if [[ $device = emulator* ]]; then
                             echo "adb -s $device $@"
                             `$ANDROID_HOME/platform-tools/adb -s $device $@ emu kill`
                         fi
