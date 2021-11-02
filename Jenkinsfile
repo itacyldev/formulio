@@ -26,6 +26,26 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
+        stage("Build") {
+                            steps {
+                                script {
+                                    sh """
+                                        chmod +x gradlew
+                                        ./gradlew clean
+                                        ./gradlew build
+                                    """
+                                }
+                            }
+                        }
+                        stage("Test") {
+                            steps {
+                                script {
+                                    sh """
+                                        ./gradlew test --stacktrace
+                                    """
+                                }
+                            }
+                        }
         stage("Integration Test") {
             when {
                 expression{BRANCH_NAME == 'develop'}
@@ -33,7 +53,6 @@ pipeline {
             steps {
                 script {
                     sh '''#!/bin/bash
-                        chmod +x gradlew
                         export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
                         export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
 
@@ -59,26 +78,6 @@ pipeline {
                 }
             }
         }
-        stage("Build") {
-                    steps {
-                        script {
-                            sh """
-                                //chmod +x gradlew
-                                ./gradlew clean
-                                ./gradlew build
-                            """
-                        }
-                    }
-                }
-                stage("Test") {
-                    steps {
-                        script {
-                            sh """
-                                ./gradlew test --stacktrace
-                            """
-                        }
-                    }
-                }
         stage("Report Jacoco") {
             steps {
                 script {

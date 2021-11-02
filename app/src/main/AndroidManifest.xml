@@ -53,6 +53,7 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+        <uses-library android:name="android.test.runner"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
