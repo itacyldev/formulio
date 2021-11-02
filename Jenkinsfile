@@ -26,26 +26,6 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
-        stage("Build") {
-            steps {
-                script {
-                    sh """
-                        chmod +x gradlew
-                        ./gradlew clean
-                        ./gradlew build
-                    """
-                }
-            }
-        }
-        stage("Test") {
-            steps {
-                script {
-                    sh """
-                        ./gradlew test --stacktrace
-                    """
-                }
-            }
-        }
         stage("Integration Test") {
             when {
                 expression{BRANCH_NAME == 'develop'}
@@ -53,6 +33,7 @@ pipeline {
             steps {
                 script {
                     sh '''#!/bin/bash
+                        chmod +x gradlew
                         export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
                         export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
 
@@ -73,11 +54,31 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
 
-                        ./gradlew clean connectedAndroidTest
+                        ./gradlew connectedAndroidTest
                     '''
                 }
             }
         }
+        stage("Build") {
+                    steps {
+                        script {
+                            sh """
+                                //chmod +x gradlew
+                                ./gradlew clean
+                                ./gradlew build
+                            """
+                        }
+                    }
+                }
+                stage("Test") {
+                    steps {
+                        script {
+                            sh """
+                                ./gradlew test --stacktrace
+                            """
+                        }
+                    }
+                }
         stage("Report Jacoco") {
             steps {
                 script {
