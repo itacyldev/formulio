@@ -53,8 +53,8 @@ pipeline {
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-                        	$ANDROID_HOME/platform-tools/adb devices
                         	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                        	$ANDROID_HOME/platform-tools/adb devices
                         fi
 
                         # Copiar bd tests
@@ -63,7 +63,7 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
 
-                        ./gradlew clean connectedAndroidTest --debug --stacktrace
+                        ./gradlew clean connectedAndroidTest --stacktrace
                     '''
                 }
             }
