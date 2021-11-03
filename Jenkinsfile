@@ -50,6 +50,16 @@ pipeline {
                         echo "num_devices: ${num_devices}"
                         $ANDROID_HOME/platform-tools/adb devices
 
+                        echo "Parando emulador..."
+                                            for device in `$ANDROID_HOME/platform-tools/adb devices`; do
+                                                if [[ $device = emulator* ]]; then
+                                                    echo "adb -s $device $@"
+                                                    `$ANDROID_HOME/platform-tools/adb -s $device $@ emu kill`
+                                                fi
+                                            done
+
+                           $ANDROID_HOME/platform-tools/adb devices
+
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
