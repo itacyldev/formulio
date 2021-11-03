@@ -48,6 +48,7 @@ pipeline {
                         $ANDROID_HOME/platform-tools/adb start-server
                         $ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
                         $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                        $ANDROID_HOME/platform-tools/adb devices
 
                         # Copiar bd tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
@@ -58,6 +59,7 @@ pipeline {
                         ./gradlew clean connectedAndroidTest --stacktrace
 
                         $ANDROID_HOME/platform-tools/adb kill-server
+                        $ANDROID_HOME/platform-tools/adb devices
                     '''
                 }
             }
@@ -84,5 +86,5 @@ pipeline {
             }
         }
     }
-    
+
 }
