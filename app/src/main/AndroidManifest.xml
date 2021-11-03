@@ -54,6 +54,8 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
+        <uses-library android:name="androidx.test.runner"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
