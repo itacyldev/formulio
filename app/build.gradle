@@ -139,12 +139,12 @@ dependencies {
     /////////////////////////////////////
 
     // Core library
-    androidTestImplementation 'androidx.test:core:1.4.0'
+    androidTestImplementation 'androidx.test:core:1.2.0'
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation('androidx.test:runner:1.4.0') {
         exclude group: 'net.sf.kxml', module: ''
     }
-    androidTestImplementation('androidx.test:rules:1.4.0') {
+    androidTestImplementation('androidx.test:rules:1.2.0') {
         exclude group: 'androidx.test', module: ''
     }
     // Assertions
@@ -162,8 +162,8 @@ dependencies {
     testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
     testImplementation 'androidx.fragment:fragment-testing:1.2.4'
-    testImplementation 'androidx.test:core:1.4.0'
-    testImplementation('androidx.test:rules:1.4.0') {
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation('androidx.test:rules:1.2.0') {
         exclude group: 'androidx.test', module: ''
     }
 }
