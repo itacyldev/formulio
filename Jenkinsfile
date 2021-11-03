@@ -31,8 +31,8 @@ pipeline {
                                 script {
                                     sh """
                                         chmod +x gradlew
-                                        ./gradlew clean
-                                        ./gradlew build
+                                        //./gradlew clean
+                                        //./gradlew build
                                     """
                                 }
                             }
@@ -41,7 +41,7 @@ pipeline {
                             steps {
                                 script {
                                     sh """
-                                        ./gradlew test --stacktrace
+                                        //./gradlew test 
                                     """
                                 }
                             }
@@ -102,10 +102,10 @@ pipeline {
     }
     post {
         failure {
-            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-            recipientProviders: [culprits()],
-            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            mimeType: 'text/html'
+            //emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            //recipientProviders: [culprits()],
+            //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            //mimeType: 'text/html'
 
 
             sh '''#!/bin/bash

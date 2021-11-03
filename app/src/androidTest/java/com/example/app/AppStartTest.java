@@ -67,7 +67,7 @@ public class AppStartTest {
 
         // check first element in view
         onView(withId(es.jcyl.ita.formic.forms.R.id.form_list))
-                .check(matches(hasDescendant(withText("form1-list"))));
+                .check(matches(hasDescendant(withText("Form Card"))));
 
     }
 }
