@@ -31,17 +31,6 @@ pipeline {
                                 script {
                                     sh """
                                         chmod +x gradlew
-                                        ./gradlew clean
-                                        ./gradlew build
-                                    """
-                                }
-                            }
-                        }
-                        stage("Test") {
-                            steps {
-                                script {
-                                    sh """
-                                        ./gradlew test
                                     """
                                 }
                             }
@@ -73,7 +62,7 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
 
-                        ./gradlew connectedAndroidTest
+                        ./gradlew connectedAndroidTest --stacktrace
                     '''
                 }
             }
