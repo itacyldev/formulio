@@ -122,21 +122,19 @@ pipeline {
             //recipientProviders: [culprits()],
             //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
             //mimeType: 'text/html'
-
-
+        }
+        always{
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo "num_devices: ${num_devices}"
                 $ANDROID_HOME/platform-tools/adb devices
-                if [ $num_devices -gt 0 ]; then
-                    echo "Parando emulador..."
-                    for device in `$ANDROID_HOME/platform-tools/adb devices`; do
-                        if [[ $device = emulator* ]]; then
-                            echo "adb -s $device $@"
-                            `$ANDROID_HOME/platform-tools/adb -s $device $@ emu kill`
-                        fi
-                    done
-                fi
+                echo "Parando emulador..."
+                for device in `$ANDROID_HOME/platform-tools/adb devices`; do
+                    if [[ $device = emulator* ]]; then
+                        echo "adb -s $device $@"
+                        `$ANDROID_HOME/platform-tools/adb -s $device $@ emu kill`
+                    fi
+                done
             '''
         }
     }
