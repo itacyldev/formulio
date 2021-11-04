@@ -55,9 +55,6 @@ pipeline {
                         export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
                         export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
 
-                        $ANDROID_HOME/platform-tools/adb kill-server
-                        $ANDROID_HOME/platform-tools/adb start-server
-
                         num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
 
                         echo "num_devices: ${num_devices}"
@@ -88,7 +85,7 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
 
-                        ./gradlew :app:connectedAndroidTest --scan
+                        ./gradlew :app:connectedAndroidTest --stacktrace --scan
                     '''
                 }
             }
