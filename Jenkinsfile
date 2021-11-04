@@ -104,16 +104,9 @@ pipeline {
             when {
                 expression{BRANCH_NAME == 'develop' || BRANCH_NAME == 'master'}
             }
-            environment {
-                scannerHome = tool 'SonarQube_4.6.2'
-            }
-            steps {
-                script {
-                    sh """
-                        ./gradlew sonarqube
-                    """
-                }
-            }
+            withSonarQubeEnv() { // Will pick the global server connection you have configured
+                  sh './gradlew sonarqube'
+             }
         }
     }
     post {
