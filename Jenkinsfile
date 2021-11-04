@@ -31,16 +31,6 @@ pipeline {
                 script {
                     sh """
                         chmod +x gradlew
-                        ./gradlew clean build
-                    """
-                }
-            }
-        }
-        stage("Test") {
-            steps {
-                script {
-                    sh """
-                        ./gradlew test
                     """
                 }
             }
