@@ -64,7 +64,7 @@ pipeline {
                         $ANDROID_HOME/platform-tools/adb devices
                         echo "-------------------------------------------------------------"
                         echo "-------------------------------------------------------------"
-                        
+
 
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
@@ -85,7 +85,7 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
 
-                        ./gradlew :app:connectedAndroidTest --scan
+                        ./gradlew clean :app:connectedAndroidTest --scan
                     '''
                 }
             }
