@@ -105,8 +105,8 @@ pipeline {
                 expression{BRANCH_NAME == 'develop' || BRANCH_NAME == 'master'}
             }
             steps {
-                script {
-                    withSonarQubeEnv() { // Will pick the global server connection you have configured
+                withSonarQubeEnv('SonarQube') {
+                    script {
                         sh './gradlew sonarqube'
                     }
                 }
