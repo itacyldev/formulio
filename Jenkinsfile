@@ -27,14 +27,24 @@ pipeline {
             }
         }
         stage("Build") {
-                            steps {
-                                script {
-                                    sh """
-                                        chmod +x gradlew
-                                    """
-                                }
-                            }
-                        }
+            steps {
+                script {
+                    sh """
+                        chmod +x gradlew
+                        ./gradlew clean build
+                    """
+                }
+            }
+        }
+        stage("Test") {
+            steps {
+                script {
+                    sh """
+                        ./gradlew test
+                    """
+                }
+            }
+        }
         stage("Integration Test") {
             when {
                 expression{BRANCH_NAME == 'develop'}
