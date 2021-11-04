@@ -105,7 +105,7 @@ pipeline {
                 expression{BRANCH_NAME == 'develop' || BRANCH_NAME == 'master'}
             }
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv(){
                     script {
                         sh './gradlew sonarqube'
                     }
