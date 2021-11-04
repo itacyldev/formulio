@@ -86,7 +86,7 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
 
-                        ./gradlew connectedAndroidTest --stacktrace --scan
+                        ./gradlew :app:connectedAndroidTest --stacktrace --scan
                     '''
                 }
             }
@@ -114,7 +114,12 @@ pipeline {
         }
     }
     post {
-        always{
+        failure {
+            //emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            //recipientProviders: [culprits()],
+            //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            //mimeType: 'text/html'
+            
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo "num_devices: ${num_devices}"
