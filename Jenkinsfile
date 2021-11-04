@@ -58,13 +58,25 @@ pipeline {
                         num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
 
                         echo "num_devices: ${num_devices}"
+                        echo "-------------------------------------------------------------"
+                        echo "-------------------------------------------------------------"
+                        echo "Antes:"
                         $ANDROID_HOME/platform-tools/adb devices
+                        echo "-------------------------------------------------------------"
+                        echo "-------------------------------------------------------------"
 
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
                         	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
                         	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
                         fi
+
+                        echo "-------------------------------------------------------------"
+                        echo "-------------------------------------------------------------"
+                        echo "Después: "
+                        $ANDROID_HOME/platform-tools/adb devices
+                        echo "-------------------------------------------------------------"
+                        echo "-------------------------------------------------------------"
 
                         # Copiar bd tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
