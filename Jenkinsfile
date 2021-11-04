@@ -45,24 +45,34 @@ pipeline {
                         export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
                         export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
 
-                        num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
+                        # doing android emulator stuff manual
+                        $ANDROID_HOME/platform-tools/adb start-server
+                        $ANDROID_HOME/emulator/emulator -prop persist.sys.language=de -prop persist.sys.country=DE -avd $AVD_IMAGE -no-window -no-audio &
+                        EMULATOR_PID=$!
 
-                        echo "num_devices: ${num_devices}"
+                        # Wait for Android to finish booting
+                        WAIT_CMD="$ANDROID_HOME/platform-tools/adb wait-for-device shell getprop init.svc.bootanim"
+                        until $WAIT_CMD | grep -m 1 stopped; do
+                          echo "Waiting..."
+                          sleep 1
+                        done
+
                         $ANDROID_HOME/platform-tools/adb devices
 
-                        if [ $num_devices -eq 0 ]; then
-                        	echo "Arrancando emulador..."
-                        	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-                        	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
-                        fi
+                        [ -d build ] || mkdir build
+                        $ANDROID_HOME/platform-tools/adb shell logcat -v time > build/logcat.log &
+                        LOGCAT_PID=$!
+                        $ANDROID_HOME/platform-tools/adb shell wm dismiss-keyguard
+                        $ANDROID_HOME/platform-tools/adb shell input keyevent 4
 
-                        # Copiar bd tests
-                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
+                        # run tests
+                        ./gradlew --continue connectedAndroidTest || echo "failed"
 
-                        # Copiar proyectos tests
-                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
+                        # Stop the background processes
+                        kill $LOGCAT_PID
+                        kill $EMULATOR_PID
 
-                        ./gradlew clean connectedAndroidTest --scan
+                        $ANDROID_HOME/platform-tools/adb devices
                     '''
                 }
             }
