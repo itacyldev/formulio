@@ -64,6 +64,7 @@ pipeline {
                         $ANDROID_HOME/platform-tools/adb devices
                         echo "-------------------------------------------------------------"
                         echo "-------------------------------------------------------------"
+                        
 
                         if [ $num_devices -eq 0 ]; then
                         	echo "Arrancando emulador..."
