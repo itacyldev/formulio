@@ -102,7 +102,10 @@ pipeline {
         }
         stage("Sonarqube") {
             when {
-                expression{BRANCH_NAME == 'develop'}
+                expression{BRANCH_NAME == 'develop' || BRANCH_NAME == 'master'}
+            }
+            environment {
+                scannerHome = tool 'SonarQube_4.6.2'
             }
             steps {
                 script {
