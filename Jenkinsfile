@@ -6,7 +6,6 @@ pipeline {
         PROJECT_NAME = 'FRMDRD'
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
     }
-
     stages {
         stage("Milestone check") {
             steps {
@@ -119,7 +118,7 @@ pipeline {
             //recipientProviders: [culprits()],
             //subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
             //mimeType: 'text/html'
-            
+
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo "num_devices: ${num_devices}"
