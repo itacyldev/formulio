@@ -4,9 +4,20 @@ pipeline {
 
     environment {
         PROJECT_NAME = 'FRMDRD'
-        GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
+        //GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
+        GIT_URL = "git@itaul4622:ITACyL/${PROJECT_NAME}.git"
     }
+    options {
+            skipDefaultCheckout(true)
+        }
     stages {
+        stage("BUG"){
+            steps {
+                sh 'git remote set-url origin "git@itaul4622:ITACyL/${PROJECT_NAME}.git"'
+                sh 'git config --get remote.origin.url'
+                sh 'git remote show origin'
+            }
+        }
         stage("Milestone check") {
             steps {
                 script {
