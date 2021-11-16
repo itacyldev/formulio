@@ -93,11 +93,13 @@ task codeCoverageReport(type: JacocoReport) {
 
 
     def coverageMainSrc = ["${rootDir}/app/src/main/java",
-                           "${rootDir}/forms/src/main/java"
+                           "${rootDir}/forms/src/main/java",
+                           "${rootDir}/repo/src/main/java"
     ]
 
     def coverageDebugTree = [fileTree(dir: "${rootDir}/app/build/intermediates/javac/debug/classes", excludes: fileFilter),
-                             fileTree(dir: "${rootDir}/forms/build/intermediates/javac/debug/classes", excludes: fileFilter)
+                             fileTree(dir: "${rootDir}/forms/build/intermediates/javac/debug/classes", excludes: fileFilter),
+                             fileTree(dir: "${rootDir}/repo/build/intermediates/javac/debug/classes", excludes: fileFilter)
     ]
 
     getSourceDirectories().setFrom(files(coverageMainSrc))
