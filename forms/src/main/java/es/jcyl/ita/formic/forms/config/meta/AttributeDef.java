@@ -39,6 +39,7 @@ public class AttributeDef {
     // component description
     public static final Attribute NAME = new Attribute("name");
     public static final Attribute DESCRIPTION = new Attribute("description");
+    public static final Attribute MAIN_FORM = new Attribute("mainForm", Boolean.class);
 
     // edit view
     public static final Attribute MAINFORM = new Attribute("mainForm");
