@@ -60,6 +60,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAIN_FORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
@@ -116,7 +117,7 @@ public class TagDef {
         Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
 
         Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ALLOWS_PARTIAL_RESTORE};
-        register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
+        register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAIN_FORM}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
         register("view", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR, MAINFORM}));
