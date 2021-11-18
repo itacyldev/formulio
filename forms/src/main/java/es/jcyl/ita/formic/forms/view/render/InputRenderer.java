@@ -85,12 +85,12 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         setInputView(env, widget);
 
         //Info button
-        setInfoButton(env, widget);
-        setVisibilityInfoButton(env, widget);
+        setInfoButton(widget);
+        setVisibilityInfoButton(widget);
         setOnClickListenerInfoButton(env, widget);
 
         //Clear button
-        setResetButton(env, widget);
+        setResetButton(widget);
         setVisibilityResetButton(env, widget);
 
         // implement specific component rendering
@@ -103,13 +103,13 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         setValueInView(env, widget);
         setMessages(env, widget);
 
-        if ((fieldLabel == null || StringUtils.isEmpty(component.getLabel())) && MessageHelper.getMessage(env, component)==null) {
+        if (fieldLabel!=null && StringUtils.isEmpty(component.getLabel()) && MessageHelper.getMessage(env, component)==null) {
             fieldLabel.setVisibility(View.GONE);
         }
 
     }
 
-    protected void setInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+    protected void setInfoButton(InputWidget<C, I> widget){
         I infoButton = (I) ViewHelper.findViewAndSetId(widget, getInfoButtonId());
         C component = widget.getComponent();
         component.setInfoButton((ImageView) infoButton);
@@ -120,41 +120,31 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         ImageView infoButton = component.getInfoButton();
         String hint = component.getHint();
 
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-                final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
-                TextView titleView = view.findViewById(R.id.info);
+        infoButton.setOnClickListener(arg0 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
+            final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+            TextView titleView = view.findViewById(R.id.info);
 
-                titleView.setText(Html.fromHtml(hint, new Html.ImageGetter() {
+            titleView.setText(Html.fromHtml(hint, source -> {
 
-                    @Override
-                    public Drawable getDrawable(String source) {
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                File file = new File(path + File.separator + source);
 
-                        /*int resourceId = env.getAndroidContext().getResources().getIdentifier(source, "drawable", env.getAndroidContext().getApplicationContext().getPackageName());
-                        Drawable drawable = env.getAndroidContext().getResources().getDrawable(resourceId);*/
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                Drawable drawable = new BitmapDrawable(env.getAndroidContext().getResources(), bitmap);
+                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
-                        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                        File file = new File(path + File.separator + source);
+                return drawable;
+            }, null));
 
-                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                        Drawable drawable = new BitmapDrawable(env.getAndroidContext().getResources(), bitmap);
-                        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-
-                        return drawable;
-                    }
-                }, null));
-
-                builder.setCustomTitle(view)
-                        .setPositiveButton("OK", null);
-                Dialog dialog = builder.create();
-                dialog.show();
-            }
+            builder.setCustomTitle(view)
+                    .setPositiveButton("OK", null);
+            Dialog dialog = builder.create();
+            dialog.show();
         });
     }
 
-    protected void setVisibilityInfoButton(RenderingEnv env, InputWidget<C, I> widget){
+    protected void setVisibilityInfoButton(InputWidget<C, I> widget){
         C component = widget.getComponent();
         String hint = component.getHint();
         if (StringUtils.isBlank(hint)){
@@ -162,17 +152,16 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         }
     }
 
-    protected void setResetButton(RenderingEnv env, InputWidget<C, I> widget){
+    protected void setResetButton(InputWidget<C, I> widget){
         // set clear button
         I resetButton = (I) ViewHelper.findViewAndSetId(widget, getResetButtonId());
         C component = widget.getComponent();
-        //UIInputComponent component = (UIInputComponent) widget.getComponent();
         component.setResetButton((ImageView) resetButton);
     }
 
     protected void setVisibilityResetButton(RenderingEnv env, InputWidget<C, I> widget){
         C component = widget.getComponent();
-        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)
+        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))
                 || !component.hasDeleteButton()) {
             component.getResetButton().setVisibility(View.GONE);
         }
@@ -230,13 +219,11 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         String inputTag = getInputTag(component);
         inputView.setTag(inputTag);
         inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
-        //inputView.setFocusableInTouchMode(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
     }
 
     protected void setVisibiltyButtonLayout(InputWidget<C, I> widget, boolean hasLabel, ImageView resetButton, ImageView infoButton){
         if (!isInfoButtonVisible(infoButton) && !isResetButtonVisible(resetButton) && !hasLabel){
-            ViewGroup layout = (ViewGroup) ViewHelper.findViewAndSetId(widget, getButtonsLayoutId(), ViewGroup.class);
-            //ViewGroup layout = (ViewGroup) resetButton.getParent();
+            ViewGroup layout = ViewHelper.findViewAndSetId(widget, getButtonsLayoutId(), ViewGroup.class);
             layout.setVisibility(View.GONE);
         }
     }

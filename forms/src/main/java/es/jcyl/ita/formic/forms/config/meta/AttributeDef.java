@@ -39,6 +39,7 @@ public class AttributeDef {
     // component description
     public static final Attribute NAME = new Attribute("name");
     public static final Attribute DESCRIPTION = new Attribute("description");
+    public static final Attribute MAIN_FORM = new Attribute("mainForm", Boolean.class);
 
     // edit view
     public static final Attribute MAINFORM = new Attribute("mainForm");
@@ -106,11 +107,6 @@ public class AttributeDef {
 
     public static final Attribute WEIGHTS = new Attribute("weights", String.class);
     public static final Attribute BORDER = new Attribute("border", Boolean.class);
-
-    // image
-    public static final Attribute HAS_SKETCH_BUTTON = new Attribute("hasSketchButton", Boolean.class);
-    public static final Attribute HAS_CAMERA_BUTTON = new Attribute("hasCameraButton", Boolean.class);
-    public static final Attribute HAS_GALLERY_BUTTON = new Attribute("hasGalleryButton", Boolean.class);
 
     // text style
     public static final Attribute FONT_SIZE = new Attribute("fontSize", String.class);

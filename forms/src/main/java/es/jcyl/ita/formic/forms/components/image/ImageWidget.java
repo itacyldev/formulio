@@ -66,84 +66,65 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         super(context, attrs, defStyle);
     }
 
+    @Override
     public void setup(RenderingEnv env) {
         // check components to show
         setCameraButton(env);
 
-        setGalleryButton();
+        setGalleryButton(env);
 
-        setEditButton(env);
+        setSketchButton(env);
 
         this.mainEntity = env.getWidgetContext().getEntity();
     }
 
-    private void setGalleryButton() {
+    private void setCameraButton(RenderingEnv env) {
+        Button cameraButton = this.findViewById(R.id.btn_camera);
+        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
+            cameraButton.setEnabled(false);
+        } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
+            cameraButton.setVisibility(View.INVISIBLE);
+        } else {
+            cameraButton.setOnClickListener(v -> launcher.launch(null));
+        }
+    }
+
+    private void setSketchButton(RenderingEnv env) {
+        Button sketchButton = this.findViewById(R.id.btn_sketch);
+        ImageResourceView inputView = this.getInputView();
+        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
+            sketchButton.setEnabled(false);
+        } else if (!component.isSketchActive()) {
+            sketchButton.setVisibility(View.INVISIBLE);
+        } else {
+            sketchButton.setOnClickListener((View v) -> {
+                SketchDialog sketchDialog = new
+                        SketchDialog(env.getFormActivity().getActivity(), inputView);
+                sketchDialog.getWindow().setBackgroundDrawable(new ColorDrawable
+                        (Color.TRANSPARENT));
+                sketchDialog.show();
+
+                sketchDialog.setOnDismissListener((DialogInterface dialog) -> {
+                    Bitmap imageData = sketchDialog.getBitmap();
+                    if (imageData != null) {
+                        setImageBitmap(imageData);
+                    }
+                });
+            });
+        }
+    }
+
+    private void setGalleryButton(RenderingEnv env) {
         Button galleryButton = this.findViewById(R.id.btn_gallery);
         galleryButton.setEnabled(false);
         // TODO::
-        /*if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
-            galleryButton.setVisibility(View.INVISIBLE);
-        }
-        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
+
+        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
             galleryButton.setEnabled(false);
-        } else if (!component.hasGalleryButton()) {
-            galleryButton.setVisibility(View.GONE);
+        } else if (!component.isGalleryActive()) {
+            galleryButton.setVisibility(View.INVISIBLE);
         } else {
-            galleryButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    gallerySelector.launch();
-                }
-            });
-        }*/
-    }
-
-    private void setCameraButton(RenderingEnv env) {
-        Button cameraButton = this.findViewById(R.id.btn_camera);
-        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-            cameraButton.setEnabled(false);
-        } else if (!component.isCameraActive() || !component.hasCameraButton()) {// TODO: or device has no camera (check throw context.device)
-            cameraButton.setVisibility(View.GONE);
-        } else {
-            cameraButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    launcher.launch(null);
-                }
-            });
-        }
-    }
-
-    private void setEditButton(RenderingEnv env) {
-        Button editButton = this.findViewById(R.id.btn_edit);
-        ImageResourceView inputView = this.getInputView();
-        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-            editButton.setEnabled(false);
-        } else if (!component.hasSketchButton()) {
-            editButton.setVisibility(View.GONE);
-        } else {
-            editButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    SketchDialog sketchDialog = new
-                            SketchDialog(env.getFormActivity().getActivity(), inputView);
-                    sketchDialog.getWindow().setBackgroundDrawable(new ColorDrawable
-                            (Color.TRANSPARENT));
-                    sketchDialog.show();
-
-                    sketchDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            Bitmap imageData = sketchDialog.getBitmap();
-                            if (imageData != null) {
-                                setImageBitmap(imageData);
-                            }
-                        }
-                    });
-                }
-            });
+            galleryButton.setOnClickListener((View v) -> gallerySelector.launch());
         }
     }
 

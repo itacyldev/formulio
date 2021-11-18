@@ -31,6 +31,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
@@ -65,8 +66,8 @@ public class AppStartTest {
                 .perform(click());
 
         // check first element in view
-        onView(RecyclerViewMatcher.withRecyclerView(es.jcyl.ita.formic.forms.R.id.form_list).atPosition(0))
-                .check(matches(hasDescendant(withText("form1-list"))));
+        onView(withId(es.jcyl.ita.formic.forms.R.id.form_list))
+                .check(matches(hasDescendant(withText("Form Card"))));
 
     }
 }
