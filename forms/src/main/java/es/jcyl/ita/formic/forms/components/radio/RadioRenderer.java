@@ -86,7 +86,14 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
                 }
             }
         });
+
         setOnClickListenerResetButton(widget);
+
+        if (component.isReadonly(env.getWidgetContext())) {
+            for (int index = 0; index < radioGroup.getChildCount(); index++) {
+                radioGroup.getChildAt(index).setEnabled(false);
+            }
+        }
     }
 
     private void setOnClickListenerResetButton(InputWidget<UIRadio, RadioGroup> widget) {
