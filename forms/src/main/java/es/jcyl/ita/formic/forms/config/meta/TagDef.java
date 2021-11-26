@@ -113,6 +113,8 @@ public class TagDef {
 
     private static String ACTION_TAGS[] = {"action", "add", "create", "update", "save", "cancel", "delete", "nav"};
 
+    private static String BASE_TAGS[] = {"main", "list", "edit", "view", "form"};
+
     private static void initialize() {
         Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
 
@@ -244,6 +246,15 @@ public class TagDef {
 
     public static boolean isActionTag(String tagName) {
         for (String tag : ACTION_TAGS) {
+            if (tagName.toLowerCase().equals(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isBaseTag(String tagName) {
+        for (String tag : BASE_TAGS) {
             if (tagName.toLowerCase().equals(tag)) {
                 return true;
             }

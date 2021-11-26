@@ -141,6 +141,14 @@
 
                     <image id="image3" converter="b64Image" embedded="true" label="10. Imagen: " value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
 
+                    <image converter="b64Image" embedded="true" label="11. Imagen: " value="${entity.image_thumb}" hint="Hint 11. Imagen" inputType="1"/>
+                    <image converter="b64Image" embedded="true" label="12. Imagen: " value="${entity.image_thumb}" hint="Hint 12. Imagen" inputType="2"/>
+                    <image converter="b64Image" embedded="true" label="13. Imagen: " value="${entity.image_thumb}" hint="Hint 13. Imagen" inputType="3"/>
+                    <image converter="b64Image" embedded="true" label="14. Imagen: " value="${entity.image_thumb}" hint="Hint 14. Imagen" inputType="4"/>
+                    <image converter="b64Image" embedded="true" label="15. Imagen: " value="${entity.image_thumb}" hint="Hint 15. Imagen" inputType="5"/>
+                    <image converter="b64Image" embedded="true" label="16. Imagen: " value="${entity.image_thumb}" hint="Hint 16. Imagen" inputType="6"/>
+                    <image converter="b64Image" embedded="true" label="17. Imagen: " value="${entity.image_thumb}" hint="Hint 17. Imagen" inputType="7"/>
+
                 </tabitem>
                 <tabitem label="Tab 2: Table">
 

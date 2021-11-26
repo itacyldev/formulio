@@ -42,6 +42,7 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
+import es.jcyl.ita.formic.forms.config.meta.TagDef;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ReadingProcessListener;
 import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
@@ -156,7 +157,12 @@ public class XmlConfigFileReader {
                 // use filename as id
                 id = FilenameUtils.getBaseName(this.currentFile);
             } else {
-                Set<String> tags = ids.containsKey(tag) ? ids.get(tag) : Collections.EMPTY_SET;
+                Set<String> tags;
+                if (TagDef.isBaseTag(tag)){
+                    tags = this.resolver.getIdsForTag(tag);
+                }else {
+                    tags = ids.containsKey(tag) ? ids.get(tag) : Collections.EMPTY_SET;
+                }
                 id = tag + (tags.size() + 1);  // table1, table2, table3,..
             }
             node.setId(id);
