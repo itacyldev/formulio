@@ -47,6 +47,7 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
 
     @Override
     protected void composeWidget(RenderingEnv env, Widget<UIRow> widget) {
+        // Do nothing
     }
 
     @Override

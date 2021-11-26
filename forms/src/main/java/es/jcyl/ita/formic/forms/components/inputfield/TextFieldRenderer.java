@@ -99,7 +99,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
     }
 
     protected void adjustBounds() {
-
+        // Do nothing
     }
 
     private void executeUserAction(RenderingEnv env, Widget widget) {
@@ -122,6 +122,7 @@ public class TextFieldRenderer extends InputTextRenderer<UIField, EditText> {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
             }
 
             @Override
