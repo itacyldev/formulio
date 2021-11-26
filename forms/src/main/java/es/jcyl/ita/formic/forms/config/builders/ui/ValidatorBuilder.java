@@ -40,10 +40,12 @@ public class ValidatorBuilder extends AbstractComponentBuilder<Validator> {
 
     @Override
     protected void doWithAttribute(Validator element, String name, String value) {
+        // Do nothing
     }
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<Validator> node) {
+        // Do nothing
     }
 
     @Override
