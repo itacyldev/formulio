@@ -83,6 +83,7 @@ public class DevConsoleActivity extends BaseActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
             }
         });
 
@@ -106,10 +107,12 @@ public class DevConsoleActivity extends BaseActivity {
         filterBy.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Do nothing
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Do nothing
             }
 
             @Override

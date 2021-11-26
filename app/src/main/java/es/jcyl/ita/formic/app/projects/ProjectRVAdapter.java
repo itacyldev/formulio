@@ -127,6 +127,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             }
             @Override
             protected void onProgressUpdate(Integer... values) {
+                // Do nothing
             }
         }
     }

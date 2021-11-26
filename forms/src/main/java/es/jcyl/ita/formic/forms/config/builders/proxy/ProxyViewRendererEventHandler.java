@@ -38,10 +38,12 @@ public class ProxyViewRendererEventHandler implements ViewRendererEventHandler {
 
     @Override
     public void onViewStart(UIView view) {
+        //Do nothing
     }
 
     @Override
     public void onEntityContextChanged(Entity entity) {
+        //Do nothing
     }
 
     @Override
@@ -51,16 +53,16 @@ public class ProxyViewRendererEventHandler implements ViewRendererEventHandler {
 
     @Override
     public void onBeforeRenderComponent(UIComponent component) {
-
+        //Do nothing
     }
 
     @Override
     public void onAfterRenderComponent(Widget widget) {
-
+        //Do nothing
     }
 
     @Override
     public void onViewEnd(ViewWidget viewWidget) {
-
+        //Do nothing
     }
 }
