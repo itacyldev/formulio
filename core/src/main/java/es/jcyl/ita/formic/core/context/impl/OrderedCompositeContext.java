@@ -39,6 +39,7 @@ import es.jcyl.ita.formic.core.context.Context;
 public class OrderedCompositeContext extends AbstractMapContext
         implements CompositeContext {
 
+    public static final String PRINT_SEPARATOR = "===============================================";
     private static final long serialVersionUID = 3866386326635253930L;
 
     private static final String ASTERISK_CTX = "*";
@@ -55,7 +56,7 @@ public class OrderedCompositeContext extends AbstractMapContext
     private final Map<String, Context> contexts = new LinkedHashMap<String, Context>();
 
     public OrderedCompositeContext() {
-
+        // Do nothing
     }
 
     /*
@@ -494,7 +495,7 @@ public class OrderedCompositeContext extends AbstractMapContext
             m.put(key, this.getValue(key));
         }
 
-        printable.add("===============================================");
+        printable.add(PRINT_SEPARATOR);
         printable.add(this.getClass().getName());
         printable.add("========= Loaded contexts ============");
         Collection<Context> collection = this.getPlainContextList();
@@ -504,11 +505,11 @@ public class OrderedCompositeContext extends AbstractMapContext
                     context.getClass().getSimpleName(), context.getPrefix());
             printable.add(line);
         }
-        printable.add("===============================================");
+        printable.add(PRINT_SEPARATOR);
         for (Object ks : m.keySet()) {
             printable.add(this.printPropertyLine(m, keysOrigin, (String) ks));
         }
-        printable.add("===============================================");
+        printable.add(PRINT_SEPARATOR);
         return printable;
     }
 
