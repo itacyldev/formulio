@@ -53,7 +53,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
     @Override
     protected void doWithAttribute(RepoConfig element, String name, String value) {
-
+        // Do nothing
     }
 
     @Override
@@ -93,7 +93,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
-
+        // Do nothing
     }
 
     /**
@@ -137,6 +137,5 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
         builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
         return builder.build();
     }
-
 
 }

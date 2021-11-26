@@ -37,6 +37,7 @@ public class UILinkBuilder extends BaseUIComponentBuilder<UILink> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UILink> node) {
+        // Do nothing
     }
 
     @Override

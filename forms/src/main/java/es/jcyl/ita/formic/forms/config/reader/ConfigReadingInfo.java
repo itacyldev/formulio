@@ -48,14 +48,17 @@ public class ConfigReadingInfo implements ReadingProcessListener {
 
     @Override
     public void fileEnd(String currentFile) {
+        // Do nothing
     }
 
     @Override
     public void viewStart(ConfigNode node) {
+        // Do nothing
     }
 
     @Override
     public void viewEnd(ConfigNode node) {
+        // Do nothing
     }
 
     public static XmlPullParser getXpp() {
@@ -78,6 +81,6 @@ public class ConfigReadingInfo implements ReadingProcessListener {
 
     @Override
     public void elementEnd(ConfigNode node) {
-
+        // Do nothing
     }
 }
