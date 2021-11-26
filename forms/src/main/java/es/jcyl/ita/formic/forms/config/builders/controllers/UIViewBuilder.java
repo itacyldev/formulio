@@ -111,6 +111,8 @@ public class UIViewBuilder extends AbstractComponentBuilder<UIView> {
                         view.setBottomNav((UIButtonBar) component);
                         toRemove.add(component);
                         break;
+                    case DEFAULT:
+                        break;
                 }
             }
         }
