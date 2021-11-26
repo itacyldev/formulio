@@ -41,6 +41,7 @@ public class UIDatatableRenderer extends AbstractGroupRenderer<UIDatatable, Data
 
     @Override
     protected void composeWidget(RenderingEnv env, DatatableWidget widget) {
+        // Do nothing
     }
 
     @Override

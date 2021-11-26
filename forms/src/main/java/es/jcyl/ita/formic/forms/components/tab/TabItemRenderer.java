@@ -34,6 +34,7 @@ public class TabItemRenderer extends AbstractGroupRenderer<UITabItem, Widget<UIT
 
     @Override
     protected void composeWidget(RenderingEnv env, Widget<UITabItem> widget) {
+        // Do nothing
     }
 
     @Override

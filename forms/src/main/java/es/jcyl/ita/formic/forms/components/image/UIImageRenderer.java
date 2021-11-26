@@ -110,7 +110,7 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
 
     @Override
     protected void setMessages(RenderingEnv env, InputWidget<UIImage, ImageResourceView> widget) {
-
+        // Do nothing
     }
 
     private String getEntityProp(UIImage component, UIForm form) {

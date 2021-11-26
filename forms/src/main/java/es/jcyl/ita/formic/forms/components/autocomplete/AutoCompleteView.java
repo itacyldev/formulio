@@ -189,6 +189,7 @@ public class AutoCompleteView extends AppCompatAutoCompleteTextView {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
             }
 
             @Override

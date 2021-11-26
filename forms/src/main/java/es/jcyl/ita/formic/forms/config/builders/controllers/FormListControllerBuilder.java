@@ -28,7 +28,6 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 import static es.jcyl.ita.formic.forms.config.DevConsole.info;
 import static es.jcyl.ita.formic.forms.config.builders.controllers.UIViewBuilder.ENTITY_SELECTOR_SET;
 
@@ -47,6 +46,7 @@ public class FormListControllerBuilder extends AbstractComponentBuilder<FormList
 
     @Override
     protected void doWithAttribute(FormListController element, String name, String value) {
+        // Do nothing
     }
 
     @Override

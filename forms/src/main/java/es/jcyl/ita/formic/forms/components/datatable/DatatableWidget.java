@@ -140,6 +140,7 @@ public class DatatableWidget extends Widget<UIDatatable>
             public void onScroll(final AbsListView view,
                                  final int firstVisibleItem, final int visibleItemCount,
                                  final int totalItemCount) {
+                // Do nothing
             }
         });
     }
@@ -279,10 +280,12 @@ public class DatatableWidget extends Widget<UIDatatable>
         filterText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Do nothing
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Do nothing
             }
 
             @Override

@@ -30,6 +30,7 @@ public class UIColumn extends AbstractUIComponent {
     private Boolean ordering = true;
 
     public UIColumn() {
+        // Do nothing
     }
 
     public String getHeaderText() {
