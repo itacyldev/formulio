@@ -150,6 +150,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     case R.id.action_forms:
                         loadFragment(new FormListFragment());
                         break;
+                    default:
+                        break;
                 }
                 return true;
             }
@@ -243,34 +245,32 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean allAcepted = true;
-                    for (int result : grantResults) {
-                        if (result != PackageManager.PERMISSION_GRANTED) {
-                            allAcepted = false;
-                            break;
-                        }
+        if (requestCode == PERMISSION_REQUEST){
+            if (grantResults.length > 0) {
+                boolean allAcepted = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allAcepted = false;
+                        break;
                     }
-                    if (allAcepted) {
-                        doInitConfiguration();
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder
-                                (this);
-                        builder.setTitle(R.string.permissions);
-                        builder.setMessage(R.string.mustacceptallpermits)
-                                .setPositiveButton(R.string.accept, new
-                                        DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.dismiss();
-                                                finish();
-                                            }
-                                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
+                }
+                if (allAcepted) {
+                    doInitConfiguration();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder
+                            (this);
+                    builder.setTitle(R.string.permissions);
+                    builder.setMessage(R.string.mustacceptallpermits)
+                            .setPositiveButton(R.string.accept, new
+                                    DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             }
         }
