@@ -29,6 +29,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +61,7 @@ public class XmlConfigFileReader {
     private XmlPullParserFactory factory;
     private ComponentBuilderFactory builderFactory = ComponentBuilderFactory.getInstance();
     private ComponentResolver resolver;
+    Map<String, Set<String>> ids;
     private String currentFile;
 
     public XmlConfigFileReader() {
@@ -65,6 +69,7 @@ public class XmlConfigFileReader {
             this.factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(false);
             resolver = new ComponentResolver();
+            ids = new HashMap<String, Set<String>>();
             builderFactory.setComponentResolver(resolver);
             List<ReadingProcessListener> listeners = builderFactory.getListeners();
             addListeners(listeners);
@@ -151,12 +156,16 @@ public class XmlConfigFileReader {
                 // use filename as id
                 id = FilenameUtils.getBaseName(this.currentFile);
             } else {
-                Set<String> tags = this.resolver.getIdsForTag(tag);
+                Set<String> tags = ids.containsKey(tag) ? ids.get(tag) : Collections.EMPTY_SET;
                 id = tag + (tags.size() + 1);  // table1, table2, table3,..
             }
             node.setId(id);
         }
         this.resolver.addComponentId(node.getName(), node.getId());
+        if (!ids.containsKey(node.getName())) {
+            ids.put(node.getName(), new HashSet<String>());
+        }
+        ids.get(node.getName()).add(node.getId());
     }
 
 
