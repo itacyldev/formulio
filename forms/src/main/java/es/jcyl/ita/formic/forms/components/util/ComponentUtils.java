@@ -9,6 +9,8 @@ import java.util.StringTokenizer;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 public class ComponentUtils {
     private static final String DELIM = ",";
     private static final int NUM_100 = 100;
@@ -75,7 +77,7 @@ public class ComponentUtils {
         if (weigthts != null && i < weigthts.length) {
             TableRow.LayoutParams lp = new TableRow.LayoutParams();
             lp.weight = 1; //column weight
-            lp = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, weigthts[i]);
+            lp = new TableRow.LayoutParams(0, MATCH_PARENT, weigthts[i]);
             view.setLayoutParams(lp);
         }
     }

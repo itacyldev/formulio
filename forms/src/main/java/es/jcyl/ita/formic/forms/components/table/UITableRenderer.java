@@ -17,6 +17,8 @@ import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -70,7 +72,7 @@ public class UITableRenderer extends AbstractGroupRenderer<UITable, Widget<UITab
                 TextView headerCell = ViewHelper.findViewAndSetId(headerLayout, R.id.header_view, TextView.class);
                 headerLayout.removeView(headerCell);
                 headerCell.setText(h);
-                row.addView(headerCell, new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT));
+                row.addView(headerCell, new TableRow.LayoutParams(MATCH_PARENT));
 
                 boolean isLastCell= i != splits.length - 1;
 
