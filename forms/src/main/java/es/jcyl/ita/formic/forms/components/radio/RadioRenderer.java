@@ -3,6 +3,7 @@ package es.jcyl.ita.formic.forms.components.radio;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EntityMapping;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -142,10 +145,10 @@ public class RadioRenderer extends InputRenderer<UIRadio, RadioGroup> {
 
     private static void setLayoutParams(float[] weigthts, int i, View view, int orientationType) {
         if (weigthts != null && i < weigthts.length) {
-            if (orientationType == RadioGroup.HORIZONTAL) {
-                view.setLayoutParams(new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT, weigthts[i]));
+            if (orientationType == LinearLayout.HORIZONTAL) {
+                view.setLayoutParams(new RadioGroup.LayoutParams(0, MATCH_PARENT, weigthts[i]));
             } else {
-                view.setLayoutParams(new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, 0, weigthts[i]));
+                view.setLayoutParams(new RadioGroup.LayoutParams(MATCH_PARENT, 0, weigthts[i]));
             }
         }
     }

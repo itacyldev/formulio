@@ -41,6 +41,8 @@ import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import static es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder.ENTITY_TYPE_ID;
+import static es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder.SOURCE;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -123,9 +125,9 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
         if (eSource == null) {
             EntitySourceBuilder builder;
             builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, source);
+            builder.withProperty(SOURCE, source);
             builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, tableName);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, entityId);
+            builder.withProperty(ENTITY_TYPE_ID, entityId);
             eSource = builder.build();
         }
 

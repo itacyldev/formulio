@@ -10,6 +10,8 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 /*
  * Copyright 2020 Gustavo Río Briones (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -74,10 +76,10 @@ public class UIDatatableRenderer extends AbstractGroupRenderer<UIDatatable, Data
      */
     private void setLayoutParams(@NonNull ListView tableView,
                                  @NonNull Context context, @NonNull UIDatatable component) {
-        final int layout_width = ListView.LayoutParams.MATCH_PARENT;
+        final int layout_width = MATCH_PARENT;
         final int layout_height;
         if (component.getNumVisibleRows() < 0) {
-            layout_height = ListView.LayoutParams.MATCH_PARENT;
+            layout_height = MATCH_PARENT;
         } else {
             layout_height = (int) (context.getResources().getDisplayMetrics().density *
                     ROW_HEIGHT_DP *
