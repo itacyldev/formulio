@@ -25,7 +25,7 @@ pipeline {
                 archiveArtifacts '**/build/outputs/**/*.apk'
 
                 // Upload the APK to Google Play
-                androidApkUpload googleCredentialsId: 'Google Play', apkFilesPattern: '**/*-release*.apk', trackName: 'alpha',  rolloutPercentage: '25'
+                androidApkUpload googleCredentialsId: 'Google Play', apkFilesPattern: '**/build/outputs/**/*.apk', trackName: 'alpha',  rolloutPercentage: '25'
 
             }
         }
