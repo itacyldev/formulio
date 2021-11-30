@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
-            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
+            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), BaseTransientBottomBar.LENGTH_LONG);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
