@@ -17,14 +17,16 @@ pipeline {
                 }
             }
         }
-        
+
         stage("Build Apk") {
             steps{
                 script {
-                    sh """
-                        chmod +x gradlew
-                        ./gradlew assembleRelease
-                    """
+                    withCredentials([file(credentialsId: 'android_keystore', variable: 'KEYFILE')]) {
+                        sh """
+                            chmod +x gradlew
+                            ./gradlew assembleRelease
+                        """
+                    }
                 }
             }
         }
