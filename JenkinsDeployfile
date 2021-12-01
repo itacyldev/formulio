@@ -24,7 +24,7 @@ pipeline {
                     withCredentials([file(credentialsId: 'android_keystore', variable: 'KEYFILE')]) {
                         sh """
                             chmod +x gradlew
-                            ./gradlew assembleRelease
+                            ./gradlew clean assembleRelease
                         """
                     }
                 }
