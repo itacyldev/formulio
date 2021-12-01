@@ -10,17 +10,18 @@ group = globalConf.group
 version = globalConf.version
 
 android {
+    compileSdkVersion = rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
+
     signingConfigs {
         release {
-            storeFile file(RELEASE_STORE_FILE)
+            storeFile file("${rootDir}/app/keystore")
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEYSTORE_ALIAS")
             keyPassword System.getenv("KEYSTORE_PASSWORD")
         }
     }
 
-    compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
         versionCode globalConf.versionCode
@@ -37,6 +38,7 @@ android {
             testCoverageEnabled true
         }
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.txt'
