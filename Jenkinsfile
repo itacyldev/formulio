@@ -117,12 +117,12 @@ pipeline {
         }
     }
     post {
-        failure {
-            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-            recipientProviders: [culprits()],
-            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            mimeType: 'text/html'
-        }
+        //failure {
+        //    emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+        //    recipientProviders: [culprits()],
+        //    subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+        //    mimeType: 'text/html'
+        //}
         always{
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))

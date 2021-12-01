@@ -131,8 +131,8 @@ task clean(type: Delete) {
 
 
 ext {
-    versionCode = 24
-    versionName = '0.6.2'
+    versionCode = 25
+    versionName = '0.6.3'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 30
     targetSdkVersion = 30
@@ -141,7 +141,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.6.2'
+    version = '0.6.3'
     artifactId = 'Formic'
 
     sharedDeps = [
