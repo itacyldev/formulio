@@ -7,6 +7,12 @@ pipeline {
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
     }
 
+    stage('Setup Tools') {
+        withCredentials([file(credentialsId: 'android_keystore', variable: 'KEYFILE')]) {
+            sh "cp \$KEYFILE app/keystore"
+        }
+    }
+
     stages {
         stage("Build Apk") {
             steps{
