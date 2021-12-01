@@ -15,13 +15,12 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("${rootDir}/app/keystore")
+            storeFile file("$rootDir/app/keykeystore")
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEYSTORE_ALIAS")
             keyPassword System.getenv("KEYSTORE_PASSWORD")
         }
     }
-
 
     defaultConfig {
         versionCode globalConf.versionCode
