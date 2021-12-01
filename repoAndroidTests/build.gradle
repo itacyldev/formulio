@@ -12,7 +12,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("$rootDir/app/keykeystore")
+            storeFile file("$rootDir/app/keystore")
             storePassword System.getenv("KEYSTORE_PASSWORD")
             keyAlias System.getenv("KEYSTORE_ALIAS")
             keyPassword System.getenv("KEYSTORE_PASSWORD")
