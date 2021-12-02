@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +32,7 @@ import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
+import es.jcyl.ita.formic.app.workspace.WorkspaceActivity;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -114,6 +114,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
+        if (id == R.id.action_workspace) {
+            showWorkspace();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -124,6 +129,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     protected final void showAbout() {
         final Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
+    protected final void showWorkspace() {
+        final Intent intent = new Intent(this, WorkspaceActivity.class);
         startActivity(intent);
     }
 
@@ -196,7 +206,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private void doInitConfiguration() {
 
         //String projectsFolder = getApplicationContext().getFilesDir() + "/projects";
-        String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
+        //String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
+        String projectsFolder = currentWorkspace;
 
         File f = new File(projectsFolder);
         if (!f.exists()) {
