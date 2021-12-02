@@ -37,6 +37,7 @@
         tools:targetApi="q">
         <activity android:name="es.jcyl.ita.formic.app.dev.DevConsoleActivity"></activity>
         <activity android:name="es.jcyl.ita.formic.app.about.AboutActivity"></activity>
+        <activity android:name="es.jcyl.ita.formic.app.workspace.WorkspaceActivity"></activity>
         <activity
             android:name="es.jcyl.ita.formic.app.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
