@@ -96,15 +96,15 @@ public class WorkspaceActivity extends BaseActivity {
                 if (path != null) {
                     pathEditText.setText(setCurrentWorkspace(path));
                     pathEditText.setTag(Boolean.FALSE);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+                    builder.setCancelable(false); // if you want user to wait for some process to finish,
+                    builder.setView(R.layout.layout_loading_dialog);
+                    AlertDialog dialog = builder.create();
+                    dialog.show(); // to show this dialog
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-            builder.setCancelable(false); // if you want user to wait for some process to finish,
-            builder.setView(R.layout.layout_loading_dialog);
-            AlertDialog dialog = builder.create();
-            dialog.show(); // to show this dialog
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
             /*Config config = Config.init(this, currentWorkspace);
             ProjectRepository projectRepo = config.getProjectRepo();
             List<Project> projects = projectRepo.listAll();
