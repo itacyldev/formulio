@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.app.workspace;/*
  */
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import androidx.annotation.RequiresApi;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.MainActivity;
 import es.jcyl.ita.formic.forms.util.FileUtils;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 
@@ -47,7 +49,7 @@ public class WorkspaceActivity extends BaseActivity {
 
         pathEditText = (EditText) findViewById(R.id.path_text);
         pathEditText.setTag(Boolean.TRUE);
-        pathEditText.setText(setCurrentWorkspace(Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects"));
+        pathEditText.setText(getCurrentWorkspace());
 
         pathImageButton = (Button) findViewById(R.id.path_button);
         pathImageButton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +73,13 @@ public class WorkspaceActivity extends BaseActivity {
 
     private String setCurrentWorkspace(String path) {
         sharedPreferences.edit().putString("current_workspace", path).apply();
+        currentWorkspace = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
         return path;
+    }
+
+    private String getCurrentWorkspace() {
+        currentWorkspace = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+        return currentWorkspace;
     }
 
     @SuppressLint("MissingSuperCall")
@@ -90,7 +98,27 @@ public class WorkspaceActivity extends BaseActivity {
                     pathEditText.setTag(Boolean.FALSE);
                 }
             }
+            pathEditText.setText(setCurrentWorkspace("/storage/emulated/0/projects"));
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+            builder.setCancelable(false); // if you want user to wait for some process to finish,
+            builder.setView(R.layout.layout_loading_dialog);
+            AlertDialog dialog = builder.create();
+            dialog.show(); // to show this dialog
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            /*Config config = Config.init(this, currentWorkspace);
+            ProjectRepository projectRepo = config.getProjectRepo();
+            List<Project> projects = projectRepo.listAll();
+            Project prj = projects.get(0);
+            Config.getInstance().setCurrentProject(prj);
+            loadFragment(new FormListFragment());*/
+
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing
     }
 
 }
