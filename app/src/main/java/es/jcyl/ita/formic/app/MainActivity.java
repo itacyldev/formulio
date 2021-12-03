@@ -15,9 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -137,16 +134,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
-    public void loadFragment(Fragment fragment) {
-        // create a FragmentManager
-        FragmentManager fm = getSupportFragmentManager();
-        // create a FragmentTransaction to begin the transaction and replace the Fragment
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        // replace the FrameLayout with new Fragment
-        fragmentTransaction.replace(R.id.fragment_content_main, fragment);
-        fragmentTransaction.commit(); // save the changes
-    }
-
     private void initialize() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -203,7 +190,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-    private void doInitConfiguration() {
+    protected void doInitConfiguration() {
 
         //String projectsFolder = getApplicationContext().getFilesDir() + "/projects";
         //String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
@@ -224,20 +211,22 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
 
-            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
+            UserMessagesHelper.toast(this, DevConsole.info(this.getString(es.jcyl.ita.formic.forms.R.string.project_opening_init,
                     (String) prj.getId())), Toast.LENGTH_LONG);
             try {
                 Config.getInstance().setCurrentProject(prj);
                 UserMessagesHelper.toast(this,
-                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
+                        DevConsole.info(this.getString(es.jcyl.ita.formic.forms.R.string.project_opening_finish, (String) prj.getId())),
                         Toast.LENGTH_LONG);
             } catch (Exception e) {
-                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
+                UserMessagesHelper.toast(this, DevConsole.info(this.getString(es.jcyl.ita.formic.forms.R.string.project_opening_error, (String) prj.getId())),
                         Toast.LENGTH_LONG);
             }
         }
         initialize();
     }
+
+
 
     @Override
     protected void setTheme() {
@@ -291,4 +280,5 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     public void onBackPressed() {
         // Do nothing
     }
+
 }

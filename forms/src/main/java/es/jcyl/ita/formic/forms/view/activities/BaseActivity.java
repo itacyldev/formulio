@@ -13,6 +13,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -125,7 +128,16 @@ public abstract class BaseActivity extends AppCompatActivity  {
                 finish();
             }
         });
+    }
 
+    public void loadFragment(Fragment fragment) {
+        // create a FragmentManager
+        FragmentManager fm = getSupportFragmentManager();
+        // create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.fragment_content_main, fragment);
+        fragmentTransaction.commit(); // save the changes
     }
 
 }
