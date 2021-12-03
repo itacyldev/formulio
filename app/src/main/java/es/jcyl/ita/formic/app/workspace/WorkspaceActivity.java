@@ -98,7 +98,6 @@ public class WorkspaceActivity extends BaseActivity {
                     pathEditText.setTag(Boolean.FALSE);
                 }
             }
-            pathEditText.setText(setCurrentWorkspace("/storage/emulated/0/projects"));
             AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
             builder.setCancelable(false); // if you want user to wait for some process to finish,
             builder.setView(R.layout.layout_loading_dialog);
