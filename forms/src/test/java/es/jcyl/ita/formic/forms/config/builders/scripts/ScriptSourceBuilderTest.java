@@ -9,7 +9,6 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;

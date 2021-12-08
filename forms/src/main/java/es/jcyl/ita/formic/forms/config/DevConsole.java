@@ -344,7 +344,7 @@ public class DevConsole {
 
     /***********/
     /**
-     * Instance accesible methods to give access to console in js scripts
+     * Instance accessible methods to give access to console in js scripts
      * /
      ***********/
     public void log(String msg) {

@@ -4,9 +4,10 @@ apply plugin: 'maven-publish'
 
 def globalConf = rootProject.ext
 
-archivesBaseName = 'forms'
+archivesBaseName = 'processes'
 group = globalConf.group
 version = globalConf.version
+
 
 android {
     compileSdkVersion = rootProject.compileSdkVersion
@@ -57,48 +58,16 @@ android {
     useLibrary 'android.test.mock'
 }
 
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':core')
 
-    implementation project(':core')
-    implementation project(':repo')
-
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation "androidx.activity:activity:1.2.0-alpha06"
-    implementation "androidx.fragment:fragment:1.3.0-alpha06"
-    implementation 'androidx.navigation:navigation-fragment:2.2.2'
-    implementation 'androidx.navigation:navigation-ui:2.2.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'com.github.tony19:logback-android:2.0.0'
-
-    implementation 'com.opencsv:opencsv:5.2'
-
-    implementation  "net.bytebuddy:byte-buddy:1.11.2"
-    implementation  "net.bytebuddy:byte-buddy-android:1.11.2"
-    implementation 'com.airbnb.android:paris:1.7.3'
-
-    api 'commons-collections:commons-collections:20040616'
-    api "commons-validator:commons-validator:1.6"
-    api 'org.mozilla:rhino:1.7.12'
-    api 'org.jgrapht:jgrapht-core:1.1.0'
-
-
-    // rxAndroid
-//    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
-//    api 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 
     /////////////////////////////////////
     // Instrumentation test dependencies
     /////////////////////////////////////
+    androidTestImplementation project(':repoTestUtils')
     // Core library
     androidTestImplementation 'androidx.test:core:1.2.0'
     // AndroidJUnitRunner and JUnit Rules
@@ -123,16 +92,6 @@ dependencies {
     /////////////////////////////////////
     testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
-    testImplementation 'androidx.test:core:1.2.0'
-    testImplementation('androidx.test:rules:1.2.0') {
-        exclude group: 'androidx.test', module: ''
-    }
-}
-
-
-task sourceJar(type: Jar) {
-    classifier "source"
 }
 
 publishing {

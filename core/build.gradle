@@ -10,6 +10,10 @@ version = globalConf.version
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api sharedDeps
+
+    compileOnly 'com.google.android:android:4.1.1.4'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'com.github.tony19:logback-android:2.0.0'
 }
 
 publishing {
