@@ -41,14 +41,19 @@ public class TestUtils {
         return file;
     }
 
-    public static String readAsString(final File file)  {
+    public static String readAsString(final String file) {
+        File f = TestUtils.findFile(file);
+        return readAsString(f);
+    }
+
+    public static String readAsString(final File file) {
 
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             return toString(reader);
         } catch (Exception e) {
-            throw new RuntimeException("An error occurred while reading the file " + file,e);
+            throw new RuntimeException("An error occurred while reading the file " + file, e);
         }
     }
 

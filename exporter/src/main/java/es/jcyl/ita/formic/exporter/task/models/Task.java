@@ -1,5 +1,4 @@
 package es.jcyl.ita.formic.exporter.task.models;
-
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,36 +15,34 @@ package es.jcyl.ita.formic.exporter.task.models;
  * limitations under the License.
  */
 
-/**
- * author:
- */
-
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.Context;
 
-public interface TaskListener {
-    void setTask(Task t);
+/**
+ *
+ * Task functionality interface.
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
+public interface Task {
 
-    void init();
+    Long getId();
 
-    void beforePage(int page);
+    String getName();
 
-    void afterPage(int page);
+    void setName(String name);
 
-    void beforeStep(int pos);
+    void setGlobalContext(CompositeContext ctx);
 
-    void afterStep(int pos);
+    void setTaskContext(Context ctx);
 
-    void error(int pos, String data1, String data2);
+    Context getTaskContext();
 
-    void error(int pos, CompositeContext context);
+    CompositeContext getGlobalContext();
 
-    /**
-     * Notifica error mientras se procesaba la p�gina indicada.
-     *
-     * @param page
-     */
-    void errorOnPage(int page);
+    void setListener(TaskListener listener);
 
-    void end();
+    TaskListener getListener();
 
+    boolean isStopOnError();
 }

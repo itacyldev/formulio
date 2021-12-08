@@ -1,7 +1,9 @@
 package es.jcyl.ita.formic.exporter.task;
 
+import es.jcyl.ita.formic.exporter.task.models.Task;
+
 public interface TaskSepItem {
 
-	public void setTask(Task t);
+	void setTask(Task t);
 
 }

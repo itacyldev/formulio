@@ -25,11 +25,18 @@ package es.jcyl.ita.formic.core.util;
  */
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Log {
 
-    private static final Logger logger = LoggerFactory.getLogger(Log.class);
+    private static Logger logger;
+
+    static {
+        initializeLogImpl();
+    }
+
+    private static void initializeLogImpl() {
+        logger = new NoopLogger();
+    }
 
     private static int level;
 
@@ -50,14 +57,14 @@ public class Log {
     }
 
     public static void debug(String msg) {
-        if(level > android.util.Log.DEBUG){
+        if (level > android.util.Log.DEBUG) {
             return;
         }
         logger.debug(msg);
     }
 
     public static void info(String msg) {
-        if(level > android.util.Log.INFO){
+        if (level > android.util.Log.INFO) {
             return;
         }
         logger.info(msg);
@@ -100,4 +107,5 @@ public class Log {
 //            }
 //        }
     }
+
 }

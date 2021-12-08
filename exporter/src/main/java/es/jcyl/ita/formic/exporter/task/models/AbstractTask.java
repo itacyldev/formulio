@@ -22,10 +22,11 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.exporter.task.Task;
 import es.jcyl.ita.formic.exporter.task.processor.Processor;
 
 /**
+ * Abstract class for Task interface implementations.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
@@ -103,5 +104,12 @@ public class AbstractTask implements Task {
         this.listener = listener;
     }
 
+    @Override
+    public boolean isStopOnError() {
+        return stopOnError;
+    }
 
+    public void setStopOnError(boolean stopOnError) {
+        this.stopOnError = stopOnError;
+    }
 }

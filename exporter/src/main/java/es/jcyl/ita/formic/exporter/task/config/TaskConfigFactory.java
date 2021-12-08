@@ -34,10 +34,13 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.exporter.jobs.config.ProcessConfigException;
-import es.jcyl.ita.formic.exporter.task.Task;
 import es.jcyl.ita.formic.exporter.task.exception.TaskException;
+import es.jcyl.ita.formic.exporter.task.listener.LogFileTaskListener;
 import es.jcyl.ita.formic.exporter.task.models.IterativeTask;
 import es.jcyl.ita.formic.exporter.task.models.NonIterTask;
+import es.jcyl.ita.formic.exporter.task.models.Task;
+import es.jcyl.ita.formic.exporter.task.models.TaskListener;
+import es.jcyl.ita.formic.exporter.task.processor.ContextPopulatorProcessor;
 import es.jcyl.ita.formic.exporter.task.processor.NonIterProcessor;
 import es.jcyl.ita.formic.exporter.task.processor.Processor;
 import es.jcyl.ita.formic.exporter.task.reader.Reader;
@@ -46,13 +49,15 @@ import es.jcyl.ita.formic.exporter.task.writer.Writer;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+
 public class TaskConfigFactory {
     private static final String ERROR_ON_JSON_READING = "An error occurred while trying to read JSON. %n";
     private static final String ERROR_ON_JSON_PARSING = "Couldn't parse JSON configuration. %n";
     private static final String ERROR_ON_CONFIG_BUILDING = "Couldn't create config object from JSON. %n";
 
+    private static TaskConfigFactory _instance;
+
     private static final Map<String, Class<?>> registry = new HashMap<>();
-//    private static final Map<String, Validator> objectValidators = new HashMap<>();
 
     static {
 //        // readers
@@ -62,20 +67,27 @@ public class TaskConfigFactory {
 //        registry.put("CONTEXTWRITER", ContextWriter.class);
 //
 //        // processors
-//        registry.put("REPORTPROCESSOR", ReportProcessor.class);
+        registry.put("CONTEXTPOPULATOR", ContextPopulatorProcessor.class);
+
     }
 
     private final ObjectMapper mapper; // threadsafe
 
     private boolean validateConfig = true;
 
-    public TaskConfigFactory() {
+    public static TaskConfigFactory getInstance() {
+        if (_instance == null) {
+            _instance = new TaskConfigFactory();
+        }
+        return _instance;
+    }
+
+    private TaskConfigFactory() {
         mapper = new ObjectMapper();
         mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
 //        initValidators();
     }
-
 
     public List<Task> getTaskList(String json, Context context) {
         JsonNode arrNode;
@@ -130,6 +142,12 @@ public class TaskConfigFactory {
         } else {
             t = readNonIterativeTask(jsonNode, context);
         }
+        // configure task listener
+        TaskListener tlistener = new LogFileTaskListener();
+        if (tlistener != null) {
+            t.setListener(tlistener);
+            tlistener.setTask(t);
+        }
         return t;
     }
 
@@ -142,6 +160,19 @@ public class TaskConfigFactory {
             throw new TaskException(ERROR_ON_JSON_PARSING + json, e);
         }
         return getTask(jsonNode, context);
+    }
+
+    /**
+     * Creates an iterator that dynamically evaluates the task config in each step. The task config
+     * is lazily read evaluating the json to replace the ${} variables in the task config before
+     * each step is executed.
+     *
+     * @param context
+     * @param json
+     * @return
+     */
+    public Iterator<Task> taskIterator(Context context, String json) {
+        return new TaskConfigIterator(this, context, json);
     }
 
     private Class<?> getTaskClass(JsonNode jsonNode) {

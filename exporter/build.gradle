@@ -62,6 +62,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':core')
 
+    implementation 'org.mini2Dx:android-beans:1.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 
     /////////////////////////////////////

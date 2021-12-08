@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.task;
+package es.jcyl.ita.formic.exporter.task.writer;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,29 +15,45 @@ package es.jcyl.ita.formic.exporter.task;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.exporter.task.models.TaskListener;
+import es.jcyl.ita.formic.exporter.task.models.Task;
+import es.jcyl.ita.formic.exporter.task.models.RecordPage;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface Task {
-    Long getId();
+public class DummyWriter implements Writer {
+    @Override
+    public void open() {
 
-    String getName();
+    }
 
-    void setName(String name);
+    @Override
+    public void write(RecordPage page) {
 
-    void setGlobalContext(CompositeContext ctx);
+    }
 
-    void setTaskContext(Context ctx);
+    @Override
+    public void setPageSize(Integer size) {
 
-    Context getTaskContext();
+    }
 
-    CompositeContext getGlobalContext();
+    @Override
+    public void setOffset(Integer offset) {
 
-    void setListener(TaskListener listener);
+    }
 
-    TaskListener getListener();
+    @Override
+    public void setPaginate(Boolean active) {
+
+    }
+
+    @Override
+    public void close() {
+
+    }
+
+    @Override
+    public void setTask(Task t) {
+
+    }
 }

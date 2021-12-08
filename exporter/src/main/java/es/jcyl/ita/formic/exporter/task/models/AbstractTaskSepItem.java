@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.exporter.task.Task;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

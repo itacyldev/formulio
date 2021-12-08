@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.VarSubstitutor;
 import es.jcyl.ita.formic.core.util.Log;
 import es.jcyl.ita.formic.exporter.jobs.config.ProcessConfigException;
-import es.jcyl.ita.formic.exporter.task.Task;
+import es.jcyl.ita.formic.exporter.task.models.Task;
 import es.jcyl.ita.formic.exporter.task.exception.TaskException;
 
 /**

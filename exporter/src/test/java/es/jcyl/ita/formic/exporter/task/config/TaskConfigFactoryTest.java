@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.exporter.task.Task;
+import es.jcyl.ita.formic.exporter.task.models.Task;
 import es.jcyl.ita.formic.exporter.task.exception.TaskException;
 
 /**
@@ -26,7 +26,7 @@ public class TaskConfigFactoryTest {
                 "    }" +
                 "}";
 
-        TaskConfigFactory factory = new TaskConfigFactory();
+        TaskConfigFactory factory = TaskConfigFactory.getInstance();
 
         Context ctx = new BasicContext("");
 
