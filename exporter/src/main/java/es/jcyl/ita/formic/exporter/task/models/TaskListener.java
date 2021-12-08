@@ -1,4 +1,5 @@
-package es.jcyl.ita.formic.exporter;
+package es.jcyl.ita.formic.exporter.task.models;
+
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,7 +17,36 @@ package es.jcyl.ita.formic.exporter;
  */
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * author:
  */
-class JobFacade {
+
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.exporter.task.Task;
+
+public interface TaskListener {
+    void setTask(Task t);
+
+    void init();
+
+    void beforePage(int page);
+
+    void afterPage(int page);
+
+    void beforeStep(int pos);
+
+    void afterStep(int pos);
+
+    void error(int pos, String data1, String data2);
+
+    void error(int pos, CompositeContext context);
+
+    /**
+     * Notifica error mientras se procesaba la p�gina indicada.
+     *
+     * @param page
+     */
+    void errorOnPage(int page);
+
+    void end();
+
 }

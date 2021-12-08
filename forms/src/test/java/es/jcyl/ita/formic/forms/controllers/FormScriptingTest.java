@@ -113,7 +113,7 @@ public class FormScriptingTest {
                 .render();
 
         // load script: the value si valid if length > 10
-        String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
+        String source = TestUtils.readAsString(TestUtils.findFile("scripts/formValidation1.js"));
 
         ScriptEngine engine = recipe.mc.getScriptEngine();
         engine.store(recipe.mc.getViewController().getId(), source);

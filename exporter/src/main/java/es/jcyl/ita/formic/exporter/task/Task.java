@@ -15,6 +15,10 @@ package es.jcyl.ita.formic.exporter.task;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.exporter.task.models.TaskListener;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -24,4 +28,16 @@ public interface Task {
     String getName();
 
     void setName(String name);
+
+    void setGlobalContext(CompositeContext ctx);
+
+    void setTaskContext(Context ctx);
+
+    Context getTaskContext();
+
+    CompositeContext getGlobalContext();
+
+    void setListener(TaskListener listener);
+
+    TaskListener getListener();
 }

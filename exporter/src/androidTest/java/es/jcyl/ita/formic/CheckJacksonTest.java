@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Scanner;
 
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
@@ -23,14 +24,21 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class CheckJacksonTest {
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("es.jcyl.ita.formic.test", appContext.getPackageName());
 
-        File file = TestUtils.findFile("job_exporter.json");
+        File file = TestUtils.getResourceAsFile("job_exporter.json");
+
+        Scanner myReader = new Scanner(file);
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            System.out.println(data);
+        }
+        myReader.close();
 
         ObjectMapper mapper = new ObjectMapper();
         // try basic mapping using task and

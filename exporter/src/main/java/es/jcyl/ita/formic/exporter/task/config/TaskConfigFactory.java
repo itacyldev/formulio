@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.jobs.config;
+package es.jcyl.ita.formic.exporter.task.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.exporter.jobs.config.ProcessConfigException;
 import es.jcyl.ita.formic.exporter.task.Task;
 import es.jcyl.ita.formic.exporter.task.exception.TaskException;
 import es.jcyl.ita.formic.exporter.task.models.IterativeTask;
@@ -120,10 +121,7 @@ public class TaskConfigFactory {
      */
     public Task getTask(JsonNode jsonNode, Context context) {
         Task t;
-        Class<?> tClazz = getTaskClass(jsonNode);
-//        if (validateConfig) {
-//            validateJSONConfig(jsonNode, tClazz);
-//        }
+        // TODO: validate task data
         // TODO: mover esto a una implementaci�n de estrategia, cada tipo de
         // clase con un parseador en una clase diferente con interfaz com�n y
         // paquete "confir.parsers"

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.task.exception;
+package es.jcyl.ita.formic.exporter.jobs;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,17 +15,8 @@ package es.jcyl.ita.formic.exporter.task.exception;
  * limitations under the License.
  */
 
-public class TaskException extends Exception {
-
-	public TaskException(String msg, Throwable t) {
-		super(msg, t);
-	}
-
-	public TaskException(Throwable t) {
-		super(t);
-	}
-
-	public TaskException(String msg) {
-		super(msg);
-	}
+/**
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
+class JobFacade {
 }
