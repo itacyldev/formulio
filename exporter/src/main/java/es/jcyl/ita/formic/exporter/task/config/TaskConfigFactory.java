@@ -38,7 +38,7 @@ import es.jcyl.ita.formic.exporter.task.models.IterativeTask;
 import es.jcyl.ita.formic.exporter.task.models.NonIterTask;
 import es.jcyl.ita.formic.exporter.task.models.Task;
 import es.jcyl.ita.formic.exporter.task.models.TaskListener;
-import es.jcyl.ita.formic.exporter.task.processor.ContextPopulatorProcessor;
+import es.jcyl.ita.formic.exporter.task.processor.ContextPopulateProcessor;
 import es.jcyl.ita.formic.exporter.task.processor.NonIterProcessor;
 import es.jcyl.ita.formic.exporter.task.processor.Processor;
 import es.jcyl.ita.formic.exporter.task.reader.Reader;
@@ -65,7 +65,7 @@ public class TaskConfigFactory {
 //        registry.put("CONTEXTWRITER", ContextWriter.class);
 //
 //        // processors
-        registry.put("CONTEXTPOPULATOR", ContextPopulatorProcessor.class);
+        registry.put("CONTEXTPOPULATOR", ContextPopulateProcessor.class);
 
     }
 

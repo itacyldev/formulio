@@ -22,12 +22,9 @@ package es.jcyl.ita.formic.exporter.task.processor;
  *
  */
 
-public class ContextPopulatorProcessor extends AbstractProcessor
+public class ContextPopulateProcessor extends AbstractProcessor
 		implements NonIterProcessor {
 
-	/**
-	 * Objeto de configuraci�n directamente mapeado desde la configuraci�n json
-	 */
 	private Object value;
 	private String name = "value";
 

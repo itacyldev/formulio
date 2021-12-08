@@ -65,7 +65,6 @@ public class TaskExecutorTest {
      */
     @Test
     public void testExecNonIterTaskInstances() throws TaskException {
-
         int NUM_TASKS = 5;
         List<Task> taskInstances = createNonIterTasks(NUM_TASKS);
 
