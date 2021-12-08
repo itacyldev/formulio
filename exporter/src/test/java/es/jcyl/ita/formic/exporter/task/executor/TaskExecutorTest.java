@@ -25,9 +25,10 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.exporter.task.exception.TaskException;
+import es.jcyl.ita.formic.exporter.task.models.IterativeTask;
 import es.jcyl.ita.formic.exporter.task.models.NonIterTask;
 import es.jcyl.ita.formic.exporter.task.models.Task;
-import es.jcyl.ita.formic.exporter.task.models.TaskListener;
+import es.jcyl.ita.formic.exporter.task.reader.RandomDataReader;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
@@ -63,10 +64,10 @@ public class TaskExecutorTest {
      * @throws TaskException
      */
     @Test
-    public void testExecTaskInstances() throws TaskException {
+    public void testExecNonIterTaskInstances() throws TaskException {
 
         int NUM_TASKS = 5;
-        List<Task> taskInstances = createTasks(NUM_TASKS);
+        List<Task> taskInstances = createNonIterTasks(NUM_TASKS);
 
         TaskExecutor executor = new TaskExecutor();
         CompositeContext gCtx = new UnPrefixedCompositeContext();
@@ -82,69 +83,57 @@ public class TaskExecutorTest {
     }
 
     /**
+     * Creates dummy iterative tasks to check the execution flow.
+     *
+     * @throws TaskException
+     */
+    @Test
+    public void testExecIterTaskInstances() throws TaskException {
+        int NUM_TASKS = 5;
+        List<Task> taskInstances = createIterTasks(NUM_TASKS);
+
+        TaskExecutor executor = new TaskExecutor();
+        CompositeContext gCtx = new UnPrefixedCompositeContext();
+        executor.execute(gCtx, taskInstances);
+
+        // check the content of the context
+        Assert.assertEquals(NUM_TASKS, gCtx.getContexts().size());
+        // try to access the context by the task nam
+        for (int i = 0; i < NUM_TASKS; i++) {
+            Context ctx = gCtx.getContext("t" + i);
+            Assert.assertNotNull(ctx);
+        }
+    }
+
+
+    /**
      * Creates dummy tasks
+     *
      * @param num
      * @return
      */
-    private List<Task> createTasks(int num) {
+    private List<Task> createNonIterTasks(int num) {
         List<Task> taskList = new ArrayList<>();
 
         for (int i = 0; i < num; i++) {
-            int finalI = i;
-            Task task = new NonIterTask() {
-
-                @Override
-                public Long getId() {
-                    return Long.valueOf(finalI);
-                }
-
-                @Override
-                public String getName() {
-                    return "t" + finalI;
-                }
-
-                @Override
-                public void setName(String name) {
-
-                }
-
-                @Override
-                public void setGlobalContext(CompositeContext ctx) {
-
-                }
-
-                @Override
-                public void setTaskContext(Context ctx) {
-
-                }
-
-                @Override
-                public Context getTaskContext() {
-                    return null;
-                }
-
-                @Override
-                public CompositeContext getGlobalContext() {
-                    return null;
-                }
-
-                @Override
-                public void setListener(TaskListener listener) {
-
-                }
-
-                @Override
-                public TaskListener getListener() {
-                    return null;
-                }
-
-                @Override
-                public boolean isStopOnError() {
-                    return false;
-                }
-            };
+            // dummy tasks without processor
+            Task task = new NonIterTask();
+            task.setName("t" + i);
             taskList.add(task);
         }
         return taskList;
     }
+
+    private List<Task> createIterTasks(int num) {
+        List<Task> taskList = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            // dummy tasks without reader/processor/writer
+            IterativeTask task = new IterativeTask();
+            task.setReader(new RandomDataReader());
+            task.setName("t" + i);
+            taskList.add(task);
+        }
+        return taskList;
+    }
+
 }

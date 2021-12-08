@@ -87,11 +87,10 @@ public class TaskConfigIterator implements Iterator<Task> {
         JsonNode jsonNode = null;
         try {
             jsonNode = readJsonTree(replaced);
+            task = taskFactory.getTask(jsonNode, context);
         } catch (TaskException e) {
             throw new RuntimeException(e);
         }
-        task = taskFactory.getTask(jsonNode, context);
-
         taskNum++;
         return task;
     }

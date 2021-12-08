@@ -45,93 +45,90 @@ public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
             throws TaskException {
 
         int numPage = 0;
-        try {
-            configureTaskProcessingObjects(task);
+        configureTaskProcessingObjects(task);
 
-            Reader reader = task.getReader();
-            List<Processor> processors = task.getProcessors();
-            Writer writer = task.getWriter();
-            if (writer == null) {
-                // establecemos una implementaci�n vac�a para evitar
-                // nullpointers
-                writer = new DummyWriter();
+        Reader reader = task.getReader();
+        List<Processor> processors = task.getProcessors();
+        Writer writer = task.getWriter();
+
+//            task.getListener().init();
+        // initialize object
+        reader.open();
+        if (!reader.allowsPagination()) {
+            task.getListener().beforePage(numPage);
+            RecordPage page = reader.read();
+            if (CollectionUtils.isNotEmpty(processors)) {
+                for (Processor proc : processors) {
+                    page = proc.process(page);
+                }
             }
+            if (writer != null) {
+                writer.open();
+                writer.write(page);
+            }
+//                task.getListener().afterPage(numPage);
+        } else {
+            // iterar sobre los resultados para escritura paginada
+            int offset = 0;
+            int pagesize = task.getPageSize();
+            reader.setOffset(offset);
+            reader.setPageSize(pagesize);
 
-            task.getListener().init();
-            // initialize object
-            reader.open();
-            if (!reader.allowsPagination()) {
-                task.getListener().beforePage(numPage);
-                RecordPage page = reader.read();
+            // initialize objects
+            writer.open();
+
+//                task.getListener().beforePage(numPage);
+            RecordPage page = reader.read();
+            while (page != null && CollectionUtils.isNotEmpty(page.getResults())) {
                 if (CollectionUtils.isNotEmpty(processors)) {
                     for (Processor proc : processors) {
                         page = proc.process(page);
                     }
                 }
                 if (writer != null) {
-                    writer.open();
+                    writer.setOffset(offset);
                     writer.write(page);
                 }
-                task.getListener().afterPage(numPage);
-            } else {
-                // iterar sobre los resultados para escritura paginada
-                int offset = 0;
-                int pagesize = task.getPageSize();
+//                    task.getListener().afterPage(numPage);
+                // actualizar filtrado paginacion
+                offset += task.getPageSize();
                 reader.setOffset(offset);
-                reader.setPageSize(pagesize);
-
-                // initialize objects
-                writer.open();
-
-                task.getListener().beforePage(numPage);
-                RecordPage page = reader.read();
-                while (page != null && CollectionUtils.isNotEmpty(page.getResults())) {
-                    if (CollectionUtils.isNotEmpty(processors)) {
-                        for (Processor proc : processors) {
-                            page = proc.process(page);
-                        }
-                    }
-                    if (writer != null) {
-                        writer.setOffset(offset);
-                        writer.write(page);
-                    }
-                    task.getListener().afterPage(numPage);
-                    // actualizar filtrado paginacion
-                    offset += task.getPageSize();
-                    reader.setOffset(offset);
-                    task.getListener().beforePage(numPage);
-                    page = reader.read();
-                    numPage++;
-                }
+//                    task.getListener().beforePage(numPage);
+                page = reader.read();
+                numPage++;
             }
-            reader.close();
-            if (writer != null) {
-                writer.close();
-            }
-
-            task.getListener().end();
-        } catch (Throwable e) {
-            task.getListener().errorOnPage(numPage);
-            throw e;
         }
+        reader.close();
+        if (writer != null) {
+            writer.close();
+        }
+
+//            task.getListener().end();
     }
 
-    private void configureTaskProcessingObjects(IterativeTask task) {
+    private void configureTaskProcessingObjects(IterativeTask task) throws TaskException {
         int pSize = task.getPageSize();
         boolean paginationActive = task.getPaginate();
 
         Reader reader = task.getReader();
-        if (reader != null) {
+        if (reader == null) {
+            throw new TaskException(String.format("Iterative tasks must have a reader instance. " +
+                    "Check configuration for task [%s].", task.getName()));
+        } else {
             reader.setTask(task);
             reader.setPageSize(pSize);
             reader.setPaginate(paginationActive);
         }
         Writer writer = task.getWriter();
-        if (writer != null) {
-            writer.setTask(task);
-            writer.setPageSize(pSize);
-            writer.setPaginate(paginationActive);
+        if (writer == null) {
+            // default writer to avoid nullpointer checks
+            writer = new DummyWriter();
+            task.setWriter(writer);
         }
+        writer.setTask(task);
+        writer.setPageSize(pSize);
+        writer.setPaginate(paginationActive);
+
         if (CollectionUtils.isNotEmpty(task.getProcessors())) {
             for (Processor prss : task.getProcessors()) {
                 prss.setTask(task);

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.task.processor;
+package es.jcyl.ita.formic.exporter.task.models;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,25 @@ package es.jcyl.ita.formic.exporter.task.processor;
  * limitations under the License.
  */
 
-
-import es.jcyl.ita.formic.exporter.task.models.TaskSepItem;
+import java.util.ArrayList;
 
 /**
- * Base interface for processor that aren't included in a reader-writer iteration.
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public class PaginatedList<M> extends ArrayList<M> {
+    int first = 0;
+    private int pageSize;
+    private Object total;
 
-public interface NonIterProcessor extends TaskSepItem {
+    public void setFirst(int i) {
+        first = i;
+    }
 
-    void process();
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
+    public void setTotalResult(int total) {
+        this.total = total;
+    }
 }

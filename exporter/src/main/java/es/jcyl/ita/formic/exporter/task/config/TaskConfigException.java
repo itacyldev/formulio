@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.task.processor;
+package es.jcyl.ita.formic.exporter.task.config;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,21 @@ package es.jcyl.ita.formic.exporter.task.processor;
  * limitations under the License.
  */
 
-
-import es.jcyl.ita.formic.exporter.task.models.TaskSepItem;
+import es.jcyl.ita.formic.exporter.task.exception.TaskException;
 
 /**
- * Base interface for processor that aren't included in a reader-writer iteration.
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public class TaskConfigException extends TaskException {
+    public TaskConfigException(String msg, Throwable t) {
+        super(msg, t);
+    }
 
-public interface NonIterProcessor extends TaskSepItem {
+    public TaskConfigException(Throwable t) {
+        super(t);
+    }
 
-    void process();
-
+    public TaskConfigException(String msg) {
+        super(msg);
+    }
 }

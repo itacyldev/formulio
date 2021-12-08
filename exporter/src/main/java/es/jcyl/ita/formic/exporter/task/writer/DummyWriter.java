@@ -15,13 +15,15 @@ package es.jcyl.ita.formic.exporter.task.writer;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.exporter.task.models.Task;
 import es.jcyl.ita.formic.exporter.task.models.RecordPage;
 
 /**
+ * Basic writer for testing purposes.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class DummyWriter implements Writer {
+
+public class DummyWriter extends AbstractWriter {
     @Override
     public void open() {
 
@@ -33,27 +35,7 @@ public class DummyWriter implements Writer {
     }
 
     @Override
-    public void setPageSize(Integer size) {
-
-    }
-
-    @Override
-    public void setOffset(Integer offset) {
-
-    }
-
-    @Override
-    public void setPaginate(Boolean active) {
-
-    }
-
-    @Override
     public void close() {
-
-    }
-
-    @Override
-    public void setTask(Task t) {
 
     }
 }

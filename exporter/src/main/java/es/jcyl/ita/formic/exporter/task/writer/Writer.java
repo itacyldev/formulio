@@ -1,8 +1,8 @@
 package es.jcyl.ita.formic.exporter.task.writer;
 
 
-import es.jcyl.ita.formic.exporter.task.TaskSepItem;
 import es.jcyl.ita.formic.exporter.task.models.RecordPage;
+import es.jcyl.ita.formic.exporter.task.models.TaskSepItem;
 
 public interface Writer extends TaskSepItem {
 

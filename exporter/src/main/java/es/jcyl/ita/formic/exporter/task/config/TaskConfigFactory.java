@@ -33,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.exporter.jobs.config.ProcessConfigException;
-import es.jcyl.ita.formic.exporter.task.exception.TaskException;
 import es.jcyl.ita.formic.exporter.task.listener.LogFileTaskListener;
 import es.jcyl.ita.formic.exporter.task.models.IterativeTask;
 import es.jcyl.ita.formic.exporter.task.models.NonIterTask;
@@ -89,13 +87,13 @@ public class TaskConfigFactory {
 //        initValidators();
     }
 
-    public List<Task> getTaskList(String json, Context context) {
+    public List<Task> getTaskList(String json, Context context) throws TaskConfigException {
         JsonNode arrNode;
         List<Task> lst = new ArrayList<>();
         try {
             arrNode = mapper.readTree(json);
             if (!arrNode.isArray()) {
-                throw new ProcessConfigException(
+                throw new TaskConfigException(
                         "Invalid json, the parser expects a JsonArray for the task list " +
                                 "but found this: " + arrNode.asText());
             } else {
@@ -105,7 +103,7 @@ public class TaskConfigFactory {
                 }
             }
         } catch (IOException e) {
-            throw new ProcessConfigException(
+            throw new TaskConfigException(
                     "An error occurred while trying to parse the task list json.", e);
         }
         return lst;
@@ -114,7 +112,7 @@ public class TaskConfigFactory {
 //    public List<Task> getTaskList(JsonNode arrNode, Context context) {
 //        List<Task> lst = new ArrayList<>();
 //        if (!arrNode.isArray()) {
-//            throw new ProcessConfigException(
+//            throw new TaskConfigException(
 //                    "El json pasado para parsear la lista de tareas no es un array.");
 //        } else {
 //            for (final JsonNode objNode : arrNode) {
@@ -131,7 +129,7 @@ public class TaskConfigFactory {
      * @param jsonNode
      * @return
      */
-    public Task getTask(JsonNode jsonNode, Context context) {
+    public Task getTask(JsonNode jsonNode, Context context) throws TaskConfigException {
         Task t;
         // TODO: validate task data
         // TODO: mover esto a una implementaci�n de estrategia, cada tipo de
@@ -152,12 +150,12 @@ public class TaskConfigFactory {
     }
 
 
-    public Task getTask(String json, Context context) throws TaskException {
+    public Task getTask(String json, Context context) throws TaskConfigException {
         JsonNode jsonNode;
         try {
             jsonNode = mapper.readTree(json);
         } catch (IOException e) {
-            throw new TaskException(ERROR_ON_JSON_PARSING + json, e);
+            throw new TaskConfigException(ERROR_ON_JSON_PARSING + json, e);
         }
         return getTask(jsonNode, context);
     }
@@ -201,7 +199,7 @@ public class TaskConfigFactory {
      * @param context
      *******************/
 
-    private Task readNonIterativeTask(JsonNode json, Context context) {
+    private Task readNonIterativeTask(JsonNode json, Context context) throws TaskConfigException {
         NonIterTask task;
         try {
             task = mapper.treeToValue(json, NonIterTask.class);
@@ -216,7 +214,7 @@ public class TaskConfigFactory {
                 return task;
             }
             if (!objectNode.isArray()) {
-                throw new ProcessConfigException(String.format(
+                throw new TaskConfigException(String.format(
                         "An error found in task [%s], attribute 'processor' must be a json list " +
                                 "with processor configs as items.",
                         task.getName()));
@@ -232,13 +230,13 @@ public class TaskConfigFactory {
             }
             return task;
         } catch (JsonParseException e) {
-            throw new ProcessConfigException(
+            throw new TaskConfigException(
                     ERROR_ON_JSON_PARSING + json, e);
         } catch (JsonMappingException e) {
-            throw new ProcessConfigException(
+            throw new TaskConfigException(
                     ERROR_ON_CONFIG_BUILDING + json, e);
         } catch (IOException e) {
-            throw new ProcessConfigException(
+            throw new TaskConfigException(
                     ERROR_ON_JSON_READING + json, e);
         }
     }
@@ -249,7 +247,7 @@ public class TaskConfigFactory {
      * @param context
      *******************/
 
-    private Task readIterativeTask(JsonNode json, Context context) {
+    private Task readIterativeTask(JsonNode json, Context context) throws TaskConfigException {
         // leer bloques de readers/writers/processors
         try {
             // lectura de par�metros generales
@@ -259,19 +257,18 @@ public class TaskConfigFactory {
             readStepItems(task, json, context);
             return task;
         } catch (JsonParseException e) {
-            throw new ProcessConfigException(
-                    "An error occurred while trying to parse json config: \n" + json, e);
+            throw new TaskConfigException(ERROR_ON_JSON_PARSING + json, e);
         } catch (JsonMappingException e) {
-            throw new ProcessConfigException(
+            throw new TaskConfigException(
                     ERROR_ON_CONFIG_BUILDING + json, e);
         } catch (IOException e) {
-            throw new ProcessConfigException(
+            throw new TaskConfigException(
                     ERROR_ON_JSON_READING + json, e);
         }
     }
 
     private void readStepItems(IterativeTask task, JsonNode root, Context context)
-            throws IOException {
+            throws IOException, TaskConfigException {
         JsonNode objectNode = root.path("reader");
         Object obj = readInnerObjectFromType(objectNode, context);
         task.setReader((Reader) obj);
@@ -286,7 +283,7 @@ public class TaskConfigFactory {
         try {
             task.setProcessor((Processor) obj);
         } catch (ClassCastException e) {
-            throw new ProcessConfigException(
+            throw new TaskConfigException(
                     String.format("Invalid Processor implementation, [%s] cannot be used in " +
                                     "iterativeTask, choose a processor that implements Processor " +
                                     "interface. "
@@ -299,7 +296,7 @@ public class TaskConfigFactory {
             return;
         }
         if (!objectNode.isArray()) {
-            throw new ProcessConfigException(String.format(
+            throw new TaskConfigException(String.format(
                     "Hay un error en la configuraci�n de la tarea [%s]: el atributo 'processors' "
                             + "debe tener formato de lista con un objeto Processor por item.",
                     task.getName()));
@@ -404,7 +401,7 @@ public class TaskConfigFactory {
 //                    jsonNode, err);
 //            LOGGER.error(msg);
 //            LOGGER.error(err.getReport());
-//            throw new ProcessConfigException(msg);
+//            throw new TaskConfigException(msg);
 //        }
 //    }
 }

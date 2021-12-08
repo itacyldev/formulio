@@ -5,7 +5,6 @@ import org.junit.Test;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.exporter.task.models.Task;
-import es.jcyl.ita.formic.exporter.task.exception.TaskException;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -15,7 +14,7 @@ import es.jcyl.ita.formic.exporter.task.exception.TaskException;
 public class TaskConfigFactoryTest {
 
     @Test
-    public void readBasicTask() throws TaskException {
+    public void readBasicTask() throws Exception {
 //        String json = TestUtils.readAsString(TestUtils.findFile("basic_tasks.json"));
 
         String json = "{\n" +
