@@ -20,9 +20,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 
 /**
- * Procesor that allows to set values in context
+ * Processor that allows to set values in context
  *
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class ContextPopulateProcessor extends AbstractProcessor

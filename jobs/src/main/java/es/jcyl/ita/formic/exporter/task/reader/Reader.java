@@ -21,7 +21,7 @@ import es.jcyl.ita.formic.exporter.task.models.TaskSepItem;
 /**
  * Interface definition for data readers.
  *
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public interface Reader extends TaskSepItem {
 

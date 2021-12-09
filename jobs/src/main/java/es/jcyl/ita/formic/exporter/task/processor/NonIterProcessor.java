@@ -20,7 +20,7 @@ import es.jcyl.ita.formic.exporter.task.models.TaskSepItem;
 
 /**
  * Base interface for processor that aren't included in a reader-writer iteration.
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public interface NonIterProcessor extends TaskSepItem {

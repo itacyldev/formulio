@@ -18,6 +18,8 @@ package es.jcyl.ita.formic.exporter.task.models;
 import java.util.ArrayList;
 
 /**
+ * Extended version of ArrayList that includes pagination info.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class PaginatedList<M> extends ArrayList<M> {

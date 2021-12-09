@@ -36,7 +36,7 @@ import es.jcyl.ita.formic.exporter.task.models.RecordPage;
  * <p>
  * Pensado para casos de test.
  *
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class RandomDataReader extends AbstractReader {
 

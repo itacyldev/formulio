@@ -24,38 +24,46 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import util.Log;
 import es.jcyl.ita.formic.exporter.task.config.TaskConfigFactory;
 import es.jcyl.ita.formic.exporter.task.exception.StopTaskExecutionSignal;
 import es.jcyl.ita.formic.exporter.task.exception.TaskException;
+import es.jcyl.ita.formic.exporter.task.models.GroupTask;
 import es.jcyl.ita.formic.exporter.task.models.IterativeTask;
+import es.jcyl.ita.formic.exporter.task.models.NonIterTask;
 import es.jcyl.ita.formic.exporter.task.models.Task;
-
+import util.Log;
+/*
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 /**
- * @author Class to execute a list of tasks
+ * Class to execute a list of tasks.
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class TaskExecutor {
 
-    private static final String ITER_HANDLER = "iter";
-    private static final String NON_ITER_HANDLER = "niter";
-
-    private Map<String, TaskHandler> handlers = new HashMap<>();
+    private Map<Class, TaskHandler> handlers = new HashMap<>();
 
     private TaskExecListener listener = new NoopTaskExecListener();
 
     public TaskExecutor() {
-        // init handlers
-        handlers.put(ITER_HANDLER, new IterativeTaskHandler());
-        handlers.put(NON_ITER_HANDLER, new NonIterativeTaskHandler());
-    }
-
-    private TaskHandler getHandler(Task t) {
-        if (t instanceof IterativeTask) {
-            return handlers.get(ITER_HANDLER);
-        } else {
-            return handlers.get(NON_ITER_HANDLER);
-        }
+        // different handlers for different execution strategies
+        handlers.put(IterativeTask.class, new IterativeTaskHandler());
+        handlers.put(NonIterTask.class, new NonIterativeTaskHandler());
+        handlers.put(GroupTask.class, new GroupTaskHandler(this));
     }
 
     /**
@@ -78,6 +86,17 @@ public class TaskExecutor {
         doExecute(context, tasks.iterator());
     }
 
+    public TaskExecListener getListener() {
+        return listener;
+    }
+
+    public void setListener(TaskExecListener listener) {
+        this.listener = listener;
+    }
+
+    /*****************************/
+    /**** Internal implementation */
+    /*****************************/
 
     private void doExecute(CompositeContext context, Iterator<Task> taskIterator)
             throws TaskException {
@@ -123,16 +142,8 @@ public class TaskExecutor {
         }
     }
 
-    /*****************************/
-    /**** Internal implementation */
-    /*****************************/
-
-    public TaskExecListener getListener() {
-        return listener;
-    }
-
-    public void setListener(TaskExecListener listener) {
-        this.listener = listener;
+    private TaskHandler getHandler(Task t) {
+        return handlers.get(t.getClass());
     }
 
     /**

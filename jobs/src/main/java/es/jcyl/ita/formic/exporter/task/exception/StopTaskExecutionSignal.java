@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.exporter.task.exception;
 /**
  * Special exception used to make the executor stop the execution of a job.
  *
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class StopTaskExecutionSignal extends RuntimeException {

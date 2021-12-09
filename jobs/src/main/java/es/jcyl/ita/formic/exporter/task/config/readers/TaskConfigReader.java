@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.task.models;
+package es.jcyl.ita.formic.exporter.task.config.readers;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,14 +15,16 @@ package es.jcyl.ita.formic.exporter.task.models;
  * limitations under the License.
  */
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.exporter.task.config.TaskConfigException;
+import es.jcyl.ita.formic.exporter.task.models.Task;
 
 /**
- * Common interface for all objects that can implement a step of a task: reader, writer and processors.
- *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface TaskSepItem {
+public interface TaskConfigReader<T extends Task>{
 
-	void setTask(Task t);
-
+    T read(JsonNode json, Context context) throws TaskConfigException;
 }

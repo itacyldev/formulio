@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.exporter.task.processor.NonIterProcessor;
 /**
  * Class that handles the execution of Non iterative tasks.
  *
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class NonIterativeTaskHandler implements TaskHandler<NonIterTask> {

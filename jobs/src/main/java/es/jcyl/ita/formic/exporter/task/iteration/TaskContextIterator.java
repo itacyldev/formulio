@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.task.models;
+package es.jcyl.ita.formic.exporter.task.iteration;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,14 +15,15 @@ package es.jcyl.ita.formic.exporter.task.models;
  * limitations under the License.
  */
 
+import java.util.Iterator;
 
-/**
- * Common interface for all objects that can implement a step of a task: reader, writer and processors.
- *
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- */
-public interface TaskSepItem {
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.exporter.task.models.GroupTask;
 
-	void setTask(Task t);
+public interface TaskContextIterator extends Iterator<CompositeContext> {
+
+	void setGlobalContext(CompositeContext ctx);
+
+	void setTask(GroupTask t);
 
 }

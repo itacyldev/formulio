@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.exporter.task.writer.Writer;
 /**
  * Class that handles the execution of iterative tasks.
  *
- * @author gustavo.rio@itacyl.es
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 

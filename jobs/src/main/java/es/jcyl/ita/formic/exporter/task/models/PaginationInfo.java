@@ -18,6 +18,12 @@ package es.jcyl.ita.formic.exporter.task.models;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Bean that holds resultSet pagination info
+ *
+ * @author: Gustavo Río (gustavo.rio@itacyl.es)
+ */
+
 public class PaginationInfo implements Serializable {
     Integer first;
     Integer pageSize;

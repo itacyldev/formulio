@@ -77,7 +77,7 @@ public class TaskExecutorTest {
         // try to access the context by the task nam
         for (int i = 0; i < NUM_TASKS; i++) {
             Context ctx = gCtx.getContext("t" + i);
-            Assert.assertNotNull(ctx); 
+            Assert.assertNotNull(ctx);
         }
     }
 
@@ -104,6 +104,22 @@ public class TaskExecutorTest {
         }
     }
 
+    /**
+     * Creates a group task and checks the iterations has been performed check the contex
+     *
+     * @throws TaskException
+     */
+    @Test
+    public void testExecGroupTaskFromJson() throws TaskException {
+        String json = TestUtils.readAsString("tasks/basic_group_task.json");
+        int NUM_EXPECTED_ITERS = 5; // configured in json
+        TaskExecutor executor = new TaskExecutor();
+        CompositeContext gCtx = new UnPrefixedCompositeContext();
+        executor.execute(gCtx, json);
+
+        Assert.assertNotNull(gCtx);
+        Assert.assertEquals(NUM_EXPECTED_ITERS, gCtx.get("r1.size"));
+    }
 
     /**
      * Creates dummy tasks
