@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.exporter.jobs;
+package es.jcyl.ita.formic.exporter.jobs.exception;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -18,13 +18,16 @@ package es.jcyl.ita.formic.exporter.jobs;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class Job {
-
-    public void execute(){
-
+class JobException extends Exception {
+    public JobException(String msg, Throwable t) {
+        super(msg, t);
     }
 
-    public void resume(){
+    public JobException(Throwable t) {
+        super(t);
+    }
 
+    public JobException(String msg) {
+        super(msg);
     }
 }
