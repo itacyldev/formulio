@@ -43,7 +43,7 @@ public class ContextPopulateProcessorTest {
 
         ContextPopulateProcessor processor = new ContextPopulateProcessor();
         // create random map and set to the populator
-        Map valueMap = RandomUtils.randomMap(10,String.class, Long.class);
+        Map valueMap = RandomUtils.randomMap(10, String.class, Long.class);
         processor.setValueMap(valueMap);
         processor.setTask(taskMock);
 
