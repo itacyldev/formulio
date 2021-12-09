@@ -105,14 +105,15 @@ public class TaskExecutorTest {
     }
 
     /**
-     * Creates a group task and checks the iterations has been performed check the contex
+     * Read group task configuration from json, execute the task and check the context group index
+     * has reached the expected value.
      *
      * @throws TaskException
      */
     @Test
     public void testExecGroupTaskFromJson() throws TaskException {
         String json = TestUtils.readAsString("tasks/basic_group_task.json");
-        int NUM_EXPECTED_ITERS = 5; // configured in json
+        int NUM_EXPECTED_ITERS = 5; // fixed value configured in basic_group_task.json
         TaskExecutor executor = new TaskExecutor();
         CompositeContext gCtx = new UnPrefixedCompositeContext();
         executor.execute(gCtx, json);
