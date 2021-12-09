@@ -141,5 +141,15 @@
       <option name="name" value="sdk android extras" />
       <option name="url" value="file:$PROJECT_DIR$/exporter/null/extras/android/m2repository" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdk google extras" />
+      <option name="name" value="sdk google extras" />
+      <option name="url" value="file:$PROJECT_DIR$/jobs/null/extras/google/m2repository" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdk android extras" />
+      <option name="name" value="sdk android extras" />
+      <option name="url" value="file:$PROJECT_DIR$/jobs/null/extras/android/m2repository" />
+    </remote-repository>
   </component>
 </project>
