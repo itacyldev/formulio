@@ -4,8 +4,8 @@ pipeline {
 
     environment {
         PROJECT_NAME = 'FRMDRD'
-        //GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
-        GIT_URL = "git@itaul4622:ITACyL/${PROJECT_NAME}.git"
+        GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
+        //GIT_URL = "git@itaul4622:ITACyL/${PROJECT_NAME}.git"
     }
     //options {
     //        skipDefaultCheckout(true)
