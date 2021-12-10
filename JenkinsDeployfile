@@ -2,10 +2,11 @@
 pipeline {
     agent any
 
-     parameters {
+    parameters {
             choice(name: 'ENV_TYPE', choices: ['alpha', 'beta', 'production' ], description: 'Canal de despliegue')
             string(name: 'BRANCH_TO_DEPLOY', defaultValue: "develop", description: 'GIT branch to deploy')
             string(name: 'RELEASE_DESCRIPTION', defaultValue: "", description: 'Descripcion para la etiqueta (sin version ni fecha), si no pones nada la etiqueta tendrá el formato v1.0.0_yyyymmdd')
+    }
 
     environment {
         PROJECT_NAME = 'FRMDRD'
