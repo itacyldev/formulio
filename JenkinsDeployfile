@@ -2,6 +2,11 @@
 pipeline {
     agent any
 
+     parameters {
+            choice(name: 'ENV_TYPE', choices: ['alpha', 'beta', 'production' ], description: 'Canal de despliegue')
+            string(name: 'BRANCH_TO_DEPLOY', defaultValue: "develop", description: 'GIT branch to deploy')
+            string(name: 'RELEASE_DESCRIPTION', defaultValue: "", description: 'Descripcion para la etiqueta (sin version ni fecha), si no pones nada la etiqueta tendrá el formato v1.0.0_yyyymmdd')
+
     environment {
         PROJECT_NAME = 'FRMDRD'
         GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
@@ -18,28 +23,15 @@ pipeline {
             }
         }
 
-        stage("Build Apk") {
-            steps{
-                script {
-                    withCredentials([file(credentialsId: 'android_keystore', variable: 'KEYFILE')]) {
-                        sh """
-                            chmod +x gradlew
-                            ./gradlew clean assembleRelease
-                        """
-                    }
+        stage("Merge, tag and push to master") {
+            steps {
+                echo " The environment is ${params.ENV_TYPE}"
+                script{
+                    def version_value = sh(returnStdout: true, script: "cat build.gradle | grep -o 'versionName = [^,]*'").trim()
+                    sh "echo Project in version value: $version_value"
                 }
-            }
-        }
 
-        stage('Upload to Play Store') {
-            steps{
-                // Archive the APKs so that they can be downloaded from Jenkins
-                archiveArtifacts '**/build/outputs/**/*.apk'
-
-                // Upload the APK to Google Play
-                androidApkUpload googleCredentialsId: 'Google Play Key', apkFilesPattern: '**/build/outputs/**/*.apk', trackName: 'alpha',  rolloutPercentage: '100'
-
-            }
+           }
         }
    }
     //post {
