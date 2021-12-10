@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs;
+package es.jcyl.ita.formic.jayjobs.jobs.executor;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,10 +15,16 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
+import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface TaskProgressHandler {
 
-    void notify(String message);
+public interface JobExecutor {
+
+	void execute(CompositeContext ctx, JobConfig job, JobExec jobExecInfo) throws JobException;
+	
 }

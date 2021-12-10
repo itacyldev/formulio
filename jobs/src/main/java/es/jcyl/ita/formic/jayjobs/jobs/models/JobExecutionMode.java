@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs;
+package es.jcyl.ita.formic.jayjobs.jobs.models;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,12 +16,24 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  */
 
 /**
- * Indicates how the tasks will be executed, if Foreground is chosen (FG) the task will execute
- * using and Async/Concurrent task, using Background makes the tasks execute in an independent
- * Background Service.
+ * Indicates how the tasks will be executed, if Foreground_Async is chosen (FG_ASYNC) the task will
+ * executed using and Async/Concurrent task, using Background makes the tasks execute in an i
+ * ndependent Background Service. ForeGround execution runs the tasks using the main thread,
+ * intended just for short running jobs.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public enum JobExecutionMode {
-    BG, FG
+    /**
+     * Use background service to execute the job
+     */
+    BG,
+    /**
+     * User Async/Concurrent task to execute the job
+     */
+    FG_ASYNC,
+    /**
+     * Execute the job in the main thread (don't use for long-running tasks)
+     */
+    FG
 }

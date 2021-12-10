@@ -15,29 +15,43 @@ package es.jcyl.ita.formic.jayjobs.jobs.config;
  * limitations under the License.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+@JsonIgnoreProperties({ "tasks" })
 public class JobConfig {
-    private String name;
-    private String config;
+    private String id; // taken from the file name
+    private String description;
     private String nextJob;
     private String configFile;
+    // required contexts and Android permissions to execute the job
+    private String[] requiredContexts;
+    private String[] requiredPermissions;
+    // selected execution mode for the job (BG/FG)
+    private JobExecutionMode executionMode;
+    // part of the job json config that defines the tasks
+    @JsonIgnore
+    private String taskConfig;
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getConfig() {
-        return config;
+    public String getDescription() {
+        return description;
     }
 
-    public void setConfig(String config) {
-        this.config = config;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getNextJob() {
@@ -54,5 +68,37 @@ public class JobConfig {
 
     public void setConfigFile(String configFile) {
         this.configFile = configFile;
+    }
+
+    public String[] getRequiredContexts() {
+        return requiredContexts;
+    }
+
+    public void setRequiredContexts(String[] requiredContexts) {
+        this.requiredContexts = requiredContexts;
+    }
+
+    public String[] getRequiredPermissions() {
+        return requiredPermissions;
+    }
+
+    public void setRequiredPermissions(String[] requiredPermissions) {
+        this.requiredPermissions = requiredPermissions;
+    }
+
+    public void setExecutionMode(JobExecutionMode executionMode) {
+        this.executionMode = executionMode;
+    }
+
+    public JobExecutionMode getExecMode() {
+        return executionMode;
+    }
+
+    public String getTaskConfig() {
+        return taskConfig;
+    }
+
+    public void setTaskConfig(String taskConfig) {
+        this.taskConfig = taskConfig;
     }
 }

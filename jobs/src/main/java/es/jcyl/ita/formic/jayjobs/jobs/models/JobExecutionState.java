@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs;
+package es.jcyl.ita.formic.jayjobs.jobs.models;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,14 +15,7 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  * limitations under the License.
  */
 
-/**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- */
-public interface StateRegister {
+public enum JobExecutionState {
+	INIT, EXECUTING, FINISHED, ERROR
 
-    void completed(String taskId);
-
-    void canceled(String taskId);
-
-    void error(String taskId);
 }

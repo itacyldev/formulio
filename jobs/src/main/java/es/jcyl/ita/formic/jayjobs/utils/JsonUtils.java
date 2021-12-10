@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs.config;
+package es.jcyl.ita.formic.jayjobs.utils;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,21 +15,26 @@ package es.jcyl.ita.formic.jayjobs.jobs.config;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JobConfigException extends JobException {
-    public JobConfigException(String msg, Throwable t) {
-        super(msg, t);
+public class JsonUtils {
+    // shared mapper instance (thread safe)
+    private static ObjectMapper mapper;
+
+    static {
+        mapper = new ObjectMapper();
+        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+        mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
     }
 
-    public JobConfigException(Throwable t) {
-        super(t);
+    public static ObjectMapper mapper(){
+        return mapper;
     }
 
-    public JobConfigException(String msg) {
-        super(msg);
-    }
+
 }

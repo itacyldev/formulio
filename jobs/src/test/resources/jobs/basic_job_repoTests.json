@@ -1,0 +1,17 @@
+{
+  "description": "job example",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "executionMode": "FG",
+  "tasks": [
+    {
+      "name": "t1",
+      "processor": {
+        "type": "contextPopulator",
+        "value": "A very weird value!!"
+      }
+    }
+  ]
+}

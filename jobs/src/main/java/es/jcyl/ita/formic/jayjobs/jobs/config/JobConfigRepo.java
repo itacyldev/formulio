@@ -15,97 +15,101 @@ package es.jcyl.ita.formic.jayjobs.jobs.config;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.core.context.ContextAwareComponent;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.jayjobs.jobs.ContextAccessor;
+import es.jcyl.ita.formic.jayjobs.utils.JsonUtils;
 
 /**
+ * Reads job configuration from the job definition json file.
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JobConfigRepo implements ContextAwareComponent {
+public class JobConfigRepo {
 
-    private Context context;
+    public JobConfig get(CompositeContext ctx, String jobType) throws JobConfigException {
+        File cfgFile = findJobConfigFile(ctx, jobType);
 
-    public JobConfig get(String jobType) throws JobConfigException {
-        JobConfig jobConf = findJobConfig(jobType);
-        if (jobConf == null) {
-            return null;
-        }
-        // load job configuration
-        loadJsonConfig(jobConf);
-        // TODO: proper job config validation
-
-        // load
-//        loadTasksFromJson(jobConf);
-        return jobConf;
-    }
-
-    public void loadJsonConfig(JobConfig jobConfig) {
-        // si en la configuraci�n json vienen configuradas las tareas se
-        // utilizan �stas.
-        if (StringUtils.isBlank(jobConfig.getConfig())) {
-            throw new JobConfigException(
-                    String.format("La configuraci�n del job [%s] est� vac�a.",
-                            jobConfig.getId()));
-        }
-
-        // leer los valores a configurar y copiarlos al objeto de conf.
-        // principal obviando las propiedades que tenemos que mantener de la BD.
-        JobConfig jsonConfig;
+        // read json content
+        String json;
         try {
-            jsonConfig = this.mapper.readValue(jobConfig.getConfig(),
-                    JobConfig.class);
-            BeanUtils.copyProperties(jsonConfig, jobConfig, "config", "id",
-                    "name", "description", "app", "cronExpression",
-                    "configFile", "lastExec", "lastSuccessExec", "nextExec",
-                    "active", "execMode", "allowedExecMode");
-
-            // si el la app es nula en el original la cogemos del json
-            if (StringUtils.isBlank(jobConfig.getApp())) {
-                jobConfig.setApp(jsonConfig.getApp());
-            }
-        } catch (Exception e) {
+            json = FileUtils.readFileToString(cfgFile, "UTF-8");
+        } catch (IOException e) {
             throw new JobConfigException(String.format(
-                    "Se produjo un error al intentar parsear la configuraci�n del job [%s].",
-                    jobConfig.getId()), e);
-
+                    "An error occurred while reading the file [%s].", cfgFile.getAbsoluteFile()), e);
         }
-    }
 
-
-    private JobConfig findJobConfig(String jobId) {
-        JobConfig jobConf = null;
+        // load job configuration
+        JobConfig jobConf;
         try {
-            jobConf = this.jobService.get(JobConfig.class, jobId);
-        } catch (DAOException e) {
-            throw new ConfigurationException(String.format(
-                    "Se produjo un error al intentar la conf. del tipo de job [%s]",
-                    jobId), e);
+            jobConf = parseJsonConfig(json);
+        } catch (JsonProcessingException e) {
+            throw new JobConfigException(String.format(
+                    "An error occurred while parsing the json content of the file [%s].",
+                    cfgFile.getAbsoluteFile()), e);
         }
-        if (jobConf != null
-                && StringUtils.isNotBlank(jobConf.getConfigFile())) {
-            // buscar configuraci�n en fichero
-            String config;
-            try {
-                config = this.fileConfigLocator
-                        .getConfigFromFile(jobConf.getConfigFile());
-                jobConf.setConfig(config);
-            } catch (IOException e) {
-                throw new ConfigurationException(String.format(
-                        "No se ha podido consultar el fichero de configuraci�n [%s] para el tipo de job [%s]. "
-                                + "Se est� buscando en la ruta recursos_app/configs de UQSERV: [%s].",
-                        jobConf.getConfigFile(), jobId,
-                        Paths.get(AppConfig.getDirRecursos(), "configs")
-                                .toString()),
-                        e);
-            }
-        }
+        jobConf.setId(jobType);
+        jobConf.setConfigFile(cfgFile.getAbsolutePath());
+        // TODO: proper job/tasks config validation
         return jobConf;
     }
 
-    @Override
-    public void setContext(Context ctx) {
-        this.context = ctx;
+    /**
+     * Reads job and tasks configuration from json.
+     *
+     * @param json
+     * @return
+     * @throws JsonProcessingException
+     */
+    public JobConfig parseJsonConfig(String json) throws JsonProcessingException,
+            JobConfigException {
+        // create job config object from json
+        JobConfig jobConfig = JsonUtils.mapper().readValue(json, JobConfig.class);
+
+        // read tasks definition and set it in the jobConfig as plain json
+        String taskJson = getTasksDefinition(jobConfig, json);
+        jobConfig.setTaskConfig(taskJson);
+
+        return jobConfig;
+    }
+
+    private String getTasksDefinition(JobConfig jobConfig, String json) throws JobConfigException,
+            JsonProcessingException {
+        // El atributo "tasks" est� ignorado, hay que leerlo a mano
+        JsonNode rootNode = JsonUtils.mapper().readTree(json);
+        JsonNode tasksNode = rootNode.path("tasks");
+        if (tasksNode.isNull() || tasksNode == null) {
+            throw new JobConfigException("Couldn't find 'task' element in job configuration");
+        } else {
+            return tasksNode.toString();
+        }
+    }
+
+    /**
+     * Locates job configuration file in project jobs folders
+     *
+     * @param ctx
+     * @param jobId
+     * @return
+     * @throws JobConfigException
+     */
+    private File findJobConfigFile(CompositeContext ctx, String jobId) throws JobConfigException {
+        // locate file in project jobs folder
+        String jobsFolder = ContextAccessor.jobsFolder(ctx);
+        File cfgFile = new File(jobsFolder, jobId);
+        if (!cfgFile.exists()) {
+            throw new JobConfigException(String.format(
+                    "The job file [%s.json] doesn't exists in folder [%s]. " +
+                            "Make sure the file exists and upper and lower case letters in the " +
+                            "file name match the job id: [%s].", jobId, jobsFolder, jobId));
+        }
+        return cfgFile;
     }
 }

@@ -15,6 +15,9 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  * limitations under the License.
  */
 
+import java.util.HashMap;
+import java.util.Map;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
@@ -22,6 +25,11 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecutor;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.MainThreadExecutor;
+import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 
 /**
  * Front class to execute jobs.
@@ -31,17 +39,23 @@ import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 public class JobFacade implements ContextAwareComponent {
 
     private Context globalContext;
-    private JobConfigRepo repo;
+    private JobConfigRepo jobConfigRepo;
+    private JobExecRepo jobExecRepo;
 
+    private Map<JobExecutionMode, JobExecutor> executors = new HashMap<>();
 
-    public void executeJob(Context ctx, String jobType) throws JobException {
-        JobConfig job = jobFactory.getJob(jobType);
-        return doExecuteJob(ctx, jobType, JobExecutionType.BY_REQUEST, job.getExecMode());
+    public JobFacade() {
+        // init executors
+        executors.put(JobExecutionMode.FG, new MainThreadExecutor());
     }
 
-    protected void doExecuteJob(CompositeContext ctx, String jobType, JobExecutionMode execMode) throws JobConfigException {
+    public Long executeJob(CompositeContext ctx, String jobType) throws JobException {
+        JobConfig job = jobConfigRepo.get(ctx, jobType);
+        return doExecuteJob(ctx, jobType, job.getExecMode());
+    }
 
-        JobConfig job = repo.get(jobType);
+    private Long doExecuteJob(CompositeContext ctx, String jobType, JobExecutionMode execMode) throws JobException {
+        JobConfig job = jobConfigRepo.get(ctx, jobType);
         if (job == null) {
             Context prjCtx = ctx.getContext("project");
             String prjName = prjCtx.getString("name");
@@ -50,37 +64,45 @@ public class JobFacade implements ContextAwareComponent {
                             "exists.",
                     prjName, jobType));
         }
-//        // completar contexto de ejecuci�n del job
-//        CompositeContext cmpCtx = completeContext(ctx, job);
-//        // registrar el incio del job en BD
-//        String userId = cmpCtx.getString("user.id");
-//        if (StringUtils.isBlank(userId)) {
-//            throw new JobException("El contexto de ejecuci�n pasado no contiene el identificador "
-//                    + "de usuario. Debes a�adir un contexto \"user\" que contenga "
-//                    + "la clave \"id\"");
-//        }
-//        JobExec jobExecutionInfo = registerExecution(job, execType, execMode, userId, cmpCtx);
-//
-//        if (execMode == JobExecutionMode.FG) {
-//            jobExecutor.executeJob(cmpCtx, job, jobExecutionInfo);
-//            if (StringUtils.isNotBlank(job.getNextJob())) {
-//                executeNextJob(ctx, job);
-//            }
-//        } else { // BG
-//            // launch bg task to process job
-//            BackGroundJobExecutor bgExecutor = new BackGroundJobExecutor();
-//            Long taskId = bgExecutor.executeJob(cmpCtx, job, jobExecutionInfo);
-//            if (isRegisterEnabled()) {
-//                // Recargamos la informaci�n del job (para casos en los que el
-//                // proceso se ha ejecutado en local)
-//                jobExecutionInfo = registry.findById(jobExecutionInfo.getId());
-//                // Actualizar el registro de ejecuci�n para vincular el id de la
-//                // tarea a la ejecuci�n del job
-//                jobExecutionInfo.setTaskId(taskId);
-//                registry.updateJobExecution(jobExecutionInfo);
-//            }
-//        }
+        // checks needed contexts and permissions
+        checkContexts(job, ctx);
+        checkPermissions(job);
+
+        JobExec jobExecutionInfo = jobExecRepo.registerExecInit(ctx, job, execMode);
+
+        JobExecutor executor = getExecutor(job);
+        executor.execute(ctx, job, jobExecutionInfo);
+
         return jobExecutionInfo.getId();
+    }
+
+    private JobExecutor getExecutor(JobConfig job) {
+        if (job.getExecMode() == null) {
+            // TODO: IF EXEC MODE IS NULL USE FG_ASYNC by default
+        }
+        JobExecutor jobExecutor = this.executors.get(job.getExecMode());
+        if (jobExecutor == null) {
+            throw new UnsupportedOperationException(String.format("%s is not implemented", job.getExecMode()));
+        }
+        return jobExecutor;
+    }
+
+    /**
+     * Checks if the execution context for the job contains all the contexts needed by the job
+     *
+     * @param job
+     * @param ctx
+     */
+    private void checkContexts(JobConfig job, CompositeContext ctx) {
+    }
+
+
+    /**
+     * Checks if the user has given all the needed permissions to execute the job
+     *
+     * @param job
+     */
+    private void checkPermissions(JobConfig job) {
     }
 
     @Override
@@ -88,11 +110,19 @@ public class JobFacade implements ContextAwareComponent {
         this.globalContext = ctx;
     }
 
-    public JobConfigRepo getRepo() {
-        return repo;
+    public JobConfigRepo getJobConfigRepo() {
+        return jobConfigRepo;
     }
 
-    public void setRepo(JobConfigRepo repo) {
-        this.repo = repo;
+    public void setJobConfigRepo(JobConfigRepo jobConfigRepo) {
+        this.jobConfigRepo = jobConfigRepo;
+    }
+
+    public JobExecRepo getJobExecRepo() {
+        return jobExecRepo;
+    }
+
+    public void setJobExecRepo(JobExecRepo jobExecRepo) {
+        this.jobExecRepo = jobExecRepo;
     }
 }

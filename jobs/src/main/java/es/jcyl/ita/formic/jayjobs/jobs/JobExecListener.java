@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs.config;
+package es.jcyl.ita.formic.jayjobs.jobs;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,21 +15,17 @@ package es.jcyl.ita.formic.jayjobs.jobs.config;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JobConfigException extends JobException {
-    public JobConfigException(String msg, Throwable t) {
-        super(msg, t);
-    }
+public interface JobExecListener {
 
-    public JobConfigException(Throwable t) {
-        super(t);
-    }
+    void onJobStart(JobConfig job, JobExec jobExecInfo);
 
-    public JobConfigException(String msg) {
-        super(msg);
-    }
+    void onJobEnd(JobConfig job, JobExec jobExecInfo);
+
+    void onJobError(JobConfig job, JobExec jobExecInfo);
 }

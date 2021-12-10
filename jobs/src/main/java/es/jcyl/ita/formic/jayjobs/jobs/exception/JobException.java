@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.exception;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-class JobException extends Exception {
+public class JobException extends Exception {
     public JobException(String msg, Throwable t) {
         super(msg, t);
     }
