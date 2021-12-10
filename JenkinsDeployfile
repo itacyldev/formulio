@@ -42,7 +42,7 @@ pipeline {
                     }
                     def ENV = ""
                     if(params.ENV_TYPE != 'production'){
-                        ENV = "_${params.ENV_TYPE}
+                        ENV = "_${params.ENV_TYPE}"
                     }
                     RELEASE_TAG = "v${VERSION}_${TIMESTAMP}${DESC}${ENV}"
                 }
