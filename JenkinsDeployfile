@@ -32,6 +32,21 @@ pipeline {
                     sh "echo Project in version value: $version_value"
                 }
 
+                script {
+                    def now = new Date()
+                    def TIMESTAMP = now.format("yyyyMMdd")
+                    def VERSION = sh(returnStdout: true, script: "cat build.gradle | grep -o 'versionName = [^,]*'").trim()
+                    def DESC = ""
+                    if(params.RELEASE_DESCRIPTION){
+                        DESC = "_${params.RELEASE_DESCRIPTION}".replaceAll(" ","_")
+                    }
+                    def ENV = ""
+                    if(params.ENV_TYPE != 'production'){
+                        ENV = "_${params.ENV_TYPE}
+                    }
+                    RELEASE_TAG = "v${VERSION}_${TIMESTAMP}${DESC}${ENV}"
+                }
+                echo "Etiquetando version ${RELEASE_TAG}"
            }
         }
    }
