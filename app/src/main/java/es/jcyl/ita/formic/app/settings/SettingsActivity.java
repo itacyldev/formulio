@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.app.workspace;/*
+package es.jcyl.ita.formic.app.settings;/*
  * Copyright 2020 Gustavo Río (mungarro@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,39 +20,44 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.MainActivity;
+import es.jcyl.ita.formic.forms.util.FileUtils;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
-public class WorkspaceActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity {
 
     private EditText pathEditText;
-    private Button pathImageButton;
+    private TextInputLayout textInputLayout;
 
     private static final int TREE_REQUEST_CODE = 9999;
 
     @Override
     protected void doOnCreate() {
-        setContentView(R.layout.activity_workspace);
-        setToolbar(getString(R.string.action_workspace));
-        //setCurrentWorkspace();
+        setContentView(R.layout.activity_settings);
+        setToolbar(getString(R.string.action_settings));
+        setCurrentWorkspace();
 
-        pathEditText = (EditText) findViewById(R.id.path_text);
+    }
+
+    private void setCurrentWorkspace(){
+        pathEditText = findViewById(R.id.path_text);
         pathEditText.setTag(Boolean.TRUE);
         pathEditText.setText(getCurrentWorkspace());
 
-        pathImageButton = (Button) findViewById(R.id.path_button);
-        pathImageButton.setOnClickListener(new View.OnClickListener() {
+        textInputLayout = findViewById(R.id.projects_folder);
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
                 intent.addCategory(Intent.CATEGORY_DEFAULT);
                 startActivityForResult(Intent.createChooser(intent
@@ -62,12 +67,6 @@ public class WorkspaceActivity extends BaseActivity {
         });
 
     }
-
-    /*private void setCurrentWorkspace(){
-        TextView labelCurrentWorkspace = findViewById(R.id.label_current_workspace);
-        setDefaultCurrentWorkspace();
-        labelCurrentWorkspace.setText(sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects"));
-    }*/
 
     public String setCurrentWorkspace(String path) {
         sharedPreferences.edit().putString("current_workspace", path).apply();
@@ -90,27 +89,14 @@ public class WorkspaceActivity extends BaseActivity {
                 uri = data.getData();
             }
             if (uri != null) {
-                //final String path = FileUtils.getPath(this, uri);
-                final String path = "/storage/emulated/0/projects2";
+                final String path = FileUtils.getPath(this, uri);
                 if (path != null) {
                     pathEditText.setText(setCurrentWorkspace(path));
                     pathEditText.setTag(Boolean.FALSE);
-                    /*AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-                    builder.setCancelable(false); // if you want user to wait for some process to finish,
-                    builder.setView(R.layout.layout_loading_dialog);
-                    AlertDialog dialog = builder.create();
-                    dialog.show(); // to show this dialog*/
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                 }
             }
-            /*Config config = Config.init(this, currentWorkspace);
-            ProjectRepository projectRepo = config.getProjectRepo();
-            List<Project> projects = projectRepo.listAll();
-            Project prj = projects.get(0);
-            Config.getInstance().setCurrentProject(prj);
-            loadFragment(new FormListFragment());
-            */
         }
     }
 
