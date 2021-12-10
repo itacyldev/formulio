@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.app.workspace;/*
+package es.jcyl.ita.formic.app.settings;/*
  * Copyright 2020 Gustavo Río (mungarro@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,13 +31,13 @@ import es.jcyl.ita.formic.R;
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
-public class WorkspaceActivityTest {
+public class SettingsActivityTest {
 
-    private WorkspaceActivity activity;
+    private SettingsActivity activity;
 
     @Before
     public void setup() {
-        activity = Robolectric.setupActivity(WorkspaceActivity.class);
+        activity = Robolectric.setupActivity(SettingsActivity.class);
     }
 
     @Test

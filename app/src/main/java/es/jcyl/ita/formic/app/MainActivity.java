@@ -29,7 +29,7 @@ import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
-import es.jcyl.ita.formic.app.workspace.WorkspaceActivity;
+import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -93,6 +93,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showSettings();
             return true;
         }
 
@@ -111,11 +112,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
-        if (id == R.id.action_workspace) {
-            showWorkspace();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -129,8 +125,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
-    protected final void showWorkspace() {
-        final Intent intent = new Intent(this, WorkspaceActivity.class);
+    protected final void showSettings() {
+        final Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
