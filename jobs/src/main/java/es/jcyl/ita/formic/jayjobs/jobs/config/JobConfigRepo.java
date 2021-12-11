@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.jobs.ContextAccessor;
+import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.utils.JsonUtils;
 
 /**

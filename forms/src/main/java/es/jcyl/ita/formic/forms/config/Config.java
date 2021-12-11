@@ -157,15 +157,19 @@ public class Config {
      * @param ctx
      */
     private void initJobsContext(CompositeContext ctx){
-        // Create temporary directory for jobs execution if it doesn't already exists
+        // Create temporary directory for job execution if it doesn't already exists
         File osTempDirectory = FileUtils.getTempDirectory();
+        if(!osTempDirectory.exists()){
+            // use cache dir
+            osTempDirectory = andContext.getCacheDir();
+        }
         File tmpFolder = new File(osTempDirectory, "tmp");
         if(!tmpFolder.exists()){
             tmpFolder.mkdir();
         }
         // application context
         BasicContext appCtx = new BasicContext("app");
-        appCtx.put("tmpFolder", tmpFolder.getAbsolutePath());
+        appCtx.put("workingFolder", tmpFolder.getAbsolutePath());
         globalContext.addContext(appCtx);
     }
 

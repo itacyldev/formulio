@@ -8,9 +8,12 @@
   "tasks": [
     {
       "name": "t1",
-      "processor": {
-        "type": "contextPopulator",
-        "value": "A very weird value!!"
+      "reader": {
+        "type": "randomDataReader",
+        "maxResults": 20
+      },
+      "writer": {
+        "type": "csvWriter"
       }
     }
   ]

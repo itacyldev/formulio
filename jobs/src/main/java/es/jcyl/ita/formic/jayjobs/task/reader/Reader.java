@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.jayjobs.task.reader;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
 import es.jcyl.ita.formic.jayjobs.task.models.TaskSepItem;
 
@@ -25,9 +26,11 @@ import es.jcyl.ita.formic.jayjobs.task.models.TaskSepItem;
  */
 public interface Reader extends TaskSepItem {
 
-    void open();
+    void open() throws TaskException;
 
-    RecordPage read();
+    RecordPage read() throws TaskException;
+
+    void close() throws TaskException;
 
     void setPageSize(Integer size);
 
@@ -37,5 +40,4 @@ public interface Reader extends TaskSepItem {
 
     Boolean allowsPagination();
 
-    void close();
 }

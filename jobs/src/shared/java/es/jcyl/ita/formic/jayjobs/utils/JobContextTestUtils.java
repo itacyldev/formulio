@@ -59,7 +59,7 @@ public class JobContextTestUtils {
 
         // Create temporary folder under SO tmp
         File tmpDir = TestUtils.createTempDirectory();
-        appContext.put("tmpFolder", tmpDir.getAbsolutePath());
+        appContext.put("workingFolder", tmpDir.getAbsolutePath());
         ctx.addContext(appContext);
 
         // create job context and set the folder of job definition files

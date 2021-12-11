@@ -39,6 +39,8 @@ import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
+import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
+import es.jcyl.ita.formic.jayjobs.task.writer.CSVWriter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -54,13 +56,11 @@ public class TaskConfigFactory {
     private static ObjectMapper mapper;
 
     static {
-//        // readers
-//        registry.put("SQLREADER", SQLReader.class);
-//
-//        // writers
-//        registry.put("CONTEXTWRITER", ContextWriter.class);
-//
-//        // processors
+        // readers
+        registry.put("RANDOMDATAREADER", RandomDataReader.class);
+        // writers
+        registry.put("CSVWRITER", CSVWriter.class);
+        // processors
         registry.put("CONTEXTPOPULATOR", ContextPopulateProcessor.class);
     }
 

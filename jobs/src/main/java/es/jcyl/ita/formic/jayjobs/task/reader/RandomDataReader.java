@@ -42,7 +42,7 @@ public class RandomDataReader extends AbstractReader {
 
     private int numColumns = 5;
     private int maxResults = 100;
-    private int _currentTolal = 0;
+    private int currentTotal = 0;
 
     @Override
     public void open() {
@@ -50,15 +50,15 @@ public class RandomDataReader extends AbstractReader {
 
     @Override
     public RecordPage read() {
-        if (this._currentTolal >= this.maxResults) {
+        if (this.currentTotal >= this.maxResults) {
             return null;
         }
-        RecordPage record = createRandomPage(this.getPageSize(),
+        RecordPage record = createRandomPage(Math.min(this.getPageSize(), this.maxResults),
                 this.numColumns);
-        this._currentTolal += record.getResults().size();
+        this.currentTotal += record.getResults().size();
         PaginationInfo pInfo = new PaginationInfo(
                 record.getResults());
-        pInfo.setTotalResult(this._currentTolal);
+        pInfo.setTotalResult(this.currentTotal);
         record.setInfo(pInfo);
         return record;
     }
@@ -71,7 +71,7 @@ public class RandomDataReader extends AbstractReader {
     @Override
     public void close() {
         // TODO Auto-generated method stub
-        this._currentTolal = 0;
+        this.currentTotal = 0;
     }
 
     public int getNumColumns() {
@@ -126,8 +126,6 @@ public class RandomDataReader extends AbstractReader {
             }
             lstSrc.add(record);
         }
-        addRandomItems(lstSrc, numItems, numColumns, false);
-
         int pageSize = 3;
         lstSrc.setFirst(0);
         lstSrc.setPageSize(pageSize);
@@ -135,20 +133,6 @@ public class RandomDataReader extends AbstractReader {
 
         RecordPage page = new RecordPage(lstSrc);
         return page;
-    }
-
-    public static List<Map<String, Object>> addRandomItems(
-            List<Map<String, Object>> lstSrc, int numItems, int numColumns,
-            boolean conSufijo) {
-
-        List<String> columns = new ArrayList<String>(numColumns);
-        for (int c = 1; c <= numColumns; c++) {
-            columns.add("col" + c
-                    + (conSufijo ? "_" + RandomStringUtils.randomAlphanumeric(5)
-                    : ""));
-        }
-
-        return addRandomItems(lstSrc, numItems, columns, true);
     }
 
     public static List<Map<String, Object>> addRandomItems(

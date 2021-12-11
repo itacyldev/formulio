@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs;
+package es.jcyl.ita.formic.jayjobs.task.utils;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -57,11 +57,17 @@ public class ContextAccessor {
         }
     }
 
-    public static String tmpFolder(CompositeContext ctx) {
+    /**
+     * Returns the temporal folder used by the application to store temporary data.
+     *
+     * @param ctx
+     * @return
+     */
+    public static String workingFolder(CompositeContext ctx) {
         if (ctx == null) {
             throw new RuntimeException("Null context passed!.");
         }
         Context appContext = ctx.getContext(APP_CTX);
-        return (appContext == null) ? null : appContext.getString("tmpFolder");
+        return (appContext == null) ? null : appContext.getString("workingFolder");
     }
 }

@@ -119,7 +119,7 @@ public class AbstractConfigObjectReader {
         Class<?> clazz = getClassFromType(objectType);
         if (clazz == null) {
             throw new IllegalArgumentException(String.format(
-                    "Invalid value for attribute 'type': [%s]. Valid values are: [%s]. ",
+                    "Invalid value for attribute 'type': [%s]. Valid values are: %s. ",
                     objectType, factory.getRegistry().keySet()));
         }
         return mapper.treeToValue(objectNode, clazz);

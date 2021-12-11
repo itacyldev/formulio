@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.jayjobs.task.processor;
  */
 
 
+import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.TaskSepItem;
 
 /**
@@ -25,6 +26,6 @@ import es.jcyl.ita.formic.jayjobs.task.models.TaskSepItem;
 
 public interface NonIterProcessor extends TaskSepItem {
 
-    void process();
+    void process() throws TaskException;
 
 }

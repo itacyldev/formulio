@@ -33,6 +33,8 @@ import es.jcyl.ita.formic.repo.test.utils.TestUtils;
  */
 public class DevJobsBuilder {
 
+
+
     public static JobConfig createDummyJobConfig() {
         JobConfig jobConfig = new JobConfig();
         jobConfig.setId(RandomUtils.randomString(10));
