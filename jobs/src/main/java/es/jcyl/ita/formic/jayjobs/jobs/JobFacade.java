@@ -20,7 +20,6 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.core.context.ContextAwareComponent;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
@@ -36,9 +35,8 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JobFacade implements ContextAwareComponent {
+public class JobFacade {
 
-    private Context globalContext;
     private JobConfigRepo jobConfigRepo;
     private JobExecRepo jobExecRepo;
 
@@ -47,6 +45,11 @@ public class JobFacade implements ContextAwareComponent {
     public JobFacade() {
         // init executors
         executors.put(JobExecutionMode.FG, new MainThreadExecutor());
+        jobConfigRepo = new JobConfigRepo();
+    }
+
+    public JobConfig getJobConfig(CompositeContext ctx, String jobType) throws JobConfigException {
+        return this.jobConfigRepo.get(ctx, jobType);
     }
 
     public Long executeJob(CompositeContext ctx, String jobType) throws JobException {
@@ -74,7 +77,7 @@ public class JobFacade implements ContextAwareComponent {
         }
         // checks needed contexts and permissions
         checkContexts(job, ctx);
-        checkPermissions(job);
+//        checkPermissions(job); // TODO: --> Esto lo debería hacer el cliente porque requerirá acceso al Contexto Android
 
         JobExec jobExecutionInfo = jobExecRepo.registerExecInit(ctx, job, execMode);
 
@@ -111,11 +114,6 @@ public class JobFacade implements ContextAwareComponent {
      * @param job
      */
     private void checkPermissions(JobConfig job) {
-    }
-
-    @Override
-    public void setContext(Context ctx) {
-        this.globalContext = ctx;
     }
 
     public JobConfigRepo getJobConfigRepo() {

@@ -28,7 +28,8 @@ import es.jcyl.ita.formic.jayjobs.jobs.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.utils.JsonUtils;
 
 /**
- * Reads job configuration from the job definition json file.
+ * Reads job configuration from the job definition json files.
+ * Uses the context to locate the project job folder.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -103,7 +104,7 @@ public class JobConfigRepo {
     private File findJobConfigFile(CompositeContext ctx, String jobId) throws JobConfigException {
         // locate file in project jobs folder
         String jobsFolder = ContextAccessor.jobsFolder(ctx);
-        File cfgFile = new File(jobsFolder, jobId+".json");
+        File cfgFile = new File(jobsFolder, jobId + ".json");
         if (!cfgFile.exists()) {
             throw new JobConfigException(String.format(
                     "The job file [%s.json] doesn't exists in folder [%s]. " +

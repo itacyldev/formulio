@@ -24,7 +24,7 @@ import es.jcyl.ita.formic.core.context.Context;
 public class ContextAccessor {
     public static final String USER_CTX = "user";
     private static final String APP_CTX = "app";
-    private static final String JOB_CTX = "job";
+    private static final String PRJ_CTX = "project";
 
     public static String userId(CompositeContext ctx) {
         if (ctx == null) {
@@ -38,7 +38,7 @@ public class ContextAccessor {
         if (ctx == null) {
             throw new RuntimeException("Null context passed!.");
         }
-        Context jobContext = ctx.getContext(JOB_CTX);
+        Context jobContext = ctx.getContext(PRJ_CTX);
         return (jobContext == null) ? null : jobContext.getString("projectFolder");
     }
 
@@ -46,7 +46,7 @@ public class ContextAccessor {
         if (ctx == null) {
             throw new RuntimeException("Null context passed!.");
         }
-        Context jobContext = ctx.getContext(JOB_CTX);
+        Context jobContext = ctx.getContext(PRJ_CTX);
         if (jobContext == null) {
             return null;
         } else if (jobContext.containsKey("jobsFolder")) {

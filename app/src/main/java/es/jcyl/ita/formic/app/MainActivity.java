@@ -181,16 +181,15 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     private void doInitConfiguration() {
-
-        //String projectsFolder = getApplicationContext().getFilesDir() + "/projects";
         String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
 
         File f = new File(projectsFolder);
         if (!f.exists()) {
             f.mkdir();
         }
-
+        // initilize formic configuration
         Config config = Config.init(this, projectsFolder);
+
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {

@@ -30,9 +30,9 @@ import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- * <p>
  * Test access to Entity and View through the FormContext.
+ * <p>
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class UnPrefixedCompositeContextTest {
@@ -62,6 +62,31 @@ public class UnPrefixedCompositeContextTest {
         Assert.assertEquals(5, ctx.get("bc2.b"));
     }
 
+    /**
+     * Combine global contexto with other context to create and effective execution context
+     */
+    @Test
+    public void testCombineGlobalContext() {
+        CompositeContext globalContext = ContextTestUtils.createGlobalContext();
+        Context device = new BasicContext("device");
+        device.put("camera", false);
+        globalContext.addContext(device);
+
+        BasicContext params = new BasicContext("params");
+        params.put("A", 1);
+        params.put("B", 2);
+
+        // combine both contexts using unprefixed context
+        UnPrefixedCompositeContext ctx = new UnPrefixedCompositeContext();
+        ctx.addContext(params);
+        ctx.addContext(globalContext);
+
+        Assert.assertEquals(1, ctx.get("params.A"));
+        Assert.assertEquals(2, ctx.get("params.B"));
+        Object o = ctx.get("device.camera");
+        Assert.assertEquals(false, o);
+    }
+
     @Test
     public void testCombineWidgetContext() {
         WidgetContext ctx = ContextTestUtils.createWidgetContext();
@@ -75,11 +100,9 @@ public class UnPrefixedCompositeContextTest {
         bc2.put("a", 4);
         bc2.put("b", 5);
 
-        CompositeContext globalContext = ContextTestUtils.createGlobalContext();
         Context device = new BasicContext("device");
         device.put("camera", false);
         ctx.addContext(device);
-        globalContext.addContext(device);
 
         // try access with prefix
         Assert.assertEquals(1, ctx.get("bc1.A"));

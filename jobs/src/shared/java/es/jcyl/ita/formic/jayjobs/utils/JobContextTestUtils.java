@@ -63,7 +63,7 @@ public class JobContextTestUtils {
         ctx.addContext(appContext);
 
         // create job context and set the folder of job definition files
-        Context projectCtx = new BasicContext("job");
+        Context projectCtx = new BasicContext("project");
         projectCtx.put("projectFolder", projectBaseFolder);//resources folder
         ctx.addContext(projectCtx);
         return ctx;

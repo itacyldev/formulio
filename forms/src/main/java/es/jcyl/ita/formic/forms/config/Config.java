@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.config;
 import android.content.Context;
 import android.content.res.Resources;
 
+import org.apache.commons.io.FileUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
@@ -27,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
@@ -45,6 +47,7 @@ import es.jcyl.ita.formic.forms.project.handlers.FormConfigHandler;
 import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
+import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -65,6 +68,7 @@ public class Config {
     private CompositeContext globalContext;
 
     private Project currentProject;
+    private JobFacade jobFacade;
     /**
      * Reads project list
      */
@@ -97,6 +101,7 @@ public class Config {
         return _instance;
     }
 
+
     /**
      * Static initialization for
      *
@@ -126,11 +131,10 @@ public class Config {
             // project repository
             projectRepo = new ProjectRepository(new File(this.appBaseFolder));
             registerHandlers();
+            jobFacade = new JobFacade();
             configLoaded = true;
         }
     }
-
-
 
 
     /**
@@ -139,9 +143,31 @@ public class Config {
      */
     private void initContext() {
         globalContext = new UnPrefixedCompositeContext();
+        // TODO: create context providers to implement each context creation
         globalContext.addContext(new DateTimeContext());
+        initJobsContext(globalContext);
         MainController.getInstance().setContext(globalContext);
         RepositoryFactory.getInstance().setContext(globalContext);
+    }
+
+    /**
+     * Prepares temp execution folder and context information to execute jobs.
+     * @param ctx
+     */
+    private void initJobsContext(CompositeContext ctx){
+        // Create temporary directory for jobs execution if it doesn't already exists
+        File osTempDirectory = FileUtils.getTempDirectory();
+        File tmpFolder = new File(osTempDirectory, "tmp");
+        if(!tmpFolder.exists()){
+            tmpFolder.mkdir();
+        }
+        // Create project and app contexts and add them to Global context
+        BasicContext projectCtx = new BasicContext("project");
+        projectCtx.put("projectFolder", this.appBaseFolder);
+        globalContext.addContext(projectCtx);
+        BasicContext appCtx = new BasicContext("app");
+        projectCtx.put("tmpFolder", tmpFolder.getAbsolutePath());
+        globalContext.addContext(appCtx);
     }
 
     private void clear() {
@@ -330,5 +356,13 @@ public class Config {
 
     public String getStringResource(int stringId) {
         return (this.getAndroidContext() == null) ? null : getResources().getString(stringId);
+    }
+
+    public JobFacade getJobFacade() {
+        return jobFacade;
+    }
+
+    public void setJobFacade(JobFacade jobFacade) {
+        this.jobFacade = jobFacade;
     }
 }

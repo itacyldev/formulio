@@ -65,6 +65,7 @@ public class ActionController {
         register(ActionType.DELETE_LIST, new DeleteFromListActionHandler(mc, router));
         register(ActionType.CREATE, new CreateEntityActionHandler(mc, router));
         register(ActionType.JS, new JsActionHandler(mc, router));
+        register(ActionType.JOB, new JobActionHandler(mc, router));
     }
 
     public void register(ActionType type, ActionHandler handler) {
