@@ -16,9 +16,6 @@ package es.jcyl.ita.formic.jayjobs.utils;
  */
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
@@ -33,6 +30,7 @@ public class JobContextTestUtils {
 
     /**
      * Creates composite context and fill with minimum data to allow job execution
+     *
      * @return
      */
     public static CompositeContext createJobExecContext() {
@@ -41,17 +39,29 @@ public class JobContextTestUtils {
         return createJobExecContext(jobsFolder.getParent());
     }
 
+    /**
+     * For instrumentation test, creates a temporary folder as project base and
+     * a "jobs" folder inside. Returns project folder
+     *
+     * @return
+     */
+    public static File createProjectFolderInstrTest() {
+        // create temporal folder (cannot use Files.createTempDirectory() in android)
+        File projectFolder = TestUtils.createTempDirectory();
+        File jobsFolder = new File(projectFolder, "jobs");
+        jobsFolder.mkdir();
+        return projectFolder;
+    }
+
     public static CompositeContext createJobExecContext(String projectBaseFolder) {
         CompositeContext ctx = new UnPrefixedCompositeContext();
         Context appContext = new BasicContext("app");
+
         // Create temporary folder under SO tmp
-        try {
-            Path tmpDir = Files.createTempDirectory("tmpDir");
-            appContext.put("tmpFolder", tmpDir.toAbsolutePath());
-            ctx.addContext(appContext);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        File tmpDir = TestUtils.createTempDirectory();
+        appContext.put("tmpFolder", tmpDir.getAbsolutePath());
+        ctx.addContext(appContext);
+
         // create job context and set the folder of job definition files
         Context projectCtx = new BasicContext("job");
         projectCtx.put("projectFolder", projectBaseFolder);//resources folder

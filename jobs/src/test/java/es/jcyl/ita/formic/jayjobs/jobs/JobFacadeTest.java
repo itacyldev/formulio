@@ -50,7 +50,7 @@ public class JobFacadeTest {
                 any(JobExecutionMode.class))).thenReturn(builder.execInfo);
         facade.setJobExecRepo(execRepo);
 
-        facade.executeJob(builder.globalContext, "basic_job_repoTests.json");
+        facade.executeJob(builder.globalContext, "basic_job_repoTests");
 
         // check context has been update with the task context
         CompositeContext gCtx = builder.globalContext;

@@ -47,6 +47,18 @@ android {
         javaMaxHeapSize "2g"
         jumboMode = true
     }
+
+    sourceSets {
+        String sharedTestJavaDir = 'src/shared/java'
+        androidTest {
+            java.srcDirs += [sharedTestJavaDir]
+            resources.srcDirs += ['src/test/resources']
+        }
+        test {
+            java.srcDirs += [sharedTestJavaDir]
+        }
+
+    }
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -88,6 +100,7 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
         exclude group: 'androidx.test', module: 'runner'
     }
+    androidTestImplementation 'org.mockito:mockito-android:4.1.0'
 
     /////////////////////////////////////
     // JUnit test dependencies

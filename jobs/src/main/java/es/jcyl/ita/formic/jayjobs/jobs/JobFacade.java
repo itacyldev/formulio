@@ -51,18 +51,26 @@ public class JobFacade implements ContextAwareComponent {
 
     public Long executeJob(CompositeContext ctx, String jobType) throws JobException {
         JobConfig job = jobConfigRepo.get(ctx, jobType);
-        return doExecuteJob(ctx, jobType, job.getExecMode());
+        return doExecuteJob(ctx, job, job.getExecMode());
     }
 
-    private Long doExecuteJob(CompositeContext ctx, String jobType, JobExecutionMode execMode) throws JobException {
+    public Long executeJob(CompositeContext ctx, String jobType, JobExecutionMode execMode) throws JobException {
         JobConfig job = jobConfigRepo.get(ctx, jobType);
+        return doExecuteJob(ctx, job, execMode);
+    }
+
+    public Long executeJob(CompositeContext ctx, JobConfig job, JobExecutionMode execMode) throws JobException {
+        return doExecuteJob(ctx, job, execMode);
+    }
+
+    private Long doExecuteJob(CompositeContext ctx, JobConfig job, JobExecutionMode execMode) throws JobException {
         if (job == null) {
             Context prjCtx = ctx.getContext("project");
             String prjName = prjCtx.getString("name");
             throw new JobConfigException(String.format(
                     "The required job type [%s] doesn't exists, make sure the file [%s/jobs/%s.json] " +
                             "exists.",
-                    prjName, jobType));
+                    prjName, job.getId()));
         }
         // checks needed contexts and permissions
         checkContexts(job, ctx);

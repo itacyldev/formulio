@@ -1,22 +1,23 @@
 package es.jcyl.ita.formic.jayjobs.jobs;
 
-import android.content.Context;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.Map;
-import java.util.Scanner;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
+import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
+import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
-import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * Instrumented test to check facade execution on android device
@@ -25,25 +26,35 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class FacadeIntegrationTest {
+
     @Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("es.jcyl.ita.formic.test", appContext.getPackageName());
+    public void testRunForeGroundJob() throws Exception {
+        String jobId = "job_exporter";
+        // Create project folder:
+        File projectFolder = JobContextTestUtils.createProjectFolderInstrTest();
 
-        File file = TestUtils.getResourceAsFile("jobs/job_exporter.json");
+        // create support execution objects
+        DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
+        builder.withContext(JobContextTestUtils.createJobExecContext(projectFolder.getAbsolutePath())).build();
+        // copy job definition file to project/jobs folder
+        TestUtils.copyResourceToFolder(String.format("jobs/%s.json",jobId), new File(projectFolder, "jobs"));
 
-        Scanner myReader = new Scanner(file);
-        while (myReader.hasNextLine()) {
-            String data = myReader.nextLine();
-            System.out.println(data);
-        }
-        myReader.close();
+        // create facade and related repositories
+        JobFacade facade = new JobFacade();
+        JobConfigRepo repo = new JobConfigRepo();
+        facade.setJobConfigRepo(repo);
+        // mock execution repo calls to return the dummy JobExecInfo
+        JobExecRepo execRepo = mock(JobExecRepo.class);
+        when(execRepo.registerExecInit(any(CompositeContext.class),
+                any(JobConfig.class),
+                any(JobExecutionMode.class))).thenReturn(builder.execInfo);
+        facade.setJobExecRepo(execRepo);
 
-        ObjectMapper mapper = new ObjectMapper();
-        // try basic mapping using task and
-        Map<?, ?> map = mapper.readValue(file, Map.class);
-        System.out.println(map);
+        facade.executeJob(builder.globalContext, jobId, JobExecutionMode.FG);
+
+        // check context has been update with the task context
+        CompositeContext gCtx = builder.globalContext;
+        Assert.assertNotNull(gCtx.getContext("t1"));
     }
 }
 

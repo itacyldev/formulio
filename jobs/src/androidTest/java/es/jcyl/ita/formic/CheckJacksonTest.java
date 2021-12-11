@@ -31,7 +31,7 @@ public class CheckJacksonTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("es.jcyl.ita.formic.test", appContext.getPackageName());
 
-        File file = TestUtils.getResourceAsFile("job_exporter.json");
+        File file = TestUtils.getResourceAsFile("jobs/job_exporter.json");
 
         Scanner myReader = new Scanner(file);
         while (myReader.hasNextLine()) {

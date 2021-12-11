@@ -28,7 +28,7 @@ public class JobConfigRepoTest {
         CompositeContext ctx = JobContextTestUtils.createJobExecContext();
         JobConfigRepo repo = new JobConfigRepo();
 
-        JobConfig jobConfig = repo.get(ctx, "basic_job_repoTests.json");
+        JobConfig jobConfig = repo.get(ctx, "basic_job_repoTests");
 
         Assert.assertNotNull(jobConfig);
         Assert.assertNotNull(jobConfig.getExecMode());

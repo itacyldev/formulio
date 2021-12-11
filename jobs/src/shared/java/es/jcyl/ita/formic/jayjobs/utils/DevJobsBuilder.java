@@ -28,10 +28,10 @@ import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
  * Handy tools to create test data
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class DevJobsBuilder {
-
 
     public static JobConfig createDummyJobConfig() {
         JobConfig jobConfig = new JobConfig();
@@ -45,10 +45,14 @@ public class DevJobsBuilder {
         public JobConfig jobConfig;
 
         public CreateDummyJobExec() {
-            this.globalContext = JobContextTestUtils.createJobExecContext();
         }
 
         private String taskConfig;
+
+        public CreateDummyJobExec withContext(CompositeContext context) {
+            this.globalContext = context;
+            return this;
+        }
 
         public CreateDummyJobExec withTasks(String taskFile) {
             taskConfig = TestUtils.readAsString(taskFile);
@@ -66,10 +70,13 @@ public class DevJobsBuilder {
         }
 
         public void build() {
+            if (this.globalContext == null) {
+                this.globalContext = JobContextTestUtils.createJobExecContext();
+            }
             if (this.jobConfig == null) {
                 this.jobConfig = createDummyJobConfig();
             }
-            if(StringUtils.isNotBlank(this.taskConfig)){
+            if (StringUtils.isNotBlank(this.taskConfig)) {
                 this.jobConfig.setTaskConfig(this.taskConfig);
             }
             this.execInfo = new JobExec();

@@ -103,7 +103,7 @@ public class JobConfigRepo {
     private File findJobConfigFile(CompositeContext ctx, String jobId) throws JobConfigException {
         // locate file in project jobs folder
         String jobsFolder = ContextAccessor.jobsFolder(ctx);
-        File cfgFile = new File(jobsFolder, jobId);
+        File cfgFile = new File(jobsFolder, jobId+".json");
         if (!cfgFile.exists()) {
             throw new JobConfigException(String.format(
                     "The job file [%s.json] doesn't exists in folder [%s]. " +
