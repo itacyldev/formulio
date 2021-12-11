@@ -21,8 +21,20 @@ public class TaskResourceAccessor {
         } else {
             String appWorkingFolder = ContextAccessor.workingFolder(ctx);
             // create absolute path to working folder
-            // devolver el fichero relativo al directorio de trabajo de la
             File f = new File(appWorkingFolder, filePath);
+            return f.getAbsolutePath();
+        }
+    }
+
+    public static String getProjectFile(CompositeContext ctx, String filePath){
+        // if absolute path, return without changes
+        File file = new File(filePath);
+        if (file.isAbsolute()) {
+            return filePath;
+        } else {
+            String projectBaseFolder = ContextAccessor.projectFolder(ctx);
+            // create absolute path to project base folder
+            File f = new File(projectBaseFolder, filePath);
             return f.getAbsolutePath();
         }
     }
