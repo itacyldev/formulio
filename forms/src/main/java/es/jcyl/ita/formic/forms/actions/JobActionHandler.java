@@ -57,7 +57,7 @@ public class JobActionHandler extends AbstractActionHandler {
             jobFacade.executeJob(ctx, jobId);
         } catch (JobException e) {
             throw new UserActionException(error(String.format("An error occurred while executing " +
-                        "the job [%s].",jobId)));
+                        "the job [%s].",jobId),e));
         }
     }
 

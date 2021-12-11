@@ -39,7 +39,7 @@ public class ContextAccessor {
             throw new RuntimeException("Null context passed!.");
         }
         Context jobContext = ctx.getContext(PRJ_CTX);
-        return (jobContext == null) ? null : jobContext.getString("projectFolder");
+        return (jobContext == null) ? null : jobContext.getString("folder");
     }
 
     public static String jobsFolder(CompositeContext ctx) {

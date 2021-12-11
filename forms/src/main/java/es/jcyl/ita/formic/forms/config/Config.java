@@ -48,6 +48,7 @@ import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -132,6 +133,7 @@ public class Config {
             projectRepo = new ProjectRepository(new File(this.appBaseFolder));
             registerHandlers();
             jobFacade = new JobFacade();
+            jobFacade.setJobExecRepo(new JobExecRepo());
             configLoaded = true;
         }
     }
@@ -161,12 +163,9 @@ public class Config {
         if(!tmpFolder.exists()){
             tmpFolder.mkdir();
         }
-        // Create project and app contexts and add them to Global context
-        BasicContext projectCtx = new BasicContext("project");
-        projectCtx.put("projectFolder", this.appBaseFolder);
-        globalContext.addContext(projectCtx);
+        // application context
         BasicContext appCtx = new BasicContext("app");
-        projectCtx.put("tmpFolder", tmpFolder.getAbsolutePath());
+        appCtx.put("tmpFolder", tmpFolder.getAbsolutePath());
         globalContext.addContext(appCtx);
     }
 
@@ -211,6 +210,9 @@ public class Config {
         // clear all previous configs
         clear();
 
+        // update project context
+        populateProjectContext(project);
+
         readingListener.setProject(project);
         DevConsole.setConfigReadingInfo(readingListener);
 
@@ -225,6 +227,18 @@ public class Config {
 
         processDefaultResources();
         processProjectResources(project);
+    }
+
+    /**
+     * Updates project context with current project
+     * @param project
+     */
+    private void populateProjectContext(Project project){
+        // Create project and app contexts and add them to Global context
+        BasicContext projectCtx = new BasicContext("project");
+        projectCtx.put("folder", project.getBaseFolder());
+        projectCtx.put("name", project.getName());
+        globalContext.addContext(projectCtx);
     }
 
     private void processDefaultResources() {
