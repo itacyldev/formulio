@@ -42,12 +42,10 @@ public class TaskExecutorExampleTest {
     @Test
     public void testExecTasksFromJson() throws TaskException, IOException {
         String json = TestUtils.readAsString("tasks/integration_RandomReader_CSVWriter.json");
-
-//        CompositeContext gCtx = new UnPrefixedCompositeContext();
         CompositeContext gCtx = JobContextTestUtils.createJobExecContext();
+
         TaskExecutor executor = new TaskExecutor();
         executor.execute(gCtx, json);
-
 
         // check the content of the context
         Assert.assertTrue(gCtx.containsKey("t1.outputFile"));
