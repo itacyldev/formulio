@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
- * Reference tests to test jobs.
+ * Reference tests for testing jobs.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
