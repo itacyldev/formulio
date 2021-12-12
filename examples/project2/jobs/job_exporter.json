@@ -11,7 +11,7 @@
       "reader": {
         "type": "sqlreader",
         "dbFile": "data/dbTest.sqlite",
-        "sqlQuery": "select * from superheroes"
+        "sqlQuery": "select id, name, real_name, age, enemy_id from superheroes"
       },
       "writer": {
         "type": "csvWriter"
