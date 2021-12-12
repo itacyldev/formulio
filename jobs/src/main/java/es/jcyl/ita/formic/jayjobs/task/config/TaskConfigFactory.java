@@ -40,6 +40,7 @@ import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
 import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
+import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
 import es.jcyl.ita.formic.jayjobs.task.writer.CSVWriter;
 
 /**
@@ -58,6 +59,7 @@ public class TaskConfigFactory {
     static {
         // readers
         registry.put("RANDOMDATAREADER", RandomDataReader.class);
+        registry.put("SQLREADER", SQLReader.class);
         // writers
         registry.put("CSVWRITER", CSVWriter.class);
         // processors

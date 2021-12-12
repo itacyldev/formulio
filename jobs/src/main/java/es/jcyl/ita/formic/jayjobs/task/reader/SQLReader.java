@@ -1,65 +1,59 @@
 package es.jcyl.ita.formic.jayjobs.task.reader;
 
-import org.apache.commons.lang3.StringUtils;
+import android.database.sqlite.SQLiteDatabase;
 
+import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.greendao.database.StandardDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
-import es.jcyl.ita.formic.jayjobs.task.models.PaginatedList;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
-import es.jcyl.ita.formic.jayjobs.task.reader.sql.SQLiteQueryEngine;
 import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
+import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
+import es.jcyl.ita.formic.repo.db.source.NativeSQLEntitySource;
+import es.jcyl.ita.formic.repo.db.sqlite.RawSQLiteRepository;
 import util.Log;
 
 public class SQLReader extends AbstractReader {
-    private static final int DEFAULT_CACHE_LIMIT = 256;
 
     private String dbFile;
-    private String querySQL;
-    private Map<String, Object> params;
-    private Boolean nameBinding = false;
-    private Boolean doCount = true;
+    private String sqlQuery;
+    // TODO: parameter binding
+//    private Map<String, Object> params;
 
-    /**
-     * Variables de estado interno
-     */
-    // cache de consultas parseadas
-    private final Map<String, ParsedSQLWrapper> parsedSqlCache = new LinkedHashMap<String, ParsedSQLWrapper>(
-            DEFAULT_CACHE_LIMIT, 0.75f, true) {
-        @Override
-        protected boolean removeEldestEntry(Entry<String, ParsedSQLWrapper> eldest) {
-            return size() > DEFAULT_CACHE_LIMIT;
-        }
-    };
-
-    private SQLiteQueryEngine qEngine = new SQLiteQueryEngine();
-    private QueryProcessorEH qProcessor;
-
-    public SQLReader() {
-        qProcessor = QueryProcessorEH.getInstance();
-    }
+    private Repository<Entity, SQLQueryFilter> repo;
 
     @Override
     public void open() throws TaskException {
         locateDbFile();
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+        NativeSQLEntitySource source = new NativeSQLEntitySource(new StandardDatabase(db), sqlQuery);
+        this.repo = new RawSQLiteRepository(source);
     }
 
     @Override
-    public RecordPage read() throws TaskException{
+    public RecordPage read() throws TaskException {
+        SQLQueryFilter filter = new SQLQueryFilter();
+        filter.setPageSize(getPageSize());
+        filter.setOffset(getOffset());
+        List<Entity> entities = repo.find(filter);
+        // convert to List<Map>
+        RecordPage page = createRecordPage(entities);
+        return page;
+    }
 
-        String pQuery = qProcessor.process(querySQL, getGlobalContext());
-        Log.debug("pQuery =" + pQuery);
-
-        if (!doCount) {
-            setPageSize(-1);
+    private RecordPage createRecordPage(List<Entity> entities) {
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (Entity entity : entities) {
+            rows.add(entity.getProperties());
         }
-
-        PaginatedList rs = qEngine.execute(pQuery, dbFile, getGlobalContext(), getPageSize(),
-                getOffset());
-
-        RecordPage rp = new RecordPage(rs);
-
-        return rp;
+        RecordPage page = new RecordPage(rows);
+        return page;
     }
 
     private void locateDbFile() throws TaskException {
@@ -76,49 +70,24 @@ public class SQLReader extends AbstractReader {
         return true;
     }
 
-    public String getQuerySQL() {
-        return querySQL;
+    public String getSqlQuery() {
+        return sqlQuery;
     }
 
-    public void setQuerySQL(String querySQL) {
-        this.querySQL = querySQL;
-    }
-
-    public Map<String, Object> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params) {
-        this.params = params;
-    }
-
-    public SQLiteQueryEngine getqEngine() {
-        return qEngine;
-    }
-
-    public void setqEngine(SQLiteQueryEngine qEngine) {
-        this.qEngine = qEngine;
+    public void setSqlQuery(String sqlQuery) {
+        this.sqlQuery = sqlQuery;
     }
 
     @Override
     public void close() {
-        // TODO Auto-generated method stub
+        this.repo = null;
     }
 
-    public Boolean getNameBinding() {
-        return nameBinding;
+    public String getDbFile() {
+        return dbFile;
     }
 
-    public void setNameBinding(Boolean nameBinding) {
-        this.nameBinding = nameBinding;
-    }
-
-
-    public Boolean isDoCount() {
-        return doCount;
-    }
-
-    public void setDoCount(Boolean doCount) {
-        this.doCount = doCount;
+    public void setDbFile(String dbFile) {
+        this.dbFile = dbFile;
     }
 }

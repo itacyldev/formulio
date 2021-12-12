@@ -16,7 +16,6 @@ package es.jcyl.ita.formic.repo.db.sqlite;
  */
 
 import android.database.Cursor;
-import android.database.CursorWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +25,16 @@ import es.jcyl.ita.formic.core.context.VarSubstitutor;
 import es.jcyl.ita.formic.repo.AbstractBaseRepository;
 import es.jcyl.ita.formic.repo.CursorPropertyReader;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.source.EntitySource;
-import es.jcyl.ita.formic.repo.db.source.NativeSQLEntitySource;
 import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
+import es.jcyl.ita.formic.repo.db.source.NativeSQLEntitySource;
 import es.jcyl.ita.formic.repo.db.sqlite.converter.SQLitePropertyConverter;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.SQLiteCursorMetaModeler;
 import es.jcyl.ita.formic.repo.db.sqlite.sql.SQLBuilder;
 import es.jcyl.ita.formic.repo.db.sqlite.sql.SQLSelectBuilder;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.MetaModeler;
+import es.jcyl.ita.formic.repo.source.EntitySource;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -77,9 +76,6 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
 
     @Override
     public long count(SQLQueryFilter filter) {
-        if (true) {
-            throw new UnsupportedOperationException("Not implemented yet!");
-        }
         String effQuery = SQLBuilder.countQuery(this.query);
         Cursor cursor = source.getDb().rawQuery(effQuery, null);
         try {
@@ -124,7 +120,6 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
             return new ArrayList();
         } else {
             List<Entity> list = new ArrayList(count);
-            CursorWindow window = null;
             if (cursor.moveToFirst()) {
                 if (this.meta == null) {
                     this.meta = readEntityMeta(cursor);
