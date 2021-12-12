@@ -5,12 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.greendao.database.StandardDatabase;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigException;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
+import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
@@ -56,11 +59,27 @@ public class SQLReader extends AbstractReader {
         return page;
     }
 
+    /**
+     * Tries to locate db file using relative reference to project folder and app working file folder
+     *
+     * @throws TaskException
+     */
     private void locateDbFile() throws TaskException {
         if (StringUtils.isBlank(dbFile)) {
             throw new TaskException("You must set the 'dbFile' attribute in sqlReader to define the target db file.");
         }
         this.dbFile = TaskResourceAccessor.getProjectFile(this.getGlobalContext(), dbFile);
+        File f = new File(dbFile);
+        if (!f.exists()) {
+            this.dbFile = TaskResourceAccessor.getWorkingFile(this.getGlobalContext(), dbFile);
+        }
+        f = new File(dbFile);
+        if (!f.exists()) {
+            throw new TaskConfigException(String.format("Couldn't find file [%s] neither in project " +
+                            "folder [%s] nor in application tmp folder [%s].", this.dbFile,
+                    ContextAccessor.projectFolder(this.getGlobalContext()),
+                    ContextAccessor.workingFolder(this.getGlobalContext())));
+        }
         Log.info("SqlReader configured to access data in dbFile: " + this.dbFile);
     }
 
