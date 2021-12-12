@@ -23,8 +23,8 @@ import java.io.File;
 import java.io.IOException;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
+import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
@@ -43,9 +43,11 @@ public class TaskExecutorExampleTest {
     public void testExecTasksFromJson() throws TaskException, IOException {
         String json = TestUtils.readAsString("tasks/integration_RandomReader_CSVWriter.json");
 
+//        CompositeContext gCtx = new UnPrefixedCompositeContext();
+        CompositeContext gCtx = JobContextTestUtils.createJobExecContext();
         TaskExecutor executor = new TaskExecutor();
-        CompositeContext gCtx = new UnPrefixedCompositeContext();
         executor.execute(gCtx, json);
+
 
         // check the content of the context
         Assert.assertTrue(gCtx.containsKey("t1.outputFile"));
@@ -57,6 +59,5 @@ public class TaskExecutorExampleTest {
         // it has at least one line
         Assert.assertTrue(fileContent.split("\\n").length>1);
     }
-
 
 }
