@@ -9,8 +9,9 @@
     {
       "name": "t1",
       "reader": {
-        "type": "randomDataReader",
-        "maxResults": 20
+        "type": "sqlreader",
+        "dbFile": "data/dbTest.sqlite",
+        "sqlQuery": "select * from superheroes"
       },
       "writer": {
         "type": "csvWriter"

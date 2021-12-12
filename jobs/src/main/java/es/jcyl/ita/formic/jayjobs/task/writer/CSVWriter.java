@@ -20,7 +20,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +40,7 @@ import util.Log;
  */
 
 public class CSVWriter extends AbstractWriter {
+    private static final DateFormat timestamper = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
     private static final Object DEFAULT_EXTENSION = "csv";
     /**
@@ -200,7 +204,7 @@ public class CSVWriter extends AbstractWriter {
         if (StringUtils.isBlank(this.outputFile)) {
             this.outputFile = String.format("%s_%s.%s",
                     RandomStringUtils.randomAlphanumeric(10),
-                    System.currentTimeMillis(), DEFAULT_EXTENSION);
+                    timestamper.format(new Date()), DEFAULT_EXTENSION);
             Log.info(String.format(
                     "The 'outputFile' attribute is not set in the CSVWriter, " +
                             "a random file name will be used [%s].", this.outputFile));

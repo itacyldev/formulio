@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.repo.db.sqlite;
  */
 
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +123,13 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
             List<Entity> list = new ArrayList(count);
             if (cursor.moveToFirst()) {
                 if (this.meta == null) {
-                    this.meta = readEntityMeta(cursor);
+                    try {
+                        this.meta = readEntityMeta(cursor);
+                    } catch (Exception e) {
+                        Log.e("dbRepo", "Error while trying to read entity meta [%s]."
+                                + e.getLocalizedMessage());
+                        throw e;
+                    }
                 }
                 Entity entity;
                 do {

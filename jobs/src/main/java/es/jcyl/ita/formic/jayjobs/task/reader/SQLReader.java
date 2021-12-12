@@ -59,9 +59,8 @@ public class SQLReader extends AbstractReader {
     private void locateDbFile() throws TaskException {
         if (StringUtils.isBlank(dbFile)) {
             throw new TaskException("You must set the 'dbFile' attribute in sqlReader to define the target db file.");
-
         }
-        this.dbFile = TaskResourceAccessor.getWorkingFile(this.getGlobalContext(), dbFile);
+        this.dbFile = TaskResourceAccessor.getProjectFile(this.getGlobalContext(), dbFile);
         Log.info("SqlReader configured to access data in dbFile: " + this.dbFile);
     }
 
