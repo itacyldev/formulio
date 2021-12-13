@@ -58,7 +58,7 @@ pipeline {
 
                         // Check if tag already exists and if so, remove it
                         script {
-                            def existsTag = sh (script: "git tag -l ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
+                            def existsTag = sh (script: "git ls-remote --tags  | grep ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
                             // If tag exists delete
                             if ("${existsTag}" == "1") {
                                 echo "Eliminando etiqueta ${RELEASE_TAG}"
