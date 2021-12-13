@@ -1,6 +1,7 @@
 
 pipeline {
-    agent any
+    //agent any
+    agent {label 'principal'}
 
     parameters {
             choice(name: 'ENV_TYPE', choices: ['alpha', 'beta', 'production' ], description: 'Canal de despliegue')
