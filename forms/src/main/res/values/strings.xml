@@ -4,7 +4,7 @@
     <string name="action_dev_console">Developer console</string>
     <string name="action_about">About</string>
     <string name="choose_directory">Choose directory</string>
-    <string name="path">Path</string>
+    <string name="workspace">Workspace</string>
     <string name="projects_folder">Path to the projects to be loaded</string>
 
 
