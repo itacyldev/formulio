@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.repo.meta.types.Geometry;
 
 import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.BLOB;
 import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.INTEGER;
+import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.NULL;
 import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.REAL;
 import static es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType.TEXT;
 
@@ -109,8 +110,9 @@ public class SQLiteConverterFactory implements ConverterFactory<SQLitePropertyCo
         this.defaultConverters.put(Geometry.class, new SQLiteBlobConverter(Date.class));
 
 
-        // default used when metadata is read from the table directly
+        // default converters to use when metadata is read from the table directly
         this.defaultDBConverters = new HashMap<>();
+        this.defaultDBConverters.put(NULL, new SQLiteTextConverter(String.class));
         this.defaultDBConverters.put(TEXT, new SQLiteTextConverter(String.class));
         this.defaultDBConverters.put(INTEGER, new SQLiteIntegerConverter(Long.class));
         this.defaultDBConverters.put(REAL, new SQLiteRealConverter(Double.class));

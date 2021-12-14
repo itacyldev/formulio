@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -109,6 +111,18 @@ public class RandomUtils {
             array[i] = (T) randomObject(clazz);
         }
         return array;
+    }
+
+    public static <K, V> Map<K, V> randomMap(int size, Class<K> keyClass, Class<V> valueClass) {
+        Map<K, V> m = new HashMap<>();
+        K key;
+        V value;
+        for (int i = 0; i < size; i++) {
+            key = (K) randomObject(keyClass);
+            value = (V) randomObject(valueClass);
+            m.put(key, value);
+        }
+        return m;
     }
 
     public static Object randomObject(Class clazz) {

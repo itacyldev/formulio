@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/forms" />
+            <option value="$PROJECT_DIR$/jobs" />
             <option value="$PROJECT_DIR$/repo" />
             <option value="$PROJECT_DIR$/repoAndroidTests" />
             <option value="$PROJECT_DIR$/repoTestUtils" />

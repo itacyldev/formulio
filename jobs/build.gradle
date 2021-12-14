@@ -1,0 +1,136 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+def globalConf = rootProject.ext
+
+archivesBaseName = 'jobs'
+group = globalConf.group
+version = globalConf.version
+
+
+android {
+    compileSdkVersion = rootProject.compileSdkVersion
+    buildToolsVersion = rootProject.buildToolsVersion
+
+    defaultConfig {
+        versionCode globalConf.versionCode
+        versionName globalConf.versionName
+        targetSdkVersion globalConf.targetSdkVersion
+        minSdkVersion globalConf.minSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.txt'
+        }
+    }
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+    dexOptions {
+        // http://developer.android.com/intl/es/tools/building/building-studio.html#instant-run
+        //preDexLibraries true
+        maxProcessCount 4
+        javaMaxHeapSize "2g"
+        jumboMode = true
+    }
+
+    sourceSets {
+        String sharedTestJavaDir = 'src/shared/java'
+        androidTest {
+            java.srcDirs += [sharedTestJavaDir]
+            resources.srcDirs += ['src/test/resources']
+        }
+        test {
+            java.srcDirs += [sharedTestJavaDir]
+        }
+
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+//    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':core')
+    api project(':repo')
+
+    api 'org.mini2Dx:android-beans:1.0.0'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    api 'commons-io:commons-io:2.6'
+    api 'com.opencsv:opencsv:5.2'
+
+    /////////////////////////////////////
+    // Instrumentation test dependencies
+    /////////////////////////////////////
+    androidTestImplementation project(':repoTestUtils')
+    // Core library
+    androidTestImplementation 'androidx.test:core:1.2.0'
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation('androidx.test:runner:1.2.0') {
+        exclude group: 'net.sf.kxml', module: ''
+    }
+    androidTestImplementation('androidx.test:rules:1.2.0') {
+        exclude group: 'androidx.test', module: ''
+    }
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
+    androidTestImplementation 'com.google.truth:truth:0.46'
+    // Espresso dependencies
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
+        exclude group: 'androidx.test', module: 'runner'
+    }
+    androidTestImplementation 'org.mockito:mockito-android:4.1.0'
+
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
+    testImplementation project(':repoTestUtils')
+    testImplementation unitTestDeps
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "http://repo.itacyl.es/archiva/repository/internal/"
+            def snapshotsRepoUrl = "http://repo.itacyl.es/archiva/repository/snapshots/"
+            url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+        }
+    }
+    publications {
+        mavenPublish(MavenPublication) {
+            artifacts {
+                groupId group
+                artifactId archivesBaseName
+                version version
+                artifact 'build/outputs/aar/' + archivesBaseName + (version.endsWith("SNAPSHOT") ? '-debug.aar' : '-release.aar')
+            }
+        }
+    }
+}

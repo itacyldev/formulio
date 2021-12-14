@@ -115,6 +115,10 @@ public class DevDbBuilder {
      *
      * @param db
      */
+    public void build(SQLiteDatabase db ) {
+        build(new StandardDatabase(db));
+    }
+
     public void build(Database db) {
         this.db = db;
         this.daoMaster = new DaoMaster(db);

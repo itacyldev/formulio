@@ -79,7 +79,7 @@ public class RhinoScriptsTest {
 
         // load script
         File file = TestUtils.findFile("scripts/repoMockAccess.js");
-        String source = TestUtils.readSource(file);
+        String source = TestUtils.readAsString(file);
         try {
             UnPrefixedCompositeContext gCtx = new UnPrefixedCompositeContext();
             BasicContext simpleTx = new BasicContext("basic");
@@ -134,7 +134,7 @@ public class RhinoScriptsTest {
         gCtx.put("repos", new RepoAccessContext());
 
         File file = TestUtils.findFile("scripts/repoAccess.js");
-        String source = TestUtils.readSource(file);
+        String source = TestUtils.readAsString(file);
 
         runScript(source, gCtx);
     }

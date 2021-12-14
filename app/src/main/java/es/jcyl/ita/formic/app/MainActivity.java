@@ -188,41 +188,38 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     protected void doInitConfiguration() {
 
-        //String projectsFolder = getApplicationContext().getFilesDir() + "/projects";
-        //String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
         String projectsFolder = currentWorkspace;
 
         File f = new File(projectsFolder);
         if (!f.exists()) {
             f.mkdir();
         }
-
+        // initilize formic configuration
         Config config = Config.init(this, projectsFolder);
+
         ProjectRepository projectRepo = config.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
-            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), BaseTransientBottomBar.LENGTH_LONG);
+            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
 
-            UserMessagesHelper.toast(this, DevConsole.info(this.getString(es.jcyl.ita.formic.forms.R.string.project_opening_init,
+            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
                     (String) prj.getId())), Toast.LENGTH_LONG);
             try {
                 Config.getInstance().setCurrentProject(prj);
                 UserMessagesHelper.toast(this,
-                        DevConsole.info(this.getString(es.jcyl.ita.formic.forms.R.string.project_opening_finish, (String) prj.getId())),
+                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
                         Toast.LENGTH_LONG);
             } catch (Exception e) {
-                UserMessagesHelper.toast(this, DevConsole.info(this.getString(es.jcyl.ita.formic.forms.R.string.project_opening_error, (String) prj.getId())),
+                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
                         Toast.LENGTH_LONG);
             }
         }
         initialize();
     }
-
-
 
     @Override
     protected void setTheme() {
