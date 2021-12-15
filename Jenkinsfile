@@ -89,7 +89,7 @@ pipeline {
                         # Copiar proyectos tests
                         $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
 
-                        ./gradlew connectedAndroidTest --stacktrace --scan
+                        ./gradlew :app:connectedAndroidTest --stacktrace --scan
                     '''
                 }
             }
