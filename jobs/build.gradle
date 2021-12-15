@@ -104,6 +104,11 @@ dependencies {
     }
     androidTestImplementation 'org.mockito:mockito-android:4.1.0'
 
+    androidTestImplementation 'org.apache.poi:poi:3.17'
+    androidTestImplementation ('org.apache.poi:poi-ooxml:3.17') {
+        exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
+    }
+
     /////////////////////////////////////
     // JUnit test dependencies
     /////////////////////////////////////
