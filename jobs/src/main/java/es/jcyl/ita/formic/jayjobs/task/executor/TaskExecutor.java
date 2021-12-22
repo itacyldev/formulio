@@ -161,5 +161,11 @@ public class TaskExecutor {
         @Override
         public void onTaskEnd(Task task) {
         }
+
+        @Override
+        public void onTaskProgressUpdate(Task task, Integer progress) {
+
+        }
+
     }
 }

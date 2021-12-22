@@ -28,4 +28,6 @@ public interface TaskExecListener {
 
     void onTaskEnd(Task task);
 
+    void onTaskProgressUpdate(Task task, Integer progress);
+
 }

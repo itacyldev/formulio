@@ -37,8 +37,8 @@ public class DbTestUtils {
     public static String[] createPopulatedDatabase(int numRows) {
         File tempDirectory = TestUtils.createTempDirectory();
         String dbFileName = String.format("%s/%s.sqlite", tempDirectory.getAbsolutePath(),
-                RandomStringUtils.randomAlphanumeric(10));
-        String randomTableName = RandomStringUtils.randomAlphanumeric(10);
+                RandomStringUtils.randomAlphabetic(10));
+        String randomTableName = RandomStringUtils.randomAlphabetic(10);
         return createPopulatedDatabase(dbFileName, randomTableName, numRows);
     }
 

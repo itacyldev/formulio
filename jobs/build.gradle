@@ -79,6 +79,9 @@ dependencies {
     api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     api 'commons-io:commons-io:2.6'
     api 'com.opencsv:opencsv:5.2'
+    
+    implementation 'es.jcyl.ita.crtdrd:crtsyn:0.4.3'
+    implementation 'es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3'
 
     /////////////////////////////////////
     // Instrumentation test dependencies

@@ -71,6 +71,8 @@ allprojects {
                 }
             }
         }
+
+        resolutionStrategy { force 'androidx.core:core:1.6.0' }
     }
 }
 
