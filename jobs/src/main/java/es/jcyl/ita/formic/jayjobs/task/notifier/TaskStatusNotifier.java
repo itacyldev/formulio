@@ -11,7 +11,6 @@ import org.apache.commons.logging.LogFactory;
 
 import es.jcyl.ita.crtcyl.sync.service.SyncService;
 import es.jcyl.ita.crtdrd.task.TaskProgressNotifier;
-import es.jcyl.ita.formic.jayjobs.R;
 import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 
 /**
@@ -132,32 +131,32 @@ public class TaskStatusNotifier implements TaskProgressNotifier {
                 [progress];
         switch (stateView) {
             case CHECKING_CONNECTIVIY:
-                message = ctx
-                        .getString(R.string.sync_checkin_connectivity);
-                break;
-            case COMPRESSING_FILE:
-                message = ctx
-                        .getString(R.string.sync_compressing_files);
-                break;
-            case CREATING_TASK:
-                message = ctx
-                        .getString(R.string.sync_creating_task);
-                break;
-            case UPLOADINGING_FILE:
-                message = ctx
-                        .getString(R.string.sync_uploading_files);
-                break;
-            case FILES_UPLOADED:
-                message = ctx
-                        .getString(R.string.sync_files_uploaded);
-                break;
-            case DOWNLOAD_FILE_READY:
-                message = ctx
-                        .getString(R.string.sync_downloading_files);
-                break;
-            case FILES_DOWNLOADED:
-                message = ctx
-                        .getString(R.string.sync_files_downloaded);
+//                message = ctx
+//                        .getString(R.string.sync_checkin_connectivity);
+//                break;
+//            case COMPRESSING_FILE:
+//                message = ctx
+//                        .getString(R.string.sync_compressing_files);
+//                break;
+//            case CREATING_TASK:
+//                message = ctx
+//                        .getString(R.string.sync_creating_task);
+//                break;
+//            case UPLOADINGING_FILE:
+//                message = ctx
+//                        .getString(R.string.sync_uploading_files);
+//                break;
+//            case FILES_UPLOADED:
+//                message = ctx
+//                        .getString(R.string.sync_files_uploaded);
+//                break;
+//            case DOWNLOAD_FILE_READY:
+//                message = ctx
+//                        .getString(R.string.sync_downloading_files);
+//                break;
+//            case FILES_DOWNLOADED:
+//                message = ctx
+//                        .getString(R.string.sync_files_downloaded);
                 break;
             case SYNC_FINISHED:
                 progressDialog.dismiss();
@@ -182,7 +181,7 @@ public class TaskStatusNotifier implements TaskProgressNotifier {
 
 
     private void finishSync() {
-        processor.finish();
+        //processor.finish();
 
     }
 

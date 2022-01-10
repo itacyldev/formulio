@@ -47,15 +47,15 @@ allprojects {
 
        maven {
            name "ITACyL - snapshots"
-           url "http://repo.itacyl.es/archiva/repository/snapshots/"
+           url "http://servicios.itacyl.es/nexus/repository/snapshots/"
        }
        maven {
            name "ITACyL - internal"
-           url "http://repo.itacyl.es/archiva/repository/internal/"
+           url "http://servicios.itacyl.es/nexus/repository/internal/"
        }
        maven {
            name "ITACyL - thirdparty"
-           url "http://repo.itacyl.es/archiva/repository/thirdparty/"
+           url "http://servicios.itacyl.es/nexus/repository/thirdparty/"
        }
     }
 

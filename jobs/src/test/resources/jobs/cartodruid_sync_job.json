@@ -1,0 +1,31 @@
+{
+  "description": "job example",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "executionMode": "FG",
+  "tasks": [
+    {
+        "name": "t1",
+        "processor": {
+          "type": "cartodruidSync",
+          "endpoint": "sampleEndpoint",
+          "workspace": "test",
+          "password": "password",
+          "files": [
+             {
+                "name": "",
+                "readwrite": "W",
+                "compress": true
+              },
+              {
+                "name": "file2",
+                "readwrite": "RW",
+                "compress": true
+             }
+            ]
+        }
+    }
+  ]
+}

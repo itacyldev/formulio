@@ -82,6 +82,7 @@ dependencies {
     
     implementation 'es.jcyl.ita.crtdrd:crtsyn:0.4.3'
     implementation 'es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3'
+    implementation 'es.jcyl.ita.crtcyl:crtcyl-core:2.36.5'
 
     /////////////////////////////////////
     // Instrumentation test dependencies
@@ -117,8 +118,8 @@ dependencies {
 publishing {
     repositories {
         maven {
-            def releasesRepoUrl = "http://repo.itacyl.es/archiva/repository/internal/"
-            def snapshotsRepoUrl = "http://repo.itacyl.es/archiva/repository/snapshots/"
+            def releasesRepoUrl = "http://servicios.itacyl.es/nexus/repository/internal/"
+            def snapshotsRepoUrl = "http://servicios.itacyl.es/nexus/repository/snapshots/"
             url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
                 username = mavenUser

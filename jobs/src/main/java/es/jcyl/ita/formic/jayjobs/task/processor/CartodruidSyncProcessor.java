@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.crtcyl.sync.config.SyncFile;
 import es.jcyl.ita.crtcyl.sync.service.SyncService.SyncStates;
 import es.jcyl.ita.crtcyl.util.ZipUtils;
@@ -39,7 +40,6 @@ import es.jcyl.ita.crtsyn.v2.services.SyncFileService;
 import es.jcyl.ita.crtsyn.v2.services.SyncService;
 import es.jcyl.ita.crtsyn.v2.tasks.SyncTaskServiceFactory;
 import es.jcyl.ita.crtsyn.v2.tasks.SyncTaskServiceFactoryImpl;
-import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
@@ -53,7 +53,7 @@ import static es.jcyl.ita.crtcyl.sync.service.SyncService.SyncStates.SYNC_FINISH
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
 
-class CartodruidSyncProcessor extends AbstractProcessor implements NonIterProcessor {
+public class CartodruidSyncProcessor extends AbstractProcessor implements NonIterProcessor {
 
     protected static final Log LOGGER = LogFactory
             .getLog(CartodruidSyncProcessor.class);
@@ -544,6 +544,9 @@ class CartodruidSyncProcessor extends AbstractProcessor implements NonIterProces
 
     public void setSyncService(SyncService syncService) {
         this.syncService = syncService;
+    }
 
+    public void setSyncFileService(SyncFileService syncFileService) {
+        this.syncFileService = syncFileService;
     }
 }

@@ -38,6 +38,7 @@ import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
+import es.jcyl.ita.formic.jayjobs.task.processor.CartodruidSyncProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
 import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
 import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
@@ -64,6 +65,7 @@ public class TaskConfigFactory {
         registry.put("CSVWRITER", CSVWriter.class);
         // processors
         registry.put("CONTEXTPOPULATOR", ContextPopulateProcessor.class);
+        registry.put("CARTODRUIDSYNC", CartodruidSyncProcessor.class);
     }
 
 

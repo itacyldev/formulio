@@ -18,6 +18,7 @@ import es.jcyl.ita.crtcyl.sync.config.SyncFile;
 import es.jcyl.ita.crtdrd.task.TaskProgressNotifier;
 import es.jcyl.ita.crtsyn.v2.resources.SyncResource;
 import es.jcyl.ita.crtsyn.v2.resources.SyncStateEnum;
+import es.jcyl.ita.crtsyn.v2.services.SyncFileService;
 import es.jcyl.ita.crtsyn.v2.services.SyncService;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
@@ -78,6 +79,26 @@ public class CartodruidSyncProcessorTest {
         tableName = RandomStringUtils.randomAlphabetic(10);
     }
 
+    private SyncService mockSyncService(String state) throws Exception {
+        Integer syncId = RandomUtils.nextInt();
+
+        if (state == null) {
+            state = SyncStateEnum.FINISHED.name();
+        }
+
+        SyncService syncServiceMock = mock(SyncService.class);
+        when(syncServiceMock.createInServer(any(File.class))).thenReturn(syncId);
+
+        SyncResource syncResource = new SyncResource();
+        syncResource.setState(state);
+        List<String> resources = new ArrayList<>();
+        resources.add("resource1");
+        syncResource.setResources(resources);
+        when(syncServiceMock.getSync(syncId)).thenReturn(syncResource);
+
+        return syncServiceMock;
+    }
+
     @Test
     public void testPush() throws TaskException {
         initValues();
@@ -117,35 +138,18 @@ public class CartodruidSyncProcessorTest {
         verify(processor1, times(1)).finishExecution();
     }
 
-    private SyncService mockSyncService(String state) throws Exception {
-        Integer syncId = RandomUtils.nextInt();
 
-        if (state == null) {
-            state = SyncStateEnum.FINISHED.name();
-        }
-
-        SyncService syncServiceMock = mock(SyncService.class);
-        when(syncServiceMock.createInServer(any(File.class))).thenReturn(syncId);
-
-        SyncResource syncResource = new SyncResource();
-        syncResource.setState(state);
-        List<String> resources = new ArrayList<>();
-        resources.add("resource1");
-        syncResource.setResources(new ArrayList<>());
-        when(syncServiceMock.getSync(syncId)).thenReturn(syncResource);
-
-        return syncServiceMock;
-    }
 
     @Test
-    public void testPull() throws TaskException {
-        int NUM_EXPECTED_RESULTS = 10;
+    public void testPushAndPull() throws TaskException {
+        initValues();
         DbTestUtils.createPopulatedDatabase(dbFileName, tableName, 10);
 
         CartodruidSyncProcessor processor = new CartodruidSyncProcessor();
-
-
+        processor.setNotifier(notifierMock);
         processor.setTask(taskMock);
+        processor.setEndpoint("endpoint");
+        processor.setPassword("password");
 
         List<SyncFile> files = new ArrayList<>();
         SyncFile file = new SyncFile();
@@ -155,32 +159,26 @@ public class CartodruidSyncProcessorTest {
         files.add(file);
 
         processor.setFiles(files);
+
         processor.setWorkspace("test");
         processor.setTmpFolder(tempDirectory);
+        processor.setDownloadFolder(tempDirectory);
 
+        SyncService syncServiceMock = null;
+        try {
+            syncServiceMock = mockSyncService(null);
+        } catch (Exception ex) {
+            fail();
+        }
+        processor.setSyncService(syncServiceMock);
 
-    }
+        SyncFileService syncFileServiceMock = mock(SyncFileService.class);
+        processor.setSyncFileService(syncFileServiceMock);
 
-    @Test
-    public void testPushAndPull() throws TaskException {
-        int NUM_EXPECTED_RESULTS = 10;
-        DbTestUtils.createPopulatedDatabase(dbFileName, tableName, 10);
+        CartodruidSyncProcessor processor1 = Mockito.spy(processor);
+        processor1.process();
 
-        CartodruidSyncProcessor processor = new CartodruidSyncProcessor();
-        processor.setTask(taskMock);
-
-        List<SyncFile> files = new ArrayList<>();
-        SyncFile file = new SyncFile();
-        file.setCompress(true);
-        file.setReadwrite("RW");
-        file.setName(dbFileName);
-        files.add(file);
-
-        processor.setFiles(files);
-        processor.setWorkspace("test");
-        processor.setTmpFolder(tempDirectory);
-        processor.process();
-
+        verify(processor1, times(1)).finishExecution();
     }
 
 }
