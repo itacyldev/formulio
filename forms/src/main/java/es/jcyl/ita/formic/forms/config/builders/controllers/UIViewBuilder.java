@@ -21,7 +21,6 @@ import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,10 +34,8 @@ import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
-import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -113,6 +110,8 @@ public class UIViewBuilder extends AbstractComponentBuilder<UIView> {
                     case BOTTOM:
                         view.setBottomNav((UIButtonBar) component);
                         toRemove.add(component);
+                        break;
+                    case DEFAULT:
                         break;
                 }
             }

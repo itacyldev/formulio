@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
@@ -61,6 +62,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        Collections.sort(mValues, (o1, o2) -> o1.getName().compareTo(o2.getName()));
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(holder.mItem.getDescription());
         holder.mContentView.setText(holder.mItem.getName());

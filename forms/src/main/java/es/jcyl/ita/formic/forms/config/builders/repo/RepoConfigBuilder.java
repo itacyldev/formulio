@@ -41,6 +41,8 @@ import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import static es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder.ENTITY_TYPE_ID;
+import static es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder.SOURCE;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -53,7 +55,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
     @Override
     protected void doWithAttribute(RepoConfig element, String name, String value) {
-
+        // Do nothing
     }
 
     @Override
@@ -93,7 +95,7 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
-
+        // Do nothing
     }
 
     /**
@@ -123,9 +125,9 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
         if (eSource == null) {
             EntitySourceBuilder builder;
             builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, source);
+            builder.withProperty(SOURCE, source);
             builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, tableName);
-            builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, entityId);
+            builder.withProperty(ENTITY_TYPE_ID, entityId);
             eSource = builder.build();
         }
 
@@ -137,6 +139,5 @@ public class RepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> {
         builder.withProperty(SQLiteGreenDAORepoBuilder.ENTITY_CONFIG, conf);
         return builder.build();
     }
-
 
 }

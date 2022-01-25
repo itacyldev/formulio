@@ -1,0 +1,121 @@
+
+pipeline {
+    //agent any
+    agent {label 'principal'}
+
+    parameters {
+            choice(name: 'ENV_TYPE', choices: ['alpha', 'beta', 'production' ], description: 'Canal de despliegue')
+            string(name: 'BRANCH_TO_DEPLOY', defaultValue: "develop", description: 'GIT branch to deploy')
+            string(name: 'RELEASE_DESCRIPTION', defaultValue: "", description: 'Descripcion para la etiqueta (sin version ni fecha), si no pones nada la etiqueta tendrá el formato v1.0.0_yyyymmdd')
+    }
+
+    environment {
+        PROJECT_NAME = 'FRMDRD'
+        //GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
+        GIT_URL = "git@itaul4622:ITACyL/${PROJECT_NAME}.git"
+    }
+
+    stages {
+
+        stage("Clone sources"){
+                    steps {
+                        echo "Clonando repositorio ${GIT_URL} rama ${params.BRANCH_TO_DEPLOY}"
+                        git branch: "${params.BRANCH_TO_DEPLOY}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
+                    }
+                }
+
+            stage("Merge, tag and push to master") {
+                steps {
+                    echo " The environment is ${params.ENV_TYPE}"
+                    script {
+                        def now = new Date()
+                        def version_value = sh(returnStdout: true, script: "cat build.gradle | grep -o 'versionName = [^,]*'").trim()
+                        sh "echo Project in version value: $version_value"
+                        def VERSION = version_value.split(/=/)[1].trim().replaceAll("'","")
+                        sh "echo final version: VERSION"
+                        def TIMESTAMP = now.format("yyyyMMdd")
+                        def DESC = ""
+                        if(params.RELEASE_DESCRIPTION){
+                            DESC = "_${params.RELEASE_DESCRIPTION}".replaceAll(" ","_")
+                        }
+                        def ENV = ""
+                        if(params.ENV_TYPE != 'production'){
+                            ENV = "_${params.ENV_TYPE}"
+                        }
+                        RELEASE_TAG = "v${VERSION}_${TIMESTAMP}${DESC}${ENV}"
+                    }
+                    echo "Etiquetando version ${RELEASE_TAG}"
+                    sshagent(['jenkins_ssh']) {
+                        // El plugin de jenkins no está fijando estas propiedades
+                        sh("git config user.name \"jenkins\" ")
+                        sh("git config user.email \"jenkins@itacyl.es\" ")
+
+                        // Drop local changes
+                        sh("git stash")
+                        sh("git checkout master")
+                        sh("git fetch")
+                        sh("git reset --hard origin/master")
+
+                        // Check if tag already exists and if so, remove it
+                        script {
+                            def existsTag = sh (script: "git ls-remote --tags  | grep ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
+                            // If tag exists delete
+                            if ("${existsTag}" == "1") {
+                                echo "Eliminando etiqueta ${RELEASE_TAG}"
+                                sh("git tag -d ${RELEASE_TAG}")
+                                sh("git push --delete origin ${RELEASE_TAG}")
+                            }
+                        }
+
+                        // Merge, create new tag and push
+                        sh("git merge ${params.BRANCH_TO_DEPLOY}")
+                        sh("git tag -fa ${RELEASE_TAG} -m \"${params.RELEASE_DESCRIPTION}\" ")
+                        sh("git push --tags origin master")
+                    }
+               }
+            }
+
+         stage('Setup Tools') {
+            steps{
+                script {
+                    withCredentials([file(credentialsId: 'android_keystore', variable: 'KEYFILE')]) {
+                        sh "cp \$KEYFILE app/keystore"
+                    }
+                }
+            }
+        }
+
+         stage("Build Apk") {
+            steps{
+                script {
+                    withCredentials([file(credentialsId: 'android_keystore', variable: 'KEYFILE')]) {
+                        sh """
+                            chmod +x gradlew
+                            ./gradlew clean assembleRelease
+                        """
+                    }
+                }
+            }
+        }
+
+
+        stage('Upload to Play Store') {
+            steps{
+                // Archive the APKs so that they can be downloaded from Jenkins
+                archiveArtifacts '**/build/outputs/**/*.apk'
+
+                // Upload the APK to Google Play
+                androidApkUpload googleCredentialsId: 'Google Play Key', apkFilesPattern: '**/build/outputs/**/*.apk', trackName: 'alpha',  rolloutPercentage: '100'
+            }
+        }
+
+   }
+    //post {
+        //failure {
+        //    emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+        //    recipientProviders: [culprits()],
+        //    subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+        //    mimeType: 'text/html'
+       // }
+    //}
+}

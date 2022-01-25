@@ -19,6 +19,7 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIAction> node) {
+        // Do nothing
     }
 
     @Override

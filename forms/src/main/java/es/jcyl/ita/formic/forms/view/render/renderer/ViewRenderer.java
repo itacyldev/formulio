@@ -237,6 +237,9 @@ public class ViewRenderer {
         if (widget1.getLayoutParams() != null) {
             widget2.setLayoutParams(widget1.getLayoutParams());
         }
+        if (widget1.getBackground() != null) {
+            widget2.setBackground(widget1.getBackground());
+        }
         widget2.setWidgetContext(widget1.getWidgetContext());
         parent.removeView(widget1);
         parent.addView(widget2, index);

@@ -17,14 +17,13 @@ package es.jcyl.ita.formic.forms.config.builders.repo;
 
 import java.io.File;
 
-import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.repo.Repository;
-import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
-import es.jcyl.ita.formic.repo.media.FileRepository;
 import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
+import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
+import es.jcyl.ita.formic.repo.media.FileRepository;
 import es.jcyl.ita.formic.repo.media.source.FileEntitySource;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
@@ -81,6 +80,6 @@ public class FileRepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> 
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
-
+        // Do nothing
     }
 }

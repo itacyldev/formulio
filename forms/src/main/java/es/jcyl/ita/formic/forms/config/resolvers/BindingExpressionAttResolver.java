@@ -28,18 +28,18 @@ import es.jcyl.ita.formic.repo.util.TypeUtils;
 public class BindingExpressionAttResolver extends AbstractAttributeResolver<ValueBindingExpression> {
 
 
-    ValueExpressionFactory factory = ValueExpressionFactory.getInstance();
+    ValueExpressionFactory expFactory = ValueExpressionFactory.getInstance();
 
     public ValueBindingExpression resolve(ConfigNode node, String attName) {
         String expStr = node.getAttribute(attName);
         ValueBindingExpression expression = null;
         if (StringUtils.isNotBlank(expStr)) {
             if (!node.hasAttribute("converter")) {
-                expression = factory.create(expStr);
+                expression = expFactory.create(expStr);
             } else {
                 // TODO: take in count converters when creating expression #204351
                 String converter = node.getAttribute("converter");
-                expression = factory.create(expStr, TypeUtils.getType(converter));
+                expression = expFactory.create(expStr, TypeUtils.getType(converter));
             }
         }
         return expression;

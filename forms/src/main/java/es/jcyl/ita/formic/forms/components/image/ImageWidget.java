@@ -17,7 +17,10 @@ package es.jcyl.ita.formic.forms.components.image;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -63,38 +66,66 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         super(context, attrs, defStyle);
     }
 
+    @Override
     public void setup(RenderingEnv env) {
         // check components to show
+        setCameraButton(env);
+
+        setGalleryButton(env);
+
+        setSketchButton(env);
+
+        this.mainEntity = env.getWidgetContext().getEntity();
+    }
+
+    private void setCameraButton(RenderingEnv env) {
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
+        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
             cameraButton.setEnabled(false);
         } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
             cameraButton.setVisibility(View.INVISIBLE);
         } else {
-            cameraButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    launcher.launch(null);
-                }
+            cameraButton.setOnClickListener(v -> launcher.launch(null));
+        }
+    }
+
+    private void setSketchButton(RenderingEnv env) {
+        Button sketchButton = this.findViewById(R.id.btn_sketch);
+        ImageResourceView inputView = this.getInputView();
+        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
+            sketchButton.setEnabled(false);
+        } else if (!component.isSketchActive()) {
+            sketchButton.setVisibility(View.INVISIBLE);
+        } else {
+            sketchButton.setOnClickListener((View v) -> {
+                SketchDialog sketchDialog = new
+                        SketchDialog(env.getFormActivity().getActivity(), inputView);
+                sketchDialog.getWindow().setBackgroundDrawable(new ColorDrawable
+                        (Color.TRANSPARENT));
+                sketchDialog.show();
+
+                sketchDialog.setOnDismissListener((DialogInterface dialog) -> {
+                    Bitmap imageData = sketchDialog.getBitmap();
+                    if (imageData != null) {
+                        setImageBitmap(imageData);
+                    }
+                });
             });
         }
+    }
+
+    private void setGalleryButton(RenderingEnv env) {
         Button galleryButton = this.findViewById(R.id.btn_gallery);
         galleryButton.setEnabled(false);
         // TODO::
-        /*if (!component.isGalleryActive()) { // TODO: or device has no camera (check throw context.device)
-            galleryButton.setVisibility(View.INVISIBLE);
-        }
-        if (component.isReadOnly()) {
+
+        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
             galleryButton.setEnabled(false);
+        } else if (!component.isGalleryActive()) {
+            galleryButton.setVisibility(View.INVISIBLE);
         } else {
-            galleryButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    gallerySelector.launch();
-                }
-            });
-        }*/
-        this.mainEntity = env.getWidgetContext().getEntity();
+            galleryButton.setOnClickListener((View v) -> gallerySelector.launch());
+        }
     }
 
     public GallerySelector getGallerySelector() {
@@ -117,6 +148,10 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         if (imageData == null) {
             return;// no image captured
         }
+        setImageBitmap(imageData);
+    }
+
+    private void setImageBitmap(Bitmap imageData){
         // extract image content
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageData.compress(Bitmap.CompressFormat.PNG, 90, stream);

@@ -16,7 +16,7 @@ package es.jcyl.ita.formic.forms.components.radio;
  * limitations under the License.
  */
 
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 
 import es.jcyl.ita.formic.forms.components.select.UISelect;
 
@@ -49,7 +49,7 @@ public class UIRadio extends UISelect {
 
     public int getOrientationType() {
         return (this.orientation.equalsIgnoreCase("horizontal")
-                ? RadioGroup.HORIZONTAL : RadioGroup.VERTICAL);
+                ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
     }
 
     public String getWeights() {

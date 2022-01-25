@@ -67,6 +67,7 @@ public class SelectRenderer extends InputRenderer<UISelect, Spinner> {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
             }
         });
 

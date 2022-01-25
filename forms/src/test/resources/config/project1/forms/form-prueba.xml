@@ -3,10 +3,95 @@
     <edit>
         <form>
             <tab>
+                <tabitem label="Tab 0: Styles">
+
+                    <autocomplete label="Autocomplete: Estilos option:" forceSelection="true"
+                        value="italic">
+                        <options>
+                            <option label="fontSize:20;" value="fontSize" labelStyle="fontSize:20"/>
+                            <option label="backgroundColor:#EC2A2A;" value="backgroundColor" labelStyle="backgroundColor:#EC2A2A;"/>
+                            <option label="fontColor:#0C69FE" value="fontColor" labelStyle="fontColor:#0C69FE"/>
+                            <option label="fontFamily:times" value="fontFamily" labelStyle="fontFamily:times"/>
+                            <option label="fontStyle:italic" value="italic" labelStyle="fontStyle:italic"/>
+                            <option label="fontStyle:bold" value="bold" labelStyle="fontStyle:bold"/>
+                            <option label="fontStyle:boldItalic" value="boldItalic" labelStyle="fontStyle:boldItalic"/>
+                            <option label="fontStyle:underlined" value="underlined" labelStyle="fontStyle:underlined"/>
+                            <option label="fontStyle:uppercase" value="uppercase" labelStyle="fontStyle:uppercase"/>
+                        </options>
+                    </autocomplete>
+
+                    <select label="Select: Estilos option:" orientation="horizontal" value="fontColor">
+                        <options>
+                            <option label="backgroundColor:#EC2A2A;" value="backgroundColor" labelStyle="backgroundColor:#EC2A2A;"/>
+                            <option label="fontSize:20;" value="fontSize" labelStyle="fontSize:20"/>
+                            <option label="fontColor:#0C69FE" value="fontColor" labelStyle="fontColor:#0C69FE"/>
+                            <option label="fontFamily:times" value="fontFamily" labelStyle="fontFamily:times"/>
+                            <option label="fontStyle:italic" value="italic" labelStyle="fontStyle:italic"/>
+                            <option label="fontStyle:bold" value="bold" labelStyle="fontStyle:bold"/>
+                            <option label="fontStyle:boldItalic" value="boldItalic" labelStyle="fontStyle:boldItalic"/>
+                            <option label="fontStyle:underlined" value="underlined" labelStyle="fontStyle:underlined"/>
+                            <option label="fontStyle:uppercase" value="uppercase" labelStyle="fontStyle:uppercase"/>
+                        </options>
+                    </select>
+
+                    <input label="Input style " inputStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase"/>
+
+                    <textarea label="Textarea style " inputStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase"/>
+
+                    <table headerText="headerText1, headerText2 " labelStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase">
+                        <row>
+                            <p value="Paragraph row1"/>
+                        </row>
+                        <row>
+                            <p value="Paragraph row2"/>
+                        </row>
+                    </table>
+
+                    <input label="backgroundColor:#EC2A2A;" labelStyle="backgroundColor:#EC2A2A"/>
+                    <input label="fontSize:20;" labelStyle="fontSize:20"/>
+                    <input label="fontColor:#0C69FE" labelStyle="fontColor:#0C69FE"/>
+                    <input label="fontFamily:times" labelStyle="fontFamily:times"/>
+                    <input label="fontStyle:bold" labelStyle="fontStyle:bold"/>
+                    <input label="fontStyle:italic" labelStyle="fontStyle:italic"/>
+                    <input label="fontStyle:boldItalic" labelStyle="fontStyle:boldItalic"/>
+                    <input label="fontStyle:underlined" labelStyle="fontStyle:underlined"/>
+                    <input label="fontStyle:uppercase" labelStyle="fontStyle:uppercase"/>
+                    <input label="fontStyle:boldItalic,underlined,uppercase" labelStyle="fontStyle:boldItalic,underlined,uppercase"/>
+                    <input label="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase" labelStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase"/>
+
+                    <radio label="Radio: Estilos option:" orientation="horizontal" value="fontColor">
+                        <options>
+                            <option label="backgroundColor:#EC2A2A;" value="backgroundColor" labelStyle="backgroundColor:#EC2A2A;"/>
+                            <option label="fontSize:20;" value="fontSize" labelStyle="fontSize:20"/>
+                            <option label="fontColor:#0C69FE" value="fontColor" labelStyle="fontColor:#0C69FE"/>
+                            <option label="fontFamily:times" value="fontFamily" labelStyle="fontFamily:times"/>
+                        </options>
+                    </radio>
+
+                    <radio label="Radio: más estilos option:" orientation="horizontal" value="italic">
+                        <options>
+                            <option label="fontStyle:italic" value="italic" labelStyle="fontStyle:italic"/>
+                            <option label="fontStyle:bold" value="bold" labelStyle="fontStyle:bold"/>
+                            <option label="fontStyle:boldItalic" value="boldItalic" labelStyle="fontStyle:boldItalic"/>
+                            <option label="fontStyle:underlined" value="underlined" labelStyle="fontStyle:underlined"/>
+                            <option label="fontStyle:uppercase" value="uppercase" labelStyle="fontStyle:uppercase"/>
+                        </options>
+                    </radio>
+
+
+
+                    <card label="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase" labelStyle="backgroundColor:#EC2A2A;fontSize:20;fontColor:#0C69FE;fontFamily:times;fontStyle:boldItalic,underlined,uppercase" subtitle="subtitle"
+                        template="card_template_1" title="title" expandable="true" expanded="true"/>
+
+                </tabitem>
                 <tabitem label="Tab 1">
+                    <p bold="true" value="Head Formulario Prueba" fontSize="20"/>
+
+                    <p value="Paragraph Formulario Prueba" bold="true" fontSize="20"/>
+
                     <link route="form1-list" value="Ir a Form Card Image" />
 
-                    <input label="1. Input: " value="${entity.input}" validator="required" hint="Hint 1. input" />
+                    <input label="1. Input: " value="${entity.input}" validator="required" hint="Hint 1. input."/>
 
                     <radio label="2. Radio:" orientation="horizontal" value="${entity.radio}" hint="Hint 2. Radio">
                         <options>
@@ -54,15 +139,22 @@
 
                     <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" hint="Hint 9. Imagen"/>
 
-                    <image converter="b64Image" embedded="true" label="10. Imagen: "
-                        value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
+                    <image id="image3" converter="b64Image" embedded="true" label="10. Imagen: " value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
+
+                    <image converter="b64Image" embedded="true" label="11. Imagen: " value="${entity.image_thumb}" hint="Hint 11. Imagen" inputType="1"/>
+                    <image converter="b64Image" embedded="true" label="12. Imagen: " value="${entity.image_thumb}" hint="Hint 12. Imagen" inputType="2"/>
+                    <image converter="b64Image" embedded="true" label="13. Imagen: " value="${entity.image_thumb}" hint="Hint 13. Imagen" inputType="3"/>
+                    <image converter="b64Image" embedded="true" label="14. Imagen: " value="${entity.image_thumb}" hint="Hint 14. Imagen" inputType="4"/>
+                    <image converter="b64Image" embedded="true" label="15. Imagen: " value="${entity.image_thumb}" hint="Hint 15. Imagen" inputType="5"/>
+                    <image converter="b64Image" embedded="true" label="16. Imagen: " value="${entity.image_thumb}" hint="Hint 16. Imagen" inputType="6"/>
+                    <image converter="b64Image" embedded="true" label="17. Imagen: " value="${entity.image_thumb}" hint="Hint 17. Imagen" inputType="7"/>
 
                 </tabitem>
                 <tabitem label="Tab 2: Table">
 
                     <table headerText=" 1. Con bordes, Clave, Valor " weights="20, 30, 50">
                         <row colspans="3">
-                            <paragraph value="Descripción de la tabla en un paragraph" />
+                            <p value="Descripción de la tabla en un paragraph" />
                         </row>
                         <row>
                             <textarea readonly="true" value="1. " />
@@ -73,7 +165,7 @@
 
                     <table border="false" headerText=" 2. Sin bordes">
                         <row colspans="3">
-                            <paragraph value="Descripción de la tabla en un paragraph" />
+                            <p value="Descripción de la tabla en un paragraph" />
                         </row>
                         <row>
                             <textarea readonly="true" value="1.  " />
@@ -84,7 +176,7 @@
 
                     <table headerText=" 3. Pesos">
                         <row colspans="3">
-                            <paragraph
+                            <p
                                 value="1: 20-30-50, 2: 20-30, 3: 20-30-50-70, 4: 40-40-80, 5: 30-80 6: asdfla" />
                         </row>
                         <row weights="20, 30, 50">
@@ -206,8 +298,8 @@
 
                     <datalist>
                         <card expandable="true" expanded="false" label="Card-${entity.image}">
-                            <head name="title" value="${entity.input}" />
-                            <head name="subtitle" value="${entity.textarea}" />"
+                            <p name="title" value="${entity.input}" />
+                            <p name="subtitle" value="${entity.textarea}" />"
                             <image repo="superHImages" value="${entity.image}" />
                         </card>
                     </datalist>

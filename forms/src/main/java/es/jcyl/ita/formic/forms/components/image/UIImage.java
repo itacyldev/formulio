@@ -22,6 +22,10 @@ import es.jcyl.ita.formic.repo.query.Filter;
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.CAMERA_ONLY;
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.GALLERY_AND_CAMERA;
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.GALLERY_ONLY;
+import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.SKETCH_AND_CAMERA;
+import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.SKETCH_AND_GALLERY;
+import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.SKETCH_AND_GALLERY_AND_CAMERA;
+import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.SKETCH_ONLY;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -99,19 +103,34 @@ public class UIImage extends UIInputComponent {
 
     public boolean isCameraActive() {
         return this.getInputType() == CAMERA_ONLY.value
-                || this.getInputType() == GALLERY_AND_CAMERA.value;
+                || this.getInputType() == GALLERY_AND_CAMERA.value
+                || this.getInputType() == SKETCH_AND_CAMERA.value
+                || this.getInputType() == SKETCH_AND_GALLERY_AND_CAMERA.value;
     }
 
     public boolean isGalleryActive() {
         return this.getInputType() == GALLERY_ONLY.value
-                || this.getInputType() == GALLERY_AND_CAMERA.value;
+                || this.getInputType() == GALLERY_AND_CAMERA.value
+                || this.getInputType() == SKETCH_AND_GALLERY.value
+                || this.getInputType() == SKETCH_AND_GALLERY_AND_CAMERA.value;
+    }
+
+    public boolean isSketchActive() {
+        return this.getInputType() == SKETCH_ONLY.value
+                || this.getInputType() == SKETCH_AND_CAMERA.value
+                || this.getInputType() == SKETCH_AND_GALLERY.value
+                || this.getInputType() == SKETCH_AND_GALLERY_AND_CAMERA.value;
     }
 
     public enum ImageInputType {
         NO_CONTROLS(0),
         CAMERA_ONLY(1),
         GALLERY_ONLY(2),
-        GALLERY_AND_CAMERA(3);
+        SKETCH_ONLY(4),
+        GALLERY_AND_CAMERA(CAMERA_ONLY.value ^ GALLERY_ONLY.value),
+        SKETCH_AND_CAMERA(SKETCH_ONLY.value ^ CAMERA_ONLY.value),
+        SKETCH_AND_GALLERY(SKETCH_ONLY.value ^ GALLERY_ONLY.value),
+        SKETCH_AND_GALLERY_AND_CAMERA(SKETCH_ONLY.value ^ GALLERY_ONLY.value ^ CAMERA_ONLY.value);
 
         public final int value;
 

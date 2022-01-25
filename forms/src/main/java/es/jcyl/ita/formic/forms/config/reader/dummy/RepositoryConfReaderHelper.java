@@ -39,6 +39,9 @@ import es.jcyl.ita.formic.repo.source.EntitySource;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
 
+import static es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder.ENTITY_TYPE_ID;
+import static es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder.SOURCE;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  *
@@ -110,52 +113,52 @@ public class RepositoryConfReaderHelper extends AbstractRepoConfigurationReader 
     private void createEntitySources() {
         EntitySourceBuilder builder;
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("ribera"));
+        builder.withProperty(SOURCE, this.sourceFactory.getSource("ribera"));
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "inspecciones");
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "inspecciones");
+        builder.withProperty(ENTITY_TYPE_ID, "inspecciones");
         builder.build();
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "contacts");
+        builder.withProperty(SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(ENTITY_TYPE_ID, "contacts");
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "contacts");
         builder.build();
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE_CURSOR);
-        builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
-        builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.ENTITY_TYPE_ID, "filteredContacts");
+        builder.withProperty(SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(ENTITY_TYPE_ID, "filteredContacts");
         String query = "select * from contacts where first_name like '%${view.f0}%'";
         builder.withProperty(NativeSQLEntitySource.NativeSQLEntitySourceBuilder.QUERY, query);
         builder.build();
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "provincia");
+        builder.withProperty(SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(ENTITY_TYPE_ID, "provincia");
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "provincia");
         builder.build();
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "municipio");
+        builder.withProperty(SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(ENTITY_TYPE_ID, "municipio");
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "municipio");
         builder.build();
 
 
         builder = sourceFactory.getBuilder(EntitySourceFactory.SOURCE_TYPE.SQLITE);
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.SOURCE, this.sourceFactory.getSource("dbTest"));
-        builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.ENTITY_TYPE_ID, "agents");
+        builder.withProperty(SOURCE, this.sourceFactory.getSource("dbTest"));
+        builder.withProperty(ENTITY_TYPE_ID, "agents");
         builder.withProperty(DBTableEntitySource.DBTableEntitySourceBuilder.TABLE_NAME, "assigned_agents");
         builder.build();
     }
 
     private void createDBSource() {
         File dbFile = new File("/sdcard/test/ribera.sqlite");
-        SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+        SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new jsqlite.Database());
         this.sourceFactory.registerSource(new Source<>("ribera", dbFile.getAbsolutePath(), db));
 
         dbFile = new File("/sdcard/test/dbTest.sqlite");
-        sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+        SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         this.sourceFactory.registerSource(new Source<>("dbTest", dbFile.getAbsolutePath(), new StandardDatabase(sqDb)));
     }
 }

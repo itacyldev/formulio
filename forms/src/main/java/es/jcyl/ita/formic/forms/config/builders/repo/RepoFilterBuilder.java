@@ -42,7 +42,7 @@ public class RepoFilterBuilder extends AbstractComponentBuilder<RepoFilter> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<RepoFilter> node) {
-
+        // Do nothing
     }
 
     @Override

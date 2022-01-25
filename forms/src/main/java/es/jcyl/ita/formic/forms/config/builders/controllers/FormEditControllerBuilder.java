@@ -53,6 +53,7 @@ public class FormEditControllerBuilder extends AbstractComponentBuilder<FormEdit
 
     @Override
     protected void doWithAttribute(FormEditController element, String name, String value) {
+        // Do nothing
     }
 
     @Override

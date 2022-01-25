@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.forms.config.elements;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
@@ -37,6 +36,7 @@ public class FormConfig extends Entity implements Identificable {
     private String id;
     private String name;
     private String description;
+    private boolean mainForm = true;
     private String filePath;
     private FormListController list;
     private List<ViewController> edits;
@@ -110,5 +110,13 @@ this.id = id;
 
     public Repository getRepo() {
         return repo;
+    }
+
+    public boolean isMainForm() {
+        return mainForm;
+    }
+
+    public void setMainForm(boolean mainForm) {
+        this.mainForm = mainForm;
     }
 }

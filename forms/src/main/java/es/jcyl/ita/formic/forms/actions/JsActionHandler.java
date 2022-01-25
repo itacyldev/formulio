@@ -65,7 +65,7 @@ public class JsActionHandler extends AbstractActionHandler {
 
     @Override
     public void onError(ActionContext actionContext, UserAction action, Exception e) {
-
+        // Do nothing
     }
 
     @Override

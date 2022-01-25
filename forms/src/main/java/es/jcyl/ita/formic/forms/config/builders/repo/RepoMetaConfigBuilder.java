@@ -49,6 +49,7 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<EntityMeta> node) {
+        // Do nothing
     }
 
     @Override
@@ -167,6 +168,4 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
         }
         return filtered;
     }
-
-
 }

@@ -5,12 +5,13 @@
 
     <TextView
         android:id="@+id/paragraph_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:clickable="true"
         android:overScrollMode="ifContentScrolls"
         android:scrollbarStyle="insideInset"
         android:scrollbars="vertical"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:textColor="?attr/onAppBackgroundColor"/>
 </es.jcyl.ita.formic.forms.view.widget.Widget>

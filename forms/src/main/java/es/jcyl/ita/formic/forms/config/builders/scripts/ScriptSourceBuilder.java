@@ -41,7 +41,7 @@ public class ScriptSourceBuilder extends AbstractComponentBuilder<ScriptSource> 
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<ScriptSource> node) {
-
+        // Do nothing
     }
 
     @Override

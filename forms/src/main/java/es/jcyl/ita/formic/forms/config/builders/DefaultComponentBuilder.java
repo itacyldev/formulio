@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 /**
@@ -32,13 +30,16 @@ public class DefaultComponentBuilder extends AbstractComponentBuilder {
 
     @Override
     protected void doWithAttribute(Object element, String name, String value) {
+        // Do nothing
     }
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode node) {
+        // Do nothing
     }
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode node) {
+        // Do nothing
     }
 }

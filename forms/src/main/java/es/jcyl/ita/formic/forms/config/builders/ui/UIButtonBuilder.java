@@ -15,16 +15,9 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
  * limitations under the License.
  */
 
-import org.mini2Dx.collections.CollectionUtils;
-
-import java.util.List;
-
 import es.jcyl.ita.formic.forms.components.link.UIButton;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
-import es.jcyl.ita.formic.forms.controllers.UIParam;
 
 /**
  * @author Rosa María Muñiz (mungarro@itacyl.es)
@@ -37,11 +30,12 @@ public class UIButtonBuilder extends AbstractComponentBuilder<UIButton> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIButton> node) {
+        // Do nothing
     }
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIButton> node) {
-
+        // Do nothing
     }
 
 

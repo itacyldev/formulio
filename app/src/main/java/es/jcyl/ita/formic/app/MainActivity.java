@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,8 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
+import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.Config;
@@ -95,6 +93,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showSettings();
             return true;
         }
 
@@ -108,6 +107,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
+        if (id == R.id.action_about) {
+            showAbout();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,14 +120,14 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
-    public void loadFragment(Fragment fragment) {
-        // create a FragmentManager
-        FragmentManager fm = getSupportFragmentManager();
-        // create a FragmentTransaction to begin the transaction and replace the Fragment
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        // replace the FrameLayout with new Fragment
-        fragmentTransaction.replace(R.id.fragment_content_main, fragment);
-        fragmentTransaction.commit(); // save the changes
+    protected final void showAbout() {
+        final Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
+    protected final void showSettings() {
+        final Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     private void initialize() {
@@ -138,6 +142,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                         break;
                     case R.id.action_forms:
                         loadFragment(new FormListFragment());
+                        break;
+                    default:
                         break;
                 }
                 return true;
@@ -180,8 +186,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-    private void doInitConfiguration() {
-        String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
+    protected void doInitConfiguration() {
+
+        String projectsFolder = currentWorkspace;
 
         File f = new File(projectsFolder);
         if (!f.exists()) {
@@ -231,34 +238,32 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean allAcepted = true;
-                    for (int result : grantResults) {
-                        if (result != PackageManager.PERMISSION_GRANTED) {
-                            allAcepted = false;
-                            break;
-                        }
+        if (requestCode == PERMISSION_REQUEST){
+            if (grantResults.length > 0) {
+                boolean allAcepted = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allAcepted = false;
+                        break;
                     }
-                    if (allAcepted) {
-                        doInitConfiguration();
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder
-                                (this);
-                        builder.setTitle(R.string.permissions);
-                        builder.setMessage(R.string.mustacceptallpermits)
-                                .setPositiveButton(R.string.accept, new
-                                        DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.dismiss();
-                                                finish();
-                                            }
-                                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
+                }
+                if (allAcepted) {
+                    doInitConfiguration();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder
+                            (this);
+                    builder.setTitle(R.string.permissions);
+                    builder.setMessage(R.string.mustacceptallpermits)
+                            .setPositiveButton(R.string.accept, new
+                                    DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             }
         }
@@ -266,6 +271,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     @Override
     public void onBackPressed() {
-
+        // Do nothing
     }
+
 }

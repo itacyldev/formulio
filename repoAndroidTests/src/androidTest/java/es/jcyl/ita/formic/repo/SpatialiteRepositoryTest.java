@@ -100,10 +100,10 @@ public class SpatialiteRepositoryTest {
     /**
      * Deleting two entities in a row using spatialite repo makes the application fail.
      */
-    @Test
+    /*@Test
     public void testsDeleteEntities() {
 
-    }
+    }*/
 
 
     private DBTableEntitySource createDBSources(File dbFile) {

@@ -15,17 +15,10 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
-
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.actions.UserActionException;
-import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.router.Router;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Empty action handler to hold pure navigation actions.
@@ -41,5 +34,6 @@ public class EmptyActionHandler extends AbstractActionHandler {
 
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
+        // Do nothing
     }
 }

@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.StandardDatabase;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mini2Dx.beanutils.ConvertUtils;
@@ -181,6 +182,7 @@ public class EntityMappingTest {
      * with another and check if it has been changed in the DB
      */
     @Test
+    @Ignore
     public void testUpdateRelatedEntity() throws Exception {
         // create access to existing database
         File dbFile = TestUtils.findFile("dbTest.sqlite");

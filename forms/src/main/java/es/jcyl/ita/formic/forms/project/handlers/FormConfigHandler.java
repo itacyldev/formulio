@@ -19,9 +19,6 @@ import android.net.Uri;
 
 import org.mini2Dx.collections.CollectionUtils;
 
-import java.util.Collections;
-
-import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -85,7 +82,7 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
         }
         formConfigRepo.save(formConfig);
 
-        if (formConfig.getList() != null) {
+        if (formConfig.getList() != null && formConfig.isMainForm()) {
             viewControllerFactory.register(formConfig.getList());
         }
         if (CollectionUtils.isNotEmpty(formConfig.getEdits())) {

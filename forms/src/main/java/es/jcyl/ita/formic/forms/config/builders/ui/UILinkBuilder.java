@@ -20,17 +20,16 @@ import org.mini2Dx.collections.CollectionUtils;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.link.UILink;
+import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
-import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
-import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 /**
  * @author Rosa María Muñiz (mungarro@itacyl.es)
  */
-public class UILinkBuilder extends AbstractComponentBuilder<UILink> {
+public class UILinkBuilder extends BaseUIComponentBuilder<UILink> {
 
     public UILinkBuilder() {
         super("link", UILink.class);
@@ -38,6 +37,7 @@ public class UILinkBuilder extends AbstractComponentBuilder<UILink> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UILink> node) {
+        // Do nothing
     }
 
     @Override

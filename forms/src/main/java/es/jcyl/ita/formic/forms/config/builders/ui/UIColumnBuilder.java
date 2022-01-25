@@ -33,6 +33,7 @@ public class UIColumnBuilder extends BaseUIComponentBuilder<UIColumn> {
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<UIColumn> node) {
+        // Do nothing
     }
 
     @Override

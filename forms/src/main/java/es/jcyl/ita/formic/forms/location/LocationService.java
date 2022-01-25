@@ -34,6 +34,8 @@ import androidx.core.app.ActivityCompat;
 
 import es.jcyl.ita.formic.forms.R;
 
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
@@ -54,8 +56,8 @@ public class LocationService implements LocationListener {
     }
 
     public void updateLocation() {
-        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
             return;
         }
@@ -64,8 +66,8 @@ public class LocationService implements LocationListener {
     public Location getLastLocation() {
         Location lastLocation = null;
         //TODO: mover al inicio
-        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Criteria criteria = new Criteria();
             String provider = locationManager.getBestProvider(criteria, true);
             lastLocation = locationManager.getLastKnownLocation(provider);

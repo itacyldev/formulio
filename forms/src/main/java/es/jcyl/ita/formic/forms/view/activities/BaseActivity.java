@@ -6,10 +6,16 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -19,6 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
     protected SharedPreferences sharedPreferences;
     protected String currentTheme;
     protected int logLevel;
+    protected String currentWorkspace;
 
 
     @Override
@@ -26,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
+        currentWorkspace = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
         logLevel = sharedPreferences.getInt("log_level", Log.DEBUG);
         setTheme();
         setLogLevel();
@@ -76,6 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
         invalidateOptionsMenu();
     }
 
+
     public void lockOrientation() {
         final int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -106,6 +115,29 @@ public abstract class BaseActivity extends AppCompatActivity  {
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+    }
+
+    protected void setToolbar(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before_white_24dp));
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                finish();
+            }
+        });
+    }
+
+    public void loadFragment(Fragment fragment) {
+        // create a FragmentManager
+        FragmentManager fm = getSupportFragmentManager();
+        // create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.fragment_content_main, fragment);
+        fragmentTransaction.commit(); // save the changes
     }
 
 }

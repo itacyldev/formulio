@@ -60,6 +60,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAIN_FORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
@@ -112,11 +113,13 @@ public class TagDef {
 
     private static String ACTION_TAGS[] = {"action", "add", "create", "update", "save", "cancel", "delete", "nav"};
 
+    private static String BASE_TAGS[] = {"main", "list", "edit", "view", "form"};
+
     private static void initialize() {
         Attribute[] scriptHooks = new Attribute[]{ON_BEFORE_RENDER, ON_AFTER_RENDER};
 
         Attribute[] baseRepoAccessor = new Attribute[]{ID, PROPERTIES, REPO, DBFILE, DBTABLE, ON_BEFORE_RENDER, ON_AFTER_RENDER, ALLOWS_PARTIAL_RESTORE};
-        register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION}));
+        register("main", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAIN_FORM}));
         register("list", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR}));
         register("edit", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, MAINFORM}));
         register("view", define(baseRepoAccessor, new Attribute[]{NAME, DESCRIPTION, ENTITYSELECTOR, MAINFORM}));
@@ -192,8 +195,7 @@ public class TagDef {
         register("script", define(new Attribute[]{SRC}));
 
         Attribute[] text = new Attribute[]{FONT_SIZE, FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, ITALIC, BOLD, UPPERCASE, UNDERLINED};
-        register("head", define(base, text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
-        register("paragraph", define(base, text));
+        register("p", define(base, text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
         register("divisor", define(base, new Attribute[]{NAME, COLOR, STROKE_WIDTH}));
 
     }
@@ -244,6 +246,15 @@ public class TagDef {
 
     public static boolean isActionTag(String tagName) {
         for (String tag : ACTION_TAGS) {
+            if (tagName.toLowerCase().equals(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isBaseTag(String tagName) {
+        for (String tag : BASE_TAGS) {
             if (tagName.toLowerCase().equals(tag)) {
                 return true;
             }

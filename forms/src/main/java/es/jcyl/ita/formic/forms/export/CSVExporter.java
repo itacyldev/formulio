@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.export;
 
 import com.opencsv.CSVWriter;
+import com.opencsv.ICSVWriter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
@@ -44,7 +44,7 @@ public class CSVExporter {
 
         try {
             file.createNewFile();
-            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file), ';', ICSVWriter.DEFAULT_QUOTE_CHARACTER, ICSVWriter.DEFAULT_ESCAPE_CHARACTER, ICSVWriter.DEFAULT_LINE_END);
 
             Filter f = FilterRepoUtils.clone(repo, filter);
 
@@ -69,7 +69,7 @@ public class CSVExporter {
 
                     for (int j = 0; j < strHeaders.length;  j++) {
                         Object obj = entity.get(strHeaders[j]);
-                        strData[j] = obj != null ? String.valueOf(obj) : "";
+                        strData[j] = (obj != null && !strHeaders[j].contains("image")) ? String.valueOf(obj) : "";
                     }
                     csvWrite.writeNext(strData);
                 }

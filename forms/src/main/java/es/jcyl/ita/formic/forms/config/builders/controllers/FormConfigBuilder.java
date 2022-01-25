@@ -18,21 +18,17 @@ package es.jcyl.ita.formic.forms.config.builders.controllers;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
-import es.jcyl.ita.formic.forms.config.ConfigurationException;
-import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -45,6 +41,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
 
     @Override
     protected void doWithAttribute(FormConfig element, String name, String value) {
+        // Do nothing
     }
 
 
