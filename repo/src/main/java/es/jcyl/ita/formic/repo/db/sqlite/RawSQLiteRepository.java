@@ -102,6 +102,7 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
         MetaModeler modeler = new SQLiteCursorMetaModeler();
         EntityMeta meta = modeler.readFromSource(cursor);
         // load default converters per each data type
+        meta.setPropertiesImplementor("java.util.LinkedHashMap");
         return meta;
     }
 

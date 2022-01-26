@@ -42,6 +42,8 @@ import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
 import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
 import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
 import es.jcyl.ita.formic.jayjobs.task.writer.CSVWriter;
+import es.jcyl.ita.formic.jayjobs.task.writer.ExcelWriter;
+import es.jcyl.ita.formic.jayjobs.task.writer.ExcelXlsWriter;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -62,6 +64,8 @@ public class TaskConfigFactory {
         registry.put("SQLREADER", SQLReader.class);
         // writers
         registry.put("CSVWRITER", CSVWriter.class);
+        registry.put("EXCELWRITER", ExcelWriter.class);
+        registry.put("EXCELXLSWRITER", ExcelXlsWriter.class);
         // processors
         registry.put("CONTEXTPOPULATOR", ContextPopulateProcessor.class);
     }
