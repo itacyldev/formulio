@@ -205,4 +205,8 @@ public class TaskConfigFactory {
     public static Map<String, Class<?>> getRegistry() {
         return registry;
     }
+
+    public static void addTaskStep(String key, Class<?> taskStep){
+        registry.put(key, taskStep);
+    }
 }

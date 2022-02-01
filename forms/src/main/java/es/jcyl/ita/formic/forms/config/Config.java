@@ -36,6 +36,7 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
+import es.jcyl.ita.formic.forms.jobs.reader.RepoReader;
 import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -49,6 +50,7 @@ import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -135,7 +137,14 @@ public class Config {
             jobFacade = new JobFacade();
             jobFacade.setJobExecRepo(new JobExecRepo());
             configLoaded = true;
+            registerRepoReader();
+
         }
+    }
+
+    private static void registerRepoReader(){
+        TaskConfigFactory factory = TaskConfigFactory.getInstance();
+        factory.addTaskStep("REPOREADER", RepoReader.class);
     }
 
 
