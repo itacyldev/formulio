@@ -127,6 +127,7 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
                     if (!fileTemplate.exists()){
                         throw new TaskException(String.format(
                                 "The file does not exist [%s]. This file must be in the projects folder: [%s] or in the working folder [%s]" ,
+                                templateFile,
                                 projectFilePath,
                                 workingFilePath));
                     }
