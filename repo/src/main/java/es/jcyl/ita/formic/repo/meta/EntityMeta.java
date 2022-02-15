@@ -46,6 +46,8 @@ public class EntityMeta<P extends PropertyType> {
      */
     private Integer[] idIndexes;
 
+    private String propertiesImplementor;
+
     public EntityMeta(String name, P[] props, String[] idProperties) {
         this.name = name;
         this.properties = props;
@@ -196,5 +198,11 @@ public class EntityMeta<P extends PropertyType> {
         return idxs;
     }
 
+    public String getPropertiesImplementor() {
+        return propertiesImplementor;
+    }
 
+    public void setPropertiesImplementor(String propertiesImplementor) {
+        this.propertiesImplementor = propertiesImplementor;
+    }
 }

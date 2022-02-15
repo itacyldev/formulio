@@ -2,6 +2,8 @@
 
 -keep public class org.apache.commons.** { *; }
 
+-keep public class org.apache.poi.** { *; }
+
 -keep public class ch.qos.logback.** { *; }
 
 -keep public class org.mozilla.javascript.** { *; }
@@ -31,6 +33,7 @@
 -keep class es.jcyl.ita.formic.forms.controllers.** {*;}
 -keep class es.jcyl.ita.formic.forms.scripts.** {*;}
 
+
 #repo
 -keepclassmembers class ** extends es.jcyl.ita.formic.repo.builders.AbstractEntitySourceBuilder {*;}
 -keep class es.jcyl.ita.formic.repo.db.source.DBTableEntitySource$DBTableEntitySourceBuilder {*;}
@@ -47,8 +50,9 @@
 -keepclassmembers class ** implements es.jcyl.ita.formic.repo.Repository {*;}
 -keepclassmembers class com.android.dx.dex.cf.** {*;}
 
-
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
+
+
 
 
 
@@ -66,3 +70,4 @@
 -dontwarn org.mozilla.**
 -dontwarn org.greenrobot.**
 -dontwarn org.apache.**
+
