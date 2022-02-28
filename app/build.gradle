@@ -24,7 +24,6 @@ android {
     }
 
     compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId globalConf.applicationId
@@ -72,11 +71,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
-        abortOnError false
-        disable 'InvalidPackage'
-        // lint sees references in the grooid jar to unavailable java classes
-    }
     dexOptions {
         // http://developer.android.com/intl/es/tools/building/building-studio.html#instant-run
         //preDexLibraries true
@@ -102,6 +96,10 @@ android {
 //    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
