@@ -48,14 +48,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    dexOptions {
-        // http://developer.android.com/intl/es/tools/building/building-studio.html#instant-run
-        //preDexLibraries true
-        maxProcessCount 4
-        javaMaxHeapSize "2g"
-        jumboMode = true
-    }
     testOptions {
         unitTests {
             includeAndroidResources = true
