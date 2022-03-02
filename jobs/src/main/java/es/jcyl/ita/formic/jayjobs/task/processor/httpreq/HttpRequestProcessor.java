@@ -4,19 +4,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
@@ -35,6 +34,8 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
     private String type = "json";
     private Map<String, Object> jsonObject;
     private String body;
+    // output variable name to set the object
+    private String outputVar;
     private String outputFile;
     private String contentEncoding = "UTF-8";
     private Map<String, String> headers;
@@ -50,7 +51,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
         RawRequest request = createRequest(future);
 
-        RequestQueue rq = (requestQueue !=null)? requestQueue: RQProvider.getRQ();
+        RequestQueue rq = (requestQueue != null) ? requestQueue : RQProvider.getRQ();
         request.setShouldCache(false);
         future.setRequest(rq.add(request));
 
@@ -59,40 +60,55 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         // wait for the response
         HttpEntity entity = null;
         try {
-            entity = future.get(5, TimeUnit.SECONDS);
+            entity = future.get(timeout, TimeUnit.SECONDS);
+
         } catch (Exception e) {
             this.onErrorResponse(new VolleyError(e));
-            LOGGER.error(e);
+            throw new TaskException("There was an error while trying to execute request: "
+                    + request, e);
         }
+        if(StringUtils.isNoneBlank(outputVar)){
+
+        }
+        // prepare output file and write entity content
+        File f = configureOutputFile();
+        try {
+            FileUtils.writeByteArrayToFile(f, entity.getContent());
+        } catch (IOException e) {
+            throw new TaskException("There was an error while trying to store the " +
+                    "response content of request: " + request, e);
+        }
+
         LOGGER.debug(String.format("Http request to %s completed", url));
         LOGGER.debug(new String(entity.getContent()));
     }
 
-    private void configureOutputFile() {
-        if (StringUtils.isBlank(outputFile)) {
-            Context ctx = getGlobalContext();
-            outputFile = String.format("%s_%s_%s_httprequest.out", System.currentTimeMillis(),
+
+    private File configureOutputFile() {
+        if (StringUtils.isBlank(this.outputFile)) {
+            Context ctx = this.getGlobalContext();
+            this.outputFile = String.format("%s_%s_%s_httprequest.out", System.currentTimeMillis(),
                     ctx.get("app.id"), ctx.get("job.id"));
             LOGGER.info(String.format(
                     "The 'outputFile' attribute is not set, random name generated: [%s].",
                     outputFile));
         }
-        outputFile = TaskResourceAccessor.getWorkingFile(getGlobalContext(), outputFile);
+        this.outputFile = TaskResourceAccessor.getWorkingFile(getGlobalContext(), outputFile);
+        return new File(this.outputFile);
     }
 
     private RawRequest createRequest(RequestFuture future) {
         byte[] content = null;
-        if(body != null){
+        if (body != null) {
             content = body.getBytes(this.charset);
         }
         HttpEntity entity = new HttpEntity(content, this.headers);
         return new RawRequest(Request.Method.GET, url, entity, future, future);
     }
 
-    @Override
     public void onErrorResponse(VolleyError error) {
         LOGGER.error(error.getMessage());
-        LOGGER.error("Http status: " + error.networkResponse);
+        LOGGER.error(error.networkResponse);
     }
 
     public String getUrl() {
@@ -135,5 +151,37 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     public void setRequestQueue(RequestQueue requestQueue) {
         this.requestQueue = requestQueue;
+    }
+
+    public String getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(String outputFile) {
+        this.outputFile = outputFile;
+    }
+
+    public String getContentEncoding() {
+        return contentEncoding;
+    }
+
+    public void setContentEncoding(String contentEncoding) {
+        this.contentEncoding = contentEncoding;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
+
+    public Integer getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Integer timeout) {
+        this.timeout = timeout;
     }
 }

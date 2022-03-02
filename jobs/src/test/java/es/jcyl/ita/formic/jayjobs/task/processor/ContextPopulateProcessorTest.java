@@ -1,5 +1,8 @@
 package es.jcyl.ita.formic.jayjobs.task.processor;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,18 +12,18 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
+import es.jcyl.ita.formic.jayjobs.utils.ContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
-
-import static org.mockito.Mockito.*;
 
 public class ContextPopulateProcessorTest {
 
     @Test
     public void testSetSimpleValue() throws TaskException {
         Context taskContext = new BasicContext("t1");
-        // create task mock and set the task context
+        // create task mock and set contexts
         Task taskMock = mock(Task.class);
         when(taskMock.getTaskContext()).thenReturn(taskContext);
+        when(taskMock.getGlobalContext()).thenReturn(ContextTestUtils.createGlobalContext());
 
         ContextPopulateProcessor processor = new ContextPopulateProcessor();
         processor.setName("myVariable");
