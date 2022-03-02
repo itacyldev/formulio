@@ -2,7 +2,6 @@ package es.jcyl.ita.formic.jayjobs.task.listener;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
 
 public class LogFileTaskListener implements TaskListener {
 

@@ -25,7 +25,7 @@ import es.jcyl.ita.formic.jayjobs.task.listener.LogFileTaskListener;
 import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 import es.jcyl.ita.formic.jayjobs.task.reader.Reader;
 import es.jcyl.ita.formic.jayjobs.task.writer.DummyWriter;

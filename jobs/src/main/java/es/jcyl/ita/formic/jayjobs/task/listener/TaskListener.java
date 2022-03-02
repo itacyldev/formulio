@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.task.models;
+package es.jcyl.ita.formic.jayjobs.task.listener;
 
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -21,6 +21,7 @@ package es.jcyl.ita.formic.jayjobs.task.models;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 public interface TaskListener {
     void setTask(Task t);

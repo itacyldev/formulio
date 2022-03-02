@@ -37,9 +37,10 @@ import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.CartodruidSyncProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
+import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.HttpRequestProcessor;
 import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
 import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
 import es.jcyl.ita.formic.jayjobs.task.writer.CSVWriter;
@@ -70,6 +71,7 @@ public class TaskConfigFactory {
         // processors
         registry.put("CONTEXTPOPULATOR", ContextPopulateProcessor.class);
         registry.put("CARTODRUIDSYNC", CartodruidSyncProcessor.class);
+        registry.put("HTTPREQUESTPROCESSOR", HttpRequestProcessor.class);
     }
 
 

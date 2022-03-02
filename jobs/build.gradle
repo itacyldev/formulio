@@ -55,6 +55,9 @@ android {
     lint {
         abortOnError false
     }
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+    }
 }
 
 dependencies {
@@ -66,7 +69,7 @@ dependencies {
     api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     api 'commons-io:commons-io:2.6'
     api 'com.opencsv:opencsv:5.2'
-
+/*
     implementation('es.jcyl.ita.crtdrd:crtsyn:0.4.3') {
         exclude group: 'xpp3', module: 'xpp3'
     }
@@ -76,59 +79,14 @@ dependencies {
     implementation('es.jcyl.ita.crtcyl:crtcyl-core:2.36.5') {
         exclude group: 'xpp3', module: 'xpp3'
     }
-
+*/
     implementation(group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17') {
         exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
     }
     implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
     implementation 'javax.xml.stream:stax-api:1.0'
     implementation 'com.fasterxml:aalto-xml:1.2.2'
-
-    /*implementation (group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1')
-    {
-        exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
-    }
-    implementation 'org.apache.xmlbeans:xmlbeans:3.1.0'
-    implementation 'com.fasterxml:aalto-xml:1.2.2'
-    implementation 'javax.xml.stream:stax-api:1.0'*/
-
-    /*implementation 'org.apache.poi:poi:4.0.1'
-    implementation 'org.apache.poi:poi-scratchpad:4.0.1'
-    implementation ('org.apache.poi:poi-ooxml:4.0.1')
-    {
-                exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
-    }
-    implementation 'org.apache.poi:poi-ooxml-schemas:4.0.0'
-    implementation 'org.apache.xmlbeans:xmlbeans:3.0.1'
-    implementation 'dom4j:dom4j:1.6.1'
-    implementation 'org.apache.commons:commons-collections4:4.2'
-    implementation 'org.apache.commons:commons-collections4:4.1'
-    implementation 'org.apache.commons:commons-compress:1.18'
-
-    implementation 'javax.xml.stream:stax-api:1.0'
-    implementation 'com.fasterxml:aalto-xml:1.2.2'*/
-
-    //implementation 'org.apache.poi:poi:3.15'
-    //implementation 'org.apache.poi:poi-ooxml:3.15'
-    //implementation 'org.apache.poi:poi-ooxml-schemas:3.15'
-
-    //implementation 'org.apache.xmlbeans:xmlbeans:2.6.0'
-    //implementation 'org.apache.xmlbeans:xmlbeans:3.1.0'
-
-    //implementation 'org.apache.poi:poi:4.0.1'
-    //implementation 'org.apache.poi:poi-ooxml:4.0.1'
-    //implementation 'javax.xml.stream:stax-api:1.0'
-    //implementation 'org.apache.xmlbeans:xmlbeans:3.1.0'
-
-    // implementation "org.apache.poi:poi:4.0.1"
-    // implementation "org.apache.poi:poi-ooxml:4.0.1"
-    // implementation "org.apache.poi:ooxml-schemas:1.4"
-    //implementation 'javax.xml.stream:stax-api:1.0'
-
-    //implementation 'com.fasterxml:aalto-xml:1.2.2'
-
-    //implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
-    //implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
+    implementation 'com.android.volley:volley:1.2.1'
 
     /////////////////////////////////////
     // Instrumentation test dependencies
@@ -154,11 +112,15 @@ dependencies {
     }
     androidTestImplementation 'org.mockito:mockito-android:4.1.0'
 
+
     /////////////////////////////////////
     // JUnit test dependencies
     /////////////////////////////////////
     testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
+
+    testImplementation "org.apache.httpcomponents:httpclient:4.5.5"
+
 }
 
 publishing {

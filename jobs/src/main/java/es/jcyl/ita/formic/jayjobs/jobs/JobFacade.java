@@ -40,6 +40,9 @@ public class JobFacade {
     private JobConfigRepo jobConfigRepo;
     private JobExecRepo jobExecRepo;
 
+    // static resources
+    private static String cacheFolder;
+
     private Map<JobExecutionMode, JobExecutor> executors = new HashMap<>();
 
     public JobFacade() {
@@ -130,5 +133,13 @@ public class JobFacade {
 
     public void setJobExecRepo(JobExecRepo jobExecRepo) {
         this.jobExecRepo = jobExecRepo;
+    }
+
+    public static String getCacheFolder() {
+        return cacheFolder;
+    }
+
+    public static void setCacheFolder(String cacheFolder) {
+        JobFacade.cacheFolder = cacheFolder;
     }
 }

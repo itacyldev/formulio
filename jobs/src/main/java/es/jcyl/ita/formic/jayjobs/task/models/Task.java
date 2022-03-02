@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.jayjobs.task.models;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 
 /**
  *

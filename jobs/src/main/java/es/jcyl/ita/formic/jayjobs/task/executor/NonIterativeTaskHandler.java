@@ -24,7 +24,7 @@ import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.listener.LogFileTaskListener;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
 
 /**

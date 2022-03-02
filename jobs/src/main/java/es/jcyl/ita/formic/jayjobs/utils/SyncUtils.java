@@ -1,18 +1,11 @@
 package es.jcyl.ita.formic.jayjobs.utils;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
-
-import es.jcyl.ita.crtcyl.sync.exception.SyncException;
-import es.jcyl.ita.crtcyl.util.ZipUtils;
 
 /**
  * Created by ita-ramvalja on 19/04/2018.
@@ -31,50 +24,36 @@ public class SyncUtils {
      * @param destino
      * @return
      */
-    public static String zipFile(Context ctx, String origen, String destino)
-            throws SyncException {
-        String path = null;
-        File zippedFile;
-        int reintentos = 0;
-        boolean fileZipped = false;
-        try {
-            while (reintentos < NUM_ZIPPING_RETRYS && !fileZipped) {
-
-                FileOutputStream os = ctx.openFileOutput(destino, ctx
-                        .MODE_PRIVATE);
-
-                ZipUtils.zip(origen, os);
-
-                zippedFile = ctx.getFileStreamPath(destino);
-                if (zippedFile.exists()) {
-                    fileZipped = true;
-                    path = zippedFile.getAbsolutePath();
-                }
-
-                reintentos++;
-            }
-
-        } catch (Exception ex) {
-            String message = "Error al comprimir el Fichero " + destino;
-            LOGGER.error(message, ex);
-            throw new SyncException(message);
-        }
-        return path;
-    }
-
-
-    public static void showAlert(Context ctx, String message, String title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.setPositiveButton("Accept",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.create().show();
+    public static String zipFile( String origen, String destino)
+             {
+                 return null;
+//        String path = null;
+//        File zippedFile;
+//        int reintentos = 0;
+//        boolean fileZipped = false;
+//        try {
+//            while (reintentos < NUM_ZIPPING_RETRYS && !fileZipped) {
+//
+//                FileOutputStream os = ctx.openFileOutput(destino, ctx
+//                        .MODE_PRIVATE);
+//
+//                //ZipUtils.zip(origen, os);
+//
+//                zippedFile = ctx.getFileStreamPath(destino);
+//                if (zippedFile.exists()) {
+//                    fileZipped = true;
+//                    path = zippedFile.getAbsolutePath();
+//                }
+//
+//                reintentos++;
+//            }
+//
+//        } catch (Exception ex) {
+//            String message = "Error al comprimir el Fichero " + destino;
+//            LOGGER.error(message, ex);
+//            throw new RuntimeException(message);
+//        }
+//        return path;
     }
 
 

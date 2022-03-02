@@ -22,6 +22,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 
 /**
