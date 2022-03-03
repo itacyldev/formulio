@@ -17,7 +17,7 @@ package es.jcyl.ita.formic.forms.config.builders.repo;
 
 import java.io.File;
 
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.elements.RepoConfig;
@@ -59,7 +59,7 @@ public class FileRepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> 
             }
         } else {
             // create under project folder
-            String projectFolder = Config.getInstance().getCurrentBaseFolder();
+            String projectFolder = App.getInstance().getCurrentBaseFolder();
             baseFile = new File(projectFolder, baseFolder);
             if (!baseFile.exists()) {
                 try {

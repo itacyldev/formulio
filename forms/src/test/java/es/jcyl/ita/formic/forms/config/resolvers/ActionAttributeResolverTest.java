@@ -22,14 +22,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
@@ -46,7 +45,7 @@ public class ActionAttributeResolverTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

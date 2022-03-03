@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.config;
+package es.jcyl.ita.formic.forms;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -30,7 +30,9 @@ import java.util.Set;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
@@ -61,8 +63,8 @@ import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class Config {
-    private static Config _instance;
+public class App {
+    private static App _instance;
     private static Map<ProjectResource.ResourceType, ProjectResourceHandler> _handlers = new HashMap<ProjectResource.ResourceType, ProjectResourceHandler>();
 
     private boolean configLoaded = false;
@@ -87,16 +89,16 @@ public class Config {
 
     private static ConfigReadingInfo readingListener = new ConfigReadingInfo();
 
-    private Config(String appBaseFolder) {
+    private App(String appBaseFolder) {
         this.appBaseFolder = appBaseFolder;
     }
 
-    private Config(Context androidContext, String appBaseFolder) {
+    private App(Context androidContext, String appBaseFolder) {
         this.appBaseFolder = appBaseFolder;
         this.andContext = androidContext;
     }
 
-    public static Config getInstance() {
+    public static App getInstance() {
         if (_instance == null) {
             throw new ConfigurationException("You first have to call to init method giving " +
                     "the base folder of the project you want to read.");
@@ -111,15 +113,15 @@ public class Config {
      * @param appBaseFolder
      * @return
      */
-    public static Config init(String appBaseFolder) {
-        _instance = new Config(appBaseFolder);
+    public static App init(String appBaseFolder) {
+        _instance = new App(appBaseFolder);
         _instance.init();
         return _instance;
     }
 
-    public static Config init(Context and, String appBaseFolder) {
+    public static App init(Context and, String appBaseFolder) {
         // TODO: cache??
-        _instance = new Config(and, appBaseFolder);
+        _instance = new App(and, appBaseFolder);
         _instance.init();
         return _instance;
     }

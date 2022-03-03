@@ -23,17 +23,10 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
@@ -49,7 +42,7 @@ public class UIViewBuilderTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

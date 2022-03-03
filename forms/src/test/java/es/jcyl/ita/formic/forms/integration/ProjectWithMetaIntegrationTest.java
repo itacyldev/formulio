@@ -29,7 +29,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
@@ -55,7 +55,7 @@ public class ProjectWithMetaIntegrationTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

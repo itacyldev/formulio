@@ -29,12 +29,11 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.datalist.DatalistItemWidget;
 import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
-import es.jcyl.ita.formic.forms.components.form.FormWidget;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
@@ -66,7 +65,7 @@ public class InputValidationIntegrationTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // Create entity Meta with a property called "email"
@@ -85,7 +84,7 @@ public class InputValidationIntegrationTest {
 
     @Test
     public void testFormConfig() throws Exception {
-        CompositeContext globalContext = Config.getInstance().getGlobalContext();
+        CompositeContext globalContext = App.getInstance().getGlobalContext();
 
         // read XML config
         String xml = XmlConfigUtils.createEditForm(XML_SNIPPET);

@@ -24,10 +24,10 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
@@ -46,7 +46,7 @@ public class UIDatatableBuilderTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

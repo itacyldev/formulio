@@ -35,7 +35,7 @@ import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -65,7 +65,7 @@ public class CreateEntityActionHandlerTest {
         if (ctx != null) {
             ctx = InstrumentationRegistry.getInstrumentation().getContext();
         }
-        Config.init(ctx, "");
+        App.init(ctx, "");
     }
 
 

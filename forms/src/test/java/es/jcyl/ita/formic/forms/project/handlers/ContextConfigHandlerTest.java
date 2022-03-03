@@ -29,7 +29,7 @@ import java.io.File;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.xml.XmlConfigFileReader;
@@ -48,7 +48,7 @@ public class ContextConfigHandlerTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -60,7 +60,7 @@ public class ContextConfigHandlerTest {
     @Test
     public void testContextRegistering() {
         // preload a context in the global context
-        Config.getInstance().getGlobalContext().addContext(new BasicContext("ctx0"));
+        App.getInstance().getGlobalContext().addContext(new BasicContext("ctx0"));
 
         // manually create the configuration Node that should be return for the contextBuilder
         ConfigNode node = new ConfigNode<CompositeContext>("context");
@@ -86,11 +86,11 @@ public class ContextConfigHandlerTest {
         handler.handle(emptyResource);
 
         // check the context to find ctx1 and ctx2
-        Assert.assertTrue(Config.getInstance().getGlobalContext().hasContext("ctx1"));
-        Assert.assertTrue(Config.getInstance().getGlobalContext().hasContext("ctx2"));
+        Assert.assertTrue(App.getInstance().getGlobalContext().hasContext("ctx1"));
+        Assert.assertTrue(App.getInstance().getGlobalContext().hasContext("ctx2"));
         // check the ctx0 context has been replaced
-        Assert.assertTrue(Config.getInstance().getGlobalContext().hasContext("ctx0"));
-        Assert.assertTrue(Config.getInstance().getGlobalContext().containsKey("ctx0.key"));
+        Assert.assertTrue(App.getInstance().getGlobalContext().hasContext("ctx0"));
+        Assert.assertTrue(App.getInstance().getGlobalContext().containsKey("ctx0.key"));
 
     }
 }

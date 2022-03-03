@@ -24,8 +24,8 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -42,10 +42,10 @@ public class FileRepoBuilderConfigTest {
 
     @BeforeClass
     public static void setUp() {
-        Config config = Config.init("");
+        App app = App.init("");
         String projectPath = "src/test/resources/config/project1";
         Project p = ProjectRepository.createFromFolder(new File(projectPath));
-        config.setCurrentProject(p);
+        app.setCurrentProject(p);
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

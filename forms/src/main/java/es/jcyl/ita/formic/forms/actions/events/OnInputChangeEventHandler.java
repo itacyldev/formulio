@@ -15,17 +15,13 @@ package es.jcyl.ita.formic.forms.actions.events;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.operations.BaseWidgetValidator;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
-import es.jcyl.ita.formic.forms.controllers.operations.WidgetValidator;
-import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
-import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
@@ -85,7 +81,7 @@ public class OnInputChangeEventHandler
                 mc.updateDependants(widget);
             }
         } catch (Exception e) {
-            String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
+            String msg = App.getInstance().getStringResource(R.string.action_generic_error);
             error(msg, e);
             mc.renderBack();
             // show error message

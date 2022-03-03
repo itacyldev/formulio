@@ -26,11 +26,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.form.FormWidget;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
@@ -69,7 +69,7 @@ public class FormScriptingTest {
             ctx.setTheme(R.style.FormudruidLight);
         }
 
-        Config.init(ctx, "");
+        App.init(ctx, "");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
