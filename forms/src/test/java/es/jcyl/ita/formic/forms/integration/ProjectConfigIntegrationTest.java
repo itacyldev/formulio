@@ -29,11 +29,11 @@ import java.io.FileFilter;
 import java.util.List;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -54,7 +54,7 @@ public class ProjectConfigIntegrationTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -70,10 +70,10 @@ public class ProjectConfigIntegrationTest {
     @Test
     public void testFormConfig() throws Exception {
         File baseFolder = TestUtils.findFile("config");
-        Config.init(baseFolder.getAbsolutePath());
-        Config config = Config.getInstance();
+        App.init(baseFolder.getAbsolutePath());
+        App app = App.getInstance();
 
-        ProjectRepository projectRepo = config.getProjectRepo();
+        ProjectRepository projectRepo = app.getProjectRepo();
         Assert.assertNotNull(projectRepo);
         List<Project> projectList = projectRepo.listAll();
 
@@ -84,12 +84,12 @@ public class ProjectConfigIntegrationTest {
         Assert.assertTrue(CollectionUtils.isNotEmpty(prj.getConfigFiles()));
         // read config and check repositories and forms
 
-        config.setCurrentProject(prj);
+        app.setCurrentProject(prj);
         // there must be 4 repos
-        Set<String> repoIds = config.getRepoConfigReader().getRepoFactory().getRepoIds();
+        Set<String> repoIds = app.getRepoConfigReader().getRepoFactory().getRepoIds();
 
         // there must be three form configs
-        List<FormConfig> formConfigs = config.getFormConfigRepo().listAll();
+        List<FormConfig> formConfigs = app.getFormConfigRepo().listAll();
         int expectedNumForms = getNunFilesInFolder(TestUtils.findFile("config/project1/forms"));
         assertEquals(expectedNumForms, formConfigs.size());
     }

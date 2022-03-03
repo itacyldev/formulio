@@ -17,7 +17,7 @@ package es.jcyl.ita.formic.forms.utils;
 
 import java.io.File;
 
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
@@ -32,9 +32,9 @@ public class ProjectUtils {
     }
 
     public static Project readProjectConfig(File folder) {
-        Config config = Config.getInstance();
+        App app = App.getInstance();
         Project p = ProjectRepository.createFromFolder(folder);
-        config.setCurrentProject(p);
+        app.setCurrentProject(p);
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         return p;

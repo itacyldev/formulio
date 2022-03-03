@@ -33,20 +33,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.datatable.DatatableWidget;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
@@ -76,7 +73,7 @@ public class ProjectRhinoScriptIntegrationTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -87,17 +84,17 @@ public class ProjectRhinoScriptIntegrationTest {
     public void testFormConfig() throws Exception {
 
         File baseFolder = TestUtils.findFile("config");
-        Config.init(baseFolder.getAbsolutePath());
-        Config config = Config.getInstance();
+        App.init(baseFolder.getAbsolutePath());
+        App app = App.getInstance();
 
         // Open project config
-        ProjectRepository projectRepo = config.getProjectRepo();
+        ProjectRepository projectRepo = app.getProjectRepo();
         Project prj = projectRepo.findById("project1");
-        Config.getInstance().setCurrentProject(prj);
+        App.getInstance().setCurrentProject(prj);
 
         // mock main controller
         MainControllerMock mc = new MainControllerMock();
-        mc.setContext(config.getGlobalContext());
+        mc.setContext(app.getGlobalContext());
 
         // navigate to form
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();

@@ -29,7 +29,7 @@ import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.EmptyActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.router.Router;
@@ -108,7 +108,7 @@ public class ActionController {
                 handler.onError(actionContext, action, e);
             }
         } catch (Exception e) {
-            String msg = Config.getInstance().getStringResource(R.string.action_generic_error);
+            String msg = App.getInstance().getStringResource(R.string.action_generic_error);
             error(msg, e);
             mc.renderBack();
 

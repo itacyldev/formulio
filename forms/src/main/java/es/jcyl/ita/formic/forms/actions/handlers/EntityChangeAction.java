@@ -17,12 +17,12 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 
 import org.apache.commons.lang3.StringUtils;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.validation.ValidatorException;
@@ -66,11 +66,11 @@ public abstract class EntityChangeAction<F extends ViewController> extends Abstr
     protected abstract void doAction(ActionContext actionContext, UserAction action);
 
     protected String getSuccessMessage(UserAction action) {
-        return Config.getInstance().getStringResource(R.string.action_generic_success);
+        return App.getInstance().getStringResource(R.string.action_generic_success);
     }
 
     protected String getErrorMessage(UserAction action, Exception e) {
-        return Config.getInstance().getStringResource(R.string.action_generic_error);
+        return App.getInstance().getStringResource(R.string.action_generic_error);
     }
 
 }

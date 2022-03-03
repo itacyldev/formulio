@@ -19,13 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
-import es.jcyl.ita.formic.forms.config.Config;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.router.Router;
@@ -58,12 +57,12 @@ public class DeleteActionHandler extends AbstractActionHandler {
     
     @Override
     public String getSuccessMessage(ActionContext actionContext, UserAction action) {
-        return Config.getInstance().getStringResource(R.string.action_delete_success);
+        return App.getInstance().getStringResource(R.string.action_delete_success);
     }
 
     @Override
     protected String getErrorMessage(UserAction action, Exception e) {
-        return Config.getInstance().getStringResource(R.string.action_delete_error);
+        return App.getInstance().getStringResource(R.string.action_delete_error);
     }
 
 }

@@ -29,6 +29,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainControllerMock;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
@@ -36,7 +37,6 @@ import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
@@ -52,8 +52,6 @@ import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 
 import static org.mockito.Mockito.*;
 
@@ -69,7 +67,7 @@ public class ViewRenderIntegrationTest {
 
     @BeforeClass
     public static void beforeClass() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -130,7 +128,7 @@ public class ViewRenderIntegrationTest {
      */
     @Test(expected = ViewConfigException.class)
     public void testRenderLoop() throws Exception {
-        CompositeContext globalContext = Config.getInstance().getGlobalContext();
+        CompositeContext globalContext = App.getInstance().getGlobalContext();
 
         // read XML config
         String xml = XmlConfigUtils.createEditForm(XML_INPUT);
