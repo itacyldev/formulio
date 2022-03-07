@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
@@ -11,7 +10,6 @@ version = globalConf.version
 
 android {
     compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
 
     signingConfigs {
         release {
@@ -27,8 +25,6 @@ android {
     }
 
     defaultConfig {
-        versionCode globalConf.versionCode
-        versionName globalConf.versionName
         targetSdkVersion globalConf.targetSdkVersion
         minSdkVersion globalConf.minSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -52,17 +48,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
-        abortOnError false
-    }
-    dexOptions {
-        // http://developer.android.com/intl/es/tools/building/building-studio.html#instant-run
-        //preDexLibraries true
-        maxProcessCount 4
-        javaMaxHeapSize "2g"
-        jumboMode = true
-    }
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -78,6 +63,9 @@ android {
 //    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
 }
 
 

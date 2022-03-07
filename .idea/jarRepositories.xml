@@ -151,5 +151,40 @@
       <option name="name" value="sdk android extras" />
       <option name="url" value="file:$PROJECT_DIR$/jobs/null/extras/android/m2repository" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:$USER_HOME$/.m2/repository" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdk android extras" />
+      <option name="name" value="sdk android extras" />
+      <option name="url" value="file:/D:/Desarrollo/tools/android_sdk/extras/android/m2repository" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../libs/mvn_repository/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdk google extras" />
+      <option name="name" value="sdk google extras" />
+      <option name="url" value="file:/D:/Desarrollo/tools/android_sdk/extras/google/m2repository" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="ITACyL - snapshots" />
+      <option name="name" value="ITACyL - snapshots" />
+      <option name="url" value="https://servicios.itacyl.es/nexus/repository/snapshots/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="ITACyL - thirdparty" />
+      <option name="name" value="ITACyL - thirdparty" />
+      <option name="url" value="https://servicios.itacyl.es/nexus/repository/thirdparty/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="ITACyL - internal" />
+      <option name="name" value="ITACyL - internal" />
+      <option name="url" value="https://servicios.itacyl.es/nexus/repository/internal/" />
+    </remote-repository>
   </component>
 </project>

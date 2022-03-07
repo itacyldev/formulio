@@ -8,7 +8,6 @@ version = globalConf.version
 android {
 
     compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
 
     signingConfigs {
         release {
@@ -25,8 +24,6 @@ android {
 
 
     defaultConfig {
-        versionCode globalConf.versionCode
-        versionName globalConf.versionName
         targetSdkVersion globalConf.targetSdkVersion
         minSdkVersion globalConf.minSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -55,12 +52,12 @@ android {
             returnDefaultValues = true
         }
     }
-    lintOptions {
-        abortOnError false
-    }
-//    useLibrary 'android.test.runner'
+    //    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {
