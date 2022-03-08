@@ -16,7 +16,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
         classpath 'org.jacoco:org.jacoco.core:0.8.6'
@@ -52,15 +52,15 @@ allprojects {
 
        maven {
            name "ITACyL - snapshots"
-           url "http://repo.itacyl.es/archiva/repository/snapshots/"
+           url "https://servicios.itacyl.es/nexus/repository/snapshots/"
        }
        maven {
            name "ITACyL - internal"
-           url "http://repo.itacyl.es/archiva/repository/internal/"
+           url "https://servicios.itacyl.es/nexus/repository/internal/"
        }
        maven {
            name "ITACyL - thirdparty"
-           url "http://repo.itacyl.es/archiva/repository/thirdparty/"
+           url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
        }
     }
 
@@ -94,7 +94,7 @@ ext {
     compileSdkVersion = 30
     targetSdkVersion = 30
     minSdkVersion = 21
-    buildToolsVersion = '30.0.2'
+    buildToolsVersion = '30.0.3'
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'

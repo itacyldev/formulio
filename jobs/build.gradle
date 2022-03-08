@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 def globalConf = rootProject.ext
@@ -40,13 +39,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    dexOptions {
-        // http://developer.android.com/intl/es/tools/building/building-studio.html#instant-run
-        //preDexLibraries true
-        maxProcessCount 4
-        javaMaxHeapSize "2g"
-        jumboMode = true
-    }
 
     sourceSets {
         String sharedTestJavaDir = 'src/shared/java'
@@ -78,10 +70,19 @@ dependencies {
     api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     api 'commons-io:commons-io:2.6'
     api 'com.opencsv:opencsv:5.2'
-    
-    implementation 'es.jcyl.ita.crtdrd:crtsyn:0.4.3'
-    implementation 'es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3'
-    implementation 'es.jcyl.ita.crtcyl:crtcyl-core:2.36.5'
+
+    implementation(group: 'es.jcyl.ita.crtdrd', name: 'crtsyn', version: '0.4.3')
+            {
+                exclude group: 'xpp3', module: 'xpp3'
+            }
+    implementation(group: 'es.jcyl.ita.crtcyl', name: 'crtcyl-generic', version: '2.36.3')
+            {
+                exclude group: 'xpp3', module: 'xpp3'
+            }
+    implementation(group: 'es.jcyl.ita.crtcyl', name: 'crtcyl-core', version: '2.36.5')
+            {
+                exclude group: 'xpp3', module: 'xpp3'
+            }
 
     implementation (group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17')
     {
