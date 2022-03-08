@@ -15,7 +15,7 @@
           "password": "password",
           "files": [
              {
-                "name": "",
+                "name": "file1",
                 "readwrite": "W",
                 "compress": true
               },
