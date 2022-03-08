@@ -18,7 +18,7 @@ package es.jcyl.ita.formic.forms.project.handlers;
 import android.net.Uri;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
@@ -58,7 +58,7 @@ public class ContextConfigHandler extends AbstractProjectResourceHandler {
      */
     private void register(CompositeContext contextMod) {
         // put all
-        CompositeContext globalCtx = Config.getInstance().getGlobalContext();
+        CompositeContext globalCtx = App.getInstance().getGlobalContext();
         globalCtx.addAllContext(contextMod.getContexts());
     }
 

@@ -26,7 +26,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 import java.nio.charset.Charset;
 
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -48,7 +48,7 @@ public class RepositoryConfHandlerTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

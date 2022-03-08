@@ -152,84 +152,24 @@
       <option name="url" value="file:$PROJECT_DIR$/jobs/null/extras/android/m2repository" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="sdk google extras" />
-      <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/null/extras/google/m2repository" />
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:$USER_HOME$/.m2/repository" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="sdk android extras" />
       <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/null/extras/android/m2repository" />
+      <option name="url" value="file:/D:/Desarrollo/tools/android_sdk/extras/android/m2repository" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../libs/mvn_repository/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="sdk google extras" />
       <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/repoTestUtils/null/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk android extras" />
-      <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/repoTestUtils/null/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk android extras" />
-      <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/jobs/null/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk google extras" />
-      <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/jobs/null/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk google extras" />
-      <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/repoAndroidTests/null/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk android extras" />
-      <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/repoAndroidTests/null/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk android extras" />
-      <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/core/null/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk google extras" />
-      <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/core/null/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk android extras" />
-      <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/repo/null/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk google extras" />
-      <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/repo/null/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk android extras" />
-      <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/app/null/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk google extras" />
-      <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/app/null/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk android extras" />
-      <option name="name" value="sdk android extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/forms/null/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="sdk google extras" />
-      <option name="name" value="sdk google extras" />
-      <option name="url" value="file:/$PROJECT_DIR$/forms/null/extras/google/m2repository" />
+      <option name="url" value="file:/D:/Desarrollo/tools/android_sdk/extras/google/m2repository" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="ITACyL - snapshots" />

@@ -30,9 +30,9 @@ import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 switch (item.getItemId()) {
                     case R.id.action_projects:
                         loadFragment(ProjectListFragment.newInstance(
-                                Config.getInstance().getProjectRepo()));
+                                App.getInstance().getProjectRepo()));
                         break;
                     case R.id.action_forms:
                         loadFragment(new FormListFragment());
@@ -201,9 +201,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             f.mkdir();
         }
         // initilize formic configuration
-        Config config = Config.init(this, projectsFolder);
+        App app = App.init(this, projectsFolder);
 
-        ProjectRepository projectRepo = config.getProjectRepo();
+        ProjectRepository projectRepo = app.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
             UserMessagesHelper.
@@ -216,7 +216,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
                     (String) prj.getId())), Toast.LENGTH_LONG);
             try {
-                Config.getInstance().setCurrentProject(prj);
+                App.getInstance().setCurrentProject(prj);
                 UserMessagesHelper.toast(this,
                         DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
                         Toast.LENGTH_LONG);

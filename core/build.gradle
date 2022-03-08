@@ -19,8 +19,8 @@ dependencies {
 publishing {
     repositories {
         maven {
-            def releasesRepoUrl = "http://servicios.itacyl.es/nexus/repository/internal/"
-            def snapshotsRepoUrl = "http://servicios.itacyl.es/nexus/repository/snapshots/"
+            def releasesRepoUrl = "https://servicios.itacyl.es.es/nexus/repository/internal/"
+            def snapshotsRepoUrl = "https://servicios.itacyl.es/nexus/repository/snapshots/"
             url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
                 username = mavenUser

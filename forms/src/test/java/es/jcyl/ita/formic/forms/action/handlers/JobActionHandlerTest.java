@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.JobActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 
@@ -53,7 +53,7 @@ public class JobActionHandlerTest {
         if (ctx != null) {
             ctx = InstrumentationRegistry.getInstrumentation().getContext();
         }
-        Config.init(ctx, "");
+        App.init(ctx, "");
     }
 
     @Test
@@ -72,7 +72,7 @@ public class JobActionHandlerTest {
 
         // mock facade
         JobFacade facadeMock = mock(JobFacade.class);
-        Config.getInstance().setJobFacade(facadeMock);
+        App.getInstance().setJobFacade(facadeMock);
 
         // act - execute action
         JobActionHandler handler = new JobActionHandler(mc, mc.getRouter());

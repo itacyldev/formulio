@@ -33,7 +33,7 @@ import java.util.List;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
@@ -58,7 +58,7 @@ public class RhinoScriptsTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -121,12 +121,12 @@ public class RhinoScriptsTest {
     public void testFormConfig() throws Exception {
 
         File baseFolder = TestUtils.findFile("config");
-        Config.init(baseFolder.getAbsolutePath());
-        Config config = Config.getInstance();
+        App.init(baseFolder.getAbsolutePath());
+        App app = App.getInstance();
 
-        ProjectRepository projectRepo = config.getProjectRepo();
+        ProjectRepository projectRepo = app.getProjectRepo();
         Project prj = projectRepo.findById("project1");
-        Config.getInstance().setCurrentProject(prj);
+        App.getInstance().setCurrentProject(prj);
 
         RepositoryFactory repoFactory = RepositoryFactory.getInstance();
 

@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.export.CSVExporter;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -171,7 +171,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
     private class ExportDatabaseCSVTask extends AsyncTask<FormListController, String, String> {
 
         protected String doInBackground(final FormListController... controllers) {
-            File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
+            File exportDir = new File(App.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
 
             CSVExporter csvExporter = CSVExporter.getInstance();
             File file = csvExporter.export(controllers[0].getEntityList().getRepo(),

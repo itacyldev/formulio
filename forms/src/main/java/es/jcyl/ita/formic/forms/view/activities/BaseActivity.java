@@ -17,8 +17,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
+import es.jcyl.ita.formic.forms.actions.ActionType;
+import es.jcyl.ita.formic.forms.actions.JobActionHandler;
+import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 
 public abstract class BaseActivity extends AppCompatActivity  {
 
@@ -82,6 +92,27 @@ public abstract class BaseActivity extends AppCompatActivity  {
         recreate();
 
         invalidateOptionsMenu();
+    }
+
+    protected void synchronization(){
+        MainController mc = MainController.getInstance();
+
+        UserAction userAction = new UserAction(ActionType.JOB);
+        Map<String, Object> params = new HashMap<>();
+        String JOB_ID = "myMockedJob";
+        params.put("jobId", JOB_ID);
+        userAction.setParams(params);
+
+        // act - execute action
+        JobActionHandler handler = new JobActionHandler(mc, mc.getRouter());
+        handler.handle(new ActionContext(mc.getViewController(), this), userAction);
+
+
+        // create facade and related repositories
+        JobFacade facade = new JobFacade();
+        JobConfigRepo repo = new JobConfigRepo();
+        facade.setJobConfigRepo(repo);
+
     }
 
 

@@ -10,11 +10,8 @@ version = globalConf.version
 
 android {
     compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
 
     defaultConfig {
-        versionCode globalConf.versionCode
-        versionName globalConf.versionName
         targetSdkVersion globalConf.targetSdkVersion
         minSdkVersion globalConf.minSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -36,10 +33,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
-        abortOnError false
-    }
-
     sourceSets {
         String sharedTestJavaDir = 'src/shared/java'
         androidTest {
@@ -59,6 +52,9 @@ android {
 //    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {

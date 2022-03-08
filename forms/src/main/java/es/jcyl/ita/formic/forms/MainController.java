@@ -34,7 +34,6 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.proxy.ProxyViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.config.builders.proxy.UIComponentProxyFactory;
@@ -113,7 +112,7 @@ public class MainController implements ContextAwareComponent {
         if (System.getProperty("java.vendor").toLowerCase().contains("android")) {
             // if context is already availate in Config, use it to get the cache directory
             // if not, relay on factory falback solution through system properties
-            Context androidContext = Config.getInstance().getAndroidContext();
+            Context androidContext = App.getInstance().getAndroidContext();
             if (androidContext != null) {
                 proxyFactory.setAndroidClassLoadingStrategy(androidContext.getCacheDir());
             }

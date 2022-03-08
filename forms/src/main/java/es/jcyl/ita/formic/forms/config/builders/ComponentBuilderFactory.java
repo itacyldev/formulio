@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
@@ -327,7 +327,7 @@ public class ComponentBuilderFactory {
     }
 
     public RepoConfigHandler getRepoReader() {
-        return Config.getInstance().getRepoConfigReader();
+        return App.getInstance().getRepoConfigReader();
     }
 
     public RepositoryFactory getRepoFactory() {

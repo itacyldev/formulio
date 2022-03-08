@@ -11,6 +11,8 @@
     <string name="action_dark_theme">Dark Theme</string>
     <string name="action_light_theme">Light Theme</string>
 
+    <string name="action_synchro">Synchronization</string>
+
     <string name="today">Today</string>
     <string name="now">Now</string>
 

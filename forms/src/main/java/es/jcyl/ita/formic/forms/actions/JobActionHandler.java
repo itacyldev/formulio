@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.handlers.AbstractActionHandler;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
@@ -53,7 +53,7 @@ public class JobActionHandler extends AbstractActionHandler {
         // clone context and add parameter context
         CompositeContext ctx = prepareContext(action.getParams());
         try {
-            JobFacade jobFacade = Config.getInstance().getJobFacade();
+            JobFacade jobFacade = App.getInstance().getJobFacade();
             jobFacade.executeJob(ctx, jobId);
         } catch (JobException e) {
             throw new UserActionException(error(String.format("An error occurred while executing " +
@@ -71,7 +71,7 @@ public class JobActionHandler extends AbstractActionHandler {
         // create execution context linking params and globalContext
         CompositeContext execContext = new UnPrefixedCompositeContext();
         execContext.addContext(paramContext);
-        execContext.addContext(Config.getInstance().getGlobalContext());
+        execContext.addContext(App.getInstance().getGlobalContext());
 
         return execContext;
     }
