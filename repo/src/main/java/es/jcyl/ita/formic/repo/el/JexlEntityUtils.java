@@ -15,55 +15,22 @@ package es.jcyl.ita.formic.repo.el;
  * limitations under the License.
  */
 
-import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
-import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.jexl3.MapContext;
-import org.apache.commons.jexl3.internal.Engine;
-import org.apache.commons.jexl3.internal.TemplateEngine;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.el.wrappers.JexlContextWrapper;
 import es.jcyl.ita.formic.repo.el.wrappers.JexlEntityWrapper;
 import es.jcyl.ita.formic.repo.query.JexlEntityExpression;
+import es.jcyl.ita.formic.core.jexl.JexlUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class JexlRepoUtils {
-
-    protected static final JexlEngine jexl = new JexlBuilder().cache(256)
-            .strict(false).silent(false).create();
-
-    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, true,
-            256, '$', '#');
-
-    public static Object eval(JexlContext ctx, String expression) {
-        try {
-            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
-            return exl.evaluate(ctx);
-        } catch (Exception e) {
-            throw new RuntimeException(String.format(
-                    "An error occurred while trying to evaluate the jexl expression [%s].",
-                    expression
-            ), e);
-        }
-    }
-
-    public static Object eval(Context context, String expression) {
-        JxltEngine.Expression exl = jxltEngine.createExpression(expression);
-        return eval(context, exl);
-    }
-
-    public static Object eval(Context context, JxltEngine.Expression exl) {
-        JexlContextWrapper jc = new JexlContextWrapper(context);
-        return exl.evaluate(jc);
-    }
+public class JexlEntityUtils extends JexlUtils {
 
     public static Object eval(Entity entity, String expression) {
         JxltEngine.Expression exl = null;
@@ -118,10 +85,5 @@ public class JexlRepoUtils {
             ), e);
         }
     }
-
-    public static JxltEngine.Expression createExpression(String expression) {
-        return jxltEngine.createExpression(expression);
-    }
-
 
 }

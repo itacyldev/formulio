@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.jayjobs.task.executor;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -84,6 +85,10 @@ public class TaskExecutor {
 
     public void execute(CompositeContext context, List<Task> tasks) throws TaskException {
         doExecute(context, tasks.iterator());
+    }
+
+    public void execute(CompositeContext context, Task task) throws TaskException {
+        execute(context, Collections.singletonList(task));
     }
 
     public TaskExecListener getListener() {

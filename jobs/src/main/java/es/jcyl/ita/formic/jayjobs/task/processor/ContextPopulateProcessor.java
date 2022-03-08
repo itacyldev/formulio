@@ -21,6 +21,8 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 
+import es.jcyl.ita.formic.jayjobs.task.iteration.AbstractTaskContextIterator;
+
 /**
  * Processor that allows to set values in context
  *

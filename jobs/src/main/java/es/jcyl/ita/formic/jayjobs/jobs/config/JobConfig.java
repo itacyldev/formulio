@@ -18,6 +18,8 @@ package es.jcyl.ita.formic.jayjobs.jobs.config;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Map;
+
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 
 /**
@@ -34,6 +36,7 @@ public class JobConfig {
     private String[] requiredPermissions;
     // selected execution mode for the job (BG/FG)
     private JobExecutionMode executionMode;
+    private Map<String, Object> globalParams;
     // part of the job json config that defines the tasks
     @JsonIgnore
     private String taskConfig;
@@ -100,5 +103,13 @@ public class JobConfig {
 
     public void setTaskConfig(String taskConfig) {
         this.taskConfig = taskConfig;
+    }
+
+    public Map<String, Object> getGlobalParams() {
+        return globalParams;
+    }
+
+    public void setGlobalParams(Map<String, Object> globalParams) {
+        this.globalParams = globalParams;
     }
 }

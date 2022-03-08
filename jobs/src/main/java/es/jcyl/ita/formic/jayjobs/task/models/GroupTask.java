@@ -25,8 +25,10 @@ public class GroupTask extends AbstractTask {
 
     private int iterSize;
     private int pageSize;
-    private int parallelize = 1;
     private String iterQuerySQL;
+    private String enterLoopExpression;
+    private String exitLoopExpression;
+    private long iterDelay = -1; //ms
 
     @JsonIgnore
     private String taskConfig;
@@ -80,5 +82,29 @@ public class GroupTask extends AbstractTask {
 
     public void setLoopIterator(TaskContextIterator loopIterator) {
         this.loopIterator = loopIterator;
+    }
+
+    public long getIterDelay() {
+        return iterDelay;
+    }
+
+    public void setIterDelay(long iterDelay) {
+        this.iterDelay = iterDelay;
+    }
+
+    public String getEnterLoopExpression() {
+        return enterLoopExpression;
+    }
+
+    public void setEnterLoopExpression(String enterLoopExpression) {
+        this.enterLoopExpression = enterLoopExpression;
+    }
+
+    public String getExitLoopExpression() {
+        return exitLoopExpression;
+    }
+
+    public void setExitLoopExpression(String exitLoopExpression) {
+        this.exitLoopExpression = exitLoopExpression;
     }
 }

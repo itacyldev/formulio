@@ -15,6 +15,9 @@ package es.jcyl.ita.formic.jayjobs.task.iteration;
  * limitations under the License.
  */
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
@@ -22,85 +25,88 @@ import es.jcyl.ita.formic.core.context.impl.MultiMapCompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 
 public abstract class AbstractTaskContextIterator implements TaskContextIterator {
+    protected static final Log LOGGER = LogFactory.getLog(AbstractTaskContextIterator.class);
 
-	protected int idx = 0;
-	protected GroupTask task;
+    protected int idx = 0;
+    protected GroupTask task;
 
-	protected CompositeContext globalContext;
-	protected BasicContext sharedContext;
-	protected Context groupIterContext;
+    private CompositeContext globalContext;
+    private Context groupIterContext;
+    private CompositeContext currentIterCtx;
 
-	/** vars privadas gesti�n del flujo */
-	private boolean initialized = false;
+    /**
+     * inner state vars
+     */
+    private boolean initialized = false;
 
-	protected final void init() {
-		groupIterContext = createGroupContext(task);
-		globalContext.addContext(groupIterContext);
-		sharedContext = new BasicContext(task.getName() + ".shared");
-		globalContext.addContext(sharedContext);
-		doInit();
-		initialized = true;
-	}
+    protected final void init() {
+        // create the GroupTask context for groupTask and add to the global context so it
+        // can be accessed from outside of the GroupTask
+        groupIterContext = new BasicContext(task.getName());
+        groupIterContext.put("size", task.getIterSize());
+        globalContext.addContext(groupIterContext);
+        doInit();
+        initialized = true;
+    }
 
-	protected Context createGroupContext(GroupTask t) {
-		Context ctx = new BasicContext(t.getName());
-		ctx.put("size", t.getIterSize());
-		return ctx;
-	}
+    abstract void doInit();
 
-	abstract void doInit();
+    @Override
+    public final synchronized boolean hasNext() {
+        if (!initialized) {
+            init();
+        }
+        LOGGER.info(String.format("Starting iteration [%s] in group task [%s]", idx, this.task.getName()));
+        // prepare iteration context
+        // update index in the group context
+        groupIterContext.put("idx", idx);
 
-	@Override
-	public final synchronized boolean hasNext() {
-		if (!initialized) {
-			init();
-		}
-		return doHasNext();
-	}
 
-	protected abstract boolean doHasNext();
+        // create context for current iteration and add global context
+        currentIterCtx = new MultiMapCompositeContext();
+        currentIterCtx.addContext(globalContext);
+        idx++;
 
-	@Override
-	public final synchronized CompositeContext next() {
-		// update index in shared context
-		groupIterContext.put("idx", idx);
+        return doHasNext();
+    }
 
-		// create context for current task
-		CompositeContext currentInterCtx = new MultiMapCompositeContext();
+    protected abstract boolean doHasNext();
 
-		// add shared contexts
-		currentInterCtx.addContext(globalContext);
-		currentInterCtx.addContext(sharedContext);
-		currentInterCtx.addContext(groupIterContext);
+    @Override
+    public final synchronized CompositeContext next() {
+        return currentIterCtx;
+    }
 
-		// add current task context
-		currentInterCtx.addContext(createTaskContext());
-		idx++;
-		return currentInterCtx;
-	}
+    protected abstract Context createTaskContext();
 
-	protected abstract Context createTaskContext();
+    public GroupTask getTask() {
+        return task;
+    }
 
-	public GroupTask getTask() {
-		return task;
-	}
+    @Override
+    public void setTask(GroupTask task) {
+        this.task = task;
+    }
 
-	@Override
-	public void setTask(GroupTask task) {
-		this.task = task;
-	}
+    public CompositeContext getGlobalContext() {
+        return globalContext;
+    }
 
-	public CompositeContext getGlobalContext() {
-		return globalContext;
-	}
+    @Override
+    public void setGlobalContext(CompositeContext globalContext) {
+        this.globalContext = globalContext;
+    }
 
-	@Override
-	public void setGlobalContext(CompositeContext globalContext) {
-		this.globalContext = globalContext;
-	}
+    protected CompositeContext getCurrentIterCtx() {
+        return currentIterCtx;
+    }
 
-	@Override
-	public void remove() {
-		// do nothing
-	}
+    public Context getGroupIterContext() {
+        return groupIterContext;
+    }
+
+    @Override
+    public void remove() {
+        // do nothing
+    }
 }

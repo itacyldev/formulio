@@ -16,34 +16,21 @@ package es.jcyl.ita.formic.jayjobs.jobs.executor;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JobExecRepo {
+public interface JobExecRepo {
 
     /**
      * Registers execution record for the passed job before it starts
+     *
      * @param ctx
      * @param job
      * @param execMode
      * @return
      */
-    public JobExec registerExecInit(CompositeContext ctx, JobConfig job, JobExecutionMode execMode){
-        // create execution record using job config
-        JobExec execution = new JobExec();
-        execution.setJobId(job.getId());
-        execution.setUserId(ContextAccessor.userId(ctx));
-        execution.setMode(job.getExecMode());
-
-        //TODO: insert into database
-        // OJOOOOOO: hay que fijar en el execInfo el id de ejecución antes de devolver la instancia
-        Long execId = 1l;
-        execution.setId(execId);
-
-        return execution;
-    }
+    JobExec registerExecInit(CompositeContext ctx, JobConfig job, JobExecutionMode execMode);
 }

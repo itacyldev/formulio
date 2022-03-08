@@ -38,7 +38,7 @@ public class HttpRequestProcessorIntTest {
     @Test
 //    @Ignore
     public void testHttpRequestJob() throws Exception {
-        String jobId = "job_httpRequetsProcessor";
+        String jobId = "async_rest_api";
         // Create project folder:
         File projectFolder = JobContextTestUtils.createProjectFolderInstrTest();
 
@@ -52,12 +52,12 @@ public class HttpRequestProcessorIntTest {
         JobFacade facade = new JobFacade();
         JobConfigRepo repo = new JobConfigRepo();
         facade.setJobConfigRepo(repo);
-        // mock execution repo calls to return the dummy JobExecInfo
-        JobExecRepo execRepo = mock(JobExecRepo.class);
-        when(execRepo.registerExecInit(any(CompositeContext.class),
-                any(JobConfig.class),
-                any(JobExecutionMode.class))).thenReturn(builder.execInfo);
-        facade.setJobExecRepo(execRepo);
+//        // mock execution repo calls to return the dummy JobExecInfo
+//        JobExecRepo execRepo = mock(JobExecRepo.class);
+//        when(execRepo.registerExecInit(any(CompositeContext.class),
+//                any(JobConfig.class),
+//                any(JobExecutionMode.class))).thenReturn(builder.execInfo);
+//        facade.setJobExecRepo(execRepo);
 
         facade.executeJob(builder.globalContext, jobId, JobExecutionMode.FG);
 

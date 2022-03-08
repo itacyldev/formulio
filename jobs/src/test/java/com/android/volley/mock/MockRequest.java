@@ -10,6 +10,11 @@ import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Taken with thanks from
+ * https://raw.githubusercontent.com/google/volley/master/core/src/test/java/com/android/volley/mock/MockRequest.java
+ */
+
 public class MockRequest extends Request<byte[]> {
     public MockRequest() {
         super(Request.Method.GET, "http://foo.com", null);

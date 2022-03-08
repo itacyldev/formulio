@@ -20,11 +20,13 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecNopRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecutor;
 import es.jcyl.ita.formic.jayjobs.jobs.executor.MainThreadExecutor;
@@ -38,7 +40,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 public class JobFacade {
 
     private JobConfigRepo jobConfigRepo;
-    private JobExecRepo jobExecRepo;
+    private JobExecRepo jobExecRepo = new JobExecNopRepo();
 
     // static resources
     private static String cacheFolder;
@@ -107,7 +109,12 @@ public class JobFacade {
      * @param job
      * @param ctx
      */
-    private void checkContexts(JobConfig job, CompositeContext ctx) {
+    private void checkContexts(JobConfig jobConfig, CompositeContext ctx) {
+        // add global params context
+        Map<String, Object> globalParams = jobConfig.getGlobalParams();
+        BasicContext bc = new BasicContext("gparams");
+        bc.putAll(globalParams);
+        ctx.addContext(bc);
     }
 
 

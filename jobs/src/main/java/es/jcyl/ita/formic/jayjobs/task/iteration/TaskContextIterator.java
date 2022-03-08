@@ -22,8 +22,17 @@ import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 
 public interface TaskContextIterator extends Iterator<CompositeContext> {
 
-	void setGlobalContext(CompositeContext ctx);
+    void setGlobalContext(CompositeContext ctx);
 
-	void setTask(GroupTask t);
+    void setTask(GroupTask t);
 
+    /**
+     * If returns true the next iteration is executed. The evaluation is make at the beginning of each iteration.
+     */
+    boolean evalEnterIterationExpr();
+
+    /**
+     * If returns true, the loops is stopped. The evaluation is made at the end of each iteration.
+     */
+    boolean evalExitIterationExpr();
 }

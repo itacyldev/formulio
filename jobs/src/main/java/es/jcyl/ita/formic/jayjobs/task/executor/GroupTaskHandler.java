@@ -41,6 +41,9 @@ public class GroupTaskHandler implements TaskHandler<GroupTask> {
         it.setGlobalContext(context);
         int counter = 0;
         while (it.hasNext()) {
+            if(!it.evalEnterIterationExpr()){
+                break;
+            }
             CompositeContext currentIterCtx = it.next();
             try {
                 if (task.getTasks() != null) {
@@ -57,6 +60,9 @@ public class GroupTaskHandler implements TaskHandler<GroupTask> {
                 if (task.isStopOnError()) {
                     throw e;
                 }
+            }
+            if(!it.evalExitIterationExpr()){
+                break;
             }
             counter++;
         }

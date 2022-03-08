@@ -1,0 +1,53 @@
+{
+  "description": "job example",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/",
+    "apikey": "USER-RIOBRIGU-uqserv"
+  },
+  "executionMode": "FG",
+  "tasks": [
+    {
+      "name": "t1",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "url": "${gparams.endpoint}?apikey=${gparams.apikey}&jobType=dummyReportJob&execMode=FG"
+      }
+    },
+    {
+      "name": "g1",
+      "iterSize": 10,
+      "iterDelay": 1000,
+      "exitLoopExpression": "${t1.output.contains('FINISHED') || t1.output.contains('ERROR')}",
+      "tasks": [
+        {
+          "name": "t2",
+          "processor": {
+            "type": "httpRequestProcessor",
+            "method": "post",
+            "url": "${t1.responseHeaders['Location']}?apikey=${gparams.apikey}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "t3",
+      "processor": {
+        "type": "ContextDebugProcessor",
+        "output": "console"
+      }
+    },
+    {
+      "name": "t4",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t2.outputJson['resources'][0]}"
+      }
+    }
+  ]
+}

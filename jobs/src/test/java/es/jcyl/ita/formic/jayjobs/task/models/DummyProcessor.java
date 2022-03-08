@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.forms.el.wrappers;
+package es.jcyl.ita.formic.jayjobs.task.models;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,33 +15,19 @@ package es.jcyl.ita.formic.forms.el.wrappers;
  * limitations under the License.
  */
 
-import org.apache.commons.jexl3.JexlContext;
+import java.util.Date;
 
-import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
+import es.jcyl.ita.formic.jayjobs.task.processor.AbstractProcessor;
+import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-
-public class JexlContextWrapper implements JexlContext {
-    Context context;
-
-    public JexlContextWrapper(Context context) {
-        this.context = context;
-    }
+public class DummyProcessor extends AbstractProcessor implements NonIterProcessor {
 
     @Override
-    public Object get(String name) {
-        return context.get(name);
-    }
-
-    @Override
-    public void set(String name, Object value) {
-        context.put(name, value);
-    }
-
-    @Override
-    public boolean has(String name) {
-        return context.containsKey(name);
+    public void process() throws TaskException {
+        this.getTaskContext().put("variable", new Date());
     }
 }

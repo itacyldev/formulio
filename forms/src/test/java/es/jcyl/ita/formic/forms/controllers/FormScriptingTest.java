@@ -138,7 +138,7 @@ public class FormScriptingTest {
 
         Assert.assertFalse(valid);
         String errorMessage = MessageHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
-        Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
+        Assert.assertTrue(StringUtils.isNotBlank(errorMessage));
 
         // Try validating the full form
 //        FormWidget formWidget = (FormWidget) ViewHelper.findComponentWidget(recipe.viewWidget, form.getId());
@@ -146,6 +146,6 @@ public class FormScriptingTest {
         // check the message has been set from the validation function
         Assert.assertFalse(valid);
         errorMessage = MessageHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
-        Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
+        Assert.assertTrue(StringUtils.isNotBlank(errorMessage));
     }
 }

@@ -135,7 +135,6 @@ public class Config {
             projectRepo = new ProjectRepository(new File(this.appBaseFolder));
             registerHandlers();
             jobFacade = new JobFacade();
-            jobFacade.setJobExecRepo(new JobExecRepo());
             configLoaded = true;
             registerRepoReader();
 

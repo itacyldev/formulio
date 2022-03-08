@@ -177,7 +177,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             public void onClick(final View v) {
                 UserEventInterceptor interceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
-                if (interceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
+                if (interceptor != null && StringUtils.isNotBlank(dtLayout.getComponent().getRoute())) {
                     UIAction uiAction = dtLayout.getComponent().getAction();
                     if (uiAction == null) {
                         return;
