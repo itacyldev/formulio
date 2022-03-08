@@ -102,11 +102,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
-        if (id == R.id.action_synchro) {
-            synchronization();
-            return true;
-        }
-
         if (id == R.id.action_dev_console) {
             openDevConsole();
             return true;
@@ -196,7 +191,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         String projectsFolder = currentWorkspace;
 
         File f = new File(projectsFolder);
-
         if (!f.exists()) {
             f.mkdir();
         }
@@ -206,8 +200,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         ProjectRepository projectRepo = app.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
-            UserMessagesHelper.
-                    toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
+            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
