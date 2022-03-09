@@ -31,6 +31,7 @@ import org.mockito.stubbing.Answer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class to create mocks for Unit testing.
@@ -47,6 +48,12 @@ public class VolleyMocks {
         return queue;
     }
 
+    public static RequestQueue createMockRQ(List<HttpResponse> responses) {
+        MockHttpStack mStack = new MockHttpStack();
+        mStack.setResponsesToReturn(responses);
+        Network network = new BasicNetwork(mStack);
+        return createMockRQ(network);
+    }
     public static RequestQueue createMockRQ(String responseContent) {
         HttpResponse response = new HttpResponse(200, new ArrayList<>(),
                 responseContent.getBytes(StandardCharsets.UTF_8));
@@ -63,4 +70,6 @@ public class VolleyMocks {
         queue.start();
         return queue;
     }
+
+
 }

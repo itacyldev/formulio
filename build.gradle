@@ -49,7 +49,6 @@ allprojects {
             name "sdk google extras"
             url "$androidHome/extras/google/m2repository/"
         }
-        /*
        maven {
            name "ITACyL - snapshots"
            url "https://servicios.itacyl.es/nexus/repository/snapshots/"
@@ -61,7 +60,7 @@ allprojects {
        maven {
            name "ITACyL - thirdparty"
            url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
-       }*/
+       }
     }
 
     configurations.all {

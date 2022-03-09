@@ -17,7 +17,7 @@ package com.android.volley.mock;
  */
 
 /**
- * Taken from
+ * Based on
  * https://raw.githubusercontent.com/google/volley/master/core/src/test/java/com/android/volley/mock/MockHttpStack.java
  */
 
@@ -27,12 +27,15 @@ import com.android.volley.toolbox.BaseHttpStack;
 import com.android.volley.toolbox.HttpResponse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MockHttpStack extends BaseHttpStack {
+import edu.emory.mathcs.backport.java.util.Collections;
 
-    private HttpResponse mResponseToReturn;
+public class MockHttpStack extends BaseHttpStack {
 
     private IOException mExceptionToThrow;
 
@@ -41,6 +44,8 @@ public class MockHttpStack extends BaseHttpStack {
     private Map<String, String> mLastHeaders;
 
     private byte[] mLastPostBody;
+    private List<HttpResponse> mResponsesToReturn;
+    private int mCurrentRespCounter = -1;
 
     public String getLastUrl() {
         return mLastUrl;
@@ -54,8 +59,27 @@ public class MockHttpStack extends BaseHttpStack {
         return mLastPostBody;
     }
 
+    public void addResponse(HttpResponse response) {
+        if (mResponsesToReturn == null) {
+            this.mResponsesToReturn = new ArrayList<>();
+        }
+        mResponsesToReturn.add(response);
+    }
+
+    public void addResponse(int status, byte[] content) {
+        addResponse(new HttpResponse(status, new ArrayList<>(), content));
+    }
+
+    public void addResponse(int status, String content) {
+        addResponse(new HttpResponse(status, new ArrayList<>(), content.getBytes(StandardCharsets.UTF_8)));
+    }
+
     public void setResponseToReturn(HttpResponse response) {
-        mResponseToReturn = response;
+        mResponsesToReturn = Collections.singletonList(response);
+    }
+
+    public void setResponsesToReturn(List<HttpResponse> responses) {
+        this.mResponsesToReturn = responses;
     }
 
     public void setExceptionToThrow(IOException exception) {
@@ -81,6 +105,7 @@ public class MockHttpStack extends BaseHttpStack {
         } catch (AuthFailureError e) {
             mLastPostBody = null;
         }
-        return mResponseToReturn;
+        mCurrentRespCounter++;
+        return mResponsesToReturn.get(mCurrentRespCounter);
     }
 }
