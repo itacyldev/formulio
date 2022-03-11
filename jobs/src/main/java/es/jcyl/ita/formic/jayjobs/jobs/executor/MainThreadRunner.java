@@ -27,7 +27,7 @@ import util.Log;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class MainThreadExecutor extends AbstractJobExecutor implements JobExecutor {
+public class MainThreadExecutor extends AbstractJobExecutor implements JobRunner {
 
     private TaskExecutor taskExecutor = new TaskExecutor();
 
