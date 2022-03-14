@@ -134,7 +134,7 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
             return super.put(key, value);
         } else {
             Context context = this.contexts.get(newKey[0]);
-            return context.put(newKey[1], value);
+            return (context == null) ? null : context.put(newKey[1], value);
         }
     }
 

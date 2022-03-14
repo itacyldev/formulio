@@ -22,14 +22,28 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Entity object to store request and response info
+ *
+ * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
+ */
+
 public class HttpEntity {
-    protected byte[] content;
-    private Map<String, String> headers;
+    // request
     private Map<String, String> params;
+    private byte[] content;
+    private String contentType;
+    private Map<String, String> headers;
+    // response
     private int httpStatus;
+    private byte[] responseContent;
+    private String responseContentType;
     private HashMap<String, String> responseHeaders;
 
-    public HttpEntity(byte[] content){
+    public HttpEntity() {
+    }
+
+    public HttpEntity(byte[] content) {
         this.content = content;
     }
 
@@ -50,7 +64,7 @@ public class HttpEntity {
         return new ByteArrayInputStream(this.content);
     }
 
-    public void setHeaders(Map<String, String> headers){
+    public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
 
@@ -80,6 +94,34 @@ public class HttpEntity {
 
     public void setParams(Map<String, String> params) {
         this.params = params;
+    }
+
+    public String getResponseContentType() {
+        return responseContentType;
+    }
+
+    public void setResponseContentType(String responseContentType) {
+        this.responseContentType = responseContentType;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public void setResponseHeaders(HashMap<String, String> responseHeaders) {
+        this.responseHeaders = responseHeaders;
+    }
+
+    public byte[] getResponseContent() {
+        return responseContent;
+    }
+
+    public void setResponseContent(byte[] responseContent) {
+        this.responseContent = responseContent;
     }
 
     @Override

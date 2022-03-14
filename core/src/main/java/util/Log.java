@@ -58,6 +58,7 @@ public class Log {
         return level <= android.util.Log.WARN;
     }
 
+
     public static void debug(String msg) {
         if (level > android.util.Log.DEBUG) {
             return;

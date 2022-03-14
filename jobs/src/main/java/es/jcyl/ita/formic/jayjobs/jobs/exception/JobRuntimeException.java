@@ -1,5 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.task.listener;
-
+package es.jcyl.ita.formic.jayjobs.jobs.exception;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -17,36 +16,18 @@ package es.jcyl.ita.formic.jayjobs.task.listener;
  */
 
 /**
- * author:
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+public class JobRuntimeException extends RuntimeException {
+    public JobRuntimeException(String msg, Throwable t) {
+        super(msg, t);
+    }
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.task.models.Task;
+    public JobRuntimeException(Throwable t) {
+        super(t);
+    }
 
-public interface TaskListener {
-    void setTask(Task t);
-
-    void init();
-
-    void beforePage(int page);
-
-    void afterPage(int page);
-
-    void beforeStep(int pos);
-
-    void afterStep(int pos);
-
-    void error(int pos, String data1, String data2);
-
-    void error(int pos, CompositeContext context);
-
-    /**
-     * Notifica error mientras se procesaba la p�gina indicada.
-     *
-     * @param page
-     */
-    void errorOnPage(int page);
-
-    void end();
-
+    public JobRuntimeException(String msg) {
+        super(msg);
+    }
 }

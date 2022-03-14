@@ -1,8 +1,6 @@
 package es.jcyl.ita.formic.jayjobs.task.processor.httpreq;
 
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -88,7 +86,7 @@ public class HttpRequestProcessorTest {
         Task taskMock = createTaskMock(taskContext);
 
         String response = "{ \"variable\": 123}";
-        RequestQueue queue = VolleyMocks.createMockRQ(response);
+        RequestQueue queue = VolleyMocks.createMockRQ(response, "application/json");
 
         HttpRequestProcessor processor = new HttpRequestProcessor();
         processor.setTask(taskMock);
@@ -98,37 +96,13 @@ public class HttpRequestProcessorTest {
         processor.process();
 
         // inspect task context
-        Map output = (Map) taskContext.get("output");
+        Map output = (Map) taskContext.get("outputJson");
         Assert.assertNotNull(output);
         Assert.assertTrue(output.containsKey("variable"));
         Assert.assertEquals(123, (int) output.get("variable"));
     }
 
-//
-//    @Test
-//    public void testContentBodySent() throws Exception {
-//        Context taskContext = new BasicContext("t1");
-//        Task taskMock = createTaskMock(taskContext);
-//
-//        byte[] expected = "test response".getBytes("UTF-8");
-//        Network network = mock(Network.class);
-//        doAnswer(returnsFirstArg()).when(network).performRequest(any(Request.class));
-//        RequestQueue queue = VolleyMocks.createMockRQ(network);
-//
-//        HttpRequestProcessor processor = new HttpRequestProcessor();
-//        processor.setTask(taskMock);
-//        processor.setRequestQueue(queue);
-//        processor.setMethod("post");
-//        processor.setBody(new String(expected));
-//
-//        processor.process();
-//
-//        ArgumentCaptor<Request> argumentCaptor = ArgumentCaptor.forClass(Request.class);
-//        verify(network).performRequest(argumentCaptor.capture());
-//        Request value = argumentCaptor.getValue();
-//    }
-
-        @Test
+    @Test
     public void testHttpMethods() throws Exception {
         Context taskContext = new BasicContext("t1");
         Task taskMock = createTaskMock(taskContext);

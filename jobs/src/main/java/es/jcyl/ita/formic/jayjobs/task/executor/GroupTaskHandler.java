@@ -35,13 +35,14 @@ public class GroupTaskHandler implements TaskHandler<GroupTask> {
     }
 
     @Override
-    public void handle(CompositeContext context, GroupTask task, TaskExec taskExecutionInfo)
+    public void handle(CompositeContext context, GroupTask task)
             throws TaskException {
         TaskContextIterator it = task.getLoopIterator();
         it.setGlobalContext(context);
         int counter = 0;
         while (it.hasNext()) {
-            if(!it.evalEnterIterationExpr()){
+            if (!it.evalEnterIterationExpr()) {
+                // if entering condition is not met exit the loop
                 break;
             }
             CompositeContext currentIterCtx = it.next();
@@ -52,16 +53,18 @@ public class GroupTaskHandler implements TaskHandler<GroupTask> {
                     executor.execute(currentIterCtx, task.getTaskConfig());
                 }
             } catch (Exception e) {
+                String errorMsg = "An error occurred during the groupTask execution in the interation: " + counter;
                 if (task.getListener() != null) {
-                    task.getListener().error(counter, currentIterCtx);
+                    task.getListener().onTaskError(task, errorMsg, e);
                 }
-                Log.error("An error occurred during the groupTask execution in the interation: " + counter);
+                Log.error(errorMsg);
                 // check if we have to go on with the execution of other iterations
                 if (task.isStopOnError()) {
                     throw e;
                 }
             }
-            if(!it.evalExitIterationExpr()){
+            if (it.evalExitIterationExpr()) {
+                // if exit condition is met exit the loop
                 break;
             }
             counter++;

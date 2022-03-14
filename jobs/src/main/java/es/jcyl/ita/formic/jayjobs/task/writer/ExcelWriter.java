@@ -29,7 +29,6 @@ import java.io.IOException;
 public class ExcelWriter extends AbstractExcelWriter {
     @Override
     protected Workbook getWorkBookInstance() {
-
         return new XSSFWorkbook();
     }
 

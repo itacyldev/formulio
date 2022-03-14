@@ -25,7 +25,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-@JsonIgnoreProperties({ "tasks" })
+@JsonIgnoreProperties({"tasks"})
 public class JobConfig {
     private String id; // taken from the file name
     private String description;
@@ -37,6 +37,7 @@ public class JobConfig {
     // selected execution mode for the job (BG/FG)
     private JobExecutionMode executionMode;
     private Map<String, Object> globalParams;
+    private boolean debug = false;
     // part of the job json config that defines the tasks
     @JsonIgnore
     private String taskConfig;
@@ -111,5 +112,13 @@ public class JobConfig {
 
     public void setGlobalParams(Map<String, Object> globalParams) {
         this.globalParams = globalParams;
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

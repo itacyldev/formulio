@@ -21,10 +21,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
-import es.jcyl.ita.formic.jayjobs.task.listener.LogFileTaskListener;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
-import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
 
 /**
@@ -36,10 +33,8 @@ import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
 public class NonIterativeTaskHandler implements TaskHandler<NonIterTask> {
 
     @Override
-    public void handle(CompositeContext context, NonIterTask task, TaskExec taskExecutionInfo)
+    public void handle(CompositeContext context, NonIterTask task)
             throws TaskException {
-
-        configureListener(task);
         try {
             List<NonIterProcessor> processors = task.getProcessors();
             if (CollectionUtils.isNotEmpty(processors)) {
@@ -48,21 +43,8 @@ public class NonIterativeTaskHandler implements TaskHandler<NonIterTask> {
                     processor.process();
                 }
             }
-            if (taskExecutionInfo != null && task.getTaskContext().get("outputFile") != null) {
-                taskExecutionInfo.setFiles((String) task.getTaskContext().get("outputFile"));
-            }
         } catch (Throwable e) {
             throw e;
         }
     }
-
-    private void configureListener(Task task) {
-        if (task.getListener() == null) {
-            // default task listener
-            TaskListener tlistener = new LogFileTaskListener();
-            task.setListener(tlistener);
-            tlistener.setTask(task);
-        }
-    }
-
 }

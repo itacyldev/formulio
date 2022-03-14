@@ -53,12 +53,18 @@ public class RawRequest extends Request<HttpEntity> {
 
     @Override
     protected Response<HttpEntity> parseNetworkResponse(NetworkResponse response) {
-        HttpEntity entity = new HttpEntity(response.data, response.headers);
+        HttpEntity entity = new HttpEntity();
         entity.setHttpStatus(response.statusCode);
-        entity.setHttpHeaders(new HashMap<>(response.headers));
+        entity.setResponseContent(response.data);
+        entity.setResponseContentType(response.headers.get("Content-Type"));
+        entity.setResponseHeaders(new HashMap<>(response.headers));
         return Response.success(entity, null);
     }
 
+    @Override
+    public String getBodyContentType() {
+        return this.entity.getContentType();
+    }
 
     @Override
     protected void deliverResponse(HttpEntity response) {

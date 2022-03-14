@@ -25,4 +25,10 @@ public interface TaskSepItem {
 
 	void setTask(Task t);
 
+	void notifyError(String msg, Throwable t);
+
+	void notifyInfo(String msg);
+
+	void notifyProgress(int total, float progress, String units);
+
 }

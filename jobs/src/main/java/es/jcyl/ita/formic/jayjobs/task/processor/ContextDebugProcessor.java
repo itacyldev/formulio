@@ -22,8 +22,6 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -40,12 +38,8 @@ import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 
 public class ContextDebugProcessor extends AbstractProcessor
         implements NonIterProcessor {
-    protected static final org.apache.commons.logging.Log LOGGER = LogFactory.getLog(ContextDebugProcessor.class);
-    private static final DateFormat timestamper = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
     private String output = "file";
-
-    private String outputFile;
 
     @Override
     public void process() throws TaskException {
@@ -56,7 +50,7 @@ public class ContextDebugProcessor extends AbstractProcessor
             LOGGER.info(printable);
         } else if (output.toLowerCase().equals("file")) {
             try {
-                FileUtils.writeLines(new File(this.outputFile), printable);
+                FileUtils.writeLines(new File(getOutputFile()), printable);
             } catch (IOException e) {
                 throw new TaskException(e);
             }
@@ -66,30 +60,6 @@ public class ContextDebugProcessor extends AbstractProcessor
                 System.out.println(s);
             }
         }
-    }
-
-    /**
-     * Determines the final name of the output file.
-     */
-    private void configureOutputFile() {
-        if (StringUtils.isBlank(this.outputFile)) {
-            this.outputFile = String.format("%s_%s.%s", RandomStringUtils.randomAlphanumeric(10),
-                    timestamper.format(new Date()), "log");
-            LOGGER.info(String.format(
-                    "The 'outputFile' attribute is not set in the ContextDebugProcessor, a random file name will be " +
-                            "used [%s].", this.outputFile));
-        }
-        this.outputFile = TaskResourceAccessor
-                .getWorkingFile(this.getGlobalContext(), this.outputFile);
-        LOGGER.info("Output file path: " + this.outputFile);
-    }
-
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
     }
 
     public String getOutput() {

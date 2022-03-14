@@ -1,6 +1,5 @@
 package es.jcyl.ita.formic.jayjobs.task.listener;
 
-import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 public class CartodruidSyncListener implements TaskExecListener {
@@ -11,7 +10,7 @@ public class CartodruidSyncListener implements TaskExecListener {
     }
 
     @Override
-    public void onTaskError(Task task) {
+    public void onTaskError(Task task, String message, Throwable t) {
 
     }
 
@@ -21,7 +20,12 @@ public class CartodruidSyncListener implements TaskExecListener {
     }
 
     @Override
-    public void onTaskProgressUpdate(Task task, Integer progress) {
+    public void onMessage(Task task, String message) {
+
+    }
+
+    @Override
+    public void onProgressUpdate(Task task, int total, float progress, String units) {
 
     }
 }

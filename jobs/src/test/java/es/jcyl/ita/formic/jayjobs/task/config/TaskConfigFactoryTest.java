@@ -28,7 +28,7 @@ public class TaskConfigFactoryTest {
         String json = "{\n" +
                 "    \"name\": \"t2\",\n" +
                 "    \"processor\": {\n" +
-                "      \"type\": \"contextPopulator\",\n" +
+                "      \"type\": \"contextPopulateProcessor\",\n" +
                 "      \"value\": 123.45\n" +
                 "    }" +
                 "}";

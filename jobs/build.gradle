@@ -43,6 +43,7 @@ android {
             java.srcDirs += [sharedTestJavaDir]
         }
     }
+
     testOptions {
         unitTests {
             includeAndroidResources = true

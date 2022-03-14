@@ -13,10 +13,10 @@ public class VarSubstitutor {
         return String.valueOf(JexlUtils.eval(new MapContext(values), source));
     }
 
-    public static String replace2(Object source, Map values) {
-        return StringSubstitutor.replace(source, values);
+    public static String replaceDynamic(String source, Map values) {
+        return String.valueOf(JexlUtils.eval(new MapContext(values), source));
     }
-
+//
 //	public static String replace(Object source, final Context values) {
 //		String str = (String) source;
 //

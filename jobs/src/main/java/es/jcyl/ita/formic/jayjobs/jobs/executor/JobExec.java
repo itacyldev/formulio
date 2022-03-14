@@ -21,6 +21,8 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 
 /**
+ * Keeps information about a job execution
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class JobExec {

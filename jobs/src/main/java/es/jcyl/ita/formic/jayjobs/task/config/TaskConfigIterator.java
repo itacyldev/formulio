@@ -21,21 +21,35 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import org.mini2Dx.collections.CollectionUtils;
+
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.core.context.ContextDebugger;
 import es.jcyl.ita.formic.core.context.VarSubstitutor;
-import util.Log;
 import es.jcyl.ita.formic.jayjobs.jobs.config.ProcessConfigException;
-import es.jcyl.ita.formic.jayjobs.task.models.Task;
+import es.jcyl.ita.formic.jayjobs.task.config.readers.DynamicExpression;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
+import es.jcyl.ita.formic.jayjobs.task.models.Task;
+import es.jcyl.ita.formic.jayjobs.utils.JsonUtils;
+import util.Log;
 
 /**
+ * Reads the task configuration json and iterates over each task element evaluating the
+ * JEXL expressions using the context
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class TaskConfigIterator implements Iterator<Task> {
+    private static final Map<Class, List> dynamicFieldsCache = new HashMap<>();
 
     private int taskNum = 0;
     private ObjectMapper mapper; // threadsafe
@@ -81,13 +95,20 @@ public class TaskConfigIterator implements Iterator<Task> {
 
         replaced = VarSubstitutor.replace(jsonStr, context);
         if (Log.isDebugEnabled()) {
-            Log.debug("Effective task JSON:\n" + replaced);
+            debugTaskInfo(jsonStr, replaced);
         }
-
-        JsonNode jsonNode = null;
+        JsonNode jsonNode;
         try {
             jsonNode = readJsonTree(replaced);
             task = taskFactory.getTask(jsonNode, context);
+            // if the task contains @DynamicExpression fields we have to exclude them from the variable evaluation
+            // these fields contain expression that must be evaluated during the execution of the task objects or
+            // during the loop evaluation process
+            List<String> dynamicExpressionFields = getDynamicExpressionFields(task.getClass());
+            if (CollectionUtils.isNotEmpty(dynamicExpressionFields)) {
+                // copy values from the original node to the task to avoid var substitution
+                JsonUtils.copyFieldsFromNode(dynamicExpressionFields, taskNode, task);
+            }
         } catch (TaskException e) {
             throw new RuntimeException(e);
         }
@@ -105,4 +126,30 @@ public class TaskConfigIterator implements Iterator<Task> {
                     json), e);
         }
     }
+
+    private List<String> getDynamicExpressionFields(Class clzz) {
+        if (!dynamicFieldsCache.containsKey(clzz)) {
+            // retrieve and store in cache
+            List<String> methods = new ArrayList<>();
+            for (Field f : clzz.getDeclaredFields()) {
+                if (f.isAnnotationPresent(DynamicExpression.class)) {
+                    methods.add(f.getName());
+                }
+            }
+            dynamicFieldsCache.put(clzz, methods);
+        }
+        return dynamicFieldsCache.get(clzz);
+    }
+
+
+    private void debugTaskInfo(String originalJson, String effectiveJson) {
+        Log.debug(String.format("=================== Task %s ===================\n", taskNum));
+        Log.debug(JsonUtils.pretty(originalJson));
+        Log.debug("------------------ Effective task ------------------");
+        Log.debug(JsonUtils.pretty(effectiveJson));
+        Log.debug("------------------ Context ------------------");
+        Log.debug("Context:\n" + ContextDebugger.getPrintableStr(context));
+        Log.debug(String.format("======================================\n", taskNum));
+    }
+
 }

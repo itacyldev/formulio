@@ -33,8 +33,6 @@ import es.jcyl.ita.formic.jayjobs.task.config.readers.GroupTaskConfigReader;
 import es.jcyl.ita.formic.jayjobs.task.config.readers.IterativeTaskConfigReader;
 import es.jcyl.ita.formic.jayjobs.task.config.readers.NonIterTaskConfigReader;
 import es.jcyl.ita.formic.jayjobs.task.config.readers.TaskConfigReader;
-import es.jcyl.ita.formic.jayjobs.task.listener.LogFileTaskListener;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
@@ -62,7 +60,17 @@ public class TaskConfigFactory {
     private Map<Class, TaskConfigReader> readers = new HashMap<>();
     private static ObjectMapper mapper;
 
-    static {
+    private TaskConfigFactory() {
+        // readers to parse task instances from json nodes
+        readers.put(IterativeTask.class, new IterativeTaskConfigReader(this));
+        readers.put(NonIterTask.class, new NonIterTaskConfigReader(this));
+        readers.put(GroupTask.class, new GroupTaskConfigReader(this));
+
+        mapper = new ObjectMapper();
+        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+        mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
+
+        /** Register Task items **/
         // readers
         registerClass(RandomDataReader.class);
         registerClass(SQLReader.class);
@@ -77,10 +85,10 @@ public class TaskConfigFactory {
         registerClass(ContextDebugProcessor.class);
     }
 
+
     private static void registerClass(Class clazz) {
         registry.put(clazz.getSimpleName().toUpperCase(Locale.ROOT), clazz);
     }
-
 
     private boolean validateConfig = true;
 
@@ -89,18 +97,6 @@ public class TaskConfigFactory {
             _instance = new TaskConfigFactory();
         }
         return _instance;
-    }
-
-    private TaskConfigFactory() {
-        // readers to parse task instances from json nodes
-        readers.put(IterativeTask.class, new IterativeTaskConfigReader(this));
-        readers.put(NonIterTask.class, new NonIterTaskConfigReader(this));
-        readers.put(GroupTask.class, new GroupTaskConfigReader(this));
-
-        mapper = new ObjectMapper();
-        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
-//        initValidators();
     }
 
     /**
@@ -173,13 +169,6 @@ public class TaskConfigFactory {
         Class taskClzz = getTaskClass(jsonNode);
         TaskConfigReader taskReader = readers.get(taskClzz);
         Task t = taskReader.read(jsonNode, context);
-
-        // configure task listener
-        TaskListener tlistener = new LogFileTaskListener();
-        if (tlistener != null) {
-            t.setListener(tlistener);
-            tlistener.setTask(t);
-        }
         return t;
     }
 
@@ -218,6 +207,6 @@ public class TaskConfigFactory {
     }
 
     public static void addTaskStep(String key, Class<?> taskStep) {
-        registry.put(key, taskStep);
+        registry.put(key.toUpperCase(), taskStep);
     }
 }

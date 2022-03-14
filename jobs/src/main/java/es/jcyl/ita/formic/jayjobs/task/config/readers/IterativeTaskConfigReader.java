@@ -39,12 +39,10 @@ public class IterativeTaskConfigReader extends AbstractConfigObjectReader
     }
 
     public IterativeTask read(JsonNode json, Context context) throws TaskConfigException {
-        // leer bloques de readers/writers/processors
+        // reads blocks of readers/processors/wriers
         try {
-            // lectura de par�metros generales
             IterativeTask task = mapper.treeToValue(json, IterativeTask.class);
-
-            // obtenemos manualmente los objetos reader/writer/processor
+            // extract reader/writer/processor objects
             readStepItems(task, json, context);
             return task;
         } catch (JsonParseException e) {

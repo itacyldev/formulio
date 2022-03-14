@@ -24,11 +24,11 @@ import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
 
 import static org.mockito.Mockito.*;
 
-public class MainThreadExecutorTest {
+public class MainThreadRunnerTest {
 
     @Test
     public void testExecution() throws Exception {
-        MainThreadExecutor executor = new MainThreadExecutor();
+        MainThreadRunner executor = new MainThreadRunner();
 
         // create test objects for job execution
         DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
@@ -44,7 +44,7 @@ public class MainThreadExecutorTest {
 
     @Test
     public void testListenerCalls() throws Exception {
-        MainThreadExecutor executor = new MainThreadExecutor();
+        MainThreadRunner executor = new MainThreadRunner();
 
         // create test objects for job execution
         DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
@@ -60,7 +60,7 @@ public class MainThreadExecutorTest {
 
     @Test
     public void testListenerCallOnError() throws Exception {
-        MainThreadExecutor executor = new MainThreadExecutor();
+        MainThreadRunner executor = new MainThreadRunner();
 
         // create test objects for job execution
         DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();

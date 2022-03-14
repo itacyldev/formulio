@@ -28,6 +28,8 @@ import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
 import es.jcyl.ita.formic.jayjobs.task.exception.StopTaskExecutionSignal;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
+import es.jcyl.ita.formic.jayjobs.task.listener.NopTaskListener;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
@@ -58,7 +60,7 @@ public class TaskExecutor {
 
     private Map<Class, TaskHandler> handlers = new HashMap<>();
 
-    private TaskExecListener listener = new NoopTaskExecListener();
+    private TaskExecListener listener = new NopTaskListener();
 
     public TaskExecutor() {
         // different handlers for different execution strategies
@@ -91,14 +93,6 @@ public class TaskExecutor {
         execute(context, Collections.singletonList(task));
     }
 
-    public TaskExecListener getListener() {
-        return listener;
-    }
-
-    public void setListener(TaskExecListener listener) {
-        this.listener = listener;
-    }
-
     /*****************************/
     /**** Internal implementation */
     /*****************************/
@@ -107,28 +101,30 @@ public class TaskExecutor {
             throws TaskException {
         boolean stopTasks = false;
         TaskHandler handler;
+
         while (taskIterator.hasNext()) {
             Task task = taskIterator.next();
-            // fijar contextos globales y de tarea
+            // set global and task contexts
             BasicContext tCtx = new BasicContext(task.getName());
             context.addContext(tCtx);
             task.setGlobalContext(context);
             task.setTaskContext(tCtx);
+            // configure task listener
+            task.setListener(listener);
 
-            TaskExec taskExecutionInfo = null;
             handler = getHandler(task);
             try {
                 listener.onTaskStart(task);
                 Log.info(String.format(">>>> Starting task execution [%s]. >>>", task.getName()));
 
-                handler.handle(context, task, taskExecutionInfo);
+                handler.handle(context, task);
 
                 Log.info(String.format("<<<< Task [%s] successfully finished.<<<", task.getName()));
                 listener.onTaskEnd(task);
             } catch (StopTaskExecutionSignal e) {
                 stopTasks = true;
             } catch (TaskException e) {
-                listener.onTaskError(task);
+                listener.onTaskError(task, "Error during task execution", e);
                 if (task.isStopOnError()) {
                     String msg = String.format(
                             "An error occurred during execution of task [%s]. Job is stopped.",
@@ -151,26 +147,13 @@ public class TaskExecutor {
         return handlers.get(t.getClass());
     }
 
-    /**
-     * Default listener implementation
-     */
-    private class NoopTaskExecListener implements TaskExecListener {
-        @Override
-        public void onTaskStart(Task task) {
+    public TaskExecListener getListener() {
+        return listener;
+    }
+
+    public void setListener(TaskExecListener listener) {
+        if(listener != null){
+            this.listener = listener;
         }
-
-        @Override
-        public void onTaskError(Task task) {
-        }
-
-        @Override
-        public void onTaskEnd(Task task) {
-        }
-
-        @Override
-        public void onTaskProgressUpdate(Task task, Integer progress) {
-
-        }
-
     }
 }

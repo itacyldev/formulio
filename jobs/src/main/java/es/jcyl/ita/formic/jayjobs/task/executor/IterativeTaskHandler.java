@@ -21,11 +21,8 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
-import es.jcyl.ita.formic.jayjobs.task.listener.LogFileTaskListener;
 import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
-import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 import es.jcyl.ita.formic.jayjobs.task.reader.Reader;
 import es.jcyl.ita.formic.jayjobs.task.writer.DummyWriter;
@@ -33,6 +30,8 @@ import es.jcyl.ita.formic.jayjobs.task.writer.Writer;
 
 /**
  * Class that handles the execution of iterative tasks.
+ * An iterative task contains reader -> processors (optional) -> writer (optional)
+ * The reader provides paginated results, each batch is passed to processor and writer before the next page is read.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -41,7 +40,7 @@ import es.jcyl.ita.formic.jayjobs.task.writer.Writer;
 public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
 
     @Override
-    public void handle(CompositeContext context, IterativeTask task, TaskExec taskExecutionInfo)
+    public void handle(CompositeContext context, IterativeTask task)
             throws TaskException {
 
         int numPage = 0;
@@ -51,11 +50,9 @@ public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
         List<Processor> processors = task.getProcessors();
         Writer writer = task.getWriter();
 
-//            task.getListener().init();
         // initialize object
         reader.open();
         if (!reader.allowsPagination()) {
-            task.getListener().beforePage(numPage);
             RecordPage page = reader.read();
             if (CollectionUtils.isNotEmpty(processors)) {
                 for (Processor proc : processors) {
@@ -66,7 +63,6 @@ public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
                 writer.open();
                 writer.write(page);
             }
-//                task.getListener().afterPage(numPage);
         } else {
             // iterar sobre los resultados para escritura paginada
             int offset = 0;
@@ -77,7 +73,6 @@ public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
             // initialize objects
             writer.open();
 
-//                task.getListener().beforePage(numPage);
             RecordPage page = reader.read();
             while (page != null && CollectionUtils.isNotEmpty(page.getResults())) {
                 if (CollectionUtils.isNotEmpty(processors)) {
@@ -89,11 +84,9 @@ public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
                     writer.setOffset(offset);
                     writer.write(page);
                 }
-//                    task.getListener().afterPage(numPage);
                 // actualizar filtrado paginacion
                 offset += task.getPageSize();
                 reader.setOffset(offset);
-//                    task.getListener().beforePage(numPage);
                 page = reader.read();
                 numPage++;
             }
@@ -102,8 +95,6 @@ public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
         if (writer != null) {
             writer.close();
         }
-
-//            task.getListener().end();
     }
 
     private void configureTaskProcessingObjects(IterativeTask task) throws TaskException {
@@ -130,19 +121,9 @@ public class IterativeTaskHandler implements TaskHandler<IterativeTask> {
         writer.setPaginate(paginationActive);
 
         if (CollectionUtils.isNotEmpty(task.getProcessors())) {
-            for (Processor prss : task.getProcessors()) {
-                prss.setTask(task);
+            for (Processor processor : task.getProcessors()) {
+                processor.setTask(task);
             }
-        }
-        configureListener(task);
-    }
-
-    private void configureListener(Task task) {
-        if (task.getListener() == null) {
-            // default task listener
-            TaskListener tlistener = new LogFileTaskListener();
-            task.setListener(tlistener);
-            tlistener.setTask(task);
         }
     }
 

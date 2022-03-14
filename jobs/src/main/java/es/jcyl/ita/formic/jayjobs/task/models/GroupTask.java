@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
+import es.jcyl.ita.formic.jayjobs.task.config.readers.DynamicExpression;
 import es.jcyl.ita.formic.jayjobs.task.iteration.TaskContextIterator;
 
 public class GroupTask extends AbstractTask {
@@ -26,7 +27,9 @@ public class GroupTask extends AbstractTask {
     private int iterSize;
     private int pageSize;
     private String iterQuerySQL;
+    @DynamicExpression
     private String enterLoopExpression;
+    @DynamicExpression
     private String exitLoopExpression;
     private long iterDelay = -1; //ms
 

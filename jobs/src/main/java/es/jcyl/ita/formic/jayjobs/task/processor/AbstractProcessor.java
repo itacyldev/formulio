@@ -1,10 +1,21 @@
 package es.jcyl.ita.formic.jayjobs.task.processor;
 
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import es.jcyl.ita.formic.jayjobs.task.models.AbstractTaskSepItem;
+import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 
 public abstract class AbstractProcessor extends AbstractTaskSepItem {
-    protected TaskListener listener;
+
+    protected static final org.apache.commons.logging.Log LOGGER = LogFactory.getLog(ContextDebugProcessor.class);
+
+    protected static final DateFormat timeStamper = new SimpleDateFormat("yyyyMMdd_HHmmss.SSS");
 
     private boolean failOnError = true;
 
@@ -16,12 +27,42 @@ public abstract class AbstractProcessor extends AbstractTaskSepItem {
         this.failOnError = failOnError;
     }
 
-    public void setListener(TaskListener listener) {
-        this.listener = listener;
+    private String outputFile;
+    private String outputExtension = "out";
+
+    /**
+     * Determines the final name of the output file.
+     */
+    protected File configureOutputFile() {
+        if (StringUtils.isBlank(this.outputFile)) {
+            String tag = this.getClass().getSimpleName();
+            this.outputFile = String.format("%s_%s.%s", timeStamper.format(new Date()), tag, getOutputFileExtension());
+            LOGGER.info(String.format(
+                    "The 'outputFile' attribute is not set in the %s, a random file name will be " +
+                            "used [%s].", tag, this.outputFile));
+        }
+        this.outputFile = TaskResourceAccessor
+                .getWorkingFile(this.getGlobalContext(), this.outputFile);
+        LOGGER.info("Output file path: " + this.outputFile);
+        return new File(outputFile);
     }
 
-    @Override
-    public TaskListener getListener() {
-        return listener;
+    public String getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(String outputFile) {
+        this.outputFile = outputFile;
+    }
+
+    public String getOutputFileExtension() {
+        return outputExtension;
+    }
+
+    public void setOutputFileExtension(String outputExtension) {
+        if (outputExtension.startsWith(".")) {
+            outputExtension = outputExtension.substring(1);// remove dot if included
+        }
+        this.outputExtension = outputExtension;
     }
 }

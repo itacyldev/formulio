@@ -1,29 +1,16 @@
 package es.jcyl.ita.formic.jayjobs.task.models;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
 import es.jcyl.ita.formic.jayjobs.task.iteration.BasicCounterIterator;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskListener;
-import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
-import es.jcyl.ita.formic.jayjobs.task.reader.InMemoryArrayReader;
-import es.jcyl.ita.formic.jayjobs.task.reader.Reader;
-import es.jcyl.ita.formic.jayjobs.task.writer.ContextWriter;
 import es.jcyl.ita.formic.jayjobs.utils.ContextTestUtils;
-import es.jcyl.ita.formic.jayjobs.utils.RandomTestUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.task.executor;
+package es.jcyl.ita.formic.jayjobs.task.listener;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,19 +15,35 @@ package es.jcyl.ita.formic.jayjobs.task.executor;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public interface TaskExecListener {
+public class NopTaskListener implements TaskExecListener {
+    @Override
+    public void onTaskStart(Task task) {
 
-    void onTaskStart(Task task);
+    }
 
-    void onTaskError(Task task);
+    @Override
+    public void onTaskError(Task task, String message, Throwable t) {
 
-    void onTaskEnd(Task task);
+    }
 
-    void onTaskProgressUpdate(Task task, Integer progress);
+    @Override
+    public void onTaskEnd(Task task) {
 
+    }
+
+    @Override
+    public void onMessage(Task task, String message) {
+
+    }
+
+    @Override
+    public void onProgressUpdate(Task task, int total, float progress, String units) {
+
+    }
 }

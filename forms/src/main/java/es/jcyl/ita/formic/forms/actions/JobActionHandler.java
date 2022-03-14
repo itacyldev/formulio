@@ -15,6 +15,9 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
@@ -26,8 +29,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import util.Log;
 
 /**
  * Action handler to execute jobs.
@@ -54,10 +56,12 @@ public class JobActionHandler extends AbstractActionHandler {
         CompositeContext ctx = prepareContext(action.getParams());
         try {
             JobFacade jobFacade = Config.getInstance().getJobFacade();
-            jobFacade.executeJob(ctx, jobId);
+            Long jobExecId = jobFacade.executeJob(ctx, jobId);
+            List<String> resources = jobFacade.getResources(ctx, jobExecId);
+            Log.info("Received: " + resources);
         } catch (JobException e) {
             throw new UserActionException(error(String.format("An error occurred while executing " +
-                        "the job [%s].",jobId),e));
+                    "the job [%s].", jobId), e));
         }
     }
 

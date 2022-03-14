@@ -28,6 +28,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mini2Dx.collections.MapUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,12 +40,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.processor.AbstractProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
-import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 import es.jcyl.ita.formic.jayjobs.utils.JsonUtils;
 import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
 
@@ -60,13 +59,16 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
     private String store;
     private String body;
 
-    // output variable name to set the object
-    private String outputFile;
+    private String inputFile;
+
+    // context where additionally the results of the processor will be published
+    private String outputContext;
     private String contentType = "text/plain";
+    private String responseContentType;
     private String contentCharset;
     private Map<String, String> headers;
     private Map<String, String> params;
-    private Integer timeout = 15; // seconds
+    private Integer timeout = 30; // seconds
 
     // internal objects
     private RequestQueue requestQueue;
@@ -141,13 +143,16 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         // prepare output file and write entity content
         File f = configureOutputFile();
         try {
-            FileUtils.writeByteArrayToFile(f, entity.getContent());
+            FileUtils.writeByteArrayToFile(f, entity.getResponseContent());
         } catch (IOException e) {
             throw new TaskException("There was an error while trying to store the response content of request: " + url, e);
         }
         // publish outputFile name in task context
         LOGGER.info("Response content stored in file: " + f.getAbsolutePath());
-        this.getTaskContext().put("outputFile", this.outputFile);
+        this.getTaskContext().put("outputFile", getOutputFile());
+        if (StringUtils.isNotBlank(outputContext)) {
+            this.getGlobalContext().put(outputContext + ".outputFile", getOutputFile());
+        }
     }
 
     /**
@@ -164,43 +169,50 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         String json = null;
         try {
             cs = HttpHeaderParser.parseCharset(entity.getResponseHeaders(), this.charset.toString());
-            strContent = new String(entity.content, cs);
+            strContent = new String(entity.getResponseContent(), cs);
         } catch (UnsupportedEncodingException e) {
             throw new TaskException("Invalid charset received from server: " + cs, e);
         }
         // publish response as string
         this.getTaskContext().put("output", strContent);
-        if (contentType.startsWith("application/json")) {
+        if (StringUtils.isNotBlank(outputContext)) {
+            this.getGlobalContext().put(outputContext + ".output", strContent);
+        }
+        if (isJsonContent(entity)) {
             // parse to json object
-            try {
-                responseObj = JsonUtils.mapper().readValue(strContent, new TypeReference<Map<String, Object>>() {
-                });
-            } catch (JsonProcessingException e) {
-                throw new TaskException("An error occurred while trying to parse server response: " + json, e);
+            if (StringUtils.isBlank(strContent)) {
+                responseObj = MapUtils.EMPTY_MAP;
+            } else {
+                try {
+                    responseObj = JsonUtils.mapper().readValue(strContent, new TypeReference<Map<String, Object>>() {
+                    });
+                } catch (JsonProcessingException e) {
+                    throw new TaskException("An error occurred while trying to parse server response, is it really json?: "
+                            + json, e);
+                }
             }
             // publish response as json object
             this.getTaskContext().put("outputJson", responseObj);
+            if (StringUtils.isNotBlank(outputContext)) {
+                this.getGlobalContext().put(outputContext + ".outputJson", responseObj);
+            }
         }
+    }
+
+    private boolean isJsonContent(HttpEntity entity) {
+        // if responseContentType attribute is set use it, otherwise, use the response Content-Type header
+        String responseContType = (StringUtils.isNotBlank(responseContentType)) ? responseContentType :
+                entity.getResponseContentType();
+        return (StringUtils.isBlank(responseContType)) ? false : responseContType.toLowerCase().startsWith("application/json");
     }
 
     /**
      * Store in contexto response info
+     *
      * @param entity
      */
     private void storeResponseInfo(HttpEntity entity) {
         this.getTaskContext().put("responseHeaders", entity.getResponseHeaders());
-    }
-
-
-    private File configureOutputFile() {
-        if (StringUtils.isBlank(this.outputFile)) {
-            Context ctx = this.getGlobalContext();
-            this.outputFile = String.format("%s_%s_%s_httprequest.out", System.currentTimeMillis(),
-                    ctx.get("app.id"), ctx.get("job.id"));
-            LOGGER.info(String.format("The 'outputFile' attribute is not set, random name generated: [%s].", outputFile));
-        }
-        this.outputFile = TaskResourceAccessor.getWorkingFile(getGlobalContext(), outputFile);
-        return new File(this.outputFile);
     }
 
     private RawRequest createRequest(RequestFuture future) {
@@ -216,6 +228,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         }
         HttpEntity entity = new HttpEntity(content, this.headers);
         entity.setParams(this.params);
+        entity.setContentType(this.contentType);
         return new RawRequest(httpMethod, url, entity, future, future);
     }
 
@@ -223,6 +236,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         LOGGER.error(error.getMessage());
         LOGGER.error(error.networkResponse);
     }
+
 
     public Map<String, String> getParams() {
         return params;
@@ -262,14 +276,6 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     public void setRequestQueue(RequestQueue requestQueue) {
         this.requestQueue = requestQueue;
-    }
-
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
     }
 
     public String getContentCharset() {
@@ -319,4 +325,29 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
     public void setMethod(String method) {
         this.method = method;
     }
+
+    public String getOutputContext() {
+        return outputContext;
+    }
+
+    public void setOutputContext(String outputContext) {
+        this.outputContext = outputContext;
+    }
+
+    public String getResponseContentType() {
+        return responseContentType;
+    }
+
+    public void setResponseContentType(String responseContentType) {
+        this.responseContentType = responseContentType;
+    }
+
+    public String getInputFile() {
+        return inputFile;
+    }
+
+    public void setInputFile(String inputFile) {
+        this.inputFile = inputFile;
+    }
+
 }

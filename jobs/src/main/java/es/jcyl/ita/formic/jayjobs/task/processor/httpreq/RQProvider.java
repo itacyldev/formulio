@@ -50,4 +50,8 @@ public class RQProvider {
     public static void setRQ(RequestQueue rq){
         instance = rq;
     }
+
+    public static void clearRQ(){
+        instance = null;
+    }
 }

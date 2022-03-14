@@ -17,6 +17,7 @@ package com.android.volley.mock;
 
 import static org.mockito.Mockito.mock;
 
+import com.android.volley.Header;
 import com.android.volley.Network;
 import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
@@ -26,6 +27,7 @@ import com.android.volley.toolbox.HttpResponse;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.NoCache;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -54,10 +56,19 @@ public class VolleyMocks {
         Network network = new BasicNetwork(mStack);
         return createMockRQ(network);
     }
-    public static RequestQueue createMockRQ(String responseContent) {
-        HttpResponse response = new HttpResponse(200, new ArrayList<>(),
-                responseContent.getBytes(StandardCharsets.UTF_8));
 
+    public static RequestQueue createMockRQ(String responseContent) {
+        return createMockRQ(responseContent, null);
+    }
+
+    public static RequestQueue createMockRQ(String responseContent, String contentType) {
+        // add contentType as header
+        List<Header> headers = new ArrayList<>();
+        if (StringUtils.isNotBlank(contentType)) {
+            headers.add(new Header("Content-Type", contentType));
+        }
+        HttpResponse response = new HttpResponse(200, headers,
+                responseContent.getBytes(StandardCharsets.UTF_8));
         MockHttpStack mStack = new MockHttpStack();
         mStack.setResponseToReturn(response);
         Network network = new BasicNetwork(mStack);

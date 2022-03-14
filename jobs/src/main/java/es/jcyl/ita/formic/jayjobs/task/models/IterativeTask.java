@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 import es.jcyl.ita.formic.jayjobs.task.reader.Reader;
 import es.jcyl.ita.formic.jayjobs.task.writer.Writer;

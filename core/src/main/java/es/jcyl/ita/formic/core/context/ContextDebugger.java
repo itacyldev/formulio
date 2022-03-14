@@ -31,7 +31,50 @@ public class ContextDebugger {
 
     public static final String PRINT_SEPARATOR = "===============================================";
 
-    public static List<String> getPrintable(CompositeContext ctx) {
+    public static List<String> getPrintable(Context ctx) {
+        if (ctx instanceof CompositeContext) {
+            return getPrintableComposite((CompositeContext) ctx);
+        } else {
+            return getPrintableSimple(ctx);
+        }
+    }
+
+    /**
+     * Including linebreaks
+     *
+     * @param ctx
+     * @return
+     */
+    public static String getPrintableStr(Context ctx) {
+        StringBuilder stb = new StringBuilder();
+        List<String> ptr = getPrintable(ctx);
+        for (String s : ptr) {
+            stb.append(s + "\n");
+        }
+        return stb.toString();
+    }
+
+    public static List<String> getPrintableSimple(Context ctx) {
+        List<String> printable = new ArrayList<String>();
+        Map m = new TreeMap(String.CASE_INSENSITIVE_ORDER);
+
+        // get a map with the key list and their origin
+        Map<String, String> keysOrigin = new HashMap<>();
+        getContextKeyDescription(ctx, keysOrigin);
+
+        // Store the properties in a Treemap to show them ordered
+        for (String key : keysOrigin.keySet()) {
+            m.put(key, ctx.getValue(key));
+        }
+        printable.add(PRINT_SEPARATOR);
+        for (Object ks : m.keySet()) {
+            printable.add(printPropertyLine(m, keysOrigin, (String) ks));
+        }
+        printable.add(PRINT_SEPARATOR);
+        return printable;
+    }
+
+    public static List<String> getPrintableComposite(CompositeContext ctx) {
         List<String> printable = new ArrayList<String>();
         Map m = new TreeMap(String.CASE_INSENSITIVE_ORDER);
 
@@ -68,23 +111,25 @@ public class ContextDebugger {
         int dif = PADDING - propValue.length();
         String pad = (dif <= 0) ? ""
                 : new String(new char[dif]).replace('\0', ' ');
-
         return propValue + pad + " -> " + keyDesc.get(ks);
     }
 
     private static Map<String, String> getKeyDescription(CompositeContext ctx) {
-        String key;
         Map<String, String> map = new HashMap<String, String>();
-
         for (final Context context : getPlainContextList(ctx)) {
-            final Iterator<String> e = context.keySet().iterator();
-            String confDesc = getConfDescription(context);
-            for (; e.hasNext(); ) {
-                key = e.next();
-                map.put(context.getPrefix() + "." + key, confDesc);
-            }
+            getContextKeyDescription(context, map);
         }
         return map;
+    }
+
+    private static void getContextKeyDescription(Context context, Map<String, String> map) {
+        String key;
+        final Iterator<String> e = context.keySet().iterator();
+        String confDesc = getConfDescription(context);
+        for (; e.hasNext(); ) {
+            key = e.next();
+            map.put(context.getPrefix() + "." + key, confDesc);
+        }
     }
 
     /**
@@ -125,7 +170,6 @@ public class ContextDebugger {
         }
         return configDest;
     }
-
 
     private static boolean isComposite(Context context) {
         return (context instanceof CompositeContext);

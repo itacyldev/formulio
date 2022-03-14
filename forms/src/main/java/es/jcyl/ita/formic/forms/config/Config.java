@@ -49,8 +49,10 @@ import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.PublishTaskResourceListener;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
+import es.jcyl.ita.formic.jayjobs.task.listener.AggregatedTaskListener;
+import es.jcyl.ita.formic.jayjobs.task.listener.LogTaskListener;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -134,16 +136,21 @@ public class Config {
             // project repository
             projectRepo = new ProjectRepository(new File(this.appBaseFolder));
             registerHandlers();
+
+            // configure job facade
             jobFacade = new JobFacade();
+            AggregatedTaskListener taskListener = new AggregatedTaskListener();
+            taskListener.addListener(new LogTaskListener());
+            taskListener.addListener(new PublishTaskResourceListener(jobFacade.getJobExecRepo()));
+            jobFacade.setListener(taskListener);
             configLoaded = true;
             registerRepoReader();
-
         }
     }
 
-    private static void registerRepoReader(){
+    private static void registerRepoReader() {
         TaskConfigFactory factory = TaskConfigFactory.getInstance();
-        factory.addTaskStep("REPOREADER", RepoReader.class);
+        factory.addTaskStep("repoReader", RepoReader.class);
     }
 
 
@@ -162,17 +169,18 @@ public class Config {
 
     /**
      * Prepares temp execution folder and context information to execute jobs.
+     *
      * @param ctx
      */
-    private void initJobsContext(CompositeContext ctx){
+    private void initJobsContext(CompositeContext ctx) {
         // Create temporary directory for job execution if it doesn't already exists
         File osTempDirectory = FileUtils.getTempDirectory();
-        if(!osTempDirectory.exists()){
+        if (!osTempDirectory.exists()) {
             // use cache dir
             osTempDirectory = andContext.getCacheDir();
         }
         File tmpFolder = new File(osTempDirectory, "tmp");
-        if(!tmpFolder.exists()){
+        if (!tmpFolder.exists()) {
             tmpFolder.mkdir();
         }
         // application context
@@ -243,9 +251,10 @@ public class Config {
 
     /**
      * Updates project context with current project
+     *
      * @param project
      */
-    private void populateProjectContext(Project project){
+    private void populateProjectContext(Project project) {
         // Create project and app contexts and add them to Global context
         BasicContext projectCtx = new BasicContext("project");
         projectCtx.put("folder", project.getBaseFolder());

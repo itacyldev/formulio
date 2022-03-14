@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.task.config.readers;
+package es.jcyl.ita.formic.jayjobs.task.listener;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,16 +15,21 @@ package es.jcyl.ita.formic.jayjobs.task.config.readers;
  * limitations under the License.
  */
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 /**
- * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface DynamicExpression {
- 
+public interface TaskExecListener {
+
+    void onTaskStart(Task task);
+
+    void onTaskError(Task task, String message, Throwable t);
+
+    void onTaskEnd(Task task);
+
+    void onProgressUpdate(Task task, int total, float progress, String units);
+
+    void onMessage(Task task, String message);
+
 }
