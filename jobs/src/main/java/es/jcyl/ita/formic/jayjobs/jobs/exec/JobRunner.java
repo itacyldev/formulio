@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs.executor;
+package es.jcyl.ita.formic.jayjobs.jobs.exec;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,9 +16,9 @@ package es.jcyl.ita.formic.jayjobs.jobs.executor;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 public interface JobRunner {
 
     void execute(CompositeContext ctx, JobConfig job, JobExec jobExecInfo) throws JobException;
-    void setListener (TaskExecListener listener);
 
+    void setListener(JobExecListener listener);
 
 }

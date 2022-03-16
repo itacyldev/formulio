@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs;
+package es.jcyl.ita.formic.jayjobs.jobs.listener;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,12 +16,13 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  */
 
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public interface JobExecListener {
+public interface JobExecListener extends TaskExecListener {
 
     void onJobStart(JobConfig job, JobExec jobExecInfo);
 

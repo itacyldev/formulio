@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs.executor;
+package es.jcyl.ita.formic.jayjobs.jobs.exec;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -16,14 +16,13 @@ package es.jcyl.ita.formic.jayjobs.jobs.executor;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.jobs.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class AbstractJobExecutor {
+public abstract class AbstractJobRunner {
 
     JobExecListener listener;
 

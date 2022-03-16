@@ -21,7 +21,7 @@ import org.junit.Test;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs.executor;
+package es.jcyl.ita.formic.jayjobs.jobs.exec;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

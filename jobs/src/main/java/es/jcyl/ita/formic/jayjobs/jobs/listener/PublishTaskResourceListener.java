@@ -17,7 +17,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
 
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;

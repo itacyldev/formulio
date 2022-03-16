@@ -18,6 +18,8 @@ package es.jcyl.ita.formic.jayjobs.jobs;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
@@ -26,14 +28,15 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecInMemo;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobRunner;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.MainThreadRunner;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.ConcurrentJobRunner;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobRunner;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.MainThreadRunner;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.NopJobListener;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
-import es.jcyl.ita.formic.jayjobs.task.listener.NopTaskListener;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
 /**
@@ -45,7 +48,7 @@ public class JobFacade {
 
     private JobConfigRepo jobConfigRepo;
     private JobExecRepo jobExecRepo = new JobExecInMemo();
-    private TaskExecListener listener = new NopTaskListener();
+    private JobExecListener listener = new NopJobListener();
 
     // static resources
     private static String cacheFolder;
@@ -54,6 +57,8 @@ public class JobFacade {
     public JobFacade() {
         // init executors
         runners.put(JobExecutionMode.FG, new MainThreadRunner());
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        runners.put(JobExecutionMode.FG_ASYNC, new ConcurrentJobRunner(executorService));
         jobConfigRepo = new JobConfigRepo();
     }
 
@@ -167,7 +172,7 @@ public class JobFacade {
         return jobExecRepo.getResources(ctx, jobExecId);
     }
 
-    public void setListener(TaskExecListener listener) {
+    public void setListener(JobExecListener listener) {
         if (listener != null) {
             this.listener = listener;
         }

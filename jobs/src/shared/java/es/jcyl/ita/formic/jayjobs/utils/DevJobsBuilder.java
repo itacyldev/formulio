@@ -22,7 +22,7 @@ import java.util.Date;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 

@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs.executor;
+package es.jcyl.ita.formic.jayjobs.jobs.exec;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -19,7 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.jobs.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
 
 import static org.mockito.Mockito.*;

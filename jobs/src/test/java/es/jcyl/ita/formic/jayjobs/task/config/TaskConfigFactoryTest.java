@@ -51,7 +51,7 @@ public class TaskConfigFactoryTest {
         String json = "{\n" +
                 "    \"name\": \"t1\",\n" +
                 "    \"processor\": {\n" +
-                "      \"type\": \"cartodruidSync\",\n" +
+                "      \"type\": \"cartodruidSyncProcessor\",\n" +
                 "      \"endpoint\": \"sampleEndpoint\",\n" +
                 "      \"workspace\": \"test\",\n" +
                 "      \"password\": \"password\",\n" +

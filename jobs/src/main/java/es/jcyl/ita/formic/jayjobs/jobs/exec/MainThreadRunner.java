@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.jobs.executor;
+package es.jcyl.ita.formic.jayjobs.jobs.exec;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -19,7 +19,6 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import util.Log;
 
 /**
@@ -27,10 +26,9 @@ import util.Log;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class MainThreadRunner extends AbstractJobExecutor implements JobRunner {
+public class MainThreadRunner extends AbstractJobRunner implements JobRunner {
 
     private TaskExecutor taskExecutor = new TaskExecutor();
-    private TaskExecListener listener;
 
     @Override
     public void execute(CompositeContext ctx, JobConfig job, JobExec jobExecInfo) throws JobException {
@@ -47,10 +45,5 @@ public class MainThreadRunner extends AbstractJobExecutor implements JobRunner {
             throw new JobException(msg, e);
         }
         notifyEnd(job, jobExecInfo);
-    }
-
-    @Override
-    public void setListener(TaskExecListener listener) {
-        this.listener = listener;
     }
 }
