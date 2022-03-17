@@ -213,6 +213,9 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
      */
     private void storeResponseInfo(HttpEntity entity) {
         this.getTaskContext().put("responseHeaders", entity.getResponseHeaders());
+        if (StringUtils.isNotBlank(outputContext)) {
+            this.getGlobalContext().put(outputContext + ".responseHeaders", entity.getResponseHeaders());
+        }
     }
 
     private RawRequest createRequest(RequestFuture future) {

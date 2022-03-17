@@ -8,7 +8,6 @@
     "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/",
     "apikey": "USER-RIOBRIGU-uqserv"
   },
-  "executionMode": "FG",
   "tasks": [
     {
       "name": "t1",

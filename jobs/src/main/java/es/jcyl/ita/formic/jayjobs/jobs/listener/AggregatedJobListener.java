@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.task.listener;
+package es.jcyl.ita.formic.jayjobs.jobs.listener;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -18,27 +18,36 @@ package es.jcyl.ita.formic.jayjobs.task.listener;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class AggregatedTaskListener implements TaskExecListener {
+public class AggregatedJobListener implements JobExecListener {
 
-    private final List<TaskExecListener> listeners;
-    public AggregatedTaskListener() {
+    private final List<JobExecListener> listeners;
+    public AggregatedJobListener() {
         listeners = new ArrayList<>();
     }
 
-    public AggregatedTaskListener(List<TaskExecListener> listeners) {
+    public AggregatedJobListener(JobExecListener... listeners) {
+        this(Arrays.asList(listeners));
+    }
+
+    public AggregatedJobListener(List<JobExecListener> listeners) {
         this.listeners = listeners;
         if (CollectionUtils.isEmpty(listeners)) {
             throw new IllegalArgumentException("Listener list must not be null!");
         }
     }
-    public void addListener(TaskExecListener listener){
+    public void addListener(JobExecListener listener){
         listeners.add(listener);
     }
 
@@ -74,6 +83,27 @@ public class AggregatedTaskListener implements TaskExecListener {
     public void onMessage(Task task, String message) {
         for (TaskExecListener listener : listeners) {
             listener.onMessage(task, message);
+        }
+    }
+
+    @Override
+    public void onJobStart(JobConfig job, JobExec jobExecInfo) {
+        for (JobExecListener listener : listeners) {
+            listener.onJobStart(job, jobExecInfo);
+        }
+    }
+
+    @Override
+    public void onJobEnd(JobConfig job, JobExec jobExecInfo) {
+        for (JobExecListener listener : listeners) {
+            listener.onJobEnd(job, jobExecInfo);
+        }
+    }
+
+    @Override
+    public void onJobError(JobConfig job, JobExec jobExecInfo) {
+        for (JobExecListener listener : listeners) {
+            listener.onJobError(job, jobExecInfo);
         }
     }
 }

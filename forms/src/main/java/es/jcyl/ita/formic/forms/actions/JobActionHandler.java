@@ -57,7 +57,7 @@ public class JobActionHandler extends AbstractActionHandler {
         try {
             JobFacade jobFacade = Config.getInstance().getJobFacade();
             Long jobExecId = jobFacade.executeJob(ctx, jobId);
-            List<String> resources = jobFacade.getResources(ctx, jobExecId);
+            List<String> resources = jobFacade.getResources(jobExecId);
             Log.info("Received: " + resources);
         } catch (JobException e) {
             throw new UserActionException(error(String.format("An error occurred while executing " +

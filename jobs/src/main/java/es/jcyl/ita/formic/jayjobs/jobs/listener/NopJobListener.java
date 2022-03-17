@@ -23,6 +23,7 @@ import es.jcyl.ita.formic.jayjobs.task.listener.NopTaskListener;
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class NopJobListener extends NopTaskListener implements JobExecListener {
+
     @Override
     public void onJobStart(JobConfig job, JobExec jobExecInfo) {
 
