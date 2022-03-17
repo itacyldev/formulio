@@ -3,14 +3,13 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
 import java.util.concurrent.Executor;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
 import util.Log;
 
-public class ConcurrentJobRunner extends AbstractJobRunner implements JobRunner{
+public class ConcurrentJobRunner extends AbstractJobRunner implements JobRunner {
 
     private TaskExecutor taskExecutor = new TaskExecutor();
     private final Executor threadExecutor;

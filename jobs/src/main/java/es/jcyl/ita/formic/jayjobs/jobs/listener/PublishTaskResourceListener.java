@@ -1,34 +1,38 @@
 package es.jcyl.ita.formic.jayjobs.jobs.listener;
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *      https://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
-import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
+import util.Log;
 
 /**
  * Task listener that uses a JobExecution repositorio to persist task execution
  *
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class PublishTaskResourceListener implements TaskExecListener {
+public class PublishTaskResourceListener implements JobExecListener {
 
     private final JobExecRepo repo;
 
@@ -48,10 +52,9 @@ public class PublishTaskResourceListener implements TaskExecListener {
     public void onTaskEnd(Task task) {
         Long jobExecId = ContextAccessor.jobExecId(task.getGlobalContext());
         try {
-            repo.updateState(task.getGlobalContext(), jobExecId, JobExecutionState.FINISHED);
             // publish task outputFiles and add to the job execution published resources
             String outputFile = (String) task.getTaskContext().get("outputFile");
-            repo.publishResource(task.getGlobalContext(), jobExecId, outputFile);
+            repo.publishResource(jobExecId, outputFile);
         } catch (JobException e) {
             throw new JobRuntimeException("There was an error while trying to publish the resources for " +
                     "job execution " + jobExecId);
@@ -64,5 +67,35 @@ public class PublishTaskResourceListener implements TaskExecListener {
 
     @Override
     public void onProgressUpdate(Task task, int total, float progress, String units) {
+    }
+
+    @Override
+    public void onJobStart(JobConfig job, JobExec jobExecInfo) {
+        try {
+            repo.updateState(jobExecInfo.getId(), JobExecutionState.EXECUTING);
+        } catch (JobException e) {
+            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
+                    JobExecutionState.EXECUTING), e);
+        }
+    }
+
+    @Override
+    public void onJobEnd(JobConfig job, JobExec jobExecInfo) {
+        try {
+            repo.updateState(jobExecInfo.getId(), JobExecutionState.FINISHED);
+        } catch (JobException e) {
+            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
+                    JobExecutionState.FINISHED), e);
+        }
+    }
+
+    @Override
+    public void onJobError(JobConfig job, JobExec jobExecInfo) {
+        try {
+            repo.updateState(jobExecInfo.getId(), JobExecutionState.ERROR);
+        } catch (JobException e) {
+            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
+                    JobExecutionState.ERROR), e);
+        }
     }
 }

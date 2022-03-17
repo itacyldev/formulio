@@ -95,7 +95,8 @@ public class TaskConfigIterator implements Iterator<Task> {
 
         replaced = VarSubstitutor.replace(jsonStr, context);
         if (Log.isDebugEnabled()) {
-            debugTaskInfo(jsonStr, replaced);
+            // TODO: revisar configuración de logs
+            //  debugTaskInfo(jsonStr, replaced);
         }
         JsonNode jsonNode;
         try {

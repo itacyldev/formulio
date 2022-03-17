@@ -25,6 +25,9 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.NopJobListener;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
 import es.jcyl.ita.formic.jayjobs.task.exception.StopTaskExecutionSignal;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
@@ -60,7 +63,7 @@ public class TaskExecutor {
 
     private Map<Class, TaskHandler> handlers = new HashMap<>();
 
-    private TaskExecListener listener = new NopTaskListener();
+    private TaskExecListener listener = new NopJobListener();
 
     public TaskExecutor() {
         // different handlers for different execution strategies

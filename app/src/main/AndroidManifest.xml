@@ -38,6 +38,7 @@
         <activity android:name="es.jcyl.ita.formic.app.dev.DevConsoleActivity"></activity>
         <activity android:name="es.jcyl.ita.formic.app.about.AboutActivity"></activity>
         <activity android:name="es.jcyl.ita.formic.app.settings.SettingsActivity"></activity>
+        <activity android:name="es.jcyl.ita.formic.app.jobs.JobProgressActivity"></activity>
         <activity
             android:name="es.jcyl.ita.formic.app.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

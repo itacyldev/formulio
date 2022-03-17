@@ -28,8 +28,15 @@ import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class JobExecDBRepo implements JobExecRepo {
+
+    private final CompositeContext ctx;
+
+    public JobExecDBRepo(CompositeContext ctx) {
+        this.ctx = ctx;
+    }
+
     @Override
-    public JobExec registerExecInit(CompositeContext ctx, JobConfig job, JobExecutionMode execMode) {
+    public JobExec registerExecInit(JobConfig job, JobExecutionMode execMode) {
         // create execution record using job config
         JobExec execution = new JobExec();
         execution.setJobId(job.getId());
@@ -40,27 +47,27 @@ public class JobExecDBRepo implements JobExecRepo {
         // OJOOOOOO: hay que fijar en el execInfo el id de ejecución antes de devolver la instancia
         Long execId = 1l;
         execution.setId(execId);
-
+        execution.setState(JobExecutionState.INIT);
         return execution;
     }
 
     @Override
-    public void updateState(CompositeContext ctx, Long jobExecId, JobExecutionState state) throws JobException {
+    public void updateState(Long jobExecId, JobExecutionState state) throws JobException {
 
     }
 
     @Override
-    public void publishResources(CompositeContext ctx, Long jobExecId, List<String> resources) throws JobException {
+    public void publishResources(Long jobExecId, List<String> resources) throws JobException {
 
     }
 
     @Override
-    public void publishResource(CompositeContext ctx, Long jobExecId, String resource) throws JobException {
+    public void publishResource(Long jobExecId, String resource) throws JobException {
 
     }
 
     @Override
-    public List<String> getResources(CompositeContext ctx, Long jobExecId) throws JobException {
+    public List<String> getResources(Long jobExecId) throws JobException {
         return null;
     }
 }

@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
@@ -34,8 +35,10 @@ import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.MainThreadRunner;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.NopJobListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.PublishTaskResourceListener;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
@@ -47,7 +50,7 @@ import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 public class JobFacade {
 
     private JobConfigRepo jobConfigRepo;
-    private JobExecRepo jobExecRepo = new JobExecInMemo();
+    private JobExecRepo jobExecRepo = new JobExecInMemo(new OrderedCompositeContext()); // Noop
     private JobExecListener listener = new NopJobListener();
 
     // static resources
@@ -68,7 +71,8 @@ public class JobFacade {
 
     public Long executeJob(CompositeContext ctx, String jobType) throws JobException {
         JobConfig job = jobConfigRepo.get(ctx, jobType);
-        return doExecuteJob(ctx, job, job.getExecMode());
+        JobExecutionMode exedMode = (job.getExecMode() == null) ? JobExecutionMode.FG_ASYNC : job.getExecMode();
+        return doExecuteJob(ctx, job, exedMode);
     }
 
     public Long executeJob(CompositeContext ctx, String jobType, JobExecutionMode execMode) throws JobException {
@@ -92,25 +96,30 @@ public class JobFacade {
         // check execution permissions
 //        checkPermissions(job); // TODO: --> Esto lo debería hacer el cliente porque requerirá acceso al Contexto Android
 
-        JobExec jobExecutionInfo = jobExecRepo.registerExecInit(ctx, job, execMode);
+        JobExec jobExecutionInfo = jobExecRepo.registerExecInit(job, execMode);
         // checks needed contexts
         checkContexts(ctx, job, jobExecutionInfo);
 
-        JobRunner executor = getJobRunner(job);
-        executor.execute(ctx, job, jobExecutionInfo);
+        JobRunner runner = getJobRunner(job, execMode);
+
+        // configure listener
+        AggregatedJobListener jobListener = new AggregatedJobListener();
+        jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo()));
+        if(this.listener != null){
+            jobListener.addListener(this.listener);
+        }
+        runner.setListener(jobListener);
+
+        runner.execute(ctx, job, jobExecutionInfo);
 
         return jobExecutionInfo.getId();
     }
 
-    private JobRunner getJobRunner(JobConfig job) {
-        if (job.getExecMode() == null) {
-            // TODO: IF EXEC MODE IS NULL USE FG_ASYNC by default
-        }
-        JobRunner jobRunner = this.runners.get(job.getExecMode());
+    private JobRunner getJobRunner(JobConfig job, JobExecutionMode execMode) {
+        JobRunner jobRunner = this.runners.get(execMode);
         if (jobRunner == null) {
             throw new UnsupportedOperationException(String.format("%s is not implemented", job.getExecMode()));
         }
-        jobRunner.setListener(listener);
         return jobRunner;
     }
 
@@ -168,8 +177,8 @@ public class JobFacade {
         JobFacade.cacheFolder = cacheFolder;
     }
 
-    public List<String> getResources(CompositeContext ctx, Long jobExecId) throws JobException{
-        return jobExecRepo.getResources(ctx, jobExecId);
+    public List<String> getResources(Long jobExecId) throws JobException {
+        return jobExecRepo.getResources(jobExecId);
     }
 
     public void setListener(JobExecListener listener) {

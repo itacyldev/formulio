@@ -49,10 +49,10 @@ import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
-import es.jcyl.ita.formic.jayjobs.jobs.listener.PublishTaskResourceListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
-import es.jcyl.ita.formic.jayjobs.task.listener.AggregatedTaskListener;
-import es.jcyl.ita.formic.jayjobs.task.listener.LogTaskListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.LogJobExecListener;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -74,6 +74,7 @@ public class Config {
 
     private Project currentProject;
     private JobFacade jobFacade;
+
     /**
      * Reads project list
      */
@@ -139,10 +140,6 @@ public class Config {
 
             // configure job facade
             jobFacade = new JobFacade();
-            AggregatedTaskListener taskListener = new AggregatedTaskListener();
-            taskListener.addListener(new LogTaskListener());
-            taskListener.addListener(new PublishTaskResourceListener(jobFacade.getJobExecRepo()));
-            jobFacade.setListener(taskListener);
             configLoaded = true;
             registerRepoReader();
         }
@@ -399,5 +396,10 @@ public class Config {
 
     public void setJobFacade(JobFacade jobFacade) {
         this.jobFacade = jobFacade;
+    }
+
+
+    public void setJobListener(JobExecListener jobListener) {
+        this.jobFacade.setListener(jobListener);
     }
 }

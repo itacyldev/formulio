@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
@@ -31,32 +30,29 @@ public interface JobExecRepo {
     /**
      * Registers execution record for the passed job before it starts.
      *
-     * @param ctx
      * @param job
      * @param execMode
      * @return
      */
-    JobExec registerExecInit(CompositeContext ctx, JobConfig job, JobExecutionMode execMode) throws JobException;
+    JobExec registerExecInit(JobConfig job, JobExecutionMode execMode) throws JobException;
 
-    void updateState(CompositeContext ctx, Long jobExecId, JobExecutionState state) throws JobException;
+    void updateState(Long jobExecId, JobExecutionState state) throws JobException;
 
     /**
      * Publishes a list of resources related to the referenced jobExecId.
      *
-     * @param ctx
      * @param jobExecId
      * @param resources
      */
-    void publishResources(CompositeContext ctx, Long jobExecId, List<String> resources) throws JobException;
+    void publishResources(Long jobExecId, List<String> resources) throws JobException;
 
     /**
      * Adds a resources to the list of published resources of the job execution.
      *
-     * @param ctx
      * @param jobExecId
      * @param resource
      */
-    void publishResource(CompositeContext ctx, Long jobExecId, String resource) throws JobException;
+    void publishResource(Long jobExecId, String resource) throws JobException;
 
-    List<String> getResources(CompositeContext ctx, Long jobExecId) throws JobException;
+    List<String> getResources(Long jobExecId) throws JobException;
 }

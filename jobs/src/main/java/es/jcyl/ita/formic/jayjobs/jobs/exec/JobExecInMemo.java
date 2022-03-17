@@ -37,9 +37,14 @@ public class JobExecInMemo implements JobExecRepo {
 
     private static final Map<Long, List<String>> resources = new HashMap<>();
     private static final Map<Long, JobExec> executions = new HashMap<>();
+    private final CompositeContext ctx;
+
+    public JobExecInMemo(CompositeContext ctx) {
+        this.ctx = ctx;
+    }
 
     @Override
-    public JobExec registerExecInit(CompositeContext ctx, JobConfig job, JobExecutionMode execMode)
+    public JobExec registerExecInit(JobConfig job, JobExecutionMode execMode)
             throws JobException {
         // create execution record using job config
         JobExec execution = new JobExec();
@@ -49,12 +54,14 @@ public class JobExecInMemo implements JobExecRepo {
 
         Long execId = Long.valueOf(executions.size() + 1);
         execution.setId(execId);
+        execution.setState(JobExecutionState.INIT);
+
         executions.put(execId, execution);
         return execution;
     }
 
     @Override
-    public void updateState(CompositeContext ctx, Long jobExecId, JobExecutionState state) throws JobException {
+    public void updateState(Long jobExecId, JobExecutionState state) throws JobException {
         JobExec jobExec = executions.get(jobExecId);
         if (jobExec == null) {
             throw new JobException("Job execution id not found: " + jobExecId);
@@ -63,7 +70,7 @@ public class JobExecInMemo implements JobExecRepo {
     }
 
     @Override
-    public void publishResources(CompositeContext ctx, Long jobExecId, List<String> resources) {
+    public void publishResources(Long jobExecId, List<String> resources) {
         List<String> current = this.resources.get(jobExecId);
         if (current == null) {
             this.resources.put(jobExecId, new ArrayList(resources));
@@ -72,12 +79,12 @@ public class JobExecInMemo implements JobExecRepo {
     }
 
     @Override
-    public void publishResource(CompositeContext ctx, Long jobExecId, String resource) {
-        publishResources(ctx, jobExecId, Collections.singletonList(resource));
+    public void publishResource(Long jobExecId, String resource) {
+        publishResources(jobExecId, Collections.singletonList(resource));
     }
 
     @Override
-    public List<String> getResources(CompositeContext ctx, Long jobExecId) {
+    public List<String> getResources(Long jobExecId) {
         return this.resources.get(jobExecId);
     }
 
