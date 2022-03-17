@@ -40,7 +40,8 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     public void setMessage(String end, String msg) {
-        textView.setText(msg);
+        CharSequence text = textView.getText();
+        textView.setText(text + "\n" + msg);
     }
 
     @Override
