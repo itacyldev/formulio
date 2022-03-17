@@ -21,6 +21,7 @@ import android.content.Intent;
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
@@ -50,6 +51,8 @@ public class JobProgressListener implements JobExecListener, Serializable {
     public void onJobEnd(JobConfig job, JobExec jobExecInfo) {
         if (activity != null) {
             activity.setMessage("info", String.format("Job %s has finished!", job.getId()));
+//            JobFacade facade;
+//            activity.setResources(facade.getResources(jobExecInfo.getId()));
         }
     }
 

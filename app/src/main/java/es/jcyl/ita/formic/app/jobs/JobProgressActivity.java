@@ -18,6 +18,8 @@ package es.jcyl.ita.formic.app.jobs;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.List;
+
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 
@@ -42,6 +44,10 @@ public class JobProgressActivity extends BaseActivity {
     public void setMessage(String end, String msg) {
         CharSequence text = textView.getText();
         textView.setText(text + "\n" + msg);
+    }
+
+    public void setResources(List<String> resources){
+
     }
 
     @Override
