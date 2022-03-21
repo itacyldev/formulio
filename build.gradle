@@ -65,11 +65,9 @@ allprojects {
     }
 
     configurations.all {
+        exclude group: 'xpp3', module: 'xpp3'
         resolutionStrategy.eachDependency { details ->
-            if (details.requested.name == 'xpp3_min') {
-                details.useTarget group: details.requested.group, name: 'xpp3', version: details.requested.version
-                details.because "Se prefiere 'xpp3' que es una version completa de 'xpp3_min'"
-            }
+
             if (details.requested.group == "androidx") {
                 if (!details.requested.name.startsWith("multidex")) {
                     details.useVersion "${ext.targetSdkVersion}.+"

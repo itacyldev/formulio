@@ -68,17 +68,8 @@ dependencies {
     api 'com.opencsv:opencsv:5.2'
 
     implementation(group: 'es.jcyl.ita.crtdrd', name: 'crtsyn', version: '0.4.3')
-            {
-                exclude group: 'xpp3', module: 'xpp3'
-            }
     implementation(group: 'es.jcyl.ita.crtcyl', name: 'crtcyl-generic', version: '2.36.3')
-            {
-                exclude group: 'xpp3', module: 'xpp3'
-            }
     implementation(group: 'es.jcyl.ita.crtcyl', name: 'crtcyl-core', version: '2.36.5')
-            {
-                exclude group: 'xpp3', module: 'xpp3'
-            }
 
     implementation (group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17')
     {
