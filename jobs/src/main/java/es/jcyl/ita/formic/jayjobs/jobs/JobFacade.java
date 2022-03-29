@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.ConcurrentJobRunner;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobRunner;
@@ -96,7 +96,7 @@ public class JobFacade {
         // check execution permissions
 //        checkPermissions(job); // TODO: --> Esto lo debería hacer el cliente porque requerirá acceso al Contexto Android
 
-        JobExec jobExecutionInfo = jobExecRepo.registerExecInit(job, execMode);
+        JobExecStatus jobExecutionInfo = jobExecRepo.registerExecInit(job, execMode);
         // checks needed contexts
         checkContexts(ctx, job, jobExecutionInfo);
 
@@ -110,7 +110,7 @@ public class JobFacade {
         }
         runner.setListener(jobListener);
 
-        runner.execute(ctx, job, jobExecutionInfo);
+        runner.execute(ctx, job, jobExecutionInfo, jobExecRepo);
 
         return jobExecutionInfo.getId();
     }
@@ -130,7 +130,7 @@ public class JobFacade {
      * @param jobConfig
      * @param jobExecutionInfo
      */
-    private void checkContexts(CompositeContext ctx, JobConfig jobConfig, JobExec jobExecutionInfo) {
+    private void checkContexts(CompositeContext ctx, JobConfig jobConfig, JobExecStatus jobExecutionInfo) {
         // add global params context
         Map<String, Object> globalParams = jobConfig.getGlobalParams();
         BasicContext bc = new BasicContext("gparams");

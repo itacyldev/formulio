@@ -31,19 +31,19 @@ public class MainThreadRunner extends AbstractJobRunner implements JobRunner {
     private TaskExecutor taskExecutor = new TaskExecutor();
 
     @Override
-    public void execute(CompositeContext ctx, JobConfig job, JobExec jobExecInfo) throws JobException {
-        notifyStart(job, jobExecInfo);
+    public void execute(CompositeContext ctx, JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) throws JobException {
+        notifyStart(job, jobExecInfo, jobExecRepo);
         try {
             taskExecutor.setListener(listener);
             taskExecutor.execute(ctx, job.getTaskConfig());
         } catch (Throwable e) {
-            notifyError(ctx, job, jobExecInfo);
+            notifyError(ctx, job, jobExecInfo, jobExecRepo);
             String msg = String.format(
                     "An error occurred during the execution id [%s] of the job [%s].",
                     jobExecInfo.getId(), job.getId());
             Log.error(msg, e);
             throw new JobException(msg, e);
         }
-        notifyEnd(job, jobExecInfo);
+        notifyEnd(job, jobExecInfo,jobExecRepo);
     }
 }

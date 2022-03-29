@@ -15,11 +15,9 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
  * limitations under the License.
  */
 
-import java.util.List;
-
-import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 
 /**
@@ -27,12 +25,9 @@ import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
  */
 public interface JobExecListener extends TaskExecListener {
 
-    void onJobStart(JobConfig job, JobExec jobExecInfo);
+    void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo);
 
-    void onJobEnd(JobConfig job, JobExec jobExecInfo);
+    void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo);
 
-    void onJobError(JobConfig job, JobExec jobExecInfo){
-        JobFacade facade;
-        facade.getResources(jobExecInfo.getId())
-    }
+    void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo);
 }

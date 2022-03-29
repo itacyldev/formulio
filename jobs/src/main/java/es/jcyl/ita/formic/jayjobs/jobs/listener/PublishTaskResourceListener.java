@@ -20,8 +20,9 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
@@ -34,7 +35,7 @@ import util.Log;
  */
 public class PublishTaskResourceListener implements JobExecListener {
 
-    private final JobExecRepo repo;
+    private JobExecRepo repo;
 
     public PublishTaskResourceListener(JobExecRepo execRepo) {
         this.repo = execRepo;
@@ -54,7 +55,9 @@ public class PublishTaskResourceListener implements JobExecListener {
         try {
             // publish task outputFiles and add to the job execution published resources
             String outputFile = (String) task.getTaskContext().get("outputFile");
-            repo.publishResource(jobExecId, outputFile);
+            JobResource resource = new JobResource();
+            resource.setResourcePath(outputFile);
+            repo.publishResource(jobExecId, resource);
         } catch (JobException e) {
             throw new JobRuntimeException("There was an error while trying to publish the resources for " +
                     "job execution " + jobExecId);
@@ -70,9 +73,9 @@ public class PublishTaskResourceListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, JobExec jobExecInfo) {
+    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         try {
-            repo.updateState(jobExecInfo.getId(), JobExecutionState.EXECUTING);
+            repo.updateState(jobExecInfo.getId(), JobExecutionState.EXECUTING, "Job Started");
         } catch (JobException e) {
             Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
                     JobExecutionState.EXECUTING), e);
@@ -80,9 +83,9 @@ public class PublishTaskResourceListener implements JobExecListener {
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExec jobExecInfo) {
+    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         try {
-            repo.updateState(jobExecInfo.getId(), JobExecutionState.FINISHED);
+            repo.updateState(jobExecInfo.getId(), JobExecutionState.FINISHED, "Job Finished");
         } catch (JobException e) {
             Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
                     JobExecutionState.FINISHED), e);
@@ -90,12 +93,13 @@ public class PublishTaskResourceListener implements JobExecListener {
     }
 
     @Override
-    public void onJobError(JobConfig job, JobExec jobExecInfo) {
+    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         try {
-            repo.updateState(jobExecInfo.getId(), JobExecutionState.ERROR);
+            repo.updateState(jobExecInfo.getId(), JobExecutionState.ERROR, "Job Error");
         } catch (JobException e) {
             Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
                     JobExecutionState.ERROR), e);
         }
     }
+
 }

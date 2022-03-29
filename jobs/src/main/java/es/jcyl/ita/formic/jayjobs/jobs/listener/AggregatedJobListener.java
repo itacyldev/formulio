@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
-import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.jayjobs.task.models.Task;
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class AggregatedJobListener implements JobExecListener {
+    private JobExecRepo jobExecRepo;
 
     private final List<JobExecListener> listeners;
     public AggregatedJobListener() {
@@ -87,23 +88,23 @@ public class AggregatedJobListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, JobExec jobExecInfo) {
+    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         for (JobExecListener listener : listeners) {
-            listener.onJobStart(job, jobExecInfo);
+            listener.onJobStart(job, jobExecInfo, jobExecRepo);
         }
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExec jobExecInfo) {
+    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         for (JobExecListener listener : listeners) {
-            listener.onJobEnd(job, jobExecInfo);
+            listener.onJobEnd(job, jobExecInfo,jobExecRepo);
         }
     }
 
     @Override
-    public void onJobError(JobConfig job, JobExec jobExecInfo) {
+    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         for (JobExecListener listener : listeners) {
-            listener.onJobError(job, jobExecInfo);
+            listener.onJobError(job, jobExecInfo,jobExecRepo);
         }
     }
 }

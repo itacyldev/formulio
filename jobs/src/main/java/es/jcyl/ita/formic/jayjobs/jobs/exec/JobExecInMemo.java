@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 public class JobExecInMemo implements JobExecRepo {
 
     private static final Map<Long, List<String>> resources = new HashMap<>();
-    private static final Map<Long, JobExec> executions = new HashMap<>();
+    private static final Map<Long, JobExecStatus> executions = new HashMap<>();
     private final CompositeContext ctx;
 
     public JobExecInMemo(CompositeContext ctx) {
@@ -44,10 +45,10 @@ public class JobExecInMemo implements JobExecRepo {
     }
 
     @Override
-    public JobExec registerExecInit(JobConfig job, JobExecutionMode execMode)
+    public JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode)
             throws JobException {
         // create execution record using job config
-        JobExec execution = new JobExec();
+        JobExecStatus execution = new JobExecStatus();
         execution.setJobId(job.getId());
         execution.setUserId(ContextAccessor.userId(ctx));
         execution.setMode(job.getExecMode());
@@ -61,31 +62,44 @@ public class JobExecInMemo implements JobExecRepo {
     }
 
     @Override
-    public void updateState(Long jobExecId, JobExecutionState state) throws JobException {
-        JobExec jobExec = executions.get(jobExecId);
+    public void updateState(Long jobExecId, JobExecutionState state, String message) throws JobException {
+        JobExecStatus jobExec = executions.get(jobExecId);
         if (jobExec == null) {
             throw new JobException("Job execution id not found: " + jobExecId);
         }
         jobExec.setState(state);
+        jobExec.setMessage(message);
+        jobExec.setLastTimeUpdated(new Date());
     }
 
     @Override
-    public void publishResources(Long jobExecId, List<String> resources) {
-        List<String> current = this.resources.get(jobExecId);
-        if (current == null) {
-            this.resources.put(jobExecId, new ArrayList(resources));
+    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException{
+        JobExecStatus jobExec = executions.get(jobExecId);
+        if (jobExec == null) {
+            throw new JobException("Job execution id not found: " + jobExecId);
         }
-        this.resources.get(jobExecId).addAll(resources);
+        jobExec.setResources(resources);
     }
 
     @Override
-    public void publishResource(Long jobExecId, String resource) {
+    public void publishResource(Long jobExecId, JobResource resource) throws JobException {
         publishResources(jobExecId, Collections.singletonList(resource));
     }
 
     @Override
-    public List<String> getResources(Long jobExecId) {
-        return this.resources.get(jobExecId);
+    public List<JobResource> getResources(Long jobExecId) {
+        JobExecStatus jobExec = executions.get(jobExecId);
+        return jobExec.getResources();
+    }
+
+    @Override
+    public JobExecStatus getJobStatus(Long jobExecId) {
+        return executions.get(jobExecId);
+    }
+
+    @Override
+    public void updateJobStatus(JobExecStatus jobStatus) {
+
     }
 
 }

@@ -19,17 +19,17 @@ public class ConcurrentJobRunner extends AbstractJobRunner implements JobRunner 
     }
 
     @Override
-    public void execute(CompositeContext ctx, JobConfig job, JobExec jobExecInfo) throws JobException {
+    public void execute(CompositeContext ctx, JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) throws JobException {
         threadExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                notifyStart(job, jobExecInfo);
+                notifyStart(job, jobExecInfo, jobExecRepo);
                 taskExecutor.setListener(listener);
                 try {
                     taskExecutor.execute(ctx, job.getTaskConfig());
-                    notifyEnd(job, jobExecInfo);
+                    notifyEnd(job, jobExecInfo, jobExecRepo);
                 } catch (TaskException e) {
-                    notifyError(ctx, job, jobExecInfo);
+                    notifyError(ctx, job, jobExecInfo, jobExecRepo);
                     String msg = String.format(
                             "An error occurred during the execution id [%s] of the job [%s].",
                             jobExecInfo.getId(), job.getId());

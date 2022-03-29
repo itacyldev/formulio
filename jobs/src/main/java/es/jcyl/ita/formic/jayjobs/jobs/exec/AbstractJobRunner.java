@@ -25,26 +25,27 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 public abstract class AbstractJobRunner {
 
     JobExecListener listener;
+    JobExecRepo jobExecRepo;
 
     public JobExecListener getListener() {
         return listener;
     }
 
-    protected void notifyStart(JobConfig job, JobExec jobExecInfo) {
+    protected void notifyStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         if (this.listener != null) {
-            this.listener.onJobStart(job, jobExecInfo);
+            this.listener.onJobStart(job, jobExecInfo, jobExecRepo);
         }
     }
 
-    protected void notifyEnd(JobConfig job, JobExec jobExecInfo) {
+    protected void notifyEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         if (this.listener != null) {
-            this.listener.onJobEnd(job, jobExecInfo);
+            this.listener.onJobEnd(job, jobExecInfo, jobExecRepo);
         }
     }
 
-    protected void notifyError(CompositeContext ctx, JobConfig job, JobExec jobExecInfo) {
+    protected void notifyError(CompositeContext ctx, JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         if (this.listener != null) {
-            this.listener.onJobError(job, jobExecInfo);
+            this.listener.onJobError(job, jobExecInfo, jobExecRepo);
         }
     }
 

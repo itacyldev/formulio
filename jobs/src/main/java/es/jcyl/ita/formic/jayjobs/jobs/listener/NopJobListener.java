@@ -16,7 +16,8 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
  */
 
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.task.listener.NopTaskListener;
 
 /**
@@ -25,17 +26,18 @@ import es.jcyl.ita.formic.jayjobs.task.listener.NopTaskListener;
 public class NopJobListener extends NopTaskListener implements JobExecListener {
 
     @Override
-    public void onJobStart(JobConfig job, JobExec jobExecInfo) {
+    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
 
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExec jobExecInfo) {
+    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
 
     }
 
     @Override
-    public void onJobError(JobConfig job, JobExec jobExecInfo) {
+    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
 
     }
+
 }

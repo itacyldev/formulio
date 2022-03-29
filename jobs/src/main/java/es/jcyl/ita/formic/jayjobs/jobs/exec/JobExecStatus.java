@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  */
 
 import java.util.Date;
+import java.util.List;
 
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
@@ -25,11 +26,12 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public class JobExec {
+public class JobExecStatus {
     private Long id;
     private String jobId;
     private String userId;
     private String userParam;
+
     /**
      * Job is initially registered for execution
      */
@@ -41,6 +43,12 @@ public class JobExec {
     private Date execEnd;
     private JobExecutionState state;
     private JobExecutionMode mode;
+
+
+    private Date lastTimeUpdated;
+    private String message;
+    private List<JobResource> resources;
+
     /**
      * Context used to launch the job execution serialized as json
      */
@@ -116,6 +124,30 @@ public class JobExec {
 
     public void setMode(JobExecutionMode mode) {
         this.mode = mode;
+    }
+
+    public Date getLastTimeUpdated() {
+        return lastTimeUpdated;
+    }
+
+    public void setLastTimeUpdated(Date lastTimeUpdated) {
+        this.lastTimeUpdated = lastTimeUpdated;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<JobResource> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<JobResource> resources) {
+        this.resources = resources;
     }
 
     public String getContext() {

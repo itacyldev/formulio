@@ -36,9 +36,9 @@ public class JobExecDBRepo implements JobExecRepo {
     }
 
     @Override
-    public JobExec registerExecInit(JobConfig job, JobExecutionMode execMode) {
+    public JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode) {
         // create execution record using job config
-        JobExec execution = new JobExec();
+        JobExecStatus execution = new JobExecStatus();
         execution.setJobId(job.getId());
         execution.setUserId(ContextAccessor.userId(ctx));
         execution.setMode(job.getExecMode());
@@ -52,22 +52,32 @@ public class JobExecDBRepo implements JobExecRepo {
     }
 
     @Override
-    public void updateState(Long jobExecId, JobExecutionState state) throws JobException {
+    public void updateState(Long jobExecId, JobExecutionState state, String message) throws JobException {
 
     }
 
     @Override
-    public void publishResources(Long jobExecId, List<String> resources) throws JobException {
+    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException {
 
     }
 
     @Override
-    public void publishResource(Long jobExecId, String resource) throws JobException {
+    public void publishResource(Long jobExecId, JobResource resource) throws JobException {
 
     }
 
     @Override
-    public List<String> getResources(Long jobExecId) throws JobException {
+    public List<JobResource> getResources(Long jobExecId) throws JobException {
         return null;
+    }
+
+    @Override
+    public JobExecStatus getJobStatus(Long jobExecId) {
+        return null;
+    }
+
+    @Override
+    public void updateJobStatus(JobExecStatus jobStatus) {
+
     }
 }

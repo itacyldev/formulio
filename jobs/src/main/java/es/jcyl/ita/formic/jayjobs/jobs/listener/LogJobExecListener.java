@@ -1,7 +1,8 @@
 package es.jcyl.ita.formic.jayjobs.jobs.listener;
 
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import util.Log;
 
@@ -33,17 +34,17 @@ public class LogJobExecListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, JobExec jobExecInfo) {
+    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         Log.info(String.format("===== JOB %s STARTED ExecId: %s =====", job.getId(), jobExecInfo.getExecInit()));
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExec jobExecInfo) {
+    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         Log.info(String.format("===== JOB %s END ExecId: %s =====", job.getId(), jobExecInfo.getExecInit()));
     }
 
     @Override
-    public void onJobError(JobConfig job, JobExec jobExecInfo) {
+    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
         Log.info(String.format("===== Error on job %s END ExecId: %s =====", job.getId(), jobExecInfo.getExecInit()));
     }
 }

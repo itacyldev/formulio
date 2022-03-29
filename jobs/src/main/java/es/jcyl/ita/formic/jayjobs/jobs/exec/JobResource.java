@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.jayjobs.jobs.exec;
+
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +15,24 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+public class JobResource {
 
-import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
-import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+    private long jobId;
+    private String resourcePath;
 
-/**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
- */
+    public long getJobId() {
+        return jobId;
+    }
 
-public interface JobRunner {
+    public void setJobId(long jobId) {
+        this.jobId = jobId;
+    }
 
-    void execute(CompositeContext ctx, JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) throws JobException;
+    public String getResourcePath() {
+        return resourcePath;
+    }
 
-    void setListener(JobExecListener listener);
-
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
 }

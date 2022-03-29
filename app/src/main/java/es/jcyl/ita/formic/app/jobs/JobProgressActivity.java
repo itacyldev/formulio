@@ -55,4 +55,6 @@ public class JobProgressActivity extends BaseActivity {
         // Do nothing
     }
 
+
+
 }
