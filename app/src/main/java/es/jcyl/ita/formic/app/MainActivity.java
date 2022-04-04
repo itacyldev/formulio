@@ -28,6 +28,7 @@ import java.util.List;
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
+import es.jcyl.ita.formic.app.jobs.JobProgressListener;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
@@ -217,6 +218,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
                         Toast.LENGTH_LONG);
             }
+            Config.getInstance().setJobListener(new JobProgressListener());
         }
         initialize();
     }

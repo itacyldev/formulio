@@ -75,15 +75,14 @@ public class JobConfigRepo {
         JobConfig jobConfig = JsonUtils.mapper().readValue(json, JobConfig.class);
 
         // read tasks definition and set it in the jobConfig as plain json
-        String taskJson = getTasksDefinition(jobConfig, json);
+        String taskJson = getTasksDefinition(json);
         jobConfig.setTaskConfig(taskJson);
 
         return jobConfig;
     }
 
-    private String getTasksDefinition(JobConfig jobConfig, String json) throws JobConfigException,
+    private String getTasksDefinition(String json) throws JobConfigException,
             JsonProcessingException {
-        // El atributo "tasks" est� ignorado, hay que leerlo a mano
         JsonNode rootNode = JsonUtils.mapper().readTree(json);
         JsonNode tasksNode = rootNode.path("tasks");
         if (tasksNode.isNull() || tasksNode == null) {

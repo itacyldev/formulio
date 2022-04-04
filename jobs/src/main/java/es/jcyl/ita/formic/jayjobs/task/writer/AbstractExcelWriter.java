@@ -14,10 +14,7 @@ package es.jcyl.ita.formic.jayjobs.task.writer;/*
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -46,9 +43,7 @@ import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
-public abstract class AbstractExcelWriter extends AbstractWriter{
-    private static final Log LOGGER = LogFactory.getLog(AbstractExcelWriter.class);
-
+public abstract class AbstractExcelWriter extends AbstractWriter {
     protected static final String CELDA_FORMATO_FECHA = "dd/mm/yyyy hh:mm";
     public static final String OLD_EXTENSION = ".xls";
     public static final String DEFAULT_EXTENSION = ".xlsx";
@@ -63,7 +58,6 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
     private boolean writeHeader = true;
     private int autoResize = 1;
     private boolean evaluateFormulas = true;
-    private String outputFile;
     private String templateFile;
     private Map<String, String> columnDataFormat;
     /**
@@ -90,7 +84,7 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
     private int count = 0;
 
     @Override
-    public void open()throws TaskException {
+    public void open() throws TaskException {
         configureTemplateFile();
         configureOutputFile();
         configureStartingPoint();
@@ -104,9 +98,8 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
 
     /**
      * Configura el nombre definitivo del fichero de plantilla
-     *
      */
-    private void configureTemplateFile() throws TaskException{
+    private void configureTemplateFile() throws TaskException {
         String templateAbsolutePath = null;
         if (templateFile != null) {
             File fileTemplateAux = new File(templateFile);
@@ -121,12 +114,12 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
             } else {
                 String projectFilePath = TaskResourceAccessor.getProjectFile(getGlobalContext(), templateFile);
                 fileTemplate = new File(projectFilePath);
-                if (!fileTemplate.exists()){
-                    String workingFilePath =  TaskResourceAccessor.getWorkingFile(getGlobalContext(), templateFile);
+                if (!fileTemplate.exists()) {
+                    String workingFilePath = TaskResourceAccessor.getWorkingFile(getGlobalContext(), templateFile);
                     fileTemplate = new File(workingFilePath);
-                    if (!fileTemplate.exists()){
+                    if (!fileTemplate.exists()) {
                         throw new TaskException(String.format(
-                                "The file does not exist [%s]. This file must be in the projects folder: [%s] or in the working folder [%s]" ,
+                                "The file does not exist [%s]. This file must be in the projects folder: [%s] or in the working folder [%s]",
                                 templateFile,
                                 projectFilePath,
                                 workingFilePath));
@@ -136,23 +129,8 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
         }
     }
 
-    /**
-     * Determina el nombre del fichero de salida definitivo.
-     */
-    private void configureOutputFile() {
-
-        if (StringUtils.isBlank(outputFile)) {
-            // si no se proporciona fichero de entrada, generar un nombre
-            // aleatorio
-            String extension = (this instanceof ExcelWriter)?DEFAULT_EXTENSION:OLD_EXTENSION;
-            outputFile = String.format("%s_%s%s", RandomStringUtils.randomAlphanumeric(10),
-                    System.currentTimeMillis(), extension);
-            LOGGER.info(String
-                    .format("No se ha especificado el atributo outputFile para el ExcelWriter, "
-                            + "generado un nombre de fichero aleatorio [%s].", outputFile));
-        }
-
-        outputFile = TaskResourceAccessor.getWorkingFile(getGlobalContext(), outputFile);
+    protected String getOutputFileExtension() {
+        return (this instanceof ExcelWriter) ? DEFAULT_EXTENSION : OLD_EXTENSION;
     }
 
     /**
@@ -369,10 +347,10 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
     /**
      * Escribe la matriz de datos excel
      *
-     * @param resultados    List<Map<String, Object>>
-     * @param hoja          Hoja excel
-     * @param filaInicio    Fila desde la que se empezará a escribir en la hoja
-     * @param celdaInicio   Celda desde la que se empezará a escribir en la hoja
+     * @param resultados  List<Map<String, Object>>
+     * @param hoja        Hoja excel
+     * @param filaInicio  Fila desde la que se empezará a escribir en la hoja
+     * @param celdaInicio Celda desde la que se empezará a escribir en la hoja
      * @throws IOException
      */
     private void escribeDatosExcel(List<Map<String, Object>> resultados, Sheet hoja, int filaInicio,
@@ -524,14 +502,6 @@ public abstract class AbstractExcelWriter extends AbstractWriter{
 
     public void setCellStart(String cellStart) {
         this.cellStart = cellStart;
-    }
-
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
     }
 
     public String getTemplateFile() {

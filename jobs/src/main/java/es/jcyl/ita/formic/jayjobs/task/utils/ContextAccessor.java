@@ -19,12 +19,17 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 
 /**
+ * Helper to access most common variables from context
+ *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class ContextAccessor {
     public static final String USER_CTX = "user";
-    private static final String APP_CTX = "app";
-    private static final String PRJ_CTX = "project";
+    public static final String APP_CTX = "app";
+    public static final String PRJ_CTX = "project";
+    public static final String JOB_CTX = "job";
+    private static final String JOB_EXEC_ID = "jobExecId";
+    private static final String JOB_ID = "jobId";
 
     public static String userId(CompositeContext ctx) {
         if (ctx == null) {
@@ -69,5 +74,26 @@ public class ContextAccessor {
         }
         Context appContext = ctx.getContext(APP_CTX);
         return (appContext == null) ? null : appContext.getString("workingFolder");
+    }
+
+    public static Long jobExecId(CompositeContext ctx) {
+        if (ctx == null) {
+            throw new RuntimeException("Null context passed!.");
+        }
+        return (!ctx.hasContext(JOB_CTX)) ? null : (Long) ctx.getContext(JOB_CTX).get(JOB_EXEC_ID);
+    }
+
+    public static void setJobExecId(CompositeContext ctx, Long jobExecId) {
+        if (!ctx.hasContext(JOB_CTX)) {
+            throw new RuntimeException("The job contexts doesn't exists in the global context.");
+        }
+        ctx.put(JOB_CTX + "." + JOB_EXEC_ID, jobExecId);
+    }
+
+    public static Long jobId(CompositeContext ctx) {
+        if (ctx == null) {
+            throw new RuntimeException("Null context passed!.");
+        }
+        return (!ctx.hasContext(JOB_CTX)) ? null : (Long) ctx.getContext(JOB_CTX).get(JOB_ID);
     }
 }

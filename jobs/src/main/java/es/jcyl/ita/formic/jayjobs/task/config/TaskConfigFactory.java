@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
@@ -32,14 +33,14 @@ import es.jcyl.ita.formic.jayjobs.task.config.readers.GroupTaskConfigReader;
 import es.jcyl.ita.formic.jayjobs.task.config.readers.IterativeTaskConfigReader;
 import es.jcyl.ita.formic.jayjobs.task.config.readers.NonIterTaskConfigReader;
 import es.jcyl.ita.formic.jayjobs.task.config.readers.TaskConfigReader;
-import es.jcyl.ita.formic.jayjobs.task.listener.LogFileTaskListener;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.models.TaskListener;
 import es.jcyl.ita.formic.jayjobs.task.processor.CartodruidSyncProcessor;
+import es.jcyl.ita.formic.jayjobs.task.processor.ContextDebugProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
+import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.HttpRequestProcessor;
 import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
 import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
 import es.jcyl.ita.formic.jayjobs.task.writer.CSVWriter;
@@ -59,29 +60,6 @@ public class TaskConfigFactory {
     private Map<Class, TaskConfigReader> readers = new HashMap<>();
     private static ObjectMapper mapper;
 
-    static {
-        // readers
-        registry.put("RANDOMDATAREADER", RandomDataReader.class);
-        registry.put("SQLREADER", SQLReader.class);
-        // writers
-        registry.put("CSVWRITER", CSVWriter.class);
-        registry.put("EXCELWRITER", ExcelWriter.class);
-        registry.put("EXCELXLSWRITER", ExcelXlsWriter.class);
-        // processors
-        registry.put("CONTEXTPOPULATOR", ContextPopulateProcessor.class);
-        registry.put("CARTODRUIDSYNC", CartodruidSyncProcessor.class);
-    }
-
-
-    private boolean validateConfig = true;
-
-    public static TaskConfigFactory getInstance() {
-        if (_instance == null) {
-            _instance = new TaskConfigFactory();
-        }
-        return _instance;
-    }
-
     private TaskConfigFactory() {
         // readers to parse task instances from json nodes
         readers.put(IterativeTask.class, new IterativeTaskConfigReader(this));
@@ -91,7 +69,34 @@ public class TaskConfigFactory {
         mapper = new ObjectMapper();
         mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
-//        initValidators();
+
+        /** Register Task items **/
+        // readers
+        registerClass(RandomDataReader.class);
+        registerClass(SQLReader.class);
+        // writers
+        registerClass(CSVWriter.class);
+        registerClass(ExcelWriter.class);
+        registerClass(ExcelXlsWriter.class);
+        // processors
+        registerClass(ContextPopulateProcessor.class);
+        registerClass(CartodruidSyncProcessor.class);
+        registerClass(HttpRequestProcessor.class);
+        registerClass(ContextDebugProcessor.class);
+    }
+
+
+    private static void registerClass(Class clazz) {
+        registry.put(clazz.getSimpleName().toUpperCase(Locale.ROOT), clazz);
+    }
+
+    private boolean validateConfig = true;
+
+    public static TaskConfigFactory getInstance() {
+        if (_instance == null) {
+            _instance = new TaskConfigFactory();
+        }
+        return _instance;
     }
 
     /**
@@ -164,13 +169,6 @@ public class TaskConfigFactory {
         Class taskClzz = getTaskClass(jsonNode);
         TaskConfigReader taskReader = readers.get(taskClzz);
         Task t = taskReader.read(jsonNode, context);
-
-        // configure task listener
-        TaskListener tlistener = new LogFileTaskListener();
-        if (tlistener != null) {
-            t.setListener(tlistener);
-            tlistener.setTask(t);
-        }
         return t;
     }
 
@@ -208,7 +206,7 @@ public class TaskConfigFactory {
         return registry;
     }
 
-    public static void addTaskStep(String key, Class<?> taskStep){
-        registry.put(key, taskStep);
+    public static void addTaskStep(String key, Class<?> taskStep) {
+        registry.put(key.toUpperCase(), taskStep);
     }
 }

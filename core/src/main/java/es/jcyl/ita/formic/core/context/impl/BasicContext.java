@@ -30,4 +30,8 @@ public class BasicContext extends AbstractMapContext {
         super(prefix);
     }
 
+    @Override
+    public String toString() {
+        return "BasicContext["+this.getPrefix()+"]";
+    }
 }

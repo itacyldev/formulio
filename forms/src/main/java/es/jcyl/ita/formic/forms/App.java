@@ -51,8 +51,10 @@ import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.LogJobExecListener;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -74,6 +76,7 @@ public class App {
 
     private Project currentProject;
     private JobFacade jobFacade;
+
     /**
      * Reads project list
      */
@@ -136,17 +139,17 @@ public class App {
             // project repository
             projectRepo = new ProjectRepository(new File(this.appBaseFolder));
             registerHandlers();
+
+            // configure job facade
             jobFacade = new JobFacade();
-            jobFacade.setJobExecRepo(new JobExecRepo());
             configLoaded = true;
             registerRepoReader();
-
         }
     }
 
-    private static void registerRepoReader(){
+    private static void registerRepoReader() {
         TaskConfigFactory factory = TaskConfigFactory.getInstance();
-        factory.addTaskStep("REPOREADER", RepoReader.class);
+        factory.addTaskStep("repoReader", RepoReader.class);
     }
 
 
@@ -165,17 +168,18 @@ public class App {
 
     /**
      * Prepares temp execution folder and context information to execute jobs.
+     *
      * @param ctx
      */
-    private void initJobsContext(CompositeContext ctx){
+    private void initJobsContext(CompositeContext ctx) {
         // Create temporary directory for job execution if it doesn't already exists
         File osTempDirectory = FileUtils.getTempDirectory();
-        if(!osTempDirectory.exists()){
+        if (!osTempDirectory.exists()) {
             // use cache dir
             osTempDirectory = andContext.getCacheDir();
         }
         File tmpFolder = new File(osTempDirectory, "tmp");
-        if(!tmpFolder.exists()){
+        if (!tmpFolder.exists()) {
             tmpFolder.mkdir();
         }
         // application context
@@ -246,9 +250,10 @@ public class App {
 
     /**
      * Updates project context with current project
+     *
      * @param project
      */
-    private void populateProjectContext(Project project){
+    private void populateProjectContext(Project project) {
         // Create project and app contexts and add them to Global context
         BasicContext projectCtx = new BasicContext("project");
         projectCtx.put("folder", project.getBaseFolder());
@@ -393,5 +398,10 @@ public class App {
 
     public void setJobFacade(JobFacade jobFacade) {
         this.jobFacade = jobFacade;
+    }
+
+
+    public void setJobListener(JobExecListener jobListener) {
+        this.jobFacade.setListener(jobListener);
     }
 }

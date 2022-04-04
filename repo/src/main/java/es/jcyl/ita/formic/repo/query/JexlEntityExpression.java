@@ -17,7 +17,7 @@ package es.jcyl.ita.formic.repo.query;
 
 import org.apache.commons.jexl3.JxltEngine;
 
-import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
+import es.jcyl.ita.formic.repo.el.JexlEntityUtils;
 
 
 /**
@@ -28,7 +28,7 @@ public class JexlEntityExpression extends Expression {
     private final JxltEngine.Expression expression;
 
     public JexlEntityExpression(String expression){
-        this.expression = JexlRepoUtils.createExpression(expression);
+        this.expression = JexlEntityUtils.createExpression(expression);
     }
 
     public JxltEngine.Expression getExpression() {

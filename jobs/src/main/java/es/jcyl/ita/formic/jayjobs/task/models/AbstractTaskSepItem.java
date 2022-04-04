@@ -20,57 +20,65 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class AbstractTaskSepItem implements TaskSepItem {
-	private String type;
-	private String className;
+public abstract class AbstractTaskSepItem implements TaskSepItem {
 
-	@JsonIgnore
-	protected Task task;
+    private String type;
+    private String className;
 
-	public Task getTask() {
-		return task;
-	}
+    @JsonIgnore
+    protected Task task;
 
-	@Override
-	public void setTask(Task task) {
-		this.task = task;
-	}
+    public Task getTask() {
+        return task;
+    }
 
-	protected Context getTaskContext() {
-		return getTask().getTaskContext();
-	}
+    @Override
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
-	protected CompositeContext getGlobalContext() {
-		return (getTask() == null) ? null : getTask().getGlobalContext();
-	}
+    protected Context getTaskContext() {
+        return getTask().getTaskContext();
+    }
 
-	protected TaskListener getListener() {
-		return (getTask() == null) ? null : getTask().getListener();
-	}
+    protected CompositeContext getGlobalContext() {
+        return (getTask() == null) ? null : getTask().getGlobalContext();
+    }
 
-	protected void error(int pos, String data1, String data2) {
-		getListener().error(pos, data1, data2);
-	}
+    public String getType() {
+        return type;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public String getClassName() {
+        return className;
+    }
 
-	public String getClassName() {
-		return className;
-	}
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
-	public void setClassName(String className) {
-		this.className = className;
-	}
+    public void notifyInfo(String message) {
+        TaskExecListener listener = getTask().getListener();
+        listener.onMessage(this.getTask(), message);
+    }
 
+    public void notifyError(String message, Throwable e) {
+        TaskExecListener listener = getTask().getListener();
+        listener.onTaskError(this.getTask(), message, e);
+    }
+
+    public void notifyProgress(int total, float progress, String units) {
+        TaskExecListener listener = getTask().getListener();
+        listener.onProgressUpdate(getTask(), total, progress, units);
+    }
 }

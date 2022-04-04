@@ -15,82 +15,23 @@ package es.jcyl.ita.formic.forms.el;
  * limitations under the License.
  */
 
-import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
-import org.apache.commons.jexl3.JexlEngine;
-import org.apache.commons.jexl3.JxltEngine;
 import org.apache.commons.jexl3.MapContext;
-import org.apache.commons.jexl3.internal.Engine;
-import org.apache.commons.jexl3.internal.TemplateEngine;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.el.wrappers.JexlContextWrapper;
-import es.jcyl.ita.formic.forms.el.wrappers.JexlEntityWrapper;
 import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.el.JexlEntityUtils;
+import es.jcyl.ita.formic.repo.el.wrappers.JexlEntityWrapper;
+import es.jcyl.ita.formic.core.jexl.JexlContextWrapper;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public class JexlFormUtils {
-    //protected static final Map<String, Object> funcs = new HashMap<String, Object>().put("math", Math.class);
-    protected static final Map<String, Object> funcs;
+public class JexlFormUtils extends JexlEntityUtils {
 
-    static {
-        Map<String, Object> aMap = new HashMap<String, Object>();
-        aMap.put("math", Math.class);
-        funcs = Collections.unmodifiableMap(aMap);
-    }
-
-    protected static final JexlEngine jexl = new JexlBuilder().cache(256).namespaces(funcs)
-            .strict(false).silent(false).create();
-
-    protected static final JxltEngine jxltEngine = new TemplateEngine((Engine) jexl, false,
-            256, '$', '#');
-
-    public static Object eval(Context ctx, String expression) {
-        try {
-            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
-            return exl.evaluate(new JexlContextWrapper(ctx));
-        } catch (Exception e) {
-            throw new RuntimeException(String.format(
-                    "An error occurred while trying to evaluate the jexl expression [%s].",
-                    expression
-            ), e);
-        }
-    }
-
-    public static Object eval(JexlContext ctx, String expression) {
-        try {
-            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
-            return exl.evaluate(ctx);
-        } catch (Exception e) {
-            throw new RuntimeException(String.format(
-                    "An error occurred while trying to evaluate the jexl expression [%s].",
-                    expression
-            ), e);
-        }
-    }
-
-    public static Object eval(Entity entity, String expression) {
-        try {
-            JxltEngine.Expression exl = jxltEngine.createExpression(expression);
-            JexlContext jc = new MapContext();
-            jc.set("entity", new JexlEntityWrapper(entity));
-            return exl.evaluate(jc);
-        } catch (Exception e) {
-            throw new RuntimeException(String.format(
-                    "An error occurred while trying to evaluate the jexl expression [%s] on entity[%s].",
-                    expression, entity.toString()
-            ), e);
-        }
-    }
 
     public static Object eval(WidgetContext ctx, String expression) {
         // First try on entity
@@ -128,10 +69,6 @@ public class JexlFormUtils {
             }
         }
         return values;
-    }
-
-    public static JxltEngine.Expression createExpression(String expression) {
-        return jxltEngine.createExpression(expression);
     }
 
 }

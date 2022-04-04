@@ -17,6 +17,10 @@ import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
+/**
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
+
 public abstract class AbstractUIComponent implements Identificable, UIComponent {
 
     protected String id;

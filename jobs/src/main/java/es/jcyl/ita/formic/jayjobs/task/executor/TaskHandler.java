@@ -20,5 +20,5 @@ import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 
 public interface TaskHandler<T extends Task> {
 
-	void handle(CompositeContext context, T task, TaskExec taskExecutionInfo) throws TaskException;
+	void handle(CompositeContext context, T task) throws TaskException;
 }

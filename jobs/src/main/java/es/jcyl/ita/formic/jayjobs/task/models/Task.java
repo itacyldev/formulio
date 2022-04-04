@@ -15,11 +15,13 @@ package es.jcyl.ita.formic.jayjobs.task.models;
  * limitations under the License.
  */
 
+import java.util.List;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 
 /**
- *
  * Task functionality interface.
  *
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -40,9 +42,9 @@ public interface Task {
 
     CompositeContext getGlobalContext();
 
-    void setListener(TaskListener listener);
-
-    TaskListener getListener();
-
     boolean isStopOnError();
+
+    void setListener(TaskExecListener listener);
+
+    TaskExecListener getListener();
 }

@@ -1,24 +1,13 @@
 package es.jcyl.ita.formic.jayjobs.task.notifier;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import es.jcyl.ita.crtcyl.sync.service.SyncService;
-import es.jcyl.ita.crtdrd.task.TaskProgressNotifier;
-import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 
 /**
  * Created by ita-ramvalja on 07/05/2019.
  */
 
-public class TaskStatusNotifier implements TaskProgressNotifier {
-
+public class TaskStatusNotifier {
+    //implements TaskProgressNotifier {
+/*
     protected static final Log LOGGER = LogFactory
             .getLog(TaskStatusNotifier.class);
 
@@ -188,4 +177,6 @@ public class TaskStatusNotifier implements TaskProgressNotifier {
     public void setClient(Processor processor) {
         this.processor = processor;
     }
+    */
+
 }

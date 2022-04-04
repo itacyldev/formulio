@@ -98,6 +98,7 @@ dependencies {
     implementation project(':core')
     implementation project(':repo')
     implementation project(':forms')
+    implementation project(':jobs')
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

@@ -47,7 +47,7 @@ public class AbstractConfigObjectReader {
     protected final TaskConfigFactory factory;
     protected static ObjectMapper mapper; // threadsafe
 
-    public AbstractConfigObjectReader(TaskConfigFactory factory){
+    public AbstractConfigObjectReader(TaskConfigFactory factory) {
         this.factory = factory;
         // configure common mapper
         mapper = new ObjectMapper();
@@ -119,12 +119,12 @@ public class AbstractConfigObjectReader {
         Class<?> clazz = getClassFromType(objectType);
         if (clazz == null) {
             throw new IllegalArgumentException(String.format(
-                    "Invalid value for attribute 'type': [%s]. Valid values are: %s. ",
-                    objectType, factory.getRegistry().keySet()));
+                    "Invalid value for attribute 'type': [%s]. Valid values are: %s. " +
+                            "Check de registry of TaskConfigFactory.", objectType,
+                    factory.getRegistry().keySet()));
         }
         return mapper.treeToValue(objectNode, clazz);
     }
-
 
 
     protected Class<?> getClassFromType(String objectType) {

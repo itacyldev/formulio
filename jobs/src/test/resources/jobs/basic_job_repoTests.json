@@ -9,7 +9,7 @@
     {
       "name": "t1",
       "processor": {
-        "type": "contextPopulator",
+        "type": "contextPopulateProcessor",
         "value": "A very weird value!!"
       }
     }

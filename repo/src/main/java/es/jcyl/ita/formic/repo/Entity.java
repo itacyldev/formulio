@@ -29,11 +29,11 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
         this(source, meta, null);
     }
 
-    public Entity(S source, M meta, Object id)  {
+    public Entity(S source, M meta, Object id) {
         this.source = source;
         this.metadata = meta;
         if (meta != null) {
-            properties = getPropertiesImplementor (this.metadata);
+            properties = getPropertiesImplementor(this.metadata);
             //properties = new HashMap<String, Object>(this.metadata.getProperties().length);
         }
         if (id != null) {
@@ -41,14 +41,14 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
         }
     }
 
-    protected  Map<String, Object> getPropertiesImplementor(EntityMeta meta) {
+    protected Map<String, Object> getPropertiesImplementor(EntityMeta meta) {
         Map<String, Object> properties;
         if (meta.getPropertiesImplementor() == null) {
             properties = new HashMap<String, Object>(this.metadata.getProperties().length);
         } else {
             try {
                 properties = (Map<String, Object>) Class.forName(meta.getPropertiesImplementor()).getDeclaredConstructor().newInstance();
-            } catch (Exception e){
+            } catch (Exception e) {
                 String msg = String.format("Error while trying to instantiate element from class: " +
                         "[%s], make sure this class has a no-parameter constructor.", meta.getPropertiesImplementor());
                 throw new RepositoryException(msg, e);

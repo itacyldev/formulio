@@ -22,7 +22,9 @@ import java.util.Date;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExec;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
@@ -34,7 +36,6 @@ import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 public class DevJobsBuilder {
 
 
-
     public static JobConfig createDummyJobConfig() {
         JobConfig jobConfig = new JobConfig();
         jobConfig.setId(RandomUtils.randomString(10));
@@ -43,7 +44,8 @@ public class DevJobsBuilder {
 
     public static class CreateDummyJobExec {
         public CompositeContext globalContext;
-        public JobExec execInfo;
+        public JobExecStatus execInfo;
+        public JobExecRepo jobExecRepo;
         public JobConfig jobConfig;
 
         public CreateDummyJobExec() {
@@ -81,10 +83,13 @@ public class DevJobsBuilder {
             if (StringUtils.isNotBlank(this.taskConfig)) {
                 this.jobConfig.setTaskConfig(this.taskConfig);
             }
-            this.execInfo = new JobExec();
+            this.execInfo = new JobExecStatus();
+            this.execInfo.setId(RandomUtils.randomLong(0,10));
             this.execInfo.setJobId(this.jobConfig.getId());
             this.execInfo.setExecInit(new Date());
             this.execInfo.setMode(jobConfig.getExecMode());
+
+            this.jobExecRepo = new JobExecInMemo(this.globalContext);
         }
     }
 }

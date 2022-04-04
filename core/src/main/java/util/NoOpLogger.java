@@ -46,17 +46,17 @@ public class NoOpLogger implements Logger {
 
     @Override
     public void trace(String format, Object arg1, Object arg2) {
-
+        System.out.println(String.format(format, arg1, arg2));
     }
 
     @Override
     public void trace(String format, Object... arguments) {
-
+        System.out.println(String.format(format,arguments));
     }
 
     @Override
     public void trace(String msg, Throwable t) {
-
+        System.out.println(msg);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class NoOpLogger implements Logger {
 
     @Override
     public void trace(Marker marker, String msg) {
-
+        System.out.println(msg);
     }
 
     @Override
@@ -96,22 +96,22 @@ public class NoOpLogger implements Logger {
 
     @Override
     public void debug(String msg) {
-
+        System.out.println(msg);
     }
 
     @Override
     public void debug(String format, Object arg) {
-
+        System.out.println(String.format(format, arg));
     }
 
     @Override
     public void debug(String format, Object arg1, Object arg2) {
-
+        System.out.println(String.format(format, arg1, arg2));
     }
 
     @Override
     public void debug(String format, Object... arguments) {
-
+        System.out.println(String.format(format, arguments));
     }
 
     @Override

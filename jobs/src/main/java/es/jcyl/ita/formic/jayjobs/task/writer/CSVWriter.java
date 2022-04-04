@@ -40,15 +40,12 @@ import util.Log;
  */
 
 public class CSVWriter extends AbstractWriter {
-    private static final DateFormat timestamper = new SimpleDateFormat("yyyyMMdd_HHmmss");
-
     private static final Object DEFAULT_EXTENSION = "csv";
     /**
      * ************************************
      * Configurable parameters via JSON
      * ************************************
      */
-    private String outputFile;
     private boolean writeHeader = true;
     private String columnSep = ";";
     private String quoteChar = "\"";
@@ -196,22 +193,8 @@ public class CSVWriter extends AbstractWriter {
         }
     }
 
-    /**
-     * Determines the final name of the output file.
-     */
-    private void configureOutputFile() {
-
-        if (StringUtils.isBlank(this.outputFile)) {
-            this.outputFile = String.format("%s_%s.%s",
-                    RandomStringUtils.randomAlphanumeric(10),
-                    timestamper.format(new Date()), DEFAULT_EXTENSION);
-            Log.info(String.format(
-                    "The 'outputFile' attribute is not set in the CSVWriter, " +
-                            "a random file name will be used [%s].", this.outputFile));
-        }
-        this.outputFile = TaskResourceAccessor
-                .getWorkingFile(this.getGlobalContext(), this.outputFile);
-        Log.info("Output file path: " + this.outputFile);
+    public static Object getDefaultExtension() {
+        return DEFAULT_EXTENSION;
     }
 
     @Override
@@ -229,14 +212,6 @@ public class CSVWriter extends AbstractWriter {
                             + this.outputFile, e);
         }
         Log.info("CSV file successfully written.");
-    }
-
-    public String getOutputFile() {
-        return this.outputFile;
-    }
-
-    public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
     }
 
     public boolean isWriteHeader() {

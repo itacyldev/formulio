@@ -15,15 +15,23 @@ package es.jcyl.ita.formic.jayjobs.task.iteration;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
+import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
+import es.jcyl.ita.formic.core.jexl.JexlUtils;
+
+/**
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
 
 public class BasicCounterIterator extends AbstractTaskContextIterator {
 
     public BasicCounterIterator() {
-
     }
 
     public BasicCounterIterator(CompositeContext globalContext, GroupTask task) {
@@ -37,6 +45,16 @@ public class BasicCounterIterator extends AbstractTaskContextIterator {
 
     @Override
     protected boolean doHasNext() {
+        long delay = task.getIterDelay();
+        if (delay != -1) {
+            // active wait between iterations
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                new TaskException(e);
+            }
+        }
+        // evaluate iter counter expression
         return idx < task.getIterSize();
     }
 
@@ -48,10 +66,46 @@ public class BasicCounterIterator extends AbstractTaskContextIterator {
     }
 
     @Override
-    protected Context createGroupContext(GroupTask t) {
-        Context ctx = new BasicContext(t.getName());
-        ctx.put("size", t.getIterSize());
-        return ctx;
+    public boolean evalEnterIterationExpr() {
+        if (StringUtils.isBlank(task.getEnterLoopExpression())) {
+            return true;
+        }
+        return evaluateExpression(task.getEnterLoopExpression());
     }
 
+    @Override
+    public boolean evalExitIterationExpr() {
+        if (StringUtils.isBlank(task.getExitLoopExpression())) {
+            return false;
+        }
+        return evaluateExpression(task.getExitLoopExpression());
+    }
+
+    /**
+     * Evaluates expression to obtain a boolean value
+     *
+     * @param expression
+     * @return
+     */
+    private boolean evaluateExpression(String expression) {
+        boolean evaluation;
+        Object eval = JexlUtils.eval(getCurrentIterCtx(), expression);
+        if (eval == null) {
+            evaluation = false;
+        } else {
+            Boolean boolValue;
+            try {
+                boolValue = (Boolean) ConvertUtils.convert(eval, Boolean.class);
+            } catch (Exception e) {
+                throw new IllegalArgumentException(String.format("Wrong expression in task [%s] attribute is wrong, " +
+                                "the expression must return a boolean, but the evaluated value is [%s]. Expression = [%s]",
+                        task.getName(), eval, expression));
+            }
+            evaluation = boolValue.booleanValue();
+        }
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(String.format("Evaluated expression : [%s] = [%s]", expression, evaluation));
+        }
+        return evaluation;
+    }
 }

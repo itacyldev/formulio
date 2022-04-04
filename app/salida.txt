@@ -160,7 +160,6 @@ debugAndroidTestCompileClasspath - Resolved configuration for compilation for va
 +--- project :repo
 |    +--- project :core (*)
 |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    +--- org.mini2Dx:android-beans:1.0.0
 |    \--- commons-io:commons-io:2.6
 +--- project :forms
@@ -437,7 +436,6 @@ debugCompileClasspath - Resolved configuration for compilation for variant: debu
 +--- project :repo
 |    +--- project :core (*)
 |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    +--- org.mini2Dx:android-beans:1.0.0
 |    \--- commons-io:commons-io:2.6
 +--- project :forms
@@ -712,11 +710,11 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    \--- org.apache.commons:commons-lang3:3.9 -> 3.10
 |    +--- commons-logging:commons-logging:1.2
 |    +--- org.slf4j:slf4j-api:1.7.30
-|    \--- com.github.tony19:logback-android:2.0.0
+|    +--- com.github.tony19:logback-android:2.0.0
+|    \--- org.mini2Dx:android-beans:1.0.0
 +--- project :repo
 |    +--- project :core (*)
 |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    +--- org.mini2Dx:android-beans:1.0.0
 |    \--- commons-io:commons-io:2.6
 +--- project :forms
@@ -834,41 +832,19 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    +--- org.mini2Dx:android-beans:1.0.0
 |    |    +--- com.fasterxml.jackson.core:jackson-databind:2.13.0
 |    |    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0
-|    |    |    \--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0 (c)
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-core:2.13.0 (c)
+|    |    |    |         \--- com.fasterxml.jackson.core:jackson-databind:2.13.0 (c)
+|    |    |    +--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
+|    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
 |    |    +--- commons-io:commons-io:2.6
 |    |    +--- com.opencsv:opencsv:5.2
 |    |    |    +--- org.apache.commons:commons-lang3:3.10
 |    |    |    +--- org.apache.commons:commons-text:1.8 (*)
 |    |    |    +--- commons-beanutils:commons-beanutils:1.9.4 (*)
 |    |    |    \--- org.apache.commons:commons-collections4:4.4
-|    |    +--- es.jcyl.ita.crtdrd:crtsyn:0.4.3
-|    |    |    +--- com.squareup.retrofit:retrofit:1.9.0
-|    |    |    |    \--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- com.squareup.okhttp:okhttp:2.4.0
-|    |    |    |    \--- com.squareup.okio:okio:1.4.0 -> 1.5.0
-|    |    |    +--- com.squareup.okio:okio:1.5.0
-|    |    |    +--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-lang:commons-lang:2.6
-|    |    |    +--- commons-collections:commons-collections:3.2.1 -> 20040616
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.17.0 -> 2.36.3
-|    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5
-|    |    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    |    \--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.17.0 -> 2.36.5 (*)
-|    |    |    +--- es.jcyl.ita.crtdrd:crttask:0.4.3
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-io:commons-io:2.4 -> 2.6
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-sync:2.36.4
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3
-|    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.36.3 (*)
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5 (*)
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.5 (*)
 |    |    +--- org.apache.poi:poi-ooxml:3.17
 |    |    |    +--- org.apache.poi:poi:3.17
 |    |    |    |    +--- commons-codec:commons-codec:1.10
@@ -877,8 +853,9 @@ debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 |    |    |    \--- com.github.virtuald:curvesapi:1.04
 |    |    +--- org.apache.xmlbeans:xmlbeans:3.1.0
 |    |    +--- javax.xml.stream:stax-api:1.0
-|    |    \--- com.fasterxml:aalto-xml:1.2.2
-|    |         \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    +--- com.fasterxml:aalto-xml:1.2.2
+|    |    |    \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    \--- com.android.volley:volley:1.2.1
 |    +--- androidx.appcompat:appcompat:1.1.0
 |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.2.0
 |    |    +--- androidx.core:core:1.1.0 -> 1.6.0 (*)
@@ -1035,7 +1012,6 @@ debugUnitTestCompileClasspath - Resolved configuration for compilation for varia
 +--- project :repo
 |    +--- project :core (*)
 |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    +--- org.mini2Dx:android-beans:1.0.0
 |    \--- commons-io:commons-io:2.6
 +--- project :forms
@@ -1599,9 +1575,9 @@ debugUnitTestRuntimeClasspath - Resolved configuration for runtime for variant: 
 |    |    |    |    \--- org.apache.commons:commons-lang3:3.9 -> 3.10
 |    |    |    +--- commons-logging:commons-logging:1.2
 |    |    |    +--- org.slf4j:slf4j-api:1.7.30
-|    |    |    \--- com.github.tony19:logback-android:2.0.0
+|    |    |    +--- com.github.tony19:logback-android:2.0.0
+|    |    |    \--- org.mini2Dx:android-beans:1.0.0
 |    |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    |    +--- org.mini2Dx:android-beans:1.0.0
 |    |    \--- commons-io:commons-io:2.6
 |    \--- junit:junit:4.12
@@ -1948,41 +1924,19 @@ debugUnitTestRuntimeClasspath - Resolved configuration for runtime for variant: 
 |    |    +--- org.mini2Dx:android-beans:1.0.0
 |    |    +--- com.fasterxml.jackson.core:jackson-databind:2.13.0
 |    |    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0
-|    |    |    \--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0 (c)
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-core:2.13.0 (c)
+|    |    |    |         \--- com.fasterxml.jackson.core:jackson-databind:2.13.0 (c)
+|    |    |    +--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
+|    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
 |    |    +--- commons-io:commons-io:2.6
 |    |    +--- com.opencsv:opencsv:5.2
 |    |    |    +--- org.apache.commons:commons-lang3:3.10
 |    |    |    +--- org.apache.commons:commons-text:1.8 (*)
 |    |    |    +--- commons-beanutils:commons-beanutils:1.9.4 (*)
 |    |    |    \--- org.apache.commons:commons-collections4:4.4
-|    |    +--- es.jcyl.ita.crtdrd:crtsyn:0.4.3
-|    |    |    +--- com.squareup.retrofit:retrofit:1.9.0
-|    |    |    |    \--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- com.squareup.okhttp:okhttp:2.4.0
-|    |    |    |    \--- com.squareup.okio:okio:1.4.0 -> 1.5.0
-|    |    |    +--- com.squareup.okio:okio:1.5.0
-|    |    |    +--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-lang:commons-lang:2.6
-|    |    |    +--- commons-collections:commons-collections:3.2.1 -> 20040616
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.17.0 -> 2.36.3
-|    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5
-|    |    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    |    \--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.17.0 -> 2.36.5 (*)
-|    |    |    +--- es.jcyl.ita.crtdrd:crttask:0.4.3
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-io:commons-io:2.4 -> 2.6
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-sync:2.36.4
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3
-|    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.36.3 (*)
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5 (*)
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.5 (*)
 |    |    +--- org.apache.poi:poi-ooxml:3.17
 |    |    |    +--- org.apache.poi:poi:3.17
 |    |    |    |    +--- commons-codec:commons-codec:1.10
@@ -1991,8 +1945,9 @@ debugUnitTestRuntimeClasspath - Resolved configuration for runtime for variant: 
 |    |    |    \--- com.github.virtuald:curvesapi:1.04
 |    |    +--- org.apache.xmlbeans:xmlbeans:3.1.0
 |    |    +--- javax.xml.stream:stax-api:1.0
-|    |    \--- com.fasterxml:aalto-xml:1.2.2
-|    |         \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    +--- com.fasterxml:aalto-xml:1.2.2
+|    |    |    \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    \--- com.android.volley:volley:1.2.1
 |    +--- androidx.appcompat:appcompat:1.1.0 (*)
 |    +--- androidx.constraintlayout:constraintlayout:1.1.3
 |    |    \--- androidx.constraintlayout:constraintlayout-solver:1.1.3
@@ -2154,7 +2109,6 @@ releaseCompileClasspath - Resolved configuration for compilation for variant: re
 +--- project :repo
 |    +--- project :core (*)
 |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    +--- org.mini2Dx:android-beans:1.0.0
 |    \--- commons-io:commons-io:2.6
 +--- project :forms
@@ -2428,11 +2382,11 @@ releaseRuntimeClasspath - Resolved configuration for runtime for variant: releas
 |    |    \--- org.apache.commons:commons-lang3:3.9 -> 3.10
 |    +--- commons-logging:commons-logging:1.2
 |    +--- org.slf4j:slf4j-api:1.7.30
-|    \--- com.github.tony19:logback-android:2.0.0
+|    +--- com.github.tony19:logback-android:2.0.0
+|    \--- org.mini2Dx:android-beans:1.0.0
 +--- project :repo
 |    +--- project :core (*)
 |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    +--- org.mini2Dx:android-beans:1.0.0
 |    \--- commons-io:commons-io:2.6
 +--- project :forms
@@ -2454,41 +2408,19 @@ releaseRuntimeClasspath - Resolved configuration for runtime for variant: releas
 |    |    +--- org.mini2Dx:android-beans:1.0.0
 |    |    +--- com.fasterxml.jackson.core:jackson-databind:2.13.0
 |    |    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0
-|    |    |    \--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0 (c)
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-core:2.13.0 (c)
+|    |    |    |         \--- com.fasterxml.jackson.core:jackson-databind:2.13.0 (c)
+|    |    |    +--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
+|    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
 |    |    +--- commons-io:commons-io:2.6
 |    |    +--- com.opencsv:opencsv:5.2
 |    |    |    +--- org.apache.commons:commons-lang3:3.10
 |    |    |    +--- org.apache.commons:commons-text:1.8 (*)
 |    |    |    +--- commons-beanutils:commons-beanutils:1.9.4 (*)
 |    |    |    \--- org.apache.commons:commons-collections4:4.4
-|    |    +--- es.jcyl.ita.crtdrd:crtsyn:0.4.3
-|    |    |    +--- com.squareup.retrofit:retrofit:1.9.0
-|    |    |    |    \--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- com.squareup.okhttp:okhttp:2.4.0
-|    |    |    |    \--- com.squareup.okio:okio:1.4.0 -> 1.5.0
-|    |    |    +--- com.squareup.okio:okio:1.5.0
-|    |    |    +--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-lang:commons-lang:2.6
-|    |    |    +--- commons-collections:commons-collections:3.2.1 -> 20040616
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.17.0 -> 2.36.3
-|    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5
-|    |    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    |    \--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.17.0 -> 2.36.5 (*)
-|    |    |    +--- es.jcyl.ita.crtdrd:crttask:0.4.3
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-io:commons-io:2.4 -> 2.6
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-sync:2.36.4
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3
-|    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.36.3 (*)
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5 (*)
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.5 (*)
 |    |    +--- org.apache.poi:poi-ooxml:3.17
 |    |    |    +--- org.apache.poi:poi:3.17
 |    |    |    |    +--- commons-codec:commons-codec:1.10
@@ -2497,8 +2429,9 @@ releaseRuntimeClasspath - Resolved configuration for runtime for variant: releas
 |    |    |    \--- com.github.virtuald:curvesapi:1.04
 |    |    +--- org.apache.xmlbeans:xmlbeans:3.1.0
 |    |    +--- javax.xml.stream:stax-api:1.0
-|    |    \--- com.fasterxml:aalto-xml:1.2.2
-|    |         \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    +--- com.fasterxml:aalto-xml:1.2.2
+|    |    |    \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    \--- com.android.volley:volley:1.2.1
 |    +--- androidx.appcompat:appcompat:1.1.0
 |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.2.0
 |    |    +--- androidx.core:core:1.1.0 -> 1.6.0
@@ -2711,7 +2644,6 @@ releaseUnitTestCompileClasspath - Resolved configuration for compilation for var
 +--- project :repo
 |    +--- project :core (*)
 |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    +--- org.mini2Dx:android-beans:1.0.0
 |    \--- commons-io:commons-io:2.6
 +--- project :forms
@@ -3276,9 +3208,9 @@ releaseUnitTestRuntimeClasspath - Resolved configuration for runtime for variant
 |    |    |    |    \--- org.apache.commons:commons-lang3:3.9 -> 3.10
 |    |    |    +--- commons-logging:commons-logging:1.2
 |    |    |    +--- org.slf4j:slf4j-api:1.7.30
-|    |    |    \--- com.github.tony19:logback-android:2.0.0
+|    |    |    +--- com.github.tony19:logback-android:2.0.0
+|    |    |    \--- org.mini2Dx:android-beans:1.0.0
 |    |    +--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT
-|    |    |    \--- org.greenrobot:greendao:3.2.3-patched-SNAPSHOT (*)
 |    |    +--- org.mini2Dx:android-beans:1.0.0
 |    |    \--- commons-io:commons-io:2.6
 |    \--- junit:junit:4.12
@@ -3622,41 +3554,19 @@ releaseUnitTestRuntimeClasspath - Resolved configuration for runtime for variant
 |    |    +--- org.mini2Dx:android-beans:1.0.0
 |    |    +--- com.fasterxml.jackson.core:jackson-databind:2.13.0
 |    |    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0
-|    |    |    \--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-annotations:2.13.0 (c)
+|    |    |    |         +--- com.fasterxml.jackson.core:jackson-core:2.13.0 (c)
+|    |    |    |         \--- com.fasterxml.jackson.core:jackson-databind:2.13.0 (c)
+|    |    |    +--- com.fasterxml.jackson.core:jackson-core:2.13.0
+|    |    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
+|    |    |    \--- com.fasterxml.jackson:jackson-bom:2.13.0 (*)
 |    |    +--- commons-io:commons-io:2.6
 |    |    +--- com.opencsv:opencsv:5.2
 |    |    |    +--- org.apache.commons:commons-lang3:3.10
 |    |    |    +--- org.apache.commons:commons-text:1.8 (*)
 |    |    |    +--- commons-beanutils:commons-beanutils:1.9.4 (*)
 |    |    |    \--- org.apache.commons:commons-collections4:4.4
-|    |    +--- es.jcyl.ita.crtdrd:crtsyn:0.4.3
-|    |    |    +--- com.squareup.retrofit:retrofit:1.9.0
-|    |    |    |    \--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- com.squareup.okhttp:okhttp:2.4.0
-|    |    |    |    \--- com.squareup.okio:okio:1.4.0 -> 1.5.0
-|    |    |    +--- com.squareup.okio:okio:1.5.0
-|    |    |    +--- com.google.code.gson:gson:2.3.1
-|    |    |    +--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-lang:commons-lang:2.6
-|    |    |    +--- commons-collections:commons-collections:3.2.1 -> 20040616
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.17.0 -> 2.36.3
-|    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5
-|    |    |    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    |    |    \--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.17.0 -> 2.36.5 (*)
-|    |    |    +--- es.jcyl.ita.crtdrd:crttask:0.4.3
-|    |    |    |    \--- commons-logging:commons-logging:1.1.1 -> 1.2
-|    |    |    +--- commons-io:commons-io:2.4 -> 2.6
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-sync:2.36.4
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3
-|    |    |    +--- com.vividsolutions:jts-core:1.14.0
-|    |    |    +--- com.thoughtworks.xstream:xstream:1.3.1
-|    |    |    +--- es.jcyl.ita.crtcyl:crtcyl-api:2.36.3 (*)
-|    |    |    \--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.3 -> 2.36.5 (*)
-|    |    +--- es.jcyl.ita.crtcyl:crtcyl-core:2.36.5 (*)
 |    |    +--- org.apache.poi:poi-ooxml:3.17
 |    |    |    +--- org.apache.poi:poi:3.17
 |    |    |    |    +--- commons-codec:commons-codec:1.10
@@ -3665,8 +3575,9 @@ releaseUnitTestRuntimeClasspath - Resolved configuration for runtime for variant
 |    |    |    \--- com.github.virtuald:curvesapi:1.04
 |    |    +--- org.apache.xmlbeans:xmlbeans:3.1.0
 |    |    +--- javax.xml.stream:stax-api:1.0
-|    |    \--- com.fasterxml:aalto-xml:1.2.2
-|    |         \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    +--- com.fasterxml:aalto-xml:1.2.2
+|    |    |    \--- org.codehaus.woodstox:stax2-api:4.2
+|    |    \--- com.android.volley:volley:1.2.1
 |    +--- androidx.appcompat:appcompat:1.1.0 (*)
 |    +--- androidx.constraintlayout:constraintlayout:1.1.3
 |    |    \--- androidx.constraintlayout:constraintlayout-solver:1.1.3

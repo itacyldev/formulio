@@ -22,6 +22,8 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
+import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 
 /**
@@ -34,6 +36,7 @@ import es.jcyl.ita.formic.jayjobs.task.processor.Processor;
 public class AbstractTask implements Task {
 
     protected Long id;
+    protected Long jobExecId;
     protected String name;
     protected String description;
     @JsonIgnore
@@ -41,11 +44,8 @@ public class AbstractTask implements Task {
     @JsonIgnore
     private CompositeContext globalContext;
     @JsonIgnore
-    private TaskListener listener;
+    private TaskExecListener listener;
     private boolean stopOnError = true;
-
-    @JsonIgnore
-    private List<Processor> processors;
 
     @Override
     public Context getTaskContext() {
@@ -95,16 +95,6 @@ public class AbstractTask implements Task {
     }
 
     @Override
-    public TaskListener getListener() {
-        return listener;
-    }
-
-    @Override
-    public void setListener(TaskListener listener) {
-        this.listener = listener;
-    }
-
-    @Override
     public boolean isStopOnError() {
         return stopOnError;
     }
@@ -112,4 +102,22 @@ public class AbstractTask implements Task {
     public void setStopOnError(boolean stopOnError) {
         this.stopOnError = stopOnError;
     }
+
+    public Long getJobExecId() {
+        return jobExecId;
+    }
+
+    public void setJobExecId(Long jobExecId) {
+        this.jobExecId = jobExecId;
+    }
+
+    @Override
+    public TaskExecListener getListener() {
+        return listener;
+    }
+
+    public void setListener(TaskExecListener listener) {
+        this.listener = listener;
+    }
+
 }
