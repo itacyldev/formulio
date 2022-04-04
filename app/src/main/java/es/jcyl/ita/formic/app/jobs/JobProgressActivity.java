@@ -15,9 +15,13 @@ package es.jcyl.ita.formic.app.jobs;
  * limitations under the License.
  */
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
@@ -29,24 +33,38 @@ import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 public class JobProgressActivity extends BaseActivity {
     private ProgressBar progressBar;
     private TextView textView;
-    private static JobProgressListener progressListener;
+    private static JobExecStatusListener execStatusListener;
+
+    private Date lastPollTime;
+
+    private JobProgressHandler mainThreadHandler;
+
+    public JobProgressHandler getMainThreadHandler() {
+        return mainThreadHandler;
+    }
 
     @Override
     protected void doOnCreate() {
         setContentView(R.layout.job_progress);
-        progressListener = (JobProgressListener) getIntent().getSerializableExtra("jobListener");
-        progressListener.setActivity(this);
+        long jobId = getIntent().getLongExtra("jobExecId", -1);
+        execStatusListener = new JobExecStatusListener(this, jobId);
+
         setToolbar(getString(R.string.action_settings));
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         textView = (TextView) findViewById(R.id.textView);
+
+        execStatusListener.startActiveWaiting();
+        mainThreadHandler = new JobProgressHandler();
+
     }
+
 
     public void setMessage(String end, String msg) {
         CharSequence text = textView.getText();
         textView.setText(text + "\n" + msg);
     }
 
-    public void setResources(List<String> resources){
+    public void setResources(List<String> resources) {
 
     }
 
@@ -56,5 +74,16 @@ public class JobProgressActivity extends BaseActivity {
     }
 
 
+    private class JobProgressHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == JobExecStatusListener.MSG_CODE) {
+                Bundle msgData = msg.getData();
+                String msgText = msgData.getString("msgTxt");
+                setMessage("", msgText);
+            }
+
+        }
+    }
 
 }

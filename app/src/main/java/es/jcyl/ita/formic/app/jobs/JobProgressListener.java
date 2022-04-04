@@ -17,6 +17,10 @@ package es.jcyl.ita.formic.app.jobs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.aware.DiscoverySession;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,6 +30,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 /**
@@ -33,77 +38,75 @@ import es.jcyl.ita.formic.jayjobs.task.models.Task;
  */
 public class JobProgressListener implements JobExecListener, Serializable {
 
-    private JobProgressActivity activity;
+
+    private JobConfig jobConfig;
+    private long jobExecId;
     private JobExecRepo jobExecRepo;
-    private Date lastPollTime;
+
 
     @Override
-    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
-        // open activity
+    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+        this.jobExecId = jobExecId;
+        this.jobExecRepo = jobExecRepo;
+        this.jobConfig = job;
 
+        // open activity
         Context andContext = Config.getInstance().getAndroidContext();
         Intent intent = new Intent(andContext, JobProgressActivity.class);
-        intent.putExtra("jobListener", this);
+        intent.putExtra("jobExecId", jobExecId);
         andContext.startActivity(intent);
     }
 
-    public void setActivity(JobProgressActivity activity) {
-        this.activity = activity;
+
+    @Override
+    public void onJobEnd(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        status.setState(JobExecutionState.FINISHED);
+        status.setMessage(String.format("Job %s has finished!", job.getId()));
+        jobExecRepo.updateJobStatus(status);
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
-        if (activity != null) {
-            activity.setMessage("info", String.format("Job %s has finished!", job.getId()));
-//            JobFacade facade;
-//            activity.setResources(facade.getResources(jobExecInfo.getId()));
-        }
-    }
-
-    @Override
-    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
-        if (activity != null) {
-            activity.setMessage("info", String.format("An error occurred on Job  %s execution!", job.getId()));
-        }
+    public void onJobError(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        status.setState(JobExecutionState.FINISHED);
+        status.setMessage(String.format("An error occurred on Job  %s execution!", job.getId()));
+        jobExecRepo.updateJobStatus(status);
     }
 
     @Override
     public void onTaskStart(Task task) {
-        if (activity != null) {
-            activity.setMessage("info", String.format("Task %s has started", task.getName()));
-        }
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        status.setState(JobExecutionState.EXECUTING);
+        status.setMessage(String.format("Task %s has started", task.getName()));
+        jobExecRepo.updateJobStatus(status);
     }
 
     @Override
     public void onTaskError(Task task, String message, Throwable t) {
-        if (activity != null) {
-            activity.setMessage("error", String.format("Task %s has an error", task.getName()));
-        }
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        status.setMessage(String.format("Task %s has an error", task.getName()));
+        status.setState(JobExecutionState.ERROR);
+        jobExecRepo.updateJobStatus(status);
     }
 
     @Override
     public void onTaskEnd(Task task) {
-        if (activity != null) {
-            activity.setMessage("info", String.format("Task %s has finished", task.getName()));
-        }
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        status.setMessage(String.format("Task %s has finished", task.getName()));
+        jobExecRepo.updateJobStatus(status);
     }
 
     @Override
     public void onProgressUpdate(Task task, int total, float progress, String units) {
-        if (activity != null) {
-            activity.setMessage("info", "" + progress);
-        }
     }
 
     @Override
     public void onMessage(Task task, String message) {
-        activity.setMessage("info", message);
-    }
-
-
-    public void pollState(Long jobExecId){
         JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
-
+        status.setMessage(message);
+        jobExecRepo.updateJobStatus(status);
     }
+
 
 }
