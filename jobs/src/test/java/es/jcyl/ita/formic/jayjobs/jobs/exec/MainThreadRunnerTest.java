@@ -34,7 +34,7 @@ public class MainThreadRunnerTest {
         DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
         builder.withTasks("tasks/basic_tasks.json").build();
 
-        executor.execute(builder.globalContext, builder.jobConfig, builder.execInfo, builder.jobExecRepo);
+        executor.execute(builder.globalContext, builder.jobConfig, builder.execInfo.getId(), builder.jobExecRepo);
 
         // if the execution goes well, there must be task contexts inserted in the global contexts
         CompositeContext gCtx = builder.globalContext;
@@ -51,9 +51,10 @@ public class MainThreadRunnerTest {
         builder.withTasks("tasks/basic_tasks.json").build();
         JobExecListener listenerMock = mock(JobExecListener.class);
         executor.setListener(listenerMock);
-        executor.execute(builder.globalContext, builder.jobConfig, builder.execInfo, builder.jobExecRepo);
+        executor.execute(builder.globalContext, builder.jobConfig, builder.execInfo.getId(), builder.jobExecRepo);
 
         // check listener has been called
+
         verify(listenerMock, times(1)).onJobEnd(any(), any(), any());
         verify(listenerMock, times(1)).onJobStart(any(), any(), any());
     }
@@ -70,7 +71,7 @@ public class MainThreadRunnerTest {
         builder.jobConfig.setTaskConfig("{ an erroneous Json to provoke error.....");
         boolean hasFailed = false;
         try {
-            executor.execute(builder.globalContext, builder.jobConfig, builder.execInfo, builder.jobExecRepo);
+            executor.execute(builder.globalContext, builder.jobConfig, builder.execInfo.getId(), builder.jobExecRepo);
         } catch (Exception e) {
             hasFailed = true;
         }

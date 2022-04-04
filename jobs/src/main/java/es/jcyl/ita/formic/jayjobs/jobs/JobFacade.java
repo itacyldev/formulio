@@ -33,6 +33,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.exec.ConcurrentJobRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.MainThreadRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener;
@@ -110,7 +111,7 @@ public class JobFacade {
         }
         runner.setListener(jobListener);
 
-        runner.execute(ctx, job, jobExecutionInfo, jobExecRepo);
+        runner.execute(ctx, job, jobExecutionInfo.getId(), jobExecRepo);
 
         return jobExecutionInfo.getId();
     }
@@ -177,7 +178,7 @@ public class JobFacade {
         JobFacade.cacheFolder = cacheFolder;
     }
 
-    public List<String> getResources(Long jobExecId) throws JobException {
+    public List<JobResource> getResources(Long jobExecId) throws JobException {
         return jobExecRepo.getResources(jobExecId);
     }
 

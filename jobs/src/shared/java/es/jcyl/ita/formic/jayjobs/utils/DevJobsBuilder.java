@@ -84,6 +84,7 @@ public class DevJobsBuilder {
                 this.jobConfig.setTaskConfig(this.taskConfig);
             }
             this.execInfo = new JobExecStatus();
+            this.execInfo.setId(RandomUtils.randomLong(0,10));
             this.execInfo.setJobId(this.jobConfig.getId());
             this.execInfo.setExecInit(new Date());
             this.execInfo.setMode(jobConfig.getExecMode());

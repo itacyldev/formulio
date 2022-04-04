@@ -34,6 +34,7 @@ public class AggregatedJobListener implements JobExecListener {
     private JobExecRepo jobExecRepo;
 
     private final List<JobExecListener> listeners;
+
     public AggregatedJobListener() {
         listeners = new ArrayList<>();
     }
@@ -48,7 +49,8 @@ public class AggregatedJobListener implements JobExecListener {
             throw new IllegalArgumentException("Listener list must not be null!");
         }
     }
-    public void addListener(JobExecListener listener){
+
+    public void addListener(JobExecListener listener) {
         listeners.add(listener);
     }
 
@@ -88,23 +90,23 @@ public class AggregatedJobListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    public void onJobStart(JobConfig job, long jobId, JobExecRepo jobExecRepo) {
         for (JobExecListener listener : listeners) {
-            listener.onJobStart(job, jobExecInfo, jobExecRepo);
+            listener.onJobStart(job, jobId, jobExecRepo);
         }
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    public void onJobEnd(JobConfig job, long jobId, JobExecRepo jobExecRepo) {
         for (JobExecListener listener : listeners) {
-            listener.onJobEnd(job, jobExecInfo,jobExecRepo);
+            listener.onJobEnd(job, jobId, jobExecRepo);
         }
     }
 
     @Override
-    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    public void onJobError(JobConfig job, long jobId, JobExecRepo jobExecRepo) {
         for (JobExecListener listener : listeners) {
-            listener.onJobError(job, jobExecInfo,jobExecRepo);
+            listener.onJobError(job, jobId, jobExecRepo);
         }
     }
 }

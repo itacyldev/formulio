@@ -73,31 +73,31 @@ public class PublishTaskResourceListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         try {
-            repo.updateState(jobExecInfo.getId(), JobExecutionState.EXECUTING, "Job Started");
+            repo.updateState(jobExecId, JobExecutionState.EXECUTING, "Job Started");
         } catch (JobException e) {
-            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
+            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + job.getId(),
                     JobExecutionState.EXECUTING), e);
         }
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    public void onJobEnd(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         try {
-            repo.updateState(jobExecInfo.getId(), JobExecutionState.FINISHED, "Job Finished");
+            repo.updateState(jobExecId, JobExecutionState.FINISHED, "Job Finished");
         } catch (JobException e) {
-            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
+            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + job.getId(),
                     JobExecutionState.FINISHED), e);
         }
     }
 
     @Override
-    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    public void onJobError(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         try {
-            repo.updateState(jobExecInfo.getId(), JobExecutionState.ERROR, "Job Error");
+            repo.updateState(jobExecId, JobExecutionState.ERROR, "Job Error");
         } catch (JobException e) {
-            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + jobExecInfo.getJobId(),
+            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + job.getId(),
                     JobExecutionState.ERROR), e);
         }
     }

@@ -31,21 +31,21 @@ public abstract class AbstractJobRunner {
         return listener;
     }
 
-    protected void notifyStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    protected void notifyStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         if (this.listener != null) {
-            this.listener.onJobStart(job, jobExecInfo, jobExecRepo);
+            this.listener.onJobStart(job, jobExecId, jobExecRepo);
         }
     }
 
-    protected void notifyEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    protected void notifyEnd(JobConfig job,  long jobExecId, JobExecRepo jobExecRepo) {
         if (this.listener != null) {
-            this.listener.onJobEnd(job, jobExecInfo, jobExecRepo);
+            this.listener.onJobEnd(job, jobExecId, jobExecRepo);
         }
     }
 
-    protected void notifyError(CompositeContext ctx, JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+    protected void notifyError(CompositeContext ctx, JobConfig job,  long jobExecId, JobExecRepo jobExecRepo) {
         if (this.listener != null) {
-            this.listener.onJobError(job, jobExecInfo, jobExecRepo);
+            this.listener.onJobError(job, jobExecId, jobExecRepo);
         }
     }
 

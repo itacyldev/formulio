@@ -34,17 +34,20 @@ public class LogJobExecListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
-        Log.info(String.format("===== JOB %s STARTED ExecId: %s =====", job.getId(), jobExecInfo.getExecInit()));
+    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        Log.info(String.format("===== JOB %s STARTED ExecId: %s =====", job.getId(), status.getExecInit()));
     }
 
     @Override
-    public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
-        Log.info(String.format("===== JOB %s END ExecId: %s =====", job.getId(), jobExecInfo.getExecInit()));
+    public void onJobEnd(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        Log.info(String.format("===== JOB %s END ExecId: %s =====", job.getId(), status.getExecInit()));
     }
 
     @Override
-    public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
-        Log.info(String.format("===== Error on job %s END ExecId: %s =====", job.getId(), jobExecInfo.getExecInit()));
+    public void onJobError(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
+        Log.info(String.format("===== Error on job %s END ExecId: %s =====", job.getId(), status.getExecInit()));
     }
 }

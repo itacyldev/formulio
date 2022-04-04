@@ -42,7 +42,7 @@ public class ConcurrentJobRunnerTest {
         DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
         builder.withTasks("tasks/basic_tasks.json").build();
 
-        runner.execute(builder.globalContext, builder.jobConfig, builder.execInfo, builder.jobExecRepo);
+        runner.execute(builder.globalContext, builder.jobConfig, builder.execInfo.getId(), builder.jobExecRepo);
 
         // if the execution goes well, there must be task contexts inserted in the global contexts
         CompositeContext gCtx = builder.globalContext;
@@ -97,17 +97,17 @@ public class ConcurrentJobRunnerTest {
         boolean finished = false;
 
         @Override
-        public void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+        public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
 
         }
 
         @Override
-        public void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+        public void onJobEnd(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
             finished = true;
         }
 
         @Override
-        public void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) {
+        public void onJobError(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
             finished = true;
         }
 

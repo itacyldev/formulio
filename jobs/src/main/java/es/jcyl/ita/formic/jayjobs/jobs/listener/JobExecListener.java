@@ -25,9 +25,9 @@ import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
  */
 public interface JobExecListener extends TaskExecListener {
 
-    void onJobStart(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo);
+    void onJobStart(JobConfig job, long jobId, JobExecRepo jobExecRepo);
 
-    void onJobEnd(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo);
+    void onJobEnd(JobConfig job, long jobId, JobExecRepo jobExecRepo);
 
-    void onJobError(JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo);
+    void onJobError(JobConfig job, long jobId, JobExecRepo jobExecRepo);
 }

@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 
 public interface JobRunner {
 
-    void execute(CompositeContext ctx, JobConfig job, JobExecStatus jobExecInfo, JobExecRepo jobExecRepo) throws JobException;
+    void execute(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) throws JobException;
 
     void setListener(JobExecListener listener);
 
