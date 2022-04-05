@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.executor.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
@@ -53,8 +53,7 @@ public class JobActaTomaMuestrasTest {
         facade.setJobConfigRepo(repo);
         // mock execution repo calls to return the dummy JobExecInfo
         JobExecRepo execRepo = mock(JobExecRepo.class);
-        when(execRepo.registerExecInit(any(CompositeContext.class),
-                any(JobConfig.class),
+        when(execRepo.registerExecInit(any(JobConfig.class),
                 any(JobExecutionMode.class))).thenReturn(builder.execInfo);
         facade.setJobExecRepo(execRepo);
 
@@ -94,8 +93,7 @@ public class JobActaTomaMuestrasTest {
         facade.setJobConfigRepo(repo);
         // mock execution repo calls to return the dummy JobExecInfo
         JobExecRepo execRepo = mock(JobExecRepo.class);
-        when(execRepo.registerExecInit(any(CompositeContext.class),
-                any(JobConfig.class),
+        when(execRepo.registerExecInit(any(JobConfig.class),
                 any(JobExecutionMode.class))).thenReturn(builder.execInfo);
         facade.setJobExecRepo(execRepo);
 
