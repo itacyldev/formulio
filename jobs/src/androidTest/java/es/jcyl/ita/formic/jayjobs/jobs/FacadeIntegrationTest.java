@@ -45,7 +45,7 @@ public class FacadeIntegrationTest {
         facade.setJobConfigRepo(repo);
         // mock execution repo calls to return the dummy JobExecInfo
         JobExecRepo execRepo = mock(JobExecRepo.class);
-        when(execRepo.registerExecInit(any(CompositeContext.class),
+        when(execRepo.registerExecInit(
                 any(JobConfig.class),
                 any(JobExecutionMode.class))).thenReturn(builder.execInfo);
         facade.setJobExecRepo(execRepo);
