@@ -39,6 +39,7 @@ import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.StorageContentManager;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
@@ -178,7 +179,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private void checkStoragePermission() {
         boolean requestStorage = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requestStorage = !Environment.isExternalStorageManager();
+            Uri treeUri = StorageContentManager.getExternalPrimaryStoragePathUri(this);
+            if (treeUri != null) {
+                currentWorkspace = FileUtils.getPath(this, treeUri);
+            } else {
+                requestStorage = true;
+            }
+
         } else {
             int result = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
             int result1 = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
@@ -219,8 +226,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-    private void warnStoragePermission(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,  es.jcyl.ita.formic.forms.R.style.DialogStyle);
+    private void warnStoragePermission() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
         builder.setMessage(R.string.specificDirectoryAccessPermission).setPositiveButton(R.string.close, new
                 DialogInterface.OnClickListener() {
                     @Override
@@ -243,7 +250,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, RQS_OPEN_DOCUMENT_TREE);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{ READ_EXTERNAL_STORAGE,
+            ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE,
                             WRITE_EXTERNAL_STORAGE, CAMERA},
                     RQS_OPEN_DOCUMENT_TREE);
         }
@@ -330,7 +337,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     dialog.show();
                 }
             }
-        }else if (requestCode == RQS_OPEN_DOCUMENT_TREE){
+        } else if (requestCode == RQS_OPEN_DOCUMENT_TREE) {
             if (grantResults.length > 0) {
                 boolean READ_EXTERNAL_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED;
@@ -359,8 +366,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             final Uri treeUri = data != null ? data.getData() : null;
             try {
                 contentResolver.takePersistableUriPermission(treeUri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 checkPermissions();
             } catch (SecurityException e) {
                 storagePermissionNotGranted();
