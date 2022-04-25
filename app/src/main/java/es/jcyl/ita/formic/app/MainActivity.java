@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,7 +182,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Uri treeUri = StorageContentManager.getExternalPrimaryStoragePathUri(this);
             if (treeUri != null) {
-                currentWorkspace = FileUtils.getPath(this, treeUri);
+                //currentWorkspace = FileUtils.getPath(this, treeUri);
             } else {
                 requestStorage = true;
             }
@@ -259,6 +260,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected void doInitConfiguration() {
 
         String projectsFolder = currentWorkspace;
+
+        try {
+            org.apache.commons.io.FileUtils.copyDirectoryToDirectory(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects"), this.getExternalFilesDir(null));
+        }catch (IOException e){
+
+        }
 
         File f = new File(projectsFolder);
         if (!f.exists()) {
