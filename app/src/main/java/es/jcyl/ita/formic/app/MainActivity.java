@@ -262,13 +262,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         String projectsFolder = currentWorkspace;
 
-        try {
-            org.apache.commons.io.FileUtils.copyDirectoryToDirectory(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects"), this.getExternalFilesDir(null));
-            //FileProvider.getUriForFile(this, this.getPackageName(),f)
-        }catch (IOException e){
-
-        }
-
         File f = new File(projectsFolder);
         if (!f.exists()) {
             f.mkdir();
