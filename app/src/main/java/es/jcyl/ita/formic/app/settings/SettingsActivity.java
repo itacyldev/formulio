@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
 
@@ -69,12 +70,12 @@ public class SettingsActivity extends BaseActivity {
 
     public String setCurrentWorkspace(String path) {
         sharedPreferences.edit().putString("current_workspace", path).apply();
-        currentWorkspace = sharedPreferences.getString("current_workspace", this.getExternalFilesDir(null) + "/projects");
+        currentWorkspace = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
         return path;
     }
 
     public String getCurrentWorkspace() {
-        currentWorkspace = sharedPreferences.getString("current_workspace", this.getExternalFilesDir(null) + "/projects");
+        currentWorkspace = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
         return currentWorkspace;
     }
 

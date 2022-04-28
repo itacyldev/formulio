@@ -19,6 +19,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,7 +96,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 prj = projectList.get(getAdapterPosition());
                 //String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
-                String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null) + "/projects");
+                String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
                 return "Task Completed.";
             }

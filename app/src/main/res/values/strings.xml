@@ -20,4 +20,6 @@
     <string name="close">Close</string>
     <string name="specificDirectoryAccessPermission">This app requires the
         permission to access the contents of a specific directory</string>
+    <string name="allFilesAccessPermission">This app requires permission to
+        manage external storage. Only the files defined in the configuration of each project within the application will be used.</string>
 </resources>

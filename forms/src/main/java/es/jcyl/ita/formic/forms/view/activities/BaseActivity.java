@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -42,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
-        currentWorkspace = sharedPreferences.getString("current_workspace", this.getExternalFilesDir(null) + "/projects");
+        currentWorkspace = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
         logLevel = sharedPreferences.getInt("log_level", Log.DEBUG);
         setTheme();
         setLogLevel();

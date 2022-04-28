@@ -15,14 +15,6 @@ package es.jcyl.ita.formic.forms.project;
  * limitations under the License.
  */
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
-import android.net.Uri;
-import android.os.Build;
-import android.provider.DocumentsContract;
-
-import androidx.documentfile.provider.DocumentFile;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -32,11 +24,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.source.EntitySource;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -128,8 +121,12 @@ public class Project extends Entity implements Serializable {
                                 folderFile.getAbsolutePath())));
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                Uri uri = Uri.parse(folderFile.toURI().getPath());
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                //Uri uri = Uri.parse(folderFile.toURI().getPath());
+                Context context = App.getInstance().getAndroidContext();
+                Uri uri = FileProvider.getUriForFile(context,
+                        context.getPackageName() + "" +
+                                ".provider", folderFile);
                 Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
                 // get document file from children uri
                 DocumentFile tree = DocumentFile.fromTreeUri(App.getInstance().getAndroidContext(), childrenUri);
@@ -148,7 +145,7 @@ public class Project extends Entity implements Serializable {
                     }
                 }
 
-            } else {
+            } */else {
                 File[] xmlFiles = folderFile.listFiles(new FilenameFilter() {
                     @Override
                     public boolean accept(File current, String name) {
