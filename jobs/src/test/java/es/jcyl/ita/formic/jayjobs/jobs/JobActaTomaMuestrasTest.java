@@ -62,6 +62,9 @@ public class JobActaTomaMuestrasTest {
         params.put("muestras", FilenameUtils.separatorsToUnix(muestras.getPath()));
 
         context.addContext(params);
+        File dbFile = new File(projectBaseFolder, String.format("%s.sqlite", "calidad"));
+
+        params.put("dbFile", dbFile.getName());
         JobConfig jobConfig = repo.get(context, "job_acta_upload_csv");
 
         RequestQueue queue = VolleyMocks.createMockRQRealNetwork();
