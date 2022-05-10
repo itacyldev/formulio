@@ -66,6 +66,7 @@ android {
     lint {
         abortOnError false
     }
+    namespace 'es.jcyl.ita.formic.forms'
 }
 
 
@@ -131,6 +132,8 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
         exclude group: 'androidx.test', module: 'runner'
     }
+
+    androidTestImplementation 'org.mockito:mockito-android:4.1.0'
 
     /////////////////////////////////////
     // JUnit test dependencies

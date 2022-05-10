@@ -33,6 +33,12 @@ public class JobExecDBRepo implements JobExecRepo {
 
     public JobExecDBRepo(CompositeContext ctx) {
         this.ctx = ctx;
+        initDB();
+    }
+
+    private void initDB() {
+
+
     }
 
     @Override

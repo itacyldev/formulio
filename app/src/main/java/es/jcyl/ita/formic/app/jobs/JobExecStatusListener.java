@@ -19,8 +19,9 @@ public class JobExecStatusListener {
 
     public static final int MSG_CODE = 1;
 
-    public JobExecStatusListener(JobProgressActivity activity, long jobExecId){
+    public JobExecStatusListener(JobProgressActivity activity, long jobExecId, JobExecRepo jobExecRepo) {
         this.jobExecId = jobExecId;
+        this.jobExecRepo = jobExecRepo;
         this.activity = activity;
     }
 
@@ -37,25 +38,27 @@ public class JobExecStatusListener {
                 JobExecStatus status;
                 do {
                     status = pollJobStatus(jobExecId);
-                    if (status.getLastTimeUpdated().after(lastPollTime)) {
-                        // Create a message in child thread.
-                        Message childThreadMessage = new Message();
-                        childThreadMessage.what = MSG_CODE;
-                        Bundle msgData = new Bundle();
-                        msgData.putString("msgTxt", status.getMessage());
-                        childThreadMessage.setData(msgData);
-                        // Put the message in main thread message queue.
-                        Handler handler = activity.getMainThreadHandler();
-                        handler.sendMessage(childThreadMessage);
-                    }
+                    if (status != null) {
+                        if (status.getLastTimeUpdated().after(lastPollTime)) {
+                            // Create a message in child thread.
+                            Message childThreadMessage = new Message();
+                            childThreadMessage.what = MSG_CODE;
+                            Bundle msgData = new Bundle();
+                            msgData.putString("msgTxt", status.getMessage());
+                            childThreadMessage.setData(msgData);
+                            // Put the message in main thread message queue.
+                            Handler handler = activity.getMainThreadHandler();
+                            handler.sendMessage(childThreadMessage);
+                        }
 
-                    try {
-                        sleep(1000);
+                        try {
+                            sleep(1000);
 
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } while (status.getState().equals(JobExecutionState.EXECUTING));
+                } while (!status.getState().equals(JobExecutionState.FINISHED) || !status.getState().equals(JobExecutionState.ERROR));
             }
         };
 

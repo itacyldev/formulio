@@ -25,7 +25,6 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 public abstract class AbstractJobRunner {
 
     JobExecListener listener;
-    JobExecRepo jobExecRepo;
 
     public JobExecListener getListener() {
         return listener;

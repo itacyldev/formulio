@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
                         Toast.LENGTH_LONG);
             }
-            Config.getInstance().setJobListener(new JobProgressListener());
+            App.getInstance().setJobListener(new JobProgressListener());
         }
         initialize();
     }

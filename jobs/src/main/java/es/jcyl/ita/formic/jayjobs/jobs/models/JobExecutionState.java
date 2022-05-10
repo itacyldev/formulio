@@ -16,6 +16,6 @@ package es.jcyl.ita.formic.jayjobs.jobs.models;
  */
 
 public enum JobExecutionState {
-	INIT, EXECUTING, FINISHED, ERROR
+    NOT_INIT, INIT, EXECUTING, FINISHED, ERROR
 
 }

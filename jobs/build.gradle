@@ -60,6 +60,7 @@ android {
             excludes += ['META-INF/INDEX.LIST']
         }
     }
+    namespace 'es.jcyl.ita.formic.jayjobs'
 }
 
 dependencies {

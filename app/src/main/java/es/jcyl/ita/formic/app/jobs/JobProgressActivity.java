@@ -26,6 +26,8 @@ import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 
 /**
  *
@@ -47,11 +49,13 @@ public class JobProgressActivity extends BaseActivity {
     protected void doOnCreate() {
         setContentView(R.layout.job_progress);
         long jobId = getIntent().getLongExtra("jobExecId", -1);
-        execStatusListener = new JobExecStatusListener(this, jobId);
+        JobExecInMemo jobExecRepo = JobExecInMemo.getInstance();
+        execStatusListener = new JobExecStatusListener(this, jobId, jobExecRepo);
 
         setToolbar(getString(R.string.action_settings));
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        textView = (TextView) findViewById(R.id.textView);
+        textView = (TextView) findViewById(R.id.progress_textView);
+
 
         execStatusListener.startActiveWaiting();
         mainThreadHandler = new JobProgressHandler();

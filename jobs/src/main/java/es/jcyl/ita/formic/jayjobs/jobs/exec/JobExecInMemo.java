@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * limitations under the License.
  */
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -36,13 +37,28 @@ import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
  */
 public class JobExecInMemo implements JobExecRepo {
 
+    private static JobExecInMemo _instance;
+
     private static final Map<Long, List<String>> resources = new HashMap<>();
     private static final Map<Long, JobExecStatus> executions = new HashMap<>();
-    private final CompositeContext ctx;
 
-    public JobExecInMemo(CompositeContext ctx) {
-        this.ctx = ctx;
+
+    private CompositeContext ctx;
+
+
+    private JobExecInMemo() {
     }
+
+    public static JobExecInMemo getInstance() {
+        if (_instance == null) {
+            _instance = new JobExecInMemo();
+        }
+        return _instance;
+    }
+
+    /*public JobExecInMemo(CompositeContext ctx) {
+        this.ctx = ctx;
+    }*/
 
     @Override
     public JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode)
@@ -56,6 +72,7 @@ public class JobExecInMemo implements JobExecRepo {
         Long execId = Long.valueOf(executions.size() + 1);
         execution.setId(execId);
         execution.setState(JobExecutionState.INIT);
+        execution.setMessage(String.format("Job %s has started!", job.getId()));
 
         executions.put(execId, execution);
         return execution;
@@ -73,7 +90,7 @@ public class JobExecInMemo implements JobExecRepo {
     }
 
     @Override
-    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException{
+    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException {
         JobExecStatus jobExec = executions.get(jobExecId);
         if (jobExec == null) {
             throw new JobException("Job execution id not found: " + jobExecId);
@@ -94,12 +111,24 @@ public class JobExecInMemo implements JobExecRepo {
 
     @Override
     public JobExecStatus getJobStatus(Long jobExecId) {
-        return executions.get(jobExecId);
+        JobExecStatus status = null;
+        if (executions.containsKey(jobExecId)) {
+            status = executions.get(jobExecId);
+        }
+        return status;
     }
 
     @Override
     public void updateJobStatus(JobExecStatus jobStatus) {
 
+    }
+
+    public CompositeContext getCtx() {
+        return ctx;
+    }
+
+    public void setCtx(CompositeContext ctx) {
+        this.ctx = ctx;
     }
 
 }
