@@ -5,10 +5,10 @@
     "job"
   ],
   "globalParams": {
-    "endpoint": "https://serviciosdes.itacyl.es/uqserv/cnt/rest/files/",
+    "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/files/",
     "apikey": "USER-MUNGARRO-UQSERV",
     "jobType": "FormicGenerarActaTomaMuestra",
-    "endpointActa": "https://serviciosdes.itacyl.es/uqserv/cnt/rest/jobs/"
+    "endpointActa": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/"
   },
   "executionMode": "FG",
   "tasks": [
