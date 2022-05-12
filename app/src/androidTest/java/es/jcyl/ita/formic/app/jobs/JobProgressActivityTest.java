@@ -97,7 +97,18 @@ public class JobProgressActivityTest {
                 .check(matches(hasDescendant(withText("message2"))));
     }
 
-    @After
+
+    @Test
+    public void testMessageJob() throws Exception {
+
+        progressListener.onMessage(null, "message2");
+
+        // check first element in view
+        onView(withId(es.jcyl.ita.formic.forms.R.id.progress_textView))
+                .check(matches(hasDescendant(withText("message2"))));
+    }
+
+        @After
     public void tearDown() {
         if (scenario != null) {
             scenario.close();
