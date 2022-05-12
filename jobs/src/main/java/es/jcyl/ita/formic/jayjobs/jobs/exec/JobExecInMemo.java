@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * limitations under the License.
  */
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -71,9 +69,9 @@ public class JobExecInMemo implements JobExecRepo {
 
         Long execId = Long.valueOf(executions.size() + 1);
         execution.setId(execId);
-        execution.setState(JobExecutionState.INIT);
-        execution.setMessage(String.format("Job %s has started!", job.getId()));
-
+        execution.setState(JobExecutionState.INITIALIZED);
+        execution.setMessage("Job has started!");
+        execution.setLastTimeUpdated(new Date());
         executions.put(execId, execution);
         return execution;
     }
@@ -114,13 +112,17 @@ public class JobExecInMemo implements JobExecRepo {
         JobExecStatus status = null;
         if (executions.containsKey(jobExecId)) {
             status = executions.get(jobExecId);
+        } else {
+            status = new JobExecStatus();
+            status.setState(JobExecutionState.NOT_INITIALIZED);
         }
         return status;
     }
 
     @Override
     public void updateJobStatus(JobExecStatus jobStatus) {
-
+        jobStatus.setLastTimeUpdated(new Date());
+        executions.put(jobStatus.getId(), jobStatus);
     }
 
     public CompositeContext getCtx() {

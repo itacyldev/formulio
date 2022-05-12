@@ -21,13 +21,12 @@ import android.os.Message;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.Date;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import util.Log;
 
 /**
  *
@@ -36,8 +35,6 @@ public class JobProgressActivity extends BaseActivity {
     private ProgressBar progressBar;
     private TextView textView;
     private static JobExecStatusListener execStatusListener;
-
-    private Date lastPollTime;
 
     private JobProgressHandler mainThreadHandler;
 
@@ -52,19 +49,18 @@ public class JobProgressActivity extends BaseActivity {
         JobExecInMemo jobExecRepo = JobExecInMemo.getInstance();
         execStatusListener = new JobExecStatusListener(this, jobId, jobExecRepo);
 
-        setToolbar(getString(R.string.action_settings));
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //setToolbar(getString(R.string.action_settings));
+        progressBar = (ProgressBar) findViewById(R.id.progressBar_cyclic);
         textView = (TextView) findViewById(R.id.progress_textView);
 
-
-        execStatusListener.startActiveWaiting();
         mainThreadHandler = new JobProgressHandler();
 
+        execStatusListener.startActiveWaiting();
     }
-
 
     public void setMessage(String end, String msg) {
         CharSequence text = textView.getText();
+        Log.debug("PLATO Activity: "+msg);
         textView.setText(text + "\n" + msg);
     }
 

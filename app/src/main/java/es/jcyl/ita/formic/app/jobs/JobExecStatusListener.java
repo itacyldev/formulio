@@ -9,6 +9,7 @@ import java.util.Date;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
+import util.Log;
 
 public class JobExecStatusListener {
     private JobProgressActivity activity;
@@ -31,16 +32,17 @@ public class JobExecStatusListener {
     }
 
     public void startActiveWaiting() {
-        lastPollTime = new Date();
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 JobExecStatus status;
                 do {
                     status = pollJobStatus(jobExecId);
-                    if (status != null) {
-                        if (status.getLastTimeUpdated().after(lastPollTime)) {
-                            // Create a message in child thread.
+
+                    if (status.getLastTimeUpdated() != null && status.getLastTimeUpdated().after(lastPollTime) || lastPollTime == null) {
+                        // Create a message in child thread.
+                        if (status.getMessage() != null) {
+                            Log.debug("PLATO Actualizando Mensaje a: " + status.getMessage());
                             Message childThreadMessage = new Message();
                             childThreadMessage.what = MSG_CODE;
                             Bundle msgData = new Bundle();
@@ -50,13 +52,15 @@ public class JobExecStatusListener {
                             Handler handler = activity.getMainThreadHandler();
                             handler.sendMessage(childThreadMessage);
                         }
+                        lastPollTime = new Date();
+                    }
 
-                        try {
-                            sleep(1000);
 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        Log.debug("PLATO Esperando...");
+                        sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 } while (!status.getState().equals(JobExecutionState.FINISHED) || !status.getState().equals(JobExecutionState.ERROR));
             }

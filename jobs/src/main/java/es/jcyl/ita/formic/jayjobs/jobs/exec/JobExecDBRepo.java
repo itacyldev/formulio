@@ -53,7 +53,7 @@ public class JobExecDBRepo implements JobExecRepo {
         // OJOOOOOO: hay que fijar en el execInfo el id de ejecución antes de devolver la instancia
         Long execId = 1l;
         execution.setId(execId);
-        execution.setState(JobExecutionState.INIT);
+        execution.setState(JobExecutionState.INITIALIZED);
         return execution;
     }
 
