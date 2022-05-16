@@ -1,0 +1,68 @@
+{
+  "description": "Job Acta Muestras",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpoint": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/files/",
+    "apikey": "USER-MUNGARRO-UQSERV",
+    "jobType": "FormicGenerarActaTomaMuestra",
+    "endpointActa": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/"
+  },
+  "executionMode": "FG",
+  "tasks": [
+    {
+      "name": "t1",
+      "processor": {
+        "inputFile": "${params.cabecera}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t2",
+      "processor": {
+        "inputFile": "${params.muestras}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t3",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "url": "${gparams.endpointActa}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&inputFile=${t1.responseHeaders['Location']}&inputFile=${t2.responseHeaders['Location']}"
+      }
+    },
+    {
+      "name": "t4",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t3.responseHeaders['Location']}?apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t5",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t4.outputJson['resources'][0]}?apikey=${gparams.apikey}",
+        "outputFile": "Acta_Toma_Muestras.docx",
+        "outputFileExtension": "docx"
+      }
+    }
+  ]
+}

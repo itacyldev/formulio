@@ -14,11 +14,13 @@ package es.jcyl.ita.formic.jayjobs.jobs;/*
  * limitations under the License.
  */
 
+import com.android.volley.RequestQueue;
+import com.android.volley.mock.VolleyMocks;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 
@@ -28,8 +30,10 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
+import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
+import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -38,8 +42,57 @@ import static org.mockito.Mockito.when;
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
-@RunWith(RobolectricTestRunner.class)
+//@RunWith(RobolectricTestRunner.class)
 public class JobActaTomaMuestrasTest {
+
+    JobFacade facade = new JobFacade();
+
+    @Test
+    public void testUploadCsv() throws Exception {
+        // read job content
+        CompositeContext context = JobContextTestUtils.createJobExecContext();
+        JobConfigRepo repo = new JobConfigRepo();
+
+        String projectBaseFolder = ContextAccessor.projectFolder(context);
+        File cabecera = new File(projectBaseFolder, String.format("%s.csv", "cabecera"));
+        File muestras = new File(projectBaseFolder, String.format("%s.csv", "muestras"));
+
+        BasicContext params = new BasicContext("params");
+        params.put("cabecera", FilenameUtils.separatorsToUnix(cabecera.getPath()));
+        params.put("muestras", FilenameUtils.separatorsToUnix(muestras.getPath()));
+
+        context.addContext(params);
+        File dbFile = new File(projectBaseFolder, String.format("%s.sqlite", "calidad"));
+
+        params.put("dbFile", dbFile.getName());
+        JobConfig jobConfig = repo.get(context, "job_acta_upload_csv");
+
+        RequestQueue queue = VolleyMocks.createMockRQRealNetwork();
+        try {
+            RQProvider.setRQ(queue);
+            facade.executeJob(context, jobConfig, JobExecutionMode.FG);
+        } finally {
+            RQProvider.clearRQ();
+        }
+    }
+
+    @Test
+    public void tesGenerarActa() throws Exception {
+        // read job content
+        CompositeContext context = JobContextTestUtils.createJobExecContext();
+        JobConfigRepo repo = new JobConfigRepo();
+
+        JobConfig jobConfig = repo.get(context, "job_generar_acta_toma_muestras");
+
+        RequestQueue queue = VolleyMocks.createMockRQRealNetwork();
+        try {
+            RQProvider.setRQ(queue);
+            facade.executeJob(context, jobConfig, JobExecutionMode.FG);
+        } finally {
+            RQProvider.clearRQ();
+        }
+    }
+
 
     @Test
     public void testJobActaCabecera() throws Exception {
@@ -107,6 +160,107 @@ public class JobActaTomaMuestrasTest {
         builder.globalContext.addContext(params);
 
         facade.executeJob(builder.globalContext, "job_acta_muestras", JobExecutionMode.FG);
+
+        // check context has been update with the task context
+        CompositeContext gCtx = builder.globalContext;
+        Assert.assertNotNull(gCtx.getContext("t1"));
+        String outputFile = gCtx.getString("t1.outputFile");
+        Assert.assertNotNull(outputFile);
+        File f = new File(outputFile);
+        Assert.assertTrue(f.exists());
+        // check the file contains expected number of lines
+        String fileContent = FileUtils.readFileToString(f, "UTF-8");
+        // it has at least one line
+        Assert.assertTrue(fileContent.split("\\n").length>1);
+
+    }
+
+    @Test
+    //@Config(sdk = {Build.VERSION_CODES.O_MR1})
+    public void testCSVActaTomaMuestras() throws Exception {
+        // create support execution objects
+        DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
+        builder.build();
+
+        // create facade and related repositories
+        JobConfigRepo repo = new JobConfigRepo();
+        facade.setJobConfigRepo(repo);
+        // mock execution repo calls to return the dummy JobExecInfo
+        JobExecRepo execRepo = mock(JobExecRepo.class);
+        when(execRepo.registerExecInit(any(JobConfig.class),
+                any(JobExecutionMode.class))).thenReturn(builder.execInfo);
+        facade.setJobExecRepo(execRepo);
+
+        BasicContext params = new BasicContext("params");
+
+        String projectBaseFolder = ContextAccessor.projectFolder(builder.globalContext);
+        File dbFile = new File(projectBaseFolder, String.format("%s.sqlite", "tierravino"));
+
+        params.put("dbFile", dbFile.getName());
+        params.put("expediente_id", 1);
+        builder.globalContext.addContext(params);
+
+        // read job content
+        //CompositeContext context = JobContextTestUtils.createJobExecContext();
+        JobConfig jobConfig = repo.get(builder.globalContext, "job_acta_toma_muestras_prueba");
+
+        RequestQueue queue = VolleyMocks.createMockRQRealNetwork();
+        try {
+            RQProvider.setRQ(queue);
+            facade.executeJob(builder.globalContext, jobConfig, JobExecutionMode.FG);
+        } finally {
+            RQProvider.clearRQ();
+        }
+
+        //facade.executeJob(builder.globalContext, "job_acta_toma_muestras_prueba", JobExecutionMode.FG);
+
+        // check context has been update with the task context
+        CompositeContext gCtx = builder.globalContext;
+        Assert.assertNotNull(gCtx.getContext("t1"));
+        String outputFile = gCtx.getString("t1.outputFile");
+        Assert.assertNotNull(outputFile);
+        File f = new File(outputFile);
+        Assert.assertTrue(f.exists());
+        // check the file contains expected number of lines
+        String fileContent = FileUtils.readFileToString(f, "UTF-8");
+        // it has at least one line
+        Assert.assertTrue(fileContent.split("\\n").length>1);
+
+    }
+
+    @Test
+    //@Config(sdk = {Build.VERSION_CODES.O_MR1})
+    public void testJobActaTomaMuestras() throws Exception {
+
+    //    3551 3564
+        // create support execution objects
+        DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
+        builder.build();
+
+        // create facade and related repositories
+        JobConfigRepo repo = new JobConfigRepo();
+        facade.setJobConfigRepo(repo);
+        // mock execution repo calls to return the dummy JobExecInfo
+        JobExecRepo execRepo = mock(JobExecRepo.class);
+        when(execRepo.registerExecInit(any(JobConfig.class),
+                any(JobExecutionMode.class))).thenReturn(builder.execInfo);
+        facade.setJobExecRepo(execRepo);
+
+
+
+        // read job content
+        //CompositeContext context = JobContextTestUtils.createJobExecContext();
+        JobConfig jobConfig = repo.get(builder.globalContext, "job_acta_toma_muestras_prueba2");
+
+        RequestQueue queue = VolleyMocks.createMockRQRealNetwork();
+        try {
+            RQProvider.setRQ(queue);
+            facade.executeJob(builder.globalContext, jobConfig, JobExecutionMode.FG);
+        } finally {
+            RQProvider.clearRQ();
+        }
+
+        //facade.executeJob(builder.globalContext, "job_acta_toma_muestras_prueba", JobExecutionMode.FG);
 
         // check context has been update with the task context
         CompositeContext gCtx = builder.globalContext;

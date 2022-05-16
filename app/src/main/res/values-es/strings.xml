@@ -18,4 +18,9 @@
     <string name="action_delete_error">Ocurrió un error al intentar eliminar la entidad. Compruebe la consola de desarrollador.</string>
     <string name="loading">Cargando...</string>
     <string name="not_found">Valor no encontrado</string>
+    <string name="close">Cerrar</string>
+    <string name="specificDirectoryAccessPermission">Esta aplicación requiere el
+        permiso para el acceso al contenido de un directorio específico</string>
+    <string name="allFilesAccessPermission">Esta aplicación requiere el
+        permiso para gestionar el almacenamiento externo. Sólo se utilizarán los ficheros definidos en la configuración de cada proyecto dentro de la aplicación</string>
 </resources>
