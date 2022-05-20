@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,7 +28,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.jobs.JobProgressListener;
+import es.jcyl.ita.formic.app.projectimport.ImporterUtils;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
@@ -61,6 +62,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private static final int PERMISSION_REQUEST = 1234;
     private static final int RQS_OPEN_DOCUMENT_TREE = 2;
     private static final int PERMISSION_STORAGE_REQUEST = 5708463;
+    private static final int PROJECT_IMPORT_FILE_SELECT = 725353137;
+
+    private static final String PROJECT_IMPORT_EXTENSION = "FRMD";
 
     @Override
     protected void doOnCreate() {
@@ -111,6 +115,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
+        if (id == R.id.action_import_project) {
+            importProject();
+            return true;
+        }
+
         if (id == R.id.action_dark_theme) {
             switchTheme();
             return true;
@@ -142,6 +151,28 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected final void showSettings() {
         final Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    protected final void importProject() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        final String mime_type = MimeTypeMap.getSingleton().hasExtension("frmd")?
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension("frmd") :
+                "*/*";
+        intent.setType(mime_type);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+
+            startActivityForResult(
+                    Intent.createChooser(intent,
+                            getString(R.string.file_to_load)),
+                    PROJECT_IMPORT_FILE_SELECT);
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this,
+                    getString(R.string.error_filemanager),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initialize() {
@@ -359,15 +390,49 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PERMISSION_STORAGE_REQUEST) {
-            if (!Environment.isExternalStorageManager()) {
-                storagePermissionNotGranted();
-                currentWorkspace = FileUtils.getPath(this, data.getData());
-            } else {
-                checkPermissions();
-            }
+        switch (requestCode) {
+            case PERMISSION_STORAGE_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    if (!Environment.isExternalStorageManager()) {
+                        storagePermissionNotGranted();
+                        currentWorkspace = FileUtils.getPath(this, data.getData());
+                    } else {
+                        checkPermissions();
+                    }
+                    break;
+                }
+            case PROJECT_IMPORT_FILE_SELECT:
+                if (resultCode == RESULT_OK) {
+                    final Uri uri = data.getData();
+                    if (uri != null) {
+                        final String path = FileUtils.getPath(this, uri);
+                        if (path != null) {
+                            final File file = new File(path);
+                            final String extension = FileUtils
+                                    .getFileExtension(file);
+
+                            if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
+                                Uri fileUri = Uri.fromFile(file);
+
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                                String destination = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+
+                                ImporterUtils.importProjectFile(fileUri,
+                                        destination, this);
+                            } else {
+                                Toast.makeText(
+                                        this,
+                                        getString(R.string.error_fileload_extension)
+                                                + " " + PROJECT_IMPORT_EXTENSION,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    break;
+                }
         }
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override

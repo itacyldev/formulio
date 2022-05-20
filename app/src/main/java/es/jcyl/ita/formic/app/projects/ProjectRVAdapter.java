@@ -15,25 +15,32 @@ package es.jcyl.ita.formic.app.projects;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.MainActivity;
+import es.jcyl.ita.formic.app.projectimport.ImporterUtils;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -53,6 +60,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView project_nameTextView;
         private final TextView project_descriptionTextView;
+        private final ImageButton buttonViewOption;
         int count = 1;
 
         public ViewHolder(View itemView) {
@@ -70,6 +78,8 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             project_nameTextView = (TextView) itemView.findViewById(R.id.projectName);
             project_descriptionTextView = (TextView) itemView.findViewById(R.id.projectDescription);
 
+            buttonViewOption = itemView.findViewById(R.id.item_project_options);
+
         }
 
         public TextView getProject_nameTextView() {
@@ -78,6 +88,10 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
 
         public TextView getProject_descriptionTextView() {
             return project_descriptionTextView;
+        }
+
+        public ImageButton getButtonViewOption() {
+            return buttonViewOption;
         }
 
         class MyTask extends AsyncTask<Integer, Integer, String> {
@@ -136,8 +150,9 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
         }
     }
 
-    public ProjectRVAdapter(List<Project> project_list) {
+    public ProjectRVAdapter(List<Project> project_list, Context ctx) {
         projectList = project_list;
+        context = ctx;
     }
 
     @Override
@@ -152,11 +167,70 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
         Project project = projectList.get(position);
         viewHolder.getProject_nameTextView().setText(project.getName());
         viewHolder.getProject_descriptionTextView().setText(project.getDescription());
+
+        viewHolder.getButtonViewOption().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //creating a popup menu
+                ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.ActionBarPopupStyle);
+                PopupMenu popup = new PopupMenu(ctw, viewHolder.buttonViewOption);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.menu_project_item);
+
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        ZipTask task = new ZipTask();
+                        task.execute((String)viewHolder.getProject_nameTextView().getText());
+
+                        return false;
+                    }
+                });
+                //displaying the popup
+                popup.show();
+
+
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return projectList.size();
+    }
+
+    private class ZipTask extends AsyncTask<String, String, String> {
+        AlertDialog dialog;
+
+        protected String doInBackground(final String... params) {
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+
+            ImporterUtils.zipFolder(new File(projectsFolder), params[0]);
+            return "";
+        }
+
+        @SuppressLint("NewApi")
+        @Override
+        protected void onPostExecute(final String success) {
+            dialog.dismiss(); // to hide this dialog
+            if (success.isEmpty()) {
+                UserMessagesHelper.toast(context, "Export successful!", Toast.LENGTH_SHORT);
+            } else {
+                UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
+            }
+        }
+        @Override
+        protected void onPreExecute() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+            builder.setCancelable(false); // if you want user to wait for some process to finish,
+            builder.setView(R.layout.layout_loading_dialog);
+            dialog = builder.create();
+            dialog.show(); // to show this dialog
+
+        }
     }
 
 }

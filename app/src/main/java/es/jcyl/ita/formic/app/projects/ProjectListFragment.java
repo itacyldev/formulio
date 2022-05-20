@@ -71,7 +71,7 @@ public class ProjectListFragment extends Fragment {
         ArrayList<Project> projects = (arguments != null) ?
                 (ArrayList<Project>) arguments.getSerializable(PROJECT_LIST)
                 : new ArrayList<>();
-        ProjectRVAdapter mAdapter = new ProjectRVAdapter(projects);
+        ProjectRVAdapter mAdapter = new ProjectRVAdapter(projects, rootView.getContext());
         mReciclerView.setAdapter(mAdapter);
 
         if (projects.isEmpty()) {
