@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,10 +24,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +37,9 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.util.FileUtils;
+import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
 /**
  * Created by ita-ramvalja on 02/02/2018.
@@ -54,6 +58,22 @@ public class ImporterUtils {
     private static final String DATA_FILE_EXT = ".sqlite";
 
     private static final Pattern projectNamePattern = Pattern.compile("^([a-zA-Z0-9]*)(-\\d*)?$");
+
+    protected static final DateFormat timeStamper = new SimpleDateFormat("yyyyMMdd_HHmmss");
+
+    public enum Extensions {
+        XML("xml"), SQLITE("sqlite"), JS("js");
+
+        String extension;
+
+        Extensions(String extension) {
+            this.extension = extension;
+        }
+
+        public String getExtension() {
+            return extension;
+        }
+    }
 
     // Comprueba la estructura carpetas y si contiene fichero de
     // conf de proyecto
@@ -147,7 +167,8 @@ public class ImporterUtils {
                             name = nameSplit[nameSplit.length - 1];
                         }
 
-                        if (FileUtils.fileExists(newFileName)) {
+
+                        if (FileUtils.fileExists(newFileName) && EnumUtils.isValidEnum(Extensions.class, FileUtils.getFileExtension(new File(newFileName)).toUpperCase())) {
                             existingFiles.put(name, newFileName);
                         }
                     }
@@ -182,8 +203,7 @@ public class ImporterUtils {
                                 destination, projectName, backUpFiles);
                     } else {
                         if (backUpFiles) {
-                            moveFiles2BackUp(context, destination, projectName, new ArrayList<>(existingFiles
-                                    .values()));
+                            moveFiles2BackUp(context, projectName);
                         }
                         extractFiles(context, pathStr, destination, projectName);
                     }
@@ -253,8 +273,7 @@ public class ImporterUtils {
                                     final DialogInterface dialog,
                                     final int id) {
                                 if (backupFiles) {
-                                    moveFiles2BackUp(context, destination, projectName, new ArrayList<>(files
-                                            .values()));
+                                    moveFiles2BackUp(context, projectName);
                                 }
                                 extractFiles(context, path, destination, projectName);
                                 dialog.dismiss();
@@ -320,6 +339,8 @@ public class ImporterUtils {
             LOGGER.info("Ficheros extraidos");
 
             launchActivity(context, projectName);
+            /*((MainActivity)context).loadFragment(ProjectListFragment.newInstance(
+                    App.getInstance().getProjectRepo()));*/
 
         } catch (Exception e) {
             LOGGER.error("Error al extraer los ficheros", e);
@@ -346,16 +367,15 @@ public class ImporterUtils {
     }
 
 
-    private static void moveFiles2BackUp(Context context, String destination, String projectName, List<String> files) {
-        try {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String dest = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + DIR_BAK + File.separator + projectName);
-            String origin = destination + File.separator + projectName;
-            FileUtils.copyDirectory(context, origin, dest);
-        } catch (IOException e) {
-            LOGGER.error("Error al copiar el proyecto " + projectName + " a la " +
-                    "carpeta temporal", e);
-        }
+    private static void moveFiles2BackUp(Context context, String projectName) {
+        String dest = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
+        new File(dest).mkdirs();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+
+       ImporterUtils.zipFolder(new File(projectsFolder), projectName, new File(dest));
+
     }
 
     private static void setSharedPreferences(Context context, String
@@ -372,8 +392,8 @@ public class ImporterUtils {
      * @param toZipFolder Folder to be zipped
      * @return the resulting ZipFile
      */
-    public static File zipFolder(File toZipFolder, String projectName) {
-        File ZipFile = new File(toZipFolder, String.format("%s.frmd", projectName));
+    public static File zipFolder(File toZipFolder, String projectName, File dest) {
+        File ZipFile = new File(dest!=null?dest:toZipFolder, String.format("%s_%s.%s", projectName, timeStamper.format(new Date()), "frmd"));
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(ZipFile));
             zipSubFolder(out,  new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length());

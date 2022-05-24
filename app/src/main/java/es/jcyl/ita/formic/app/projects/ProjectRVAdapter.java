@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.app.projects;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -32,9 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,8 +211,20 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
 
-            ImporterUtils.zipFolder(new File(projectsFolder), params[0]);
+            File file = ImporterUtils.zipFolder(new File(projectsFolder), params[0], null);
+            shareFile(file);
+
             return "";
+        }
+
+        private void shareFile(File file) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType(URLConnection.guessContentTypeFromName(file.getName()));
+            shareIntent.putExtra(Intent.EXTRA_STREAM,
+                    FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file));
+            shareIntent.setType("text/csv");
+
+            context.startActivity(Intent.createChooser(shareIntent, "Share File"));
         }
 
         @SuppressLint("NewApi")
