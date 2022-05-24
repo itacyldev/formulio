@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -27,7 +28,9 @@ import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
@@ -35,7 +38,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 public class JobProgressActivityTest {
 
     ActivityScenario scenario;
-
+    JobConfig jobConfig;
     JobProgressListener progressListener;
 
     static Intent intent;
@@ -64,50 +67,37 @@ public class JobProgressActivityTest {
 
         TestUtils.copyResourceToFolder(String.format("jobs/%s.json", "basic_job_repoTests"), jobDir);
 
-        JobConfig jobConfig = repo.get(ctx, "basic_job_repoTests");
+        jobConfig = repo.get(ctx, "basic_job_repoTests");
+
+        scenario = rule.getScenario();
 
         progressListener = new JobProgressListener(false);
         progressListener.onJobStart(jobConfig, 1, jobExecRepo);
 
-        scenario = rule.getScenario();
-        scenario.moveToState(Lifecycle.State.STARTED);
+
+        //scenario.moveToState(Lifecycle.State.STARTED);
     }
 
     @Test
-    public void testStartJob() throws Exception {
+    public void testJobMessages() throws Exception {
+        Thread.sleep(500);
 
-        // TextView
-        onView(withId(R.id.progress_textView)).check(matches(withText("Job has started!")));
-        //textView.check(matches(withText("Job has started!")));
+        ViewInteraction view = onView(withId(R.id.progressLayout));
+        view.check(matches(hasDescendant(withText("Job basic_job_repoTests has started!"))));
 
-//        onView(withId(es.jcyl.ita.formic.forms.R.id.progress_textView))
-//                .check(matches(hasDescendant(withText("Job has started!"))));
 
-        //progressListener.onMessage(null, "message1");
+        progressListener.onMessage(null, "message1");
+        Thread.sleep(500);
+        view.check(matches(hasDescendant(withText("message1"))));
 
-        // check first element in view
-        //onView(withId(es.jcyl.ita.formic.forms.R.id.progress_textView))
-        //textView.check(matches(withText("message1")));
+        progressListener.onJobEnd(jobConfig, 1, JobExecInMemo.getInstance());
+        Thread.sleep(500);
+        view.check(matches(hasDescendant(withText("Job basic_job_repoTests has finished!"))));
 
-        //progressListener.onMessage(null, "message2");
-
-        // check first element in view
-        //onView(withId(es.jcyl.ita.formic.forms.R.id.progress_textView))
-        //textView.check(matches(withText("message2")));
     }
 
 
-    @Test
-    public void testMessageJob() throws Exception {
-
-        progressListener.onMessage(null, "message2");
-
-        // check first element in view
-        onView(withId(es.jcyl.ita.formic.forms.R.id.progress_textView))
-                .check(matches(hasDescendant(withText("message2"))));
-    }
-
-        @After
+    @After
     public void tearDown() {
         if (scenario != null) {
             scenario.close();
