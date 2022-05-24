@@ -18,8 +18,11 @@ package es.jcyl.ita.formic.app.jobs;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -59,9 +62,11 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     public void setMessage(String end, String msg) {
-        CharSequence text = textView.getText();
-        Log.debug("PLATO Activity: "+msg);
-        textView.setText(text + "\n" + msg);
+        LinearLayout layout = findViewById(R.id.progressLayout);
+        TextView view = new TextView(this);
+        view.setId((int)System.currentTimeMillis());
+        view.setText(msg);
+        layout.addView(view);
     }
 
     public void setResources(List<String> resources) {

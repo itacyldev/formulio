@@ -42,7 +42,7 @@ public class JobExecStatusListener {
                     if (status.getLastTimeUpdated() != null && status.getLastTimeUpdated().after(lastPollTime) || lastPollTime == null) {
                         // Create a message in child thread.
                         if (status.getMessage() != null) {
-                            Log.debug("PLATO Actualizando Mensaje a: " + status.getMessage());
+                            Log.debug("Actualizando Mensaje a: " + status.getMessage());
                             Message childThreadMessage = new Message();
                             childThreadMessage.what = MSG_CODE;
                             Bundle msgData = new Bundle();
@@ -57,7 +57,7 @@ public class JobExecStatusListener {
 
 
                     try {
-                        Log.debug("PLATO Esperando...");
+                        Log.debug("Esperando...");
                         sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();

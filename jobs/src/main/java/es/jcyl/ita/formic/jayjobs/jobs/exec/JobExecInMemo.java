@@ -70,7 +70,7 @@ public class JobExecInMemo implements JobExecRepo {
         Long execId = Long.valueOf(executions.size() + 1);
         execution.setId(execId);
         execution.setState(JobExecutionState.INITIALIZED);
-        execution.setMessage("Job has started!");
+        execution.setMessage(String.format("Job %s has started!", job.getId()));
         execution.setLastTimeUpdated(new Date());
         executions.put(execId, execution);
         return execution;
