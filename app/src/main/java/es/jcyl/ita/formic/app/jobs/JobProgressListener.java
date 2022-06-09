@@ -19,13 +19,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.aware.DiscoverySession;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
@@ -33,6 +28,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;

@@ -218,16 +218,28 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         }
     }
 
-    private RawRequest createRequest(RequestFuture future) {
+    private RawRequest createRequest(RequestFuture future) throws TaskException {
         byte[] content = null;
-        if (body != null) {
-            content = body.getBytes(this.charset);
+        if(inputFile != null){
+            try{
+                content = FileUtils.readFileToByteArray(new File(inputFile));
+            } catch (IOException e) {
+                throw new TaskException("There was an error while trying to read inputfile: ", e);
+            }
+        } else {
+            if (body != null) {
+                content = body.getBytes(this.charset);
+            }
         }
         if (headers == null) {
             headers = new HashMap<>();
         }
+        if (params == null) {
+            params = new HashMap<>();
+        }
         if (headers.containsKey("contentType") && StringUtils.isNotBlank(contentType)) {
             headers.put("contentType", contentType);
+            //headers.put("Content-Type", "multipart/form-data");
         }
         HttpEntity entity = new HttpEntity(content, this.headers);
         entity.setParams(this.params);

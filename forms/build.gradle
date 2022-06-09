@@ -105,6 +105,7 @@ dependencies {
     api "commons-validator:commons-validator:1.6"
     api 'org.mozilla:rhino:1.7.12'
     api 'org.jgrapht:jgrapht-core:1.1.0'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
 
 
     // rxAndroid

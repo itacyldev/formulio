@@ -7,12 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -22,6 +27,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +44,14 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.forms.util.FileUtils;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
@@ -49,12 +59,15 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected SharedPreferences settings;
 
     private static final int PERMISSION_REQUEST = 1234;
+    private static final int RQS_OPEN_DOCUMENT_TREE = 2;
+    private static final int PERMISSION_STORAGE_REQUEST = 5708463;
 
     @Override
     protected void doOnCreate() {
         getApplication().getFilesDir();
         setContentView(R.layout.activity_main);
-        checkPermissions();
+        //checkPermissions();
+        checkStoragePermission();
         checkDeviceFeatures();
     }
 
@@ -163,6 +176,26 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 UserAction.navigate(form.getId()));
     }
 
+    private void checkStoragePermission() {
+
+        boolean requestStorage = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requestStorage = !Environment.isExternalStorageManager();
+        } else {
+            int result = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
+            int result1 = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
+            int result2 = ContextCompat.checkSelfPermission(this, CAMERA);
+            requestStorage =
+                    !(result == PackageManager.PERMISSION_GRANTED || result1 == PackageManager.PERMISSION_GRANTED || result2 == PackageManager.PERMISSION_GRANTED);
+        }
+
+        if (requestStorage) {
+            warnStoragePermission();
+        } else {
+            checkPermissions();
+        }
+    }
+
     protected void checkPermissions() {
         List<String> permsList = new ArrayList<>();
 
@@ -184,6 +217,44 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
             doInitConfiguration();
+        }
+    }
+
+    private void warnStoragePermission() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+        builder.setMessage(R.string.allFilesAccessPermission).setPositiveButton(R.string.close, new
+                DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                requestStoragePermission();
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void requestStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.addCategory("android.intent.category.DEFAULT");
+                intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                startActivityForResult(intent, PERMISSION_STORAGE_REQUEST);
+            } catch (Exception e) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivityForResult(intent, PERMISSION_STORAGE_REQUEST);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{ READ_EXTERNAL_STORAGE,
+                            WRITE_EXTERNAL_STORAGE, CAMERA},
+                    PERMISSION_STORAGE_REQUEST);
         }
     }
 
@@ -240,7 +311,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST){
+        if (requestCode == PERMISSION_REQUEST) {
             if (grantResults.length > 0) {
                 boolean allAcepted = true;
                 for (int result : grantResults) {
@@ -258,15 +329,43 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     builder.setMessage(R.string.mustacceptallpermits)
                             .setPositiveButton(R.string.accept, new
                                     DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                    finish();
-                                }
-                            });
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+                                            finish();
+                                        }
+                                    });
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
+            }
+        } else if (requestCode == PERMISSION_STORAGE_REQUEST) {
+            if (grantResults.length > 0) {
+                boolean READ_EXTERNAL_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                if (READ_EXTERNAL_STORAGE && WRITE_EXTERNAL_STORAGE) {
+                    checkPermissions();
+                } else {
+                    storagePermissionNotGranted();
+                }
+            }
+        }
+    }
+
+    private void storagePermissionNotGranted() {
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PERMISSION_STORAGE_REQUEST) {
+            if (!Environment.isExternalStorageManager()) {
+                storagePermissionNotGranted();
+                currentWorkspace = FileUtils.getPath(this, data.getData());
+            } else {
+                checkPermissions();
             }
         }
     }

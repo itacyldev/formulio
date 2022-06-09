@@ -20,6 +20,9 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,10 +31,17 @@ import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+
 public class RawRequest extends Request<HttpEntity> {
 
     private final Response.Listener listener;
     private HttpEntity entity;
+
+    //private String boundary = "apiclient-" + System.currentTimeMillis();
+
+    private final String twoHyphens = "--";
+    private final String lineEnd = "\r\n";
+    private final String boundary = "apiclient-" + System.currentTimeMillis();
 
     public RawRequest(int method, String url, HttpEntity entity, Response.Listener listener,
                       Response.ErrorListener errorListener) {
@@ -43,12 +53,42 @@ public class RawRequest extends Request<HttpEntity> {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> entityHeaders = entity.getHeaders();
+        if (entityHeaders.containsKey("Content-Type") && ((String)entityHeaders.get("Content-Type")).contains("multipart")) {
+            entityHeaders.put("Content-Type", "multipart/form-data; boundary=" + boundary);
+        }
         return entityHeaders != null ? entityHeaders : super.getHeaders();
-    }
+            }
 
     @Override
     public byte[] getBody() throws AuthFailureError {
-        return this.entity.getContent();
+        byte[] body = this.entity.getContent();
+        if (getHeaders().containsKey("Content-Type") && ((String)getHeaders().get("Content-Type")).contains("multipart")){
+            try {
+               this.entity.setContentType("multipart/form-data; boundary=");
+                body = createFileContent(this.entity.getContent(), boundary, getBodyContentType(), "filename.csv");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            body = this.entity.getContent();
+        }
+        return body;
+    }
+
+    private byte[] createFileContent(byte[] data, String boundary, String contentType, String fileName) throws IOException {
+        String start = //"Content-Type: "+ contentType + "\"--"+  boundary + "\"\r\n\r\n"+
+                "--"+  boundary + "\r\n"+
+                        "Content-Type: application/octet-stream; name="+fileName + "\r\n"+
+                        "Content-Transfer-Encoding: binary"+"\r\n"+
+                        "Content-Disposition: form-data; name=\"contentFile\"; filename=\"" + fileName + "\"\r\n\r\n";
+
+        String end = "\r\n--" + boundary + "--";
+
+
+        byte[] bytesFileContent = ArrayUtils.addAll(start.getBytes(), ArrayUtils.addAll(data, end.getBytes()));
+
+        //FileUtils.writeByteArrayToFile(new File("C:\\Desarrollo\\workspaces\\wks-and\\FRMDRD\\jobs\\build\\intermediates\\java_res\\debugUnitTest\\out\\prueba2.txt"), bytesFileContent);
+        return bytesFileContent;
     }
 
     @Override

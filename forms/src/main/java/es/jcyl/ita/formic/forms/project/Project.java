@@ -112,6 +112,7 @@ public class Project extends Entity implements Serializable {
 
         ProjectResource.ResourceType type;
         for (String folder : CONFIG_FOLDERS) {
+
             File folderFile = new File(getBaseFolder() + "/" + folder);
             type = getFromFolderName(folder);
             if (!folderFile.exists() || !folderFile.isDirectory()) {
@@ -119,29 +120,60 @@ public class Project extends Entity implements Serializable {
                         error(String.format("Can't find config folder %s, did you delete it?",
                                 folderFile.getAbsolutePath())));
             }
-            File[] xmlFiles = folderFile.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File current, String name) {
-                    return name.endsWith(".xml");
-                }
-            });
-            if (ArrayUtils.isNotEmpty(xmlFiles)) {
-                for (File confFile : xmlFiles) {
-                    if (type == null) {
-                        type = getTypeFromFilename(confFile.getName());
+
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                //Uri uri = Uri.parse(folderFile.toURI().getPath());
+                Context context = App.getInstance().getAndroidContext();
+                Uri uri = FileProvider.getUriForFile(context,
+                        context.getPackageName() + "" +
+                                ".provider", folderFile);
+                Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
+                // get document file from children uri
+                DocumentFile tree = DocumentFile.fromTreeUri(App.getInstance().getAndroidContext(), childrenUri);
+                DocumentFile[] treeFiles = tree.listFiles();
+                for (DocumentFile confFile : treeFiles) {
+                    if (!confFile.isDirectory() && confFile.getName().endsWith(".xml")) {
+                        if (type == null) {
+                            type = getTypeFromFilename(confFile.getName());
+                        }
+                        if (type == null) {
+                            DevConsole.warn("Unknown file name while reading configuration, " +
+                                    "skipped! : " + confFile.getUri().getPath());
+                        } else {
+                            //files.add(new ProjectResource(this, confFile, type));
+                        }
                     }
-                    if (type == null) {
-                        DevConsole.warn("Unknown file name while reading configuration, " +
-                                "skipped! : " + confFile.getAbsolutePath());
-                    } else {
-                        files.add(new ProjectResource(this, confFile, type));
-                    }
                 }
-            } else {
-                throw new ProjectException(
-                        error(String.format("Project '%s' has no files inside the folder '%s'. " +
-                                "Did you delete them?.\n Full path:\n%s", this.getId(), folder, getBaseFolder())));
+
+            } */else {
+                File[] xmlFiles = folderFile.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File current, String name) {
+                        return name.endsWith(".xml");
+                    }
+                });
+
+
+                if (ArrayUtils.isNotEmpty(xmlFiles)) {
+                    for (File confFile : xmlFiles) {
+                        if (type == null) {
+                            type = getTypeFromFilename(confFile.getName());
+                        }
+                        if (type == null) {
+                            DevConsole.warn("Unknown file name while reading configuration, " +
+                                    "skipped! : " + confFile.getAbsolutePath());
+                        } else {
+                            files.add(new ProjectResource(this, confFile, type));
+                        }
+                    }
+                } else {
+                    throw new ProjectException(
+                            error(String.format("Project '%s' has no files inside the folder '%s'. " +
+                                    "Did you delete them?.\n Full path:\n%s", this.getId(), folder, getBaseFolder())));
+                }
             }
+
+
         }
         return files;
     }
