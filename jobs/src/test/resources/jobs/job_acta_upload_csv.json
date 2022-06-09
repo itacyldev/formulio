@@ -41,17 +41,22 @@
     {
       "name": "t3",
       "processor": {
+        "inputFile": "${params.firmas}",
         "type": "httpRequestProcessor",
         "method": "post",
-        "url": "${gparams.endpointActa}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&inputFile=${t1.responseHeaders['Location']}&inputFile=${t2.responseHeaders['Location']}"
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}"
       }
     },
     {
       "name": "t4",
       "processor": {
         "type": "httpRequestProcessor",
-        "method": "get",
-        "url": "${t3.responseHeaders['Location']}?apikey=${gparams.apikey}"
+        "method": "post",
+        "url": "${gparams.endpointActa}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&inputFile=${t1.responseHeaders['Location']}&inputFile=${t2.responseHeaders['Location']}&inputFile=${t3.responseHeaders['Location']}"
       }
     },
     {
@@ -59,7 +64,15 @@
       "processor": {
         "type": "httpRequestProcessor",
         "method": "get",
-        "url": "${t4.outputJson['resources'][0]}?apikey=${gparams.apikey}",
+        "url": "${t4.responseHeaders['Location']}?apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t6",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t5.outputJson['resources'][0]}?apikey=${gparams.apikey}",
         "outputFile": "Acta_Toma_Muestras.docx",
         "outputFileExtension": "docx"
       }
