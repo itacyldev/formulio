@@ -122,4 +122,44 @@ public class JobCSVTomaMuestrasTest {
 
     }
 
+    @Test
+    public void testJobActaFirmas() throws Exception {
+        // create support execution objects
+        DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
+        builder.build();
+
+        // create facade and related repositories
+        JobConfigRepo repo = new JobConfigRepo();
+        facade.setJobConfigRepo(repo);
+        // mock execution repo calls to return the dummy JobExecInfo
+        JobExecRepo execRepo = mock(JobExecRepo.class);
+        when(execRepo.registerExecInit(any(JobConfig.class),
+                any(JobExecutionMode.class))).thenReturn(builder.execInfo);
+        facade.setJobExecRepo(execRepo);
+
+        BasicContext params = new BasicContext("params");
+
+        String projectBaseFolder = ContextAccessor.projectFolder(builder.globalContext);
+        File dbFile = new File(projectBaseFolder, String.format("%s.sqlite", "tierravino"));
+
+        params.put("dbFile", dbFile.getName());
+        params.put("expediente_id", 1);
+        builder.globalContext.addContext(params);
+
+        facade.executeJob(builder.globalContext, "job_acta_firmas", JobExecutionMode.FG);
+
+        // check context has been update with the task context
+        CompositeContext gCtx = builder.globalContext;
+        Assert.assertNotNull(gCtx.getContext("t1"));
+        String outputFile = gCtx.getString("t1.outputFile");
+        Assert.assertNotNull(outputFile);
+        File f = new File(outputFile);
+        Assert.assertTrue(f.exists());
+        // check the file contains expected number of lines
+        String fileContent = FileUtils.readFileToString(f, "UTF-8");
+        // it has at least one line
+        Assert.assertTrue(fileContent.split("\\n").length>1);
+
+    }
+
 }
