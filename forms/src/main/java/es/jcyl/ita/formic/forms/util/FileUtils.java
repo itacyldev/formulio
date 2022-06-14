@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -9,6 +10,13 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 
 public class FileUtils {
@@ -107,5 +115,163 @@ public class FileUtils {
         }
         return null;
     }
+
+    /**
+     * Devuelve la extensi�n de un fichero.
+     *
+     * @param file
+     * @return
+     */
+    public static String getFileExtension(final File file) {
+        String output = null;
+
+        if (file == null) {
+            return output;
+        }
+
+        final int i = file.getName().lastIndexOf('.');
+        if (i > 0) {
+            output = file.getName().substring(i + 1);
+        }
+
+        return output;
+    }
+
+    /**
+     * Comprueba si existe un fichero.
+     *
+     * @param url
+     * @return
+     */
+    public static boolean fileExists(final String url) {
+        boolean output = true;
+
+        if (url == null) {
+            return output;
+        }
+
+
+        final File file = new File(url);
+        if (!file.exists()) {
+            output = false;
+        }
+        return output;
+    }
+
+    /**
+     * Copia un archivo de origen en otro de destino.
+     *
+     * @param context
+     * @param source
+     * @param target
+     * @throws IOException
+     */
+    public static void copyFile(Context context, File source, File target) throws IOException {
+        if (source == null || target == null) {
+            return;
+        }
+
+        if (!target.exists()) {
+            target.createNewFile();
+        }
+
+        FileChannel sourceChannel = null;
+        FileChannel targetChannel = null;
+
+        try {
+            sourceChannel = new FileInputStream(source).getChannel();
+            targetChannel = new FileOutputStream(target).getChannel();
+            targetChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+
+            refreshFilesystem(context, target);
+        } finally {
+            if (sourceChannel != null) {
+                sourceChannel.close();
+            }
+            if (targetChannel != null) {
+                targetChannel.close();
+            }
+        }
+    }
+
+    /**
+     * Refresca un archivo en el sistema de archivos.
+     *
+     * @param context
+     * @param file
+     */
+    public static void refreshFilesystem(final Context context, final File file) {
+        if (context != null && file != null) {
+            Uri contentUri;
+            if (Build.VERSION.SDK_INT >= 24) {
+                contentUri = FileProvider.getUriForFile(context,
+                        context.getPackageName() + "" +
+                                ".provider", file);
+            } else {
+                contentUri = Uri.fromFile(file);
+            }
+
+
+            final Intent mediaScanIntent = new Intent(
+                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
+            context.sendBroadcast(mediaScanIntent);
+        }
+    }
+
+    /**
+     * Copy a directory and all its contents recursively
+     * @param context
+     * @param origin
+     * @param destination
+     */
+    public static void copyDirectory(Context context, String origin, String destination) throws IOException {
+        checkCreateDirectory(destination);
+        File directory = new File(origin);
+        File f;
+        if (directory.isDirectory()) {
+            checkCreateDirectory(destination);
+            String [] files = directory.list();
+            if (files.length > 0) {
+                for (String archivo : files) {
+                    f = new File (origin + File.separator + archivo);
+                    if(f.isDirectory()) {
+                        checkCreateDirectory(destination+File.separator+archivo+File.separator);
+                        copyDirectory(context, origin+File.separator+archivo+File.separator, destination+File.separator+archivo+File.separator);
+                    } else { //Es un archivo
+                        copyFile(context, new File(origin+File.separator+archivo), new File(destination+File.separator+archivo));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if a directory exists, and if not, create all the necessary path for it to exist
+     * @param path
+     */
+    public static void checkCreateDirectory(String path) {
+        File directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+    }
+
+    public static File getLatestFilefromDir(String dirPath){
+        File dir = new File(dirPath);
+        File[] files = dir.listFiles();
+        if (files == null || files.length == 0) {
+            return null;
+        }
+
+        File lastModifiedFile = files[0];
+        for (int i = 1; i < files.length; i++) {
+            if (lastModifiedFile.lastModified() < files[i].lastModified()) {
+                lastModifiedFile = files[i];
+            }
+        }
+        return lastModifiedFile;
+    }
+
+
 
 }
