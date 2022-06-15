@@ -49,6 +49,7 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
+import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
 /**
  * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
@@ -208,10 +209,13 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
 
         protected String doInBackground(final String... params) {
 
+            String dest = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
+            new File(dest).mkdirs();
+
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
 
-            File file = ImporterUtils.zipFolder(new File(projectsFolder), params[0], null);
+            File file = ImporterUtils.zipFolder(new File(projectsFolder), params[0],  new File(dest));
             shareFile(file);
 
             return "";
@@ -222,8 +226,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             shareIntent.setType(URLConnection.guessContentTypeFromName(file.getName()));
             shareIntent.putExtra(Intent.EXTRA_STREAM,
                     FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file));
-            shareIntent.setType("text/csv");
-
+            //shareIntent.setType("application/zip");
             context.startActivity(Intent.createChooser(shareIntent, "Share File"));
         }
 
