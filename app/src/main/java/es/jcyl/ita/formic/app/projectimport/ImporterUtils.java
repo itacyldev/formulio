@@ -118,6 +118,9 @@ public class ImporterUtils {
                 projectName = matcher.group(1);
             }
 
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPreferences.edit().putString("projectName", projectName).apply();
+
             String dataFile = DIR_DATA + File.separator + projectName +
                     DATA_FILE_EXT;
 

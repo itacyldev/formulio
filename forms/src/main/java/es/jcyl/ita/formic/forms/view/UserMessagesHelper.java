@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.router.Router;
 
 /**
@@ -67,13 +66,6 @@ public class UserMessagesHelper {
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(viewContext);
             String currentTheme = sharedPreferences.getString("current_theme", "light");
-            if (currentTheme.equals("light")) {
-                view.setBackgroundColor(viewContext.getResources().getColor(R.color.light_OnBackgroundColor));
-                text.setTextColor(viewContext.getResources().getColor(R.color.light_toastText));
-            } else {
-                view.setBackgroundColor(viewContext.getResources().getColor(R.color.dark_OnBackgroundColor));
-                text.setTextColor(viewContext.getResources().getColor(R.color.dark_toastText));
-            }
         }
         toast.show();
     }
