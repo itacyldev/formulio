@@ -6,20 +6,16 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/action_import_project"
-        android:title="@string/action_import_project"
-        android:orderInCategory="200"
-        app:showAsAction="never" />
     <item android:id="@+id/action_dark_theme"
         android:title="@string/action_dark_theme"
-        android:orderInCategory="300"
+        android:orderInCategory="200"
         app:showAsAction="never" />
     <item android:id="@+id/action_dev_console"
         android:title="@string/action_dev_console"
-        android:orderInCategory="400"
+        android:orderInCategory="300"
         app:showAsAction="never" />
     <item android:id="@+id/action_about"
         android:title="@string/action_about"
-        android:orderInCategory="500"
+        android:orderInCategory="400"
         app:showAsAction="never" />
 </menu>

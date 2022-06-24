@@ -14,7 +14,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.MimeTypeMap;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.mini2Dx.collections.CollectionUtils;
@@ -34,6 +35,7 @@ import java.util.List;
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
+import es.jcyl.ita.formic.app.dialog.ProjectDialog;
 import es.jcyl.ita.formic.app.jobs.JobProgressListener;
 import es.jcyl.ita.formic.app.projectimport.ImporterUtils;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
@@ -115,11 +117,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             return true;
         }
 
-        if (id == R.id.action_import_project) {
-            importProject();
-            return true;
-        }
-
         if (id == R.id.action_dark_theme) {
             switchTheme();
             return true;
@@ -153,36 +150,15 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
-    protected final void importProject() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        final String mime_type = MimeTypeMap.getSingleton().hasExtension("frmd")?
-                MimeTypeMap.getSingleton().getMimeTypeFromExtension("frmd") :
-                "*/*";
-        intent.setType(mime_type);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        try {
-
-            startActivityForResult(
-                    Intent.createChooser(intent,
-                            getString(R.string.file_to_load)),
-                    PROJECT_IMPORT_FILE_SELECT);
-
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this,
-                    getString(R.string.error_filemanager),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void initialize() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_projects:
-                        loadFragment(ProjectListFragment.newInstance(
+                       loadFragment(ProjectListFragment.newInstance(
                                 App.getInstance().getProjectRepo()));
                         break;
                     case R.id.action_forms:
@@ -192,6 +168,16 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                         break;
                 }
                 return true;
+            }
+        });
+
+        import_project.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProjectDialog projectDialog = new ProjectDialog
+                        (MainActivity.this, currentTheme);
+                projectDialog.build().show();
+                //openProjectDialog();
             }
         });
 
@@ -306,7 +292,16 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
-            Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String projectName = sharedPreferences.getString("projectName","");
+            Project prj = projects.get(0);
+            if (projectName != null) {
+                for (Project project : projects) {
+                    if (project.getName().equals(projectName)) {
+                        prj = project;
+                    }
+                }
+            }
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
 
             UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
