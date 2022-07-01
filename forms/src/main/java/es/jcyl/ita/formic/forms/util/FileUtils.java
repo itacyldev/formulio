@@ -1,22 +1,28 @@
 package es.jcyl.ita.formic.forms.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.UriPermission;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
+import androidx.documentfile.provider.DocumentFile;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileUtils {
@@ -69,8 +75,8 @@ public class FileUtils {
 
         // DocumentProvider
         if("com.android.externalstorage.documents".equals(uri.getAuthority())
-        || "com.android.providers.downloads.documents".equals(uri.getAuthority())
-        || "com.android.providers.media.documents".equals(uri.getAuthority())){
+                || "com.android.providers.downloads.documents".equals(uri.getAuthority())
+                || "com.android.providers.media.documents".equals(uri.getAuthority())){
             String docId = null;
             if (isKitKat && DocumentsContract.isDocumentUri(context, uri)){
                 docId = DocumentsContract.getDocumentId(uri);
@@ -84,7 +90,7 @@ public class FileUtils {
             final String type = split[0];
 
             if ("primary".equalsIgnoreCase(type)) {
-                String external_storage_path = Environment.getExternalStorageDirectory() + "/";
+                String external_storage_path = context.getExternalFilesDir(null) + "/";
                 if (split.length > 1) {
                     return external_storage_path + split[1];
                 } else {
@@ -235,6 +241,24 @@ public class FileUtils {
                 for (String archivo : files) {
                     f = new File (origin + File.separator + archivo);
                     if(f.isDirectory()) {
+
+                        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+
+                        Uri uri = getUri(context);
+                        DocumentFile documentFile = DocumentFile.fromTreeUri(context, uri);
+
+                        Uri contentUri;
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            contentUri = FileProvider.getUriForFile(context,
+                                    context.getPackageName() + "" +
+                                            ".provider", file);
+                        } else {
+                            contentUri = Uri.fromFile(file);
+                        }
+
+                        //DocumentFile documentFile = DocumentFile.fromTreeUri(context, contentUri);
+
+
                         checkCreateDirectory(destination+File.separator+archivo+File.separator);
                         copyDirectory(context, origin+File.separator+archivo+File.separator, destination+File.separator+archivo+File.separator);
                     } else { //Es un archivo
@@ -272,6 +296,137 @@ public class FileUtils {
         return lastModifiedFile;
     }
 
+    /*public static void copyDirectoryToInternalStorage(final Context context, File folder) {
+        File[] fileList = folder.listFiles();
+
+        Uri contentUri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            contentUri = FileProvider.getUriForFile(context,
+                    context.getPackageName() + "" +
+                            ".provider", folder);
+        } else {
+            contentUri = Uri.fromFile(folder);
+        }
+        List<Uri> uriList = listDocuments(context, contentUri, false);
+
+        for (File file : fileList) {
+            if (file.isDirectory()) {
+                File newFile = new File(context.getExternalFilesDir(null).getAbsolutePath()+"/projects/"+file.getName());
+                if (!newFile.exists()) {
+                    newFile.mkdir();
+                }
+                copyDirectoryToInternalStorage(context, file);
+            } else {
+                try {
+                    String filePath = file.getPath();
+                    FileInputStream fis = new FileInputStream(filePath);
+                    FileOutputStream fos = new FileOutputStream(context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+                    int read = 0;
+                    int bufferSize = 1024;
+                    final byte[] buffers = new byte[bufferSize];
+                    while ((read = fis.read(buffers)) != -1) {
+                        fos.write(buffers, 0, read);
+                    }
+
+                    fis.close();
+                    fos.close();
+
+                } catch (Exception e) {
+
+                    Log.e("Exception", e.getMessage());
+                }
+            }
+
+        }
+    }*/
+
+   /* public static String copyFileToInternalStorage(final Context context, Uri uri, String newDirName) {
+        Uri returnUri = uri;
+
+        Cursor returnCursor = context.getContentResolver().query(returnUri, new String[]{
+                OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
+        }, null, null, null);
 
 
+       int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor.moveToFirst();
+        String name = (returnCursor.getString(nameIndex));
+        String size = (Long.toString(returnCursor.getLong(sizeIndex)));
+
+        File output;
+        if (!newDirName.equals("")) {
+            File dir = new File(context.getFilesDir() + "/" + newDirName);
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            output = new File(context.getFilesDir() + "/" + newDirName + "/" + name);
+        } else {
+            output = new File(context.getFilesDir() + "/" + name);
+        }
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            FileOutputStream outputStream = new FileOutputStream(output);
+            int read = 0;
+            int bufferSize = 1024;
+            final byte[] buffers = new byte[bufferSize];
+            while ((read = inputStream.read(buffers)) != -1) {
+                outputStream.write(buffers, 0, read);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+        } catch (Exception e) {
+
+            Log.e("Exception", e.getMessage());
+        }
+
+        return output.getPath();
+    }*/
+
+    public static Uri[] listFiles(Context context, Uri self) {
+        final ContentResolver resolver = context.getContentResolver();
+        final Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(self,
+                DocumentsContract.getDocumentId(self));
+        final ArrayList<Uri> results = new ArrayList<Uri>();
+
+        Cursor c = null;
+        try {
+            c = resolver.query(childrenUri, new String[] {
+                    DocumentsContract.Document.COLUMN_DOCUMENT_ID }, null, null, null);
+            while (c.moveToNext()) {
+                final String documentId = c.getString(0);
+                final Uri documentUri = DocumentsContract.buildDocumentUriUsingTree(self,
+                        documentId);
+                results.add(documentUri);
+            }
+        } catch (Exception e) {
+            Log.w("Failed query: ",e);
+        } finally {
+            closeQuietly(c);
+        }
+
+        return results.toArray(new Uri[results.size()]);
+    }
+
+    private static void closeQuietly(AutoCloseable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (RuntimeException rethrown) {
+                throw rethrown;
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    public static Uri getUri(Context context) {
+        List<UriPermission> persistedUriPermissions = context.getContentResolver().getPersistedUriPermissions();
+        if (persistedUriPermissions.size() > 0) {
+            UriPermission uriPermission = persistedUriPermissions.get(0);
+            return uriPermission.getUri();
+        }
+        return null;
+    }
 }
