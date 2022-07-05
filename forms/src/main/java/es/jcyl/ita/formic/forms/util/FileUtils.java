@@ -90,7 +90,7 @@ public class FileUtils {
             final String type = split[0];
 
             if ("primary".equalsIgnoreCase(type)) {
-                String external_storage_path = context.getExternalFilesDir(null) + "/";
+                String external_storage_path = Environment.getExternalStorageDirectory() + "/";
                 if (split.length > 1) {
                     return external_storage_path + split[1];
                 } else {

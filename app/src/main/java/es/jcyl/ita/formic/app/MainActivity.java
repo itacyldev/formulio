@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +29,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,8 +73,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected void doOnCreate() {
         getApplication().getFilesDir();
         setContentView(R.layout.activity_main);
-        //checkPermissions();
-        checkStoragePermission();
+        checkPermissions();
+        //checkStoragePermission();
         checkDeviceFeatures();
     }
 
@@ -281,12 +279,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         String projectsFolder = currentWorkspace;
 
-        try {
-            FileUtils.copyDirectory(this, Environment.getExternalStorageDirectory()+"/projects", projectsFolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         File f = new File(projectsFolder);
         if (!f.exists()) {
             f.mkdir();
@@ -444,14 +436,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 }
         }
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PERMISSION_STORAGE_REQUEST) {
-            if (!Environment.isExternalStorageManager()) {
-                storagePermissionNotGranted();
-                currentWorkspace = FileUtils.getPath(this, data.getData());
-            } else {
-                checkPermissions();
-            }
-        }
+
     }
 
     @Override
