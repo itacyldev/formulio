@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -296,95 +298,6 @@ public class FileUtils {
         return lastModifiedFile;
     }
 
-    /*public static void copyDirectoryToInternalStorage(final Context context, File folder) {
-        File[] fileList = folder.listFiles();
-
-        Uri contentUri;
-        if (Build.VERSION.SDK_INT >= 24) {
-            contentUri = FileProvider.getUriForFile(context,
-                    context.getPackageName() + "" +
-                            ".provider", folder);
-        } else {
-            contentUri = Uri.fromFile(folder);
-        }
-        List<Uri> uriList = listDocuments(context, contentUri, false);
-
-        for (File file : fileList) {
-            if (file.isDirectory()) {
-                File newFile = new File(context.getExternalFilesDir(null).getAbsolutePath()+"/projects/"+file.getName());
-                if (!newFile.exists()) {
-                    newFile.mkdir();
-                }
-                copyDirectoryToInternalStorage(context, file);
-            } else {
-                try {
-                    String filePath = file.getPath();
-                    FileInputStream fis = new FileInputStream(filePath);
-                    FileOutputStream fos = new FileOutputStream(context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
-                    int read = 0;
-                    int bufferSize = 1024;
-                    final byte[] buffers = new byte[bufferSize];
-                    while ((read = fis.read(buffers)) != -1) {
-                        fos.write(buffers, 0, read);
-                    }
-
-                    fis.close();
-                    fos.close();
-
-                } catch (Exception e) {
-
-                    Log.e("Exception", e.getMessage());
-                }
-            }
-
-        }
-    }*/
-
-   /* public static String copyFileToInternalStorage(final Context context, Uri uri, String newDirName) {
-        Uri returnUri = uri;
-
-        Cursor returnCursor = context.getContentResolver().query(returnUri, new String[]{
-                OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
-        }, null, null, null);
-
-
-       int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-        returnCursor.moveToFirst();
-        String name = (returnCursor.getString(nameIndex));
-        String size = (Long.toString(returnCursor.getLong(sizeIndex)));
-
-        File output;
-        if (!newDirName.equals("")) {
-            File dir = new File(context.getFilesDir() + "/" + newDirName);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            output = new File(context.getFilesDir() + "/" + newDirName + "/" + name);
-        } else {
-            output = new File(context.getFilesDir() + "/" + name);
-        }
-        try {
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            FileOutputStream outputStream = new FileOutputStream(output);
-            int read = 0;
-            int bufferSize = 1024;
-            final byte[] buffers = new byte[bufferSize];
-            while ((read = inputStream.read(buffers)) != -1) {
-                outputStream.write(buffers, 0, read);
-            }
-
-            inputStream.close();
-            outputStream.close();
-
-        } catch (Exception e) {
-
-            Log.e("Exception", e.getMessage());
-        }
-
-        return output.getPath();
-    }*/
-
     public static Uri[] listFiles(Context context, Uri self) {
         final ContentResolver resolver = context.getContentResolver();
         final Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(self,
@@ -428,5 +341,72 @@ public class FileUtils {
             return uriPermission.getUri();
         }
         return null;
+    }
+
+    public static void moveFile(File file, File dir) throws IOException {
+        File newFile = new File(dir, file.getName());
+        FileChannel outputChannel = null;
+        FileChannel inputChannel = null;
+        try {
+            outputChannel = new FileOutputStream(newFile).getChannel();
+            inputChannel = new FileInputStream(file).getChannel();
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+            inputChannel.close();
+            file.delete();
+        } finally {
+            if (inputChannel != null) inputChannel.close();
+            if (outputChannel != null) outputChannel.close();
+        }
+
+    }
+
+    public static String copyFileToInternalStorage(Context context, Uri uri, String newDirName) {
+        Uri returnUri = uri;
+
+        Cursor returnCursor = context.getContentResolver().query(returnUri, new String[]{
+                OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
+        }, null, null, null);
+
+
+        /*
+         * Get the column indexes of the data in the Cursor,
+         *     * move to the first row in the Cursor, get the data,
+         *     * and display it.
+         * */
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor.moveToFirst();
+        String name = (returnCursor.getString(nameIndex));
+        String size = (Long.toString(returnCursor.getLong(sizeIndex)));
+
+        File output;
+        if (!newDirName.equals("")) {
+            File dir = new File(context.getFilesDir() + "/" + newDirName);
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            output = new File(context.getFilesDir() + "/" + newDirName + "/" + name);
+        } else {
+            output = new File(context.getFilesDir() + "/" + name);
+        }
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            FileOutputStream outputStream = new FileOutputStream(output);
+            int read = 0;
+            int bufferSize = 1024;
+            final byte[] buffers = new byte[bufferSize];
+            while ((read = inputStream.read(buffers)) != -1) {
+                outputStream.write(buffers, 0, read);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+        } catch (Exception e) {
+
+            Log.e("Exception", e.getMessage());
+        }
+
+        return output.getPath();
     }
 }

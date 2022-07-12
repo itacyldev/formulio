@@ -297,7 +297,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             Project prj = projects.get(0);
             if (projectName != null) {
                 for (Project project : projects) {
-                    if (project.getName().equals(projectName)) {
+                    if (project.getName().equalsIgnoreCase(projectName)) {
                         prj = project;
                     }
                 }
@@ -409,7 +409,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 if (resultCode == RESULT_OK) {
                     final Uri uri = data.getData();
                     if (uri != null) {
-                        final String path = FileUtils.getPath(this, uri);
+
+                        final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
                         if (path != null) {
                             final File file = new File(path);
                             final String extension = FileUtils
@@ -418,11 +419,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                             if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
                                 Uri fileUri = Uri.fromFile(file);
 
-                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                                String destination = sharedPreferences.getString("current_workspace", getExternalFilesDir(null).getAbsolutePath() + "/projects");
-
-                                ImporterUtils.importProjectFile(fileUri,
-                                        destination, this);
+                                ImporterUtils.importProjectFile( fileUri, getExternalFilesDir(null).getAbsolutePath()+"/projects", this);
                             } else {
                                 Toast.makeText(
                                         this,
