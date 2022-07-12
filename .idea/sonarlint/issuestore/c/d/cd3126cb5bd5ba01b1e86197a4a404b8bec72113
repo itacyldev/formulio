@@ -1,0 +1,32 @@
+
+E
+java:S3740%"/Provide the parametrized type for this generic.(»ä‰Õ
+D
+java:S3740."/Provide the parametrized type for this generic.(€Ùó 
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+<
+java:S1170*"!Make this final field static too.(®âÆ¥ýÿÿÿÿ
+<
+java:S1170+"!Make this final field static too.(¹Áõ—ýÿÿÿÿ
+V	java:S125("<This block of commented-out lines of code should be removed.(Ûºüäýÿÿÿÿ
+?
+java:S19058")Remove this unnecessary cast to "String".(î¬Ðê
+D
+java:S1905A")Remove this unnecessary cast to "String".(›åÂüÿÿÿÿ
+‚
+java:S1130N"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(¯˜èÞ
+H
+java:S1172N"2Remove this unused method parameter "contentType".(¯˜èÞ
+Q	java:S125Z"<This block of commented-out lines of code should be removed.(­‘Ïù
+P
+java:S1117`":Rename "entity" which hides the field declared at line 38.(œ¹°ã
+I
+java:S1068*".Remove this unused "twoHyphens" private field.(®âÆ¥ýÿÿÿÿ
+F
+java:S1068+"+Remove this unused "lineEnd" private field.(¹Áõ—ýÿÿÿÿ
+c
+java:S11928"MDefine a constant instead of duplicating this literal "Content-Type" 6 times.(î¬Ðê
+~
+java:S1488X"hImmediately return this expression instead of assigning it to the temporary variable "bytesFileContent".(¨‘­ÿ
+^
+java:S2583;"CChange this condition so that it does not always evaluate to "true"(ÈæÅÈøÿÿÿÿ

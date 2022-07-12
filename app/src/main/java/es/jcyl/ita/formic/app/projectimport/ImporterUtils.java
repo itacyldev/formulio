@@ -420,28 +420,30 @@ public class ImporterUtils {
 
         File[] fileList = folder.listFiles();
         BufferedInputStream origin = null;
-        for (File file : fileList) {
-            if (file.isDirectory()) {
-                zipSubFolder(out, file, basePathLength);
-            } else {
-                byte data[] = new byte[BUFFER];
+        if (fileList != null){
+            for (File file : fileList) {
+                if (file.isDirectory()) {
+                    zipSubFolder(out, file, basePathLength);
+                } else {
+                    byte data[] = new byte[BUFFER];
 
-                String unmodifiedFilePath = file.getPath();
-                String relativePath = unmodifiedFilePath.substring(basePathLength + 1);
+                    String unmodifiedFilePath = file.getPath();
+                    String relativePath = unmodifiedFilePath.substring(basePathLength + 1);
 
-                FileInputStream fi = new FileInputStream(unmodifiedFilePath);
-                origin = new BufferedInputStream(fi, BUFFER);
+                    FileInputStream fi = new FileInputStream(unmodifiedFilePath);
+                    origin = new BufferedInputStream(fi, BUFFER);
 
-                ZipEntry entry = new ZipEntry(relativePath);
-                entry.setTime(file.lastModified()); // to keep modification time after unzipping
-                out.putNextEntry(entry);
+                    ZipEntry entry = new ZipEntry(relativePath);
+                    entry.setTime(file.lastModified()); // to keep modification time after unzipping
+                    out.putNextEntry(entry);
 
-                int count;
-                while ((count = origin.read(data, 0, BUFFER)) != -1) {
-                    out.write(data, 0, count);
+                    int count;
+                    while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                        out.write(data, 0, count);
+                    }
+                    origin.close();
+                    out.closeEntry();
                 }
-                origin.close();
-                out.closeEntry();
             }
         }
     }

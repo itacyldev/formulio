@@ -1,0 +1,19 @@
+
+S
+java:S1874"8Remove this use of "THEME_HOLO_LIGHT"; it is deprecated.(ÍØ„“ùÿÿÿÿ
+R
+java:S1874"7Remove this use of "THEME_HOLO_DARK"; it is deprecated.(ÍØ„“ùÿÿÿÿ
+O
+java:S1659;"-Declare "backgroundColor" on a separate line.(êå¸ùÿÿÿÿ8ç„ë¤™0
+V
+java:S1481;"4Remove this unused "backgroundColor" local variable.(êå¸ùÿÿÿÿ8é„ë¤™0
+M
+java:S1874A"0Remove this use of "getColor"; it is deprecated.(½Øíê8ê„ë¤™0
+R
+java:S1874B"0Remove this use of "getColor"; it is deprecated.(Õ¬¥»şÿÿÿÿ8ë„ë¤™0
+T
+java:S1874P">Remove this use of "startActivityForResult"; it is deprecated.(Á„ˆš
+>
+java:S1604$"(Make this anonymous inner class a lambda(Î¬¯”
+f
+java:S1301("KReplace this "switch" statement by "if" statements to increase readability.(öÛ«°şÿÿÿÿ

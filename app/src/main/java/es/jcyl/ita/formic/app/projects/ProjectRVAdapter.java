@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -114,7 +113,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 prj = projectList.get(getAdapterPosition());
                 //String projectsFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects";
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
-                String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+                String projectsFolder = sharedPreferences.getString("current_workspace", currentContext.getExternalFilesDir(null).getAbsolutePath() + "/projects");
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
                 return "Task Completed.";
             }
@@ -213,7 +212,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             new File(dest).mkdirs();
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+            String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
 
             File file = ImporterUtils.zipFolder(new File(projectsFolder), params[0],  new File(dest));
             shareFile(file);

@@ -1,7 +1,9 @@
 package es.jcyl.ita.formic.app;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,9 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +42,7 @@ import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.StorageContentManager;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
@@ -72,8 +73,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     protected void doOnCreate() {
         getApplication().getFilesDir();
         setContentView(R.layout.activity_main);
-        //checkPermissions();
-        checkStoragePermission();
+        checkPermissions();
+        //checkStoragePermission();
         checkDeviceFeatures();
     }
 
@@ -158,7 +159,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_projects:
-                       loadFragment(ProjectListFragment.newInstance(
+                        loadFragment(ProjectListFragment.newInstance(
                                 App.getInstance().getProjectRepo()));
                         break;
                     case R.id.action_forms:
@@ -197,7 +198,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         boolean requestStorage = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requestStorage = !Environment.isExternalStorageManager();
+            Uri treeUri = StorageContentManager.getExternalPrimaryStoragePathUri(this);
+            if (treeUri != null) {
+                currentWorkspace = FileUtils.getPath(this, treeUri);
+            } else {
+                requestStorage = true;
+            }
+
         } else {
             int result = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
             int result1 = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
@@ -211,6 +218,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         } else {
             checkPermissions();
         }
+
     }
 
     protected void checkPermissions() {
@@ -239,7 +247,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     private void warnStoragePermission() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-        builder.setMessage(R.string.allFilesAccessPermission).setPositiveButton(R.string.close, new
+        builder.setMessage(R.string.specificDirectoryAccessPermission).setPositiveButton(R.string.close, new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -258,20 +266,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     private void requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                intent.addCategory("android.intent.category.DEFAULT");
-                intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
-                startActivityForResult(intent, PERMISSION_STORAGE_REQUEST);
-            } catch (Exception e) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                startActivityForResult(intent, PERMISSION_STORAGE_REQUEST);
-            }
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, RQS_OPEN_DOCUMENT_TREE);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{ READ_EXTERNAL_STORAGE,
+            ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE,
                             WRITE_EXTERNAL_STORAGE, CAMERA},
-                    PERMISSION_STORAGE_REQUEST);
+                    RQS_OPEN_DOCUMENT_TREE);
         }
     }
 
@@ -297,7 +297,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             Project prj = projects.get(0);
             if (projectName != null) {
                 for (Project project : projects) {
-                    if (project.getName().equals(projectName)) {
+                    if (project.getName().equalsIgnoreCase(projectName)) {
                         prj = project;
                     }
                 }
@@ -365,7 +365,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     dialog.show();
                 }
             }
-        } else if (requestCode == PERMISSION_STORAGE_REQUEST) {
+        } else if (requestCode == RQS_OPEN_DOCUMENT_TREE) {
             if (grantResults.length > 0) {
                 boolean READ_EXTERNAL_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED;
@@ -383,16 +383,25 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     @RequiresApi(api = Build.VERSION_CODES.R)
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         switch (requestCode) {
-            case PERMISSION_STORAGE_REQUEST:
+            case RQS_OPEN_DOCUMENT_TREE:
                 if (resultCode == RESULT_OK) {
-                    if (!Environment.isExternalStorageManager()) {
-                        storagePermissionNotGranted();
-                        currentWorkspace = FileUtils.getPath(this, data.getData());
-                    } else {
+                    currentWorkspace = FileUtils.getPath(this, data.getData());
+
+                    final ContentResolver contentResolver = getContentResolver();
+
+                    final Uri treeUri = data != null ? data.getData() : null;
+                    try {
+                        contentResolver.takePersistableUriPermission(treeUri,
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         checkPermissions();
+                    } catch (SecurityException e) {
+                        storagePermissionNotGranted();
                     }
                     break;
                 }
@@ -400,7 +409,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 if (resultCode == RESULT_OK) {
                     final Uri uri = data.getData();
                     if (uri != null) {
-                        final String path = FileUtils.getPath(this, uri);
+
+                        final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
                         if (path != null) {
                             final File file = new File(path);
                             final String extension = FileUtils
@@ -409,11 +419,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                             if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
                                 Uri fileUri = Uri.fromFile(file);
 
-                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                                String destination = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
-
-                                ImporterUtils.importProjectFile(fileUri,
-                                        destination, this);
+                                ImporterUtils.importProjectFile( fileUri, getExternalFilesDir(null).getAbsolutePath()+"/projects", this);
                             } else {
                                 Toast.makeText(
                                         this,
