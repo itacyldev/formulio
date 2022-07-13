@@ -31,14 +31,13 @@ public class FileUtils {
 
 
     /**
-     * Obtenemos el path a partir de una URI.
+     * We get the path from a URI
      *
      * @param context
      * @param uri
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static String getPath(final Context context, final Uri uri) {
+     public static String getPath(final Context context, final Uri uri) {
         String output = null;
 
         if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -70,7 +69,6 @@ public class FileUtils {
         return output;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public static String getPathWithDocumentsContract(final Context context, final Uri uri) {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         final boolean isNougat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;

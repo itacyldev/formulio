@@ -29,15 +29,16 @@ import com.google.android.material.snackbar.Snackbar;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.dialog.ProjectDialog;
 import es.jcyl.ita.formic.app.jobs.JobProgressListener;
-import es.jcyl.ita.formic.app.projectimport.ImporterUtils;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
@@ -47,6 +48,7 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.util.FileUtils;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -419,7 +421,14 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                             if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
                                 Uri fileUri = Uri.fromFile(file);
 
-                                ImporterUtils.importProjectFile( fileUri, getExternalFilesDir(null).getAbsolutePath()+"/projects", this);
+                                try {
+                                    importProject(this, fileUri);
+                                } catch (IOException e) {
+                                    Toast.makeText(
+                                            this,
+                                            getString(R.string.projectimportfail),
+                                            Toast.LENGTH_SHORT).show();
+                                }
                             } else {
                                 Toast.makeText(
                                         this,
@@ -440,5 +449,115 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     public void onBackPressed() {
         // Do nothing
     }
+
+    private void importProject(Context context, Uri fileUri) throws IOException {
+
+        ProjectImporter projectImporter = ProjectImporter.getInstance();
+
+        String origin = projectImporter.getPathString(this, fileUri);
+        String destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
+        Map<String, String> existingFiles = projectImporter.getExistingFiles(origin, destination);
+        String projectName = projectImporter.getProjectName(this, fileUri.getLastPathSegment());
+
+        if ("".equals(origin)) {
+            showProjectImportFailDialog(context);
+        }
+
+        if (existingFiles.size() > 0) {
+           showExistingFilesDialog(context, existingFiles, origin,
+                    destination, projectName, projectImporter);
+        }else {
+            importProject(context, origin, destination, projectName, projectImporter);
+        }
+    }
+
+    private void showProjectImportFailDialog(Context context) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+        final AlertDialog dialog = builder.setMessage(R.string.projectimportfail)
+                .setPositiveButton(es.jcyl.ita.formic.forms.R.string.accept,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(
+                                    final DialogInterface cancelDialog,
+                                    final int id) {
+                                cancelDialog.cancel();
+                                launchActivity(context, "");
+                            }
+                        }).create();
+
+        dialog.show();
+    }
+
+    private void showExistingFilesDialog(final Context context, final
+    Map<String, String> files, final String origin, final String destination,
+                                         final String projectName, ProjectImporter projectImporter) {
+
+        String message = context.getString(R.string.project_import_existing_files);
+
+        for (String file : files.keySet()) {
+            message += "\n- " + file;
+        }
+
+        message += "\n" + context.getString(R.string
+                .project_import_overwrite_files);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+        final AlertDialog dialog = builder.setMessage(message)
+                .setPositiveButton(es.jcyl.ita.formic.forms.R.string.accept,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(
+                                    final DialogInterface dialog,
+                                    final int id) {
+                                importProject(context, origin, destination, projectName, projectImporter);
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton(es.jcyl.ita.formic.forms.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialog,
+                                                final int id) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+        dialog.show();
+
+
+    }
+
+    private void importProject(Context context, String origin, String destination, String projectName, ProjectImporter projectImporter){
+        try {
+            projectImporter.moveFiles2BackUp(context, projectName);
+            projectImporter.extractFiles(context, origin, destination);
+            launchActivity(context, projectName);
+        }catch (IOException e){
+            Toast.makeText(
+                    this,
+                    getString(R.string.projectimportfail),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void launchActivity(Context context, String projectName) {
+        setSharedPreferences(context, projectName);
+
+        final Intent intent =
+                context.getPackageManager()
+                        .getLaunchIntentForPackage(
+                                context.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
+    private void setSharedPreferences(Context context, String
+            selectedFileName) {
+        final SharedPreferences.Editor editor = context
+                .getSharedPreferences("selectedProject", Context.MODE_PRIVATE)
+                .edit();
+        editor.putString("name", selectedFileName);
+        editor.commit();
+    }
+
+
 
 }
