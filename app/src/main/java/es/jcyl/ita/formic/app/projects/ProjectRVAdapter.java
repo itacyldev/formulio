@@ -42,10 +42,10 @@ import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.MainActivity;
-import es.jcyl.ita.formic.app.projectimport.ImporterUtils;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
@@ -214,7 +214,8 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
 
-            File file = ImporterUtils.zipFolder(new File(projectsFolder), params[0],  new File(dest));
+            ProjectImporter projectImporter = ProjectImporter.getInstance();
+            File file = projectImporter.zipFolder(new File(projectsFolder), params[0],  new File(dest));
             shareFile(file);
 
             return "";
