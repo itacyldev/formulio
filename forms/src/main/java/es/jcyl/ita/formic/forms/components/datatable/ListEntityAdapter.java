@@ -129,12 +129,26 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         }
 
         // Adjust the column width to the content size
-        adjustColumnWidth((LinearLayout) item);
-        adjustColumnWidth(this.dtLayout.getHeaderView());
+
+        //adjustColumnWidth((LinearLayout) item);
+        //adjustColumnWidth(this.dtLayout.getHeaderView());
 
         //if there is no route in the table
         if (this.dtLayout.getComponent().getRoute() == null) {
             item.setBackground(ContextCompat.getDrawable(context, R.drawable.unselectablebuttonbackground));
+        }
+
+        if (this.dtLayout.getEntities().size() == position + 1){
+            for(int i = 0; i < this.dtLayout.getEntities().size(); i++){
+                getMinColumnWidth((LinearLayout) cacheViews[i]);
+            }
+            getMinColumnWidth(this.dtLayout.getHeaderView());
+            for(int i = 0; i < this.dtLayout.getEntities().size(); i++){
+                  //((LinearLayout) cacheViews[4]).getChildAt(2).getMeasuredWidth()
+                adjustColumnWidth((LinearLayout) cacheViews[i]);
+                adjustColumnWidth(this.dtLayout.getHeaderView());
+            }
+
         }
 
         setAlternateRowColor(position, item);
@@ -164,7 +178,22 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
             if (maxColWidth > colWidth) {
                 cellView.setMinimumWidth(maxColWidth);
-            } else {
+            } /*else {
+                minColWidths[i] = colWidth;
+            }*/
+        }
+    }
+
+    public void getMinColumnWidth(LinearLayout rowLayout) {
+
+        Integer nChild = rowLayout.getChildCount();
+        for (int i = 0; i < nChild; i++) {
+            View cellView = rowLayout.getChildAt(i);
+            Integer colWidth = 0;
+            colWidth = cellView.getMeasuredWidth();
+            Integer maxColWidth = minColWidths[i];
+
+            if (maxColWidth <= colWidth) {
                 minColWidths[i] = colWidth;
             }
         }
