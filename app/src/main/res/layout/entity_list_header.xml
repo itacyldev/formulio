@@ -15,10 +15,11 @@
 
         <TextView
             android:id="@+id/list_header_textview"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
+            android:autoSizeTextType="uniform"
             style="@style/Datatable_header_title" />
 
         <ImageView
