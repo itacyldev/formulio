@@ -47,7 +47,6 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
-import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
 /**
@@ -121,7 +120,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             protected void onPostExecute(String result) {
                 try {
                     App.getInstance().setCurrentProject(prj);
-                    ((MainActivity) currentContext).loadFragment(new FormListFragment());
+                    ((MainActivity) currentContext).loadFragment();
                 } catch (Exception e) {
                     projectOpeningFinish = false;
 
