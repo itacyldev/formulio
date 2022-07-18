@@ -47,6 +47,7 @@ import es.jcyl.ita.formic.forms.StorageContentManager;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
@@ -153,7 +154,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
-    private void initialize() {
+    private void initFormicBackend () {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -165,7 +166,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                                 App.getInstance().getProjectRepo()));
                         break;
                     case R.id.action_forms:
-                        loadFragment(new FormListFragment());
+                       loadFragment();
+
                         break;
                     default:
                         break;
@@ -187,7 +189,28 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
-        loadFragment(new FormListFragment());
+        loadFragment();
+    }
+
+    public void loadFragment(){
+        // get view controles and check if exists a "main" form
+        ViewControllerFactory ctlFactory = ViewControllerFactory.getInstance();
+
+        boolean containsMain = false;
+        for (String a : ctlFactory.getControllerIds()) {
+            if (a.startsWith("main-")) {
+                containsMain = true;
+                break;
+
+            }
+        }
+        if (containsMain) {
+            MainController.getInstance().getRouter().navigate(MainActivity.this,
+                    UserAction.navigate("main-view1"));
+        }else{
+            // open default form list view
+            loadFragment(new FormListFragment());
+        }
     }
 
     @Override
@@ -319,7 +342,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
             App.getInstance().setJobListener(new JobProgressListener());
         }
-        initialize();
+        initFormicBackend();
     }
 
     @Override
