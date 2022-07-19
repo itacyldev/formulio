@@ -205,6 +205,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         }
         if (containsMain) {
+            loadFragment(ProjectListFragment.newInstance(
+                    App.getInstance().getProjectRepo()));
             MainController.getInstance().getRouter().navigate(MainActivity.this,
                     UserAction.navigate("main-view1"));
         }else{
