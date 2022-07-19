@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -166,8 +167,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                                 App.getInstance().getProjectRepo()));
                         break;
                     case R.id.action_forms:
-                       loadFragment();
-
+                        loadFragment(new FormListFragment());
                         break;
                     default:
                         break;
@@ -205,6 +205,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         }
         if (containsMain) {
+            loadFragment(new FormListFragment());
             MainController.getInstance().getRouter().navigate(MainActivity.this,
                     UserAction.navigate("main-view1"));
         }else{
@@ -266,7 +267,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
-            doInitConfiguration();
+            //doInitConfiguration();
+            new MyTask(this).execute();
         }
     }
 
@@ -328,8 +330,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 }
             }
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
+            App.getInstance().setCurrentProject(prj);
 
-            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
+            /*UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
                     (String) prj.getId())), Toast.LENGTH_LONG);
             try {
                 App.getInstance().setCurrentProject(prj);
@@ -339,7 +342,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             } catch (Exception e) {
                 UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
                         Toast.LENGTH_LONG);
-            }
+            }*/
             App.getInstance().setJobListener(new JobProgressListener());
         }
         initFormicBackend();
@@ -372,7 +375,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     }
                 }
                 if (allAcepted) {
-                    doInitConfiguration();
+                    //doInitConfiguration();
+                    new MyTask(this).execute();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder
                             (this);
@@ -581,6 +585,43 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         editor.commit();
     }
 
+    class MyTask extends AsyncTask<String, String, String> {
+        AlertDialog dialog;
+        Context currentContext;
 
+        public MyTask(Context context) {
+            currentContext =  context;
+        }
 
+        @Override
+        protected String doInBackground(String... params) {
+            doInitConfiguration();
+            return "";
+        }
+        @Override
+        protected void onPostExecute(final String success) {
+            dialog.dismiss(); // to hide this dialog
+
+            UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_init,
+                    (String)App.getInstance().getCurrentProject().getId())), Toast.LENGTH_LONG);
+            try {
+                UserMessagesHelper.toast(currentContext,
+                        DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
+                        Toast.LENGTH_LONG);
+            } catch (Exception e) {
+                UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) App.getInstance().getCurrentProject().getId())),
+                        Toast.LENGTH_LONG);
+            }
+         }
+
+        @Override
+        protected void onPreExecute() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(currentContext, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+            builder.setCancelable(false); // if you want user to wait for some process to finish,
+            builder.setView(R.layout.layout_loading_dialog);
+            dialog = builder.create();
+            dialog.show(); // to show this dialog
+
+        }
+}
 }
