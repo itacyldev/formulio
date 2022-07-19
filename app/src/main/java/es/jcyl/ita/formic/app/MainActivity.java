@@ -332,17 +332,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
             App.getInstance().setCurrentProject(prj);
 
-            /*UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
-                    (String) prj.getId())), Toast.LENGTH_LONG);
-            try {
-                App.getInstance().setCurrentProject(prj);
-                UserMessagesHelper.toast(this,
-                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
-            } catch (Exception e) {
-                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
-            }*/
             App.getInstance().setJobListener(new JobProgressListener());
         }
         initFormicBackend();
@@ -602,13 +591,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         protected void onPostExecute(final String success) {
             dialog.dismiss(); // to hide this dialog
 
-            UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_init,
-                    (String)App.getInstance().getCurrentProject().getId())), Toast.LENGTH_LONG);
-            try {
+            if (success.isEmpty()) {
                 UserMessagesHelper.toast(currentContext,
                         DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
                         Toast.LENGTH_LONG);
-            } catch (Exception e) {
+            } else {
                 UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) App.getInstance().getCurrentProject().getId())),
                         Toast.LENGTH_LONG);
             }
@@ -616,6 +603,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         @Override
         protected void onPreExecute() {
+            /*UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_init,
+                    (String)App.getInstance().getCurrentProject().getId())), Toast.LENGTH_LONG);*/
             AlertDialog.Builder builder = new AlertDialog.Builder(currentContext, es.jcyl.ita.formic.forms.R.style.DialogStyle);
             builder.setCancelable(false); // if you want user to wait for some process to finish,
             builder.setView(R.layout.layout_loading_dialog);
