@@ -205,7 +205,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         }
         if (containsMain) {
-            loadFragment(new FormListFragment());
             MainController.getInstance().getRouter().navigate(MainActivity.this,
                     UserAction.navigate("main-view1"));
         }else{
@@ -302,8 +301,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-    protected void doInitConfiguration() {
+    protected String doInitConfiguration() {
 
+        String success = "";
         String projectsFolder = currentWorkspace;
 
         File f = new File(projectsFolder);
@@ -316,7 +316,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         ProjectRepository projectRepo = app.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
-            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
+            success = getString(R.string.no_projects);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -330,11 +330,18 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 }
             }
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-            App.getInstance().setCurrentProject(prj);
+
+           try {
+                App.getInstance().setCurrentProject(prj);
+                success = getString(R.string.project_opening_finish);
+            } catch (Exception e) {
+                success = getString(R.string.project_opening_error);
+            }
 
             App.getInstance().setJobListener(new JobProgressListener());
         }
         initFormicBackend();
+        return success;
     }
 
     @Override
@@ -584,9 +591,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         @Override
         protected String doInBackground(String... params) {
-            doInitConfiguration();
-            return "";
+            return doInitConfiguration();
         }
+
         @Override
         protected void onPostExecute(final String success) {
             dialog.dismiss(); // to hide this dialog
@@ -596,15 +603,21 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                         DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
                         Toast.LENGTH_LONG);
             } else {
-                UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) App.getInstance().getCurrentProject().getId())),
-                        Toast.LENGTH_LONG);
+                if (success.equals(getString(R.string.project_opening_error))) {
+                    UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) App.getInstance().getCurrentProject().getId())),
+                            Toast.LENGTH_LONG);
+                }else if (success.equals(getString(R.string.no_projects))) {
+                    UserMessagesHelper.toast(currentContext, warn("No projects found!!. Create a folder under " + currentWorkspace), Snackbar.LENGTH_LONG);
+                }else if (success.equals(getString(R.string.project_opening_finish))) {
+                    UserMessagesHelper.toast(currentContext,
+                            DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
+                            Toast.LENGTH_LONG);
+                }
             }
          }
 
         @Override
         protected void onPreExecute() {
-            /*UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_init,
-                    (String)App.getInstance().getCurrentProject().getId())), Toast.LENGTH_LONG);*/
             AlertDialog.Builder builder = new AlertDialog.Builder(currentContext, es.jcyl.ita.formic.forms.R.style.DialogStyle);
             builder.setCancelable(false); // if you want user to wait for some process to finish,
             builder.setView(R.layout.layout_loading_dialog);
