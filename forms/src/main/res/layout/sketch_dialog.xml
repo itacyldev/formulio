@@ -18,21 +18,23 @@
             android:layout_weight="0.6">
             <LinearLayout
                 android:id="@+id/field_layout_layout"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
-                tools:ignore="MissingConstraints">
+                android:weightSum="10">
+                <LinearLayout
+                    android:id="@+id/canvasLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:orientation="vertical">
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/buttonLayout"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="3"
+                    android:layout_weight="1"
                     android:background="@android:color/white">
                     <Button
                         android:id="@+id/cancel"
@@ -66,12 +68,6 @@
                         tools:ignore="ButtonStyle"
                         android:textSize="16sp"
                         android:background="@drawable/roundbutton"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/canvasLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
