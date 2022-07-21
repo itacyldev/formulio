@@ -144,9 +144,9 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             }
             getMinColumnWidth(this.dtLayout.getHeaderView());
             for(int i = 0; i < this.dtLayout.getEntities().size(); i++){
-                  //((LinearLayout) cacheViews[4]).getChildAt(2).getMeasuredWidth()
                 adjustColumnWidth((LinearLayout) cacheViews[i]);
                 adjustColumnWidth(this.dtLayout.getHeaderView());
+                item.requestLayout();
             }
 
         }
@@ -168,7 +168,6 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
      * @param rowLayout
      */
     public void adjustColumnWidth(LinearLayout rowLayout) {
-
         Integer nChild = rowLayout.getChildCount();
         for (int i = 0; i < nChild; i++) {
             View cellView = rowLayout.getChildAt(i);
@@ -179,8 +178,8 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             if (maxColWidth > colWidth) {
                 cellView.setMinimumWidth(maxColWidth);
             } /*else {
-                minColWidths[i] = colWidth;
-            }*/
+                    minColWidths[i] = colWidth;
+                }*/
         }
     }
 
@@ -189,8 +188,11 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
         Integer nChild = rowLayout.getChildCount();
         for (int i = 0; i < nChild; i++) {
             View cellView = rowLayout.getChildAt(i);
+
             Integer colWidth = 0;
+            cellView.measure(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             colWidth = cellView.getMeasuredWidth();
+
             Integer maxColWidth = minColWidths[i];
 
             if (maxColWidth <= colWidth) {
