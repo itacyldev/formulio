@@ -148,7 +148,6 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 adjustColumnWidth(this.dtLayout.getHeaderView());
                 item.requestLayout();
             }
-
         }
 
         setAlternateRowColor(position, item);
