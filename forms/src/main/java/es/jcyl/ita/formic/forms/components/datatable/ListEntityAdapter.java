@@ -120,12 +120,21 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             holder = (ViewColumnHolder) item.getTag();
         }
 
+        getMinColumnWidth(this.dtLayout.getHeaderView());
         if (!holder.charged || holder.position != position) {
             setViewsLayout(holder, currentEntity);
             setOnClickListener(holder.layout, currentEntity);
             holder.position = position;
             holder.charged = true;
             cacheViews[position % cacheViews.length] = item;
+            for (int i=0; i< cacheViews.length & cacheViews[i] != null; i++){
+               getMinColumnWidth((LinearLayout) cacheViews[i]);
+            }
+            for (int i=0; i< cacheViews.length & cacheViews[i] != null; i++){
+                adjustColumnWidth((LinearLayout) cacheViews[i]);
+                adjustColumnWidth(this.dtLayout.getHeaderView());
+                item.requestLayout();
+            }
         }
 
         // Adjust the column width to the content size
@@ -138,7 +147,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             item.setBackground(ContextCompat.getDrawable(context, R.drawable.unselectablebuttonbackground));
         }
 
-        if (this.dtLayout.getEntities().size() == position + 1){
+        /*if (this.dtLayout.getEntities().size() == position + 1){
             for(int i = 0; i < this.dtLayout.getEntities().size(); i++){
                 getMinColumnWidth((LinearLayout) cacheViews[i]);
             }
@@ -148,7 +157,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
                 adjustColumnWidth(this.dtLayout.getHeaderView());
                 item.requestLayout();
             }
-        }
+        }*/
 
         
         setAlternateRowColor(position, item);
