@@ -30,6 +30,7 @@ import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.column.UIColumn;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
@@ -127,14 +128,17 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             holder.position = position;
             holder.charged = true;
             cacheViews[position % cacheViews.length] = item;
-            for (int i=0; i< cacheViews.length & cacheViews[i] != null; i++){
-               getMinColumnWidth((LinearLayout) cacheViews[i]);
+            for (int i = 0; i < cacheViews.length & cacheViews[i] != null; i++) {
+                DevConsole.debug("cacheViews.length::: "+cacheViews.length);
+                DevConsole.debug("i::: "+i);
+                getMinColumnWidth((LinearLayout) cacheViews[i]);
             }
-            for (int i=0; i< cacheViews.length & cacheViews[i] != null; i++){
+            for (int i = 0; i < cacheViews.length & cacheViews[i] != null; i++) {
                 adjustColumnWidth((LinearLayout) cacheViews[i]);
                 adjustColumnWidth(this.dtLayout.getHeaderView());
-                item.requestLayout();
+                //item.requestLayout();
             }
+            
         }
 
         // Adjust the column width to the content size
