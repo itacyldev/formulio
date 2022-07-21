@@ -136,7 +136,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             for (int i = 0; i < cacheViews.length & cacheViews[i] != null; i++) {
                 adjustColumnWidth((LinearLayout) cacheViews[i]);
                 adjustColumnWidth(this.dtLayout.getHeaderView());
-                    //item.requestLayout();
+                //item.requestLayout();
             }
             
         }
