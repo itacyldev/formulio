@@ -268,8 +268,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
-            //doInitConfiguration();
-            new MyTask(this).execute();
+            doInitConfiguration();
+            //new MyTask(this).execute();
         }
     }
 
@@ -373,8 +373,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     }
                 }
                 if (allAcepted) {
-                    //doInitConfiguration();
-                    new MyTask(this).execute();
+                    doInitConfiguration();
+                    //new MyTask(this).execute();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder
                             (this);
