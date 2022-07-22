@@ -303,9 +303,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-    protected String doInitConfiguration() {
+    protected void doInitConfiguration() {
 
-        String success = "";
         String projectsFolder = currentWorkspace;
 
         File f = new File(projectsFolder);
@@ -318,7 +317,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         ProjectRepository projectRepo = app.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
-            success = getString(R.string.no_projects);
+            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -333,18 +332,22 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
 
-           try {
+            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
+                    (String) prj.getId())), Toast.LENGTH_LONG);
+            try {
                 App.getInstance().setCurrentProject(prj);
-                success = getString(R.string.project_opening_finish);
+                UserMessagesHelper.toast(this,
+                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
+                        Toast.LENGTH_LONG);
             } catch (Exception e) {
-                success = getString(R.string.project_opening_error);
+                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
+                        Toast.LENGTH_LONG);
             }
-
             App.getInstance().setJobListener(new JobProgressListener());
         }
         initFormicBackend();
-        return success;
     }
+
 
     @Override
     protected void setTheme() {
@@ -583,7 +586,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         editor.commit();
     }
 
-    class MyTask extends AsyncTask<String, String, String> {
+    /*class MyTask extends AsyncTask<String, String, String> {
         AlertDialog dialog;
         Context currentContext;
 
@@ -627,5 +630,42 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             dialog.show(); // to show this dialog
 
         }
-}
+}*/
+
+    class MyTask extends AsyncTask<Project, String, String> {
+        AlertDialog dialog;
+        Context currentContext;
+
+        public MyTask(Context context) {
+            currentContext =  context;
+        }
+
+        @Override
+        protected String doInBackground(Project... params) {
+            String success="";
+            try {
+                App.getInstance().setCurrentProject(params[0]);
+                success = getString(R.string.project_opening_finish);
+            } catch (Exception e) {
+                success = getString(R.string.project_opening_error);
+            }
+            return success;
+        }
+
+        @Override
+        protected void onPostExecute(final String success) {
+            dialog.dismiss(); // to hide this dialog
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(currentContext, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+            builder.setCancelable(false); // if you want user to wait for some process to finish,
+            builder.setView(R.layout.layout_loading_dialog);
+            dialog = builder.create();
+            dialog.show(); // to show this dialog
+
+        }
+    }
 }
