@@ -22,4 +22,23 @@
         permission to access the contents of a specific directory</string>
     <string name="allFilesAccessPermission">This app requires permission to
         manage external storage. Only the files defined in the configuration of each project within the application will be used.</string>
+    <string name="title_activity_project_import">ProjectImportActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="file_to_load">File to load</string>
+    <string name="error_filemanager">No file manager found</string>
+    <string name="error_fileload_extension">The file type must be</string>
+    <string name="project_import_file_incorrect">The structure of the file is not correct.\nCheck that the following directories exist:\n</string>
+    <string name="projectimportfail">It was not possible to import the
+        project.\nTry to open the file with a file explorer or import it
+        directly</string>
+    <string name="project_import_files">And the files:\n</string>
+    <string name="project_import_existing_files">The following files already exist on the device:</string>
+    <string name="project_import_overwrite_files">If you continue, a copy will be saved in projects/bak and then they will be overwritten</string>
 </resources>

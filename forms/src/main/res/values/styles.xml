@@ -199,6 +199,11 @@
         <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerButtonStyle</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerButtonStyle</item>
     </style>
+    
+  <style name="MyDialogStyle" parent="android:Theme.Holo.Dialog">
+      <item name="android:windowBackground">@android:color/transparent</item>
+      <item name="android:background">@null</item>
+    </style>
 
     <style name="DatePickerButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">?attr/onPrimaryColor</item>
