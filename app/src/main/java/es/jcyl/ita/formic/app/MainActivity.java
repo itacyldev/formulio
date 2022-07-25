@@ -117,11 +117,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            showSettings();
-            return true;
-        }
-
         if (id == R.id.action_dark_theme) {
             switchTheme();
             return true;
