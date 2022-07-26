@@ -18,7 +18,6 @@ package es.jcyl.ita.formic.forms.actions.events;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.components.UIComponent;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -38,6 +37,7 @@ public class OnClickEventHandler
     public void handle(Event event) {
         // if the component has defined an UserAction for this event, use it
         UserAction action = event.getHandler();
+        action.addParam("parentContext", event.getSource().getRootWidget().getContext());
         if(action != null){
             ac.doUserAction(action);
             if(action.isViewChangeAction()){
