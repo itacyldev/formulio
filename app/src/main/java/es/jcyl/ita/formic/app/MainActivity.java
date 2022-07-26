@@ -27,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
@@ -191,19 +192,18 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         // get view controles and check if exists a "main" form
         ViewControllerFactory ctlFactory = ViewControllerFactory.getInstance();
 
-        boolean containsMain = false;
+        String formId="";
         for (String a : ctlFactory.getControllerIds()) {
             if (a.startsWith("main-")) {
-                containsMain = true;
+                formId = a;
                 break;
-
             }
         }
-        if (containsMain) {
+        if (StringUtils.isNotEmpty(formId)) {
             loadFragment(ProjectListFragment.newInstance(
                     App.getInstance().getProjectRepo()));
             MainController.getInstance().getRouter().navigate(MainActivity.this,
-                    UserAction.navigate("main-view1"));
+                    UserAction.navigate(formId));
         }else{
             // open default form list view
             loadFragment(new FormListFragment());

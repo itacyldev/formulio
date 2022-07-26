@@ -22,6 +22,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
@@ -67,6 +68,8 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
             } else {
                 setupChildrenIds(formConfig, "edit", edits);
             }
+        }else if (viewList.size() > 1){
+            throw new ConfigurationException("The form has more than one view component");
         }
         BuilderHelper.addDefaultRepoNode(node);
     }
