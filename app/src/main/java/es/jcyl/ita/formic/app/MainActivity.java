@@ -1,19 +1,21 @@
 package es.jcyl.ita.formic.app;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.mini2Dx.collections.CollectionUtils;
@@ -30,19 +33,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
+import es.jcyl.ita.formic.app.dialog.ProjectDialog;
 import es.jcyl.ita.formic.app.jobs.JobProgressListener;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.StorageContentManager;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
+import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.util.FileUtils;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -61,13 +69,16 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private static final int PERMISSION_REQUEST = 1234;
     private static final int RQS_OPEN_DOCUMENT_TREE = 2;
     private static final int PERMISSION_STORAGE_REQUEST = 5708463;
+    private static final int PROJECT_IMPORT_FILE_SELECT = 725353137;
+
+    private static final String PROJECT_IMPORT_EXTENSION = "FRMD";
 
     @Override
     protected void doOnCreate() {
         getApplication().getFilesDir();
         setContentView(R.layout.activity_main);
-        //checkPermissions();
-        checkStoragePermission();
+        checkPermissions();
+        //checkStoragePermission();
         checkDeviceFeatures();
     }
 
@@ -144,8 +155,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
-    private void initialize() {
+    private void initFormicBackend () {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -164,10 +176,43 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         });
 
+        import_project.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProjectDialog projectDialog = new ProjectDialog
+                        (MainActivity.this, currentTheme);
+                projectDialog.build().show();
+                //openProjectDialog();
+            }
+        });
+
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
-        loadFragment(new FormListFragment());
+        loadFragment();
+    }
+
+    public void loadFragment(){
+        // get view controles and check if exists a "main" form
+        ViewControllerFactory ctlFactory = ViewControllerFactory.getInstance();
+
+        boolean containsMain = false;
+        for (String a : ctlFactory.getControllerIds()) {
+            if (a.startsWith("main-")) {
+                containsMain = true;
+                break;
+
+            }
+        }
+        if (containsMain) {
+            loadFragment(ProjectListFragment.newInstance(
+                    App.getInstance().getProjectRepo()));
+            MainController.getInstance().getRouter().navigate(MainActivity.this,
+                    UserAction.navigate("main-view1"));
+        }else{
+            // open default form list view
+            loadFragment(new FormListFragment());
+        }
     }
 
     @Override
@@ -180,7 +225,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         boolean requestStorage = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requestStorage = !Environment.isExternalStorageManager();
+            Uri treeUri = StorageContentManager.getExternalPrimaryStoragePathUri(this);
+            if (treeUri != null) {
+                currentWorkspace = FileUtils.getPath(this, treeUri);
+            } else {
+                requestStorage = true;
+            }
+
         } else {
             int result = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
             int result1 = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
@@ -194,6 +245,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         } else {
             checkPermissions();
         }
+
     }
 
     protected void checkPermissions() {
@@ -217,12 +269,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
             doInitConfiguration();
+            //new MyTask(this).execute();
         }
     }
 
     private void warnStoragePermission() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-        builder.setMessage(R.string.allFilesAccessPermission).setPositiveButton(R.string.close, new
+        builder.setMessage(R.string.specificDirectoryAccessPermission).setPositiveButton(R.string.close, new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -241,25 +294,18 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     private void requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                intent.addCategory("android.intent.category.DEFAULT");
-                intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
-                startActivityForResult(intent, PERMISSION_STORAGE_REQUEST);
-            } catch (Exception e) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                startActivityForResult(intent, PERMISSION_STORAGE_REQUEST);
-            }
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, RQS_OPEN_DOCUMENT_TREE);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{ READ_EXTERNAL_STORAGE,
+            ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE,
                             WRITE_EXTERNAL_STORAGE, CAMERA},
-                    PERMISSION_STORAGE_REQUEST);
+                    RQS_OPEN_DOCUMENT_TREE);
         }
     }
 
-    protected void doInitConfiguration() {
+    protected String doInitConfiguration() {
 
+        String success = "";
         String projectsFolder = currentWorkspace;
 
         File f = new File(projectsFolder);
@@ -272,26 +318,32 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         ProjectRepository projectRepo = app.getProjectRepo();
         List<Project> projects = projectRepo.listAll();
         if (CollectionUtils.isEmpty(projects)) {
-            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
+            success = getString(R.string.no_projects);
         } else {
             // TODO: extract Project View Helper to FORMIC-27
-            Project prj = projects.get(0); // TODO: store in shareSettings the last open project FORMIC-27
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String projectName = sharedPreferences.getString("projectName","");
+            Project prj = projects.get(0);
+            if (projectName != null) {
+                for (Project project : projects) {
+                    if (project.getName().equalsIgnoreCase(projectName)) {
+                        prj = project;
+                    }
+                }
+            }
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
 
-            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
-                    (String) prj.getId())), Toast.LENGTH_LONG);
-            try {
+           try {
                 App.getInstance().setCurrentProject(prj);
-                UserMessagesHelper.toast(this,
-                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
+                success = getString(R.string.project_opening_finish);
             } catch (Exception e) {
-                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
+                success = getString(R.string.project_opening_error);
             }
+
             App.getInstance().setJobListener(new JobProgressListener());
         }
-        initialize();
+        initFormicBackend();
+        return success;
     }
 
     @Override
@@ -322,6 +374,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 }
                 if (allAcepted) {
                     doInitConfiguration();
+                    //new MyTask(this).execute();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder
                             (this);
@@ -339,7 +392,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     dialog.show();
                 }
             }
-        } else if (requestCode == PERMISSION_STORAGE_REQUEST) {
+        } else if (requestCode == RQS_OPEN_DOCUMENT_TREE) {
             if (grantResults.length > 0) {
                 boolean READ_EXTERNAL_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED;
@@ -357,17 +410,64 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     @RequiresApi(api = Build.VERSION_CODES.R)
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PERMISSION_STORAGE_REQUEST) {
-            if (!Environment.isExternalStorageManager()) {
-                storagePermissionNotGranted();
-                currentWorkspace = FileUtils.getPath(this, data.getData());
-            } else {
-                checkPermissions();
-            }
+
+        switch (requestCode) {
+            case RQS_OPEN_DOCUMENT_TREE:
+                if (resultCode == RESULT_OK) {
+                    currentWorkspace = FileUtils.getPath(this, data.getData());
+
+                    final ContentResolver contentResolver = getContentResolver();
+
+                    final Uri treeUri = data != null ? data.getData() : null;
+                    try {
+                        contentResolver.takePersistableUriPermission(treeUri,
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        checkPermissions();
+                    } catch (SecurityException e) {
+                        storagePermissionNotGranted();
+                    }
+                    break;
+                }
+            case PROJECT_IMPORT_FILE_SELECT:
+                if (resultCode == RESULT_OK) {
+                    final Uri uri = data.getData();
+                    if (uri != null) {
+
+                        final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
+                        if (path != null) {
+                            final File file = new File(path);
+                            final String extension = FileUtils
+                                    .getFileExtension(file);
+
+                            if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
+                                Uri fileUri = Uri.fromFile(file);
+
+                                try {
+                                    importProject(this, fileUri);
+                                } catch (IOException e) {
+                                    Toast.makeText(
+                                            this,
+                                            getString(R.string.projectimportfail),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(
+                                        this,
+                                        getString(R.string.error_fileload_extension)
+                                                + " " + PROJECT_IMPORT_EXTENSION,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    break;
+                }
         }
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
@@ -375,4 +475,157 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         // Do nothing
     }
 
+    private void importProject(Context context, Uri fileUri) throws IOException {
+
+        ProjectImporter projectImporter = ProjectImporter.getInstance();
+
+        String origin = projectImporter.getPathString(this, fileUri);
+        String destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
+        Map<String, String> existingFiles = projectImporter.getExistingFiles(origin, destination);
+        String projectName = projectImporter.getProjectName(this, fileUri.getLastPathSegment());
+
+        if ("".equals(origin)) {
+            showProjectImportFailDialog(context);
+        }
+
+        if (existingFiles.size() > 0) {
+           showExistingFilesDialog(context, existingFiles, origin,
+                    destination, projectName, projectImporter);
+        }else {
+            importProject(context, origin, destination, projectName, projectImporter);
+        }
+    }
+
+    private void showProjectImportFailDialog(Context context) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+        final AlertDialog dialog = builder.setMessage(R.string.projectimportfail)
+                .setPositiveButton(es.jcyl.ita.formic.forms.R.string.accept,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(
+                                    final DialogInterface cancelDialog,
+                                    final int id) {
+                                cancelDialog.cancel();
+                                launchActivity(context, "");
+                            }
+                        }).create();
+
+        dialog.show();
+    }
+
+    private void showExistingFilesDialog(final Context context, final
+    Map<String, String> files, final String origin, final String destination,
+                                         final String projectName, ProjectImporter projectImporter) {
+
+        String message = context.getString(R.string.project_import_existing_files);
+
+        for (String file : files.keySet()) {
+            message += "\n- " + file;
+        }
+
+        message += "\n" + context.getString(R.string
+                .project_import_overwrite_files);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+        final AlertDialog dialog = builder.setMessage(message)
+                .setPositiveButton(es.jcyl.ita.formic.forms.R.string.accept,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(
+                                    final DialogInterface dialog,
+                                    final int id) {
+                                importProject(context, origin, destination, projectName, projectImporter);
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton(es.jcyl.ita.formic.forms.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialog,
+                                                final int id) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+        dialog.show();
+
+
+    }
+
+    private void importProject(Context context, String origin, String destination, String projectName, ProjectImporter projectImporter){
+        try {
+            projectImporter.moveFiles2BackUp(context, projectName);
+            projectImporter.extractFiles(context, origin, destination);
+            launchActivity(context, projectName);
+        }catch (IOException e){
+            Toast.makeText(
+                    this,
+                    getString(R.string.projectimportfail),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void launchActivity(Context context, String projectName) {
+        setSharedPreferences(context, projectName);
+
+        final Intent intent =
+                context.getPackageManager()
+                        .getLaunchIntentForPackage(
+                                context.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
+    private void setSharedPreferences(Context context, String
+            selectedFileName) {
+        final SharedPreferences.Editor editor = context
+                .getSharedPreferences("selectedProject", Context.MODE_PRIVATE)
+                .edit();
+        editor.putString("name", selectedFileName);
+        editor.commit();
+    }
+
+    class MyTask extends AsyncTask<String, String, String> {
+        AlertDialog dialog;
+        Context currentContext;
+
+        public MyTask(Context context) {
+            currentContext =  context;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return doInitConfiguration();
+        }
+
+        @Override
+        protected void onPostExecute(final String success) {
+            dialog.dismiss(); // to hide this dialog
+
+            if (success.isEmpty()) {
+                UserMessagesHelper.toast(currentContext,
+                        DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
+                        Toast.LENGTH_LONG);
+            } else {
+                if (success.equals(getString(R.string.project_opening_error))) {
+                    UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) App.getInstance().getCurrentProject().getId())),
+                            Toast.LENGTH_LONG);
+                }else if (success.equals(getString(R.string.no_projects))) {
+                    UserMessagesHelper.toast(currentContext, warn("No projects found!!. Create a folder under " + currentWorkspace), Snackbar.LENGTH_LONG);
+                }else if (success.equals(getString(R.string.project_opening_finish))) {
+                    UserMessagesHelper.toast(currentContext,
+                            DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
+                            Toast.LENGTH_LONG);
+                }
+            }
+         }
+
+        @Override
+        protected void onPreExecute() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(currentContext, es.jcyl.ita.formic.forms.R.style.DialogStyle);
+            builder.setCancelable(false); // if you want user to wait for some process to finish,
+            builder.setView(R.layout.layout_loading_dialog);
+            dialog = builder.create();
+            dialog.show(); // to show this dialog
+
+        }
+}
 }

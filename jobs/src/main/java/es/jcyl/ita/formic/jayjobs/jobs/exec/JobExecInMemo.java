@@ -26,7 +26,6 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
-import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
 /**
  * In memory Job execution repository implementation.
@@ -64,7 +63,8 @@ public class JobExecInMemo implements JobExecRepo {
         // create execution record using job config
         JobExecStatus execution = new JobExecStatus();
         execution.setJobId(job.getId());
-        execution.setUserId(ContextAccessor.userId(ctx));
+        //execution.setUserId(ContextAccessor.userId(ctx));
+        execution.setUserId("PRUEBA_JOB");
         execution.setMode(job.getExecMode());
 
         Long execId = Long.valueOf(executions.size() + 1);

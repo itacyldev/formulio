@@ -24,13 +24,13 @@ import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
+import util.Log;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
@@ -64,8 +64,8 @@ public class JobProgressListener implements JobExecListener, Serializable {
 
         try {
             jobExecRepo.registerExecInit(job, JobExecutionMode.FG);
-        }catch (JobException ex){
-
+        } catch (JobException ex) {
+            Log.error(String.format("An error occurred during execution of job [%s]", job.getId()));
         }
     }
 
@@ -75,6 +75,9 @@ public class JobProgressListener implements JobExecListener, Serializable {
 
         intent.putExtra("jobExecId", jobExecId);
         andContext.startActivity(intent);
+//        Bundle bundle = new Bundle();
+//        bundle.putLong("jobExecId", jobExecId);
+//        andContext.startActivity(intent, bundle);
     }
 
 

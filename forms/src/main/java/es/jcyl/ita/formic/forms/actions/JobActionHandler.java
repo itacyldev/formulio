@@ -17,6 +17,8 @@ package es.jcyl.ita.formic.forms.actions;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
+import android.content.Context;
+
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
@@ -48,6 +50,10 @@ public class JobActionHandler extends AbstractActionHandler {
                     "value='yourJobId'/> and make sure the file " +
                     "'yourProject/jobs/yourJobId.json' exists"));
         }
+
+
+        Context ParentContext = (Context) action.getParams().get("parentContext");
+
         String jobId = (String) action.getParams().get("jobId");
 
         // clone context and add parameter context
