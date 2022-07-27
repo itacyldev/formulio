@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.app.jobs;
  * limitations under the License.
  */
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
 import android.content.Context;
 import android.content.Intent;
 
@@ -75,7 +73,6 @@ public class JobProgressListener implements JobExecListener, Serializable {
         Context andContext = App.getInstance().getAndroidContext();
         Intent intent = new Intent(andContext, JobProgressActivity.class);
 
-        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("jobExecId", jobExecId);
         andContext.startActivity(intent);
     }
