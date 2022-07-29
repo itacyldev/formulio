@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -181,6 +182,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 //openProjectDialog();
             }
         });
+
+        ImageView imageNoProjects = (ImageView) findViewById(R.id.image_no_projects);
+        if (App.getInstance().getCurrentProject() == null){
+            imageNoProjects.setVisibility(View.VISIBLE);
+        }else{
+            imageNoProjects.setVisibility(View.GONE);
+        }
 
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);

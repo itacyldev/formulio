@@ -29,6 +29,16 @@
         <item name="srcCompat">@android:drawable/ic_input_add</item>
     </style>
 
+    <style name="FloatingActionAddProjectButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="backgroundTint">?attr/primaryColor</item>
+        <item name="tint">?attr/onPrimaryColor</item>
+        <item name="srcCompat">@drawable/ic_action_folder</item>
+    </style>
+
     <!-- Components -->
     <style name="HintTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textSize">14sp</item> <!-- floating hint text size -->
