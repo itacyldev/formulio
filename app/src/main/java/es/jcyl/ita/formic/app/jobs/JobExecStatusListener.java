@@ -18,7 +18,7 @@ public class JobExecStatusListener {
 
     private Date lastPollTime;
 
-    public static final int MSG_CODE = 1;
+    public static final int MSG_CODE = 9085747;
 
     public JobExecStatusListener(JobProgressActivity activity, long jobExecId, JobExecRepo jobExecRepo) {
         this.jobExecId = jobExecId;
@@ -32,6 +32,7 @@ public class JobExecStatusListener {
     }
 
     public void startActiveWaiting() {
+
         final Thread thread = new Thread() {
             @Override
             public void run() {
@@ -39,10 +40,10 @@ public class JobExecStatusListener {
                 do {
                     status = pollJobStatus(jobExecId);
 
-                    if (status.getLastTimeUpdated() != null && status.getLastTimeUpdated().after(lastPollTime) || lastPollTime == null) {
+                    if (lastPollTime == null || (status.getLastTimeUpdated() != null && status.getLastTimeUpdated().after(lastPollTime))) {
                         // Create a message in child thread.
                         if (status.getMessage() != null) {
-                            Log.debug("Actualizando Mensaje a: " + status.getMessage());
+                            Log.debug("Updating Message to: " + status.getMessage());
                             Message childThreadMessage = new Message();
                             childThreadMessage.what = MSG_CODE;
                             Bundle msgData = new Bundle();
@@ -57,17 +58,26 @@ public class JobExecStatusListener {
 
 
                     try {
-                        Log.debug("Esperando...");
+                        Log.debug("Waiting...");
                         sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } while (!status.getState().equals(JobExecutionState.FINISHED) || !status.getState().equals(JobExecutionState.ERROR));
+                } while (!status.getState().equals(JobExecutionState.FINISHED) && !status.getState().equals(JobExecutionState.ERROR));
+                // JOB has finished or execution has stopped because of errors
             }
         };
 
         thread.start();
 
+//        try {
+//            thread.join();
+//        }catch (InterruptedException e){
+//            Log.error("Error waiting thread finish");
+//        }
+
+
+        activity.endJob();
     }
 
 }

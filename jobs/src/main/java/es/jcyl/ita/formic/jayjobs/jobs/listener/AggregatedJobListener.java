@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
@@ -90,9 +91,9 @@ public class AggregatedJobListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, long jobId, JobExecRepo jobExecRepo) {
+    public void onJobStart(CompositeContext ctx, JobConfig job, long jobId, JobExecRepo jobExecRepo) {
         for (JobExecListener listener : listeners) {
-            listener.onJobStart(job, jobId, jobExecRepo);
+            listener.onJobStart(ctx, job, jobId, jobExecRepo);
         }
     }
 

@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
@@ -25,7 +26,7 @@ import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
  */
 public interface JobExecListener extends TaskExecListener {
 
-    void onJobStart(JobConfig job, long jobId, JobExecRepo jobExecRepo);
+    void onJobStart(CompositeContext ctx, JobConfig job, long jobId, JobExecRepo jobExecRepo);
 
     void onJobEnd(JobConfig job, long jobId, JobExecRepo jobExecRepo);
 

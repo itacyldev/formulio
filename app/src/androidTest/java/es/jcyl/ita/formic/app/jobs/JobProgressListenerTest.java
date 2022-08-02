@@ -94,7 +94,7 @@ public class JobProgressListenerTest {
 
 
         JobProgressListener listener = new JobProgressListener();
-        listener.onJobStart(jobConfig, 1, jobExecRepo);
+        listener.onJobStart(ctx, jobConfig, 1, jobExecRepo);
 
 
     }

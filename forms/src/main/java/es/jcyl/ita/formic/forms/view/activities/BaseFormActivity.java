@@ -32,7 +32,8 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class BaseFormActivity<F extends ViewController> extends BaseActivity
+public abstract class
+BaseFormActivity<F extends ViewController> extends BaseActivity
         implements FormActivity<F> {
 
     protected Router router;

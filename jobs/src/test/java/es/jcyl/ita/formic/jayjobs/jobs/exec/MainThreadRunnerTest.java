@@ -56,7 +56,7 @@ public class MainThreadRunnerTest {
         // check listener has been called
 
         verify(listenerMock, times(1)).onJobEnd(any(), any(), any());
-        verify(listenerMock, times(1)).onJobStart(any(), any(), any());
+        verify(listenerMock, times(1)).onJobStart(any(),any(), any(), any());
     }
 
     @Test

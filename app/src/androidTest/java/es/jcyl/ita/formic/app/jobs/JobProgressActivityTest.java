@@ -70,7 +70,7 @@ public class JobProgressActivityTest {
         scenario = rule.getScenario();
 
         progressListener = new JobProgressListener(false);
-        progressListener.onJobStart(jobConfig, 1, jobExecRepo);
+        progressListener.onJobStart(ctx, jobConfig, 1, jobExecRepo);
 
 
         //scenario.moveToState(Lifecycle.State.STARTED);

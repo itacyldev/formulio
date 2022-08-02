@@ -20,7 +20,10 @@ import android.content.Intent;
 
 import java.io.Serializable;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.App;
+import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
@@ -53,13 +56,15 @@ public class JobProgressListener implements JobExecListener, Serializable {
     }
 
     @Override
-    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+    public void onJobStart(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         this.jobExecId = jobExecId;
         this.jobConfig = job;
 
         // open activity
         if (showProgress) {
-            launchProgressActivity();
+            es.jcyl.ita.formic.core.context.Context paramsContext =  ctx.getContext("params");
+            Context  parentContext = (Context) paramsContext.get("parentContext");
+            launchProgressActivity(parentContext);
         }
 
         try {
@@ -69,12 +74,13 @@ public class JobProgressListener implements JobExecListener, Serializable {
         }
     }
 
-    private void launchProgressActivity() {
-        Context andContext = App.getInstance().getAndroidContext();
+    private void launchProgressActivity(Context andContext) {
+        //Context andContext = App.getInstance().getAndroidContext();
         Intent intent = new Intent(andContext, JobProgressActivity.class);
 
         intent.putExtra("jobExecId", jobExecId);
         andContext.startActivity(intent);
+
 //        Bundle bundle = new Bundle();
 //        bundle.putLong("jobExecId", jobExecId);
 //        andContext.startActivity(intent, bundle);
