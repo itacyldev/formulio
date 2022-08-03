@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
@@ -77,6 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     protected void switchTheme() {
 
+        App.getInstance().clear();
         if (currentTheme.equals("light")) {
             setTheme(R.style.FormudruidDark);
             sharedPreferences.edit().putString("current_theme", "dark").apply();
@@ -92,6 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
         recreate();
 
         invalidateOptionsMenu();
+
     }
 
     protected void synchronization(){
@@ -152,7 +154,6 @@ public abstract class BaseActivity extends AppCompatActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before_white_24dp));
         toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {

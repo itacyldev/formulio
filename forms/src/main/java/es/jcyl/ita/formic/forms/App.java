@@ -53,8 +53,6 @@ import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
-import es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener;
-import es.jcyl.ita.formic.jayjobs.jobs.listener.LogJobExecListener;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -188,7 +186,7 @@ public class App {
         globalContext.addContext(appCtx);
     }
 
-    private void clear() {
+    public void clear() {
         // clear defined forms configs, form controllers and repos
         if (formConfigRepo != null) {
             this.formConfigRepo.deleteAll();
