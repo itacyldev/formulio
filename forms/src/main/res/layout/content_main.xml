@@ -20,7 +20,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/import_project"
-            style="@style/FloatingActionAddProjectButtonStyle"/>
+            style="@style/FloatingActionAddButtonStyle"/>
     </FrameLayout>
 
     <LinearLayout
@@ -50,10 +50,13 @@
                     android:layout_weight="0.10">
                 </RelativeLayout>
                 <RelativeLayout
+                    android:id="@+id/layout_no_projects"
                     android:layout_width="match_parent"
                     android:layout_height="0dip"
-                    android:layout_weight="0.6">
+                    android:layout_weight="0.6"
+                    android:visibility="gone">
                     <TextView
+                        android:id="@+id/text_no_projects"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/no_current_project"
@@ -64,7 +67,6 @@
                         android:id="@+id/image_no_projects"
                         android:src="@drawable/ic_assignment_black_24dp"
                         android:clickable="false"
-                        android:visibility="gone"
                         android:tint="?attr/primaryColor"
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"/>

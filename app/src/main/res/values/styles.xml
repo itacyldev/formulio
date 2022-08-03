@@ -8,8 +8,8 @@
     <style name="BottomNavigationStyle">
         <item name="android:background">?attr/primaryColor</item>
         <item name="itemBackground">?attr/primaryColor</item>
-        <item name="itemIconTint">?attr/onPrimaryColor</item>
-        <item name="itemTextColor">?attr/onPrimaryColor</item>
+        <item name="itemIconTint">@drawable/navbar_color</item>
+        <item name="itemTextColor">@drawable/navbar_color</item>
     </style>
     
     <style name="ProjectFormsCardStyle">
@@ -27,16 +27,6 @@
         <item name="backgroundTint">?attr/primaryColor</item>
         <item name="tint">?attr/onPrimaryColor</item>
         <item name="srcCompat">@android:drawable/ic_input_add</item>
-    </style>
-
-    <style name="FloatingActionAddProjectButtonStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">bottom|end</item>
-        <item name="android:layout_margin">@dimen/fab_margin</item>
-        <item name="backgroundTint">?attr/primaryColor</item>
-        <item name="tint">?attr/onPrimaryColor</item>
-        <item name="srcCompat">@drawable/ic_action_folder</item>
     </style>
 
     <!-- Components -->

@@ -16,7 +16,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         startActivity(intent);
     }
 
-    private void initFormicBackend () {
+    private void initFormicBackend() {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -162,9 +162,11 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     case R.id.action_projects:
                         loadFragment(ProjectListFragment.newInstance(
                                 App.getInstance().getProjectRepo()));
+                        loadImageNoProjects();
                         break;
                     case R.id.action_forms:
                         loadFragment(new FormListFragment());
+                        loadImageNoProjects();
                         break;
                     default:
                         break;
@@ -183,17 +185,22 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
         });
 
-        ImageView imageNoProjects = (ImageView) findViewById(R.id.image_no_projects);
-        if (App.getInstance().getCurrentProject() == null){
-            imageNoProjects.setVisibility(View.VISIBLE);
-        }else{
-            imageNoProjects.setVisibility(View.GONE);
-        }
-
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
         loadFragment();
+
+
+
+    }
+
+    private void loadImageNoProjects(){
+        RelativeLayout layoutNoProjects = findViewById(R.id.layout_no_projects);
+        if (App.getInstance().getProjectRepo().listAll().size() == 0){
+            layoutNoProjects.setVisibility(View.VISIBLE);
+        }else{
+            layoutNoProjects.setVisibility(View.GONE);
+        }
     }
 
     public void loadFragment(){
@@ -216,6 +223,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             // open default form list view
             loadFragment(new FormListFragment());
         }
+
+        loadImageNoProjects();
+
     }
 
     @Override
@@ -670,5 +680,15 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             dialog.show(); // to show this dialog
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Project selectedProject = App.getInstance().getCurrentProject();
+        int id = selectedProject == null?R.id.action_projects:R.id.action_forms;
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.getMenu().findItem(id).setChecked(true);
+
     }
 }
