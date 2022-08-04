@@ -53,10 +53,6 @@ public class JobExecInMemo extends AbstractJobExecRepo {
         return _instance;
     }
 
-    /*public JobExecInMemo(CompositeContext ctx) {
-        this.ctx = ctx;
-    }*/
-
     @Override
     public JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode)
             throws JobException {
