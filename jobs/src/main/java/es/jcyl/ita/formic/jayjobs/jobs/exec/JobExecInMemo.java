@@ -125,6 +125,7 @@ public class JobExecInMemo extends AbstractJobExecRepo {
     public void updateJobStatus(JobExecStatus jobStatus) {
         jobStatus.setLastTimeUpdated(new Date());
         executions.put(jobStatus.getId(), jobStatus);
+        addMessage(jobStatus.getId(), jobStatus.getMessage());
     }
 
     public CompositeContext getCtx() {

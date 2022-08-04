@@ -41,37 +41,7 @@ public class JobExecStatusListener {
                 do {
                     status = pollJobStatus(jobExecId);
 
-                    List<String> messages = jobExecRepo.getMessages(jobExecId);
-
-                    while (messages.size() > 0) {
-                        String msg = messages.remove(0);
-                        Log.debug("Updating Message to: " + status.getMessage());
-                        Message childThreadMessage = new Message();
-                        childThreadMessage.what = MSG_CODE;
-                        Bundle msgData = new Bundle();
-                        msgData.putString("msgTxt", msg);
-                        childThreadMessage.setData(msgData);
-                        // Put the message in main thread message queue.
-                        Handler handler = activity.getMainThreadHandler();
-                        handler.sendMessage(childThreadMessage);
-                    }
-
-
-                    if (lastPollTime == null || (status.getLastTimeUpdated() != null && status.getLastTimeUpdated().after(lastPollTime))) {
-                        // Create a message in child thread.
-                        if (status.getMessage() != null) {
-                            Log.debug("Updating Message to: " + status.getMessage());
-                            Message childThreadMessage = new Message();
-                            childThreadMessage.what = MSG_CODE;
-                            Bundle msgData = new Bundle();
-                            msgData.putString("msgTxt", status.getMessage());
-                            childThreadMessage.setData(msgData);
-                            // Put the message in main thread message queue.
-                            Handler handler = activity.getMainThreadHandler();
-                            handler.sendMessage(childThreadMessage);
-                        }
-                        lastPollTime = new Date();
-                    }
+                    publishMessages(status);
 
 
                     try {
@@ -82,6 +52,7 @@ public class JobExecStatusListener {
                     }
                 } while (!status.getState().equals(JobExecutionState.FINISHED) && !status.getState().equals(JobExecutionState.ERROR));
                 // JOB has finished or execution has stopped because of errors
+                publishMessages(status);
             }
         };
 
@@ -98,6 +69,23 @@ public class JobExecStatusListener {
 //
 //
 //        activity.endJob();
+    }
+
+    private void publishMessages(JobExecStatus status) {
+        List<String> messages = jobExecRepo.getMessages(jobExecId);
+
+        while (messages.size() > 0) {
+            String msg = messages.remove(0);
+            Log.debug("Updating Message to: " + status.getMessage());
+            Message childThreadMessage = new Message();
+            childThreadMessage.what = MSG_CODE;
+            Bundle msgData = new Bundle();
+            msgData.putString("msgTxt", msg);
+            childThreadMessage.setData(msgData);
+            // Put the message in main thread message queue.
+            Handler handler = activity.getMainThreadHandler();
+            handler.sendMessage(childThreadMessage);
+        }
     }
 
 }
