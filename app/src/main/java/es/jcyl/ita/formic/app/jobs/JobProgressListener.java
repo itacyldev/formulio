@@ -80,10 +80,6 @@ public class JobProgressListener implements JobExecListener, Serializable {
 
         intent.putExtra("jobExecId", jobExecId);
         andContext.startActivity(intent);
-
-//        Bundle bundle = new Bundle();
-//        bundle.putLong("jobExecId", jobExecId);
-//        andContext.startActivity(intent, bundle);
     }
 
 

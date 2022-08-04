@@ -1,23 +1,39 @@
 package es.jcyl.ita.formic.app.jobs;
+/*
+ * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import java.util.Date;
 import java.util.List;
 
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import util.Log;
-
+/**
+ * Listener to collect Job execution status updates
+ *
+ * @autor Javier Ramos (javier.ramos@itacyl.es)
+ */
 public class JobExecStatusListener {
     private JobProgressActivity activity;
     private JobExecRepo jobExecRepo;
     private final long jobExecId;
-
-    private Date lastPollTime;
 
     public static final int MSG_CODE = 9085747;
 
@@ -40,9 +56,7 @@ public class JobExecStatusListener {
                 JobExecStatus status;
                 do {
                     status = pollJobStatus(jobExecId);
-
                     publishMessages(status);
-
 
                     try {
                         Log.debug("Waiting...");
@@ -71,6 +85,10 @@ public class JobExecStatusListener {
 //        activity.endJob();
     }
 
+    /**
+     * Send messages to the activity to display them on the screen
+     * @param status
+     */
     private void publishMessages(JobExecStatus status) {
         List<String> messages = jobExecRepo.getMessages(jobExecId);
 

@@ -1,6 +1,6 @@
 package es.jcyl.ita.formic.app.jobs;
 /*
- * Copyright 2020 Gustavo Río (mungarro@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,9 @@ import util.Log;
 
 /**
  *
+ * Activity to show the execution of a job and its results
+ *
+ * @autor Javier Ramos (javier.ramos@itacyl.es)
  */
 public class JobProgressActivity extends BaseActivity {
     private final Activity activity = this;
