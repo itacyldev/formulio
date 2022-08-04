@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
  *
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class JobExecInMemo implements JobExecRepo {
+public class JobExecInMemo extends AbstractJobExecRepo {
 
     private static JobExecInMemo _instance;
 
@@ -73,6 +73,7 @@ public class JobExecInMemo implements JobExecRepo {
         execution.setMessage(String.format("Job %s has started!", job.getId()));
         execution.setLastTimeUpdated(new Date());
         executions.put(execId, execution);
+        addMessage(execId, execution.getMessage());
         return execution;
     }
 
@@ -84,6 +85,7 @@ public class JobExecInMemo implements JobExecRepo {
         }
         jobExec.setState(state);
         jobExec.setMessage(message);
+        addMessage(jobExecId, message);
         jobExec.setLastTimeUpdated(new Date());
     }
 

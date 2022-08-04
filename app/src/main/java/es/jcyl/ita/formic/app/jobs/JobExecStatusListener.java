@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import java.util.Date;
+import java.util.List;
 
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
@@ -39,6 +40,22 @@ public class JobExecStatusListener {
                 JobExecStatus status;
                 do {
                     status = pollJobStatus(jobExecId);
+
+                    List<String> messages = jobExecRepo.getMessages(jobExecId);
+
+                    while (messages.size() > 0) {
+                        String msg = messages.remove(0);
+                        Log.debug("Updating Message to: " + status.getMessage());
+                        Message childThreadMessage = new Message();
+                        childThreadMessage.what = MSG_CODE;
+                        Bundle msgData = new Bundle();
+                        msgData.putString("msgTxt", msg);
+                        childThreadMessage.setData(msgData);
+                        // Put the message in main thread message queue.
+                        Handler handler = activity.getMainThreadHandler();
+                        handler.sendMessage(childThreadMessage);
+                    }
+
 
                     if (lastPollTime == null || (status.getLastTimeUpdated() != null && status.getLastTimeUpdated().after(lastPollTime))) {
                         // Create a message in child thread.
@@ -75,9 +92,12 @@ public class JobExecStatusListener {
 //        }catch (InterruptedException e){
 //            Log.error("Error waiting thread finish");
 //        }
-
-
-        activity.endJob();
+//        while (thread.isAlive()) {
+//            //do nothing
+//        }
+//
+//
+//        activity.endJob();
     }
 
 }
