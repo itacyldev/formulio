@@ -19,23 +19,23 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
+import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
-import util.Log;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
 
 /**
- *
  * Activity to show the execution of a job and its results
  *
  * @autor Javier Ramos (javier.ramos@itacyl.es)
@@ -43,7 +43,10 @@ import util.Log;
 public class JobProgressActivity extends BaseActivity {
     private final Activity activity = this;
 
-    private ProgressBar progressBar;
+    long jobId;
+
+    JobExecRepo jobExecRepo;
+
     private JobExecStatusListener execStatusListener;
 
     private JobProgressHandler mainThreadHandler;
@@ -55,13 +58,9 @@ public class JobProgressActivity extends BaseActivity {
     @Override
     protected void doOnCreate() {
         setContentView(R.layout.job_progress);
-        long jobId = getIntent().getLongExtra("jobExecId", -1);
-        JobExecInMemo jobExecRepo = JobExecInMemo.getInstance();
+        jobId = getIntent().getLongExtra("jobExecId", -1);
+        jobExecRepo = JobExecInMemo.getInstance();
         execStatusListener = new JobExecStatusListener(this, jobId, jobExecRepo);
-
-        //setToolbar(getString(R.string.action_settings));
-        progressBar = (ProgressBar) findViewById(R.id.progressBar_cyclic);
-
 
         Button button = (Button) findViewById(R.id.progress_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -76,39 +75,61 @@ public class JobProgressActivity extends BaseActivity {
         execStatusListener.startActiveWaiting();
     }
 
-    public void setMessage(String end, String msg) {
+    public void setMessage(String msg) {
         LinearLayout layout = findViewById(R.id.progress_messages_layout);
         TextView view = new TextView(this);
-        view.setId((int)System.currentTimeMillis());
+        view.setId((int) System.currentTimeMillis());
         view.setText(msg);
         layout.addView(view);
     }
 
-    public void setResources(List<String> resources) {
-
-    }
 
     @Override
     public void onBackPressed() {
         // Do nothing
     }
 
-    public void endJob(){
+    public void endJob() {
+        publishResources();
         Button button = findViewById(R.id.progress_button);
         button.setEnabled(true);
+
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar_cyclic);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void publishResources() {
+        try {
+            List<JobResource> resources = jobExecRepo.getResources(jobId);
+            for (JobResource resource : resources) {
+                String resourcePath = resource.getResourcePath();
+                addResource(resourcePath);
+            }
+        } catch (JobException e) {
+
+        }
+    }
+
+    public void addResource(String resourcePath) {
+        LinearLayout layout = findViewById(R.id.progress_resources_layout);
+        TextView view = new TextView(this);
+        view.setId((int) System.currentTimeMillis());
+        view.setText(resourcePath);
+        view.setMovementMethod(LinkMovementMethod.getInstance());
+        layout.addView(view);
     }
 
 
     private class JobProgressHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            Bundle msgData = msg.getData();
+            String msgText = msgData.getString("msgTxt");
             if (msg.what == JobExecStatusListener.MSG_CODE) {
-                Bundle msgData = msg.getData();
-                String msgText = msgData.getString("msgTxt");
-                setMessage("", msgText);
+                setMessage(msgText);
             }
-
         }
     }
-
 }
+
+

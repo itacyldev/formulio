@@ -17,14 +17,18 @@ package es.jcyl.ita.formic.app.jobs;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import util.Log;
+
 /**
  * Listener to collect Job execution status updates
  *
@@ -36,6 +40,7 @@ public class JobExecStatusListener {
     private final long jobExecId;
 
     public static final int MSG_CODE = 9085747;
+    public static final int RESOURCE_CODE = 93504963;
 
     public JobExecStatusListener(JobProgressActivity activity, long jobExecId, JobExecRepo jobExecRepo) {
         this.jobExecId = jobExecId;
@@ -49,44 +54,34 @@ public class JobExecStatusListener {
     }
 
     public void startActiveWaiting() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
 
-        final Thread thread = new Thread() {
-            @Override
-            public void run() {
-                JobExecStatus status;
-                do {
-                    status = pollJobStatus(jobExecId);
-                    publishMessages(status);
-
-                    try {
-                        Log.debug("Waiting...");
-                        sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                } while (!status.getState().equals(JobExecutionState.FINISHED) && !status.getState().equals(JobExecutionState.ERROR));
-                // JOB has finished or execution has stopped because of errors
+        executor.execute(() -> {
+            JobExecStatus status;
+            do {
+                status = pollJobStatus(jobExecId);
                 publishMessages(status);
-            }
-        };
 
-        thread.start();
+                try {
+                    Log.debug("Waiting...");
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (!status.getState().equals(JobExecutionState.FINISHED) && !status.getState().equals(JobExecutionState.ERROR));
+            // JOB has finished or execution has stopped because of errors
+            publishMessages(status);
 
-//        try {
-//            thread.join();
-//        }catch (InterruptedException e){
-//            Log.error("Error waiting thread finish");
-//        }
-//        while (thread.isAlive()) {
-//            //do nothing
-//        }
-//
-//
-//        activity.endJob();
+            handler.post(() -> {
+                activity.endJob();
+            });
+        });
     }
 
     /**
      * Send messages to the activity to display them on the screen
+     *
      * @param status
      */
     private void publishMessages(JobExecStatus status) {
@@ -105,5 +100,4 @@ public class JobExecStatusListener {
             handler.sendMessage(childThreadMessage);
         }
     }
-
 }
