@@ -37,7 +37,9 @@ public class OnClickEventHandler
     public void handle(Event event) {
         // if the component has defined an UserAction for this event, use it
         UserAction action = event.getHandler();
-        action.addParam("parentContext", event.getSource().getRootWidget().getContext());
+        if(event.getSource()!=null) {
+            action.addParam("parentContext", event.getSource().getRootWidget().getContext());
+        }
         if(action != null){
             ac.doUserAction(action);
             if(action.isViewChangeAction()){

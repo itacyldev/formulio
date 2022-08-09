@@ -1,5 +1,6 @@
 package es.jcyl.ita.formic.jayjobs.jobs.listener;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
@@ -34,7 +35,7 @@ public class LogJobExecListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+    public void onJobStart(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
         Log.info(String.format("===== JOB %s STARTED ExecId: %s =====", job.getId(), status.getExecInit()));
     }

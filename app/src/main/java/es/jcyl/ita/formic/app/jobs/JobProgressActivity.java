@@ -1,6 +1,6 @@
 package es.jcyl.ita.formic.app.jobs;
 /*
- * Copyright 2020 Gustavo Río (mungarro@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,12 @@ package es.jcyl.ita.formic.app.jobs;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,11 +36,15 @@ import util.Log;
 
 /**
  *
+ * Activity to show the execution of a job and its results
+ *
+ * @autor Javier Ramos (javier.ramos@itacyl.es)
  */
 public class JobProgressActivity extends BaseActivity {
+    private final Activity activity = this;
+
     private ProgressBar progressBar;
-    private TextView textView;
-    private static JobExecStatusListener execStatusListener;
+    private JobExecStatusListener execStatusListener;
 
     private JobProgressHandler mainThreadHandler;
 
@@ -54,7 +61,15 @@ public class JobProgressActivity extends BaseActivity {
 
         //setToolbar(getString(R.string.action_settings));
         progressBar = (ProgressBar) findViewById(R.id.progressBar_cyclic);
-        textView = (TextView) findViewById(R.id.progress_textView);
+
+
+        Button button = (Button) findViewById(R.id.progress_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
 
         mainThreadHandler = new JobProgressHandler();
 
@@ -62,7 +77,7 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     public void setMessage(String end, String msg) {
-        LinearLayout layout = findViewById(R.id.progressLayout);
+        LinearLayout layout = findViewById(R.id.progress_messages_layout);
         TextView view = new TextView(this);
         view.setId((int)System.currentTimeMillis());
         view.setText(msg);
@@ -76,6 +91,11 @@ public class JobProgressActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // Do nothing
+    }
+
+    public void endJob(){
+        Button button = findViewById(R.id.progress_button);
+        button.setEnabled(true);
     }
 
 

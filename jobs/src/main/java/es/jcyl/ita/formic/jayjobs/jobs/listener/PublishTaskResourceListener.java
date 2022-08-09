@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
  *
  */
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
@@ -73,7 +74,7 @@ public class PublishTaskResourceListener implements JobExecListener {
     }
 
     @Override
-    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+    public void onJobStart(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         try {
             repo.updateState(jobExecId, JobExecutionState.EXECUTING, "Job Started");
         } catch (JobException e) {

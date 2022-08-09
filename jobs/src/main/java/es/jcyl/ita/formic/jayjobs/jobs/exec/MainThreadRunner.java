@@ -32,7 +32,7 @@ public class MainThreadRunner extends AbstractJobRunner implements JobRunner {
 
     @Override
     public void execute(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) throws JobException {
-        notifyStart(job, jobExecId, jobExecRepo);
+        notifyStart(ctx,job, jobExecId, jobExecRepo);
         try {
             taskExecutor.setListener(listener);
             taskExecutor.execute(ctx, job.getTaskConfig());

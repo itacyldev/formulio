@@ -1,24 +1,41 @@
 package es.jcyl.ita.formic.app.jobs;
+/*
+ * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import java.util.Date;
+import java.util.List;
 
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import util.Log;
-
+/**
+ * Listener to collect Job execution status updates
+ *
+ * @autor Javier Ramos (javier.ramos@itacyl.es)
+ */
 public class JobExecStatusListener {
     private JobProgressActivity activity;
     private JobExecRepo jobExecRepo;
     private final long jobExecId;
 
-    private Date lastPollTime;
-
-    public static final int MSG_CODE = 1;
+    public static final int MSG_CODE = 9085747;
 
     public JobExecStatusListener(JobProgressActivity activity, long jobExecId, JobExecRepo jobExecRepo) {
         this.jobExecId = jobExecId;
@@ -32,42 +49,61 @@ public class JobExecStatusListener {
     }
 
     public void startActiveWaiting() {
+
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 JobExecStatus status;
                 do {
                     status = pollJobStatus(jobExecId);
-
-                    if (status.getLastTimeUpdated() != null && status.getLastTimeUpdated().after(lastPollTime) || lastPollTime == null) {
-                        // Create a message in child thread.
-                        if (status.getMessage() != null) {
-                            Log.debug("Actualizando Mensaje a: " + status.getMessage());
-                            Message childThreadMessage = new Message();
-                            childThreadMessage.what = MSG_CODE;
-                            Bundle msgData = new Bundle();
-                            msgData.putString("msgTxt", status.getMessage());
-                            childThreadMessage.setData(msgData);
-                            // Put the message in main thread message queue.
-                            Handler handler = activity.getMainThreadHandler();
-                            handler.sendMessage(childThreadMessage);
-                        }
-                        lastPollTime = new Date();
-                    }
-
+                    publishMessages(status);
 
                     try {
-                        Log.debug("Esperando...");
+                        Log.debug("Waiting...");
                         sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } while (!status.getState().equals(JobExecutionState.FINISHED) || !status.getState().equals(JobExecutionState.ERROR));
+                } while (!status.getState().equals(JobExecutionState.FINISHED) && !status.getState().equals(JobExecutionState.ERROR));
+                // JOB has finished or execution has stopped because of errors
+                publishMessages(status);
             }
         };
 
         thread.start();
 
+//        try {
+//            thread.join();
+//        }catch (InterruptedException e){
+//            Log.error("Error waiting thread finish");
+//        }
+//        while (thread.isAlive()) {
+//            //do nothing
+//        }
+//
+//
+//        activity.endJob();
+    }
+
+    /**
+     * Send messages to the activity to display them on the screen
+     * @param status
+     */
+    private void publishMessages(JobExecStatus status) {
+        List<String> messages = jobExecRepo.getMessages(jobExecId);
+
+        while (messages.size() > 0) {
+            String msg = messages.remove(0);
+            Log.debug("Updating Message to: " + status.getMessage());
+            Message childThreadMessage = new Message();
+            childThreadMessage.what = MSG_CODE;
+            Bundle msgData = new Bundle();
+            msgData.putString("msgTxt", msg);
+            childThreadMessage.setData(msgData);
+            // Put the message in main thread message queue.
+            Handler handler = activity.getMainThreadHandler();
+            handler.sendMessage(childThreadMessage);
+        }
     }
 
 }

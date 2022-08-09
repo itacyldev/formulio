@@ -47,6 +47,11 @@
       <option name="url" value="file:/$MAVEN_REPOSITORY$/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:/$MAVEN_REPOSITORY$/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="ITACyL - internal" />
       <option name="name" value="ITACyL - internal" />
       <option name="url" value="http://repo.itacyl.es/archiva/repository/internal/" />
@@ -202,11 +207,6 @@
       <option name="url" value="file:/D:/Desarrollo/tools/android_sdk/extras/android/m2repository" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="MavenLocal" />
-      <option name="name" value="MavenLocal" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../../libs/mvn_repository/" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="sdk google extras" />
       <option name="name" value="sdk google extras" />
       <option name="url" value="file:/D:/Desarrollo/tools/android_sdk/extras/google/m2repository" />
@@ -305,6 +305,16 @@
       <option name="id" value="sdk google extras" />
       <option name="name" value="sdk google extras" />
       <option name="url" value="file:/$PROJECT_DIR$/forms/null/extras/google/m2repository" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdk google extras" />
+      <option name="name" value="sdk google extras" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../tools/android_sdk/extras/google/m2repository/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sdk android extras" />
+      <option name="name" value="sdk android extras" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../tools/android_sdk/extras/android/m2repository/" />
     </remote-repository>
   </component>
 </project>

@@ -59,4 +59,6 @@ public interface JobExecRepo {
     JobExecStatus getJobStatus(Long jobExecId);
 
     void updateJobStatus(JobExecStatus jobStatus);
+
+    List<String> getMessages(Long jobExecId);
 }

@@ -50,10 +50,6 @@ public class JobActionHandler extends AbstractActionHandler {
                     "value='yourJobId'/> and make sure the file " +
                     "'yourProject/jobs/yourJobId.json' exists"));
         }
-
-
-        Context ParentContext = (Context) action.getParams().get("parentContext");
-
         String jobId = (String) action.getParams().get("jobId");
 
         // clone context and add parameter context
@@ -78,9 +74,13 @@ public class JobActionHandler extends AbstractActionHandler {
         }
         // create execution context linking params and globalContext
         CompositeContext execContext = new UnPrefixedCompositeContext();
-        execContext.addContext(paramContext);
+        CompositeContext globalCtx= App.getInstance().getGlobalContext();
+        if(globalCtx.hasContext("params")){
+            globalCtx.getContext("params").putAll(paramContext);
+        }else{
+            execContext.addContext(paramContext);
+        }
         execContext.addContext(App.getInstance().getGlobalContext());
-
         return execContext;
     }
 }

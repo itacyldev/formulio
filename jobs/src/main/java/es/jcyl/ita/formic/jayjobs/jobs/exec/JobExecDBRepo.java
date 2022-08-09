@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class JobExecDBRepo implements JobExecRepo {
+public class JobExecDBRepo extends AbstractJobExecRepo {
 
     private final CompositeContext ctx;
 

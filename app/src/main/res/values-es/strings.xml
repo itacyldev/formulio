@@ -33,4 +33,5 @@
     <string name="project_import_files">Y los ficheros:\n</string>
     <string name="project_import_existing_files">Los siguientes ficheros ya existen en el dispositivo:</string>
     <string name="project_import_overwrite_files">Si continúa se guardará una copia en projects/bak y se sobreescribirán"</string>
+    <string name="back">Volver</string>
 </resources>
