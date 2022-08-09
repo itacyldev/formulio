@@ -51,7 +51,7 @@ import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 public class JobFacade {
 
     private JobConfigRepo jobConfigRepo;
-    private JobExecRepo jobExecRepo = new JobExecInMemo(new OrderedCompositeContext()); // Noop
+    private JobExecRepo jobExecRepo = JobExecInMemo.getInstance(); // Noop
     private JobExecListener listener = new NopJobListener();
 
     // static resources
@@ -106,7 +106,9 @@ public class JobFacade {
         // configure listener
         AggregatedJobListener jobListener = new AggregatedJobListener();
         jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo()));
-        if(this.listener != null){
+        if (this.listener != null) {
+
+            
             jobListener.addListener(this.listener);
         }
         runner.setListener(jobListener);

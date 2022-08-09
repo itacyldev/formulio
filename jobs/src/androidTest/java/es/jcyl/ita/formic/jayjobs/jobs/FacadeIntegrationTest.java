@@ -37,7 +37,7 @@ public class FacadeIntegrationTest {
         DevJobsBuilder.CreateDummyJobExec builder = new DevJobsBuilder.CreateDummyJobExec();
         builder.withContext(JobContextTestUtils.createJobExecContext(projectFolder.getAbsolutePath())).build();
         // copy job definition file to project/jobs folder
-        TestUtils.copyResourceToFolder(String.format("jobs/%s.json",jobId), new File(projectFolder, "jobs"));
+        TestUtils.copyResourceToFolder(String.format("jobs/%s.json", jobId), new File(projectFolder, "jobs"));
 
         // create facade and related repositories
         JobFacade facade = new JobFacade();

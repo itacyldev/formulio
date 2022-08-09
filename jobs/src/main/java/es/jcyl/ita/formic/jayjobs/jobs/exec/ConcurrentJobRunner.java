@@ -23,7 +23,7 @@ public class ConcurrentJobRunner extends AbstractJobRunner implements JobRunner 
         threadExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                notifyStart(job, jobExecId, jobExecRepo);
+                notifyStart(ctx, job, jobExecId, jobExecRepo);
                 taskExecutor.setListener(listener);
                 try {
                     taskExecutor.execute(ctx, job.getTaskConfig());

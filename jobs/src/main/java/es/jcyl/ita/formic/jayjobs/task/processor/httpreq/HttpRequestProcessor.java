@@ -220,8 +220,8 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     private RawRequest createRequest(RequestFuture future) throws TaskException {
         byte[] content = null;
-        if(inputFile != null){
-            try{
+        if (inputFile != null) {
+            try {
                 content = FileUtils.readFileToByteArray(new File(inputFile));
             } catch (IOException e) {
                 throw new TaskException("There was an error while trying to read inputfile: ", e);
@@ -248,8 +248,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
     }
 
     public void onErrorResponse(VolleyError error) {
-        LOGGER.error(error.getMessage());
-        LOGGER.error(error.networkResponse);
+
     }
 
 

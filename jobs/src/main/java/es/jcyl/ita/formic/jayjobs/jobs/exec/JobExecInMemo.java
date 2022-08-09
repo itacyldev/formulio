@@ -15,7 +15,6 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,21 +26,31 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
-import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
 /**
  * In memory Job execution repository implementation.
  *
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class JobExecInMemo implements JobExecRepo {
+public class JobExecInMemo extends AbstractJobExecRepo {
+
+    private static JobExecInMemo _instance;
 
     private static final Map<Long, List<String>> resources = new HashMap<>();
     private static final Map<Long, JobExecStatus> executions = new HashMap<>();
-    private final CompositeContext ctx;
 
-    public JobExecInMemo(CompositeContext ctx) {
-        this.ctx = ctx;
+
+    private CompositeContext ctx;
+
+
+    private JobExecInMemo() {
+    }
+
+    public static JobExecInMemo getInstance() {
+        if (_instance == null) {
+            _instance = new JobExecInMemo();
+        }
+        return _instance;
     }
 
     @Override
@@ -50,14 +59,17 @@ public class JobExecInMemo implements JobExecRepo {
         // create execution record using job config
         JobExecStatus execution = new JobExecStatus();
         execution.setJobId(job.getId());
-        execution.setUserId(ContextAccessor.userId(ctx));
+        //execution.setUserId(ContextAccessor.userId(ctx));
+        execution.setUserId("PRUEBA_JOB");
         execution.setMode(job.getExecMode());
 
         Long execId = Long.valueOf(executions.size() + 1);
         execution.setId(execId);
-        execution.setState(JobExecutionState.INIT);
-
+        execution.setState(JobExecutionState.INITIALIZED);
+        execution.setMessage(String.format("Job %s has started!", job.getId()));
+        execution.setLastTimeUpdated(new Date());
         executions.put(execId, execution);
+        addMessage(execId, execution.getMessage());
         return execution;
     }
 
@@ -69,11 +81,12 @@ public class JobExecInMemo implements JobExecRepo {
         }
         jobExec.setState(state);
         jobExec.setMessage(message);
+        addMessage(jobExecId, message);
         jobExec.setLastTimeUpdated(new Date());
     }
 
     @Override
-    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException{
+    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException {
         JobExecStatus jobExec = executions.get(jobExecId);
         if (jobExec == null) {
             throw new JobException("Job execution id not found: " + jobExecId);
@@ -94,12 +107,29 @@ public class JobExecInMemo implements JobExecRepo {
 
     @Override
     public JobExecStatus getJobStatus(Long jobExecId) {
-        return executions.get(jobExecId);
+        JobExecStatus status = null;
+        if (executions.containsKey(jobExecId)) {
+            status = executions.get(jobExecId);
+        } else {
+            status = new JobExecStatus();
+            status.setState(JobExecutionState.NOT_INITIALIZED);
+        }
+        return status;
     }
 
     @Override
     public void updateJobStatus(JobExecStatus jobStatus) {
+        jobStatus.setLastTimeUpdated(new Date());
+        executions.put(jobStatus.getId(), jobStatus);
+        addMessage(jobStatus.getId(), jobStatus.getMessage());
+    }
 
+    public CompositeContext getCtx() {
+        return ctx;
+    }
+
+    public void setCtx(CompositeContext ctx) {
+        this.ctx = ctx;
     }
 
 }
