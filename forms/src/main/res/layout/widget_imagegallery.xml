@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<es.jcyl.ita.formic.forms.components.image.ImageGalleryWidget
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.widget.GridView
+        android:id="@+id/imagegrid_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="scrollable"
+        style="@style/TabLayoutStyle"/>
+</es.jcyl.ita.formic.forms.components.image.ImageGalleryWidget>
