@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
+import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItem;
 import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
@@ -34,7 +36,6 @@ import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
-import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
@@ -58,6 +59,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIImageGalleryBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UILinkBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIMultiOptionBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIRowBuilder;
@@ -179,6 +181,9 @@ public class ComponentBuilderFactory {
         registerBuilder("context", new ContextBuilder());
 
         registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
+
+        registerBuilder("imagegallery", newBuilder(UIImageGalleryBuilder.class, "imagegallery"));
+        registerBuilder("imagegalleryitem", newBasicBuilder(UIImageGalleryItem.class, "imagegalleryitem"));
 
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
         registerAttResolver("binding", exprResolver);

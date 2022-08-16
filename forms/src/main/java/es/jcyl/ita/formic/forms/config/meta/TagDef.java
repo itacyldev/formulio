@@ -198,6 +198,9 @@ public class TagDef {
         register("p", define(base, text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
         register("divisor", define(base, new Attribute[]{NAME, COLOR, STROKE_WIDTH}));
 
+
+        register("imagegallery", define(baseRepoAccessor, new Attribute[]{ROUTE}));
+        register("imagegalleryitem", define(new Attribute[]{ID}));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {
