@@ -74,7 +74,7 @@ public class UIImageGalleryBuilderTest {
     private static final String XML_TEST_REPO = "<imagegallery id=\"myimagegallery\" repo=\"pictures\"/>";
 
     @Test
-    public void tesDatalistAttributes() throws Exception {
+    public void tesImageGalleryAttributes() throws Exception {
         RepositoryUtils.registerMock("pictures");
 
         String xml = XmlConfigUtils.createMainList(XML_TEST_REPO);
@@ -96,7 +96,7 @@ public class UIImageGalleryBuilderTest {
             + "</imagegallery>";
 
     @Test
-    public void testDatalistitem() throws Exception {
+    public void testImageGalleryitem() throws Exception {
         String xml = XmlConfigUtils.createMainList(XML_TEST_WITH_TITEM);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
@@ -116,7 +116,6 @@ public class UIImageGalleryBuilderTest {
     @AfterClass
     public static void tearDown() {
         RepositoryUtils.unregisterMock("pictures");
-        RepositoryUtils.unregisterMock("pictures2");
     }
 
 }

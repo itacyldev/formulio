@@ -32,7 +32,8 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
-public abstract class AbstractRenderer<C extends UIComponent, W extends Widget<C>>
+public abstract class
+AbstractRenderer<C extends UIComponent, W extends Widget<C>>
         implements Renderer<C> {
 
     public final Widget<C> render(RenderingEnv env, C component) {
