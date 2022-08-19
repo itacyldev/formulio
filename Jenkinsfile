@@ -29,7 +29,7 @@ pipeline {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
-        stage('Build') {
+        stage('Build & Unit test') {
             steps {
                 script {
                     sh '''
@@ -41,7 +41,7 @@ pipeline {
             }
             post {
                 always {
-                    junit allowEmptyResults: true, testResults: '**/build/test-results/test/*.xml'
+                    junit allowEmptyResults: true, testResults: '**/build/test-results/testDebugUnitTest/*.xml'
                 }
             }
         }
