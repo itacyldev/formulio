@@ -58,6 +58,7 @@ android {
     lint {
         abortOnError false
     }
+    namespace 'es.jcyl.ita.formic.repo'
 }
 
 dependencies {

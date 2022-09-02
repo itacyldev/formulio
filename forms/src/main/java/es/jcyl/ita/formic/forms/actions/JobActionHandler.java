@@ -17,6 +17,8 @@ package es.jcyl.ita.formic.forms.actions;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
+import android.content.Context;
+
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
@@ -72,9 +74,13 @@ public class JobActionHandler extends AbstractActionHandler {
         }
         // create execution context linking params and globalContext
         CompositeContext execContext = new UnPrefixedCompositeContext();
-        execContext.addContext(paramContext);
+        CompositeContext globalCtx= App.getInstance().getGlobalContext();
+        if(globalCtx.hasContext("params")){
+            globalCtx.getContext("params").putAll(paramContext);
+        }else{
+            execContext.addContext(paramContext);
+        }
         execContext.addContext(App.getInstance().getGlobalContext());
-
         return execContext;
     }
 }

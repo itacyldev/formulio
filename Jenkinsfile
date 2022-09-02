@@ -11,51 +11,47 @@ pipeline {
     //        skipDefaultCheckout(true)
     //    }
     stages {
-        stage("Milestone check") {
+        stage('Milestone check') {
             steps {
                 script {
                     // Posibles builds en ejecución (se comprueban solo tres anteriores)
                     def buildNumber = env.BUILD_NUMBER as int
-                    for (int i = buildNumber-3; i < buildNumber; i++){
-                        echo ("Cancelando build: ${i}")
+                    for (int i = buildNumber - 3; i < buildNumber; i++) {
+                        echo("Cancelando build: ${i}")
                         milestone(i)
                     }
                     milestone(buildNumber)
                 }
             }
         }
-        stage("Clone sources"){
+        stage('Clone sources') {
             steps {
                 git branch: "${BRANCH_NAME}", credentialsId: 'jenkins-gitea-user', url: "${GIT_URL}"
             }
         }
-        stage("Build") {
+        stage('Build & Unit test') {
             steps {
                 script {
-                    sh """
+                    sh '''
                         chmod +x gradlew
                         ./gradlew clean
-                        ./gradlew build
-                    """
+                        ./gradlew test build
+                    '''
+                }
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: '**/build/test-results/testDebugUnitTest/*.xml'
                 }
             }
         }
-        stage("Test") {
-            steps {
-                script {
-                    sh """
-                        ./gradlew test
-                    """
-                }
-            }
-        }
-        stage("Integration Test") {
+        stage('Integration Test') {
             when {
-                expression{BRANCH_NAME == 'develop'}
+                expression { BRANCH_NAME == 'develop' }
             }
             steps {
                 script {
-                    sh '''#!/bin/bash
+                        sh '''#!/bin/bash
                         export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
                         export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
 
@@ -69,11 +65,10 @@ pipeline {
                         echo "-------------------------------------------------------------"
                         echo "-------------------------------------------------------------"
 
-
                         if [ $num_devices -eq 0 ]; then
-                        	echo "Arrancando emulador..."
-                        	$ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-                        	$ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+                            echo "Arrancando emulador..."
+                            $ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
+                            $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
                         fi
 
                         echo "-------------------------------------------------------------"
@@ -93,37 +88,48 @@ pipeline {
                     '''
                 }
             }
-        }
-        stage("Report Jacoco") {
-            steps {
-                script {
-                    sh """
-                        ./gradlew codeCoverageReport
-                    """
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: '**/build/reports/androidTests/connected/*.xml'
                 }
             }
         }
-        stage("Sonarqube") {
+        stage('Report Jacoco') {
+            steps {
+                sh './gradlew codeCoverageReport'
+            }
+        }
+        stage('SonarQube analysis') {
             when {
-                expression{BRANCH_NAME == 'develop' || BRANCH_NAME == 'master'}
+                expression { BRANCH_NAME == 'develop' }
             }
             steps {
-                script {
-                    sh """
-                        ./gradlew sonarqube
-                    """
+                withSonarQubeEnv('SonarQube-ITA') {
+                    sh './gradlew sonarqube'
+                }
+            }
+        }
+        stage('Quality Gate') {
+            when {
+                expression { BRANCH_NAME == 'develop' }
+            }
+            steps {
+                timeout(time: 20, unit: 'MINUTES') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
     }
     post {
-        //failure {
-        //    emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-        //    recipientProviders: [culprits()],
-        //    subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-        //    mimeType: 'text/html'
-        //}
-        always{
+        failure {
+            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+            recipientProviders: [culprits()],
+            subject: "Build failed in jenkins: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            mimeType: 'text/html'
+        }
+        always {
             sh '''#!/bin/bash
                 num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
                 echo "num_devices: ${num_devices}"

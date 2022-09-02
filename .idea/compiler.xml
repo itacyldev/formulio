@@ -3,6 +3,12 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
       <module name="core" target="1.7" />
+      <module name="Formic.core.main" target="1.8" />
+      <module name="Formic.core.test" target="1.8" />
+      <module name="Formic.repo.main" target="1.8" />
+      <module name="Formic.repo.test" target="1.8" />
+      <module name="Formic.repoTestUtils.main" target="1.8" />
+      <module name="Formic.repoTestUtils.test" target="1.8" />
       <module name="repo" target="1.7" />
       <module name="repoTestUtils" target="1.7" />
       <module name="test-utils" target="1.7" />

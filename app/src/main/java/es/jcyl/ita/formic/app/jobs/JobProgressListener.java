@@ -20,34 +20,61 @@ import android.content.Intent;
 
 import java.io.Serializable;
 
-import es.jcyl.ita.formic.forms.App;
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
+import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
+import util.Log;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class JobProgressListener implements JobExecListener, Serializable {
 
-
+    private JobExecRepo jobExecRepo;
     private JobConfig jobConfig;
     private long jobExecId;
-    private JobExecRepo jobExecRepo;
 
+    private boolean showProgress = true;
+
+    public JobProgressListener() {
+        this.jobExecRepo = JobExecInMemo.getInstance();
+    }
+
+    public JobProgressListener(boolean showProgress) {
+        this.showProgress = showProgress;
+        this.jobExecRepo = JobExecInMemo.getInstance();
+    }
 
     @Override
-    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+    public void onJobStart(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         this.jobExecId = jobExecId;
-        this.jobExecRepo = jobExecRepo;
         this.jobConfig = job;
 
         // open activity
-        Context andContext = App.getInstance().getAndroidContext();
+        if (showProgress) {
+            es.jcyl.ita.formic.core.context.Context paramsContext =  ctx.getContext("params");
+            Context  parentContext = (Context) paramsContext.get("parentContext");
+            launchProgressActivity(parentContext);
+        }
+
+        try {
+            jobExecRepo.registerExecInit(job, JobExecutionMode.FG);
+        } catch (JobException ex) {
+            Log.error(String.format("An error occurred during execution of job [%s]", job.getId()));
+        }
+    }
+
+    private void launchProgressActivity(Context andContext) {
+        //Context andContext = App.getInstance().getAndroidContext();
         Intent intent = new Intent(andContext, JobProgressActivity.class);
+
         intent.putExtra("jobExecId", jobExecId);
         andContext.startActivity(intent);
     }

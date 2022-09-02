@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
@@ -26,7 +27,7 @@ import es.jcyl.ita.formic.jayjobs.task.listener.NopTaskListener;
 public class NopJobListener extends NopTaskListener implements JobExecListener {
 
     @Override
-    public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+    public void onJobStart(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
 
     }
 

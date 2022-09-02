@@ -27,12 +27,18 @@ import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class JobExecDBRepo implements JobExecRepo {
+public class JobExecDBRepo extends AbstractJobExecRepo {
 
     private final CompositeContext ctx;
 
     public JobExecDBRepo(CompositeContext ctx) {
         this.ctx = ctx;
+        initDB();
+    }
+
+    private void initDB() {
+
+
     }
 
     @Override
@@ -47,7 +53,7 @@ public class JobExecDBRepo implements JobExecRepo {
         // OJOOOOOO: hay que fijar en el execInfo el id de ejecución antes de devolver la instancia
         Long execId = 1l;
         execution.setId(execId);
-        execution.setState(JobExecutionState.INIT);
+        execution.setState(JobExecutionState.INITIALIZED);
         return execution;
     }
 

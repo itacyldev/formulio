@@ -97,7 +97,7 @@ public class ConcurrentJobRunnerTest {
         boolean finished = false;
 
         @Override
-        public void onJobStart(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
+        public void onJobStart(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
 
         }
 
