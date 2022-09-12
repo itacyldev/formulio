@@ -163,10 +163,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                         loadFragment(ProjectListFragment.newInstance(
                                 App.getInstance().getProjectRepo()));
                         loadImageNoProjects();
+                        checkNavigationButton(R.id.action_projects);
                         break;
                     case R.id.action_forms:
                         loadFragment(new FormListFragment());
                         loadImageNoProjects();
+                        checkNavigationButton(R.id.action_forms);
                         break;
                     default:
                         break;
@@ -187,6 +189,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         settings = PreferenceManager
                 .getDefaultSharedPreferences(this);
+
 
         loadFragment();
 
@@ -219,13 +222,14 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     App.getInstance().getProjectRepo()));
             MainController.getInstance().getRouter().navigate(MainActivity.this,
                     UserAction.navigate(formId));
+            checkNavigationButton(R.id.action_projects);
         }else{
             // open default form list view
             loadFragment(new FormListFragment());
+            checkNavigationButton(R.id.action_forms);
         }
 
         loadImageNoProjects();
-
     }
 
     @Override
@@ -685,10 +689,15 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     protected void onResume() {
         super.onResume();
+        int id = this.getTitle().toString().startsWith(getString(R.string.projects_of))?R.id.action_projects:R.id.action_forms;
+        checkNavigationButton(id);
+    }
+
+    private void checkNavigationButton(int id) {
         Project selectedProject = App.getInstance().getCurrentProject();
-        int id = selectedProject == null?R.id.action_projects:R.id.action_forms;
+        //int id = selectedProject == null?R.id.action_projects:R.id.action_forms;
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
-
     }
 }

@@ -19,16 +19,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.dialog.ProgressDialog;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
@@ -55,6 +50,8 @@ public class JobProgressActivity extends BaseActivity {
         return mainThreadHandler;
     }
 
+    ProgressDialog progressDialog;
+
     @Override
     protected void doOnCreate() {
         setContentView(R.layout.job_progress);
@@ -62,13 +59,9 @@ public class JobProgressActivity extends BaseActivity {
         jobExecRepo = JobExecInMemo.getInstance();
         execStatusListener = new JobExecStatusListener(this, jobId, jobExecRepo);
 
-        Button button = (Button) findViewById(R.id.progress_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.finish();
-            }
-        });
+
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.show();
 
         mainThreadHandler = new JobProgressHandler();
 
@@ -76,11 +69,7 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     public void setMessage(String msg) {
-        LinearLayout layout = findViewById(R.id.progress_messages_layout);
-        TextView view = new TextView(this);
-        view.setId((int) System.currentTimeMillis());
-        view.setText(msg);
-        layout.addView(view);
+        progressDialog.setText(msg);
     }
 
 
@@ -91,11 +80,7 @@ public class JobProgressActivity extends BaseActivity {
 
     public void endJob() {
         publishResources();
-        Button button = findViewById(R.id.progress_button);
-        button.setEnabled(true);
-
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar_cyclic);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressDialog.showProgressButton();
     }
 
     private void publishResources() {
@@ -110,13 +95,11 @@ public class JobProgressActivity extends BaseActivity {
         }
     }
 
+
+
+
     public void addResource(String resourcePath) {
-        LinearLayout layout = findViewById(R.id.progress_resources_layout);
-        TextView view = new TextView(this);
-        view.setId((int) System.currentTimeMillis());
-        view.setText(resourcePath);
-        view.setMovementMethod(LinkMovementMethod.getInstance());
-        layout.addView(view);
+        progressDialog.addResource(resourcePath);
     }
 
 
