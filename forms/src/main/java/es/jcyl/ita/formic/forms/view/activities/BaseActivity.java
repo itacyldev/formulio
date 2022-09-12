@@ -152,14 +152,16 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     protected void setToolbar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before_white_24dp));
-        toolbar.setTitle(title);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                finish();
-            }
-        });
+        if (toolbar != null) {
+            toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before_white_24dp));
+            toolbar.setTitle(title);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    finish();
+                }
+            });
+        }
     }
 
     public void loadFragment(Fragment fragment) {

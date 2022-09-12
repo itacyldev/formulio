@@ -42,4 +42,5 @@
     <string name="project_import_existing_files">The following files already exist on the device:</string>
     <string name="project_import_overwrite_files">If you continue, a copy will be saved in projects/bak and then they will be overwritten</string>
     <string name="back">Back</string>
+    <string name="process_finish">The process has finished. The files:</string>
 </resources>
