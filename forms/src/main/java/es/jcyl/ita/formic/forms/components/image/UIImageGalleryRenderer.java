@@ -7,7 +7,6 @@ import java.util.List;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.Entity;
 
 /*
@@ -42,11 +41,6 @@ public class UIImageGalleryRenderer extends AbstractRenderer<UIImageGallery, Ima
 
         GridView gridView = widget.findViewById(R.id.imagegrid_view);
 
-        List<Entity> entityList = widget.getEntities();
-
-        ImageListAdapter adapter = createAdapter(component, entityList);
-
-        gridView.setAdapter(adapter);
 
         widget.setGridView(gridView);
 
@@ -56,10 +50,19 @@ public class UIImageGalleryRenderer extends AbstractRenderer<UIImageGallery, Ima
 
     }
 
-    private ImageListAdapter createAdapter(UIImageGallery component, List<Entity> entityList) {
-        ImageListAdapter adapter = new ImageListAdapter(component);
+    /**
+     * Configure widget after creation.
+     *
+     * @param env
+     * @param widget
+     */
+    protected void setupWidget(RenderingEnv env, ImageGalleryWidget widget) {
+        widget.setup(env);
+        List<Entity> entityList = widget.getEntities();
+
+        ImageListAdapter adapter = new ImageListAdapter(widget.getComponent(), env);
         adapter.addItems(entityList);
-        return adapter;
+        widget.setAdapter(adapter);
     }
 
 

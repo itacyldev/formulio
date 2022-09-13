@@ -24,9 +24,11 @@ import es.jcyl.ita.formic.repo.RepositoryException;
 public class FilterRepoUtils {
 
     public static Filter createInstance(Repository repo) {
-        Filter f;
+        Filter f = null;
         try {
-            f = (Filter) repo.getFilterClass().newInstance();
+            if (repo.getFilterClass() != null) {
+                f = (Filter) repo.getFilterClass().newInstance();
+            }
         } catch (Exception e) {
             throw new RepositoryException("An error occurred while trying to instantiate the filter " +
                     "class: " + repo.getFilterClass().getName());
@@ -34,7 +36,7 @@ public class FilterRepoUtils {
         return f;
     }
 
-    public static Filter clone(Repository repo, Filter filter){
+    public static Filter clone(Repository repo, Filter filter) {
         Filter f = createInstance(repo);
         if (filter != null) {
             f.setExpression(filter.getExpression());

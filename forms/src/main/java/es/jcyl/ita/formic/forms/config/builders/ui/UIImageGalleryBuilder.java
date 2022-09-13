@@ -47,7 +47,7 @@ public class UIImageGalleryBuilder extends BaseUIComponentBuilder<UIImageGallery
     protected void setupOnSubtreeStarts(ConfigNode<UIImageGallery> node) {
         BuilderHelper.setUpRepo(node, true);
         // Add item node if doesn't exist
-        addItemNode(node);
+        //addItemNode(node);
     }
 
     @Override
