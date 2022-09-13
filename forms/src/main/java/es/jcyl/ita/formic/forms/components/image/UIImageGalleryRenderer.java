@@ -1,17 +1,14 @@
 package es.jcyl.ita.formic.forms.components.image;
 
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.widget.ViewPager2;
+import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
+import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.Entity;
 
 /*
  * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -32,7 +29,7 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIImageGalleryRenderer extends AbstractGroupRenderer<UIImageGallery, ImageGalleryWidget> {
+public class UIImageGalleryRenderer extends AbstractRenderer<UIImageGallery, ImageGalleryWidget> {
 
     @Override
     protected int getWidgetLayoutId(UIImageGallery component) {
@@ -42,46 +39,37 @@ public class UIImageGalleryRenderer extends AbstractGroupRenderer<UIImageGallery
     @Override
     protected void composeWidget(RenderingEnv env, ImageGalleryWidget widget) {
         UIImageGallery component = widget.getComponent();
-        FragmentActivity fragmentActivity = (FragmentActivity) env.getAndroidContext();
 
         GridView gridView = widget.findViewById(R.id.imagegrid_view);
 
+        List<Entity> entityList = widget.getEntities();
+
+        ImageListAdapter adapter = createAdapter(component, entityList);
+
+        gridView.setAdapter(adapter);
+
         widget.setGridView(gridView);
 
+        widget.setConverter(component.getConverter());
+
+        //setValueInView();
+
     }
 
-    private void updatePagerHeightForChild(View view, ViewPager2 viewPager) {
-        int wMeasureSpec =
-                View.MeasureSpec.makeMeasureSpec(view.getWidth(), View.MeasureSpec.EXACTLY);
-        int hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        view.measure(wMeasureSpec, hMeasureSpec);
-
-        if (viewPager.getLayoutParams().height != view.getMeasuredHeight()) {
-            ViewGroup.LayoutParams lp = viewPager.getLayoutParams();
-            lp.height = view.getMeasuredHeight();
-        }
+    private ImageListAdapter createAdapter(UIImageGallery component, List<Entity> entityList) {
+        ImageListAdapter adapter = new ImageListAdapter(component);
+        adapter.addItems(entityList);
+        return adapter;
     }
 
-    @Override
-    public void addViews(RenderingEnv env, Widget<UIImageGallery> root, Widget[] views) {
-        GridView gridView = root.findViewById(R.id.imagegrid_view);
-        ListAdapter adapter = gridView.getAdapter();
 
-
-
-//        int fragCount = 0;
-//        for (View view : views) {
-//            adapter.addView(view, fragCount);
-//            fragCount++;
-//        }
-//  º
-//        adapter.notifyDataSetChanged();
+    private void setValueInView(RenderingEnv env, ImageGalleryWidget widget) {
+        //ImageResourceView inputView = widget.getInputView();
+        UIImageGallery component = widget.getComponent();
+        Object value = getComponentValue(env, component, null);
+        //widget.getConverter().setViewValue(inputView, value);
     }
 
-    @Override
-    protected boolean isAbleToShowNestedMessages() {
-        return true;
-    }
 
 //    @Override
 //    protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {

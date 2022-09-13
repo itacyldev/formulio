@@ -1,6 +1,5 @@
 package es.jcyl.ita.formic.forms.components.image;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,26 +12,22 @@ import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.repo.Entity;
 
 public class ImageListAdapter extends BaseAdapter {
 
-    private List<UIImageGalleryItem> imageItems ;
-    private Context mContext;
-    private CompositeContext globalContext;
+    private List<Entity> imageItems;
     private int itemLayout;
 
-    public ImageListAdapter(RenderingEnv env, CompositeContext context, int resource, int textViewId, UIImageGallery component) {
+    public ImageListAdapter(UIImageGallery component) {
         imageItems = new ArrayList<>();
-        mContext = env.getAndroidContext();
-        globalContext = context;
         itemLayout = R.layout.widget_imagegalleryitem;
     }
 
 
     @Override
     public int getCount() {
-        return 0;
+        return imageItems.size();
     }
 
     @Override
@@ -47,12 +42,24 @@ public class ImageListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, @NonNull ViewGroup parent) {
-        UIImageGalleryItem item = imageItems.get(position);
+        Entity item = imageItems.get(position);
         if (view == null) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(itemLayout, parent, false);
         }
 
         return view;
+    }
+
+    public void setItems(List<Entity> items) {
+        this.imageItems = items;
+    }
+
+    public void addItem(Entity item) {
+        this.imageItems.add(item);
+    }
+
+    public void addItems(List<Entity> items) {
+        this.imageItems.addAll(items);
     }
 }
