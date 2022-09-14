@@ -245,7 +245,7 @@ public class RenderingEnv {
         return selectionManager;
     }
 
-    void setEntity(Entity entity) {
+    public void setEntity(Entity entity) {
         // add form to context with full id
         this.globalContext.addContext(new EntityContext(entity));
         // register

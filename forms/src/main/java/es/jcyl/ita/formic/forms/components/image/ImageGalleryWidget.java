@@ -1,18 +1,20 @@
 package es.jcyl.ita.formic.forms.components.image;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.components.autocomplete.UIAutoComplete;
+import es.jcyl.ita.formic.forms.context.ContextUtils;
+import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelectorWidget;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
@@ -28,6 +30,7 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
 
     private ViewValueConverter converter;
 
+    private AndViewContext thisViewCtx = new AndViewContext(this);
     GridView gridView;
     private Repository repo;
     private List<Entity> entities = new ArrayList<>();
@@ -35,22 +38,40 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
     // view filtering criteria
     private Filter filter;
 
-    @Override
-    public void setup(RenderingEnv env) {
-        super.setup(env);
-        this.repo = component.getRepo();
-    }
 
     public ImageGalleryWidget(Context context) {
         super(context);
     }
 
-    public void setGridView(GridView gridView){
+    public ImageGalleryWidget(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public ImageGalleryWidget(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    public void setGridView(GridView gridView) {
         this.gridView = gridView;
     }
 
-    public void initialize(RenderingEnv env, Widget<UIAutoComplete> widget, ImageView arrowDropDown) {
+    @Override
+    public void setup(RenderingEnv env) {
+        super.setup(env);
+        this.repo = component.getRepo();
+//        LinearLayout contentView = findViewById(R.id.datalist_content_layout);
+//        setContentView(contentView);
+        load(env);
 
+    }
+
+    public void load(RenderingEnv env) {
+        // set filter to repo using current view data
+        this.entities.clear();
+        CompositeContext ctx = setupThisContext(env);
+        this.filter = setupFilter(ctx, this.getComponent().getFilter());
+        // read first page to render data
+        loadNextPage();
     }
 
     private void loadNextPage() {
@@ -60,10 +81,16 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
 
     private void addData() {
         List list = this.repo.find(this.filter);
-
-
-
         this.entities.addAll(list);
+    }
+
+    private CompositeContext setupThisContext(RenderingEnv env) {
+        thisViewCtx.setPrefix("this");
+        // use default widgetContext for initialRendering
+        WidgetContext widgetContext = (this.getWidgetContext() != null)
+                ? this.getWidgetContext() : env.getWidgetContext();
+        CompositeContext ctx = ContextUtils.combine(widgetContext, thisViewCtx);
+        return ctx;
     }
 
     /**
@@ -75,7 +102,7 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
      */
     private Filter setupFilter(CompositeContext context, Filter defFilter) {
         Filter f = FilterRepoUtils.createInstance(repo);
-        if (defFilter != null) {
+        if (defFilter != null && f != null) {
             FilterHelper.evaluateFilter(context, defFilter, f);
         }
         return f;
@@ -112,5 +139,9 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
 
     public void setConverter(ViewValueConverter converter) {
         this.converter = converter;
+    }
+
+    public void setAdapter(ImageListAdapter adapter) {
+        this.gridView.setAdapter(adapter);
     }
 }

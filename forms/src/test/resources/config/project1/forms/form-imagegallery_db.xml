@@ -1,0 +1,9 @@
+<main name="Form Image Gallery" description="An example of short description" id="formImagegalleryDB" repo="superHRepo">
+    <list name="Image Gallery from DB">
+        <form>
+            <imagegallery repo="superHImagesDBRepo">
+                <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
+            </imagegallery>
+        </form>
+    </list>
+</main>
