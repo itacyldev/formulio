@@ -2,8 +2,6 @@ package es.jcyl.ita.formic.forms.components.image;
 
 import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.UIGroupComponent;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.formic.repo.Repository;

@@ -77,11 +77,11 @@ public class UIImageGalleryBuilder extends BaseUIComponentBuilder<UIImageGallery
         imageGallery.setNumItems(numItems);
     }
 
-    public UIDatalist createDatalistFromRepo(Repository repo) {
+    public UIImageGallery createImageGalleryFromRepo(Repository repo) {
         // select all entity properties
         EntityMeta meta = repo.getMeta();
         String[] fieldFilter = meta.getPropertyNames();
-        return createDatalistFromRepo(repo, fieldFilter);
+        return createImageGalleryFromRepo(repo, fieldFilter);
     }
 
     /**
@@ -91,11 +91,11 @@ public class UIImageGalleryBuilder extends BaseUIComponentBuilder<UIImageGallery
      * @param properties
      * @return
      */
-    public UIDatalist createDatalistFromRepo(Repository repo, String[] properties) {
-        UIDatalist datalist = new UIDatalist();
-        datalist.setRepo(repo);
+    public UIImageGallery createImageGalleryFromRepo(Repository repo, String[] properties) {
+        UIImageGallery imagegallery = new UIImageGallery();
+        imagegallery.setRepo(repo);
 
-        return datalist;
+        return imagegallery;
     }
 
     /**
