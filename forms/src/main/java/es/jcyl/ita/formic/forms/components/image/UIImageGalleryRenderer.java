@@ -2,11 +2,18 @@ package es.jcyl.ita.formic.forms.components.image;
 
 import android.widget.GridView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.components.datalist.DatalistItemWidget;
+import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
+import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
+import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
+import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
 
 /*
@@ -28,7 +35,7 @@ import es.jcyl.ita.formic.repo.Entity;
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
  */
-public class UIImageGalleryRenderer extends AbstractRenderer<UIImageGallery, ImageGalleryWidget> {
+public class UIImageGalleryRenderer extends AbstractGroupRenderer<UIImageGallery, ImageGalleryWidget> {
 
     @Override
     protected int getWidgetLayoutId(UIImageGallery component) {
@@ -59,18 +66,13 @@ public class UIImageGalleryRenderer extends AbstractRenderer<UIImageGallery, Ima
     protected void setupWidget(RenderingEnv env, ImageGalleryWidget widget) {
         widget.setup(env);
         List<Entity> entityList = widget.getEntities();
-
-        ImageListAdapter adapter = new ImageListAdapter(widget.getComponent(), env);
-        adapter.addItems(entityList);
-        widget.setAdapter(adapter);
     }
 
 
-    private void setValueInView(RenderingEnv env, ImageGalleryWidget widget) {
-        //ImageResourceView inputView = widget.getInputView();
-        UIImageGallery component = widget.getComponent();
-        Object value = getComponentValue(env, component, null);
-        //widget.getConverter().setViewValue(inputView, value);
+    public void addViews(RenderingEnv env, Widget<UIImageGallery> root, Widget[] widgets) {
+        ImageListAdapter adapter = new ImageListAdapter(root.getComponent(), env);
+        adapter.setImageItemViews((ImageWidget[])widgets);
+        ((ImageGalleryWidget)root).setAdapter(adapter);
     }
 
 
