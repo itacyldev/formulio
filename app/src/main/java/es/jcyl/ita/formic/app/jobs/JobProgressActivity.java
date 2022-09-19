@@ -20,10 +20,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
-import es.jcyl.ita.formic.app.dialog.ProgressDialog;
+import es.jcyl.ita.formic.app.dialog.JobResultDialog;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
@@ -40,6 +42,8 @@ public class JobProgressActivity extends BaseActivity {
 
     long jobId;
 
+    String jobDescription;
+
     JobExecRepo jobExecRepo;
 
     private JobExecStatusListener execStatusListener;
@@ -50,18 +54,20 @@ public class JobProgressActivity extends BaseActivity {
         return mainThreadHandler;
     }
 
-    ProgressDialog progressDialog;
+    JobResultDialog jobResultDialog;
 
     @Override
     protected void doOnCreate() {
         setContentView(R.layout.job_progress);
         jobId = getIntent().getLongExtra("jobExecId", -1);
+        jobDescription = getIntent().getStringExtra("jobExecDescription");
         jobExecRepo = JobExecInMemo.getInstance();
         execStatusListener = new JobExecStatusListener(this, jobId, jobExecRepo);
 
 
-        progressDialog = new ProgressDialog(activity);
-        progressDialog.show();
+        jobResultDialog = new JobResultDialog(activity, true);
+        jobResultDialog.show();
+        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription)?jobDescription:activity.getString(R.string.job_result));
 
         mainThreadHandler = new JobProgressHandler();
 
@@ -69,7 +75,7 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     public void setMessage(String msg) {
-        progressDialog.setText(msg);
+        jobResultDialog.setText(msg);
     }
 
 
@@ -80,7 +86,7 @@ public class JobProgressActivity extends BaseActivity {
 
     public void endJob() {
         publishResources();
-        progressDialog.showProgressButton();
+        jobResultDialog.endJob();
     }
 
     private void publishResources() {
@@ -99,7 +105,7 @@ public class JobProgressActivity extends BaseActivity {
 
 
     public void addResource(String resourcePath) {
-        progressDialog.addResource(resourcePath);
+        jobResultDialog.addResource(resourcePath);
     }
 
 
