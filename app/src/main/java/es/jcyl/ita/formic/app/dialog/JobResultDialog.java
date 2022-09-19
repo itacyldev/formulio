@@ -103,6 +103,7 @@ public class JobResultDialog extends Dialog{
         acceptButton = findViewById(R.id.accept_button);
         showConsoleButton = findViewById(R.id.show_console_button);
         progressText = findViewById(R.id.text_loading_dialog);
+        progressText.setMovementMethod(new ScrollingMovementMethod());
         progressTitle = findViewById(R.id.progress_title);
         progressConsole = findViewById(R.id.progress_console);
         progressConsole.setMovementMethod(new ScrollingMovementMethod());
@@ -149,7 +150,6 @@ public class JobResultDialog extends Dialog{
     }
 
     public void setText(String message){
-        TextView progressText = (TextView) findViewById(R.id.text_loading_dialog);
         progressText.setText("" + message);
         progressText.setVisibility(View.VISIBLE);
         setConsoleText(message);
