@@ -34,5 +34,8 @@
     <string name="project_import_existing_files">Los siguientes ficheros ya existen en el dispositivo:</string>
     <string name="project_import_overwrite_files">Si continúa se guardará una copia en projects/bak y se sobreescribirán"</string>
     <string name="back">Volver</string>
-    <string name="process_finish">El proceso ha finalizado. Los ficheros:</string>
+    <string name="process_finish">El proceso ha finalizado.</string>
+    <string name="job_result">Resultado del trabajo</string>
+    <string name="exporting">Exportando...</string>
+    <string name="project_import_continue">Se va a importar el proyecto. ¿Desea continuar?</string>
 </resources>

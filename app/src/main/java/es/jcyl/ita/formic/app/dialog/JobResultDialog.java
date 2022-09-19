@@ -16,36 +16,49 @@ package es.jcyl.ita.formic.app.dialog;/*
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.android.material.button.MaterialButton;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.R;
 
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
-public class ProgressDialog extends Dialog{
+public class JobResultDialog extends Dialog{
     public Activity activity;
     private ProgressBar mProgressBar;
+    private MaterialButton acceptButton;
     private MaterialButton backButton;
     private MaterialButton showConsoleButton;
     private TextView progressText;
@@ -58,9 +71,22 @@ public class ProgressDialog extends Dialog{
     List<String> listItems;
     List<String> listStrItems;
 
-    public ProgressDialog(Activity activity){
+    boolean finishActivity = true;
+
+    private static Map<String, Drawable> icons = new HashMap<String, Drawable>();
+
+    public JobResultDialog(Activity activity, boolean finishActivity){
         super(activity, R.style.DialogStyle);
         this.activity = activity;
+        this.finishActivity = finishActivity;
+    }
+
+    public MaterialButton getAcceptButton() {
+        return acceptButton;
+    }
+
+    public MaterialButton getShowConsoleButton() {
+        return showConsoleButton;
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +94,19 @@ public class ProgressDialog extends Dialog{
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        setContentView(R.layout.layout_loading_dialog);
+        setContentView(R.layout.job_progress_dialog);
 
+        setWidthAndHeight();
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        backButton = (MaterialButton) findViewById(R.id.back_button);
-        showConsoleButton = (com.google.android.material.button.MaterialButton) findViewById(R.id.show_console_button);
-        progressText = (TextView) findViewById(R.id.text_loading_dialog);
-        progressTitle = (TextView) findViewById(R.id.progress_title);
+        mProgressBar = findViewById(R.id.progress_bar);
+        backButton = findViewById(R.id.back_button);
+        acceptButton = findViewById(R.id.accept_button);
+        showConsoleButton = findViewById(R.id.show_console_button);
+        progressText = findViewById(R.id.text_loading_dialog);
+        progressTitle = findViewById(R.id.progress_title);
         progressConsole = findViewById(R.id.progress_console);
+        progressConsole.setMovementMethod(new ScrollingMovementMethod());
         progressConsoleLayout = findViewById(R.id.progress_console_layout);
-        //progressResourcesLayout = findViewById(R.id.progress_resources_layout);
         listView = findViewById(R.id.progress_list_view);
 
         listItems= new ArrayList<>();
@@ -91,7 +119,9 @@ public class ProgressDialog extends Dialog{
             @Override
             public void onClick(View v) {
                 dismiss();
-                activity.finish();
+                if (finishActivity) {
+                    activity.finish();
+                }
             }
         });
 
@@ -109,6 +139,10 @@ public class ProgressDialog extends Dialog{
         });
     }
 
+    public void setProgressTitle(String title){
+        progressTitle.setText(StringUtils.upperCase(title));
+    }
+
     public void setConsoleText(String message){
         builder.append(message);
         builder.append("\n");
@@ -119,15 +153,13 @@ public class ProgressDialog extends Dialog{
         progressText.setText("" + message);
         progressText.setVisibility(View.VISIBLE);
         setConsoleText(message);
+        progressConsole.setText(builder, TextView.BufferType.SPANNABLE);
     }
 
-    public void showProgressButton() {
+    public void endJob() {
         setText(activity.getString(R.string.process_finish));
         mProgressBar.setVisibility(View.GONE);
         progressConsole.setText(builder, TextView.BufferType.SPANNABLE);
-        progressConsoleLayout.setVisibility(View.VISIBLE);
-        progressTitle.setText("GENERAR ACTA");
-        progressTitle.setVisibility(View.VISIBLE);
         showListResources();
 
     }
@@ -139,9 +171,8 @@ public class ProgressDialog extends Dialog{
 
     private void showListResources() {
 
-        ArrayAdapter<String> adapter;
-        adapter=new ArrayAdapter<String>(activity, R.layout.progress_dialog_item, R.id.progress_dialog_item_id, listStrItems);
-        listView.setAdapter(adapter);
+        listView.setVisibility(View.VISIBLE);
+        listView.setAdapter(new ResourceAdapter(activity, listStrItems));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -152,11 +183,64 @@ public class ProgressDialog extends Dialog{
                 final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
 
                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                intentShareFile.setType("application/msword");
+                intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
                 intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
                 activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));
             }
         });
     }
+
+    private void setWidthAndHeight(){
+
+        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels*0.60);
+        this.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+    }
+
+    private class ResourceAdapter extends ArrayAdapter<String> {
+
+        public ResourceAdapter(Context context, final List<String> lst) {
+            super(context, 0, lst);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            ViewHolder holder;
+
+            if (null == convertView) {
+                convertView = inflater.inflate(
+                        R.layout.job_progress_dialog_item,
+                        parent,
+                        false);
+
+                holder = new ViewHolder();
+                holder.imageView = (ImageView) convertView.findViewById(R.id.dialog_resource_image);
+                holder.textView = (TextView) convertView.findViewById(R.id.dialog_resource_text);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            // Lead actual.
+            String resource = (String) getItem(position);
+
+            // Setup.
+            holder.textView.setText(resource);
+            if (IconFactory.getInstance().getIcon(FilenameUtils.getExtension(resource)) != null) {
+                Drawable drawable = ContextCompat.getDrawable(getContext(), IconFactory.getInstance().getIcon(FilenameUtils.getExtension(resource)).intValue());
+                holder.imageView.setImageDrawable(drawable);
+            }
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            ImageView imageView;
+            TextView textView;
+        }
+
+   }
 
 }

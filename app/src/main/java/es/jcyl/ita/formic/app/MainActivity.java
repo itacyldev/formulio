@@ -2,7 +2,9 @@ package es.jcyl.ita.formic.app;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,6 +42,7 @@ import java.util.Map;
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.about.AboutActivity;
 import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
+import es.jcyl.ita.formic.app.dialog.JobResultDialog;
 import es.jcyl.ita.formic.app.dialog.ProjectDialog;
 import es.jcyl.ita.formic.app.jobs.JobProgressListener;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
@@ -66,6 +69,8 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
+    private final Activity activity = this;
+
     protected SharedPreferences settings;
 
     private static final int PERMISSION_REQUEST = 1234;
@@ -74,6 +79,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private static final int PROJECT_IMPORT_FILE_SELECT = 725353137;
 
     private static final String PROJECT_IMPORT_EXTENSION = "FRMD";
+
+    protected ProgressDialog pd = null;
 
     @Override
     protected void doOnCreate() {
@@ -465,15 +472,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
                             if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
                                 Uri fileUri = Uri.fromFile(file);
-
-                                try {
-                                    importProject(this, fileUri);
-                                } catch (IOException e) {
-                                    Toast.makeText(
-                                            this,
-                                            getString(R.string.projectimportfail),
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                                ImportTask importTask = new ImportTask(this);
+                                importTask.execute(fileUri);
                             } else {
                                 Toast.makeText(
                                         this,
@@ -493,81 +493,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     public void onBackPressed() {
         // Do nothing
-    }
-
-    private void importProject(Context context, Uri fileUri) throws IOException {
-
-        ProjectImporter projectImporter = ProjectImporter.getInstance();
-
-        String origin = projectImporter.getPathString(this, fileUri);
-        String destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
-        Map<String, String> existingFiles = projectImporter.getExistingFiles(origin, destination);
-        String projectName = projectImporter.getProjectName(this, fileUri.getLastPathSegment());
-
-        if ("".equals(origin)) {
-            showProjectImportFailDialog(context);
-        }
-
-        if (existingFiles.size() > 0) {
-           showExistingFilesDialog(context, existingFiles, origin,
-                    destination, projectName, projectImporter);
-        }else {
-            importProject(context, origin, destination, projectName, projectImporter);
-        }
-    }
-
-    private void showProjectImportFailDialog(Context context) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-        final AlertDialog dialog = builder.setMessage(R.string.projectimportfail)
-                .setPositiveButton(es.jcyl.ita.formic.forms.R.string.accept,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(
-                                    final DialogInterface cancelDialog,
-                                    final int id) {
-                                cancelDialog.cancel();
-                                launchActivity(context, "");
-                            }
-                        }).create();
-
-        dialog.show();
-    }
-
-    private void showExistingFilesDialog(final Context context, final
-    Map<String, String> files, final String origin, final String destination,
-                                         final String projectName, ProjectImporter projectImporter) {
-
-        String message = context.getString(R.string.project_import_existing_files);
-
-        for (String file : files.keySet()) {
-            message += "\n- " + file;
-        }
-
-        message += "\n" + context.getString(R.string
-                .project_import_overwrite_files);
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-        final AlertDialog dialog = builder.setMessage(message)
-                .setPositiveButton(es.jcyl.ita.formic.forms.R.string.accept,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(
-                                    final DialogInterface dialog,
-                                    final int id) {
-                                importProject(context, origin, destination, projectName, projectImporter);
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton(es.jcyl.ita.formic.forms.R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface dialog,
-                                                final int id) {
-                                dialog.dismiss();
-                            }
-                        }).create();
-        dialog.show();
-
-
     }
 
     private void importProject(Context context, String origin, String destination, String projectName, ProjectImporter projectImporter){
@@ -603,86 +528,74 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         editor.commit();
     }
 
-    /*class MyTask extends AsyncTask<String, String, String> {
-        AlertDialog dialog;
-        Context currentContext;
+    private class ImportTask extends AsyncTask<Uri, String, String> {
+        JobResultDialog jobResultDialog;
+        Context currenContext;
+        String origin;
+        String destination;
+        String projectName;
+        ProjectImporter projectImporter;
 
-        public MyTask(Context context) {
-            currentContext =  context;
+        public ImportTask(Context context) {
+            currenContext =  context;
         }
 
-        @Override
-        protected String doInBackground(String... params) {
-            return doInitConfiguration();
-        }
+        protected String doInBackground(final Uri... params) {
+            String text="";
 
-        @Override
-        protected void onPostExecute(final String success) {
-            dialog.dismiss(); // to hide this dialog
+            projectImporter = ProjectImporter.getInstance();
 
-            if (success.isEmpty()) {
-                UserMessagesHelper.toast(currentContext,
-                        DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
-                        Toast.LENGTH_LONG);
-            } else {
-                if (success.equals(getString(R.string.project_opening_error))) {
-                    UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) App.getInstance().getCurrentProject().getId())),
-                            Toast.LENGTH_LONG);
-                }else if (success.equals(getString(R.string.no_projects))) {
-                    UserMessagesHelper.toast(currentContext, warn("No projects found!!. Create a folder under " + currentWorkspace), Snackbar.LENGTH_LONG);
-                }else if (success.equals(getString(R.string.project_opening_finish))) {
-                    UserMessagesHelper.toast(currentContext,
-                            DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
-                            Toast.LENGTH_LONG);
-                }
-            }
-         }
-
-        @Override
-        protected void onPreExecute() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(currentContext, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-            builder.setCancelable(false); // if you want user to wait for some process to finish,
-            builder.setView(R.layout.layout_loading_dialog);
-            dialog = builder.create();
-            dialog.show(); // to show this dialog
-
-        }
-}*/
-
-    class MyTask extends AsyncTask<Project, String, String> {
-        AlertDialog dialog;
-        Context currentContext;
-
-        public MyTask(Context context) {
-            currentContext =  context;
-        }
-
-        @Override
-        protected String doInBackground(Project... params) {
-            String success="";
+            origin = projectImporter.getPathString(currenContext, params[0]);
+            destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
+            Map<String, String> existingFiles = null;
             try {
-                App.getInstance().setCurrentProject(params[0]);
-                success = getString(R.string.project_opening_finish);
-            } catch (Exception e) {
-                success = getString(R.string.project_opening_error);
+                existingFiles = projectImporter.getExistingFiles(origin, destination);
+                projectName = projectImporter.getProjectName(currenContext, params[0].getLastPathSegment());
+
+                if ("".equals(origin)) {
+                    text = currenContext.getString(R.string.projectimportfail);
+                }else if (existingFiles.size() > 0) {
+                    text = currenContext.getString(R.string.project_import_existing_files);
+
+                    for (String file : existingFiles.keySet()) {
+                        text += "\n- " + file;
+                    }
+
+                    text += "\n" + currenContext.getString(R.string
+                            .project_import_overwrite_files);
+                    jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+                }else {
+                    text=currenContext.getString(R.string.project_import_continue);
+                    jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+
+                }
+            }catch (IOException e) {
+                text="Import failed!";
             }
-            return success;
+
+            return text;
         }
 
+        @SuppressLint("NewApi")
         @Override
-        protected void onPostExecute(final String success) {
-            dialog.dismiss(); // to hide this dialog
-
+        protected void onPostExecute(final String text) {
+            jobResultDialog.endJob();
+            jobResultDialog.setText(text);
         }
-
         @Override
         protected void onPreExecute() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(currentContext, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-            builder.setCancelable(false); // if you want user to wait for some process to finish,
-            builder.setView(R.layout.layout_loading_dialog);
-            dialog = builder.create();
-            dialog.show(); // to show this dialog
+            jobResultDialog = new JobResultDialog(activity, false);
+            jobResultDialog.show();
+            jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
+            jobResultDialog.setProgressTitle(activity.getString(R.string.action_import_project));
 
+            jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jobResultDialog.dismiss();
+                    importProject(currenContext, origin, destination, projectName, projectImporter);
+                }
+            });
         }
     }
 
@@ -700,4 +613,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
     }
+
+
 }

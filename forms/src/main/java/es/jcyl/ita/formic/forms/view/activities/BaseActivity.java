@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.view.activities;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -40,6 +41,8 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
@@ -173,5 +176,6 @@ public abstract class BaseActivity extends AppCompatActivity  {
         fragmentTransaction.replace(R.id.fragment_content_main, fragment);
         fragmentTransaction.commit(); // save the changes
     }
+
 
 }

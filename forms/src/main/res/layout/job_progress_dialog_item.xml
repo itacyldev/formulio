@@ -13,14 +13,13 @@
     android:padding="8dp">
 
     <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_action_folder"
-        android:tint="?attr/primaryColorVariant"
+        android:id="@+id/dialog_resource_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_margin="8dp"/>
 
     <TextView
-        android:id="@+id/progress_dialog_item_id"
+        android:id="@+id/dialog_resource_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?attr/onSurfaceColor"
