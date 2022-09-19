@@ -607,12 +607,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     private void checkNavigationButton(int id) {
-        Project selectedProject = App.getInstance().getCurrentProject();
-        //int id = selectedProject == null?R.id.action_projects:R.id.action_forms;
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
     }
-
 
 }
