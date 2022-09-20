@@ -28,7 +28,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
@@ -58,14 +57,12 @@ import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.util.FileUtils;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
@@ -292,8 +289,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
-            doInitConfiguration();
-            //new MyTask(this).execute();
+            //doInitConfiguration();
+            new InitConfigurationTask(this).execute();
         }
     }
 
@@ -327,52 +324,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-    protected void doInitConfiguration() {
-
-        String projectsFolder = currentWorkspace;
-
-        File f = new File(projectsFolder);
-        if (!f.exists()) {
-            f.mkdir();
-        }
-        // initilize formic configuration
-        App app = App.init(this, projectsFolder);
-
-        ProjectRepository projectRepo = app.getProjectRepo();
-        List<Project> projects = projectRepo.listAll();
-        if (CollectionUtils.isEmpty(projects)) {
-            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
-        } else {
-            // TODO: extract Project View Helper to FORMIC-27
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String projectName = sharedPreferences.getString("projectName","");
-            Project prj = projects.get(0);
-            if (projectName != null) {
-                for (Project project : projects) {
-                    if (project.getName().equalsIgnoreCase(projectName)) {
-                        prj = project;
-                    }
-                }
-            }
-            DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-
-            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
-                    (String) prj.getId())), Toast.LENGTH_LONG);
-            try {
-                App.getInstance().setCurrentProject(prj);
-                UserMessagesHelper.toast(this,
-                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
-            } catch (Exception e) {
-                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
-            }
-            App.getInstance().setJobListener(new JobProgressListener());
-        }
-        initFormicBackend();
-    }
-
-
     @Override
     protected void setTheme() {
         if (currentTheme.equals("dark")) {
@@ -400,8 +351,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     }
                 }
                 if (allAcepted) {
-                    doInitConfiguration();
-                    //new MyTask(this).execute();
+                    //doInitConfiguration();
+                    new InitConfigurationTask(this).execute();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder
                             (this);
@@ -597,6 +548,109 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 }
             });
         }
+    }
+
+     class InitConfigurationTask extends AsyncTask<String, String, String> {
+        JobResultDialog jobResultDialog;
+        Context currentContext;
+
+        public InitConfigurationTask(Context context) {
+            currentContext =  context;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return doInitConfiguration();
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            jobResultDialog.endJob();
+            if (StringUtils.isEmpty(text)) {
+                text = currentContext.getString(R.string.project_opening_finish);
+                //UserMessagesHelper.toast(currentContext,
+                //        DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
+                //        Toast.LENGTH_LONG);
+            /*} else {
+                if (text.equals(getString(R.string.project_opening_error))) {
+                    UserMessagesHelper.toast(currentContext, DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) App.getInstance().getCurrentProject().getId())),
+                            Toast.LENGTH_LONG);
+                }else if (success.equals(getString(R.string.no_projects))) {
+                    UserMessagesHelper.toast(currentContext, warn("No projects found!!. Create a folder under " + currentWorkspace), Snackbar.LENGTH_LONG);
+                }else if (success.equals(getString(R.string.project_opening_finish))) {
+                    UserMessagesHelper.toast(currentContext,
+                            DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) App.getInstance().getCurrentProject().getId())),
+                            Toast.LENGTH_LONG);
+                }
+            }*/
+            }
+            jobResultDialog.setText(text);
+            jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+         }
+
+        @Override
+        protected void onPreExecute() {
+            jobResultDialog = new JobResultDialog(activity, false);
+            jobResultDialog.show();
+            jobResultDialog.setProgressTitle(activity.getString(R.string.project_opening));
+            jobResultDialog.getBackButton().setVisibility(View.GONE);
+            jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
+            jobResultDialog.setText(currentContext.getString(R.string.project_opening));
+
+            jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jobResultDialog.dismiss();
+                }
+            });
+        }
+
+         protected String doInitConfiguration() {
+
+             String text = "";
+
+             String projectsFolder = currentWorkspace;
+
+             File f = new File(projectsFolder);
+             if (!f.exists()) {
+                 f.mkdir();
+             }
+             // initilize formic configuration
+             App app = App.init(currentContext, projectsFolder);
+
+             ProjectRepository projectRepo = app.getProjectRepo();
+             List<Project> projects = projectRepo.listAll();
+             if (CollectionUtils.isEmpty(projects)) {
+                 text = "No projects found!!. Create a folder under " + projectsFolder;
+                 //UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
+             } else {
+                 // TODO: extract Project View Helper to FORMIC-27
+                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
+                 String projectName = sharedPreferences.getString("projectName","");
+                 Project prj = projects.get(0);
+                 if (projectName != null) {
+                     for (Project project : projects) {
+                         if (project.getName().equalsIgnoreCase(projectName)) {
+                             prj = project;
+                         }
+                     }
+                 }
+                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
+
+                 //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init, (String) prj.getId())), Toast.LENGTH_LONG);
+                 try {
+                     App.getInstance().setCurrentProject(prj);
+                     text = currentContext.getString(R.string.project_opening_finish, prj.getId());
+                      //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())), Toast.LENGTH_LONG);
+                 } catch (Exception e) {
+                     text = currentContext.getString(R.string.project_opening_error, prj.getId());
+                     //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())), Toast.LENGTH_LONG);
+                 }
+                 App.getInstance().setJobListener(new JobProgressListener());
+             }
+             initFormicBackend();
+             return text;
+         }
     }
 
     @Override

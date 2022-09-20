@@ -81,6 +81,10 @@ public class JobResultDialog extends Dialog{
         this.finishActivity = finishActivity;
     }
 
+    public MaterialButton getBackButton() {
+        return backButton;
+    }
+
     public MaterialButton getAcceptButton() {
         return acceptButton;
     }
