@@ -24,6 +24,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
@@ -59,9 +60,10 @@ public class ViewControllerBuilderTest {
     }
 
     private static final String MULTIPLE_VIEW = "<view/><view/><view/>";
-    @Test
+    @Test(expected = ConfigurationException.class)
     public void testMultipleViewsInFile() throws Exception {
         String xml = XmlConfigUtils.createMain(MULTIPLE_VIEW);
+
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         Assert.assertNotNull(formConfig.getEdits());
         Assert.assertEquals(3, formConfig.getEdits().size());
