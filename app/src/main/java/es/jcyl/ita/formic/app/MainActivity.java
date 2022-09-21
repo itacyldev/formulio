@@ -290,6 +290,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
             doInitConfiguration(this);
+            loadImageNoProjects();
             //new InitConfigurationTask(this).execute();
         }
     }
@@ -569,13 +570,14 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         @Override
         protected void onPostExecute(String text) {
+            loadImageNoProjects();
             jobResultDialog.endJob();
             if (StringUtils.isEmpty(text)) {
                 text = currentContext.getString(R.string.project_opening_finish);
             }
             jobResultDialog.setText(text);
             jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
-            loadImageNoProjects();
+
          }
 
         @Override
