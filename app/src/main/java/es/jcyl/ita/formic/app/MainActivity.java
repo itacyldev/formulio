@@ -486,6 +486,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         String destination;
         String projectName;
         ProjectImporter projectImporter;
+        boolean showAcceptButton = false;
 
         public ImportTask(Context context) {
             currenContext =  context;
@@ -514,10 +515,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
                     text += "\n" + currenContext.getString(R.string
                             .project_import_overwrite_files);
-                    jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+                    showAcceptButton = true;
+                    //jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
                 }else {
                     text=currenContext.getString(R.string.project_import_continue);
-                    jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+                    showAcceptButton = true;
+                    //jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
 
                 }
             }catch (IOException e) {
@@ -531,6 +534,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         @Override
         protected void onPostExecute(final String text) {
             jobResultDialog.endJob();
+            jobResultDialog.getAcceptButton().setVisibility(showAcceptButton?View.VISIBLE:View.GONE);
             jobResultDialog.setText(text);
         }
         @Override
