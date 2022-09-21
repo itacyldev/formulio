@@ -8,6 +8,7 @@
     <string name="project_opening_init">Abriendo proyecto %1$s ...</string>
     <string name="project_opening">Abriendo proyecto ...</string>
     <string name="project_opening_finish">Proyecto %1$s abierto.</string>
+    <string name="no_projects_found">No se han encontrado proyectos. Importa un proyecto pulsando el ícono +</string>
     <string name="project_opening_error">Ocurrió un error al intentar abrir el proyecto %1$s, compruebe la consola de desarrollador.</string>
     <string name="projects_of">"Proyectos de "</string>
     <string name="forms_of">"Formularios de "</string>

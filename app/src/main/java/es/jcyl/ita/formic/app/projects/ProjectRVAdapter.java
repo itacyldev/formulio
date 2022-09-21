@@ -119,6 +119,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 try {
                     App.getInstance().setCurrentProject(prj);
                     ((MainActivity) currentContext).loadFragment();
+                    ((MainActivity) currentContext).loadImageNoProjects();
                 } catch (Exception e) {
                     projectOpeningFinish = false;
 
