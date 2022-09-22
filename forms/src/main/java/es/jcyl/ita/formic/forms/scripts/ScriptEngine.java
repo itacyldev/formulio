@@ -39,6 +39,8 @@ public class ScriptEngine {
 
     private static ScriptEngine _instance;
     Map<String, Script> scripts = new HashMap<>();
+    Map<String, String> scriptSources = new HashMap<>();
+
     private Context rhino;
     private ScriptableObject sharedScope;
     private ScriptableObject scope;
@@ -56,10 +58,17 @@ public class ScriptEngine {
     }
 
     public Script getScript(String formId) {
+        if (!scripts.containsKey(formId) && scriptSources.containsKey(formId)){
+            storeScript(formId, scriptSources.get(formId));
+        }
         return this.scripts.get(formId);
     }
 
     public void store(String formId, String source) {
+        this.scriptSources.put(formId, source);
+    }
+
+    private void storeScript(String formId, String source){
         Script script = rhino.compileString(source, formId, 1, null);
         this.scripts.put(formId, script);
     }
