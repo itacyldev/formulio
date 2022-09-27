@@ -91,7 +91,7 @@ public class UIImageGalleryBuilderTest {
     }
 
     private static final String XML_TEST_WITH_TITEM = "<imagegallery  id=\"myimagegallery\" >"
-            + "  <imagegalleryitem id=\"my_imagegalleryitem\">"
+            + "  <imagegalleryitem id=\"my_imagegalleryitem\" converter=\"b64Image\">"
             + "  </imagegalleryitem>"
             + "</imagegallery>";
 
@@ -109,6 +109,7 @@ public class UIImageGalleryBuilderTest {
         UIComponent[] children = imageGallery.getChildren();
         Assert.assertEquals(1, children.length);
         UIImageGalleryItem item = (UIImageGalleryItem) children[0];
+
         Assert.assertEquals("my_imagegalleryitem", item.getId());
     }
 

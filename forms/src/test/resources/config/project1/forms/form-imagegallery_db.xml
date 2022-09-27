@@ -2,7 +2,7 @@
     <list name="Image Gallery from DB">
         <form>
             <imagegallery repo="superHImagesDBRepo">
-                <image converter="b64Image" embedded="true" value="${entity.image_thumb}" />
+                <imagegalleryitem converter="b64Image" value="${entity.image_thumb}" />
             </imagegallery>
         </form>
     </list>

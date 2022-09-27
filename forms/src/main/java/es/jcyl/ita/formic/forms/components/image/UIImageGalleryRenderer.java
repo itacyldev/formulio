@@ -2,16 +2,10 @@ package es.jcyl.ita.formic.forms.components.image;
 
 import android.widget.GridView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.components.datalist.DatalistItemWidget;
-import es.jcyl.ita.formic.forms.components.datalist.DatalistWidget;
-import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
-import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
-import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
@@ -45,12 +39,9 @@ public class UIImageGalleryRenderer extends AbstractGroupRenderer<UIImageGallery
     @Override
     protected void composeWidget(RenderingEnv env, ImageGalleryWidget widget) {
         UIImageGallery component = widget.getComponent();
-
         GridView gridView = widget.findViewById(R.id.imagegrid_view);
 
-
         widget.setGridView(gridView);
-
         widget.setConverter(component.getConverter());
 
         //setValueInView();

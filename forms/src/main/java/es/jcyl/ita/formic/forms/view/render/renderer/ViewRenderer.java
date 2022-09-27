@@ -35,6 +35,8 @@ import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItemProxy;
+import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItem;
+import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItemProxy;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -178,7 +180,11 @@ public class ViewRenderer {
             String cId = component.getId();
             // set component id to item-1,item-2, starting with 1
             return new UIDatalistItemProxy(cId + "-" + (id + 1), component, entity);
-        } else {
+        } else if (component instanceof UIImageGalleryItem) {
+            String cId = component.getId();
+            // set component id to item-1,item-2, starting with 1
+            return new UIImageGalleryItemProxy(cId + "-" + (id + 1), (UIImageGalleryItem)component, entity);
+        }else {
             return component;
         }
     }
