@@ -233,7 +233,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             checkNavigationButton(R.id.action_forms);
         }
 
-        //loadImageNoProjects();
+        loadImageNoProjects();
     }
 
     @Override
@@ -289,9 +289,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
-            //doInitConfiguration(this);
-            //loadImageNoProjects();
-            new InitConfigurationTask(this).execute();
+            doInitConfiguration(this);
+            loadImageNoProjects();
+            //new InitConfigurationTask(this).execute();
         }
     }
 
@@ -352,8 +352,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     }
                 }
                 if (allAcepted) {
-                    //doInitConfiguration(this);
-                    new InitConfigurationTask(this).execute();
+                    doInitConfiguration(this);
+                    //new InitConfigurationTask(this).execute();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder
                             (this);
@@ -630,6 +630,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     }
                 }
             }
+           // destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
 
             //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init, (String) prj.getId())), Toast.LENGTH_LONG);

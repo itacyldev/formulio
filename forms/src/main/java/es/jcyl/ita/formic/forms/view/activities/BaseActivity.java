@@ -1,7 +1,6 @@
 package es.jcyl.ita.formic.forms.view.activities;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -17,9 +16,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.FileAppender;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;

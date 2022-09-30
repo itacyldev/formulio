@@ -278,6 +278,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
             }
             jobResultDialog.endJob();
+            jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
         }
         @Override
         protected void onPreExecute() {
@@ -285,6 +286,14 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             jobResultDialog.show();
             jobResultDialog.setProgressTitle(context.getString(R.string.export));
             jobResultDialog.setText(context.getString(R.string.exporting));
+            jobResultDialog.getBackButton().setVisibility(View.GONE);
+
+            jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jobResultDialog.dismiss();
+                }
+            });
         }
     }
 

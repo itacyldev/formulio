@@ -99,8 +99,11 @@ public class JobResultDialog extends Dialog{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.job_progress_dialog);
+        
 
         setWidthAndHeight();
+
+        setCanceledOnTouchOutside(false);
 
         mProgressBar = findViewById(R.id.progress_bar);
         backButton = findViewById(R.id.back_button);
