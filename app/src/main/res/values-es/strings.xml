@@ -6,7 +6,9 @@
     <string name="mustacceptallpermits">Debe aceptar todos los permisos.</string>
     <string name="no_projects">No hay proyectos</string>
     <string name="project_opening_init">Abriendo proyecto %1$s ...</string>
+    <string name="project_opening">Abriendo proyecto ...</string>
     <string name="project_opening_finish">Proyecto %1$s abierto.</string>
+    <string name="no_projects_found">No se han encontrado proyectos. Importa un proyecto pulsando el ícono +</string>
     <string name="project_opening_error">Ocurrió un error al intentar abrir el proyecto %1$s, compruebe la consola de desarrollador.</string>
     <string name="projects_of">"Proyectos de "</string>
     <string name="forms_of">"Formularios de "</string>
@@ -34,5 +36,8 @@
     <string name="project_import_existing_files">Los siguientes ficheros ya existen en el dispositivo:</string>
     <string name="project_import_overwrite_files">Si continúa se guardará una copia en projects/bak y se sobreescribirán"</string>
     <string name="back">Volver</string>
-    <string name="process_finish">El proceso ha finalizado. Los ficheros:</string>
+    <string name="process_finish">El proceso ha finalizado.</string>
+    <string name="job_result">Resultado del trabajo</string>
+    <string name="exporting">Exportando...</string>
+    <string name="project_import_continue">Se va a importar el proyecto. ¿Desea continuar?</string>
 </resources>
