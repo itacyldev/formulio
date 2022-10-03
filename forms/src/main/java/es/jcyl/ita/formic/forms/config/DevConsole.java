@@ -149,7 +149,7 @@ public class DevConsole {
         String effMsg = getMsg(Log.ERROR, msg, null);
         if (Log.ERROR >= level) {
             addError(addTimeStamp(effMsg, Log.ERROR));
-            //logger.error(effMsg);
+            logger.error(effMsg);
         }
         return effMsg;
     }
@@ -158,7 +158,7 @@ public class DevConsole {
         String effMsg = getMsg(Log.INFO, s, null);
         if (Log.INFO >= level) {
             addInfo(addTimeStamp(effMsg, Log.INFO));
-            //logger.info(effMsg);
+            logger.info(effMsg);
         }
         return effMsg;
     }
@@ -168,7 +168,7 @@ public class DevConsole {
         String effMsg = getMsg(Log.ERROR, msg, t);
         if (Log.ERROR >= level) {
 //            addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
-            //logger.error(msg, t);
+            logger.error(msg, t);
         }
         return effMsg;
     }
@@ -179,7 +179,7 @@ public class DevConsole {
         String effMsg = getMsg(Log.WARN, msg, null);
         if (Log.WARN >= level) {
             addWarn(addTimeStamp(effMsg, Log.WARN));
-            //logger.warn(msg);
+            logger.warn(msg);
         }
         return effMsg;
     }
@@ -188,7 +188,7 @@ public class DevConsole {
         String effMsg = getMsg(Log.DEBUG, msg, null);
         if (Log.DEBUG >= level) {
             addDebug(addTimeStamp(effMsg, Log.DEBUG));
-            //logger.debug(msg);
+            logger.debug(msg);
         }
         return effMsg;
     }
