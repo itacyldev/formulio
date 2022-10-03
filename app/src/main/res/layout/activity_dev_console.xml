@@ -117,12 +117,11 @@
                         android:clickable="false"
                         android:focusable="false"
                         android:cursorVisible="false"
-                        android:textSize="11dp"
+                        android:textSize="18dp"
                         android:gravity="bottom"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
