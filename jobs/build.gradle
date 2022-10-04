@@ -1,0 +1,150 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+def globalConf = rootProject.ext
+
+archivesBaseName = 'jobs'
+group = globalConf.group
+version = globalConf.version
+
+
+android {
+    compileSdkVersion = rootProject.compileSdkVersion
+
+    defaultConfig {
+        targetSdkVersion globalConf.targetSdkVersion
+        minSdkVersion globalConf.minSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.txt'
+        }
+    }
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        String sharedTestJavaDir = 'src/shared/java'
+        androidTest {
+            java.srcDirs += [sharedTestJavaDir]
+            resources.srcDirs += ['src/test/resources']
+        }
+        test {
+            java.srcDirs += [sharedTestJavaDir]
+        }
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+//    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST']
+        }
+    }
+    namespace 'es.jcyl.ita.formic.jayjobs'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':core')
+    api project(':repo')
+
+    api 'org.mini2Dx:android-beans:1.0.0'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    api 'commons-io:commons-io:2.6'
+    api 'com.opencsv:opencsv:5.2'
+/*
+    implementation('es.jcyl.ita.crtdrd:crtsyn:0.4.3') {
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+    implementation('es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3') {
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+    implementation('es.jcyl.ita.crtcyl:crtcyl-core:2.36.5') {
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+*/
+    implementation(group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17') {
+        exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
+    }
+    implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
+    implementation 'javax.xml.stream:stax-api:1.0'
+    implementation 'com.fasterxml:aalto-xml:1.2.2'
+    implementation 'com.android.volley:volley:1.2.1'
+
+    /////////////////////////////////////
+    // Instrumentation test dependencies
+    /////////////////////////////////////
+    androidTestImplementation project(':repoTestUtils')
+    // Core library
+    androidTestImplementation 'androidx.test:core:1.2.0'
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation('androidx.test:runner:1.2.0') {
+        exclude group: 'net.sf.kxml', module: ''
+    }
+    androidTestImplementation('androidx.test:rules:1.2.0') {
+        exclude group: 'androidx.test', module: ''
+    }
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
+    androidTestImplementation 'com.google.truth:truth:0.46'
+    // Espresso dependencies
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0') {
+        exclude group: 'androidx.test', module: 'runner'
+    }
+    androidTestImplementation 'org.mockito:mockito-android:4.1.0'
+
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
+    testImplementation project(':repoTestUtils')
+    testImplementation unitTestDeps
+
+    testImplementation "org.apache.httpcomponents:httpclient:4.5.5"
+
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "http://servicios.itacyl.es/nexus/repository/internal/"
+            def snapshotsRepoUrl = "http://servicios.itacyl.es/nexus/repository/snapshots/"
+            url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+        }
+    }
+    publications {
+        mavenPublish(MavenPublication) {
+            artifacts {
+                groupId group
+                artifactId archivesBaseName
+                version version
+                artifact 'build/outputs/aar/' + archivesBaseName + (version.endsWith("SNAPSHOT") ? '-debug.aar' : '-release.aar')
+            }
+        }
+    }
+}

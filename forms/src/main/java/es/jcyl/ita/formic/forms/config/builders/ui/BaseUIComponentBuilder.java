@@ -31,10 +31,12 @@ public class BaseUIComponentBuilder<E extends UIComponent> extends AbstractCompo
 
     @Override
     protected void doWithAttribute(E element, String name, String value) {
+        // Do nothing
     }
 
     @Override
     protected void setupOnSubtreeStarts(ConfigNode<E> node) {
+        // Do nothing
     }
 
     @Override

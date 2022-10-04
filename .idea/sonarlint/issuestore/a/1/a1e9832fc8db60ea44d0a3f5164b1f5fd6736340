@@ -1,0 +1,25 @@
+
+E
+java:S3740'"/Provide the parametrized type for this generic.(Ò ›
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+;
+java:S2055'"%Add a no-arg constructor to "Entity".(Ò ›
+t
+java:S2293X"YReplace the type specification in this constructor call with the diamond operator ("<>").(û–¨­øÿÿÿÿ
+h
+java:S3776j"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(©ı½ñ
+J
+java:S1854o"5Remove this useless assignment to local variable "f".(ÄáÍf
+P
+java:S1854n"5Remove this useless assignment to local variable "f".(—Ó”¤ûÿÿÿÿ
+J
+java:S1854m"5Remove this useless assignment to local variable "f".(’™»
+;
+java:S1481m"&Remove this unused "f" local variable.(’™»
+A
+java:S1075t"&Remove this hard-coded path-delimiter.(’à·šşÿÿÿÿ
+Q	java:S125|"<This block of commented-out lines of code should be removed.(¤”²ë
+\
+java:S1192*"FDefine a constant instead of duplicating this literal "forms" 3 times.(ô±¡ë
+D
+java:S1604•"(Make this anonymous inner class a lambda(ª©ñšÿÿÿÿÿ

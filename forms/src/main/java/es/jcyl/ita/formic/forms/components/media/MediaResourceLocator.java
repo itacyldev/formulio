@@ -17,7 +17,7 @@ package es.jcyl.ita.formic.forms.components.media;
 
 import java.io.File;
 
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 
 /**
  * Helper class to locate resources with paths relative to current project
@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.config.Config;
 public class MediaResourceLocator {
 
     public static File locate(String path) {
-        return new File(Config.getInstance().getCurrentProject().getBaseFolder(), path);
+        return new File(App.getInstance().getCurrentProject().getBaseFolder(), path);
     }
 
     public static File locateImage(String path) {
@@ -51,7 +51,7 @@ public class MediaResourceLocator {
     }
 
     private static String getFolderByType(String type) {
-        return Config.getInstance().getCurrentProject().getFolderByType(type);
+        return App.getInstance().getCurrentProject().getFolderByType(type);
     }
 
 

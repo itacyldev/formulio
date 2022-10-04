@@ -63,6 +63,7 @@ public class UILinkRenderer extends AbstractRenderer<UILink, Widget<UILink>> {
 
     @Override
     protected void setupWidget(RenderingEnv env, Widget<UILink> widget) {
+        // Do nothing
     }
 
 }

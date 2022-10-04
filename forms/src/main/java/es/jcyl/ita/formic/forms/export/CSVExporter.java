@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.forms.export;
 
 import com.opencsv.CSVWriter;
+import com.opencsv.ICSVWriter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,7 +44,7 @@ public class CSVExporter {
 
         try {
             file.createNewFile();
-            CSVWriter csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.DEFAULT_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file), ';', ICSVWriter.DEFAULT_QUOTE_CHARACTER, ICSVWriter.DEFAULT_ESCAPE_CHARACTER, ICSVWriter.DEFAULT_LINE_END);
 
             Filter f = FilterRepoUtils.clone(repo, filter);
 

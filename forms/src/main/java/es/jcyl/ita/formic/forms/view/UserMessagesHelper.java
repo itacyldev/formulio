@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
@@ -24,7 +25,6 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.router.Router;
 
 /**
@@ -60,18 +60,12 @@ public class UserMessagesHelper {
 
     public static void toast(Context viewContext, String msg, int duration) {
         Toast toast = Toast.makeText(viewContext, msg, duration);
-        View view = toast.getView();
-        TextView text = (TextView) view.findViewById(android.R.id.message);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            View view = toast.getView();
+            TextView text = (TextView) view.findViewById(android.R.id.message);
 
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(viewContext);
-        String currentTheme = sharedPreferences.getString("current_theme", "light");
-        if (currentTheme.equals("light")) {
-            view.setBackgroundColor(viewContext.getResources().getColor(R.color.light_OnBackgroundColor));
-            text.setTextColor(viewContext.getResources().getColor(R.color.light_toastText));
-        } else {
-            view.setBackgroundColor(viewContext.getResources().getColor(R.color.dark_OnBackgroundColor));
-            text.setTextColor(viewContext.getResources().getColor(R.color.dark_toastText));
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(viewContext);
+            String currentTheme = sharedPreferences.getString("current_theme", "light");
         }
         toast.show();
     }

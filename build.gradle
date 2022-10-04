@@ -16,7 +16,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.1.3'
         classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
         classpath 'org.jacoco:org.jacoco.core:0.8.6'
@@ -50,80 +50,34 @@ allprojects {
             url "$androidHome/extras/google/m2repository/"
         }
 
-        maven {
-            name "ITACyL - snapshots"
-            url "http://repo.itacyl.es/archiva/repository/snapshots/"
-        }
-        maven {
-            name "ITACyL - internal"
-            url "http://repo.itacyl.es/archiva/repository/internal/"
-        }
-        maven {
-            name "ITACyL - thirdparty"
-            url "http://repo.itacyl.es/archiva/repository/thirdparty/"
-        }
+       maven {
+           name "ITACyL - snapshots"
+           url "https://servicios.itacyl.es/nexus/repository/snapshots/"
+       }
+       maven {
+           name "ITACyL - internal"
+           url "https://servicios.itacyl.es/nexus/repository/internal/"
+       }
+       maven {
+           name "ITACyL - thirdparty"
+           url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
+       }
     }
 
     configurations.all {
+        exclude group: 'xpp3', module: 'xpp3'
         resolutionStrategy.eachDependency { details ->
-            if (details.requested.name == 'xpp3_min') {
-                details.useTarget group: details.requested.group, name: 'xpp3', version: details.requested.version
-                details.because "Se prefiere 'xpp3' que es una version completa de 'xpp3_min'"
-            }
+
             if (details.requested.group == "androidx") {
                 if (!details.requested.name.startsWith("multidex")) {
                     details.useVersion "${ext.targetSdkVersion}.+"
                 }
             }
         }
+
+        resolutionStrategy { force 'androidx.core:core:1.6.0' }
     }
 }
-
-def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/jsqlite/**/*.*']
-
-task codeCoverageReport(type: JacocoReport) {
-    executionData fileTree(project.rootDir.absolutePath).include('**/build/jacoco/*.exec')
-
-    reports {
-        html.enabled true
-        xml.enabled true
-        csv.enabled false
-        html.destination file("${buildDir}/reports/html")
-    }
-
-
-    def coverageMainSrc = ["${rootDir}/app/src/main/java",
-                           "${rootDir}/forms/src/main/java"
-                           //,"${rootDir}/repo/src/main/java"
-    ]
-
-    def coverageDebugTree = [fileTree(dir: "${rootDir}/app/build/intermediates/javac/debug/classes", excludes: fileFilter),
-                             fileTree(dir: "${rootDir}/forms/build/intermediates/javac/debug/classes", excludes: fileFilter)
-                             //,fileTree(dir: "${rootDir}/repo/build/intermediates/javac/debug/classes", excludes: fileFilter)
-    ]
-
-    getSourceDirectories().setFrom(files(coverageMainSrc))
-    getClassDirectories().setFrom(files(coverageDebugTree))
-    //getExecutionData().setFrom(files(["app/build/jacoco/testDebugUnitTest.exec",
-      //                                "forms/build/jacoco/testDebugUnitTest.exec"
-}
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "FRMDRD"
-        property "sonar.login", "d247ac449f25eb8e8852380dabf101956f1d1a1b"
-        property "sonar.projectName", "Formic"
-        property 'sonar.host.url', "https://servicios.itacyl.es/sonarqube"
-        property 'sonar.java.coveragePlugin', "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${rootDir}/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
-        property "sonar.language", "java"
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.test.inclusions", "**/*Test*/**"
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.exclusions", fileFilter
-    }
-}
-
 
 task clean(type: Delete) {
     delete rootProject.buildDir
@@ -131,17 +85,18 @@ task clean(type: Delete) {
 
 
 ext {
-    versionCode = 24
-    versionName = '0.6.2'
+
+    versionCode = 35
+    versionName = '0.7.1'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 30
     targetSdkVersion = 30
     minSdkVersion = 21
-    buildToolsVersion = '29.0.2'
+    buildToolsVersion = '30.0.3'
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.6.2'
+    version = '0.7.12'
     artifactId = 'Formic'
 
     sharedDeps = [

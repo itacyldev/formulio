@@ -24,7 +24,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.repo.AbstractEditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
-import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
+import es.jcyl.ita.formic.repo.el.JexlEntityUtils;
 import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
@@ -109,7 +109,7 @@ public class MemoRepository extends AbstractEditableRepository<Entity, Object, B
                     "expression implementor!.");
         }
         JexlEntityExpression expression = (JexlEntityExpression) expr;
-        Object[] indexes = JexlRepoUtils.bulkEval(values, expression);
+        Object[] indexes = JexlEntityUtils.bulkEval(values, expression);
         int i = 0;
         for (Entity entity : values) {
             Boolean include = (Boolean) ConvertUtils.convert(indexes[i], Boolean.class);

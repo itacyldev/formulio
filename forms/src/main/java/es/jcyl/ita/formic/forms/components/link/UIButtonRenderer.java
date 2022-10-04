@@ -70,6 +70,7 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
 
     @Override
     protected void setupWidget(RenderingEnv env, Widget<UIButton> widget) {
+        // Do nothing
     }
 
 }

@@ -6,10 +6,9 @@ import org.junit.runner.RunWith;
 import org.mozilla.javascript.Script;
 import org.robolectric.RobolectricTestRunner;
 
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class ScriptSourceBuilderTest {
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

@@ -24,7 +24,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
@@ -38,7 +38,7 @@ public class ProjectTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -74,8 +74,8 @@ public class ProjectTest {
         Project prj = list.get(0);
         prj.open();;
 
-        Config.init(templateFolder.getAbsolutePath());
-        Config.getInstance().setCurrentProject(prj);
+        App.init(templateFolder.getAbsolutePath());
+        App.getInstance().setCurrentProject(prj);
 //        Config.getInstance().readConfig(prj);
     }
 

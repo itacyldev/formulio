@@ -22,14 +22,23 @@ import java.io.File;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import es.jcyl.ita.formic.forms.App;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
+import es.jcyl.ita.formic.forms.actions.ActionType;
+import es.jcyl.ita.formic.forms.actions.JobActionHandler;
+import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.export.CSVExporter;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment.OnListFragmentInteractionListener;
+import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link +} and makes a call to the
@@ -168,10 +177,33 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
         }
     }
 
+    protected void export(){
+        MainController mc = MainController.getInstance();
+
+        UserAction userAction = new UserAction(ActionType.JOB);
+        Map<String, Object> params = new HashMap<>();
+        String JOB_ID = "job_generar_acta_toma_muestras";
+        params.put("jobId", JOB_ID);
+        params.put("expediente_id", 1);
+        userAction.setParams(params);
+
+        // act - execute action
+        JobActionHandler handler = new JobActionHandler(mc, mc.getRouter());
+        handler.handle(new ActionContext(mc.getViewController(), context), userAction);
+
+
+        // create facade and related repositories
+        JobFacade facade = new JobFacade();
+        JobConfigRepo repo = new JobConfigRepo();
+        facade.setJobConfigRepo(repo);
+
+    }
+
     private class ExportDatabaseCSVTask extends AsyncTask<FormListController, String, String> {
 
+
         protected String doInBackground(final FormListController... controllers) {
-            File exportDir = new File(Config.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
+            File exportDir = new File(App.getInstance().getCurrentProject().getBaseFolder() + "/exports", "");
 
             CSVExporter csvExporter = CSVExporter.getInstance();
             File file = csvExporter.export(controllers[0].getEntityList().getRepo(),

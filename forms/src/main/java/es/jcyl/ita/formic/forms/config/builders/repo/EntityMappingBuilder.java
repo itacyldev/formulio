@@ -1,4 +1,5 @@
 package es.jcyl.ita.formic.forms.config.builders.repo;
+
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -88,5 +89,6 @@ public class EntityMappingBuilder extends AbstractComponentBuilder<EntityMapping
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<EntityMapping> node) {
+        // Do nothing
     }
 }

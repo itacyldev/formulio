@@ -30,11 +30,10 @@ import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ProjectUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
-import es.jcyl.ita.formic.forms.controllers.FormEditController;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
@@ -53,7 +52,7 @@ public class FormConfigBuilderTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -63,8 +62,8 @@ public class FormConfigBuilderTest {
     @Test
     public void testFileconfig() throws Exception {
         ProjectUtils.readProjectConfig("src/test/resources/config/project1");
-        Config config = Config.getInstance();
-        config.getFormConfigRepo().findById("formPrueba");
+        App app = App.getInstance();
+        app.getFormConfigRepo().findById("formPrueba");
 
     }
 

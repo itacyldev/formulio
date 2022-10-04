@@ -6,12 +6,24 @@ group = globalConf.group
 version = globalConf.version
 
 android {
+
     compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
+
+    signingConfigs {
+        release {
+            /*storeFile file(RELEASE_STORE_FILE)
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEYSTORE_ALIAS")
+            keyPassword System.getenv("KEYSTORE_PASSWORD")*/
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+
 
     defaultConfig {
-        versionCode globalConf.versionCode
-        versionName globalConf.versionName
         targetSdkVersion globalConf.targetSdkVersion
         minSdkVersion globalConf.minSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -20,6 +32,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -39,12 +52,13 @@ android {
             returnDefaultValues = true
         }
     }
-    lintOptions {
-        abortOnError false
-    }
-//    useLibrary 'android.test.runner'
+    //    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
+    namespace 'es.jcyl.ita.formic.repo'
 }
 
 dependencies {

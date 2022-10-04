@@ -1,0 +1,11 @@
+
+t
+java:S1450'"^Remove the "textInputLayout" field and declare it as a local variable in the relevant methods.(è¨Œõ
+T
+java:S1874>">Remove this use of "startActivityForResult"; it is deprecated.(Æ×Ðõ
+`
+java:S1874T"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ŸŒ¹Ñ
+h
+java:S1192G"RDefine a constant instead of duplicating this literal "current_workspace" 3 times.(¨‰ÞÒ
+C
+java:S16049"(Make this anonymous inner class a lambda(§Æ£¦ýÿÿÿÿ

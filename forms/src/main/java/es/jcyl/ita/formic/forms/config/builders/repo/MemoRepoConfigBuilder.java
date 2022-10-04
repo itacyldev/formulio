@@ -50,5 +50,6 @@ public class MemoRepoConfigBuilder extends AbstractComponentBuilder<RepoConfig> 
 
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<RepoConfig> node) {
+        // Do nothing
     }
 }

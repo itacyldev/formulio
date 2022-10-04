@@ -16,7 +16,7 @@ package es.jcyl.ita.formic.forms.config.builders.context;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilder;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
@@ -29,14 +29,14 @@ public class ContextBuilder implements ComponentBuilder<CompositeContext> {
 
     @Override
     public CompositeContext build(ConfigNode<CompositeContext> node) {
-        CompositeContext globalContext = Config.getInstance().getGlobalContext();
+        CompositeContext globalContext = App.getInstance().getGlobalContext();
 
         // default context creation
         if (!globalContext.containsKey("date")) {
             globalContext.addContext(new DateTimeContext("date"));
         }
         if (!globalContext.containsKey("location")) {
-            globalContext.put("location", new LocationService(Config.getInstance().getAndroidContext()));
+            globalContext.put("location", new LocationService(App.getInstance().getAndroidContext()));
         }
         return globalContext;
     }

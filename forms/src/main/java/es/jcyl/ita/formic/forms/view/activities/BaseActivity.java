@@ -12,22 +12,48 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.FileAppender;
+import es.jcyl.ita.formic.forms.App;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
+import es.jcyl.ita.formic.forms.actions.ActionType;
+import es.jcyl.ita.formic.forms.actions.JobActionHandler;
+import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 
 public abstract class BaseActivity extends AppCompatActivity  {
 
     protected SharedPreferences sharedPreferences;
     protected String currentTheme;
     protected int logLevel;
+    protected String currentWorkspace;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
+        currentWorkspace = sharedPreferences.getString("current_workspace", getExternalFilesDir(null).getAbsolutePath() + "/projects");
         logLevel = sharedPreferences.getInt("log_level", Log.DEBUG);
         setTheme();
         setLogLevel();
@@ -61,6 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     protected void switchTheme() {
 
+        App.getInstance().clear();
         if (currentTheme.equals("light")) {
             setTheme(R.style.FormudruidDark);
             sharedPreferences.edit().putString("current_theme", "dark").apply();
@@ -76,7 +103,30 @@ public abstract class BaseActivity extends AppCompatActivity  {
         recreate();
 
         invalidateOptionsMenu();
+
     }
+
+    protected void synchronization(){
+        MainController mc = MainController.getInstance();
+
+        UserAction userAction = new UserAction(ActionType.JOB);
+        Map<String, Object> params = new HashMap<>();
+        String JOB_ID = "myMockedJob";
+        params.put("jobId", JOB_ID);
+        userAction.setParams(params);
+
+        // act - execute action
+        JobActionHandler handler = new JobActionHandler(mc, mc.getRouter());
+        handler.handle(new ActionContext(mc.getViewController(), this), userAction);
+
+
+        // create facade and related repositories
+        JobFacade facade = new JobFacade();
+        JobConfigRepo repo = new JobConfigRepo();
+        facade.setJobConfigRepo(repo);
+
+    }
+
 
     public void lockOrientation() {
         final int currentapiVersion = android.os.Build.VERSION.SDK_INT;
@@ -112,16 +162,27 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     protected void setToolbar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before_white_24dp));
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                finish();
-            }
-        });
-
+        if (toolbar != null) {
+            toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before_white_24dp));
+            toolbar.setTitle(title);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    finish();
+                }
+            });
+        }
     }
+
+    public void loadFragment(Fragment fragment) {
+        // create a FragmentManager
+        FragmentManager fm = getSupportFragmentManager();
+        // create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.fragment_content_main, fragment);
+        fragmentTransaction.commit(); // save the changes
+    }
+
 
 }

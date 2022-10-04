@@ -5,6 +5,8 @@ import android.widget.TableRow;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 public class TableUtils {
     private static final String DELIM = ",";
     private static final int NUM_100 = 100;
@@ -34,7 +36,7 @@ public class TableUtils {
         if (weigthts != null && i < weigthts.length) {
             TableRow.LayoutParams lp = new TableRow.LayoutParams();
             lp.weight = 1; //column weight
-            lp = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weigthts[i]);
+            lp = new TableRow.LayoutParams(0, WRAP_CONTENT, weigthts[i]);
             view.setLayoutParams(lp);
         }
     }

@@ -13,19 +13,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:backgroundTint="@color/buttonHighlight_Dark"
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/projectName"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_weight="0.6">
 
-            <TextView
-                android:id="@+id/projectDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/projectName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
+                <TextView
+                    android:id="@+id/projectDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/item_project_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                style="?android:attr/actionOverflowButtonStyle"
+                android:tint="?attr/onSurfaceColor"
+                android:paddingRight="5dp"
+                android:layout_weight="0.4"/>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

@@ -42,9 +42,9 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.File;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
@@ -74,7 +74,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         // get input view and set Tag and Value
         I inputView = (I) ViewHelper.findViewAndSetId(widget, getInputViewId());
         if (inputView == null) {
-            Resources res = Config.getInstance().getResources();
+            Resources res = App.getInstance().getResources();
             DevConsole.error(String.format("There's an error in the '%s' class, the method  " +
                             "getInputViewId() must return an existing component in the widget " +
                             "layout. Make sure there's a View with the id [%s] in the file [%s].",

@@ -22,17 +22,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.UIComponentHelper;
-import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
-import es.jcyl.ita.formic.forms.components.link.UIButton;
-import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.config.Config;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
-import es.jcyl.ita.formic.forms.controllers.FormListController;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
@@ -49,7 +42,7 @@ public class ViewControllerBuilderTest {
 
     @BeforeClass
     public static void setUp() {
-        Config.init("");
+        App.init("");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -67,9 +60,10 @@ public class ViewControllerBuilderTest {
     }
 
     private static final String MULTIPLE_VIEW = "<view/><view/><view/>";
-    @Test
+    @Test(expected = ConfigurationException.class)
     public void testMultipleViewsInFile() throws Exception {
         String xml = XmlConfigUtils.createMain(MULTIPLE_VIEW);
+
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         Assert.assertNotNull(formConfig.getEdits());
         Assert.assertEquals(3, formConfig.getEdits().size());

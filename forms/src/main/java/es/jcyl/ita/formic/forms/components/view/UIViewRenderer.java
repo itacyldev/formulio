@@ -28,6 +28,7 @@ public class UIViewRenderer extends AbstractGroupRenderer<UIView, Widget<UIView>
 
     @Override
     protected void composeWidget(RenderingEnv env, Widget<UIView> widget) {
+        // Do nothing
     }
 
     @Override

@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.R;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -115,7 +115,7 @@ public class FormListFragment extends Fragment {
                     + " must implement OnListFragmentInteractionListener");
         }
         if (context instanceof Activity) {
-            Project selectedProject = Config.getInstance().getCurrentProject();
+            Project selectedProject = App.getInstance().getCurrentProject();
             String title = (selectedProject == null) ?
                     getString(R.string.no_current_project)
                     : getString(R.string.forms_of) + selectedProject.getName();

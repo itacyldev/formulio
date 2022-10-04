@@ -120,17 +120,16 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             holder = (ViewColumnHolder) item.getTag();
         }
 
+        getMinColumnWidth(this.dtLayout.getHeaderView());
         if (!holder.charged || holder.position != position) {
             setViewsLayout(holder, currentEntity);
             setOnClickListener(holder.layout, currentEntity);
             holder.position = position;
             holder.charged = true;
             cacheViews[position % cacheViews.length] = item;
+            // Adjust the column width to the content size
+            adjustColumnWidth();
         }
-
-        // Adjust the column width to the content size
-        adjustColumnWidth((LinearLayout) item);
-        adjustColumnWidth(this.dtLayout.getHeaderView());
 
         //if there is no route in the table
         if (this.dtLayout.getComponent().getRoute() == null) {
@@ -151,10 +150,25 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
     }
 
     /**
+     *  Adjust the column width to the content size
+     */
+   public void adjustColumnWidth() {
+        for(View v: cacheViews){
+            if (v!=null){
+                getMinColumnWidth((LinearLayout) v);
+            }
+        }
+        for(View v: cacheViews){
+            if (v!=null){
+                adjustColumnWidth((LinearLayout) v);
+                adjustColumnWidth(this.dtLayout.getHeaderView());
+            }
+        }
+    }
+    /**
      * @param rowLayout
      */
-    public void adjustColumnWidth(LinearLayout rowLayout) {
-
+    private void adjustColumnWidth(LinearLayout rowLayout) {
         Integer nChild = rowLayout.getChildCount();
         for (int i = 0; i < nChild; i++) {
             View cellView = rowLayout.getChildAt(i);
@@ -164,7 +178,23 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
 
             if (maxColWidth > colWidth) {
                 cellView.setMinimumWidth(maxColWidth);
-            } else {
+            }
+        }
+    }
+
+    private void getMinColumnWidth(LinearLayout rowLayout) {
+
+        Integer nChild = rowLayout.getChildCount();
+        for (int i = 0; i < nChild; i++) {
+            View cellView = rowLayout.getChildAt(i);
+
+            Integer colWidth = 0;
+            cellView.measure(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            colWidth = cellView.getMeasuredWidth();
+
+            Integer maxColWidth = minColWidths[i];
+
+            if (maxColWidth <= colWidth) {
                 minColWidths[i] = colWidth;
             }
         }
@@ -177,7 +207,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             public void onClick(final View v) {
                 UserEventInterceptor interceptor = dtLayout.getRenderingEnv().getUserActionInterceptor();
                 // create navigation route using current entity Id as parameter
-                if (interceptor != null && StringUtils.isNoneBlank(dtLayout.getComponent().getRoute())) {
+                if (interceptor != null && StringUtils.isNotBlank(dtLayout.getComponent().getRoute())) {
                     UIAction uiAction = dtLayout.getComponent().getAction();
                     if (uiAction == null) {
                         return;

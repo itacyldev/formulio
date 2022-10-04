@@ -72,6 +72,8 @@ public class UICardRenderer extends AbstractGroupRenderer<UICard, Widget<UICard>
                 id = R.layout.card_template_2;
                 break;
             }
+            default:
+                break;
         }
         return id;
     }

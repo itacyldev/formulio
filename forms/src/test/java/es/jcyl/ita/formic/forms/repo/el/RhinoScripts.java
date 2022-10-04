@@ -57,7 +57,7 @@ public class RhinoScripts {
     @Test
     public void testScriptFromFile() throws Exception {
         File file = TestUtils.findFile("scripts/rhino1.js");
-        String source = TestUtils.readSource(file);
+        String source = TestUtils.readAsString(file);
 
         Context rhino = Context.enter();
         rhino.setOptimizationLevel(-1);

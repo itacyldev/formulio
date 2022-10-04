@@ -19,7 +19,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.util.List;
 
-import es.jcyl.ita.formic.repo.el.JexlRepoUtils;
+import es.jcyl.ita.formic.repo.el.JexlEntityUtils;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -122,7 +122,7 @@ public abstract class AbstractEditableRepository<T extends Entity, ID, F extends
 
     private void updateEntityProps(Entity mainEntity, Entity relatedEntity, EntityMapping relation) {
         for (CalculatedProperty cp : relation.getCalcProps()) {
-            relatedEntity.set(cp.property, JexlRepoUtils.eval(mainEntity, cp.expression));
+            relatedEntity.set(cp.property, JexlEntityUtils.eval(mainEntity, cp.expression));
         }
     }
 

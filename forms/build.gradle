@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
@@ -11,11 +10,21 @@ version = globalConf.version
 
 android {
     compileSdkVersion = rootProject.compileSdkVersion
-    buildToolsVersion = rootProject.buildToolsVersion
+
+    signingConfigs {
+        release {
+            /*storeFile file(RELEASE_STORE_FILE)
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEYSTORE_ALIAS")
+            keyPassword System.getenv("KEYSTORE_PASSWORD")*/
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
 
     defaultConfig {
-        versionCode globalConf.versionCode
-        versionName globalConf.versionName
         targetSdkVersion globalConf.targetSdkVersion
         minSdkVersion globalConf.minSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -28,6 +37,7 @@ android {
             testCoverageEnabled true
         }
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.txt'
@@ -37,16 +47,6 @@ android {
         encoding = "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-    lintOptions {
-        abortOnError false
-    }
-    dexOptions {
-        // http://developer.android.com/intl/es/tools/building/building-studio.html#instant-run
-        //preDexLibraries true
-        maxProcessCount 4
-        javaMaxHeapSize "2g"
-        jumboMode = true
     }
     testOptions {
         unitTests {
@@ -63,6 +63,10 @@ android {
 //    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
+    namespace 'es.jcyl.ita.formic.forms'
 }
 
 
@@ -71,6 +75,7 @@ dependencies {
 
     implementation project(':core')
     implementation project(':repo')
+    implementation project(':jobs')
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -84,15 +89,15 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-//    implementation 'com.google.dagger:dagger:2.26'
 
     implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'com.github.tony19:logback-android:2.0.0'
 
-    implementation group: 'com.opencsv', name: 'opencsv', version: '5.2'
+    implementation 'com.opencsv:opencsv:5.2'
 
     implementation  "net.bytebuddy:byte-buddy:1.11.2"
     implementation  "net.bytebuddy:byte-buddy-android:1.11.2"
+    implementation 'com.airbnb.android:paris:1.7.3'
 
     //implementation 'org.jsoup:jsoup:1.14.3'
 
@@ -100,6 +105,8 @@ dependencies {
     api "commons-validator:commons-validator:1.6"
     api 'org.mozilla:rhino:1.7.12'
     api 'org.jgrapht:jgrapht-core:1.1.0'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+
 
     // rxAndroid
 //    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
@@ -127,6 +134,8 @@ dependencies {
         exclude group: 'androidx.test', module: 'runner'
     }
 
+    androidTestImplementation 'org.mockito:mockito-android:4.1.0'
+
     /////////////////////////////////////
     // JUnit test dependencies
     /////////////////////////////////////
@@ -147,8 +156,8 @@ task sourceJar(type: Jar) {
 publishing {
     repositories {
         maven {
-            def releasesRepoUrl = "http://repo.itacyl.es/archiva/repository/internal/"
-            def snapshotsRepoUrl = "http://repo.itacyl.es/archiva/repository/snapshots/"
+            def releasesRepoUrl = "http://servicios.itacyl.es/nexus/repository/internal/"
+            def snapshotsRepoUrl = "http://servicios.itacyl.es/nexus/repository/snapshots/"
             url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
                 username = mavenUser

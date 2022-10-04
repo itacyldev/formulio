@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -71,11 +72,11 @@ public class ProjectListFragment extends Fragment {
         ArrayList<Project> projects = (arguments != null) ?
                 (ArrayList<Project>) arguments.getSerializable(PROJECT_LIST)
                 : new ArrayList<>();
-        ProjectRVAdapter mAdapter = new ProjectRVAdapter(projects);
+        ProjectRVAdapter mAdapter = new ProjectRVAdapter(projects, rootView.getContext());
         mReciclerView.setAdapter(mAdapter);
 
         if (projects.isEmpty()) {
-
+            App.getInstance().clear();
             UserMessagesHelper.toast(getContext(), getString(R.string.no_projects),
                     Toast.LENGTH_SHORT);
         }

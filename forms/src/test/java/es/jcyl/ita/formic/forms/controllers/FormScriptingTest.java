@@ -26,11 +26,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.form.FormWidget;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
@@ -69,7 +69,7 @@ public class FormScriptingTest {
             ctx.setTheme(R.style.FormudruidLight);
         }
 
-        Config.init(ctx, "");
+        App.init(ctx, "");
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
@@ -113,7 +113,7 @@ public class FormScriptingTest {
                 .render();
 
         // load script: the value si valid if length > 10
-        String source = TestUtils.readSource(TestUtils.findFile("scripts/formValidation1.js"));
+        String source = TestUtils.readAsString(TestUtils.findFile("scripts/formValidation1.js"));
 
         ScriptEngine engine = recipe.mc.getScriptEngine();
         engine.store(recipe.mc.getViewController().getId(), source);
@@ -138,7 +138,7 @@ public class FormScriptingTest {
 
         Assert.assertFalse(valid);
         String errorMessage = MessageHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
-        Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
+        Assert.assertTrue(StringUtils.isNotBlank(errorMessage));
 
         // Try validating the full form
 //        FormWidget formWidget = (FormWidget) ViewHelper.findComponentWidget(recipe.viewWidget, form.getId());
@@ -146,6 +146,6 @@ public class FormScriptingTest {
         // check the message has been set from the validation function
         Assert.assertFalse(valid);
         errorMessage = MessageHelper.getMessage(recipe.env.getWidgetContext(), form.getId());
-        Assert.assertTrue(StringUtils.isNoneBlank(errorMessage));
+        Assert.assertTrue(StringUtils.isNotBlank(errorMessage));
     }
 }

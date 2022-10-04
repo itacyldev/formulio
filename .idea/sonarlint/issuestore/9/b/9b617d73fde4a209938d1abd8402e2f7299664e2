@@ -1,0 +1,12 @@
+
+P
+java:S1118":Add a private constructor to hide the implicit public one.(œàçž
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+`
+java:S11928"JDefine a constant instead of duplicating this literal "validator" 3 times.(õ×¾ì
+^
+java:S1192"HDefine a constant instead of duplicating this literal "binding" 6 times.(ž¶¹Ç
+]
+java:S1192|"GDefine a constant instead of duplicating this literal "action" 3 times.(º¡Þç
+\
+java:S1192q"FDefine a constant instead of duplicating this literal "color" 5 times.(‹õÞË

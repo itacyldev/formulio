@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -24,11 +22,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import es.jcyl.ita.formic.core.context.AbstractMapContext;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.core.context.ContextDebugger;
 
 /**
  * Implements Context aggregation ordering returning keys by context insertion order.
@@ -55,7 +53,7 @@ public class OrderedCompositeContext extends AbstractMapContext
     private final Map<String, Context> contexts = new LinkedHashMap<String, Context>();
 
     public OrderedCompositeContext() {
-
+        // Do nothing
     }
 
     /*
@@ -411,69 +409,17 @@ public class OrderedCompositeContext extends AbstractMapContext
 
     public void debugContext() {
         if (LOGGER.isDebugEnabled()) {
-            List<String> printable = this.getPrintable();
+            List<String> printable = ContextDebugger.getPrintable(this);
             for (String str : printable) {
                 LOGGER.debug(str);
             }
         }
     }
 
-    private String printPropertyLine(Map m, Map keyDesc, String ks) {
-        int PADDING = 35;
-        String propValue = String.format("\t%s = %s", ks, m.get(ks));
-        int dif = PADDING - propValue.length();
-        String pad = (dif <= 0) ? ""
-                : new String(new char[dif]).replace('\0', ' ');
-
-        return propValue + pad + " -> " + keyDesc.get(ks);
-    }
-
-    private boolean isComposite(Context context) {
-        return (context instanceof CompositeContext);
-    }
-
-    /**
-     * Returns all nested contexts as a plain collection. (Depth-first walk of the context tree).
-     *
-     * @return
-     */
-    private Collection<Context> getPlainContextList() {
-        Collection<Context> configOrig, configDest = null;
-
-        /*
-         * Go over the list, copying the contexts, if a composite context is found,
-         * replace it with its children contexts
-         */
-        boolean hayConfigCompuestas = true;
-        configOrig = this.getContexts();
-
-        while (hayConfigCompuestas) {
-            hayConfigCompuestas = false;
-
-            configDest = new LinkedList<Context>();
-            for (Context context : configOrig) {
-                if (!isComposite(context)) {
-                    configDest.add(context);
-                } else {
-                    // a�adimos solo las hijas
-                    configDest
-                            .addAll(((CompositeContext) context).getContexts());
-                    hayConfigCompuestas = true;
-                }
-            }
-            if (hayConfigCompuestas) {
-                // cambiamos origen-destinoa y volvemos a recorrer para
-                // asegurarnos de que no hay conf. compuestas
-                configOrig = configDest;
-                configDest = null;
-            }
-        }
-        return configDest;
-    }
-
     public void print(PrintStream out) {
         try {
-            for (String line : getPrintable()) {
+            List<String> printable = ContextDebugger.getPrintable(this);
+            for (String line : printable) {
                 out.println(line);
             }
         } catch (Exception e) {
@@ -482,59 +428,11 @@ public class OrderedCompositeContext extends AbstractMapContext
         }
     }
 
-    public List<String> getPrintable() {
-        List<String> printable = new ArrayList<String>();
-        Map m = new TreeMap(String.CASE_INSENSITIVE_ORDER);
-
-        // get a map with the key list and their origin
-        Map<String, String> keysOrigin = this.getKeyDescription();
-
-        // Store the properties in a Treemap to show them ordered
-        for (String key : keysOrigin.keySet()) {
-            m.put(key, this.getValue(key));
-        }
-
-        printable.add("===============================================");
-        printable.add(this.getClass().getName());
-        printable.add("========= Loaded contexts ============");
-        Collection<Context> collection = this.getPlainContextList();
-
-        for (Context context : collection) {
-            String line = String.format("\t%s - %s",
-                    context.getClass().getSimpleName(), context.getPrefix());
-            printable.add(line);
-        }
-        printable.add("===============================================");
-        for (Object ks : m.keySet()) {
-            printable.add(this.printPropertyLine(m, keysOrigin, (String) ks));
-        }
-        printable.add("===============================================");
-        return printable;
-    }
-
-    private Map<String, String> getKeyDescription() {
-        String key;
-        Map<String, String> map = new HashMap<String, String>();
-
-        for (final Context context : this.getPlainContextList()) {
-            final Iterator<String> e = context.keySet().iterator();
-            String confDesc = this.getConfDescription(context);
-            for (; e.hasNext(); ) {
-                key = e.next();
-                map.put(context.getPrefix() + "." + key, confDesc);
-            }
-        }
-        return map;
-    }
-
-    private String getConfDescription(Context conf) {
-        return conf.getClass().getSimpleName() + " - " + conf.getPrefix();
-    }
 
     @Override
     public Set<String> keySet() {
         Enumeration<String> keys = getKeys();
-        return new HashSet<String>(Collections.list(keys));
+        return new HashSet<>(Collections.list(keys));
     }
 
     @Override

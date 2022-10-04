@@ -17,12 +17,12 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 
 import org.apache.commons.lang3.StringUtils;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
-import es.jcyl.ita.formic.forms.config.Config;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
@@ -60,6 +60,6 @@ public abstract class AbstractActionHandler implements ActionHandler {
     }
 
     protected String getErrorMessage(UserAction action, Exception e) {
-        return Config.getInstance().getStringResource(R.string.action_generic_error);
+        return App.getInstance().getStringResource(R.string.action_generic_error);
     }
 }
