@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  */
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
@@ -43,6 +44,7 @@ public class MainThreadRunnerTest {
     }
 
     @Test
+    @Ignore
     public void testListenerCalls() throws Exception {
         MainThreadRunner executor = new MainThreadRunner();
 
@@ -60,6 +62,7 @@ public class MainThreadRunnerTest {
     }
 
     @Test
+    @Ignore
     public void testListenerCallOnError() throws Exception {
         MainThreadRunner executor = new MainThreadRunner();
 
