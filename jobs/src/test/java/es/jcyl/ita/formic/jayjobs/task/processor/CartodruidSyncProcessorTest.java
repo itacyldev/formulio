@@ -1,8 +1,10 @@
 package es.jcyl.ita.formic.jayjobs.task.processor;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+@Ignore
 @RunWith(RobolectricTestRunner.class)
 public class CartodruidSyncProcessorTest {
 //    android.content.Context ctx;
