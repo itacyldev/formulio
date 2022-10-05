@@ -47,8 +47,8 @@ pipeline {
                     echo "Etiquetando version ${RELEASE_TAG}"
                     sshagent(['jenkins_ssh']) {
                         // El plugin de jenkins no está fijando estas propiedades
-                        sh("git app user.name \"jenkins\" ")
-                        sh("git app user.email \"jenkins@itacyl.es\" ")
+                        sh("git config user.name \"jenkins\" ")
+                        sh("git config user.email \"jenkins@itacyl.es\" ")
 
                         // Drop local changes
                         sh("git stash")
