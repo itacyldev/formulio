@@ -16,19 +16,14 @@ package es.jcyl.ita.formic.jayjobs.task.processor;
  */
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.ContextDebugger;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
-import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 
 /**
  * Writes the content of the context in file
@@ -47,7 +42,7 @@ public class ContextDebugProcessor extends AbstractProcessor
         CompositeContext ctx = this.getGlobalContext();
         List<String> printable = ContextDebugger.getPrintable(ctx);
         if (output.toLowerCase().equals("log")) {
-            LOGGER.info(printable);
+            LOGGER.info(String.valueOf(printable));
         } else if (output.toLowerCase().equals("file")) {
             try {
                 FileUtils.writeLines(new File(getOutputFile()), printable);
