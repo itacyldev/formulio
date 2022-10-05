@@ -45,55 +45,7 @@ pipeline {
                 }
             }
         }
-        stage('Integration Test') {
-            when {
-                expression { BRANCH_NAME == 'develop' }
-            }
-            steps {
-                script {
-                        sh '''#!/bin/bash
-                        export ANDROID_EMULATOR_HOME=/apps/android-sdk-linux/test
-                        export ANDROID_AVD_HOME=$ANDROID_EMULATOR_HOME/avd
-
-                        num_devices=$((`$ANDROID_HOME/platform-tools/adb devices|wc -l`-2))
-
-                        echo "num_devices: ${num_devices}"
-                        echo "-------------------------------------------------------------"
-                        echo "-------------------------------------------------------------"
-                        echo "Antes:"
-                        $ANDROID_HOME/platform-tools/adb devices
-                        echo "-------------------------------------------------------------"
-                        echo "-------------------------------------------------------------"
-
-                        if [ $num_devices -eq 0 ]; then
-                            echo "Arrancando emulador..."
-                            $ANDROID_HOME/emulator/emulator -avd nexus_6 -no-window -gpu guest -no-audio -read-only &
-                            $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
-                        fi
-
-                        echo "-------------------------------------------------------------"
-                        echo "-------------------------------------------------------------"
-                        echo "Después: "
-                        $ANDROID_HOME/platform-tools/adb devices
-                        echo "-------------------------------------------------------------"
-                        echo "-------------------------------------------------------------"
-
-                        # Copiar bd tests
-                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/ribera.sqlite /sdcard/test/ribera.sqlite
-
-                        # Copiar proyectos tests
-                        $ANDROID_HOME/platform-tools/adb push ${WORKSPACE}/forms/src/test/resources/config/project1 /sdcard/projects/project1
-
-                        ./gradlew :app:connectedAndroidTest --stacktrace --scan --no-parallel
-                    '''
-                }
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: '**/build/reports/androidTests/connected/*.xml'
-                }
-            }
-        }
+        
         stage('Report Jacoco') {
             steps {
                 sh './gradlew codeCoverageReport'
