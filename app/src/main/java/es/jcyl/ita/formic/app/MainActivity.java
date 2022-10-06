@@ -28,7 +28,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
@@ -58,14 +57,12 @@ import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.util.FileUtils;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
@@ -204,7 +201,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     }
 
-    private void loadImageNoProjects(){
+    public void loadImageNoProjects(){
         RelativeLayout layoutNoProjects = findViewById(R.id.layout_no_projects);
         if (App.getInstance().getProjectRepo().listAll().size() == 0){
             layoutNoProjects.setVisibility(View.VISIBLE);
@@ -292,8 +289,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
-            doInitConfiguration();
-            //new MyTask(this).execute();
+            doInitConfiguration(this);
+            loadImageNoProjects();
+            //new InitConfigurationTask(this).execute();
         }
     }
 
@@ -327,52 +325,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-    protected void doInitConfiguration() {
-
-        String projectsFolder = currentWorkspace;
-
-        File f = new File(projectsFolder);
-        if (!f.exists()) {
-            f.mkdir();
-        }
-        // initilize formic configuration
-        App app = App.init(this, projectsFolder);
-
-        ProjectRepository projectRepo = app.getProjectRepo();
-        List<Project> projects = projectRepo.listAll();
-        if (CollectionUtils.isEmpty(projects)) {
-            UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
-        } else {
-            // TODO: extract Project View Helper to FORMIC-27
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String projectName = sharedPreferences.getString("projectName","");
-            Project prj = projects.get(0);
-            if (projectName != null) {
-                for (Project project : projects) {
-                    if (project.getName().equalsIgnoreCase(projectName)) {
-                        prj = project;
-                    }
-                }
-            }
-            DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-
-            UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init,
-                    (String) prj.getId())), Toast.LENGTH_LONG);
-            try {
-                App.getInstance().setCurrentProject(prj);
-                UserMessagesHelper.toast(this,
-                        DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
-            } catch (Exception e) {
-                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())),
-                        Toast.LENGTH_LONG);
-            }
-            App.getInstance().setJobListener(new JobProgressListener());
-        }
-        initFormicBackend();
-    }
-
-
     @Override
     protected void setTheme() {
         if (currentTheme.equals("dark")) {
@@ -400,8 +352,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     }
                 }
                 if (allAcepted) {
-                    doInitConfiguration();
-                    //new MyTask(this).execute();
+                    doInitConfiguration(this);
+                    //new InitConfigurationTask(this).execute();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder
                             (this);
@@ -535,6 +487,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         String destination;
         String projectName;
         ProjectImporter projectImporter;
+        boolean showAcceptButton = false;
 
         public ImportTask(Context context) {
             currenContext =  context;
@@ -563,10 +516,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
                     text += "\n" + currenContext.getString(R.string
                             .project_import_overwrite_files);
-                    jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+                    showAcceptButton = true;
+                    //jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
                 }else {
                     text=currenContext.getString(R.string.project_import_continue);
-                    jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+                    showAcceptButton = true;
+                    //jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
 
                 }
             }catch (IOException e) {
@@ -580,6 +535,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         @Override
         protected void onPostExecute(final String text) {
             jobResultDialog.endJob();
+            jobResultDialog.getAcceptButton().setVisibility(showAcceptButton?View.VISIBLE:View.GONE);
             jobResultDialog.setText(text);
         }
         @Override
@@ -599,6 +555,101 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
+     class InitConfigurationTask extends AsyncTask<String, String, String> {
+        JobResultDialog jobResultDialog;
+        Context currentContext;
+
+        public InitConfigurationTask(Context context) {
+            currentContext =  context;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return doInitConfiguration(currentContext);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            loadImageNoProjects();
+            jobResultDialog.endJob();
+            if (StringUtils.isEmpty(text)) {
+                text = currentContext.getString(R.string.project_opening_finish);
+            }
+            jobResultDialog.setText(text);
+            jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+
+         }
+
+        @Override
+        protected void onPreExecute() {
+            jobResultDialog = new JobResultDialog(activity, false);
+            jobResultDialog.show();
+            jobResultDialog.setProgressTitle(activity.getString(R.string.project_opening));
+            jobResultDialog.getBackButton().setVisibility(View.GONE);
+            jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
+            jobResultDialog.setText(currentContext.getString(R.string.project_opening));
+
+            jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jobResultDialog.dismiss();
+                }
+            });
+        }
+
+    }
+
+    protected String doInitConfiguration(Context ctx) {
+
+        String text = "";
+
+        String projectsFolder = currentWorkspace;
+
+        File f = new File(projectsFolder);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        // initilize formic configuration
+        App app = App.init(ctx, projectsFolder);
+
+        ProjectRepository projectRepo = app.getProjectRepo();
+        List<Project> projects = projectRepo.listAll();
+        if (CollectionUtils.isEmpty(projects)) {
+            text = ctx.getString(R.string.no_projects_found);
+            DevConsole.warn(text);
+            //UserMessagesHelper.toast(this, warn("No projects found!!. Create a folder under " + projectsFolder), Snackbar.LENGTH_LONG);
+        } else {
+            // TODO: extract Project View Helper to FORMIC-27
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+            String projectName = sharedPreferences.getString("projectName","");
+            Project prj = projects.get(0);
+            if (projectName != null) {
+                for (Project project : projects) {
+                    if (project.getName().equalsIgnoreCase(projectName)) {
+                        prj = project;
+                    }
+                }
+            }
+           // destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
+            DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
+
+            //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init, (String) prj.getId())), Toast.LENGTH_LONG);
+            try {
+                App.getInstance().setCurrentProject(prj);
+                text = ctx.getString(R.string.project_opening_finish, prj.getId());
+                DevConsole.info(text);
+                //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())), Toast.LENGTH_LONG);
+            } catch (Exception e) {
+                text = ctx.getString(R.string.project_opening_error, prj.getId());
+                DevConsole.error(text);
+                //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())), Toast.LENGTH_LONG);
+            }
+            App.getInstance().setJobListener(new JobProgressListener());
+        }
+        initFormicBackend();
+        return text;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -607,12 +658,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     private void checkNavigationButton(int id) {
-        Project selectedProject = App.getInstance().getCurrentProject();
-        //int id = selectedProject == null?R.id.action_projects:R.id.action_forms;
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
     }
-
 
 }

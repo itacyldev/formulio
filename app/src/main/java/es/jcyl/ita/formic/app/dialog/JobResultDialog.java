@@ -81,6 +81,10 @@ public class JobResultDialog extends Dialog{
         this.finishActivity = finishActivity;
     }
 
+    public MaterialButton getBackButton() {
+        return backButton;
+    }
+
     public MaterialButton getAcceptButton() {
         return acceptButton;
     }
@@ -95,14 +99,18 @@ public class JobResultDialog extends Dialog{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.job_progress_dialog);
+        
 
         setWidthAndHeight();
+
+        setCanceledOnTouchOutside(false);
 
         mProgressBar = findViewById(R.id.progress_bar);
         backButton = findViewById(R.id.back_button);
         acceptButton = findViewById(R.id.accept_button);
         showConsoleButton = findViewById(R.id.show_console_button);
         progressText = findViewById(R.id.text_loading_dialog);
+        progressText.setMovementMethod(new ScrollingMovementMethod());
         progressTitle = findViewById(R.id.progress_title);
         progressConsole = findViewById(R.id.progress_console);
         progressConsole.setMovementMethod(new ScrollingMovementMethod());
@@ -149,7 +157,6 @@ public class JobResultDialog extends Dialog{
     }
 
     public void setText(String message){
-        TextView progressText = (TextView) findViewById(R.id.text_loading_dialog);
         progressText.setText("" + message);
         progressText.setVisibility(View.VISIBLE);
         setConsoleText(message);
