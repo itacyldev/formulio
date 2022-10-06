@@ -52,6 +52,14 @@ public class TextAreaRenderer extends TextFieldRenderer {
         removeUnderline(env, component, textInputLayout);
 
         setOnClickListenerResetButton(component, inputView);
+
+        setLines(component, inputView);
+    }
+
+    private void setLines(UIField component, EditText inputView){
+        if (component.getLines() != null){
+            inputView.setLines(component.getLines());
+        }
     }
 
 }
