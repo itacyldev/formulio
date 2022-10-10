@@ -22,6 +22,7 @@ import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.converters.CustomDateConverter;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -109,7 +110,13 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                final Calendar c = new GregorianCalendar();
+                //final Calendar c = new GregorianCalendar();
+
+                CustomDateConverter cdc = new CustomDateConverter();
+                cdc.setPatterns(new String[]{widget.getComponent().getPattern()});
+                ConvertUtils.register(cdc, Calendar.class);
+                Calendar c = (Calendar) ConvertUtils.convert(input.getText(), Calendar.class);
+
                 final Dialog dateDialog = new DatePickerDialog(widget.getContext(),
                         R.style.DialogStyle,
                         listener, c.get(Calendar.YEAR), c
@@ -144,7 +151,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     protected void setValueInView(RenderingEnv env, InputWidget<UIField, Button> widget) {
         String value = getComponentValue(env, widget.getComponent(), String.class);
-        widget.getConverter().setViewValue(widget.getInputView(), StringUtils.isNotEmpty(value)?formatDate(value, widget):value);
+        widget.getConverter().setViewValue(widget.getInputView(), StringUtils.isNotEmpty(value) ? formatDate(value, widget) : value);
     }
 
     private String formatDate(String value, InputWidget<UIField, Button> widget) {
@@ -153,16 +160,16 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         try {
             long currentTime = ((Date) ConvertUtils.convert(value, Date.class)).getTime();
             long dateOnly = (currentTime / millisInDay) * millisInDay;
-            Date clearDate = new Date(widget.getComponent().getType().equals(UIField.TYPE.DATE.name())?dateOnly:currentTime);
+            Date clearDate = new Date(widget.getComponent().getType().equals(UIField.TYPE.DATE.name()) ? dateOnly : currentTime);
             formattedDate = new SimpleDateFormat(widget.getComponent().getPattern()).format(clearDate);
-        }catch (Exception e){
+        } catch (Exception e) {
             DevConsole.error(String.format("An error occurred while trying to format the date [%s].", value));
             return value;
         }
         return formattedDate;
     }
 
-    private String formatDate(Date date, String pattern){
+    private String formatDate(Date date, String pattern) {
         return new SimpleDateFormat(pattern).format(date);
     }
 

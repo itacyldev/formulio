@@ -21,8 +21,8 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -54,7 +54,7 @@ public class ProjectImporter {
 
  private static ProjectImporter _instance;
 
- private static final Log LOGGER = LogFactory.getLog(ProjectImporter.class);
+ private static final Logger LOGGER = LoggerFactory.getLogger(ProjectImporter.class);
 
  private static final Pattern projectNamePattern = Pattern.compile("^([a-zA-Z0-9]*)(-\\d*)?$");
  private static final DateFormat timeStamper = new SimpleDateFormat("yyyyMMdd_HHmmss");

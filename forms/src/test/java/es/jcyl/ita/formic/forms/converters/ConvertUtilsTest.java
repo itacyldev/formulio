@@ -21,6 +21,8 @@ import org.junit.Test;
 import org.mini2Dx.beanutils.ConvertUtils;
 import org.mini2Dx.beanutils.converters.LongConverter;
 
+import java.util.Calendar;
+
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 
 /**
@@ -46,6 +48,18 @@ public class ConvertUtilsTest {
         // get converter and try to convert and empty value
         Object value = ConvertUtils.convert("", Long.class);
         Assert.assertNull(value);
+    }
+
+    @Test
+    public void testStringToDate() {
+
+
+        CustomDateConverter cdc = new CustomDateConverter();
+        cdc.setPatterns(new String[]{"yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss"});
+        ConvertUtils.register(cdc, Calendar.class);
+
+        Object value = ConvertUtils.convert("2022-10-03", Calendar.class);
+        Assert.assertNotNull(value);
     }
 
 

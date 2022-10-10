@@ -1,7 +1,8 @@
 package es.jcyl.ita.formic.jayjobs.task.processor;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -13,7 +14,7 @@ import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 
 public abstract class AbstractProcessor extends AbstractTaskSepItem {
 
-    protected static final org.apache.commons.logging.Log LOGGER = LogFactory.getLog(ContextDebugProcessor.class);
+     protected static final Logger LOGGER = LoggerFactory.getLogger(ContextDebugProcessor.class);
 
     protected static final DateFormat timeStamper = new SimpleDateFormat("yyyyMMdd_HHmmss.SSS");
 
