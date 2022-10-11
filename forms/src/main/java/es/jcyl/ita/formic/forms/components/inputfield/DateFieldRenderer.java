@@ -110,12 +110,14 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                //final Calendar c = new GregorianCalendar();
+                Calendar c = new GregorianCalendar();
+                if (input.getText() != null && StringUtils.isNotEmpty(input.getText())) {
+                    CustomDateConverter cdc = new CustomDateConverter();
+                    cdc.setPatterns(new String[]{widget.getComponent().getPattern()});
+                    ConvertUtils.register(cdc, Calendar.class);
 
-                CustomDateConverter cdc = new CustomDateConverter();
-                cdc.setPatterns(new String[]{widget.getComponent().getPattern()});
-                ConvertUtils.register(cdc, Calendar.class);
-                Calendar c = (Calendar) ConvertUtils.convert(input.getText(), Calendar.class);
+                    c = (Calendar) ConvertUtils.convert(input.getText(), Calendar.class);
+                }
 
                 final Dialog dateDialog = new DatePickerDialog(widget.getContext(),
                         R.style.DialogStyle,
