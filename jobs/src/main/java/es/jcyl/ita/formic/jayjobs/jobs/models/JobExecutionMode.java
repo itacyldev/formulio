@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.jayjobs.jobs.models;
  * limitations under the License.
  */
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Indicates how the tasks will be executed, if Foreground_Async is chosen (FG_ASYNC) the task will
  * executed using and Async/Concurrent task, using Background makes the tasks execute in an i
@@ -27,13 +29,26 @@ public enum JobExecutionMode {
     /**
      * Use background service to execute the job
      */
-    BG,
+    BG ("BG"),
     /**
      * User Async/Concurrent task to execute the job
      */
-    FG_ASYNC,
+    FG_ASYNC("FG_ASYNC"),
     /**
      * Execute the job in the main thread (don't use for long-running tasks)
      */
-    FG
+    FG("FG");
+
+    private String jsonValue;
+
+    private JobExecutionMode(final String json) {
+        this.jsonValue = json;
+    }
+
+    @JsonValue
+    public String jsonValue() {
+        return this.jsonValue;
+    }
+
+
 }
