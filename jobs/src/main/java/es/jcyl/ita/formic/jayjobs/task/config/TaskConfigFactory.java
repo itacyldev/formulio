@@ -68,7 +68,6 @@ public class TaskConfigFactory {
 
         mapper = new ObjectMapper();
         mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
 
         /** Register Task items **/
