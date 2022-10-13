@@ -25,7 +25,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-@JsonIgnoreProperties({"tasks", "executionMode"})
+@JsonIgnoreProperties({"tasks"})
 public class JobConfig {
     private String id; // taken from the file name
     private String description;
