@@ -52,10 +52,6 @@
 
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
-
-
-
-
 -keepattributes EnclosingMethod, InnerClasses
 -keepattributes *Annotation*
 -keepattributes Signature
