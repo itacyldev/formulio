@@ -35,7 +35,7 @@ public class JobConfig {
     private String[] requiredContexts;
     private String[] requiredPermissions;
     // selected execution mode for the job (BG/FG)
-    private JobExecutionMode executionMode;
+      private JobExecutionMode executionMode;
     private Map<String, Object> globalParams;
     private boolean debug = false;
     // part of the job json config that defines the tasks
@@ -88,6 +88,10 @@ public class JobConfig {
 
     public void setRequiredPermissions(String[] requiredPermissions) {
         this.requiredPermissions = requiredPermissions;
+    }
+
+    public JobExecutionMode getExecutionMode() {
+        return executionMode;
     }
 
     public void setExecutionMode(JobExecutionMode executionMode) {

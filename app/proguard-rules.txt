@@ -56,6 +56,7 @@
 -keepattributes *Annotation*
 -keepattributes Signature
 
+
 -dontwarn org.codehaus.groovy.**
 -dontwarn groovy**
 -dontnote org.codehaus.groovy.**
