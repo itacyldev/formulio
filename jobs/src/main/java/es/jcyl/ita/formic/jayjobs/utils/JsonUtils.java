@@ -23,11 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.mini2Dx.beanutils.PropertyUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-
-import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
