@@ -52,9 +52,30 @@
 
 -keep class es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder
 
--keepattributes EnclosingMethod, InnerClasses
--keepattributes *Annotation*
--keepattributes Signature
+# com.fasterxml.jackson
+#-keep class com.fasterxml.jackson.databind.ObjectMapper {
+#    public <methods>;
+#    protected <methods>;
+#}
+#-keep class com.fasterxml.jackson.databind.ObjectWriter {
+#    public ** writeValueAsString(**);
+#}
+#-keepnames class com.fasterxml.jackson.** { *; }
+
+#-keepnames class com.fasterxml.jackson.databind.** { *; }
+#-dontwarn com.fasterxml.jackson.databind.**
+#-keep class com.fasterxml.jackson.annotation.** { *; }
+
+-keep class es.jcyl.ita.formic.jayjobs.jobs.** {*;}
+-keep class es.jcyl.ita.formic.jayjobs.task.** {*;}
+-keep class es.jcyl.ita.formic.jayjobs.utils.** {*;}
+
+
+
+
+
+# General
+-keepattributes SourceFile,LineNumberTable,*Annotation*,EnclosingMethod,Signature,Exceptions,InnerClasses
 
 
 -dontwarn org.codehaus.groovy.**
