@@ -42,11 +42,10 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        if(BuildConfig.DEBUG){
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
         super.onCreate(savedInstanceState);
+        if (BuildConfig.DEBUG) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
         currentWorkspace = sharedPreferences.getString("current_workspace", getExternalFilesDir(null).getAbsolutePath() + "/projects");
