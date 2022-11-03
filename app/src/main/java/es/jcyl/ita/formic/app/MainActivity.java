@@ -168,11 +168,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                                 App.getInstance().getProjectRepo()));
                         loadImageNoProjects();
                         checkNavigationButton(R.id.action_projects);
+                        import_project.setVisibility(View.VISIBLE);
                         break;
                     case R.id.action_forms:
                         loadFragment(new FormListFragment());
                         loadImageNoProjects();
                         checkNavigationButton(R.id.action_forms);
+                        import_project.setVisibility(View.GONE);
                         break;
                     default:
                         break;
