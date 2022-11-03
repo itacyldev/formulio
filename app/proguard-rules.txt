@@ -68,7 +68,7 @@
 
 -keep class es.jcyl.ita.formic.jayjobs.jobs.** {*;}
 -keep class es.jcyl.ita.formic.jayjobs.task.** {*;}
--keep class es.jcyl.ita.formic.jayjobs.utils.** {*;}
+#-keep class es.jcyl.ita.formic.jayjobs.utils.** {*;}
 
 
 
