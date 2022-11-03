@@ -99,7 +99,7 @@ public class JobConfig {
     }
 
     public JobExecutionMode getExecMode() {
-        return Enum.valueOf(JobExecutionMode.class, getExecutionMode());
+        return getExecutionMode()!=null?Enum.valueOf(JobExecutionMode.class, getExecutionMode()):null;
     }
 
     public String getTaskConfig() {
