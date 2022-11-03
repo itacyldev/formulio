@@ -20,6 +20,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/import_project"
+            android:visibility="gone"
             style="@style/FloatingActionAddButtonStyle"/>
     </FrameLayout>
 
