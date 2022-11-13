@@ -97,7 +97,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         composeInputView(env, widget);
 
         //Visibilty Button Layout
-        setVisibiltyButtonLayout(widget, StringUtils.isNotBlank(component.getLabel()), component.getResetButton(), component.getInfoButton());
+        setVisibilityButtonLayout(widget, StringUtils.isNotBlank(component.getLabel()), component.getResetButton(), component.getInfoButton());
 
         // set value and error messages
         setValueInView(env, widget);
@@ -221,7 +221,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         inputView.setEnabled(!(Boolean) ConvertUtils.convert(widget.getComponent().isReadonly(env.getWidgetContext()), Boolean.class));
     }
 
-    protected void setVisibiltyButtonLayout(InputWidget<C, I> widget, boolean hasLabel, ImageView resetButton, ImageView infoButton){
+    protected void setVisibilityButtonLayout(InputWidget<C, I> widget, boolean hasLabel, ImageView resetButton, ImageView infoButton){
         if (!isInfoButtonVisible(infoButton) && !isResetButtonVisible(resetButton) && !hasLabel){
             ViewGroup layout = ViewHelper.findViewAndSetId(widget, getButtonsLayoutId(), ViewGroup.class);
             layout.setVisibility(View.GONE);

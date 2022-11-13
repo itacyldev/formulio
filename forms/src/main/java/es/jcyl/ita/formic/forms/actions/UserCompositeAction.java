@@ -16,19 +16,27 @@ package es.jcyl.ita.formic.forms.actions;
  */
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
+ *
+ * Bean class to hold UserAction sequence
  */
-public enum ActionType {
+public class UserCompositeAction extends UserAction {
 
-    SAVE, DELETE, DELETE_LIST, CANCEL, NAV, BACK, CREATE, JS, JOB, COMPOSITE;
+    private UserAction[] actions;
 
-    public static boolean isCustomAction(String type) {
-        try {
-            ActionType.valueOf(type.toUpperCase());
-            return false;
-        } catch (Exception e) {
-            return true;
+    public UserCompositeAction(UserAction[] actions) {
+        super(ActionType.COMPOSITE);
+        this.actions = actions;
+        if (this.actions == null) {
+            this.actions = new UserAction[]{};
         }
+    }
 
+    public UserAction[] getActions() {
+        return actions;
+    }
+
+    public void setActions(UserAction[] actions) {
+        this.actions = actions;
     }
 }
