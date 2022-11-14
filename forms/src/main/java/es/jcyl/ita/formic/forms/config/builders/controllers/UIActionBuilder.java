@@ -31,8 +31,7 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
         UIAction element = node.getElement();
         if (ConfigNodeHelper.hasChildrenByTag(node, "action")) {
             String actionType = node.getAttribute("type");
-
-            if (!actionType.equalsIgnoreCase("composite")) {
+            if (actionType != null && !actionType.equalsIgnoreCase("composite")) {
                 throw new ConfigurationException(error(String.format("The action [%s] has nested " +
                         "actions but its type is [%s]. If you nest actions inside another " +
                         "action, the top-level action can only be of type 'composite'. " +
@@ -43,6 +42,7 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
             List<ConfigNode> actionNodes = ConfigNodeHelper.getChildrenByTag(node, "action");
             UIAction[] nestedActions = ConfigNodeHelper.nodeElementsToArray(UIAction.class, actionNodes);
             UIActionGroup group = (UIActionGroup) node.getElement();
+            group.setType("composite");
             group.setActions(nestedActions);
         } else {
             // attach nested options
@@ -73,7 +73,7 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
 
     @Override
     protected UIAction instantiate(ConfigNode<UIAction> node) {
-        if (!ConfigNodeHelper.hasDescendantByTag(node, "action")) {
+        if (!ConfigNodeHelper.hasChildrenByTag(node, "action")) {
             return super.instantiate(node);
         } else {
             return new UIActionGroup();

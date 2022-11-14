@@ -15,8 +15,11 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
+import org.mini2Dx.collections.MapUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +28,7 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -32,8 +36,6 @@ import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Generic action to create an entity using the passed entityType and additional parameters as
@@ -51,7 +53,7 @@ public class CreateEntityActionHandler extends AbstractActionHandler {
 
     @Override
     public void handle(ActionContext actionContext, UserAction action) {
-        String repoId = (String) action.getParams().get("repo");
+        String repoId = MapUtils.isEmpty(action.getParams()) ? null : (String) action.getParams().get("repo");
         if (StringUtils.isBlank(repoId)) {
             throw new UserActionException(error("The parameter 'repo' is mandatory for the " +
                     "entity creation action."));
@@ -93,7 +95,7 @@ public class CreateEntityActionHandler extends AbstractActionHandler {
      */
     @Override
     public UserAction prepareNavigation(ActionContext actionContext, UserAction action) {
-        UserAction navAction = UserAction.clone(action);
+        UserAction navAction = UserActionHelper.clone(action);
         // set entityId as parameter
         navAction.addParam("entityId", actionContext.getAttribute("entityId"));
         return navAction;

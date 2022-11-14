@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentFactory;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 
 /**
- * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
  */
 public class ProjectListFragmentFactory extends FragmentFactory {
 

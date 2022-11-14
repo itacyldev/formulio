@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.actions.UserCompositeAction;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
@@ -54,7 +55,7 @@ public class ActionControllerTest {
         Router router = new Router(mockMc);
         ActionController controller = new ActionController(mockMc, router);
         String myExpectedFormId = "myformId";
-        UserAction action = UserAction.navigate(myExpectedFormId);
+        UserAction action = UserActionHelper.navigate(myExpectedFormId);
 
         // Act
         controller.doUserAction(action);
@@ -81,9 +82,9 @@ public class ActionControllerTest {
         ActionController controller = new ActionController(mockMc, router);
 
         String myExpectedFormId = "form2";
-        UserAction lastAction = UserAction.navigate(myExpectedFormId);
-        UserAction[] subActions = new UserAction[]{new UserAction(ActionType.SAVE), new UserAction(ActionType.NAV),
-                new UserAction(ActionType.DELETE), lastAction};
+        UserAction lastAction = UserActionHelper.navigate(myExpectedFormId);
+        UserAction[] subActions = new UserAction[]{UserActionHelper.newAction(ActionType.SAVE), UserActionHelper.newAction(ActionType.NAV),
+                UserActionHelper.newAction(ActionType.DELETE), lastAction};
         UserCompositeAction compositeAction = new UserCompositeAction(subActions);
 
         // Act

@@ -95,10 +95,9 @@ public class UIActionBuilderTest {
         Assert.assertEquals(action.getController(), "widget1");
     }
 
-
     private static final String XML_NESTED_ACTIONS = "" +
             "<button id=\"myButton\" label=\"guardar\">\n" +
-            "    <action id=\"groupAction\">\n" +
+            "    <action id=\"compositeAction\">\n" +
             "      <action id=\"nestedAction1\" type=\"save\" controller=\"widget1\">\n" +
             "        <params>\n" +
             "            <param name=\"parametro1\" value=\"value1\"/>\n" +
@@ -118,9 +117,9 @@ public class UIActionBuilderTest {
         Assert.assertNotNull(button);
         UIAction action = button.getAction();
         // direct action attached to the component is of type COMPOSITE and it has no params
-        Assert.assertEquals("COMPOSITE", action.getType());
+        Assert.assertEquals("composite", action.getType());
         Assert.assertEquals(UIActionGroup.class, action.getClass());
-        Assert.assertEquals("groupAction", action.getId());
+        Assert.assertEquals("compositeAction", action.getId());
         // Composite action has no nested parameters
         Assert.assertTrue(ArrayUtils.isEmpty(action.getParams()));
         // The composite action has two nested actions

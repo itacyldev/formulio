@@ -15,17 +15,23 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Bean class to hold UserAction sequence
  */
 public class UserCompositeAction extends UserAction {
 
     private UserAction[] actions;
 
+    UserCompositeAction() {
+        super(ActionType.COMPOSITE.name());
+    }
+
     public UserCompositeAction(UserAction[] actions) {
-        super(ActionType.COMPOSITE);
+        super(ActionType.COMPOSITE.name());
         this.actions = actions;
         if (this.actions == null) {
             this.actions = new UserAction[]{};
@@ -38,5 +44,14 @@ public class UserCompositeAction extends UserAction {
 
     public void setActions(UserAction[] actions) {
         this.actions = actions;
+    }
+
+    public void setWidget(Widget widget) {
+        super.setWidget(widget);
+        if(actions!=null){
+            for(UserAction nestedAction: actions){
+                nestedAction.setWidget(widget);
+            }
+        }
     }
 }

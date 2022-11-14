@@ -15,6 +15,10 @@ package es.jcyl.ita.formic.forms.action.handlers;
  * limitations under the License.
  */
 
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
+
 import android.content.Context;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -30,17 +34,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.JsActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
-import es.jcyl.ita.formic.forms.App;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
-
-import static org.hamcrest.Matchers.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -71,7 +74,7 @@ public class JsActionHandlerTest {
         MainController mc = MockingUtils.mockMainController(ctx);
 
         // prepare user Action
-        UserAction userAction = new UserAction(ActionType.JS);
+        UserAction userAction = UserActionHelper.newAction(ActionType.JS);
         Map<String, Object> params = new HashMap<>();
         params.put("method", "myJsFunction");
         userAction.setParams(params);
@@ -96,7 +99,7 @@ public class JsActionHandlerTest {
         MainController mc = MockingUtils.mockMainController(ctx);
 
         // prepare user Action
-        UserAction userAction = new UserAction(ActionType.JS);
+        UserAction userAction = UserActionHelper.newAction(ActionType.JS);
         Map<String, Object> params = new HashMap<>();
         params.put("method", "myJsFunction");
         params.put("param1", "value1");
@@ -123,7 +126,7 @@ public class JsActionHandlerTest {
         MainController mc = MockingUtils.mockMainController(ctx);
 
         // prepare user Action
-        UserAction userAction = new UserAction(ActionType.JS);
+        UserAction userAction = UserActionHelper.newAction(ActionType.JS);
         Map<String, Object> params = new HashMap<>();
         userAction.setParams(params);
 

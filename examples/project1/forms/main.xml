@@ -1,0 +1,21 @@
+<main>
+    <view>
+        <input value="you are in view 1" />
+        <datatable repo="sups" />
+        <buttonbar type="bottom">
+            <button label="myvalue">
+                <action>
+                    <action id="actionaaaa" type="create">
+                        <param name="repo" value="sups" />
+                    </action>
+                    <action id="actionxxx" route="myView1-view1" type="nav"></action>
+                </action>
+            </button>
+            <button label="simpleAction">
+                <action id="action33" type="create">
+                    <param name="repo" value="sups" />
+                </action>
+            </button>
+        </buttonbar>
+    </view>
+</main>
