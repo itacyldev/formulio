@@ -1,0 +1,69 @@
+
+J
+java:S3740S"/Provide the parametrized type for this generic.(¦«ˆúÿÿÿÿ
+E
+java:S3740U"/Provide the parametrized type for this generic.(…Î¸Å
+J
+java:S3740X"/Provide the parametrized type for this generic.(î¥‰×ùÿÿÿÿ
+F
+java:S3740²"/Provide the parametrized type for this generic.(¶‘Ø¼
+F
+java:S3740²"/Provide the parametrized type for this generic.(¶‘Ø¼
+K
+java:S3740³"/Provide the parametrized type for this generic.(ßù ñüÿÿÿÿ
+K
+java:S3740Ò"/Provide the parametrized type for this generic.(óö¢‡üÿÿÿÿ
+F
+java:S3740˜"/Provide the parametrized type for this generic.(²‡Øş
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+s	java:S116N"^Rename this field "HEADER_FILTER_SUFIX" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÉËôâ
+w	java:S116O"]Rename this field "HEADER_ORDER_SUFIX" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(éæ®ûûÿÿÿÿ
+7
+java:S1170N"!Make this final field static too.(ÉËôâ
+<
+java:S1170O"!Make this final field static too.(éæ®ûûÿÿÿÿ
+v
+java:S1450a"[Remove the "selectionMgr" field and declare it as a local variable in the relevant methods.(—¸½¬øÿÿÿÿ
+R	java:S125¿"<This block of commented-out lines of code should be removed.(•™ŞÜ
+O
+java:S1117ô"8Rename "sort" which hides the field declared at line 89.(˜Õó»
+B
+java:S1481…"&Remove this unused "i" local variable.(ùó›Ìøÿÿÿÿ
+V
+java:S1117¥":Rename "offset" which hides the field declared at line 81.(Õ‚úÿÿÿÿ
+I
+java:S1068Z".Remove this unused "controller" private field.(¾Ò»çıÿÿÿÿ
+K
+java:S1068a"0Remove this unused "selectionMgr" private field.(—¸½¬øÿÿÿÿ
+F
+java:S1066…"/Merge this if statement with the enclosing one.(‹¢†‹
+l	java:S117Ù"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¨ª¢«ÿÿÿÿÿ
+l	java:S117’"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£êĞ“ÿÿÿÿÿ
+l	java:S117“"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…¼æÇûÿÿÿÿ
+g	java:S117œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ğ§ÁÌ
+l	java:S117¥"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£…¢¨şÿÿÿÿ
+l	java:S117Ò"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£êĞ“ÿÿÿÿÿ
+D
+java:S1604ˆ"(Make this anonymous inner class a lambda(´ù– øÿÿÿÿ
+?
+java:S1604"(Make this anonymous inner class a lambda(ñÏ¾ä
+?
+java:S1604ª"(Make this anonymous inner class a lambda(±Ôœ¢
+Z
+java:S1155Ú">Use isEmpty() to check whether the collection is empty or not.(äèç™úÿÿÿÿ
+s
+java:S1488ô"\Immediately return this expression instead of assigning it to the temporary variable "sort".(˜Õó»
+w
+java:S1488ş"[Immediately return this expression instead of assigning it to the temporary variable "ctx".(­¢Şşÿÿÿÿ
+A
+java:S5411ó"*Use the primitive boolean expression here.(ƒ÷²£
+A
+java:S5411í"*Use the primitive boolean expression here.(¯ˆ–­
+A
+java:S5411"*Use the primitive boolean expression here.(ƒ÷²£
+A
+java:S5411¦"*Use the primitive boolean expression here.(ÙÑâÍ
+F
+java:S5411¶"*Use the primitive boolean expression here.(èîî›ùÿÿÿÿ
+A
+java:S5411¹"*Use the primitive boolean expression here.(¯ˆ–­

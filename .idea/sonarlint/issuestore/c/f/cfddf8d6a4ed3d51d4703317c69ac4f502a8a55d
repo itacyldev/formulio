@@ -1,0 +1,26 @@
+
+J
+java:S37403"/Provide the parametrized type for this generic.(¦«ˆúÿÿÿÿ
+E
+java:S37405"/Provide the parametrized type for this generic.(…Î¸Å
+J
+java:S37409"/Provide the parametrized type for this generic.(î¥‰×ùÿÿÿÿ
+E
+java:S3740j"/Provide the parametrized type for this generic.(í—È°
+E
+java:S3740~"/Provide the parametrized type for this generic.(¶‘Ø¼
+E
+java:S3740~"/Provide the parametrized type for this generic.(¶‘Ø¼
+J
+java:S3740"/Provide the parametrized type for this generic.(ßù ñüÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+v
+java:S14504"[Remove the "renderingEnv" field and declare it as a local variable in the relevant methods.(ÒÔÎœÿÿÿÿÿ
+v
+java:S1450="[Remove the "selectionMgr" field and declare it as a local variable in the relevant methods.(—¸½¬øÿÿÿÿ
+K
+java:S10684"0Remove this unused "renderingEnv" private field.(ÒÔÎœÿÿÿÿÿ
+K
+java:S1068="0Remove this unused "selectionMgr" private field.(—¸½¬øÿÿÿÿ
+v
+java:S1488s"[Immediately return this expression instead of assigning it to the temporary variable "ctx".(èšàüÿÿÿÿ

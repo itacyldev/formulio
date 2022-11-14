@@ -1,0 +1,26 @@
+
+K
+java:S3740…"/Provide the parametrized type for this generic.(¦±¨¸ùÿÿÿÿ
+V	java:S125)"<This block of commented-out lines of code should be removed.(ÜœÚãüÿÿÿÿ
+T
+java:S1874-"9Remove this use of "PreferenceManager"; it is deprecated.(ðíÕ€úÿÿÿÿ
+^
+java:S1874-"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(ðíÕ€úÿÿÿÿ
+P	java:S1255"<This block of commented-out lines of code should be removed.(êº¬h
+W	java:S125²"<This block of commented-out lines of code should be removed.(ð–®Çøÿÿÿÿ
+V
+java:S1161È":Add the "@Override" annotation above this method signature(‹±ÖÃûÿÿÿÿ
+U
+java:S1874É"9Remove this use of "PreferenceManager"; it is deprecated.(ðíÕ€úÿÿÿÿ
+_
+java:S1874É"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(ðíÕ€úÿÿÿÿ
+F
+java:S1172Ò"/Remove this unused method parameter "logLevel".(šÜÍõ
+U
+java:S1874Ó"9Remove this use of "PreferenceManager"; it is deprecated.(ðíÕ€úÿÿÿÿ
+_
+java:S1874Ó"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(ðíÕ€úÿÿÿÿ
+R	java:S125Ö"<This block of commented-out lines of code should be removed.(˜ýæÍ
+f	java:S117_"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ¥ôý
+C
+java:S1604b"(Make this anonymous inner class a lambda(áÝ—Ûÿÿÿÿÿ
