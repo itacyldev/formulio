@@ -34,6 +34,7 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
@@ -76,7 +77,7 @@ public class CreateEntityActionHandlerTest {
         MainController mc = MockingUtils.mockMainController(ctx);
 
         // prepare user Action
-        UserAction userAction = new UserAction(ActionType.CREATE.name(), null, mc.getViewController());
+        UserAction userAction = UserActionHelper.newAction(ActionType.CREATE.name(), null, mc.getViewController());
         Map<String, Object> params = new HashMap<>();
         String entityType = "testRandomEntityType";
         params.put("repo", entityType);

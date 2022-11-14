@@ -183,6 +183,10 @@ public class Router {
         }
     }
 
+    public State getCurrent() {
+        return current;
+    }
+
     public class State {
         String formId;
         UserAction action;
@@ -190,6 +194,14 @@ public class Router {
         public State(String formId, UserAction action) {
             this.formId = formId;
             this.action = action;
+        }
+
+        public String getFormId() {
+            return formId;
+        }
+
+        public UserAction getAction() {
+            return action;
         }
 
         public String toString() {

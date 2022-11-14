@@ -139,7 +139,7 @@
 
                     <image label="9. Imagen: " value="${'superheroes/batgirl.jpg'}" hint="Hint 9. Imagen"/>
 
-                    <image id="image3" converter="b64Image" embedded="true" label="10. Imagen: " value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
+                    <image converter="b64Image" embedded="true" label="10. Imagen: " value="${entity.image_thumb}" hint="Hint 10. Imagen"/>
 
                     <image converter="b64Image" embedded="true" label="11. Imagen: " value="${entity.image_thumb}" hint="Hint 11. Imagen" inputType="1"/>
                     <image converter="b64Image" embedded="true" label="12. Imagen: " value="${entity.image_thumb}" hint="Hint 12. Imagen" inputType="2"/>

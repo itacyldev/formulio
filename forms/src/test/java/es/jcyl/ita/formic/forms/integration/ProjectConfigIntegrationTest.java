@@ -47,7 +47,7 @@ import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
- * Tests to check commons-converters functionallity
+ * Tests to check project config reading
  */
 @RunWith(RobolectricTestRunner.class)
 public class ProjectConfigIntegrationTest {
@@ -65,7 +65,6 @@ public class ProjectConfigIntegrationTest {
     /**
      * Check formEdit and formList are properly created
      */
-    private static final String TEST_BASIC1 = "<main repo=\"contacts\"/>";
 
     @Test
     public void testFormConfig() throws Exception {

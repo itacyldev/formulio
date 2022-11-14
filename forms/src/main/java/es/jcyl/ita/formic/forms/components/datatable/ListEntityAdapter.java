@@ -235,7 +235,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             Object route = e.evaluate((JexlContext) context);
             strRoute = (String) ConvertUtils.convert(route, String.class);
         }
-        UserAction action = new UserAction(actionTemplate.getType(), strRoute, component);
+        UserAction action = UserActionHelper.newAction(actionTemplate.getType(), strRoute, component);
         action.setRegisterInHistory(actionTemplate.isRegisterInHistory());
 
         action.setRefresh(actionTemplate.getRefresh());

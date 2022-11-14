@@ -19,6 +19,7 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
@@ -108,7 +109,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = new UserAction(ActionType.BACK.name(), "back", this.viewController);
+        UserAction action = UserActionHelper.newAction(ActionType.BACK.name(), "back", this.viewController);
         action.setRestoreView(true);
 //        action.setOrigin(formController.getId());
         mc.getActionController().doUserAction(action);
@@ -130,8 +131,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
                         Object route = e.evaluate((JexlContext) env.getWidgetContext());
                         strRoute = (String) ConvertUtils.convert(route, String.class);
                     }
-//                    UserAction action = new UserAction(formAction.getType(), strRoute, formController);
-                    UserAction action = new UserAction(formAction, viewController);
+                    UserAction action = UserActionHelper.newAction(formAction, viewController);
                     action.setRegisterInHistory(formAction.isRegisterInHistory());
                     action.setRefresh(formAction.getRefresh());
                     action.setMessage(formAction.getMessage());

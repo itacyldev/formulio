@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
- *
+ * <p>
  * Default class to create basic components
  */
 public class DefaultGroupComponentBuilder extends DefaultComponentBuilder {

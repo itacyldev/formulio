@@ -20,7 +20,7 @@ package es.jcyl.ita.formic.forms.actions;
  */
 public enum ActionType {
 
-    SAVE, DELETE, DELETE_LIST, CANCEL, NAV, BACK, CREATE, JS, JOB;
+    SAVE, DELETE, DELETE_LIST, CANCEL, NAV, BACK, CREATE, JS, JOB, COMPOSITE;
 
     public static boolean isCustomAction(String type) {
         try {

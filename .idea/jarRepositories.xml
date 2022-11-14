@@ -316,5 +316,15 @@
       <option name="name" value="sdk android extras" />
       <option name="url" value="file:/$PROJECT_DIR$/../../../tools/android_sdk/extras/android/m2repository/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:$USER_HOME$/.m2/repository/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../libs/mvn_repository/" />
+    </remote-repository>
   </component>
 </project>
