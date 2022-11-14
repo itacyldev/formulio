@@ -1,0 +1,19 @@
+
+D
+java:S3740L"/Provide the parametrized type for this generic.(å Õ`
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+:
+java:S19481"$Make "mc" transient or serializable.(û‹ÿ™
+G
+java:S19486",Make "rootWidget" transient or serializable.(³Ãô’ÿÿÿÿÿ
+H
+java:S19487"-Make "contentView" transient or serializable.(¶Ö³øÿÿÿÿ
+C
+java:S19488"-Make "stateHolder" transient or serializable.(º¿ë¿
+D
+java:S1948;".Make "entityLoader" transient or serializable.(Òûûý
+Q	java:S125:"<This block of commented-out lines of code should be removed.(ÉÙÖ
+G
+java:S1135V"2Complete the task associated to this TODO comment.(“—Õ_
+T
+java:S1117e">Rename "rootWidget" which hides the field declared at line 54.(÷ö«ˆ

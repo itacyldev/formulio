@@ -1,0 +1,39 @@
+
+`	java:S112i"FDefine and throw a dedicated exception instead of using a generic one.(õàÖÒÿÿÿÿÿ
+`	java:S112x"FDefine and throw a dedicated exception instead of using a generic one.(õàÖÒÿÿÿÿÿ
+a	java:S112‚"FDefine and throw a dedicated exception instead of using a generic one.(õàÖÒÿÿÿÿÿ
+a	java:S112á"FDefine and throw a dedicated exception instead of using a generic one.(õàÖÒÿÿÿÿÿ
+\	java:S112©"FDefine and throw a dedicated exception instead of using a generic one.(ÃÔ÷ı
+L
+java:S3740ö"/Provide the parametrized type for this generic.(êÖÌ}8³ÙŸŞº0
+M
+java:S2160%"+Override the "equals" method in this class.( éù¨ıÿÿÿÿ8ÆÙŸŞº0
+6
+java:S2885." Make "dtf" an instance variable.(ß‡
+o
+java:S22934"YReplace the type specification in this constructor call with the diamond operator ("<>").(ùÌÀ–
+X
+java:S1161":Add the "@Override" annotation above this method signature(š×Ëë8ûÚŸŞº0
+u
+java:S2293©"YReplace the type specification in this constructor call with the diamond operator ("<>").(ñ­´Øüÿÿÿÿ
+u
+java:S2293¹"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼Òì¼øÿÿÿÿ
+p
+java:S2293Ë"YReplace the type specification in this constructor call with the diamond operator ("<>").(Í×ø
+u
+java:S2293Œ"YReplace the type specification in this constructor call with the diamond operator ("<>").(„­»Øÿÿÿÿÿ
+u
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(øª„Âşÿÿÿÿ
+R
+java:S1751“"6Remove this "return" statement or make it conditional.(şûîÊúÿÿÿÿ
+p
+java:S2293ä"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÉÓè¥
+p
+java:S2293î"YReplace the type specification in this constructor call with the diamond operator ("<>").(á¶ú
+=
+java:S1068."'Remove this unused "dtf" private field.(ß‡
+g	java:S117–"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ä°„
+g	java:S117¼"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ùşíÂ
+g	java:S117Ê"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ä°„
+|
+java:S1488‡"`Immediately return this expression instead of assigning it to the temporary variable "iterator".(ù¯’Ğşÿÿÿÿ

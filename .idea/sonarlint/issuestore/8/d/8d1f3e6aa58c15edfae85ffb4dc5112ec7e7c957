@@ -1,0 +1,31 @@
+
+J
+java:S3740<"/Provide the parametrized type for this generic.(Î¸§•ıÿÿÿÿ
+E
+java:S3740T"/Provide the parametrized type for this generic.(Ü³âë
+D
+java:S3740g"/Provide the parametrized type for this generic.(î¢¹s
+L
+java:S3740Ì"/Provide the parametrized type for this generic.(ø¤¹j8ôò¥¢0
+M
+java:S3740ı"/Provide the parametrized type for this generic.(À»Ş‘8õò¥¢0
+V	java:S125+"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+^	java:S125”"<This block of commented-out lines of code should be removed.(“ƒÙàşÿÿÿÿ8“ó¥¢0
+n
+java:S3252À"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(§€…·8—ó¥¢0
+n
+java:S3252À"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(§€…·8˜ó¥¢0
+R
+java:S1905Ş"/Remove this unnecessary cast to "Serializable".(È²ÖÊüÿÿÿÿ8¡ó¥¢0
+u
+java:S3252ê"WUse static access with "es.jcyl.ita.formic.core.jexl.JexlUtils" for "createExpression".(øòÓ¶8¥ó¥¢0
+L
+java:S1905ö"/Remove this unnecessary cast to "Serializable".(–­ 08¨ó¥¢0
+N
+java:S1481•"+Remove this unused "column" local variable.(ÂøÂŠøÿÿÿÿ8®ó¥¢0
+_
+java:S1117¦"<Rename "inflater" which hides the field declared at line 63.(Ü¥Åúÿÿÿÿ8¯ó¥¢0
+F
+java:S1604Í"(Make this anonymous inner class a lambda(á¨­í8³ó¥¢0
+|
+java:S1488§"^Immediately return this expression instead of assigning it to the temporary variable "output".(Ù½Œ8´ó¥¢0

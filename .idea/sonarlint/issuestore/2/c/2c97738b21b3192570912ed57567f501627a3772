@@ -1,0 +1,84 @@
+
+J
+java:S3740_"/Provide the parametrized type for this generic.(–†Èêùÿÿÿÿ
+J
+java:S3740`"/Provide the parametrized type for this generic.(Ü³¸ğşÿÿÿÿ
+F
+java:S3740‘"/Provide the parametrized type for this generic.(Ì»Åò
+K
+java:S3740œ"/Provide the parametrized type for this generic.(–Æç¥şÿÿÿÿ
+F
+java:S3740Ê"/Provide the parametrized type for this generic.(è€Ş’
+F
+java:S3740Ë"/Provide the parametrized type for this generic.(è…Ã²
+F
+java:S3740Ô"/Provide the parametrized type for this generic.(ıÃÑ
+F
+java:S3740Õ"/Provide the parametrized type for this generic.(ÚóÉÊ
+K
+java:S3740â"/Provide the parametrized type for this generic.(©—Ö˜şÿÿÿÿ
+F
+java:S3740æ"/Provide the parametrized type for this generic.(ÌÏú¹
+K
+java:S3740ğ"/Provide the parametrized type for this generic.(ÍÎğÖüÿÿÿÿ
+F
+java:S3740ô"/Provide the parametrized type for this generic.(ÃÂ™ù
+F
+java:S3740ô"/Provide the parametrized type for this generic.(ÃÂ™ù
+K
+java:S3740ø"/Provide the parametrized type for this generic.(£²ÔÏÿÿÿÿÿ
+K
+java:S3740ø"/Provide the parametrized type for this generic.(£²ÔÏÿÿÿÿÿ
+K
+java:S3740ø"/Provide the parametrized type for this generic.(£²ÔÏÿÿÿÿÿ
+K
+java:S3740ù"/Provide the parametrized type for this generic.(èÔ¸şÿÿÿÿ
+F
+java:S3740“"/Provide the parametrized type for this generic.(ıÜ¼
+F
+java:S3740“"/Provide the parametrized type for this generic.(ıÜ¼
+F
+java:S3740”"/Provide the parametrized type for this generic.(§Ë®¿
+K
+java:S3740™"/Provide the parametrized type for this generic.(‡¶Ùıÿÿÿÿ
+K
+java:S3740™"/Provide the parametrized type for this generic.(‡¶Ùıÿÿÿÿ
+K
+java:S3740š"/Provide the parametrized type for this generic.(†›ñ˜úÿÿÿÿ
+K
+java:S3740Ÿ"/Provide the parametrized type for this generic.(ˆ’ı‘øÿÿÿÿ
+K
+java:S3740Ÿ"/Provide the parametrized type for this generic.(ˆ’ı‘øÿÿÿÿ
+F
+java:S3740 "/Provide the parametrized type for this generic.(‰‚Óª
+F
+java:S3740 "/Provide the parametrized type for this generic.(‰‚Óª
+F
+java:S3740½"/Provide the parametrized type for this generic.(¡¨îæ
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+o	java:S116`"URename this field "_resolvers" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ü³¸ğşÿÿÿÿ
+j
+java:S3008^"TRename this field "_instance" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(É¤œ
+h
+java:S1450]"RRemove the "xpp" field and declare it as a local variable in the relevant methods.(ŠÖ‰ó
+R	java:S125Œ"<This block of commented-out lines of code should be removed.(ÛÔ¼İ
+X
+java:S4838Õ"AChange "AttributeResolver" to the type handled by the Collection.(ÚóÉÊ
+G
+java:S1172ì"+Remove this unused method parameter "type".(ÅæÇÔıÿÿÿÿ
+J
+java:S1905í"3Remove this unnecessary cast to "ComponentBuilder".(¼åÂ­
+O
+java:S3878„"8Remove this array creation and simply pass the elements.(¾—İ„
+O
+java:S3878†"8Remove this array creation and simply pass the elements.(¥ŒÌÊ
+=
+java:S1068]"'Remove this unused "xpp" private field.(ŠÖ‰ó
+f
+java:S1192²"JDefine a constant instead of duplicating this literal "validator" 3 times.(¾Ê­øÿÿÿÿ
+^
+java:S1192‘"GDefine a constant instead of duplicating this literal "action" 3 times.(Ì»Åò
+K
+java:S1066Î"/Merge this if statement with the enclosing one.(‡‹Ü‚üÿÿÿÿ
+K
+java:S1066Ø"/Merge this if statement with the enclosing one.(¥ûàøÿÿÿÿ

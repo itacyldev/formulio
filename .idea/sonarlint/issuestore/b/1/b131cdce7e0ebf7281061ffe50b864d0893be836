@@ -1,0 +1,25 @@
+
+
+java:S1450D"dRemove the "progressConsoleLayout" field and declare it as a local variable in the relevant methods.(ÙÙ¨¸ÿÿÿÿÿ
+t
+java:S2293L"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ô™¿¾úÿÿÿÿ
+U
+java:S1161`":Add the "@Override" annotation above this method signature(ž¨Œþÿÿÿÿ
+O
+java:S1874Ž"3Remove this use of "getDrawable"; it is deprecated.(ÁÛƒ¬ûÿÿÿÿ
+g
+java:S3252Ë"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(òá´à
+E
+java:S1905ê")Remove this unnecessary cast to "String".(ÀœªÞþÿÿÿÿ
+T
+java:S1068D"9Remove this unused "progressConsoleLayout" private field.(ÙÙ¨¸ÿÿÿÿÿ
+D
+java:S1068L")Remove this unused "icons" private field.(Ô™¿¾úÿÿÿÿ
+>
+java:S1604~"(Make this anonymous inner class a lambda(¾‡µà
+D
+java:S1604ˆ"(Make this anonymous inner class a lambda(ù®‘…üÿÿÿÿ
+>
+java:S1604¸"(Make this anonymous inner class a lambda(•ÁñS
+j
+java:S1104;"TMake activity a static final constant or non-public and provide accessors if needed.(î«ùù

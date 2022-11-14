@@ -1,0 +1,42 @@
+
+F
+java:S3740Á"/Provide the parametrized type for this generic.(ûÅ¿
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+o
+java:S22939"YReplace the type specification in this constructor call with the diamond operator ("<>").(«™Û
+o
+java:S2293:"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ş­Ø
+o
+java:S2293<"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ø’
+t
+java:S2293="YReplace the type specification in this constructor call with the diamond operator ("<>").(Ú¿¾¶øÿÿÿÿ
+I
+java:S1135”"2Complete the task associated to this TODO comment.(ÅÌ‚‡
+I
+java:S1135§"2Complete the task associated to this TODO comment.(ÅÌ‚‡
+Q	java:S125ª"<This block of commented-out lines of code should be removed.(ÂÆ¹n
+I
+java:S1135²"2Complete the task associated to this TODO comment.(ÅÌ‚‡
+D
+java:S1172Å"(Remove this unused method parameter "t".(Èÿ°ˆıÿÿÿÿ
+b
+java:S3252Ì"KUse static access with "es.jcyl.ita.formic.core.jexl.JexlUtils" for "eval".(½‚” 
+R	java:S125Î"<This block of commented-out lines of code should be removed.(Ï÷÷½
+u
+java:S2293Ú"YReplace the type specification in this constructor call with the diamond operator ("<>").(•ÁÜÊşÿÿÿÿ
+Q
+java:S2209â"5Change this instance-reference to a static reference.(é¤Šÿÿÿÿÿ
+Q
+java:S2209â"5Change this instance-reference to a static reference.(é¤Šÿÿÿÿÿ
+p
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(àœŞ‡
+_
+java:S4201±"IRemove this unnecessary null check; "instanceof" returns false for nulls.(ÜªÔe
+I
+java:S1135Â"2Complete the task associated to this TODO comment.(û¦Úß
+E
+java:S10682"/Remove this unused "DEV_CONSOLE" private field.(±¸‰
+v
+java:S1488t"[Immediately return this expression instead of assigning it to the temporary variable "msg".(Ôôäşÿÿÿÿ
+u
+java:S1488Ì"^Immediately return this expression instead of assigning it to the temporary variable "effMsg".(½‚” 

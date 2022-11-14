@@ -1,0 +1,17 @@
+
+t
+java:S3008"YRename this field "PATH_SEPARATOR" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¥› ”üÿÿÿÿ
+U
+java:S1118":Add a private constructor to hide the implicit public one.(Ç×¬€þÿÿÿÿ
+G
+java:S1068"*Remove this unused "LOGGER" private field.(µ¦·œ8Åã”Áº0
+T
+java:S1068">Remove this unused "externalStorageWorkPathUri" private field.(ÙÒËž
+D
+java:S1121,".Extract the assignment out of this expression.(Á¿¹œ
+T
+java:S1155&">Use isEmpty() to check whether the collection is empty or not.(È™²Ê
+u
+java:S1104"ZMake PATH_SEPARATOR a static final constant or non-public and provide accessors if needed.(¥› ”üÿÿÿÿ
+O
+java:S1444"4Make this "public static PATH_SEPARATOR" field final(¥› ”üÿÿÿÿ

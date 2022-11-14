@@ -223,16 +223,19 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 break;
             }
         }
+        FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         if (StringUtils.isNotEmpty(formId)) {
             loadFragment(ProjectListFragment.newInstance(
                     App.getInstance().getProjectRepo()));
             MainController.getInstance().getRouter().navigate(MainActivity.this,
                     UserAction.navigate(formId));
             checkNavigationButton(R.id.action_projects);
+            import_project.setVisibility(View.VISIBLE);
         }else{
             // open default form list view
             loadFragment(new FormListFragment());
             checkNavigationButton(R.id.action_forms);
+            import_project.setVisibility(View.GONE);
         }
 
         loadImageNoProjects();
