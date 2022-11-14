@@ -9,6 +9,7 @@ import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIActionGroup;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 
 public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
@@ -25,11 +26,20 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
     @Override
     protected void setupOnSubtreeEnds(ConfigNode<UIAction> node) {
         UIAction element = node.getElement();
-        // attach nested options
-        List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
-        if (CollectionUtils.isNotEmpty(paramNodes)) {
-            UIParam[] params = BuilderHelper.getParams(paramNodes);
-            element.setParams(params);
+        if (ConfigNodeHelper.hasChildrenByTag(node, "action")) {
+            // the action has nested action elements, this is a compositeAction.
+            // Attach nested actions and
+            List<ConfigNode> actionNodes = ConfigNodeHelper.getChildrenByTag(node, "action");
+            UIAction[] nestedActions = ConfigNodeHelper.nodeElementsToArray(UIAction.class, actionNodes);
+            UIActionGroup group = (UIActionGroup) node.getElement();
+            group.setActions(nestedActions);
+        } else {
+            // attach nested options
+            List<ConfigNode> paramNodes = ConfigNodeHelper.getDescendantByTag(node, "param");
+            if (CollectionUtils.isNotEmpty(paramNodes)) {
+                UIParam[] params = BuilderHelper.getParams(paramNodes);
+                element.setParams(params);
+            }
         }
     }
 
@@ -48,5 +58,14 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
     private boolean needsHistoryPop(String value) {
         value = value.toLowerCase();
         return value.equals("save") || value.equals("delete") || value.equals("cancel");
+    }
+
+    @Override
+    protected UIAction instantiate(ConfigNode<UIAction> node) {
+        if (!ConfigNodeHelper.hasDescendantByTag(node, "action")) {
+            return super.instantiate(node);
+        } else {
+            return new UIActionGroup();
+        }
     }
 }

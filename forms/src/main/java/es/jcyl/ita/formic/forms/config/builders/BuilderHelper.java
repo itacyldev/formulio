@@ -15,11 +15,15 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.BeanUtils;
 import org.mini2Dx.beanutils.BeanUtilsBean;
 import org.mini2Dx.beanutils.PropertyUtilsBean;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,8 +43,6 @@ import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.util.TypeUtils;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

@@ -17,14 +17,20 @@ package es.jcyl.ita.formic.forms.controllers;
  *
  */
 
+import es.jcyl.ita.formic.forms.actions.ActionType;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
  * Groups a sequence of actions to link them to a component
  */
-public class UIActionGroup {
+public class UIActionGroup extends UIAction {
 
     private UIAction[] actions;
+
+    public UIActionGroup() {
+        this.setType(ActionType.COMPOSITE.name());
+    }
 
     public UIAction[] getActions() {
         return actions;

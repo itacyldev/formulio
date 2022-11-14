@@ -46,7 +46,7 @@ public class UIActionGroupBuilder<T extends UIComponent> extends BaseUIComponent
         // attach nested actions
         List<ConfigNode> actionNodes = ConfigNodeHelper.getDescendantByTag(node, "action");
         if (CollectionUtils.isNotEmpty(actionNodes)) {
-            warn("Action group found with no nested actions in file in file ${file}.");
+            warn("Action group found with no nested actions in file ${file}.");
         } else {
             if (node.hasAttribute("repo")) {
                 throw new ConfigurationException(DevConsole.error(String.format("In component <%s id=\"%s\"/> " +

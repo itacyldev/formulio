@@ -181,6 +181,7 @@ public class TagDef {
         register("cancel", actionAttributes);
         register("delete", actionAttributes);
         register("nav", actionAttributes);
+        register("actiongroup", define(new Attribute[]{ID}));
 
         register("tab", define(base, new Attribute[]{ID, ALLOWS_PARTIAL_RESTORE}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));

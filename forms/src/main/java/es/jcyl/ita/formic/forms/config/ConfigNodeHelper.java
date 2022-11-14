@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config;
  * limitations under the License.
  */
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -303,5 +304,31 @@ public class ConfigNodeHelper {
             }
         }
     }
+
+    /**
+     * Given a list of nodes, creates an Array that holds the linked elements of the nodes.
+     *
+     * @param nodes
+     * @param <T>
+     * @return
+     */
+    public static <T> T[] nodeElementsToArray(Class<T> clazz, List<ConfigNode> nodes) {
+        List<T> items = new ArrayList<>();
+        for (int i = 0; i < nodes.size(); i++) {
+            ConfigNode node = nodes.get(i);
+            try {
+                Object element = node.getElement();
+                if (element != null) {
+                    items.add((T) element);
+                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException(String.format("Wrong type found when trying to " +
+                                "copy elements from node [%s], expected [%s] but found [%s]", node.getId(),
+                        clazz.getName(), node.getElement().getClass().getName()), e);
+            }
+        }
+        return items.toArray((T[]) Array.newInstance(clazz, items.size()));
+    }
+
 
 }
