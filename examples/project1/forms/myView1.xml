@@ -1,8 +1,0 @@
-<main>
-    <view id="view1">
-        <p value="you are in view 1"/>
-        <button value="Navigate to View2">
-            <action id="action2" type="nav" route="myView2"/>
-        </button>
-    </view>
-</main>

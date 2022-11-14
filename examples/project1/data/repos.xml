@@ -1,3 +1,0 @@
-<repos>
-    <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="sups" />
-</repos>
