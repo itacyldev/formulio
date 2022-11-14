@@ -68,7 +68,7 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
             } else {
                 setupChildrenIds(formConfig, "edit", edits);
             }
-        }else if (viewList.size() > 1){
+        } else if (viewList.size() > 1) {
             throw new ConfigurationException("The form has more than one view component");
         }
         BuilderHelper.addDefaultRepoNode(node);

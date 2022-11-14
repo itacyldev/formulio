@@ -1,10 +1,13 @@
 package es.jcyl.ita.formic.forms.config.builders.controllers;
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.config.ConfigNodeHelper;
+import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.AbstractComponentBuilder;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
@@ -27,6 +30,14 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
     protected void setupOnSubtreeEnds(ConfigNode<UIAction> node) {
         UIAction element = node.getElement();
         if (ConfigNodeHelper.hasChildrenByTag(node, "action")) {
+            String actionType = node.getAttribute("type");
+
+            if (!actionType.equalsIgnoreCase("composite")) {
+                throw new ConfigurationException(error(String.format("The action [%s] has nested " +
+                        "actions but its type is [%s]. If you nest actions inside another " +
+                        "action, the top-level action can only be of type 'composite'. " +
+                        "Check file ${file}.", node.getId(), actionType)));
+            }
             // the action has nested action elements, this is a compositeAction.
             // Attach nested actions and
             List<ConfigNode> actionNodes = ConfigNodeHelper.getChildrenByTag(node, "action");

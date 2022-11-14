@@ -121,6 +121,7 @@ public class UIActionBuilderTest {
         Assert.assertEquals("COMPOSITE", action.getType());
         Assert.assertEquals(UIActionGroup.class, action.getClass());
         Assert.assertEquals("groupAction", action.getId());
+        // Composite action has no nested parameters
         Assert.assertTrue(ArrayUtils.isEmpty(action.getParams()));
         // The composite action has two nested actions
         UIActionGroup compositeAction = (UIActionGroup) action;
