@@ -48,4 +48,5 @@
     <string name="job_result">Job result</string>
     <string name="exporting">Exportando...</string>
     <string name="project_import_continue">The project will be imported. Do you wish to continue?</string>
+    <string name="confirmation">Confirmation</string>
 </resources>

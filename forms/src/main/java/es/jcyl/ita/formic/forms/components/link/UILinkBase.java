@@ -15,9 +15,15 @@ package es.jcyl.ita.formic.forms.components.link;
  * limitations under the License.
  */
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 
 import static es.jcyl.ita.formic.forms.components.link.UILinkBase.TYPE.LINK;
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 
 /**
@@ -35,6 +41,9 @@ public class UILinkBase extends AbstractUIComponent {
 
     private String route;
 
+    protected ValueBindingExpression confirmation;
+    protected String labelConfirmation;
+
     @Override
     public String getRendererType() {return type.name().toLowerCase();}
 
@@ -45,4 +54,30 @@ public class UILinkBase extends AbstractUIComponent {
     public void setRoute(String route) {
         this.route = route;
     }
+
+    public void setConfirmation(ValueBindingExpression confirmation) {
+        this.confirmation = confirmation;
+    }
+
+    public String getLabelConfirmation() {
+        return labelConfirmation;
+    }
+
+    public void setLabelConfirmation(String labelConfirmation) {
+        this.labelConfirmation = labelConfirmation;
+    }
+
+    public boolean isConfirmation(Context context) {
+        if (this.confirmation == null) {
+            return false;
+        } else {
+            try {
+                return (Boolean) ConvertUtils.convert(JexlFormUtils.eval(context, this.confirmation), Boolean.class);
+            } catch (Exception e) {
+                error("Error while trying to evaluate JEXL expression: " + this.confirmation.toString(), e);
+                return false;
+            }
+        }
+    }
+
 }

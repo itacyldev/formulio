@@ -25,6 +25,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.dialog.ConfirmationDialog;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -58,14 +59,40 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
                     UserMessagesHelper.toast(env.getAndroidContext(), component.getReadonlyMessage(),
                             Toast.LENGTH_LONG);
                 } else {
-                    UserEventInterceptor interceptor = env.getUserActionInterceptor();
-                    if (interceptor != null) {
-                        Event event = new Event(Event.EventType.CLICK, widget);
-                        interceptor.notify(event);
+                    if (component.isConfirmation(env.getWidgetContext())) {
+                        ConfirmationDialog confirmationDialog = new ConfirmationDialog(env.getAndroidContext());
+                        confirmationDialog.show();
+
+                        confirmationDialog.getConfirmationDialogText().setText(component.getLabelConfirmation());
+                        confirmationDialog.getConfirmationDialogTitle().setText(StringUtils.upperCase(env.getAndroidContext().getString(R.string.confirmation)));
+
+                        confirmationDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                execute(env, widget);
+                                confirmationDialog.cancel();
+                            }
+                        });
+                        confirmationDialog.getCancelButton().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                confirmationDialog.cancel();
+                            }
+                        });
+                    }else{
+                        execute(env, widget);
                     }
                 }
             }
         });
+    }
+
+    private void execute(RenderingEnv env, Widget<UIButton> widget){
+        UserEventInterceptor interceptor = env.getUserActionInterceptor();
+        if (interceptor != null) {
+            Event event = new Event(Event.EventType.CLICK, widget);
+            interceptor.notify(event);
+        }
     }
 
     @Override
