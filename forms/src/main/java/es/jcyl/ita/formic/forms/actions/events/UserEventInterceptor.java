@@ -50,7 +50,14 @@ public class UserEventInterceptor {
             action = createUserAction(event);
             event.setHandler(action);
         }
-        clickHandler.handle(event);
+        switch (event.getType()) {
+            case CLICK:
+                clickHandler.handle(event);
+                break;
+            case CHANGE:
+                changeHandler.handle(event);
+                break;
+        }
     }
 
     private UserAction createUserAction(Event event) {
