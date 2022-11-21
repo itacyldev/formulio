@@ -113,13 +113,17 @@ public class ActionController {
         for (UserAction sbAction : subActions) {
             // navigate just in last action
             boolean doNavigate = i == subActions.length - 1;
-            execAction(actionContext, sbAction, doNavigate);
+            try {
+                execAction(actionContext, sbAction, doNavigate, true);
+            } catch (StopCompositeActionException e){
+                break;
+            }
             i++;
         }
     }
 
     private void execAction(ActionContext actionContext, UserAction action) {
-        execAction(actionContext, action, true);
+        execAction(actionContext, action, true, false);
     }
 
     /**
@@ -129,7 +133,7 @@ public class ActionController {
      * @param action
      * @param withNavigation
      */
-    private void execAction(ActionContext actionContext, UserAction action, boolean withNavigation) {
+    private void execAction(ActionContext actionContext, UserAction action, boolean withNavigation, boolean rethrow) {
         ActionHandler handler = handlerMap.get(action.getType().toLowerCase());
         if (handler == null) {
             throw new ConfigurationException(error("No action handler found for action type: " + action.getType()));
@@ -156,6 +160,9 @@ public class ActionController {
         } catch (UserActionException | ValidatorException e) {
             mc.renderBack();
             handler.onError(actionContext, action, e);
+            if(rethrow){
+                throw new StopCompositeActionException(e);
+            }
         }
     }
 

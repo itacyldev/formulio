@@ -28,7 +28,9 @@ import org.junit.Test;
 
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.actions.ActionHandler;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionHelper;
@@ -37,6 +39,7 @@ import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
+import es.jcyl.ita.formic.forms.validation.ValidatorException;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
@@ -95,4 +98,63 @@ public class ActionControllerTest {
         assertEquals(lastAction, controller.getCurrentAction());
     }
 
+    /**
+     * Runs an actionSequence with one ActionHandler that forces a ValidationError. Checks the
+     * sequence has been aborted.
+     */
+    @Test
+    public void testRunCompositeActionWithValidationError() {
+        // mock mainController and View Controller to provide a widget to run data modification actions
+        MainController mockMc = MockingUtils.mockMainController();
+        Router router = new Router(mockMc);
+        // mock view controller
+        WidgetController widgetController = mock(WidgetController.class);
+        when(widgetController.save()).thenReturn(true);
+        // mock principal widgetController
+        ViewController ctrl = mock(ViewController.class);
+        when(mockMc.getViewController()).thenReturn(ctrl);
+        when(ctrl.getMainWidgetController()).thenReturn(widgetController);
+
+        // Arrange controller
+        ActionController controller = new ActionController(mockMc, router);
+        controller.register("mockError", new ValidationErrorActionHandler());
+
+        String myExpectedFormId = "form2";
+        UserAction lastAction = UserActionHelper.navigate(myExpectedFormId);
+        UserAction mockErrorAction = UserActionHelper.newAction("mockError");
+        UserAction[] subActions = new UserAction[]{UserActionHelper.newAction(ActionType.SAVE), mockErrorAction,
+                UserActionHelper.newAction(ActionType.NAV),
+                UserActionHelper.newAction(ActionType.DELETE), lastAction};
+        UserCompositeAction compositeAction = new UserCompositeAction(subActions);
+
+        // Act
+        controller.doUserAction(compositeAction);
+
+        // assert
+        assertEquals(mockErrorAction, controller.getCurrentAction());
+    }
+
+
+    public class ValidationErrorActionHandler implements ActionHandler {
+
+        @Override
+        public void handle(ActionContext actionContext, UserAction action) {
+            throw new ValidatorException("Forced error");
+        }
+
+        @Override
+        public UserAction prepareNavigation(ActionContext actionContext, UserAction action) {
+            return null;
+        }
+
+        @Override
+        public void onError(ActionContext actionContext, UserAction action, Exception e) {
+
+        }
+
+        @Override
+        public String getSuccessMessage(ActionContext actionContext, UserAction action) {
+            return null;
+        }
+    }
 }
