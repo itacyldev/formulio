@@ -15,7 +15,8 @@ package es.jcyl.ita.formic.jayjobs.task.writer;/*
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -23,12 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import es.jcyl.ita.formic.jayjobs.task.models.AbstractTaskSepItem;
-import es.jcyl.ita.formic.jayjobs.task.processor.ContextDebugProcessor;
 import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 
 public abstract class AbstractWriter extends AbstractTaskSepItem implements Writer {
 
-    protected static final org.apache.commons.logging.Log LOGGER = LogFactory.getLog(ContextDebugProcessor.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractWriter.class);
     protected static final DateFormat timeStamper = new SimpleDateFormat("yyyyMMdd_HHmmss.SSS");
 
     private Integer pageSize;

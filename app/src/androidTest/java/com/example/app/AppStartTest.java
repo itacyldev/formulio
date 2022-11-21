@@ -45,6 +45,7 @@ public class AppStartTest {
 
     public static final String STRING_TO_BE_TYPED = "Espresso";
 
+
     /**
      * Use {@link ActivityScenarioRule} to create and launch the activity under test, and close it
      * after test completes. This is a replacement for {@link androidx.test.rule.ActivityTestRule}.

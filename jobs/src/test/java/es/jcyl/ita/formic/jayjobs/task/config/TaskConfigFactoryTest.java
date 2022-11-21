@@ -1,8 +1,6 @@
 package es.jcyl.ita.formic.jayjobs.task.config;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,8 +9,10 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.task.processor.CartodruidSyncProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -45,6 +45,7 @@ public class TaskConfigFactoryTest {
 
 
     @Test
+    @Ignore
     public void readCartoDruidSyncTask() throws Exception {
 
 

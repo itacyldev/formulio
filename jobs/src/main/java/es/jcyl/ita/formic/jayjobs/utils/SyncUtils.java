@@ -1,10 +1,10 @@
 package es.jcyl.ita.formic.jayjobs.utils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 
 /**
@@ -13,8 +13,7 @@ import java.io.FilenameFilter;
 
 public class SyncUtils {
 
-    protected static final Log LOGGER = LogFactory
-            .getLog(SyncUtils.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(SyncUtils.class);
 
     private static final int NUM_ZIPPING_RETRYS = 5;
 

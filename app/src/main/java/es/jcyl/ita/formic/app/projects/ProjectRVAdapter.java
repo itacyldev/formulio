@@ -18,7 +18,6 @@ package es.jcyl.ita.formic.app.projects;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -32,16 +31,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.MainActivity;
+import es.jcyl.ita.formic.app.dialog.JobResultDialog;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -121,6 +119,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 try {
                     App.getInstance().setCurrentProject(prj);
                     ((MainActivity) currentContext).loadFragment();
+                    ((MainActivity) currentContext).loadImageNoProjects();
                 } catch (Exception e) {
                     projectOpeningFinish = false;
 
@@ -202,7 +201,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
         return projectList.size();
     }
 
-    private class ZipTask extends AsyncTask<String, String, String> {
+    /*private class ZipTask extends AsyncTask<String, String, String> {
         AlertDialog dialog;
 
         protected String doInBackground(final String... params) {
@@ -247,6 +246,54 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             dialog = builder.create();
             dialog.show(); // to show this dialog
 
+        }
+    }*/
+
+    private class ZipTask extends AsyncTask<String, String, String> {
+        JobResultDialog jobResultDialog;
+
+        protected String doInBackground(final String... params) {
+
+            String dest = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
+            new File(dest).mkdirs();
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+
+            ProjectImporter projectImporter = ProjectImporter.getInstance();
+            File file = projectImporter.zipFolder(new File(projectsFolder), params[0],  new File(dest));
+            jobResultDialog.addResource(file.getPath());
+
+            return "";
+        }
+
+        @SuppressLint("NewApi")
+        @Override
+        protected void onPostExecute(final String success) {
+            if (success.isEmpty()) {
+                jobResultDialog.setText("Export successful!");
+                UserMessagesHelper.toast(context, "Export successful!", Toast.LENGTH_SHORT);
+            } else {
+                jobResultDialog.setText("Export failed!");
+                UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
+            }
+            jobResultDialog.endJob();
+            jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+        }
+        @Override
+        protected void onPreExecute() {
+            jobResultDialog = new JobResultDialog((MainActivity) context, false);
+            jobResultDialog.show();
+            jobResultDialog.setProgressTitle(context.getString(R.string.export));
+            jobResultDialog.setText(context.getString(R.string.exporting));
+            jobResultDialog.getBackButton().setVisibility(View.GONE);
+
+            jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jobResultDialog.dismiss();
+                }
+            });
         }
     }
 

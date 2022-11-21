@@ -15,8 +15,9 @@ package es.jcyl.ita.formic.jayjobs.task.iteration;
  * limitations under the License.
  */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
@@ -25,7 +26,8 @@ import es.jcyl.ita.formic.core.context.impl.MultiMapCompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 
 public abstract class AbstractTaskContextIterator implements TaskContextIterator {
-    protected static final Log LOGGER = LogFactory.getLog(AbstractTaskContextIterator.class);
+
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTaskContextIterator.class);
 
     protected int idx = 0;
     protected GroupTask task;

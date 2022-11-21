@@ -19,16 +19,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.dialog.JobResultDialog;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
@@ -45,6 +42,8 @@ public class JobProgressActivity extends BaseActivity {
 
     long jobId;
 
+    String jobDescription;
+
     JobExecRepo jobExecRepo;
 
     private JobExecStatusListener execStatusListener;
@@ -55,20 +54,20 @@ public class JobProgressActivity extends BaseActivity {
         return mainThreadHandler;
     }
 
+    JobResultDialog jobResultDialog;
+
     @Override
     protected void doOnCreate() {
         setContentView(R.layout.job_progress);
         jobId = getIntent().getLongExtra("jobExecId", -1);
+        jobDescription = getIntent().getStringExtra("jobExecDescription");
         jobExecRepo = JobExecInMemo.getInstance();
         execStatusListener = new JobExecStatusListener(this, jobId, jobExecRepo);
 
-        Button button = (Button) findViewById(R.id.progress_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.finish();
-            }
-        });
+
+        jobResultDialog = new JobResultDialog(activity, true);
+        jobResultDialog.show();
+        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription)?jobDescription:activity.getString(R.string.job_result));
 
         mainThreadHandler = new JobProgressHandler();
 
@@ -76,11 +75,7 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     public void setMessage(String msg) {
-        LinearLayout layout = findViewById(R.id.progress_messages_layout);
-        TextView view = new TextView(this);
-        view.setId((int) System.currentTimeMillis());
-        view.setText(msg);
-        layout.addView(view);
+        jobResultDialog.setText(msg);
     }
 
 
@@ -91,11 +86,7 @@ public class JobProgressActivity extends BaseActivity {
 
     public void endJob() {
         publishResources();
-        Button button = findViewById(R.id.progress_button);
-        button.setEnabled(true);
-
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar_cyclic);
-        progressBar.setVisibility(View.INVISIBLE);
+        jobResultDialog.endJob();
     }
 
     private void publishResources() {
@@ -110,13 +101,11 @@ public class JobProgressActivity extends BaseActivity {
         }
     }
 
+
+
+
     public void addResource(String resourcePath) {
-        LinearLayout layout = findViewById(R.id.progress_resources_layout);
-        TextView view = new TextView(this);
-        view.setId((int) System.currentTimeMillis());
-        view.setText(resourcePath);
-        view.setMovementMethod(LinkMovementMethod.getInstance());
-        layout.addView(view);
+        jobResultDialog.addResource(resourcePath);
     }
 
 

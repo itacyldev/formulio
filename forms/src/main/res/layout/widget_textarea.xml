@@ -67,6 +67,7 @@
                 android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
+                android:gravity="top|start"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
