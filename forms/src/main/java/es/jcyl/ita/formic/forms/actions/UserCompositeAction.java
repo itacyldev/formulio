@@ -15,6 +15,10 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
+import java.util.HashMap;
+
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -46,11 +50,51 @@ public class UserCompositeAction extends UserAction {
         this.actions = actions;
     }
 
+    /**
+     * Setters for shareable atributes across all nested actions
+     * @param param
+     * @param value
+     */
+
+    public void addParam(String param, Object value) {
+        if (actions != null) {
+            for (UserAction nestedAction : actions) {
+                nestedAction.addParam(param, value);
+            }
+        }
+    }
+
     public void setWidget(Widget widget) {
         super.setWidget(widget);
-        if(actions!=null){
-            for(UserAction nestedAction: actions){
+        if (actions != null) {
+            for (UserAction nestedAction : actions) {
                 nestedAction.setWidget(widget);
+            }
+        }
+    }
+
+    public void setOrigin(ViewController origin) {
+        if (actions != null) {
+            for (UserAction nestedAction : actions) {
+                nestedAction.setOrigin(origin);
+            }
+        }
+    }
+
+    @Override
+    public void setController(String controller) {
+        if (actions != null) {
+            for (UserAction nestedAction : actions) {
+                nestedAction.setController(controller);
+            }
+        }
+    }
+
+    @Override
+    public void setComponent(UIComponent component) {
+        if (actions != null) {
+            for (UserAction nestedAction : actions) {
+                nestedAction.setComponent(component);
             }
         }
     }
