@@ -41,7 +41,7 @@ public class ComponentResolver {
         }
         if (tags.get(tagName).contains(id)) {
             throw new ConfigurationException(DevConsole.error(
-                    String.format("Duplicate id for component [%s] id=[%s].", tagName, id)));
+                    String.format("Duplicate id for component [%s] id=[%s] in file ${file}.", tagName, id)));
         }
         tags.get(tagName).add(id);
     }

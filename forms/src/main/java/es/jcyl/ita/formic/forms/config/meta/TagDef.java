@@ -84,6 +84,8 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RESTORE_VIEW;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SELECTED;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONFIRMATION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_CONFIRMATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SRC;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.STROKE_WIDTH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
@@ -168,7 +170,7 @@ public class TagDef {
         register("option", define(new Attribute[]{ID, optionValue, LABEL}, scriptHooks));
 
         register("buttonbar", define(base, new Attribute[]{TYPE}));
-        register("button", define(baseInput, new Attribute[]{ROUTE, ACTION}));
+        register("button", define(baseInput, new Attribute[]{ROUTE, ACTION, CONFIRMATION, LABEL_CONFIRMATION}));
         register("link", define(baseInput, new Attribute[]{ROUTE, ACTION}));
 
         Map<String, Attribute> actionAttributes = define(new Attribute[]{ID, ROUTE, LABEL, TYPE,
@@ -181,6 +183,7 @@ public class TagDef {
         register("cancel", actionAttributes);
         register("delete", actionAttributes);
         register("nav", actionAttributes);
+        register("actiongroup", define(new Attribute[]{ID}));
 
         register("tab", define(base, new Attribute[]{ID, ALLOWS_PARTIAL_RESTORE}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));

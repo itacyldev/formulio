@@ -28,6 +28,7 @@ import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.JobActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
@@ -104,7 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
     protected void synchronization(){
         MainController mc = MainController.getInstance();
 
-        UserAction userAction = new UserAction(ActionType.JOB);
+        UserAction userAction = UserActionHelper.newAction(ActionType.JOB);
         Map<String, Object> params = new HashMap<>();
         String JOB_ID = "myMockedJob";
         params.put("jobId", JOB_ID);

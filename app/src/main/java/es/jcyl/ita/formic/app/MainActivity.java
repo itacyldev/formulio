@@ -1,5 +1,9 @@
 package es.jcyl.ita.formic.app;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -50,6 +54,7 @@ import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.StorageContentManager;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
@@ -59,10 +64,6 @@ import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.util.FileUtils;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
-
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
@@ -223,16 +224,19 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 break;
             }
         }
+        FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         if (StringUtils.isNotEmpty(formId)) {
             loadFragment(ProjectListFragment.newInstance(
                     App.getInstance().getProjectRepo()));
             MainController.getInstance().getRouter().navigate(MainActivity.this,
-                    UserAction.navigate(formId));
+                    UserActionHelper.navigate(formId));
             checkNavigationButton(R.id.action_projects);
+            import_project.setVisibility(View.VISIBLE);
         }else{
             // open default form list view
             loadFragment(new FormListFragment());
             checkNavigationButton(R.id.action_forms);
+            import_project.setVisibility(View.GONE);
         }
 
         loadImageNoProjects();
@@ -241,7 +245,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     public void onListFragmentInteraction(ViewController form) {
         MainController.getInstance().getRouter().navigate(this,
-                UserAction.navigate(form.getId()));
+                UserActionHelper.navigate(form.getId()));
     }
 
     private void checkStoragePermission() {

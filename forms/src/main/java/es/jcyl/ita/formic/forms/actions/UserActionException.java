@@ -23,4 +23,8 @@ public class UserActionException extends RuntimeException {
         super(msg);
     }
 
+    public UserActionException(Throwable t) {
+        super(t);
+    }
+
 }

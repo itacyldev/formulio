@@ -19,7 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
@@ -51,7 +53,7 @@ public class DevFormNav {
     }
 
     public void nav(String formControllerId, Map<String, Object> params) {
-        UserAction navAction = UserAction.navigate(formControllerId);
+        UserAction navAction = UserActionHelper.navigate(formControllerId);
         if (params != null) {
             navAction.setParams(params);
         }
@@ -67,13 +69,13 @@ public class DevFormNav {
     }
 
     public void clickSave() {
-        UserAction action = new UserAction("save", null);
+        UserAction action = UserActionHelper.newAction(ActionType.SAVE);
         Event event = new Event(Event.EventType.CLICK, null, action);
         eventInterceptor.notify(event);
     }
 
     public void clickSave(String controller) {
-        UserAction action = new UserAction("save", null);
+        UserAction action = UserActionHelper.newAction(ActionType.SAVE);
         action.setController(controller);
         Event event = new Event(Event.EventType.CLICK, null, action);
         eventInterceptor.notify(event);

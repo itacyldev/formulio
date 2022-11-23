@@ -129,6 +129,9 @@ public class AttributeDef {
     public static final Attribute RESTORE_VIEW = new Attribute("restoreView", Boolean.class);
     public static final Attribute POP_HISTORY = new Attribute("popHistory", Integer.class);
     public static final Attribute MESSAGE = new Attribute("message", "message", String.class);
+    public static final Attribute CONFIRMATION = new Attribute("confirmation", "confirmation", "binding");
+    public static final Attribute LABEL_CONFIRMATION = new Attribute("labelConfirmation", "labelConfirmation", String.class);
+
 
     // scripting
     public static final Attribute ON_SAVE = new Attribute("onsave", true);

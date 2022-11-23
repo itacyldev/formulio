@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.link.UIButton;
@@ -34,7 +37,6 @@ import es.jcyl.ita.formic.forms.components.select.UISelect;
 import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.components.table.UITable;
 import es.jcyl.ita.formic.forms.config.AttributeResolver;
-import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.builders.context.ContextBuilder;
 import es.jcyl.ita.formic.forms.config.builders.controllers.FormConfigBuilder;
@@ -75,13 +77,12 @@ import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
+import es.jcyl.ita.formic.forms.controllers.UIActionGroup;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Maps each xml tag with the builder responsible for the component creation.
@@ -139,7 +140,6 @@ public class ComponentBuilderFactory {
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
         //registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
         registerBuilder("button", newDefaultBuilder(UIButton.class, "button"));
-
         registerBuilder("buttonbar", newDefaultGroupBuilder(UIButtonBar.class, "buttonbar"));
 
         ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
@@ -152,6 +152,7 @@ public class ComponentBuilderFactory {
         registerBuilder("delete", actionBuilder);
         registerBuilder("save", actionBuilder);
         registerBuilder("cancel", actionBuilder);
+        registerBuilder("actiongroup", newDefaultGroupBuilder(UIActionGroup.class, "actiongroup"));
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);

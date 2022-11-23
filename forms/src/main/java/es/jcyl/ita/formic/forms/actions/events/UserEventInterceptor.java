@@ -1,16 +1,22 @@
 package es.jcyl.ita.formic.forms.actions.events;
 
-import java.io.Serializable;
-
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIActionGroup;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 
+/**
+ * Receives an event to fire on a component, retrieves proper handler and creates the UserAction
+ * object.
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
 public class UserEventInterceptor {
 
     private final MainController mc;
@@ -62,16 +68,12 @@ public class UserEventInterceptor {
             return null;
         }
         Context context = (event.getContext() != null) ? event.getContext() : event.getSource().getWidgetContext();
-        UserAction action = new UserAction(component.getAction(), component);
+        UserAction action = UserActionHelper.newAction(component.getAction(), component);
         action.setWidget(event.getSource());
-        if (uiAction.hasParams()) {
-            for (UIParam param : uiAction.getParams()) {
-                Object value = JexlFormUtils.eval(context, param.getValue());
-                action.addParam(param.getName(),value);
-            }
-        }
+        UserActionHelper.evalActionParams(context, uiAction, action);
         return action;
     }
+
 
     public boolean isDisabled() {
         return disabled;

@@ -15,12 +15,15 @@ package es.jcyl.ita.formic.forms.actions;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
@@ -28,8 +31,6 @@ import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.EmptyActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
-import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.router.Router;
@@ -37,8 +38,7 @@ import es.jcyl.ita.formic.forms.validation.ValidatorException;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -47,7 +47,7 @@ public class ActionController {
 
     private static final String REFRESH_THIS = "this";
     private static final String REFRESH_ALL = "all";
-    private final Map<String, ActionHandler> actionMap = new HashMap<>();
+    private final Map<String, ActionHandler> handlerMap = new HashMap<>();
     private final MainController mc;
     private final Router router;
     private UserAction currentAction;
@@ -73,7 +73,7 @@ public class ActionController {
     }
 
     public void register(String type, ActionHandler handler) {
-        actionMap.put(type.toLowerCase(), handler);
+        handlerMap.put(type.toLowerCase(), handler);
     }
 
     public synchronized void doUserAction(UserAction action) {
@@ -82,38 +82,87 @@ public class ActionController {
             // in other case dismiss action to prevent executing delayed actions
             return;
         }
-        this.currentAction = action;
-
-        ActionHandler handler;
         try {
             // create context for action execution
             ActionContext actionContext = new ActionContext(mc.getViewController(),
                     mc.getRenderingEnv().getAndroidContext());
-            handler = actionMap.get(action.getType().toLowerCase());
-            if (handler == null) {
-                throw new ConfigurationException(error("No action handler found for action type: " + action.getType()));
-            }
-            if (DevConsole.isDebugEnabled()) {
-                DevConsole.debug(String.format("Executing action %s with ActionHandler: %s.",
-                        action, handler));
-            }
-            mc.saveViewState();
-            try {
-                handler.handle(actionContext, action);
-                String msg = handler.getSuccessMessage(actionContext, action);
-                UserAction navAction = handler.prepareNavigation(actionContext, action);
-                resolveNavigation(actionContext, navAction, msg);
-            } catch (UserActionException | ValidatorException e) {
-                mc.renderBack();
-                handler.onError(actionContext, action, e);
+            if (action instanceof UserCompositeAction) {
+                execAction(actionContext, (UserCompositeAction) action);
+            } else {
+                execAction(actionContext, action);
             }
         } catch (Exception e) {
             String msg = App.getInstance().getStringResource(R.string.action_generic_error);
             error(msg, e);
             mc.renderBack();
-
             // show error message
             UserMessagesHelper.toast(mc.getRenderingEnv().getAndroidContext(), msg);
+        }
+    }
+
+    /**
+     * Execute composite actions, run action sequence applying navigation for the last action. this.currentAction will
+     * point to the last action and the end of the CompositeAction.
+     *
+     * @param actionContext
+     * @param action
+     */
+    private void execAction(ActionContext actionContext, UserCompositeAction action) {
+        UserAction[] subActions = action.getActions();
+        int i = 0;
+        for (UserAction sbAction : subActions) {
+            // navigate just in last action
+            boolean doNavigate = i == subActions.length - 1;
+            try {
+                execAction(actionContext, sbAction, doNavigate, true);
+            } catch (StopCompositeActionException e){
+                break;
+            }
+            i++;
+        }
+    }
+
+    private void execAction(ActionContext actionContext, UserAction action) {
+        execAction(actionContext, action, true, false);
+    }
+
+    /**
+     * Execute basic actions
+     *
+     * @param actionContext
+     * @param action
+     * @param withNavigation
+     */
+    private void execAction(ActionContext actionContext, UserAction action, boolean withNavigation, boolean rethrow) {
+        ActionHandler handler = handlerMap.get(action.getType().toLowerCase());
+        if (handler == null) {
+            throw new ConfigurationException(error("No action handler found for action type: " + action.getType()));
+        }
+        if (action.getOrigin() != null && action.getOrigin() != mc.getViewController()) {
+            // Make sure the formController referred by the action is the current form controller,
+            // in other case dismiss action to prevent executing delayed actions
+            return;
+        }
+        this.currentAction = action;
+
+        if (DevConsole.isDebugEnabled()) {
+            DevConsole.debug(String.format("Executing action %s with ActionHandler: %s.",
+                    action, handler));
+        }
+        mc.saveViewState();
+        try {
+            handler.handle(actionContext, action);
+            if (withNavigation) {
+                String msg = handler.getSuccessMessage(actionContext, action);
+                UserAction navAction = handler.prepareNavigation(actionContext, action);
+                resolveNavigation(actionContext, navAction, msg);
+            }
+        } catch (UserActionException | ValidatorException e) {
+            mc.renderBack();
+            handler.onError(actionContext, action, e);
+            if(rethrow){
+                throw new StopCompositeActionException(e);
+            }
         }
     }
 

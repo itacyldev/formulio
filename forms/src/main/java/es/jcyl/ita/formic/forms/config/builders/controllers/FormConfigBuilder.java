@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.config.builders.controllers;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -68,8 +70,8 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
             } else {
                 setupChildrenIds(formConfig, "edit", edits);
             }
-        }else if (viewList.size() > 1){
-            throw new ConfigurationException("The form has more than one view component");
+        } else if (viewList.size() > 1) {
+            throw new ConfigurationException(error("The form has more than one view component in file ${file}"));
         }
         BuilderHelper.addDefaultRepoNode(node);
     }
