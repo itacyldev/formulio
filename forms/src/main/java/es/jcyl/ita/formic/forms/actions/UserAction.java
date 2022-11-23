@@ -17,12 +17,11 @@ package es.jcyl.ita.formic.forms.actions;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
-import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
 /**
@@ -122,7 +121,7 @@ public class UserAction {
 
     public void addParam(String param, Object value) {
         if (this.params == null) {
-            this.params = new HashMap<>();
+            this.params = new LinkedHashMap<>();
         }
         this.params.put(param, value);
     }
