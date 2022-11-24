@@ -19,8 +19,8 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.App;
@@ -30,6 +30,8 @@ import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.EmptyActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.JobActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.JsActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -199,7 +201,7 @@ public class ActionController {
     }
 
     private String createMessage(UserAction action, Widget widget) {
-        List<WidgetContextHolder> contextHolders = widget.getRootWidget().getContextHolders();
+        Collection<WidgetContextHolder> contextHolders = widget.getRootWidget().getContextHolders();
         String holderIds;
         if (contextHolders == null) {
             holderIds = "none";

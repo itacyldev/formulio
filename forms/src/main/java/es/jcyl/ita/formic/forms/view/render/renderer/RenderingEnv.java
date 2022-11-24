@@ -65,7 +65,7 @@ public class RenderingEnv {
      */
     private static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
     private ViewWidget rootWidget;
-    private ViewStateHolder stateHolder; // curren View state holder
+    private ViewStateHolder stateHolder; // current View state holder
 
     private SelectionManager selectionManager = new SelectionManager();
     /**

@@ -132,7 +132,6 @@ public class AttributeDef {
     public static final Attribute CONFIRMATION = new Attribute("confirmation", "confirmation", "binding");
     public static final Attribute LABEL_CONFIRMATION = new Attribute("labelConfirmation", "labelConfirmation", String.class);
 
-
     // scripting
     public static final Attribute ON_SAVE = new Attribute("onsave", true);
     public static final Attribute ON_BEFORE_RENDER = new Attribute("onBeforeRender", "onBeforeRenderAction", String.class);

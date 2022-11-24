@@ -16,6 +16,7 @@ import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -59,12 +60,12 @@ public class ViewContext extends AbstractBaseContext {
      * @param field
      * @return
      */
-    public Widget findWidget(UIComponent field) {
+    public IWidget findWidget(UIComponent field) {
         return (Widget) this.statefulViews.get(field.getId());
     }
 
-    public Widget findWidget(String componentId) {
-        return (Widget) this.statefulViews.get(componentId);
+    public IWidget findWidget(String componentId) {
+        return  this.statefulViews.get(componentId);
     }
 
     /**
@@ -82,7 +83,7 @@ public class ViewContext extends AbstractBaseContext {
 
     @Override
     public Object getValue(String elementId) {
-        Widget widget = findWidget(elementId);
+        IWidget widget = findWidget(elementId);
         if (widget == null) {
             warn(String.format("No view element id [%s] .", elementId));
             return null;
@@ -196,7 +197,7 @@ public class ViewContext extends AbstractBaseContext {
     }
 
     /**
-     * Registers componentes in the view contexto to store/retrieve their state in case of re-rendering (postback)
+     * Registers components in the view context to store/retrieve their state in case of re-rendering (postback)
      *
      * @param widget
      * @param widget

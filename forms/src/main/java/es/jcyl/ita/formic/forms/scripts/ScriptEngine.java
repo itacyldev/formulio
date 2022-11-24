@@ -16,6 +16,8 @@ package es.jcyl.ita.formic.forms.scripts;
  */
 
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Script;
@@ -58,7 +60,7 @@ public class ScriptEngine {
     }
 
     public Script getScript(String formId) {
-        if (!scripts.containsKey(formId) && scriptSources.containsKey(formId)){
+        if (!scripts.containsKey(formId) && scriptSources.containsKey(formId)) {
             storeScript(formId, scriptSources.get(formId));
         }
         return this.scripts.get(formId);
@@ -68,7 +70,7 @@ public class ScriptEngine {
         this.scriptSources.put(formId, source);
     }
 
-    private void storeScript(String formId, String source){
+    private void storeScript(String formId, String source) {
         Script script = rhino.compileString(source, formId, 1, null);
         this.scripts.put(formId, script);
     }
@@ -78,18 +80,25 @@ public class ScriptEngine {
     }
 
     public Object callFunction(String method, Object... args) {
+        if (scope == null) {
+            throw new IllegalStateException(error("Scope not initialized!. Make sure you put your <script/> " +
+                    "tag in current view XML"));
+        }
         // execute function
         Object fObj = scope.get(method, scope);
         if (!(fObj instanceof Function)) {
             throw new IllegalArgumentException("Function not found: " + method);
         }
         Function function = (Function) fObj;
-        if (scope == null) {
-            throw new IllegalStateException("Scope not initialized!.");
-        }
         Object result = function.call(rhino, scope, scope, args);
         return (result instanceof Undefined) ? null : result;
     }
+
+    public Object callFunction(Function function, Object... args) {
+        Object result = function.call(rhino, scope, scope, args);
+        return (result instanceof Undefined) ? null : result;
+    }
+
 
     public void initEngine(Map<String, Object> props) {
         // initialize scope and load Global context

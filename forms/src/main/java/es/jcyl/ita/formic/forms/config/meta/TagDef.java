@@ -15,9 +15,6 @@ package es.jcyl.ita.formic.forms.config.meta;
  * limitations under the License.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ACTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ALLOWS_PARTIAL_RESTORE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
@@ -26,6 +23,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONFIRMATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONTROLLER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONVERTER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.DBFILE;
@@ -56,6 +54,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_POSITION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ITALIC;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_CONFIRMATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_FILTERING_PROP;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
@@ -84,8 +83,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.REPO_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.RESTORE_VIEW;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ROUTE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SELECTED;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONFIRMATION;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_CONFIRMATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SRC;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.STROKE_WIDTH;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.SUBTITLE;
@@ -100,6 +97,9 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WEIGHTS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WIDTH;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -183,7 +183,6 @@ public class TagDef {
         register("cancel", actionAttributes);
         register("delete", actionAttributes);
         register("nav", actionAttributes);
-        register("actiongroup", define(new Attribute[]{ID}));
 
         register("tab", define(base, new Attribute[]{ID, ALLOWS_PARTIAL_RESTORE}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));

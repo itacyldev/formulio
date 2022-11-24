@@ -46,6 +46,7 @@ import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.scripts.ScriptViewHelper;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
@@ -120,11 +121,12 @@ public class MainController implements ContextAwareComponent {
         viewRenderer.addEventHandler(new ProxyViewRendererEventHandler(proxyFactory));
     }
 
-    private void setupScriptingEnv(es.jcyl.ita.formic.core.context.Context ctx) {
+    private void setupScriptingEnv(es.jcyl.ita.formic.core.context.CompositeContext ctx) {
         Map<String, Object> props = new HashMap<>();
         props.put("ctx", ctx);
         props.put("renderEnv", this.renderingEnv);
         props.put("console", new DevConsole());
+        props.put("vh", new ScriptViewHelper(this.renderingEnv, ctx));
         scriptEngine.initEngine(props);
         // add event handler to execute scripts during component rendering
         this.viewRenderer.addEventHandler(new RhinoViewRenderHandler(scriptEngine));

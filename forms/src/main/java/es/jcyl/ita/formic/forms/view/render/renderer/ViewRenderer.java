@@ -67,7 +67,8 @@ public class ViewRenderer {
 
     public Widget render(RenderingEnv env, UIComponent component) {
         env.clearDeferredViews();
-        return doRender(env, component, component, true);
+        Widget widget = doRender(env, component, component, true);
+        return widget;
     }
 
     public Widget renderSubtree(RenderingEnv env, Widget widget) {

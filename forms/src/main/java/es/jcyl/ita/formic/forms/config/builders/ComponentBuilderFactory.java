@@ -152,7 +152,6 @@ public class ComponentBuilderFactory {
         registerBuilder("delete", actionBuilder);
         registerBuilder("save", actionBuilder);
         registerBuilder("cancel", actionBuilder);
-        registerBuilder("actiongroup", newDefaultGroupBuilder(UIActionGroup.class, "actiongroup"));
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);

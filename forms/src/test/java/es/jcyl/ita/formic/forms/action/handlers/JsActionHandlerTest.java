@@ -38,7 +38,7 @@ import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
-import es.jcyl.ita.formic.forms.actions.JsActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.JsActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
 import es.jcyl.ita.formic.forms.actions.UserActionHelper;
