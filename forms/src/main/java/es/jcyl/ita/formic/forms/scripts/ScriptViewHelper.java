@@ -16,7 +16,9 @@ package es.jcyl.ita.formic.forms.scripts;
  */
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
+import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
@@ -25,6 +27,7 @@ import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
  * Javascript helper to provide shortcuts to avoid boilerplate code
  */
 public class ScriptViewHelper {
+    ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
 
     private final CompositeContext ctx;
     private final RenderingEnv env;
@@ -50,11 +53,12 @@ public class ScriptViewHelper {
 
     /**
      * Returns all the ViewContextHolders in current View
+     *
      * @return
      */
     public ScriptableList<WidgetContextHolder> viewHolders() {
         ScriptableList<WidgetContextHolder> lst = new ScriptableList<>(this.env.getScriptEngine());
-        for(WidgetContextHolder holder: env.getRootWidget().getContextHolders()){
+        for (WidgetContextHolder holder : env.getRootWidget().getContextHolders()) {
             lst.add(holder);
         }
         return lst;
@@ -62,13 +66,22 @@ public class ScriptViewHelper {
 
     /**
      * Returns all the ViewContexts in current View
+     *
      * @return
      */
     public ScriptableList<ViewContext> viewContexts() {
         ScriptableList<ViewContext> lst = new ScriptableList<>(this.env.getScriptEngine());
-        for(WidgetContextHolder holder: env.getRootWidget().getContextHolders()){
+        for (WidgetContextHolder holder : env.getRootWidget().getContextHolders()) {
             lst.add(holder.getWidgetContext().getViewContext());
         }
         return lst;
+    }
+
+    public void setUIValue(UIComponent component, Object value) {
+        if (value != null) {
+            component.setValueExpression(exprFactory.getInstance().create(value.toString()));
+        } else {
+            component.setValueExpression(null);
+        }
     }
 }

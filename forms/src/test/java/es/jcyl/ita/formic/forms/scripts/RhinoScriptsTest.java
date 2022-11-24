@@ -157,7 +157,7 @@ public class RhinoScriptsTest {
 
     static final String IMPORTING_SOURCE =
             " function f1() { " +
-                    " return Packages.es.jcyl.ita.formic.forms.scripts.ScriptEntityUtils.test('hollo');" +
+                    " return Packages.es.jcyl.ita.formic.forms.scripts.ScriptEntityHelper.convert('123', 'Long');" +
                     "}";
 
     @Test
