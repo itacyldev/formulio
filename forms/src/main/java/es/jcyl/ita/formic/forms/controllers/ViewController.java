@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -183,16 +184,26 @@ public class ViewController implements Identificable {
      * LIFECYCLE HOOKS
      */
     public void onBeforeRender() {
-        if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
+        String method = this.onBeforeRenderAction;
+        if (StringUtils.isNotBlank(method)) {
             ScriptEngine engine = mc.getScriptEngine();
-            engine.callFunction(this.onBeforeRenderAction, this);
+            if (engine.isFunction(method)) {
+                engine.callFunction(method, view);
+            } else {
+                engine.executeScript(method, Collections.singletonMap("this", this));
+            }
         }
     }
 
     public void onAfterRender(View view) {
-        if (StringUtils.isNotBlank(this.onAfterRenderAction)) {
+        String method = this.onAfterRenderAction;
+        if (StringUtils.isNotBlank(method)) {
             ScriptEngine engine = mc.getScriptEngine();
-            engine.callFunction(this.onAfterRenderAction, view);
+            if (engine.isFunction(method)) {
+                engine.callFunction(method, view);
+            } else {
+                engine.executeScript(method, Collections.singletonMap("this", view));
+            }
         }
     }
 
