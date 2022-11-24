@@ -19,12 +19,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import androidx.annotation.NonNull;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mozilla.javascript.NativeJavaObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.actions.ActionController;
@@ -82,20 +85,14 @@ public class RhinoScriptableListTest {
                     "}", filterLambdaSource);
 
     /**
-     * Creates a scriptable list with maps and use the filter() function to get the last 3 items of the scriptable
+     * Creates a scriptable fixture (list with maps) and use the filter() function to get the last 3 items of the scriptable
      * collection
      */
     @Test
     public void testFilter() {
         ScriptEngine engine = new ScriptEngine();
 
-        ScriptableList<Map> lst = new ScriptableList<>(engine);
-        for (int i = 0; i < 5; i++) {
-            Map m = new HashMap();
-            m.put("obj" + i, i);
-            // obj.values().toArray()[0]  gives the map value
-            lst.add(m);
-        }
+        ScriptableList<Map> lst = createFixtureMap(engine);
         // Running the method "size()" over all the elements in collection, the expected return is five 1's
         Object myResult = runFunction(engine, filterFndSource, "myfunction", new Object[]{lst});
 
@@ -103,25 +100,27 @@ public class RhinoScriptableListTest {
         Assert.assertEquals(2, resultLst.size()); // 3,4 expected
     }
 
-    private String test3FndSource = " function myfunction(vh) { " +
-            "var viewContexts = vh.viewHolders();" +
-            "lst = viewContexts.filter(obj => obj.holderId.startsWith('myWgt'));" +
-            "lst = lst.apply(obj => obj.widgetContext.viewContext);\n" +
-            "lst.apply(obj => obj.set('myProperty','valor'));\n " +
-            "   return viewContexts;" +
-            "}";
 
     /**
      * Uses the ScriptViewHelper to link filter/apply methods on ViewHolder objects
      */
     @Test
     public void testFilterApply() {
+        String source = " function myfunction(vh) { " +
+                "var viewContexts = vh.viewHolders();" +
+                "lst = viewContexts.filter(obj => obj.holderId.startsWith('myWgt'));" +
+                "lst = lst.flatMap(obj => obj.widgetContext.viewContext.statefulWidgets);\n" +
+                "lst.apply(o => o.setValue('valor'));\n " +
+                "   return viewContexts;" +
+                "}";
+
         ScriptEngine engine = new ScriptEngine();
 
         // Running the method "size()" over all the elements in collection, the expected return is five 1's
-        ScriptViewHelper vh = createViewMock("myWgt", engine);
+        RenderingEnv rendEnv = ScriptViewTestUtils.createViewMock("myWgt", engine);
+        ScriptViewHelper vh =  new ScriptViewHelper(rendEnv, ContextTestUtils.createGlobalContext());
 
-        Object myResult = runFunction(engine, test3FndSource, "myfunction", new Object[]{vh});
+        Object myResult = runFunction(engine, source, "myfunction", new Object[]{vh});
 
         ScriptableList resultLst = (ScriptableList) ((NativeJavaObject) myResult).unwrap();
         Assert.assertNotNull(resultLst);
@@ -131,6 +130,109 @@ public class RhinoScriptableListTest {
         // get the mock and verify the set method has been called
         InputWidget widgetMock = (InputWidget) viewContext.getStatefulWidgets().get(0);
         verify(widgetMock).setValue("valor");
+    }
+
+    /**
+     * Creates a scriptable fixture (list with maps) and use the filter() function to get the last 3 items of the scriptable
+     * collection
+     */
+    @Test
+    public void testReduce() {
+        String source = " function myfunction(collection) { " +
+                "   out.println(collection); " +
+                "   return collection.reduce( (acc,o) => acc + o.size() )" +
+                "}";
+
+        ScriptEngine engine = new ScriptEngine();
+
+        ScriptableList<Map> lst = createFixtureMap(engine);
+        // Running the method "size()" over all the elements in collection, the expected return is five 1's
+        NativeJavaObject myResult = (NativeJavaObject) runFunction(engine, source, "myfunction", new Object[]{lst});
+
+        Assert.assertEquals(5.0, myResult.unwrap()); // 3,4 expected
+    }
+
+
+    @Test
+    public void testMap() {
+        String source = " function myfunction(collection) { " +
+                "   out.println(collection); " +
+                "   return collection.map(o => o.keySet())" +
+                "}";
+        ScriptEngine engine = new ScriptEngine();
+
+        ScriptableList<Map> lst = createFixtureMap(engine);
+        // Running the method "size()" over all the elements in collection, the expected return is five 1's
+        NativeJavaObject myResult = (NativeJavaObject) runFunction(engine, source, "myfunction", new Object[]{lst});
+
+        Assert.assertEquals(5, ((List)myResult.unwrap()).size()); // 3,4 expected
+    }
+
+
+    @Test
+    public void testFlatMap() {
+        String source = " function myfunction(collection) { " +
+                "   out.println(collection); " +
+                "   return collection.flatMap(o => o.values())" +
+                "}";
+        ScriptEngine engine = new ScriptEngine();
+
+        ScriptableList<Map> lst = createFixtureMap(engine);
+        // Running the method "size()" over all the elements in collection, the expected return is five 1's
+        NativeJavaObject myResult = (NativeJavaObject) runFunction(engine, source, "myfunction", new Object[]{lst});
+
+        Assert.assertEquals(5, ((List)myResult.unwrap()).size()); // 3,4 expected
+    }
+
+    /**
+     * Creates a scriptable fixture (list with maps) and use the filter() function to get the last 3 items of the scriptable
+     * collection
+     */
+    @Test
+    public void testReduceSum() {
+        String source = " function myfunction(collection) { " +
+                "   out.println(collection); " +
+                "   return collection.map(o => o.size()).reduceSum()" +
+                "}";
+        ScriptEngine engine = new ScriptEngine();
+
+        ScriptableList<Map> lst = createFixtureMap(engine);
+        // Running the method "size()" over all the elements in collection, the expected return is five 1's
+        Object myResult = runFunction(engine, source, "myfunction", new Object[]{lst});
+
+        Assert.assertEquals(5.0, (float) myResult, 0.001); // 3,4 expected
+    }
+
+    /**
+     * Creates a scriptable fixture (list with maps) and use the filter() function to get the last 3 items of the scriptable
+     * collection
+     */
+    @Test
+    public void testReduceCount() {
+        String source = " function myfunction(collection) { " +
+                "   out.println(collection); " +
+                "   return collection.map(o => o.size()).reduceCount()" +
+                "}";
+
+        ScriptEngine engine = new ScriptEngine();
+
+        ScriptableList<Map> lst = createFixtureMap(engine);
+        // Running the method "size()" over all the elements in collection, the expected return is five 1's
+        Object myResult = runFunction(engine, source, "myfunction", new Object[]{lst});
+
+        Assert.assertEquals(5, (int) myResult, 0.001); // 3,4 expected
+    }
+
+    @NonNull
+    private ScriptableList<Map> createFixtureMap(ScriptEngine engine) {
+        ScriptableList<Map> lst = new ScriptableList<>(engine);
+        for (int i = 0; i < 5; i++) {
+            Map m = new HashMap();
+            m.put("obj" + i, i);
+            // obj.values().toArray()[0]  gives the map value
+            lst.add(m);
+        }
+        return lst;
     }
 
 
@@ -144,28 +246,6 @@ public class RhinoScriptableListTest {
         return engine.callFunction(fncName, params);
     }
 
-    private ScriptViewHelper createViewMock(String prefix, ScriptEngine engine) {
-        // create 5 widgetContext, each context has a widget it its View context with Id "myproperty"
-        Map<String, WidgetContextHolder> map = new HashMap<>();
-        for (int i = 0; i < 5; i++) {
-            String id = prefix + "-" + i;
-            WidgetContextHolder wCtx = new DummyWidgetContextHolder(id);
-            InputWidget widget = mock(InputWidget.class);
-            UIInputComponent component = mock(UIInputComponent.class);
-            when(component.getId()).thenReturn("myProperty");
-            when(widget.getComponent()).thenReturn(component);
-            wCtx.getWidgetContext().getViewContext().registerWidget(widget);
-            map.put(id, wCtx);
-        }
-        ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
-        env.setScriptEngine(engine);
-        // set the root view Widget
-        ViewWidget viewWidget = mock(ViewWidget.class);
-        when(viewWidget.getContextHoldersMap()).thenReturn(map);
-        when(viewWidget.getContextHolders()).thenReturn(map.values());
-        env.setRootWidget(viewWidget);
-        return new ScriptViewHelper(env, ContextTestUtils.createGlobalContext());
-    }
+
 
 }

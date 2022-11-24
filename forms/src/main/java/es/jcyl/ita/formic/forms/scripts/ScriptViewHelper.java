@@ -20,7 +20,9 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.repo.Entity;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
@@ -77,6 +79,31 @@ public class ScriptViewHelper {
         return lst;
     }
 
+    /**
+     * Returns all the StatefullWidgets in current View
+     *
+     * @return
+     */
+    public ScriptableList<StatefulWidget> viewWidgets() {
+        ScriptableList<StatefulWidget> lst = new ScriptableList<>(this.env.getScriptEngine());
+        for (WidgetContextHolder holder : env.getRootWidget().getContextHolders()) {
+            lst.addAll(holder.getWidgetContext().getViewContext().getStatefulWidgets());
+        }
+        return lst;
+    }
+
+    /**
+     * Returns all the ViewContexts in current View
+     *
+     * @return
+     */
+    public ScriptableList<Entity> entities() {
+        ScriptableList<Entity> lst = new ScriptableList<>(this.env.getScriptEngine());
+        for (WidgetContextHolder holder : env.getRootWidget().getContextHolders()) {
+            lst.add(holder.getWidgetContext().getEntity());
+        }
+        return lst;
+    }
     public void setUIValue(UIComponent component, Object value) {
         if (value != null) {
             component.setValueExpression(exprFactory.getInstance().create(value.toString()));

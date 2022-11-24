@@ -51,7 +51,11 @@ public class JsActionHandler extends AbstractActionHandler {
         }
         Object[] callParams = params.values().toArray(new Object[params.size()]);
         ScriptEngine scriptEngine = this.mc.getScriptEngine();
-        scriptEngine.callFunction(methodName, callParams);
+        if(scriptEngine.isFunction(methodName)){
+            scriptEngine.callFunction(methodName, callParams);
+        } else {// treat as script
+            scriptEngine.executeScript(methodName, params);
+        }
     }
 
     @Override

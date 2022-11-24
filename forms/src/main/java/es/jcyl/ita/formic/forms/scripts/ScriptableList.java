@@ -15,17 +15,19 @@ package es.jcyl.ita.formic.forms.scripts;
  * limitations under the License.
  */
 
-import android.renderscript.Script;
-
-import org.apache.commons.beanutils.Converter;
 import org.mini2Dx.beanutils.ConvertUtils;
+import org.mozilla.javascript.BaseFunction;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.JsDevTools;
+import org.mozilla.javascript.NativeJavaObject;
 
 import java.util.ArrayList;
-
-import es.jcyl.ita.formic.repo.converter.ConverterUtils;
+import java.util.Collection;
+import java.util.Map;
 
 /**
+ * Extends ArrayList to provide filter-map-reduce pattern on Java Lists to simplify access to objects from js functions.
+ *
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class ScriptableList<T> extends ArrayList<T> {
@@ -36,19 +38,73 @@ public class ScriptableList<T> extends ArrayList<T> {
     }
 
     /**
-     * Applies the given function to all the elements of current list
+     * Map patter function to transform ScriptableList into a new Scriptable list applying the given
+     * function to current elements.
+     *
+     * @param object
+     */
+    public ScriptableList<Object> map(Object object) {
+        checkFunctionParameter(object, "flat()");
+        ScriptableList<Object> resultList = new ScriptableList<>(this.engine);
+        for (Object item : this) {
+            Object result = engine.callFunction((Function) object, item);
+            if (result == null) {
+                throw new IllegalArgumentException("The callback function passed to map() returned a null value. " +
+                        JsDevTools.decompile((BaseFunction) object));
+            }
+            if (result instanceof NativeJavaObject) {
+                result = ((NativeJavaObject) result).unwrap();
+            }
+            resultList.add(result);
+        }
+        return resultList;
+    }
+
+    /**
+     * Creates a new List applying the callback function on current elements and flatting found collections and maps
+     * into the resulting list.
+     *
+     * @param object
+     */
+    public ScriptableList<Object> flatMap(Object object) {
+        checkFunctionParameter(object, "flatMap()");
+        ScriptableList<Object> resultList = new ScriptableList<>(this.engine);
+        for (Object item : this) {
+            Object result = engine.callFunction((Function) object, item);
+            if (result == null) {
+                throw new IllegalArgumentException("The callback function passed to map() returned a null value. " +
+                        JsDevTools.decompile((BaseFunction) object));
+            }
+            if (result instanceof NativeJavaObject) {
+                result = ((NativeJavaObject) result).unwrap();
+            }
+            if (result instanceof Collection) {
+                resultList.addAll((Collection) result);
+            } else if (result instanceof Map) {
+                resultList.addAll(((Map) result).values());
+            } else {
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
+
+    /**
+     * Applies the given function to all the elements of current list. If the function returns an object it is add to the result list.
      *
      * @param object
      */
     public ScriptableList<Object> apply(Object object) {
-        if (!(object instanceof Function)) {
-            throw new IllegalArgumentException(String.format("Illegal object passed to function apply(), it must be a " +
-                    "function. Found: [%s]. %s.", object.getClass(), object));
-        }
+        checkFunctionParameter(object, "apply()");
         ScriptableList<Object> resultList = new ScriptableList<>(this.engine);
         for (Object item : this) {
             Object result = engine.callFunction((Function) object, item);
-            resultList.add(result);
+            if (result != null) {
+                if (result instanceof NativeJavaObject) {
+                    result = ((NativeJavaObject) result).unwrap();
+                }
+                resultList.add(result);
+            }
         }
         return resultList;
     }
@@ -75,10 +131,7 @@ public class ScriptableList<T> extends ArrayList<T> {
     }
 
     private Object doFilter(Object object, boolean returnFirst) {
-        if (!(object instanceof Function)) {
-            throw new IllegalArgumentException(String.format("Illegal object passed to function apply(), it must be a " +
-                    "function. Found: [%s]. %s.", object.getClass(), object));
-        }
+        checkFunctionParameter(object, "filter()");
         ScriptableList<Object> resultList = new ScriptableList<>(this.engine);
         for (Object item : this) {
             Object result = engine.callFunction((Function) object, item);
@@ -91,8 +144,9 @@ public class ScriptableList<T> extends ArrayList<T> {
                     resultList.add(item);
                 }
             } catch (Exception e) {
-                throw new IllegalArgumentException(String.format("The return of the filter function must be a boolean value." +
-                        "Found: [%s] when applying on item [%s].", result, item));
+                throw new IllegalArgumentException(String.format("The return of the filter function must be a " +
+                                "boolean value. Found: [%s] when applying on item [%s]. %s", result, item,
+                        JsDevTools.decompile((BaseFunction) object)));
             }
         }
         if (returnFirst) {
@@ -101,6 +155,50 @@ public class ScriptableList<T> extends ArrayList<T> {
         } else {
             // return found elements
             return resultList;
+        }
+    }
+
+    /**
+     * Reduces current list to an object
+     *
+     * @param object
+     * @return
+     */
+    public Object reduce(Object object) {
+        checkFunctionParameter(object, "reduce()");
+        Object accumulated = null;
+        for (Object item : this) {
+            accumulated = engine.callFunction((Function) object, accumulated, item);
+        }
+        return accumulated;
+    }
+
+    /**
+     * Sums current elements trying to force then to floats
+     *
+     * @return
+     */
+    public float reduceSum() {
+        float accumulated = 0;
+        for (Object item : this) {
+            accumulated += (float) ConvertUtils.convert(item, Float.class);
+        }
+        return accumulated;
+    }
+
+    /**
+     * Counts the number of items in the list.
+     *
+     * @return
+     */
+    public int reduceCount() {
+        return this.size();
+    }
+
+    private void checkFunctionParameter(Object object, String functionName) {
+        if (!(object instanceof Function)) {
+            throw new IllegalArgumentException(String.format("Illegal object passed callback in %s, it must be a " +
+                    "function. Found: [%s]. %s.", functionName, object.getClass(), JsDevTools.decompile((BaseFunction) object)));
         }
     }
 

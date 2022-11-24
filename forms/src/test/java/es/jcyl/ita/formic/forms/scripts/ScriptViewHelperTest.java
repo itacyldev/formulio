@@ -38,7 +38,7 @@ public class ScriptViewHelperTest {
 
     @Test
     public void testFindViewContext() {
-        // create widget context holder with its ViewContex
+        // create widget context holder with its ViewContext
         WidgetContextHolder wCtx = new DummyWidgetContextHolder("myDummyWidget");
         ViewContext expectedViewContext = wCtx.getWidgetContext().getViewContext();
 

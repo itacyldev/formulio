@@ -25,7 +25,9 @@ import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -78,11 +80,43 @@ public class ScriptEngine {
     public void executeScript(Script source) {
         source.exec(rhino, scope);
     }
+    public void executeScript(String source) {
+        executeScript(source, null);
+    }
+
+    public void executeScript(String source, Map<String, Object> params) {
+        Script script = rhino.compileString(source, "anonymous", 1, null);
+        // put arguments in scope and remove then
+        try {
+            if(params!=null){
+                for (Map.Entry<String, Object> entry : params.entrySet()) {
+                    ScriptableObject.putProperty(scope, entry.getKey(), Context.javaToJS(entry.getValue(), scope));
+                }
+            }
+            script.exec(rhino, scope);
+        } finally {
+            if(params!=null){
+                for (String key : params.keySet()) {
+                    scope.delete(key);
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if given name is a function in correct view scope
+     *
+     * @return
+     */
+    public boolean isFunction(String method) {
+        Object fObj = scope.get(method, scope);
+        return (fObj instanceof Function);
+    }
 
     public Object callFunction(String method, Object... args) {
         if (scope == null) {
             throw new IllegalStateException(error("Scope not initialized!. Make sure you put your <script/> " +
-                    "tag in current view XML"));
+                    "tag in current view XML file."));
         }
         // execute function
         Object fObj = scope.get(method, scope);
@@ -123,6 +157,10 @@ public class ScriptEngine {
         scope.setParentScope(null);
 
         script.exec(rhino, scope);
+    }
+
+    public ScriptableObject getScope() {
+        return scope;
     }
 
     public void putProperty(String name, Object object) {
