@@ -1,0 +1,19 @@
+<main>
+    <view>
+        <button>
+            <action type="js">
+                <param method="vh.setWidgetValue('myInput',123.5);console.log(vh.widget('my"/>
+            </action>
+        </button>
+        <input id="myInput" value="you are in view 1" />
+        <datatable repo="contacts" />
+        <buttonbar type="fab">
+            <button action="create" route="form7-edit1">
+                <param name="repo" value="contacts" />
+                <param name="fecha" value="${date.now}" />
+                <param name="first_name" value="aaaaa" />
+                <param name="last_name" value="bbbbb" />
+            </button>
+        </buttonbar>
+    </view>
+</main>
