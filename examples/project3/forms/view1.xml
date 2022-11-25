@@ -3,7 +3,7 @@
         <button>
             <action type="js">
                 <param name="method"
-                    value="vh.setWidgetValue('myInput',123.5);vh.widget('myInput').setBackGroundColor(color.red)" />
+                    value="vh.setWidgetValue('myInput',123.5)" />
             </action>
         </button>
         <button label="button2">
