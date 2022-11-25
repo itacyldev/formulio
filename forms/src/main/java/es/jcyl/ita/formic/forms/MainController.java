@@ -129,6 +129,7 @@ public class MainController implements ContextAwareComponent {
         props.put("console", new DevConsole());
         props.put("vh", new ScriptViewHelper(this.renderingEnv, ctx));
         props.put("eh", new ScriptEntityHelper());
+        props.put("session", new HashMap());
         scriptEngine.initEngine(props);
         // add event handler to execute scripts during component rendering
         this.viewRenderer.addEventHandler(new RhinoViewRenderHandler(scriptEngine));

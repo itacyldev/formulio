@@ -20,6 +20,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
@@ -84,12 +85,24 @@ public class ScriptViewHelper {
      *
      * @return
      */
-    public ScriptableList<StatefulWidget> viewWidgets() {
+    public ScriptableList<StatefulWidget> widgets() {
         ScriptableList<StatefulWidget> lst = new ScriptableList<>(this.env.getScriptEngine());
         for (WidgetContextHolder holder : env.getRootWidget().getContextHolders()) {
             lst.addAll(holder.getWidgetContext().getViewContext().getStatefulWidgets());
         }
         return lst;
+    }
+
+    public IWidget widget(String componentId) {
+        IWidget widget = null;
+        ScriptableList<StatefulWidget> lst = new ScriptableList<>(this.env.getScriptEngine());
+        for (WidgetContextHolder holder : env.getRootWidget().getContextHolders()) {
+            widget = holder.getWidgetContext().getViewContext().findWidget(componentId);
+            if (widget != null) {
+                break;
+            }
+        }
+        return widget;
     }
 
     /**
@@ -104,6 +117,7 @@ public class ScriptViewHelper {
         }
         return lst;
     }
+
     public void setUIValue(UIComponent component, Object value) {
         if (value != null) {
             component.setValueExpression(exprFactory.getInstance().create(value.toString()));

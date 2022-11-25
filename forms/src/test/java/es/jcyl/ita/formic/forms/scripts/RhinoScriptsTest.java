@@ -176,7 +176,7 @@ public class RhinoScriptsTest {
         engine.store("formTest", IMPORTING_SOURCE);
         engine.initScope("formTest");
 
-        String source = "var value = vh.viewWidgets().filter(o=> o.componentId.startsWith('myWidgets')).map(o => o.getValue())";
+        String source = "var value = vh.widgets().filter(o=> o.componentId.startsWith('myWidgets')).map(o => o.getValue())";
 
         engine.executeScript(source);
         ScriptableObject scope = engine.getScope();
