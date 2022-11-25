@@ -86,7 +86,7 @@ public class ScriptEngine {
 
     public void executeScript(String source, Map<String, Object> params) {
         Script script = rhino.compileString(source, "anonymous", 1, null);
-        // put arguments in scope and remove then
+        // put arguments in scope and remove then after execution
         try {
             if(params!=null){
                 for (Map.Entry<String, Object> entry : params.entrySet()) {

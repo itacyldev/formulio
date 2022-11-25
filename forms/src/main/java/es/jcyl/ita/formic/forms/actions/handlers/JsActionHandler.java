@@ -42,20 +42,29 @@ public class JsActionHandler extends AbstractActionHandler {
     }
 
     public void handle(ActionContext actionContext, UserAction action) {
+        if (action.getParams() == null) {
+            throwNoParamsException();
+        }
         Map<String, Object> params = new HashMap<>(action.getParams());
         String methodName = (String) params.remove("method");
         if (methodName == null) {
-            throw new UserActionException(error("No 'method' parameter found, to call a " +
-                    "js function from a component, set a parameter <param name='method' " +
-                    "value='yourJsFunctionName'/>"));
+            throwNoParamsException();
         }
         Object[] callParams = params.values().toArray(new Object[params.size()]);
         ScriptEngine scriptEngine = this.mc.getScriptEngine();
-        if(scriptEngine.isFunction(methodName)){
+        if (scriptEngine.isFunction(methodName)) {
             scriptEngine.callFunction(methodName, callParams);
         } else {// treat as script
             scriptEngine.executeScript(methodName, params);
         }
+    }
+
+    private void throwNoParamsException() {
+        throw new UserActionException(error("No 'method' parameter found, to call a " +
+                "js function from a component, set a parameter <param name=\"method\" " +
+                "value=\"yourJsFunctionName\"/>.\n" +
+                "You can also use the \"method\" attribute to define a js script:  " +
+                "<param name=\"method\" value=\"console.log('hello world!)\"/>/>"));
     }
 
     @Override

@@ -120,6 +120,32 @@ public class JsActionHandlerTest {
         Assert.assertThat(out, hasSize(3));
     }
 
+    @Test
+    public void testExecuteScript() throws Exception {
+        // mock main controller and prepare action controller
+        MainController mc = MockingUtils.mockMainController(ctx);
+
+        // prepare user Action
+        UserAction userAction = UserActionHelper.newAction(ActionType.JS);
+        Map<String, Object> params = new HashMap<>();
+        // script set the var myVar in scope
+        params.put("method", "var myVar = 33");
+        userAction.setParams(params);
+
+        // create engine and store js function
+        ScriptEngine scriptEngine = mc.getScriptEngine();
+        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.initScope(mc.getViewController().getId());
+
+        List<String> out = new ArrayList();
+        scriptEngine.putProperty("out", out);
+        // act - execute action
+        JsActionHandler handler = new JsActionHandler(mc, mc.getRouter());
+        handler.handle(new ActionContext(mc.getViewController(), ctx), userAction);
+
+        Assert.assertEquals(33.0, scriptEngine.getScope().get("myVar"));
+    }
+
     @Test(expected = UserActionException.class)
     public void testExecuteJsFunctionNoMethodParam() throws Exception {
         // mock main controller and prepare action controller
