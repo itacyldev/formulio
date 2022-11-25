@@ -95,7 +95,6 @@ public class ScriptViewHelper {
 
     public IWidget widget(String componentId) {
         IWidget widget = null;
-        ScriptableList<StatefulWidget> lst = new ScriptableList<>(this.env.getScriptEngine());
         for (WidgetContextHolder holder : env.getRootWidget().getContextHolders()) {
             widget = holder.getWidgetContext().getViewContext().findWidget(componentId);
             if (widget != null) {

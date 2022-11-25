@@ -131,6 +131,7 @@ public class AttributeDef {
     public static final Attribute MESSAGE = new Attribute("message", "message", String.class);
     public static final Attribute CONFIRMATION = new Attribute("confirmation", "confirmation", "binding");
     public static final Attribute LABEL_CONFIRMATION = new Attribute("labelConfirmation", "labelConfirmation", String.class);
+    public static final Attribute METHOD = new Attribute("method", String.class);
 
     // scripting
     public static final Attribute ON_SAVE = new Attribute("onsave", true);

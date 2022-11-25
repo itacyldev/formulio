@@ -61,6 +61,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAIN_FORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.METHOD;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ON_AFTER_RENDER;
@@ -183,6 +184,7 @@ public class TagDef {
         register("cancel", actionAttributes);
         register("delete", actionAttributes);
         register("nav", actionAttributes);
+        register("js", define(actionAttributes, new Attribute[]{METHOD}));
 
         register("tab", define(base, new Attribute[]{ID, ALLOWS_PARTIAL_RESTORE}));
         register("tabitem", define(base, new Attribute[]{ID, LABEL, PROPERTIES, SELECTED}));
