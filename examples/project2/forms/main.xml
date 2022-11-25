@@ -1,8 +1,8 @@
 <main>
-    <view>
+    <view name="My">
         <button>
             <action type="js">
-                <param method="vh.setWidgetValue('myInput',123.5);console.log(vh.widget('my"/>
+                <param method="vh.setWidgetValue('myInput',123.5);console.log(vh.widget('myInput'))"/>
             </action>
         </button>
         <input id="myInput" value="you are in view 1" />

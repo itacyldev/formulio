@@ -95,6 +95,11 @@ public class BuilderHelper {
      * @return
      */
     public static PropertyType[] getPropertiesFromRepo(Repository repo, String[] propertyNames) {
+        if (repo == null) {
+            throw new ConfigurationException(error("No repository defined in file ${file}. " +
+                    "Set the 'repo' attribute in main,edit or list tags to define the repository " +
+                    "to use in the data list."));
+        }
         PropertyType[] properties;
         int i = 0;
         PropertyType prop;
