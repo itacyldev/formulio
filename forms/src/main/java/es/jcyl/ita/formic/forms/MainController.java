@@ -44,6 +44,7 @@ import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.scripts.Color;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.scripts.ScriptEntityHelper;
@@ -129,6 +130,7 @@ public class MainController implements ContextAwareComponent {
         props.put("console", new DevConsole());
         props.put("vh", new ScriptViewHelper(this.renderingEnv, ctx));
         props.put("eh", new ScriptEntityHelper());
+        props.put("color", new Color());
         props.put("session", new HashMap());
         scriptEngine.initEngine(props);
         // add event handler to execute scripts during component rendering

@@ -15,12 +15,15 @@ package es.jcyl.ita.formic.forms.scripts;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.IWidget;
+import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
@@ -115,6 +118,15 @@ public class ScriptViewHelper {
             lst.add(holder.getWidgetContext().getEntity());
         }
         return lst;
+    }
+
+    public void setWidgetValue(String componentId, Object value) {
+        IWidget widget = widget(componentId);
+        if (!(widget instanceof InputWidget)) {
+            error("Cannot set value on component %s, only InputWidget can have setValue() method.");
+            return;
+        }
+        ((InputWidget)widget).setValue(value);
     }
 
     public void setUIValue(UIComponent component, Object value) {

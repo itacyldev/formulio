@@ -25,9 +25,7 @@ import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -80,6 +78,7 @@ public class ScriptEngine {
     public void executeScript(Script source) {
         source.exec(rhino, scope);
     }
+
     public void executeScript(String source) {
         executeScript(source, null);
     }
@@ -88,14 +87,14 @@ public class ScriptEngine {
         Script script = rhino.compileString(source, "anonymous", 1, null);
         // put arguments in scope and remove then after execution
         try {
-            if(params!=null){
+            if (params != null) {
                 for (Map.Entry<String, Object> entry : params.entrySet()) {
                     ScriptableObject.putProperty(scope, entry.getKey(), Context.javaToJS(entry.getValue(), scope));
                 }
             }
             script.exec(rhino, scope);
         } finally {
-            if(params!=null){
+            if (params != null) {
                 for (String key : params.keySet()) {
                     scope.delete(key);
                 }
@@ -148,15 +147,14 @@ public class ScriptEngine {
      * Initializes current scope to remove previous properties and load current View scripts
      */
     public void initScope(String formControllerId) {
-        Script script = getScript(formControllerId);
-        if (script == null) {
-            return; // no js in this view
-        }
         this.scope = (ScriptableObject) rhino.newObject(sharedScope);
         scope.setPrototype(sharedScope);
         scope.setParentScope(null);
 
-        script.exec(rhino, scope);
+        Script script = getScript(formControllerId);
+        if (script != null) {
+            script.exec(rhino, scope);
+        }
     }
 
     public ScriptableObject getScope() {

@@ -74,4 +74,5 @@ public class ScriptViewHelperTest {
 
         Assert.assertTrue(CollectionUtils.isNotEmpty(collection));
     }
+
 }
