@@ -83,16 +83,26 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
      * @param paramNodes
      */
     private void configureJsAction(ConfigNode<UIAction> node, List<ConfigNode> paramNodes) {
+        // Check if method has been set as attribute
         String method = node.getAttribute("method");
-        if (StringUtils.isEmpty(method)) {
-            throw new ConfigurationException(error(String.format("Attribute 'method' is mandatory in js actions, " +
-                    "check action [%s] if file ${file}.", node.getId())));
+        boolean hasMethodParam = false;
+        // Check if method has been set as parameter
+        if(StringUtils.isBlank(method)){
+            ConfigNode methodParamNode = ConfigNodeHelper.findNodeByAttValue(paramNodes, "name", "method");
+            method = methodParamNode.getAttribute("value");
+            hasMethodParam = true;
         }
-        // add method as a parameter node
-        ConfigNode methodNode = new ConfigNode("param");
-        methodNode.setAttribute("name", "method");
-        methodNode.setAttribute("value", method);
-        paramNodes.add(methodNode);
+        if (StringUtils.isEmpty(method)) {
+            throw new ConfigurationException(error(String.format("Attribute 'method' is mandatory in js actions. " +
+                    "Check action [%s] if file ${file}.", node.getId())));
+        }
+        if (!hasMethodParam){
+            // add method as a parameter node
+            ConfigNode methodNode = new ConfigNode("param");
+            methodNode.setAttribute("name", "method");
+            methodNode.setAttribute("value", method);
+            paramNodes.add(methodNode);
+        }
     }
 
     @Override

@@ -112,7 +112,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
         UserAction action = UserActionHelper.newAction(ActionType.BACK.name(), "back", this.viewController);
         action.setRestoreView(true);
 //        action.setOrigin(formController.getId());
-        mc.getActionController().doUserAction(action);
+        mc.getActionController().execAction(action);
         finish();
     }
 

@@ -149,7 +149,14 @@ public class UIActionBuilderTest {
             ////
             "<button id=\"myButton\" label=\"guardar\" action=\"js\" method=\"console.log()\">\n" +
                     "    <param name=\"param1\" value=\"value1\"/>" +
-                    "</button>\n"
+                    "</button>\n",
+            ///
+            "<button id=\"myButton\" label=\"guardar\">\n" +
+                    "  <action type=\"js\">\n" +
+                    "    <param name=\"method\" value=\"console.log\" />\n" +
+                    "    <param name=\"param1\" value=\"value1\"/>" +
+                    "  </action>\n" +
+                    "</button>"
     };
 
     @Test

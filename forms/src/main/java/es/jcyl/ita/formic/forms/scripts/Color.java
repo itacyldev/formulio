@@ -1,5 +1,10 @@
 package es.jcyl.ita.formic.forms.scripts;
 
+/**
+ * Helper function to access colors by name from js functions
+ *
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
+ */
 public class Color {
     public static int getBlack() {
         return android.graphics.Color.BLACK;
@@ -48,11 +53,13 @@ public class Color {
     public static int getTransparent() {
         return android.graphics.Color.TRANSPARENT;
     }
-    public static int rgb(int r, int g, int b, int alpha){
+    
+    public static int rgb(int r, int g, int b, int alpha) {
         return (alpha & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
     }
-    public static int rgb(int r, int g, int b){
-        return rgb(255,r,g,b);
+
+    public static int rgb(int r, int g, int b) {
+        return rgb(255, r, g, b);
     }
 
 }
