@@ -36,12 +36,14 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.App;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -171,7 +173,10 @@ public class RhinoScriptsTest {
         // initialize Script engine and set the ScriptViewHelper
         Map<String, Object> props = new HashMap<>();
         props.put("out", System.out);
-        props.put("vh", new ScriptViewHelper(rendEnv, ContextTestUtils.createGlobalContext()));
+
+        MainController mc = MockingUtils.mockMainController(null, ContextTestUtils.createGlobalContext());
+        when(mc.getRenderingEnv()).thenReturn(rendEnv);
+        props.put("vh", new ScriptViewHelper(mc));
         engine.initEngine(props);
         engine.store("formTest", IMPORTING_SOURCE);
         engine.initScope("formTest");

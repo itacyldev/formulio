@@ -30,12 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.utils.dummy.DummyWidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
@@ -118,7 +120,9 @@ public class RhinoScriptableListTest {
 
         // Running the method "size()" over all the elements in collection, the expected return is five 1's
         RenderingEnv rendEnv = ScriptViewTestUtils.createViewMock("myWgt", engine);
-        ScriptViewHelper vh =  new ScriptViewHelper(rendEnv, ContextTestUtils.createGlobalContext());
+        MainController mc = MockingUtils.mockMainController(null, ContextTestUtils.createGlobalContext());
+        when(mc.getRenderingEnv()).thenReturn(rendEnv);
+        ScriptViewHelper vh =  new ScriptViewHelper(mc);
 
         Object myResult = runFunction(engine, source, "myfunction", new Object[]{vh});
 

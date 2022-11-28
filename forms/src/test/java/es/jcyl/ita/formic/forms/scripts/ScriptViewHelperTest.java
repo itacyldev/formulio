@@ -23,10 +23,12 @@ import org.junit.Test;
 import org.mini2Dx.collections.CollectionUtils;
 
 import edu.emory.mathcs.backport.java.util.Collections;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.utils.dummy.DummyWidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
@@ -49,8 +51,10 @@ public class ScriptViewHelperTest {
         when(viewWidget.getContextHoldersMap()).thenReturn(Collections.singletonMap("myDummyWidget",wCtx));
         when(viewWidget.getContextHolders()).thenReturn(Collections.singletonList(wCtx));
         env.setRootWidget(viewWidget);
+        MainController mc = MockingUtils.mockMainController(null, ContextTestUtils.createGlobalContext());
+        when(mc.getRenderingEnv()).thenReturn(env);
 
-        ScriptViewHelper helper = new ScriptViewHelper(env, ContextTestUtils.createGlobalContext());
+        ScriptViewHelper helper = new ScriptViewHelper(mc);
         ViewContext viewContext = helper.viewContext("myDummyWidget");
 
         Assert.assertEquals(expectedViewContext, viewContext);
@@ -69,7 +73,10 @@ public class ScriptViewHelperTest {
         when(viewWidget.getContextHolders()).thenReturn(Collections.singletonList(wCtx));
         env.setRootWidget(viewWidget);
 
-        ScriptViewHelper helper = new ScriptViewHelper(env, ContextTestUtils.createGlobalContext());
+        MainController mc = MockingUtils.mockMainController(null, ContextTestUtils.createGlobalContext());
+        when(mc.getRenderingEnv()).thenReturn(env);
+
+        ScriptViewHelper helper = new ScriptViewHelper(mc);
         ScriptableList<ViewContext> collection = helper.viewContexts();
 
         Assert.assertTrue(CollectionUtils.isNotEmpty(collection));

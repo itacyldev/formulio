@@ -77,6 +77,7 @@ public class RenderingEnv {
     private Context viewContext; // current view Android Context
     private FormActivity formActivity;
     private ScriptEngine scriptEngine;
+    private boolean restoreState = true;
     /**
      * User text typing delay controls
      */
@@ -347,7 +348,7 @@ public class RenderingEnv {
     }
 
     public void restoreState(StatefulWidget widget) {
-        if (stateHolder != null) {
+        if (stateHolder != null && restoreState) {
             stateHolder.restoreState(widget);
         }
     }
@@ -355,6 +356,14 @@ public class RenderingEnv {
 
     public void setStateHolder(ViewStateHolder stateHolder) {
         this.stateHolder = stateHolder;
+    }
+
+    public boolean isRestoreState() {
+        return restoreState;
+    }
+
+    public void setRestoreState(boolean restoreState) {
+        this.restoreState = restoreState;
     }
 }
 

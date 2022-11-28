@@ -16,6 +16,8 @@ package es.jcyl.ita.formic.forms;
  */
 
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.ViewGroup;
@@ -56,9 +58,8 @@ import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -128,7 +129,7 @@ public class MainController implements ContextAwareComponent {
         props.put("ctx", ctx);
         props.put("renderEnv", this.renderingEnv);
         props.put("console", new DevConsole());
-        props.put("vh", new ScriptViewHelper(this.renderingEnv, ctx));
+        props.put("vh", new ScriptViewHelper(this));
         props.put("eh", new ScriptEntityHelper());
         props.put("color", new Color());
         props.put("session", this.globalContext.getContext("session"));
@@ -299,10 +300,32 @@ public class MainController implements ContextAwareComponent {
     public Widget updateView(Widget widget, boolean reactiveCall) {
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
-        Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
-        viewRenderer.replaceView(widget, newView);
-        renderingEnv.enableInterceptors();
+        Widget newView;
+        try {
+            newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
+            viewRenderer.replaceView(widget, newView);
+        } finally {
+            renderingEnv.enableInterceptors();
+        }
         return newView;
+    }
+
+    /**
+     * Re-renders the given widget and forces to update the view of all its dependant components.
+     *
+     * @param widget
+     */
+    public void updateViewWithDependants(IWidget widget) {
+        renderingEnv.disableInterceptors();
+        try {
+            renderingEnv.setRestoreState(false);
+            Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
+            viewRenderer.replaceView((Widget) widget, (Widget)newView);
+            viewRenderer.renderDeps(this.renderingEnv, widget);
+        } finally {
+            renderingEnv.setRestoreState(true);
+            renderingEnv.enableInterceptors();
+        }
     }
 
     /**

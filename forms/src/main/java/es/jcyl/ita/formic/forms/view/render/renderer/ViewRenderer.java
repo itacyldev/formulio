@@ -50,6 +50,7 @@ import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
+import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
@@ -67,11 +68,10 @@ public class ViewRenderer {
 
     public Widget render(RenderingEnv env, UIComponent component) {
         env.clearDeferredViews();
-        Widget widget = doRender(env, component, component, true);
-        return widget;
+        return doRender(env, component, component, true);
     }
 
-    public Widget renderSubtree(RenderingEnv env, Widget widget) {
+    public Widget renderSubtree(RenderingEnv env, IWidget widget) {
         env.clearDeferredViews();
         // find current widget context holder and set context in rendering environment
         WidgetContext wCtx = widget.getWidgetContext();
@@ -315,7 +315,7 @@ public class ViewRenderer {
     /**
      * Given an element in current view, renders all the dependant elements
      */
-    public void renderDeps(RenderingEnv env, Widget widget) {
+    public void renderDeps(RenderingEnv env, IWidget widget) {
         // get element dags
         UIComponent component = widget.getComponent();
         ViewDAG viewDAG = env.getViewDAG();
