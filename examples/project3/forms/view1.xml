@@ -7,7 +7,7 @@
             </action>
         </button>
         <button label="button2">
-            <action type="js" method="session.set('miProp',(session.get('miProp') == null)?1:session.get('miProp')+1);vh.updateUI('myInput')" />
+            <action type="js" method="session.set('miProp',(session.get('miProp') == null)?1:session.get('miProp')+1);vh.updateWidget('myInput')" />
         </button>
         <input id="myInput" value="${session.miProp}" />
         <datatable repo="contacts" />

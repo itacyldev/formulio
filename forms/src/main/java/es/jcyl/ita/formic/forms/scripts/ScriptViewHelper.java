@@ -125,9 +125,13 @@ public class ScriptViewHelper {
         return lst;
     }
 
-    public void updateUI(String componentId) {
+    public void updateWidget(String componentId) {
         // find widget to re-render
         IWidget widget = widget(componentId);
+        mc.updateViewWithDependants(widget);
+    }
+
+    public void updateWidget(IWidget widget) {
         mc.updateViewWithDependants(widget);
     }
 
