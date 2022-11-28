@@ -129,7 +129,7 @@ public class RhinoScriptsTest {
 
         ProjectRepository projectRepo = app.getProjectRepo();
         Project prj = projectRepo.findById("project1");
-        App.getInstance().setCurrentProject(prj);
+        App.getInstance().openProject(prj);
 
         CompositeContext gCtx = new UnPrefixedCompositeContext();
         gCtx.put("repos", new RepoAccessContext());

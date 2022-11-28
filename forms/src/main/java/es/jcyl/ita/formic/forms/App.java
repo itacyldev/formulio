@@ -337,7 +337,7 @@ public class App {
      *
      * @param project Selected project.
      */
-    public void setCurrentProject(final Project project) {
+    public void openProject(final Project project) {
         try {
             currentProject = project;
             readConfig(project);
