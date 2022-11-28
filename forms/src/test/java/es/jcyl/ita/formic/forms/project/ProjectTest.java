@@ -75,7 +75,7 @@ public class ProjectTest {
         prj.open();;
 
         App.init(templateFolder.getAbsolutePath());
-        App.getInstance().setCurrentProject(prj);
+        App.getInstance().openProject(prj);
 //        Config.getInstance().readConfig(prj);
     }
 

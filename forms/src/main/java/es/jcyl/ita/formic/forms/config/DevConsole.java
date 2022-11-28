@@ -34,7 +34,6 @@ import java.util.Set;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.util.ContextInitializer;
-import ch.qos.logback.core.joran.spi.JoranException;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
@@ -127,20 +126,22 @@ public class DevConsole {
     public static String getStrLevel(int level) {
         String strLevel = "";
         switch (level) {
-            case 3:
+            case Log.VERBOSE:
+                strLevel = "TRACE";
+                break;
+            case Log.DEBUG:
                 strLevel = "DEBUG";
                 break;
-            case 4:
+            case Log.INFO:
                 strLevel = "INFO";
                 break;
-            case 5:
+            case Log.WARN:
                 strLevel = "WARN";
                 break;
-            default:
+            case Log.ERROR:
                 strLevel = "ERROR";
                 break;
         }
-
         return strLevel;
     }
 
@@ -148,8 +149,8 @@ public class DevConsole {
     public static String error(String msg) {
         // TODO: link log library
         String effMsg = EMPTY_STRING;
-        if (Log.ERROR >= level) {
-            effMsg = getMsg(Log.ERROR, msg, null);
+        if (level >= Log.ERROR) {
+            effMsg = getMsg(msg, null);
             addError(addTimeStamp(effMsg, Log.ERROR));
             logger.error(effMsg);
         }
@@ -158,8 +159,8 @@ public class DevConsole {
 
     public static String info(String s) {
         String effMsg = EMPTY_STRING;
-        if (Log.INFO >= level) {
-            effMsg = getMsg(Log.INFO, s, null);
+        if (level >= Log.INFO) {
+            effMsg = getMsg(s, null);
             addInfo(addTimeStamp(effMsg, Log.INFO));
             logger.info(effMsg);
         }
@@ -169,9 +170,8 @@ public class DevConsole {
     public static String error(String msg, Throwable t) {
         // TODO: link log library
         String effMsg = EMPTY_STRING;
-        if (Log.ERROR >= level) {
-            effMsg = getMsg(Log.ERROR, msg, t);
-//            addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
+        if (level >= Log.ERROR) {
+            effMsg = getMsg(msg, t);
             logger.error(msg, t);
         }
         return effMsg;
@@ -181,8 +181,8 @@ public class DevConsole {
     public static String warn(String msg) {
         // TODO: link log library
         String effMsg = EMPTY_STRING;
-        if (Log.WARN >= level) {
-            effMsg = getMsg(Log.WARN, msg, null);
+        if (level >= Log.WARN) {
+            effMsg = getMsg(msg, null);
             addWarn(addTimeStamp(effMsg, Log.WARN));
             logger.warn(msg);
         }
@@ -191,8 +191,8 @@ public class DevConsole {
 
     public static String debug(String msg) {
         String effMsg = EMPTY_STRING;
-        if (Log.DEBUG >= level) {
-            effMsg = getMsg(Log.DEBUG, msg, null);
+        if (level >= Log.DEBUG) {
+            effMsg = getMsg(msg, null);
             addDebug(addTimeStamp(effMsg, Log.DEBUG));
             logger.debug(msg);
         }
@@ -201,30 +201,18 @@ public class DevConsole {
 
     public static String trace(String msg) {
         String effMsg = EMPTY_STRING;
-        if (Log.VERBOSE >= level) {
-            effMsg = getMsg(Log.VERBOSE, msg, null);
+        if (level >= Log.VERBOSE) {
+            effMsg = getMsg(msg, null);
             logger.trace(msg);
         }
         return effMsg;
     }
 
-    private static String getMsg(int errorLevel, String msg, Throwable t) {
+    private static String getMsg(String msg, Throwable t) {
         if (StringUtils.isBlank(msg)) {
             return "";
         }
-        if (errorLevel < level) {
-            return msg;
-        }
         String effMsg = String.valueOf(JexlFormUtils.eval(devContext, msg));
-
-//        if (errorLevel == Log.ERROR) {
-//            System.err.println(effMsg);
-//        } else {
-//            System.out.println(effMsg);
-//        }
-//        if (t != null) {
-//            System.err.println(t.getMessage());
-//        }
         return effMsg;
     }
 
@@ -272,26 +260,18 @@ public class DevConsole {
     public static Queue<String> getMessages(String filterBy, int logLevel) {
         Queue<String> console = null;
         switch (logLevel) {
-            case Log.ERROR: {
+            case Log.ERROR:
                 console = consoleError;
                 break;
-            }
-            case Log.WARN: {
+            case Log.WARN:
                 console = consoleWarn;
                 break;
-            }
-            case Log.INFO: {
+            case Log.INFO:
                 console = consoleInfo;
                 break;
-            }
-            case Log.DEBUG: {
+            default:
                 console = consoleDebug;
                 break;
-            }
-            default: {
-                console = consoleDebug;
-                break;
-            }
         }
         return filter(console, filterBy);
     }
@@ -311,7 +291,6 @@ public class DevConsole {
     }
 
     public static void setLogFileName(String projectsFolder, String fileName) {
-
         String logFolder = projectsFolder + "/" + fileName + "/logs";
         System.setProperty("FILE_NAME", fileName);
         System.setProperty("HOME_LOG", logFolder);
@@ -325,12 +304,11 @@ public class DevConsole {
             ContextInitializer ci = new ContextInitializer(lc);
             try {
                 ci.autoConfig();
-            } catch (JoranException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Log.e("Error", "Error while setting log file", e);
             }
         }
     }
-
 
     public static void debug(ConfigNode root) {
         // TODO #204330
@@ -341,11 +319,11 @@ public class DevConsole {
     }
 
     public static boolean isInfoEnabled() {
-        return isLevelEnabled(Log.DEBUG);
+        return isLevelEnabled(Log.INFO);
     }
 
     public static boolean isWarnEnabled() {
-        return isLevelEnabled(Log.DEBUG);
+        return isLevelEnabled(Log.WARN);
     }
 
     private static boolean isLevelEnabled(int logLevel) {
@@ -368,6 +346,4 @@ public class DevConsole {
     public void err(String msg) {
         DevConsole.error(msg);
     }
-
-
 }

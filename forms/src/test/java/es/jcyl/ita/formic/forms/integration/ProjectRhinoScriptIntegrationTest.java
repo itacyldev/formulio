@@ -90,7 +90,7 @@ public class ProjectRhinoScriptIntegrationTest {
         // Open project config
         ProjectRepository projectRepo = app.getProjectRepo();
         Project prj = projectRepo.findById("project1");
-        App.getInstance().setCurrentProject(prj);
+        App.getInstance().openProject(prj);
 
         // mock main controller
         MainControllerMock mc = new MainControllerMock();

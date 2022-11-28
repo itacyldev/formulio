@@ -40,34 +40,34 @@ public class Log {
         logger = new NoOpLogger();
     }
 
-    private static int level;
+    private static int level = android.util.Log.INFO;
 
     public static void setLevel(int l) {
         level = l;
     }
 
     public static boolean isDebugEnabled() {
-        return level <= android.util.Log.DEBUG;
+        return level >= android.util.Log.DEBUG;
     }
 
     public static boolean isInfoEnabled() {
-        return level <= android.util.Log.INFO;
+        return level >= android.util.Log.INFO;
     }
 
     public static boolean isWarnEnabled() {
-        return level <= android.util.Log.WARN;
+        return level >= android.util.Log.WARN;
     }
 
 
     public static void debug(String msg) {
-        if (level > android.util.Log.DEBUG) {
+        if (level >= android.util.Log.DEBUG) {
             return;
         }
         logger.debug(msg);
     }
 
     public static void info(String msg) {
-        if (level > android.util.Log.INFO) {
+        if (level >= android.util.Log.INFO) {
             return;
         }
         logger.info(msg);
@@ -86,7 +86,7 @@ public class Log {
     }
 
     public static void error(String msg, Throwable t) {
-        if (android.util.Log.WARN >= level) {
+        if (level >= android.util.Log.ERROR) {
             logger.error(msg, t);
         }
     }

@@ -101,7 +101,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             Context currentContext;
 
             public MyTask(Context context) {
-                currentContext =  context;
+                currentContext = context;
             }
 
             @Override
@@ -112,30 +112,38 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
                 String projectsFolder = sharedPreferences.getString("current_workspace", currentContext.getExternalFilesDir(null).getAbsolutePath() + "/projects");
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-
-                App.getInstance().setCurrentProject(prj);
-                return "Task Completed.";
+                try {
+                    App.getInstance().openProject(prj);
+                } catch (Exception e) {
+                    DevConsole.error("Error while trying to open project " + prj.getName(), e);
+                    return "error";
+                }
+                return "ok";
             }
+
             @Override
             protected void onPostExecute(String result) {
-                try {
-                    ((MainActivity) currentContext).loadFragment();
-                    ((MainActivity) currentContext).loadImageNoProjects();
-                } catch (Exception e) {
-                    projectOpeningFinish = false;
+                if (!result.equals("error")) {
+                    try {
+                        ((MainActivity) currentContext).loadFragment();
+                        ((MainActivity) currentContext).loadImageNoProjects();
+                    } catch (Exception e) {
+                        projectOpeningFinish = false;
 
+                    }
                 }
                 dialog.dismiss(); // to hide this dialog
-                if (!projectOpeningFinish){
+                if (!projectOpeningFinish || result.equals("error")) {
                     UserMessagesHelper.toast(currentContext,
                             DevConsole.info(currentContext.getString(R.string.project_opening_error, (String) prj.getId())),
                             Toast.LENGTH_LONG);
-                }else{
+                } else {
                     UserMessagesHelper.toast(currentContext,
                             DevConsole.info(currentContext.getString(R.string.project_opening_finish, (String) prj.getId())),
                             Toast.LENGTH_LONG);
                 }
             }
+
             @Override
             protected void onPreExecute() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
@@ -143,8 +151,8 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 builder.setView(R.layout.layout_loading_dialog);
                 dialog = builder.create();
                 dialog.show(); // to show this dialog
-
             }
+
             @Override
             protected void onProgressUpdate(Integer... values) {
                 // Do nothing
@@ -184,7 +192,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         ZipTask task = new ZipTask();
-                        task.execute((String)viewHolder.getProject_nameTextView().getText());
+                        task.execute((String) viewHolder.getProject_nameTextView().getText());
 
                         return false;
                     }
@@ -262,7 +270,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
 
             ProjectImporter projectImporter = ProjectImporter.getInstance();
-            File file = projectImporter.zipFolder(new File(projectsFolder), params[0],  new File(dest));
+            File file = projectImporter.zipFolder(new File(projectsFolder), params[0], new File(dest));
             jobResultDialog.addResource(file.getPath());
 
             return "";
@@ -281,6 +289,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             jobResultDialog.endJob();
             jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
         }
+
         @Override
         protected void onPreExecute() {
             jobResultDialog = new JobResultDialog((MainActivity) context, false);

@@ -83,7 +83,7 @@ public class ProjectConfigIntegrationTest {
         Assert.assertTrue(CollectionUtils.isNotEmpty(prj.getConfigFiles()));
         // read config and check repositories and forms
 
-        app.setCurrentProject(prj);
+        app.openProject(prj);
         // there must be 4 repos
         Set<String> repoIds = app.getRepoConfigReader().getRepoFactory().getRepoIds();
 
