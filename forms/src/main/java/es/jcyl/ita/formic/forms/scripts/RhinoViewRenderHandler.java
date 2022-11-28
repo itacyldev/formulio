@@ -56,8 +56,11 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
 
     @Override
     public void onBeforeRenderComponent(UIComponent component) {
+        if (component == null) {
+            return;
+        }
         String method = component.getOnBeforeRenderAction();
-        if (component == null || StringUtils.isBlank(method)) {
+        if (StringUtils.isBlank(method)) {
             return;
         }
         try {
@@ -77,8 +80,11 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
     @Override
     public void onAfterRenderComponent(Widget widget) {
         UIComponent component = widget.getComponent();
+        if (component == null) {
+            return;
+        }
         String method = component.getOnAfterRenderAction();
-        if (component == null || StringUtils.isBlank(method)) {
+        if (StringUtils.isBlank(method)) {
             return;
         }
         try {

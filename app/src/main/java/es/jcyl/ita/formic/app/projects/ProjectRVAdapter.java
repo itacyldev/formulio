@@ -112,12 +112,14 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
                 String projectsFolder = sharedPreferences.getString("current_workspace", currentContext.getExternalFilesDir(null).getAbsolutePath() + "/projects");
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
+
+                App.getInstance().setCurrentProject(prj);
+
                 return "Task Completed.";
             }
             @Override
             protected void onPostExecute(String result) {
                 try {
-                    App.getInstance().setCurrentProject(prj);
                     ((MainActivity) currentContext).loadFragment();
                     ((MainActivity) currentContext).loadImageNoProjects();
                 } catch (Exception e) {
