@@ -179,10 +179,10 @@ public class XmlConfigFileReader {
         ComponentBuilder builder = builderFactory.getBuilder(root.getName());
         notifyElementStart(root);
 
-        DevConsole.debug("Starting tag: ${tag}");
+        DevConsole.trace("Starting tag: ${tag}");
         if (builder != null) {
             Object element = builder.build(root);
-            DevConsole.debug("<${tag}/> element created.");
+            DevConsole.trace("<${tag}/> element created.");
             root.setElement(element);
         }
         List<ConfigNode> children = root.getChildren();
@@ -190,12 +190,12 @@ public class XmlConfigFileReader {
             build(kid);
         }
         if (builder != null) {
-            DevConsole.debug("Processing children of <${tag}/>");
+            DevConsole.trace("Processing children of <${tag}/>");
             builder.processChildren(root);
         }
         notifyElementEnd(root);
         DevConsole.debug(root);
-        DevConsole.debug("Ending tag: ${tag}");
+        DevConsole.trace("Ending tag: ${tag}");
     }
 
 

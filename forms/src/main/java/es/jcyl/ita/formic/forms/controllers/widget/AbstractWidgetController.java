@@ -67,7 +67,10 @@ public abstract class AbstractWidgetController implements WidgetController {
         // go over all the input components looking for bindings that are not readonly
         for (StatefulWidget widget : widgetContext.getStatefulWidgets()) {
             if (widget.getComponent() instanceof UIInputComponent) {
-                updateEntity(viewContext, entityContext, (UIInputComponent) widget.getComponent());
+                boolean isReadOnly = ((UIInputComponent) widget.getComponent()).isReadonly(widgetContext);
+                if (!isReadOnly) {
+                    updateEntity(viewContext, entityContext, (UIInputComponent) widget.getComponent());
+                }
             }
         }
     }

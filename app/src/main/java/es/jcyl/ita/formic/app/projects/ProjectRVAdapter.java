@@ -114,7 +114,6 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
 
                 App.getInstance().setCurrentProject(prj);
-
                 return "Task Completed.";
             }
             @Override

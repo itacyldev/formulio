@@ -48,6 +48,7 @@ import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 public class DevConsole {
 
     private static final String DEV_CONSOLE = "devconsole";
+    private static final String EMPTY_STRING = "";
     private static int level;
 
     private static ConfigReadingInfo configReadingInfo;
@@ -146,8 +147,9 @@ public class DevConsole {
 
     public static String error(String msg) {
         // TODO: link log library
-        String effMsg = getMsg(Log.ERROR, msg, null);
+        String effMsg = EMPTY_STRING;
         if (Log.ERROR >= level) {
+            effMsg = getMsg(Log.ERROR, msg, null);
             addError(addTimeStamp(effMsg, Log.ERROR));
             logger.error(effMsg);
         }
@@ -155,8 +157,9 @@ public class DevConsole {
     }
 
     public static String info(String s) {
-        String effMsg = getMsg(Log.INFO, s, null);
+        String effMsg = EMPTY_STRING;
         if (Log.INFO >= level) {
+            effMsg = getMsg(Log.INFO, s, null);
             addInfo(addTimeStamp(effMsg, Log.INFO));
             logger.info(effMsg);
         }
@@ -165,8 +168,9 @@ public class DevConsole {
 
     public static String error(String msg, Throwable t) {
         // TODO: link log library
-        String effMsg = getMsg(Log.ERROR, msg, t);
+        String effMsg = EMPTY_STRING;
         if (Log.ERROR >= level) {
+            effMsg = getMsg(Log.ERROR, msg, t);
 //            addError(getSpannableString(effMsg, Log.ERROR, COLOR_ERROR));
             logger.error(msg, t);
         }
@@ -176,8 +180,9 @@ public class DevConsole {
 
     public static String warn(String msg) {
         // TODO: link log library
-        String effMsg = getMsg(Log.WARN, msg, null);
+        String effMsg = EMPTY_STRING;
         if (Log.WARN >= level) {
+            effMsg = getMsg(Log.WARN, msg, null);
             addWarn(addTimeStamp(effMsg, Log.WARN));
             logger.warn(msg);
         }
@@ -185,15 +190,24 @@ public class DevConsole {
     }
 
     public static String debug(String msg) {
-        String effMsg = getMsg(Log.DEBUG, msg, null);
+        String effMsg = EMPTY_STRING;
         if (Log.DEBUG >= level) {
+            effMsg = getMsg(Log.DEBUG, msg, null);
             addDebug(addTimeStamp(effMsg, Log.DEBUG));
             logger.debug(msg);
         }
         return effMsg;
     }
 
-    //
+    public static String trace(String msg) {
+        String effMsg = EMPTY_STRING;
+        if (Log.VERBOSE >= level) {
+            effMsg = getMsg(Log.VERBOSE, msg, null);
+            logger.trace(msg);
+        }
+        return effMsg;
+    }
+
     private static String getMsg(int errorLevel, String msg, Throwable t) {
         if (StringUtils.isBlank(msg)) {
             return "";
