@@ -157,8 +157,10 @@ public class App {
      */
     private void initContext() {
         globalContext = new UnPrefixedCompositeContext();
-        // TODO: create context providers to implement each context creation
+        // TODO: create context providers to implement each context creation and configure
+        //  them in project file
         globalContext.addContext(new DateTimeContext());
+        globalContext.addContext(new BasicContext("session"));
         initJobsContext(globalContext);
         MainController.getInstance().setContext(globalContext);
         RepositoryFactory.getInstance().setContext(globalContext);
