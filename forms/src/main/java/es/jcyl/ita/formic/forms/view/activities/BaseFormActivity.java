@@ -16,6 +16,7 @@ package es.jcyl.ita.formic.forms.view.activities;
  */
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,6 +40,7 @@ BaseFormActivity<F extends ViewController> extends BaseActivity
     protected Router router;
     protected RenderingEnv env;
     protected F viewController;
+    private Dialog currentDialog;
     /**
      * View element used to render the forms defined for this controller
      */
@@ -46,24 +48,41 @@ BaseFormActivity<F extends ViewController> extends BaseActivity
 
     protected void doOnCreate() {
         attachContentView();
-
         MainController mc = MainController.getInstance();
         mc.registerActivity(this);
+        currentDialog = WaitingLayerHelper.createDialog(this);
+        WaitingLayerHelper.showWithDelay(currentDialog,1000);
+        ActivityCallback callable = new ActivityCallback(this, mc, this.viewController, this.contentView);
+        mc.renderViewAsync(this, callable);
+    }
 
-        // render edit view content and link content view
-        try {
-            View viewRoot = mc.renderView(this);
-            contentView.setFocusable(false);
-            contentView.addView(viewRoot);
-        } catch (Exception e) {
-            DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
-            router.back(this, new String[]{"Sorry, there was an error while trying to render the view. " +
-                    "See console for details."});
+    public class ActivityCallback {
+        private final ViewController viewController;
+        private final MainController mc;
+        private final ViewGroup contentView;
+        private final Activity activity;
+
+        public ActivityCallback(Activity activity, MainController mc, ViewController viewController, ViewGroup contentView) {
+            this.activity = activity;
+            this.contentView = contentView;
+            this.mc = mc;
+            this.viewController = viewController;
         }
 
-        doRender(mc.getRenderingEnv());
-        renderToolBars(mc.getRenderingEnv());
-        showMessages();
+        public void call(View view) throws Exception {
+            try {
+                contentView.setFocusable(false);
+                contentView.addView(view);
+            } catch (Exception e) {
+                DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
+                router.back(activity, new String[]{"Sorry, there was an error while trying to render the view. " +
+                        "See console for details."});
+            }
+            doRender(mc.getRenderingEnv());
+            renderToolBars(mc.getRenderingEnv());
+            WaitingLayerHelper.dismiss(currentDialog);
+            showMessages();
+        }
     }
 
     protected abstract void renderToolBars(RenderingEnv renderingEnv);

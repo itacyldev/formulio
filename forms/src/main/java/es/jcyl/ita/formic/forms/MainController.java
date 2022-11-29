@@ -20,6 +20,8 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
@@ -27,6 +29,8 @@ import androidx.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
@@ -51,6 +55,7 @@ import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.scripts.ScriptEntityHelper;
 import es.jcyl.ita.formic.forms.scripts.ScriptViewHelper;
+import es.jcyl.ita.formic.forms.view.activities.BaseFormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
@@ -160,7 +165,6 @@ public class MainController implements ContextAwareComponent {
             ViewController controller = getViewController(formId);
             this.viewController = controller;
             this.viewController.load(globalContext);
-            this.scriptEngine.initScope(controller.getId());
         } catch (Exception e) {
             restoreMCState();
             throw e;
@@ -241,6 +245,22 @@ public class MainController implements ContextAwareComponent {
         return staticMap.get(formController.getClass());
     }
 
+    public void renderViewAsync(Context viewContext, BaseFormActivity.ActivityCallback callback) {
+        UIView uiView = viewController.getView();
+        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
+
+        renderingEnv.initialize();
+        renderingEnv.setAndroidContext(viewContext);
+        renderingEnv.setViewDAG(viewDAG);
+        renderingEnv.setScriptEngine(scriptEngine);
+        viewController.getStateHolder().clearViewState();
+        renderingEnv.setStateHolder(viewController.getStateHolder());
+        renderingEnv.disableInterceptors();
+
+        // render view Widget and restore partial state if needed
+        runRendering(uiView, callback);
+    }
+
     /**
      * Renders current view in the given Android context and returns the generated View
      *
@@ -261,6 +281,7 @@ public class MainController implements ContextAwareComponent {
 
         // render view Widget and restore partial state if needed
         viewController.onBeforeRender();
+
         Widget widget = viewRenderer.render(renderingEnv, uiView);
         viewController.setRootWidget((ViewWidget) widget);
         restorePrevState(viewController);
@@ -270,6 +291,42 @@ public class MainController implements ContextAwareComponent {
 
         return widget;
     }
+
+    private void runRendering(UIView uiView, BaseFormActivity.ActivityCallback callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                scriptEngine.initContext();
+                Looper.prepare();
+                viewController.onBeforeRender();
+                scriptEngine.initScope(viewController.getId());
+
+                Widget widget = viewRenderer.render(renderingEnv, uiView);
+
+                //Background work here
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewController.setRootWidget((ViewWidget) widget);
+                        restorePrevState(viewController);
+
+                        renderingEnv.enableInterceptors();
+                        viewController.onAfterRender(widget);
+                        try {
+                            callback.call(widget);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
     public Widget renderComponent(UIComponent component) {
         renderingEnv.disableInterceptors();
@@ -320,7 +377,7 @@ public class MainController implements ContextAwareComponent {
         try {
             renderingEnv.setRestoreState(false);
             Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
-            viewRenderer.replaceView((Widget) widget, (Widget)newView);
+            viewRenderer.replaceView((Widget) widget, (Widget) newView);
             viewRenderer.renderDeps(this.renderingEnv, widget);
         } finally {
             renderingEnv.setRestoreState(true);

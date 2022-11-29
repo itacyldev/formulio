@@ -55,6 +55,10 @@ public class ScriptEngine {
     }
 
     public ScriptEngine() {
+        initContext();
+    }
+
+    public void initContext(){
         this.rhino = Context.enter();
         rhino.setOptimizationLevel(-1);
     }
@@ -157,6 +161,11 @@ public class ScriptEngine {
         }
     }
 
+    /**
+     * Just for testing purposes
+     *
+     * @return
+     */
     public ScriptableObject getScope() {
         return scope;
     }
