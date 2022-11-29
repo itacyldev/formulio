@@ -15,8 +15,12 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import android.content.Context;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -38,17 +42,14 @@ import es.jcyl.ita.formic.forms.components.tab.UITab;
 import es.jcyl.ita.formic.forms.components.tab.UITabItem;
 import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
+import es.jcyl.ita.formic.forms.utils.MockingUtils;
+import es.jcyl.ita.formic.forms.utils.dummy.DummyViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -59,13 +60,18 @@ public class TabRendererTest {
 
     ViewRenderer renderHelper = new ViewRenderer();
     Context ctx;
+    private static MainController mc;
+
     @Before
     public void setup() {
-        MainController mainController = MainController.getInstance();
-        ViewController mockFC = mock(ViewController.class);
-        mainController.setViewController(mockFC);
+        ctx = ApplicationProvider.getApplicationContext();
+        mc = MockingUtils.mockMainController(ctx);
+//        MainController mainController = MainController.getInstance();
+//        ViewController mockFC = mock(ViewController.class);
+//        when(mockFC.getView()).thenReturn(mock(UIView.class));
+//        mainController.setViewController(mockFC);
 
-        ctx = Robolectric.setupActivity(FormEditViewHandlerActivity.class);
+        ctx = Robolectric.setupActivity(DummyViewHandlerActivity.class);
         ctx.setTheme(R.style.FormudruidDark);
     }
 
@@ -75,7 +81,8 @@ public class TabRendererTest {
      */
     @Test
     public void test2Tabs() {
-        RenderingEnv env = mock(RenderingEnv.class);
+
+        RenderingEnv env = mock(RenderingEnv.class); 
         when(env.getAndroidContext()).thenReturn(ctx);
         when(env.getWidgetContext()).thenReturn(ContextTestUtils.createWidgetContext());
 
@@ -100,7 +107,7 @@ public class TabRendererTest {
         UITab tab = new UITab();
         tab.setId(RandomUtils.randomString(4));
         tab.setChildren(lstTabItem);
-        
+
         UIView view = new UIView();
         view.addChild(tab);
 
