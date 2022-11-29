@@ -68,17 +68,20 @@ public class LocationService implements LocationListener {
         //TODO: mover al inicio
         if (checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Criteria criteria = new Criteria();
-            String provider = locationManager.getBestProvider(criteria, true);
-            lastLocation = locationManager.getLastKnownLocation(provider);
-            //if last location is too old then return null
-            if (lastLocation != null && (System.currentTimeMillis() - lastLocation.getTime() > MAX_ELAPSED_TIME)) {
-                lastLocation = null;
-            }
-
-        } else {
             ActivityCompat.requestPermissions((Activity) ctx, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
         }
+        Criteria criteria = new Criteria();
+        try {
+            String provider = locationManager.getBestProvider(criteria, true);
+            lastLocation = locationManager.getLastKnownLocation("network");
+        } catch (Exception e) {
+            // No location available
+        }
+        //if last location is too old then return null
+//        if (lastLocation != null && (System.currentTimeMillis() - lastLocation.getTime() > MAX_ELAPSED_TIME)) {
+        // en el caso de obtener a partir de la red el elapsed time puede ser mucho mayor
+//            lastLocation = null;
+//        }
         return lastLocation;
     }
 

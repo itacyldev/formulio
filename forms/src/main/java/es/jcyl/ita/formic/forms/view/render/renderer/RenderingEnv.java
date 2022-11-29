@@ -91,11 +91,9 @@ public class RenderingEnv {
     private Map<String, BasicContext> messageMap = new HashMap<>();
     private BasicContext currentMessageContext;
 
-
     public RenderingEnv(ActionController actionController) {
         userActionInterceptor = new UserEventInterceptor(actionController);
     }
-
 
     protected RenderingEnv() {
     }

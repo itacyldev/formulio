@@ -13,7 +13,8 @@
         <input id="myInput" value="${session.miProp}" />
         <datatable repo="contacts" />
         -->
-        <button label="button2" action="js" method="console.log(ctx.get('location').asLatLong);" />
+        <button label="button2" action="js" method="console.log(ctx.get('location').asLatLong);vh.setWidgetValue('myNewInput',ctx.get('location').asLatLong)" />
         <input id="myNewInput" value="${location.getAsLatLong()}" />
+        <input id="myDateInput" value="${date.now}" />
     </view>
 </main>

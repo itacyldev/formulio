@@ -92,9 +92,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private void checkDeviceFeatures() {
         Context context = getApplicationContext();
         /** Check if this device has a camera */
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            // TODO: complete
-            DevConsole.error("Camera not available in this device.");
+        if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            DevConsole.warn("Camera not available in this device.");
         }
     }
 
@@ -251,6 +250,10 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
         boolean requestStorage = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            File[] externalStorageVolumes =
+//                    ContextCompat.getExternalFilesDirs(this,null);
+//            File primaryExternalStorage = externalStorageVolumes[0];
+//            currentWorkspace = primaryExternalStorage.getPath();
             Uri treeUri = StorageContentManager.getExternalPrimaryStoragePathUri(this);
             if (treeUri != null) {
                 currentWorkspace = FileUtils.getPath(this, treeUri);
@@ -280,7 +283,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         String[] permissions = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
         };
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(this,
@@ -289,7 +294,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 permsList.add(permission);
             }
         }
-
         if (permsList.size() > 0) {
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
@@ -607,6 +611,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     protected String doInitConfiguration(Context ctx) {
         String text = "";
+
+        // Ver esto: FORMIC-678 Revisar mainActivity
+        File[] externalStorageVolumes =
+                ContextCompat.getExternalFilesDirs(this, null);
+        File primaryExternalStorage = externalStorageVolumes[0];
+        currentWorkspace = primaryExternalStorage.getPath() + "/projects";
 
         String projectsFolder = currentWorkspace;
 

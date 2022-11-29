@@ -48,12 +48,24 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
      */
     public Object getValue(final String key) {
         String[] newKey = splitKey(key);
+        Object value;
         if (newKey == null || this.contexts == null) {
-            return super.get(key);
+            value = super.get(key);
         } else {
             Context context = this.contexts.get(newKey[0]);
-            return (context == null) ? null : context.get(newKey[1]);
+            value = (context == null) ? null : context.get(newKey[1]);
         }
+        if(value == null) {
+            for (Context c : contexts.values()) {
+                if(c instanceof CompositeContext){
+                    value = ((CompositeContext) c).getValue(key);
+                    if (value != null) {
+                        return value;
+                    }
+                }
+            }
+        }
+        return value;
     }
 
     @Override
@@ -204,7 +216,7 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
             return;
         }
         if (context instanceof CompositeContext) {
-            addAllContext(((CompositeContext) context).getContexts());
+            this.contexts.put("global", context);
         } else {
             String prKey = getMapKey(context.getPrefix());
             this.contexts.put(prKey, context);
