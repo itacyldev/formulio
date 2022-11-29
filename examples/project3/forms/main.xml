@@ -1,5 +1,6 @@
 <main repo="provRepo">
-    <list name="My">
+    <view name="My">
+        <!--
         <button>
             <action type="js">
                 <param name="method"
@@ -11,5 +12,8 @@
         </button>
         <input id="myInput" value="${session.miProp}" />
         <datatable repo="contacts" />
-    </list>
+        -->
+        <button label="button2" action="js" method="console.log(ctx.get('location').asLatLong);" />
+        <input id="myNewInput" value="${location.getAsLatLong()}" />
+    </view>
 </main>

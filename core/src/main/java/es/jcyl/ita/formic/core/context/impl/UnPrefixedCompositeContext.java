@@ -56,7 +56,6 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
         }
     }
 
-
     @Override
     public Object get(String key) {
         return getValue(key);

@@ -48,7 +48,6 @@ import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
-import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
 import es.jcyl.ita.formic.forms.scripts.Color;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
@@ -90,12 +89,11 @@ public class MainController implements ContextAwareComponent {
     private ActionController actionController;
     private ViewController viewController;
     private ViewControllerFactory formControllerFactory;
-    private ReactivityFlowManager flowManager;
     private ScriptEngine scriptEngine;
 
     // navigation control
     private Router router;
-    private static HashMap<Class, Class> staticMap;
+    private static HashMap<Class, Class> controllerMap;
     private MCState state;
 
 
@@ -119,8 +117,8 @@ public class MainController implements ContextAwareComponent {
         // initialize uiComponent proxy factory
         UIComponentProxyFactory proxyFactory = UIComponentProxyFactory.getInstance();
         if (System.getProperty("java.vendor").toLowerCase().contains("android")) {
-            // if context is already availate in Config, use it to get the cache directory
-            // if not, relay on factory falback solution through system properties
+            // if context is already available in Config, use it to get the cache directory
+            // if not, relay on factory fallback solution through system properties
             Context androidContext = App.getInstance().getAndroidContext();
             if (androidContext != null) {
                 proxyFactory.setAndroidClassLoadingStrategy(androidContext.getCacheDir());
@@ -205,7 +203,6 @@ public class MainController implements ContextAwareComponent {
         }
     }
 
-
     private void setupParamsContext(@Nullable Map<String, Object> params) {
         BasicContext pContext = new BasicContext("params");
         if (params != null) {
@@ -225,7 +222,6 @@ public class MainController implements ContextAwareComponent {
         this.renderingEnv.setFormActivity(formActivity);
     }
 
-
     /*********************************************/
     /***  View rendering methods */
     /*********************************************/
@@ -233,16 +229,15 @@ public class MainController implements ContextAwareComponent {
      * static mapping to relate each form type with the implenting view.
      */
     private void registerFormTypeViews() {
-        staticMap = new HashMap<>(2);
-        staticMap.put(FormEditController.class, FormEditViewHandlerActivity.class);
-        staticMap.put(ViewController.class, FormEditViewHandlerActivity.class);
-        staticMap.put(FormListController.class, FormListViewHandlerActivity.class);
+        controllerMap = new HashMap<>(2);
+        controllerMap.put(FormEditController.class, FormEditViewHandlerActivity.class);
+        controllerMap.put(ViewController.class, FormEditViewHandlerActivity.class);
+        controllerMap.put(FormListController.class, FormListViewHandlerActivity.class);
         // TODO: dynamic mapping for extensions
-
     }
 
     protected Class getViewImpl(ViewController formController) {
-        return staticMap.get(formController.getClass());
+        return controllerMap.get(formController.getClass());
     }
 
     public void renderViewAsync(Context viewContext, BaseFormActivity.ActivityCallback callback) {

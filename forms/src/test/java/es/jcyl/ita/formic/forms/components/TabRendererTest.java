@@ -60,17 +60,10 @@ public class TabRendererTest {
 
     ViewRenderer renderHelper = new ViewRenderer();
     Context ctx;
-    private static MainController mc;
 
     @Before
     public void setup() {
         ctx = ApplicationProvider.getApplicationContext();
-        mc = MockingUtils.mockMainController(ctx);
-//        MainController mainController = MainController.getInstance();
-//        ViewController mockFC = mock(ViewController.class);
-//        when(mockFC.getView()).thenReturn(mock(UIView.class));
-//        mainController.setViewController(mockFC);
-
         ctx = Robolectric.setupActivity(DummyViewHandlerActivity.class);
         ctx.setTheme(R.style.FormudruidDark);
     }
@@ -81,8 +74,7 @@ public class TabRendererTest {
      */
     @Test
     public void test2Tabs() {
-
-        RenderingEnv env = mock(RenderingEnv.class); 
+        RenderingEnv env = mock(RenderingEnv.class);
         when(env.getAndroidContext()).thenReturn(ctx);
         when(env.getWidgetContext()).thenReturn(ContextTestUtils.createWidgetContext());
 

@@ -149,7 +149,7 @@ public class DevConsole {
     public static String error(String msg) {
         // TODO: link log library
         String effMsg = EMPTY_STRING;
-        if (level >= Log.ERROR) {
+        if (level <= Log.ERROR) {
             effMsg = getMsg(msg, null);
             addError(addTimeStamp(effMsg, Log.ERROR));
             logger.error(effMsg);
@@ -159,7 +159,7 @@ public class DevConsole {
 
     public static String info(String s) {
         String effMsg = EMPTY_STRING;
-        if (level >= Log.INFO) {
+        if (level <= Log.INFO) {
             effMsg = getMsg(s, null);
             addInfo(addTimeStamp(effMsg, Log.INFO));
             logger.info(effMsg);
@@ -170,7 +170,7 @@ public class DevConsole {
     public static String error(String msg, Throwable t) {
         // TODO: link log library
         String effMsg = EMPTY_STRING;
-        if (level >= Log.ERROR) {
+        if (level <= Log.ERROR) {
             effMsg = getMsg(msg, t);
             logger.error(msg, t);
         }
@@ -191,7 +191,7 @@ public class DevConsole {
 
     public static String debug(String msg) {
         String effMsg = EMPTY_STRING;
-        if (level >= Log.DEBUG) {
+        if (level <= Log.DEBUG) {
             effMsg = getMsg(msg, null);
             addDebug(addTimeStamp(effMsg, Log.DEBUG));
             logger.debug(msg);
@@ -201,7 +201,7 @@ public class DevConsole {
 
     public static String trace(String msg) {
         String effMsg = EMPTY_STRING;
-        if (level >= Log.VERBOSE) {
+        if (level <= Log.VERBOSE) {
             effMsg = getMsg(msg, null);
             logger.trace(msg);
         }
