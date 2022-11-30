@@ -187,6 +187,12 @@ public class Router {
         return current;
     }
 
+    public void clear() {
+        this.current = null;
+        this.memento.clear();
+        this.clearGlobalMessages();
+    }
+
     public class State {
         String formId;
         UserAction action;

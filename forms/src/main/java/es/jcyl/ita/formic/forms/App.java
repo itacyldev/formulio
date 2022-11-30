@@ -194,7 +194,7 @@ public class App {
             this.formConfigRepo.deleteAll();
         }
         formControllerFactory.clear();
-        MainController.getInstance().getScriptEngine().clearSources();
+        MainController.getInstance().clear();
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
         this.globalContext.clear();

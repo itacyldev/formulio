@@ -228,5 +228,9 @@ public class ActionController {
     public UserAction getCurrentAction() {
         return this.currentAction;
     }
+
+    public void clear() {
+        this.currentAction = null;
+    }
 }
 

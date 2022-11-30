@@ -18,36 +18,50 @@ package es.jcyl.ita.formic.forms.view.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Handler;
 
 import es.jcyl.ita.formic.forms.R;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class WaitingLayerHelper {
+public class ProgressBarHelper {
 
+    private Dialog dialog;
+    private int delayMs = 200;
 
-    private static boolean open;
+    private boolean open;
 
-    public  static Dialog createDialog(Context context) {
+    public ProgressBarHelper(Context context) {
+        // create dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
         builder.setView(R.layout.dialog_loading);
-        Dialog dialog = builder.create();
-        return dialog;
+        dialog = builder.create();
     }
-    public static void showWithDelay(Dialog dialog, int ms){
-        try {
-            open = true;
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-        }
-        if(open){
-            dialog.show();
-        }
+
+    public void show() {
+        open = true;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (open) {
+                    dialog.show();
+                }
+            }
+        }, this.delayMs);
     }
-    public static void dismiss(Dialog dialog){
+
+    public void hide() {
         open = false;
         dialog.dismiss();
+    }
+
+    public int getDelayMs() {
+        return delayMs;
+    }
+
+    public void setDelayMs(int delayMs) {
+        this.delayMs = delayMs;
     }
 }

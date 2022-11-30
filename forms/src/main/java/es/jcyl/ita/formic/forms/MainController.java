@@ -58,6 +58,7 @@ import es.jcyl.ita.formic.forms.view.activities.BaseFormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
+import es.jcyl.ita.formic.forms.view.async.AsyncRenderWorker;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -222,6 +223,7 @@ public class MainController implements ContextAwareComponent {
         this.renderingEnv.setFormActivity(formActivity);
     }
 
+
     /*********************************************/
     /***  View rendering methods */
     /*********************************************/
@@ -240,7 +242,7 @@ public class MainController implements ContextAwareComponent {
         return controllerMap.get(formController.getClass());
     }
 
-    public void renderViewAsync(Context viewContext, BaseFormActivity.ActivityCallback callback) {
+    public void renderViewAsync2(Context viewContext, BaseFormActivity.ActivityCallback callback) {
         UIView uiView = viewController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
@@ -254,6 +256,23 @@ public class MainController implements ContextAwareComponent {
 
         // render view Widget and restore partial state if needed
         runRendering(uiView, callback);
+    }
+
+    public void renderViewAsync(Context viewContext, BaseFormActivity.ActivityCallback callback) {
+        UIView uiView = viewController.getView();
+        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
+
+        renderingEnv.initialize();
+        renderingEnv.setAndroidContext(viewContext);
+        renderingEnv.setViewDAG(viewDAG);
+        renderingEnv.setScriptEngine(scriptEngine);
+        viewController.getStateHolder().clearViewState();
+        renderingEnv.setStateHolder(viewController.getStateHolder());
+        renderingEnv.disableInterceptors();
+
+        // render view Widget and restore partial state if needed
+        AsyncRenderWorker worker = new AsyncRenderWorker(this);
+        worker.runRender(uiView, new PostRenderCallBack(callback));
     }
 
     /**
@@ -322,6 +341,33 @@ public class MainController implements ContextAwareComponent {
         });
     }
 
+    public void clear() {
+        router.clear();
+        actionController.clear();
+        scriptEngine.clearSources();
+        viewController = null;
+    }
+
+    public class PostRenderCallBack {
+        private final BaseFormActivity.ActivityCallback callback;
+
+        public PostRenderCallBack(BaseFormActivity.ActivityCallback callback) {
+            this.callback = callback;
+        }
+
+        public void call(Widget widget) {
+            viewController.setRootWidget((ViewWidget) widget);
+            restorePrevState(viewController);
+
+            renderingEnv.enableInterceptors();
+            viewController.onAfterRender(widget);
+            try {
+                callback.call(widget);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public Widget renderComponent(UIComponent component) {
         renderingEnv.disableInterceptors();
@@ -440,6 +486,10 @@ public class MainController implements ContextAwareComponent {
 
     public RenderingEnv getRenderingEnv() {
         return renderingEnv;
+    }
+
+    public ViewRenderer getViewRenderer() {
+        return viewRenderer;
     }
 
     public ActionController getActionController() {

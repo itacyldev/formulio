@@ -16,12 +16,12 @@ package es.jcyl.ita.formic.forms.view.activities;
  */
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -33,25 +33,25 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class
-BaseFormActivity<F extends ViewController> extends BaseActivity
+public abstract class BaseFormActivity<F extends ViewController> extends BaseActivity
         implements FormActivity<F> {
 
     protected Router router;
     protected RenderingEnv env;
     protected F viewController;
-    private Dialog currentDialog;
+    private ProgressBarHelper progressBarHelper;
     /**
      * View element used to render the forms defined for this controller
      */
     private ViewGroup contentView;
 
     protected void doOnCreate() {
-        attachContentView();
+        progressBarHelper = new ProgressBarHelper(this);
+        progressBarHelper.show();
+
         MainController mc = MainController.getInstance();
+        attachContentView();
         mc.registerActivity(this);
-        currentDialog = WaitingLayerHelper.createDialog(this);
-        WaitingLayerHelper.showWithDelay(currentDialog,1000);
         ActivityCallback callable = new ActivityCallback(this, mc, this.viewController, this.contentView);
         mc.renderViewAsync(this, callable);
     }
@@ -78,14 +78,13 @@ BaseFormActivity<F extends ViewController> extends BaseActivity
                 router.back(activity, new String[]{"Sorry, there was an error while trying to render the view. " +
                         "See console for details."});
             }
-            doRender(mc.getRenderingEnv());
-            renderToolBars(mc.getRenderingEnv());
-            WaitingLayerHelper.dismiss(currentDialog);
-            showMessages();
+            createView(mc.getRenderingEnv());
+            createToolBars(mc.getRenderingEnv());
+            progressBarHelper.hide();
         }
     }
 
-    protected abstract void renderToolBars(RenderingEnv renderingEnv);
+    protected abstract void createToolBars(RenderingEnv renderingEnv);
 
 
     protected void attachContentView() {
@@ -96,7 +95,7 @@ BaseFormActivity<F extends ViewController> extends BaseActivity
 
     protected abstract int getLayoutResource();
 
-    protected abstract void doRender(RenderingEnv renderingEnv);
+    protected abstract void createView(RenderingEnv renderingEnv);
 
     protected void showMessages() {
         // check if there are messages to show

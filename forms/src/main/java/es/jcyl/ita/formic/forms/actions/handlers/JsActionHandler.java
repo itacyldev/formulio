@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.actions.handlers;
  */
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.MainController;
@@ -45,7 +46,7 @@ public class JsActionHandler extends AbstractActionHandler {
         if (action.getParams() == null) {
             throwNoParamsException();
         }
-        Map<String, Object> params = new HashMap<>(action.getParams());
+        Map<String, Object> params = new LinkedHashMap<>(action.getParams());
         String methodName = (String) params.remove("method");
         if (methodName == null) {
             throwNoParamsException();

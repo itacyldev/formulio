@@ -63,10 +63,10 @@ public class DummyViewHandlerActivity extends BaseFormActivity<ViewController>
     }
 
     @Override
-    protected void doRender(RenderingEnv renderingEnv) {
+    protected void createView(RenderingEnv renderingEnv) {
     }
 
-    protected void renderToolBars(RenderingEnv env) {
+    protected void createToolBars(RenderingEnv env) {
     }
 
     @Override
