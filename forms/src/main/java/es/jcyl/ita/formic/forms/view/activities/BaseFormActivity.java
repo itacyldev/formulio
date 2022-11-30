@@ -131,7 +131,6 @@ public abstract class BaseFormActivity<F extends ViewController> extends BaseAct
         ActivityResultLauncher<String> mGetContent = registerForActivityResult(callback.getContract(),
                 callback.getCallBack()
         );
-
         callback.setResultLauncher(this, mGetContent);
     }
 }

@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
@@ -69,7 +71,7 @@ public class AutocompleteStaticViewConverterTest {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
         ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mockAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mockAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

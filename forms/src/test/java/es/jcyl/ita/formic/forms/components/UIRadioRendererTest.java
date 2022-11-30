@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
@@ -69,7 +70,7 @@ public class UIRadioRendererTest {
         confConverter.init();
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
         env.disableInterceptors();
@@ -100,7 +101,7 @@ public class UIRadioRendererTest {
     @Test
     public void testNotVisibleRadio() {
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

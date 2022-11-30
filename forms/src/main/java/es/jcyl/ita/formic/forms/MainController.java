@@ -18,10 +18,9 @@ package es.jcyl.ita.formic.forms;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
@@ -29,8 +28,6 @@ import androidx.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.ContextAwareComponent;
@@ -62,6 +59,7 @@ import es.jcyl.ita.formic.forms.view.async.AsyncRenderWorker;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -110,9 +108,8 @@ public class MainController implements ContextAwareComponent {
         formControllerFactory.setMc(this);
         router = new Router(this);
         actionController = new ActionController(this, router);
-        renderingEnv = new RenderingEnv(actionController);
+        renderingEnv = RenderingEnvFactory.getInstance().create(actionController);
         scriptEngine = ScriptEngine.getInstance();
-//        flowManager = ReactivityFlowManager.getInstance();
         registerFormTypeViews();
 
         // initialize uiComponent proxy factory
@@ -159,18 +156,25 @@ public class MainController implements ContextAwareComponent {
         saveMCState();
 
         setupParamsContext(params);
+
+        ViewController lastController = null;
+        if (this.viewController != null) {
+            lastController = viewController;
+        }
         try {
             // get form configuration for given formId and load data
-            ViewController controller = getViewController(formId);
-            this.viewController = controller;
+            this.viewController = getViewController(formId);
             this.viewController.load(globalContext);
         } catch (Exception e) {
             restoreMCState();
             throw e;
         }
-
-        // get the activity class for current controller
+        // get the activity class for current controller and start it
         initActivity(andContext);
+        // reset last controller to unbind UI components
+        if (lastController != null) {
+            lastController.reset();
+        }
     }
 
     protected ViewController getViewController(String formId) {
@@ -218,8 +222,8 @@ public class MainController implements ContextAwareComponent {
         formActivity.setRouter(this.router);
         formActivity.setViewController(this.viewController);
         // set the View elements to controllers
-        this.router.registerActivity(formActivity.getActivity());
         this.viewController.setContentView(formActivity.getContentView());
+        this.viewController.setActivity(formActivity.getActivity());
         this.renderingEnv.setFormActivity(formActivity);
     }
 
@@ -240,22 +244,6 @@ public class MainController implements ContextAwareComponent {
 
     protected Class getViewImpl(ViewController formController) {
         return controllerMap.get(formController.getClass());
-    }
-
-    public void renderViewAsync2(Context viewContext, BaseFormActivity.ActivityCallback callback) {
-        UIView uiView = viewController.getView();
-        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
-
-        renderingEnv.initialize();
-        renderingEnv.setAndroidContext(viewContext);
-        renderingEnv.setViewDAG(viewDAG);
-        renderingEnv.setScriptEngine(scriptEngine);
-        viewController.getStateHolder().clearViewState();
-        renderingEnv.setStateHolder(viewController.getStateHolder());
-        renderingEnv.disableInterceptors();
-
-        // render view Widget and restore partial state if needed
-        runRendering(uiView, callback);
     }
 
     public void renderViewAsync(Context viewContext, BaseFormActivity.ActivityCallback callback) {
@@ -285,7 +273,7 @@ public class MainController implements ContextAwareComponent {
         UIView uiView = viewController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
-        renderingEnv.initialize();
+        RenderingEnvFactory.getInstance().initialize(renderingEnv);
         renderingEnv.setAndroidContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.setScriptEngine(scriptEngine);
@@ -306,40 +294,56 @@ public class MainController implements ContextAwareComponent {
         return widget;
     }
 
-    private void runRendering(UIView uiView, BaseFormActivity.ActivityCallback callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+//    public void renderViewAsync2(Context viewContext, BaseFormActivity.ActivityCallback callback) {
+//        UIView uiView = viewController.getView();
+//        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
+//
+//        renderingEnv.initialize();
+//        renderingEnv.setAndroidContext(viewContext);
+//        renderingEnv.setViewDAG(viewDAG);
+//        renderingEnv.setScriptEngine(scriptEngine);
+//        viewController.getStateHolder().clearViewState();
+//        renderingEnv.setStateHolder(viewController.getStateHolder());
+//        renderingEnv.disableInterceptors();
+//
+//        // render view Widget and restore partial state if needed
+//        runRendering(uiView, callback);
+//    }
 
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                scriptEngine.initContext();
-                Looper.prepare();
-                viewController.onBeforeRender();
-                scriptEngine.initScope(viewController.getId());
-
-                Widget widget = viewRenderer.render(renderingEnv, uiView);
-
-                //Background work here
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewController.setRootWidget((ViewWidget) widget);
-                        restorePrevState(viewController);
-
-                        renderingEnv.enableInterceptors();
-                        viewController.onAfterRender(widget);
-                        try {
-                            callback.call(widget);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        });
-    }
+//    private void runRendering(UIView uiView, BaseFormActivity.ActivityCallback callback) {
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//
+//        Handler handler = new Handler(Looper.getMainLooper());
+//
+//        executor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                scriptEngine.initContext();
+//                Looper.prepare();
+//                viewController.onBeforeRender();
+//                scriptEngine.initScope(viewController.getId());
+//
+//                Widget widget = viewRenderer.render(renderingEnv, uiView);
+//
+//                //Background work here
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        viewController.setRootWidget((ViewWidget) widget);
+//                        restorePrevState(viewController);
+//
+//                        renderingEnv.enableInterceptors();
+//                        viewController.onAfterRender(widget);
+//                        try {
+//                            callback.call(widget);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//            }
+//        });
+//    }
 
     public void clear() {
         router.clear();

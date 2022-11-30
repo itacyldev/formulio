@@ -28,6 +28,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
@@ -78,7 +79,7 @@ public class AutocompleteDynamicViewConverterTest {
         ctx.setTheme(R.style.FormudruidLight);
 
         ActionController mockAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mockAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mockAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
 
         env.setAndroidContext(ctx);

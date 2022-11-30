@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import es.jcyl.ita.formic.core.context.AbstractBaseContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
@@ -20,6 +21,7 @@ import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
 
@@ -46,8 +48,8 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.warn;
  */
 
 public class ViewContext extends AbstractBaseContext {
-    private final Widget widget; // Form's Android view root
-    private Map<String, StatefulWidget> statefulViews = new HashMap<String, StatefulWidget>();
+    private Widget widget; // Form's Android view root
+    private Map<String, StatefulWidget> statefulViews = new WeakHashMap<String, StatefulWidget>();
 
     public ViewContext(Widget widget) {
         this.setPrefix("view");
@@ -152,7 +154,9 @@ public class ViewContext extends AbstractBaseContext {
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("You can't remove one component from the view using the context!.");
+        this.statefulViews.clear();
+        this.statefulViews = null;
+        this.widget = null;
     }
 
     public List<StatefulWidget> getStatefulWidgets() {

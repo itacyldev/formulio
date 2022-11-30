@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.config.builders.proxy.UIComponentProxyFactory;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
@@ -23,8 +22,7 @@ import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.*;

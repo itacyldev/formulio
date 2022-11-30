@@ -16,7 +16,7 @@ package es.jcyl.ita.formic.forms.utils.dummy;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
@@ -75,6 +75,11 @@ public class DummyWidgetContextHolder implements WidgetContextHolder {
     @Override
     public WidgetContextHolder getHolder() {
         return this;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
 

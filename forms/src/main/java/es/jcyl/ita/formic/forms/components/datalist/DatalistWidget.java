@@ -29,7 +29,7 @@ import es.jcyl.ita.formic.forms.controllers.widget.GroupWidgetController;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.selection.EntitySelectorWidget;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;

@@ -27,7 +27,7 @@ import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 
 /**
  * Test access to Entity and View through the FormContext.

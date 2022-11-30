@@ -15,9 +15,6 @@ package es.jcyl.ita.formic.forms.view.widget;
  * limitations under the License.
  */
 
-import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */

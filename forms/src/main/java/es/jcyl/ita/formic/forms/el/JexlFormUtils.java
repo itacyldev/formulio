@@ -20,7 +20,7 @@ import org.apache.commons.jexl3.MapContext;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.el.JexlEntityUtils;
 import es.jcyl.ita.formic.repo.el.wrappers.JexlEntityWrapper;

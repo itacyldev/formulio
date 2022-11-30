@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
@@ -42,6 +43,7 @@ import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
@@ -57,69 +59,55 @@ public class RenderingEnv {
     /**
      * context access
      */
-    private CompositeContext globalContext;
-    private WidgetContext widgetContext;
+    CompositeContext globalContext;
+    WidgetContext widgetContext;
+    WidgetManager widgetManager = new WidgetManager();
+    RenderingEnvFactory factory;
     /**
      * Wrapper for globalContext, used in case contxt is accesed before first WidgetContextHolder
      * has been renderer. Testing purposes mainly.
      */
-    private static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
-    private ViewWidget rootWidget;
-    private ViewStateHolder stateHolder; // current View state holder
+    static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
+    ViewWidget rootWidget;
+    ViewStateHolder stateHolder; // current View state holder
 
-    private SelectionManager selectionManager = new SelectionManager();
+    SelectionManager selectionManager = new SelectionManager();
     /**
      * view rendering
      */
-    private ViewDAG viewDAG;
-    private Map<String, List<DeferredView>> deferredViews;
-    private UserEventInterceptor userActionInterceptor;
-    private Context viewContext; // current view Android Context
-    private FormActivity formActivity;
-    private ScriptEngine scriptEngine;
-    private boolean restoreState = true;
+    ViewDAG viewDAG;
+    Map<String, List<DeferredView>> deferredViews;
+    UserEventInterceptor userActionInterceptor;
+    Context viewContext; // current view Android Context
+    FormActivity formActivity;
+    ScriptEngine scriptEngine;
+    boolean restoreState = true;
+
     /**
      * User text typing delay controls
      */
-    private int inputTypingDelay = 450;
-    private boolean inputDelayDisabled = false;
+    int inputTypingDelay = 450;
+    boolean inputDelayDisabled = false;
     // current entity in context
-    private Entity entity;
+    Entity entity;
     /**
      * Keeps the message errors to show messages during re-rendering
      */
-    private Map<String, BasicContext> messageMap = new HashMap<>();
-    private BasicContext currentMessageContext;
+    Map<String, BasicContext> messageMap = new HashMap<>();
+    BasicContext currentMessageContext;
 
-    public RenderingEnv(ActionController actionController) {
+    RenderingEnv(ActionController actionController) {
         userActionInterceptor = new UserEventInterceptor(actionController);
     }
 
     protected RenderingEnv() {
     }
 
-    public static RenderingEnv clone(RenderingEnv env) {
-        RenderingEnv newEnv = new RenderingEnv();
-        newEnv.globalContext = env.globalContext;
-        newEnv.widgetContext = env.widgetContext;
-        newEnv.rootWidget = env.rootWidget;
-        newEnv.viewDAG = env.viewDAG;
-        newEnv.deferredViews = env.deferredViews;
-        newEnv.userActionInterceptor = env.userActionInterceptor;
-        newEnv.viewContext = env.viewContext;
-        newEnv.formActivity = env.formActivity;
-        newEnv.inputTypingDelay = env.inputTypingDelay;
-        newEnv.inputDelayDisabled = env.inputDelayDisabled;
-        newEnv.entity = env.entity;
-        newEnv.messageMap = env.messageMap;
-        newEnv.stateHolder = env.stateHolder;
-        return newEnv;
-    }
-
     /**
      * Clears composite context before starting the rendering process
      */
     public void initialize() {
+        this.widgetManager.dispose();
         if (this.globalContext == null) {
             throw new IllegalStateException(DevConsole.error("Global Context is not set, call " +
                     "setGlobalContext first!!."));
@@ -313,6 +301,10 @@ public class RenderingEnv {
             }
 
             @Override
+            public void dispose() {
+            }
+
+            @Override
             public void setWidgetContext(WidgetContext context) {
 
             }
@@ -362,6 +354,18 @@ public class RenderingEnv {
 
     public void setRestoreState(boolean restoreState) {
         this.restoreState = restoreState;
+    }
+
+    public WidgetManager getWidgetManager() {
+        return widgetManager;
+    }
+
+    public RenderingEnvFactory getFactory() {
+        return factory;
+    }
+
+    public void setFactory(RenderingEnvFactory factory) {
+        this.factory = factory;
     }
 }
 

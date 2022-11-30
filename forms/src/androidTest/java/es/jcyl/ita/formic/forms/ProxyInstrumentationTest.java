@@ -34,7 +34,7 @@ import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.config.meta.AttributeDef;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.*;

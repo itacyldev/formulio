@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 
 /**

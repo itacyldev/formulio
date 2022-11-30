@@ -16,7 +16,7 @@ package es.jcyl.ita.formic.forms.utils.dummy;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
@@ -66,6 +66,11 @@ public class DummyStatefulWidget implements StatefulWidget {
     @Override
     public WidgetContextHolder getHolder() {
         return null;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
     public void setWidgetContext(WidgetContext widgetContext) {

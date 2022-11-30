@@ -54,8 +54,9 @@ import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -96,7 +97,7 @@ public class NestedMessageErrorTest {
         ctx.setTheme(R.style.FormudruidDark);
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

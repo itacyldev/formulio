@@ -30,7 +30,7 @@ import java.util.Set;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;

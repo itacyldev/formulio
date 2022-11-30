@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.utils.dummy.DummyWidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
 /**
@@ -45,7 +46,7 @@ public class ScriptViewHelperTest {
         ViewContext expectedViewContext = wCtx.getWidgetContext().getViewContext();
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
         // set the root view Widget
         ViewWidget viewWidget = mock(ViewWidget.class);
         when(viewWidget.getContextHoldersMap()).thenReturn(Collections.singletonMap("myDummyWidget",wCtx));
@@ -66,7 +67,7 @@ public class ScriptViewHelperTest {
         WidgetContextHolder wCtx = new DummyWidgetContextHolder("myDummyWidget");
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
         // set the root view Widget
         ViewWidget viewWidget = mock(ViewWidget.class);
         when(viewWidget.getContextHoldersMap()).thenReturn(Collections.singletonMap("myDummyWidget",wCtx));

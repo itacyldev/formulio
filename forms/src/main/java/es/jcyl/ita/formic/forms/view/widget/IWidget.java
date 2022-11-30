@@ -16,7 +16,6 @@ package es.jcyl.ita.formic.forms.view.widget;
  */
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * Common functionality for Widget interfaces.
@@ -36,4 +35,6 @@ public interface IWidget {
     WidgetContext getWidgetContext();
 
     WidgetContextHolder getHolder();
+
+    void dispose();
 }

@@ -39,6 +39,7 @@ import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -72,7 +73,7 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         MainController mc = MockingUtils.mockMainController(ctx);
-        RenderingEnv env = new RenderingEnv(mc.getActionController());
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mc.getActionController());
         env.setGlobalContext(gCtx);
         env.setAndroidContext(ctx);
 
@@ -104,7 +105,7 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         MainController mc = MockingUtils.mockMainController(ctx);
-        RenderingEnv env = new RenderingEnv(mc.getActionController());
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mc.getActionController());
         env.setGlobalContext(gCtx);
         env.setAndroidContext(ctx);
 

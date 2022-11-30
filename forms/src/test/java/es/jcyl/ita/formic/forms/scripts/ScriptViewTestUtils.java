@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.utils.dummy.DummyWidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
@@ -52,7 +53,7 @@ public class ScriptViewTestUtils {
             map.put(id, wCtx);
         }
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
         env.setScriptEngine(engine);
         // set the root view Widget
         ViewWidget viewWidget = mock(ViewWidget.class);

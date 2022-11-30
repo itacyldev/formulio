@@ -47,6 +47,7 @@ import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.DAGNode;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -99,7 +100,7 @@ public class DelegatedExpressionTest {
         // set entity in forms context
         form.setEntity(entity);
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
         env.setViewDAG(viewDAG);
@@ -116,7 +117,6 @@ public class DelegatedExpressionTest {
     }
 
     private Object[] createDepsTree(Context ctx) {
-
         // create one field form
         DevFormBuilder.CreateOneFieldForm recipe = new DevFormBuilder.CreateOneFieldForm().invoke(ctx);
         UIForm form = recipe.form;

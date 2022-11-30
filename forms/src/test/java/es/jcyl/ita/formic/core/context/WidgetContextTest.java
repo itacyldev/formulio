@@ -33,12 +33,13 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
@@ -118,7 +119,7 @@ public class WidgetContextTest {
         Entity entity = entityBuilder.withRandomData().build();
         form.setEntity(entity);
 
-        RenderingEnv env = new RenderingEnv(mock(ActionController.class));
+        RenderingEnv env = RenderingEnvFactory.getInstance().create(mock(ActionController.class));
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
         env.disableInterceptors();

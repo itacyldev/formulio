@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.meta.Attribute;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
