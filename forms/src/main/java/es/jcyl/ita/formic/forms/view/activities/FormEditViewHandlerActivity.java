@@ -66,7 +66,6 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
     }
 
     protected void createToolBars(RenderingEnv env) {
-        // configurar menu
         UIView view = this.viewController.getView();
         if(view == null){
             return; // just in testing cases
