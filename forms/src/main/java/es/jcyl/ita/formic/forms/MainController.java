@@ -18,7 +18,6 @@ package es.jcyl.ita.formic.forms;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.ViewGroup;
@@ -58,6 +57,7 @@ import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.async.AsyncRenderWorker;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.render.RendererFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
@@ -104,12 +104,14 @@ public class MainController implements ContextAwareComponent {
     }
 
     MainController() {
+        // coordinate factory creation
         formControllerFactory = ViewControllerFactory.getInstance();
         formControllerFactory.setMc(this);
         router = new Router(this);
         actionController = new ActionController(this, router);
-        renderingEnv = RenderingEnvFactory.getInstance().create(actionController);
+        RenderingEnvFactory.getInstance().setActionController(actionController);
         scriptEngine = ScriptEngine.getInstance();
+        RenderingEnvFactory.getInstance().setScriptEngine(scriptEngine);
         registerFormTypeViews();
 
         // initialize uiComponent proxy factory
@@ -123,6 +125,12 @@ public class MainController implements ContextAwareComponent {
             }
         }
         viewRenderer.addEventHandler(new ProxyViewRendererEventHandler(proxyFactory));
+    }
+
+    private void initContextDependant(){
+        RenderingEnvFactory.getInstance().setGlobalContext(this.globalContext);
+        renderingEnv = RenderingEnvFactory.getInstance().create();
+        setupScriptingEnv(globalContext);
     }
 
     private void setupScriptingEnv(es.jcyl.ita.formic.core.context.CompositeContext ctx) {
@@ -143,7 +151,6 @@ public class MainController implements ContextAwareComponent {
     /*********************************************/
     /***  Navigation control methods */
     /*********************************************/
-
     /**
      * Implements navigation to a new view
      *
@@ -250,11 +257,12 @@ public class MainController implements ContextAwareComponent {
         UIView uiView = viewController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
-        renderingEnv.initialize();
+        RenderingEnvFactory.getInstance().initialize(renderingEnv);
         renderingEnv.setAndroidContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
-        renderingEnv.setScriptEngine(scriptEngine);
+//        renderingEnv.setScriptEngine(scriptEngine);
         viewController.getStateHolder().clearViewState();
+
         renderingEnv.setStateHolder(viewController.getStateHolder());
         renderingEnv.disableInterceptors();
 
@@ -514,10 +522,7 @@ public class MainController implements ContextAwareComponent {
             throw new IllegalArgumentException(error("MainController needs an instance of CompositeContext to use it as GlobalContext."));
         }
         this.globalContext = (CompositeContext) ctx; // global context is received
-        renderingEnv.setGlobalContext(this.globalContext);
-        setupScriptingEnv(globalContext);
-        // add state and message context
-        globalContext.addContext(new BasicContext("state"));// TODO: sobra?
+        initContextDependant();
     }
 
     /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/

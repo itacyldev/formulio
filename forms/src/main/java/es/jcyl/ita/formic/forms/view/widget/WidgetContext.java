@@ -37,6 +37,7 @@ public class WidgetContext extends UnPrefixedCompositeContext {
 
     private WidgetContextHolder holder;
 
+    private boolean disposable = false;
     private ViewContext viewContext;
     private EntityContext entityContext;
     private BasicContext messageContext;
@@ -63,6 +64,8 @@ public class WidgetContext extends UnPrefixedCompositeContext {
     }
 
     public void clear() {
+        disposable = true;
+        this.contexts.clear();
         super.clear();
         if (this.viewContext != null) {
             this.viewContext.clear();

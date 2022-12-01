@@ -18,7 +18,15 @@ package es.jcyl.ita.formic.forms.view.render.renderer;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
+import es.jcyl.ita.formic.forms.components.UIComponent;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
@@ -26,31 +34,48 @@ import es.jcyl.ita.formic.forms.actions.ActionController;
 public class RenderingEnvFactory {
 
     private static RenderingEnvFactory instance;
+    private WidgetManager widgetManager = new WidgetManager();
     private Map<Integer, RenderingEnv> clones = new WeakHashMap<>();
+    private ActionController actionController;
+    private CompositeContext globalContext;
+    private ScriptEngine scriptEngine;
 
     public static RenderingEnvFactory getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new RenderingEnvFactory();
         }
         return instance;
     }
 
-    public void initialize(RenderingEnv env){
-        env.initialize();
+    /**
+     * Initializes principal rendering env and removes all clones
+     *
+     * @param env
+     */
+    public void initialize(RenderingEnv env) {
+        env.clearSelection();
+        env.clearMessages();
+        env.setEmptyCtx(createDefaultCtx());
+        // remove existing widgets
+        this.widgetManager.dispose();
         // remove previous clones if they exists
-        for(RenderingEnv envClone: clones.values()){
+        for (RenderingEnv envClone : clones.values()) {
             dispose(envClone);
         }
         clones.clear();
     }
 
-    public RenderingEnv create(ActionController actionController) {
+    public RenderingEnv create() {
         RenderingEnv env = new RenderingEnv(actionController);
         env.setFactory(this);
+        env.setGlobalContext(globalContext);
+        env.setWidgetManager(widgetManager);
+        env.setScriptEngine(scriptEngine);
         return env;
     }
+
     public RenderingEnv clone(RenderingEnv env) {
-        RenderingEnv newEnv = new RenderingEnv();
+        RenderingEnv newEnv = create();
         newEnv.globalContext = env.globalContext;
         newEnv.widgetContext = env.widgetContext;
         newEnv.rootWidget = env.rootWidget;
@@ -80,10 +105,80 @@ public class RenderingEnvFactory {
         env.viewContext = null;
         env.formActivity = null;
         env.entity = null;
+        env.messageMap.clear();
         env.messageMap = null;
         env.stateHolder = null;
         env.widgetManager = null;
     }
 
+    public ActionController getActionController() {
+        return actionController;
+    }
 
+    public void setActionController(ActionController actionController) {
+        this.actionController = actionController;
+    }
+
+    private WidgetContext createDefaultCtx() {
+
+        WidgetContext wctx = new WidgetContext(new WidgetContextHolder() {
+            @Override
+            public String getHolderId() {
+                return null;
+            }
+
+            @Override
+            public int getId() {
+                return 0;
+            }
+
+            @Override
+            public UIComponent getComponent() {
+                return null;
+            }
+
+            @Override
+            public String getComponentId() {
+                return null;
+            }
+
+            @Override
+            public Widget getWidget() {
+                return null;
+            }
+
+            @Override
+            public WidgetContext getWidgetContext() {
+                return null;
+            }
+
+            @Override
+            public WidgetContextHolder getHolder() {
+                return null;
+            }
+
+            @Override
+            public void dispose() {
+            }
+
+            @Override
+            public void setWidgetContext(WidgetContext context) {
+
+            }
+        });
+        wctx.addContext(globalContext);
+        return wctx;
+    }
+
+    public void setGlobalContext(CompositeContext globalContext) {
+        this.globalContext = globalContext;
+    }
+
+    public ScriptEngine getScriptEngine() {
+        return scriptEngine;
+    }
+
+    public void setScriptEngine(ScriptEngine scriptEngine) {
+        this.scriptEngine = scriptEngine;
+    }
 }

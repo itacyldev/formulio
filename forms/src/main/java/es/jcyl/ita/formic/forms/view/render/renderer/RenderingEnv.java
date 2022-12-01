@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
@@ -61,7 +60,7 @@ public class RenderingEnv {
      */
     CompositeContext globalContext;
     WidgetContext widgetContext;
-    WidgetManager widgetManager = new WidgetManager();
+    WidgetManager widgetManager;
     RenderingEnvFactory factory;
     /**
      * Wrapper for globalContext, used in case contxt is accesed before first WidgetContextHolder
@@ -70,7 +69,6 @@ public class RenderingEnv {
     static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
     ViewWidget rootWidget;
     ViewStateHolder stateHolder; // current View state holder
-
     SelectionManager selectionManager = new SelectionManager();
     /**
      * view rendering
@@ -107,16 +105,8 @@ public class RenderingEnv {
      * Clears composite context before starting the rendering process
      */
     public void initialize() {
-        this.widgetManager.dispose();
-        if (this.globalContext == null) {
-            throw new IllegalStateException(DevConsole.error("Global Context is not set, call " +
-                    "setGlobalContext first!!."));
-        }
-        this.clearSelection();
-        this.clearMessages();
-        this.initEmptyWidgetCtx(globalContext);
+        this.factory.initialize(this);
     }
-
 
     CompositeContext getGlobalContext() {
         return globalContext;
@@ -219,7 +209,6 @@ public class RenderingEnv {
 
     public void setGlobalContext(CompositeContext globalContext) {
         this.globalContext = globalContext;
-        initEmptyWidgetCtx(globalContext);
     }
 
     public void clearSelection() {
@@ -261,57 +250,6 @@ public class RenderingEnv {
     public void setScriptEngine(ScriptEngine scriptEngine) {
         this.scriptEngine = scriptEngine;
     }
-
-    private void initEmptyWidgetCtx(CompositeContext gContxt) {
-
-        EMPTY_WIDGET_CTX = new WidgetContext(new WidgetContextHolder() {
-            @Override
-            public String getHolderId() {
-                return null;
-            }
-
-            @Override
-            public int getId() {
-                return 0;
-            }
-
-            @Override
-            public UIComponent getComponent() {
-                return null;
-            }
-
-            @Override
-            public String getComponentId() {
-                return null;
-            }
-
-            @Override
-            public Widget getWidget() {
-                return null;
-            }
-
-            @Override
-            public WidgetContext getWidgetContext() {
-                return null;
-            }
-
-            @Override
-            public WidgetContextHolder getHolder() {
-                return null;
-            }
-
-            @Override
-            public void dispose() {
-            }
-
-            @Override
-            public void setWidgetContext(WidgetContext context) {
-
-            }
-        });
-        EMPTY_WIDGET_CTX.addContext(gContxt);
-    }
-
 
     public Map<String, BasicContext> getMessageMap() {
         return messageMap;
@@ -359,6 +297,9 @@ public class RenderingEnv {
     public WidgetManager getWidgetManager() {
         return widgetManager;
     }
+    void setWidgetManager(WidgetManager widgetManager){
+        this.widgetManager = widgetManager;
+    }
 
     public RenderingEnvFactory getFactory() {
         return factory;
@@ -366,6 +307,10 @@ public class RenderingEnv {
 
     public void setFactory(RenderingEnvFactory factory) {
         this.factory = factory;
+    }
+
+    public void setEmptyCtx(WidgetContext defaultCtx) {
+        EMPTY_WIDGET_CTX = defaultCtx;
     }
 }
 

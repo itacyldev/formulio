@@ -34,7 +34,6 @@ import es.jcyl.ita.formic.forms.view.widget.Widget;
  */
 public class AsyncRenderWorker implements Runnable {
     private final MainController mc;
-    private final RenderingEnv renderingEnv;
     ExecutorService executor = Executors.newSingleThreadExecutor();
 
     Handler handler = new Handler(Looper.getMainLooper());
@@ -43,7 +42,6 @@ public class AsyncRenderWorker implements Runnable {
 
     public AsyncRenderWorker(MainController mc) {
         this.mc = mc;
-        this.renderingEnv = mc.getRenderingEnv();
     }
 
     public void runRender(UIView uiView, MainController.PostRenderCallBack callback) {
@@ -62,7 +60,7 @@ public class AsyncRenderWorker implements Runnable {
         mc.getScriptEngine().initScope(viewController.getId());
         viewController.onBeforeRender();
 
-        Widget widget = mc.getViewRenderer().render(renderingEnv, uiView);
+        Widget widget = mc.getViewRenderer().render(mc.getRenderingEnv(), uiView);
 
         handler.post(new Runnable() {
             @Override

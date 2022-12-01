@@ -60,23 +60,12 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentActivity);
         viewPager.setAdapter(viewPagerAdapter);
 
-        /*viewPager.post(new Runnable(){
-            @Override
-            public void run(){
-                int currentItem = getCurrentItem(env, component);
-                viewPager.setCurrentItem(currentItem, false);
-            }
-        });*/
-
         viewPagerAdapter.notifyDataSetChanged();
 
-        TabLayoutMediator.TabConfigurationStrategy strategy = new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                UIComponent[] children = component.getChildren();
-                UITabItem tabItem = (UITabItem) children[position];
-                tab.setText(tabItem.getLabel());
-            }
+        TabLayoutMediator.TabConfigurationStrategy strategy = (tab, position) -> {
+            UIComponent[] children = component.getChildren();
+            UITabItem tabItem = (UITabItem) children[position];
+            tab.setText(tabItem.getLabel());
         };
 
         TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, strategy);
@@ -87,34 +76,23 @@ public class UITabRenderer extends AbstractGroupRenderer<UITab, TabWidget> {
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                viewPager.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (viewPagerAdapter.getTabFragments().size() > position) {
-                            TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
-                            updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
-                            viewPager.requestLayout();
-                            viewPager.getRootView().findViewById(R.id.scroll).setScrollY(widget.getPositionScrollY());
-                        }
+                viewPager.post(() -> {
+                    if (viewPagerAdapter.getTabFragments().size() > position) {
+                        TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(position);
+                        updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
+                        viewPager.requestLayout();
+                        viewPager.getRootView().findViewById(R.id.scroll).setScrollY(widget.getPositionScrollY());
                     }
                 });
             }
         });
 
         ViewTreeObserver vto = viewPager.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                viewPager.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(viewPager.getCurrentItem());
-                        updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
-                        viewPager.requestLayout();
-                    }
-                });
-            }
-        });
+        vto.addOnGlobalLayoutListener(() -> viewPager.post(() -> {
+            TabFragment tabFragment = viewPagerAdapter.getTabFragments().get(viewPager.getCurrentItem());
+            updatePagerHeightForChild(tabFragment.getTabView(), viewPager);
+            viewPager.requestLayout();
+        }));
     }
 
     private void updatePagerHeightForChild(View view, ViewPager2 viewPager) {

@@ -37,7 +37,7 @@ import es.jcyl.ita.formic.core.context.Context;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UnPrefixedCompositeContext extends MapCompositeContext implements CompositeContext, JexlContext {
-    private final Map<String, Context> contexts = new LinkedHashMap();
+    protected final Map<String, Context> contexts = new LinkedHashMap();
 
     /**
      * Looks up a property in the context, looking in each of the stored context. The key must

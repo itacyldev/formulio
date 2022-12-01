@@ -71,8 +71,8 @@ public abstract class BaseFormActivity<F extends ViewController> extends BaseAct
 
         public void call(View view) throws Exception {
             try {
-                contentView.setFocusable(false);
                 contentView.addView(view);
+                contentView.setFocusable(false);
             } catch (Exception e) {
                 DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
                 router.back(activity, new String[]{"Sorry, there was an error while trying to render the view. " +
