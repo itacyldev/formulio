@@ -63,7 +63,6 @@ public class RenderingEnv {
      * Wrapper for globalContext, used in case contxt is accesed before first WidgetContextHolder
      * has been renderer. Testing purposes mainly.
      */
-//    static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
     ViewWidget rootWidget;
     ViewStateHolder stateHolder; // current View state holder
     SelectionManager selectionManager = new SelectionManager();
@@ -275,7 +274,6 @@ public class RenderingEnv {
         }
     }
 
-
     public void setStateHolder(ViewStateHolder stateHolder) {
         this.stateHolder = stateHolder;
     }
@@ -303,9 +301,5 @@ public class RenderingEnv {
     public void setFactory(RenderingEnvFactory factory) {
         this.factory = factory;
     }
-//
-//    public void setEmptyCtx(WidgetContext defaultCtx) {
-//        EMPTY_WIDGET_CTX = defaultCtx;
-//    }
 }
 
