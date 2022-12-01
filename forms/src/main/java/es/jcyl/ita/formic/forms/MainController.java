@@ -302,57 +302,6 @@ public class MainController implements ContextAwareComponent {
         return widget;
     }
 
-//    public void renderViewAsync2(Context viewContext, BaseFormActivity.ActivityCallback callback) {
-//        UIView uiView = viewController.getView();
-//        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
-//
-//        renderingEnv.initialize();
-//        renderingEnv.setAndroidContext(viewContext);
-//        renderingEnv.setViewDAG(viewDAG);
-//        renderingEnv.setScriptEngine(scriptEngine);
-//        viewController.getStateHolder().clearViewState();
-//        renderingEnv.setStateHolder(viewController.getStateHolder());
-//        renderingEnv.disableInterceptors();
-//
-//        // render view Widget and restore partial state if needed
-//        runRendering(uiView, callback);
-//    }
-
-//    private void runRendering(UIView uiView, BaseFormActivity.ActivityCallback callback) {
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//
-//        Handler handler = new Handler(Looper.getMainLooper());
-//
-//        executor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                scriptEngine.initContext();
-//                Looper.prepare();
-//                viewController.onBeforeRender();
-//                scriptEngine.initScope(viewController.getId());
-//
-//                Widget widget = viewRenderer.render(renderingEnv, uiView);
-//
-//                //Background work here
-//                handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        viewController.setRootWidget((ViewWidget) widget);
-//                        restorePrevState(viewController);
-//
-//                        renderingEnv.enableInterceptors();
-//                        viewController.onAfterRender(widget);
-//                        try {
-//                            callback.call(widget);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//    }
-
     public void clear() {
         router.clear();
         actionController.clear();
