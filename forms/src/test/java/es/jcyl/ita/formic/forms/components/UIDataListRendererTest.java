@@ -76,7 +76,8 @@ public class UIDataListRendererTest {
     @Test
     public void testEmptyDataList() {
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 
@@ -98,7 +99,8 @@ public class UIDataListRendererTest {
     @Test
     public void testNotEmptyDataList() {
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

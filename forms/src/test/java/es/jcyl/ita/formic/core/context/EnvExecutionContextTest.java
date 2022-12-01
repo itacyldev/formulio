@@ -82,7 +82,8 @@ public class EnvExecutionContextTest {
         // render the view and check de resulting context
         CompositeContext globalContext = ContextTestUtils.createGlobalContext();
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(globalContext);
         env.setAndroidContext(ctx);
 

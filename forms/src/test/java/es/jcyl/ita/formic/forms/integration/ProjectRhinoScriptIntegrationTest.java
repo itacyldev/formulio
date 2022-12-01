@@ -159,7 +159,8 @@ public class ProjectRhinoScriptIntegrationTest {
         ActionController mcAC = mock(ActionController.class);
 
         // Prepare rendering environment
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(globalContext);
         env.setAndroidContext(ctx);
 

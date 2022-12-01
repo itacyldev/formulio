@@ -72,7 +72,8 @@ public class UISelectRendererTest {
         confConverter.init();
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 
@@ -103,7 +104,8 @@ public class UISelectRendererTest {
     @Test
     public void testNotVisibleSelect() {
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

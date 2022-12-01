@@ -77,7 +77,8 @@ public class TabRendererTest {
      */
     @Test
     public void test2Tabs() {
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mock(ActionController.class));
+        RenderingEnvFactory.getInstance().setActionController(mock(ActionController.class));
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env = spy(env);
         when(env.getAndroidContext()).thenReturn(ctx);
         when(env.getWidgetContext()).thenReturn(ContextTestUtils.createWidgetContext());

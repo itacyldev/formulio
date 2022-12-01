@@ -32,7 +32,6 @@ import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.ViewStateHolder;
@@ -41,9 +40,7 @@ import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
-import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -66,7 +63,7 @@ public class RenderingEnv {
      * Wrapper for globalContext, used in case contxt is accesed before first WidgetContextHolder
      * has been renderer. Testing purposes mainly.
      */
-    static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
+//    static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
     ViewWidget rootWidget;
     ViewStateHolder stateHolder; // current View state holder
     SelectionManager selectionManager = new SelectionManager();
@@ -121,7 +118,7 @@ public class RenderingEnv {
     }
 
     public WidgetContext getWidgetContext() {
-        return (widgetContext == null) ? EMPTY_WIDGET_CTX : widgetContext;
+        return widgetContext;
     }
 
     /**
@@ -226,9 +223,6 @@ public class RenderingEnv {
         this.globalContext.addContext(new EntityContext(entity));
         // register
         this.entity = entity;
-        if (this.getWidgetContext() == EMPTY_WIDGET_CTX) {
-            EMPTY_WIDGET_CTX.setEntity(entity);
-        }
     }
 
     Entity getEntity() {
@@ -297,7 +291,8 @@ public class RenderingEnv {
     public WidgetManager getWidgetManager() {
         return widgetManager;
     }
-    void setWidgetManager(WidgetManager widgetManager){
+
+    void setWidgetManager(WidgetManager widgetManager) {
         this.widgetManager = widgetManager;
     }
 
@@ -308,9 +303,9 @@ public class RenderingEnv {
     public void setFactory(RenderingEnvFactory factory) {
         this.factory = factory;
     }
-
-    public void setEmptyCtx(WidgetContext defaultCtx) {
-        EMPTY_WIDGET_CTX = defaultCtx;
-    }
+//
+//    public void setEmptyCtx(WidgetContext defaultCtx) {
+//        EMPTY_WIDGET_CTX = defaultCtx;
+//    }
 }
 

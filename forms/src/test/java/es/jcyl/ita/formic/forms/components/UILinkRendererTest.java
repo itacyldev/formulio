@@ -64,7 +64,8 @@ public class UILinkRendererTest {
     public void testSimpleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 
@@ -84,7 +85,8 @@ public class UILinkRendererTest {
     public void testNotVisibleLink() {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

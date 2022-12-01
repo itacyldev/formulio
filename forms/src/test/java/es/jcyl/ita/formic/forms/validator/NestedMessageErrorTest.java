@@ -97,7 +97,8 @@ public class NestedMessageErrorTest {
         ctx.setTheme(R.style.FormudruidDark);
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

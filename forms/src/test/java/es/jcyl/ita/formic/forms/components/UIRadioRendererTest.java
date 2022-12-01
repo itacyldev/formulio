@@ -70,7 +70,8 @@ public class UIRadioRendererTest {
         confConverter.init();
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
         env.disableInterceptors();
@@ -101,7 +102,25 @@ public class UIRadioRendererTest {
     @Test
     public void testNotVisibleRadio() {
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
+        env.setAndroidContext(ctx);
+
+        UIRadio select = new UIRadio();
+        select.setId(RandomUtils.randomString(4));
+        select.setRenderExpression(exprFactory.create("false"));
+        View view = renderHelper.render(env, select);
+
+        Assert.assertNotNull(view);
+        Assert.assertTrue(view.getVisibility() == View.GONE);
+    }
+
+    @Test
+    public void testNotVisibleRadio2() {
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

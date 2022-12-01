@@ -53,7 +53,8 @@ public class ScriptViewTestUtils {
             map.put(id, wCtx);
         }
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setScriptEngine(engine);
         // set the root view Widget
         ViewWidget viewWidget = mock(ViewWidget.class);

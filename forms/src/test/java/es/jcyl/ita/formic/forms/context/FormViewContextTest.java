@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.context;
  * limitations under the License.
  */
 
+import static org.mockito.Mockito.mock;
+
 import android.content.Context;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
@@ -73,7 +76,8 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         MainController mc = MockingUtils.mockMainController(ctx);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mc.getActionController());
+        RenderingEnvFactory.getInstance().setActionController(mc.getActionController());
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(gCtx);
         env.setAndroidContext(ctx);
 
@@ -105,7 +109,8 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         MainController mc = MockingUtils.mockMainController(ctx);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mc.getActionController());
+        RenderingEnvFactory.getInstance().setActionController(mc.getActionController());
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(gCtx);
         env.setAndroidContext(ctx);
 

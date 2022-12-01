@@ -46,7 +46,8 @@ public class ScriptViewHelperTest {
         ViewContext expectedViewContext = wCtx.getWidgetContext().getViewContext();
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         // set the root view Widget
         ViewWidget viewWidget = mock(ViewWidget.class);
         when(viewWidget.getContextHoldersMap()).thenReturn(Collections.singletonMap("myDummyWidget",wCtx));
@@ -67,7 +68,8 @@ public class ScriptViewHelperTest {
         WidgetContextHolder wCtx = new DummyWidgetContextHolder("myDummyWidget");
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         // set the root view Widget
         ViewWidget viewWidget = mock(ViewWidget.class);
         when(viewWidget.getContextHoldersMap()).thenReturn(Collections.singletonMap("myDummyWidget",wCtx));

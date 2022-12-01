@@ -119,7 +119,8 @@ public class WidgetContextTest {
         Entity entity = entityBuilder.withRandomData().build();
         form.setEntity(entity);
 
-        RenderingEnv env = RenderingEnvFactory.getInstance().create(mock(ActionController.class));
+        RenderingEnvFactory.getInstance().setActionController(mock(ActionController.class));
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
         env.disableInterceptors();

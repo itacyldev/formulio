@@ -19,16 +19,16 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
 /**
+ * Factory to manage RenderingEnv instance creation and dispose
+ *
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class RenderingEnvFactory {
@@ -55,7 +55,7 @@ public class RenderingEnvFactory {
     public void initialize(RenderingEnv env) {
         env.clearSelection();
         env.clearMessages();
-        env.setEmptyCtx(createDefaultCtx());
+        env.setWidgetContext(createDefaultWidgetCtx());
         // remove existing widgets
         this.widgetManager.dispose();
         // remove previous clones if they exists
@@ -71,6 +71,7 @@ public class RenderingEnvFactory {
         env.setGlobalContext(globalContext);
         env.setWidgetManager(widgetManager);
         env.setScriptEngine(scriptEngine);
+        env.setWidgetContext(createDefaultWidgetCtx());
         return env;
     }
 
@@ -119,55 +120,10 @@ public class RenderingEnvFactory {
         this.actionController = actionController;
     }
 
-    private WidgetContext createDefaultCtx() {
-
-        WidgetContext wctx = new WidgetContext(new WidgetContextHolder() {
-            @Override
-            public String getHolderId() {
-                return null;
-            }
-
-            @Override
-            public int getId() {
-                return 0;
-            }
-
-            @Override
-            public UIComponent getComponent() {
-                return null;
-            }
-
-            @Override
-            public String getComponentId() {
-                return null;
-            }
-
-            @Override
-            public Widget getWidget() {
-                return null;
-            }
-
-            @Override
-            public WidgetContext getWidgetContext() {
-                return null;
-            }
-
-            @Override
-            public WidgetContextHolder getHolder() {
-                return null;
-            }
-
-            @Override
-            public void dispose() {
-            }
-
-            @Override
-            public void setWidgetContext(WidgetContext context) {
-
-            }
-        });
-        wctx.addContext(globalContext);
-        return wctx;
+    private WidgetContext createDefaultWidgetCtx() {
+        WidgetContext wCtx = new WidgetContext(EMPTY_WCTX_HOLDER);
+        wCtx.addContext(globalContext);
+        return wCtx;
     }
 
     public void setGlobalContext(CompositeContext globalContext) {
@@ -181,4 +137,49 @@ public class RenderingEnvFactory {
     public void setScriptEngine(ScriptEngine scriptEngine) {
         this.scriptEngine = scriptEngine;
     }
+
+    private static WidgetContextHolder EMPTY_WCTX_HOLDER = new WidgetContextHolder() {
+        @Override
+        public String getHolderId() {
+            return null;
+        }
+
+        @Override
+        public int getId() {
+            return 0;
+        }
+
+        @Override
+        public UIComponent getComponent() {
+            return null;
+        }
+
+        @Override
+        public String getComponentId() {
+            return null;
+        }
+
+        @Override
+        public Widget getWidget() {
+            return null;
+        }
+
+        @Override
+        public WidgetContext getWidgetContext() {
+            return null;
+        }
+
+        @Override
+        public WidgetContextHolder getHolder() {
+            return null;
+        }
+
+        @Override
+        public void dispose() {
+        }
+
+        @Override
+        public void setWidgetContext(WidgetContext context) {
+        }
+    };
 }
