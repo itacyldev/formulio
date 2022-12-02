@@ -84,7 +84,7 @@ public class RenderingEnvFactory {
         newEnv.deferredViews = env.deferredViews;
         newEnv.userActionInterceptor = env.userActionInterceptor;
         newEnv.viewContext = env.viewContext;
-//        newEnv.formActivity = env.formActivity;
+        newEnv.formActivity = env.formActivity;
         newEnv.inputTypingDelay = env.inputTypingDelay;
         newEnv.inputDelayDisabled = env.inputDelayDisabled;
         newEnv.entity = env.entity;
