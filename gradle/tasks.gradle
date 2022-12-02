@@ -1,0 +1,83 @@
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+///////////////////////////////////
+// JACOCO COVERAGE REPORT
+///////////////////////////////////
+
+def fileFilter = ['**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*']
+
+task coverageReport(type: JacocoReport) {
+//    dependsOn ':compileJava'
+    dependsOn ':compileDebugAndroidTestSources'
+    dependsOn ':test'
+
+    executionData fileTree(project.rootDir.absolutePath).include('**/build/jacoco/*.exec')
+
+    doFirst {
+        println ' ----------------------------------------------------------------------------------------'
+        println '       Building code coverage report '
+        println ' ----------------------------------------------------------------------------------------'
+    }
+
+    reports {
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/reports/html")
+    }
+
+    def coverageMainSrc = [
+            "${rootDir}/src/main/java",
+    ]
+
+    def coverageDebugTree = [
+            fileTree(dir: "${rootDir}/build/classes", excludes: fileFilter),
+    ]
+
+    getSourceDirectories().setFrom(files(coverageMainSrc))
+    getClassDirectories().setFrom(files(coverageDebugTree))
+    //getExecutionData().setFrom(files(["app/build/jacoco/testDebugUnitTest.exec",
+    //                                "forms/build/jacoco/testDebugUnitTest.exec"
+}
+
+///////////////////////////////////
+/// SONARQUBE ANALYTICS
+///////////////////////////////////
+
+// get sonarQube token from local.properties or relay on sysEnv
+//var sonarQubeToken = System.hasProperty("SONARQUBE_TOKEN") ? System.getenv('SONARQUBE_TOKEN') : properties.getProperty("SONARQUBE_TOKEN")
+//
+//sonarqube {
+//    properties {
+//        property 'sonar.projectKey', 'FORMIC'
+//        property 'sonar.projectName', 'FORMIC'
+//        property 'sonar.login', sonarQubeToken
+//        property 'sonar.host.url', 'https://servicios.itacyl.es/sonarqube'
+//        property 'sonar.language', 'java'
+//        property 'sonar.sourceEncoding', 'UTF-8'
+//        property "sonar.junit.reportPaths", "${rootDir}/build/test-results/test/"
+//        property "sonar.exclusions", "recursos/**,*.css,etc/**,doc/**,build/**"
+//        property 'sonar.java.coveragePlugin', 'jacoco'
+//        property 'sonar.coverage.jacoco.xmlReportPaths', "${rootDir}/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
+//        properties["sonar.dependencyCheck.htmlReportPath"] = "${rootDir}/build/reports/dependency-check-report.html"
+//        properties["sonar.dependencyCheck.xmlReportPath"] = "${rootDir}/build/reports/dependency-check-report.xml"
+//    }
+//}
+///////////////////////////////////
+// DEPENDENCY CHECK
+///////////////////////////////////
+
+// configuracion report OWASP check-deps
+//dependencyCheck {
+//    formats = ["html", "xml"]
+//    suppressionFile "${rootDir}/recursos/dcheck-suppress.xml"
+//    analyzers {
+//        retirejs {
+//            enabled = false
+//        }
+//        assemblyEnabled = false
+//        nodeEnabled = false
+//        msbuildEnabled = false
+//    }
+//}
