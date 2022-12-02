@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -14,9 +15,22 @@
 
     <application>
         <activity
+            android:name="androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity"
+            android:exported="false" />
+        <activity
+            android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity"
+            android:exported="false" />
+        <activity
+            android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity"
+            android:exported="false" />
+        <activity
+            android:exported="false"
+            tools:node="merge"
             android:name="es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:exported="false"
+            tools:node="merge"
             android:name="es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity"
             android:label="FormEditView"
             android:windowSoftInputMode="adjustPan" />
