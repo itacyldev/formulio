@@ -66,6 +66,7 @@ allprojects {
 
     configurations.all {
         exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'commons-logging', module: 'commons-logging'
          resolutionStrategy.eachDependency { details ->
 
             if (details.requested.group == "androidx") {
@@ -86,8 +87,8 @@ task clean(type: Delete) {
 
 ext {
 
-    versionCode = 48
-    versionName = '0.7.26'
+    versionCode = 49
+    versionName = '0.7.27'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 30
     targetSdkVersion = 30
@@ -96,7 +97,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.26'
+    version = '0.7.27'
     artifactId = 'Formic'
 
     sharedDeps = [
