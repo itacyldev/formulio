@@ -31,8 +31,9 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
-import es.jcyl.ita.formic.forms.actions.JobActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.JobActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.export.CSVExporter;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
@@ -180,7 +181,7 @@ public class FCItemRecyclerViewAdapter extends RecyclerView.Adapter<FCItemRecycl
     protected void export(){
         MainController mc = MainController.getInstance();
 
-        UserAction userAction = new UserAction(ActionType.JOB);
+        UserAction userAction = UserActionHelper.newAction(ActionType.JOB);
         Map<String, Object> params = new HashMap<>();
         String JOB_ID = "job_generar_acta_toma_muestras";
         params.put("jobId", JOB_ID);

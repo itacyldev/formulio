@@ -1,5 +1,9 @@
 package es.jcyl.ita.formic.app;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -49,7 +53,7 @@ import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.StorageContentManager;
-import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
@@ -57,12 +61,9 @@ import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.util.FileUtils;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
-
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
@@ -91,9 +92,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private void checkDeviceFeatures() {
         Context context = getApplicationContext();
         /** Check if this device has a camera */
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            // TODO: complete
-            DevConsole.error("Camera not available in this device.");
+        if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            DevConsole.warn("Camera not available in this device.");
         }
     }
 
@@ -200,39 +200,41 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         loadFragment();
 
 
-
     }
 
-    public void loadImageNoProjects(){
+    public void loadImageNoProjects() {
         RelativeLayout layoutNoProjects = findViewById(R.id.layout_no_projects);
-        if (App.getInstance().getProjectRepo().listAll().size() == 0){
+        if (App.getInstance().getProjectRepo().listAll().size() == 0) {
             layoutNoProjects.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             layoutNoProjects.setVisibility(View.GONE);
         }
     }
 
-    public void loadFragment(){
+    public void loadFragment() {
         // get view controles and check if exists a "main" form
         ViewControllerFactory ctlFactory = ViewControllerFactory.getInstance();
 
-        String formId="";
+        String formId = "";
         for (String a : ctlFactory.getControllerIds()) {
             if (a.startsWith("main-")) {
                 formId = a;
                 break;
             }
         }
+        FloatingActionButton import_project = findViewById(es.jcyl.ita.formic.forms.R.id.import_project);
         if (StringUtils.isNotEmpty(formId)) {
             loadFragment(ProjectListFragment.newInstance(
                     App.getInstance().getProjectRepo()));
             MainController.getInstance().getRouter().navigate(MainActivity.this,
-                    UserAction.navigate(formId));
+                    UserActionHelper.navigate(formId));
             checkNavigationButton(R.id.action_projects);
-        }else{
+            import_project.setVisibility(View.VISIBLE);
+        } else {
             // open default form list view
             loadFragment(new FormListFragment());
             checkNavigationButton(R.id.action_forms);
+            import_project.setVisibility(View.GONE);
         }
 
         loadImageNoProjects();
@@ -241,13 +243,17 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     public void onListFragmentInteraction(ViewController form) {
         MainController.getInstance().getRouter().navigate(this,
-                UserAction.navigate(form.getId()));
+                UserActionHelper.navigate(form.getId()));
     }
 
     private void checkStoragePermission() {
 
         boolean requestStorage = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            File[] externalStorageVolumes =
+//                    ContextCompat.getExternalFilesDirs(this,null);
+//            File primaryExternalStorage = externalStorageVolumes[0];
+//            currentWorkspace = primaryExternalStorage.getPath();
             Uri treeUri = StorageContentManager.getExternalPrimaryStoragePathUri(this);
             if (treeUri != null) {
                 currentWorkspace = FileUtils.getPath(this, treeUri);
@@ -277,7 +283,9 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         String[] permissions = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
         };
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(this,
@@ -286,7 +294,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 permsList.add(permission);
             }
         }
-
         if (permsList.size() > 0) {
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
@@ -449,12 +456,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         // Do nothing
     }
 
-    private void importProject(Context context, String origin, String destination, String projectName, ProjectImporter projectImporter){
+    private void importProject(Context context, String origin, String destination, String projectName, ProjectImporter projectImporter) {
         try {
             projectImporter.moveFiles2BackUp(context, projectName);
             projectImporter.extractFiles(context, origin, destination);
             launchActivity(context, projectName);
-        }catch (IOException e){
+        } catch (IOException e) {
             Toast.makeText(
                     this,
                     getString(R.string.projectimportfail),
@@ -492,16 +499,16 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         boolean showAcceptButton = false;
 
         public ImportTask(Context context) {
-            currenContext =  context;
+            currenContext = context;
         }
 
         protected String doInBackground(final Uri... params) {
-            String text="";
+            String text = "";
 
             projectImporter = ProjectImporter.getInstance();
 
             origin = projectImporter.getPathString(currenContext, params[0]);
-            destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
+            destination = getExternalFilesDir(null).getAbsolutePath() + "/projects";
             Map<String, String> existingFiles = null;
             try {
                 existingFiles = projectImporter.getExistingFiles(origin, destination);
@@ -509,7 +516,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
                 if ("".equals(origin)) {
                     text = currenContext.getString(R.string.projectimportfail);
-                }else if (existingFiles.size() > 0) {
+                } else if (existingFiles.size() > 0) {
                     text = currenContext.getString(R.string.project_import_existing_files);
 
                     for (String file : existingFiles.keySet()) {
@@ -520,14 +527,14 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                             .project_import_overwrite_files);
                     showAcceptButton = true;
                     //jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
-                }else {
-                    text=currenContext.getString(R.string.project_import_continue);
+                } else {
+                    text = currenContext.getString(R.string.project_import_continue);
                     showAcceptButton = true;
                     //jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
 
                 }
-            }catch (IOException e) {
-                text="Import failed!";
+            } catch (IOException e) {
+                text = "Import failed!";
             }
 
             return text;
@@ -537,9 +544,10 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         @Override
         protected void onPostExecute(final String text) {
             jobResultDialog.endJob();
-            jobResultDialog.getAcceptButton().setVisibility(showAcceptButton?View.VISIBLE:View.GONE);
+            jobResultDialog.getAcceptButton().setVisibility(showAcceptButton ? View.VISIBLE : View.GONE);
             jobResultDialog.setText(text);
         }
+
         @Override
         protected void onPreExecute() {
             jobResultDialog = new JobResultDialog(activity, false);
@@ -557,12 +565,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         }
     }
 
-     class InitConfigurationTask extends AsyncTask<String, String, String> {
+    class InitConfigurationTask extends AsyncTask<String, String, String> {
         JobResultDialog jobResultDialog;
         Context currentContext;
 
         public InitConfigurationTask(Context context) {
-            currentContext =  context;
+            currentContext = context;
         }
 
         @Override
@@ -580,7 +588,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             jobResultDialog.setText(text);
             jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
 
-         }
+        }
 
         @Override
         protected void onPreExecute() {
@@ -602,8 +610,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     }
 
     protected String doInitConfiguration(Context ctx) {
-
         String text = "";
+
+        // Ver esto: FORMIC-678 Revisar mainActivity
+        File[] externalStorageVolumes =
+                ContextCompat.getExternalFilesDirs(this, null);
+        File primaryExternalStorage = externalStorageVolumes[0];
+        currentWorkspace = primaryExternalStorage.getPath() + "/projects";
 
         String projectsFolder = currentWorkspace;
 
@@ -623,7 +636,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         } else {
             // TODO: extract Project View Helper to FORMIC-27
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-            String projectName = sharedPreferences.getString("projectName","");
+            String projectName = sharedPreferences.getString("projectName", "");
             Project prj = projects.get(0);
             if (projectName != null) {
                 for (Project project : projects) {
@@ -632,19 +645,14 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     }
                 }
             }
-           // destination = getExternalFilesDir(null).getAbsolutePath()+"/projects";
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
-
-            //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_init, (String) prj.getId())), Toast.LENGTH_LONG);
             try {
-                App.getInstance().setCurrentProject(prj);
-                text = ctx.getString(R.string.project_opening_finish, prj.getId());
-                DevConsole.info(text);
-                //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_finish, (String) prj.getId())), Toast.LENGTH_LONG);
+                App.getInstance().openProject(prj);
+                DevConsole.info(ctx.getString(R.string.project_opening_finish, prj.getId()));
             } catch (Exception e) {
                 text = ctx.getString(R.string.project_opening_error, prj.getId());
                 DevConsole.error(text);
-                //UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())), Toast.LENGTH_LONG);
+                UserMessagesHelper.toast(this, DevConsole.info(this.getString(R.string.project_opening_error, (String) prj.getId())), Toast.LENGTH_LONG);
             }
             App.getInstance().setJobListener(new JobProgressListener());
         }
@@ -655,7 +663,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     @Override
     protected void onResume() {
         super.onResume();
-        int id = this.getTitle().toString().startsWith(getString(R.string.projects_of))?R.id.action_projects:R.id.action_forms;
+        int id = this.getTitle().toString().startsWith(getString(R.string.projects_of)) ? R.id.action_projects : R.id.action_forms;
         checkNavigationButton(id);
     }
 

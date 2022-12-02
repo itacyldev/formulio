@@ -32,7 +32,6 @@ import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.view.ViewStateHolder;
@@ -41,8 +40,7 @@ import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
 import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.forms.view.selection.SelectionManager;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
-import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -57,79 +55,54 @@ public class RenderingEnv {
     /**
      * context access
      */
-    private CompositeContext globalContext;
-    private WidgetContext widgetContext;
+    CompositeContext globalContext;
+    WidgetContext widgetContext;
+    WidgetManager widgetManager;
+    RenderingEnvFactory factory;
     /**
      * Wrapper for globalContext, used in case contxt is accesed before first WidgetContextHolder
      * has been renderer. Testing purposes mainly.
      */
-    private static WidgetContext EMPTY_WIDGET_CTX = new WidgetContext();
-    private ViewWidget rootWidget;
-    private ViewStateHolder stateHolder; // curren View state holder
-
-    private SelectionManager selectionManager = new SelectionManager();
+    ViewWidget rootWidget;
+    ViewStateHolder stateHolder; // current View state holder
+    SelectionManager selectionManager = new SelectionManager();
     /**
      * view rendering
      */
-    private ViewDAG viewDAG;
-    private Map<String, List<DeferredView>> deferredViews;
-    private UserEventInterceptor userActionInterceptor;
-    private Context viewContext; // current view Android Context
-    private FormActivity formActivity;
-    private ScriptEngine scriptEngine;
+    ViewDAG viewDAG;
+    Map<String, List<DeferredView>> deferredViews;
+    UserEventInterceptor userActionInterceptor;
+    Context viewContext; // current view Android Context
+    FormActivity formActivity;
+    ScriptEngine scriptEngine;
+    boolean restoreState = true;
+
     /**
      * User text typing delay controls
      */
-    private int inputTypingDelay = 450;
-    private boolean inputDelayDisabled = false;
+    int inputTypingDelay = 450;
+    boolean inputDelayDisabled = false;
     // current entity in context
-    private Entity entity;
+    Entity entity;
     /**
      * Keeps the message errors to show messages during re-rendering
      */
-    private Map<String, BasicContext> messageMap = new HashMap<>();
-    private BasicContext currentMessageContext;
+    Map<String, BasicContext> messageMap = new HashMap<>();
+    BasicContext currentMessageContext;
 
-
-    public RenderingEnv(ActionController actionController) {
+    RenderingEnv(ActionController actionController) {
         userActionInterceptor = new UserEventInterceptor(actionController);
     }
 
-
     protected RenderingEnv() {
-    }
-
-    public static RenderingEnv clone(RenderingEnv env) {
-        RenderingEnv newEnv = new RenderingEnv();
-        newEnv.globalContext = env.globalContext;
-        newEnv.widgetContext = env.widgetContext;
-        newEnv.rootWidget = env.rootWidget;
-        newEnv.viewDAG = env.viewDAG;
-        newEnv.deferredViews = env.deferredViews;
-        newEnv.userActionInterceptor = env.userActionInterceptor;
-        newEnv.viewContext = env.viewContext;
-        newEnv.formActivity = env.formActivity;
-        newEnv.inputTypingDelay = env.inputTypingDelay;
-        newEnv.inputDelayDisabled = env.inputDelayDisabled;
-        newEnv.entity = env.entity;
-        newEnv.messageMap = env.messageMap;
-        newEnv.stateHolder = env.stateHolder;
-        return newEnv;
     }
 
     /**
      * Clears composite context before starting the rendering process
      */
     public void initialize() {
-        if (this.globalContext == null) {
-            throw new IllegalStateException(DevConsole.error("Global Context is not set, call " +
-                    "setGlobalContext first!!."));
-        }
-        this.clearSelection();
-        this.clearMessages();
-        this.initEmptyWidgetCtx(globalContext);
+        this.factory.initialize(this);
     }
-
 
     CompositeContext getGlobalContext() {
         return globalContext;
@@ -144,7 +117,7 @@ public class RenderingEnv {
     }
 
     public WidgetContext getWidgetContext() {
-        return (widgetContext == null) ? EMPTY_WIDGET_CTX : widgetContext;
+        return widgetContext;
     }
 
     /**
@@ -232,7 +205,6 @@ public class RenderingEnv {
 
     public void setGlobalContext(CompositeContext globalContext) {
         this.globalContext = globalContext;
-        initEmptyWidgetCtx(globalContext);
     }
 
     public void clearSelection() {
@@ -250,9 +222,6 @@ public class RenderingEnv {
         this.globalContext.addContext(new EntityContext(entity));
         // register
         this.entity = entity;
-        if (this.getWidgetContext() == EMPTY_WIDGET_CTX) {
-            EMPTY_WIDGET_CTX.setEntity(entity);
-        }
     }
 
     public Entity getEntity() {
@@ -274,53 +243,6 @@ public class RenderingEnv {
     public void setScriptEngine(ScriptEngine scriptEngine) {
         this.scriptEngine = scriptEngine;
     }
-
-    private void initEmptyWidgetCtx(CompositeContext gContxt) {
-
-        EMPTY_WIDGET_CTX = new WidgetContext(new WidgetContextHolder() {
-            @Override
-            public String getHolderId() {
-                return null;
-            }
-
-            @Override
-            public int getId() {
-                return 0;
-            }
-
-            @Override
-            public UIComponent getComponent() {
-                return null;
-            }
-
-            @Override
-            public String getComponentId() {
-                return null;
-            }
-
-            @Override
-            public Widget getWidget() {
-                return null;
-            }
-
-            @Override
-            public WidgetContext getWidgetContext() {
-                return null;
-            }
-
-            @Override
-            public WidgetContextHolder getHolder() {
-                return null;
-            }
-
-            @Override
-            public void setWidgetContext(WidgetContext context) {
-
-            }
-        });
-        EMPTY_WIDGET_CTX.addContext(gContxt);
-    }
-
 
     public Map<String, BasicContext> getMessageMap() {
         return messageMap;
@@ -347,14 +269,37 @@ public class RenderingEnv {
     }
 
     public void restoreState(StatefulWidget widget) {
-        if (stateHolder != null) {
+        if (stateHolder != null && restoreState) {
             stateHolder.restoreState(widget);
         }
     }
 
-
     public void setStateHolder(ViewStateHolder stateHolder) {
         this.stateHolder = stateHolder;
+    }
+
+    public boolean isRestoreState() {
+        return restoreState;
+    }
+
+    public void setRestoreState(boolean restoreState) {
+        this.restoreState = restoreState;
+    }
+
+    public WidgetManager getWidgetManager() {
+        return widgetManager;
+    }
+
+    void setWidgetManager(WidgetManager widgetManager) {
+        this.widgetManager = widgetManager;
+    }
+
+    public RenderingEnvFactory getFactory() {
+        return factory;
+    }
+
+    public void setFactory(RenderingEnvFactory factory) {
+        this.factory = factory;
     }
 }
 

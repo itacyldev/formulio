@@ -34,8 +34,9 @@ import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionType;
-import es.jcyl.ita.formic.forms.actions.JobActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.JobActionHandler;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 
@@ -62,7 +63,7 @@ public class JobActionHandlerTest {
         MainController mc = MockingUtils.mockMainController(ctx);
 
         // prepare user Action
-        UserAction userAction = new UserAction(ActionType.JOB);
+        UserAction userAction = UserActionHelper.newAction(ActionType.JOB);
         Map<String, Object> params = new HashMap<>();
         params.put("param1", "value1");
         params.put("param2", "value2");

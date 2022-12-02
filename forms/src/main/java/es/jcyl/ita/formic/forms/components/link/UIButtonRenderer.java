@@ -25,6 +25,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
+import es.jcyl.ita.formic.forms.dialog.ConfirmationDialog;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -51,21 +52,59 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
         if (StringUtils.isNotBlank(component.getLabel())) {
             addButton.setText(component.getLabel());
         }
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-                    UserMessagesHelper.toast(env.getAndroidContext(), component.getReadonlyMessage(),
-                            Toast.LENGTH_LONG);
+        addButton.setOnClickListener(new ButtonClickListener(widget, env));
+    }
+
+    public class ButtonClickListener implements View.OnClickListener {
+
+        private final Widget widget;
+        private final RenderingEnv env;
+
+        public ButtonClickListener(Widget widget, RenderingEnv env) {
+            this.widget = widget;
+            this.env = env;
+        }
+
+        @Override
+        public void onClick(View v) {
+            UIButton component = (UIButton) widget.getComponent();
+            if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
+                UserMessagesHelper.toast(env.getAndroidContext(), component.getReadonlyMessage(),
+                        Toast.LENGTH_LONG);
+            } else {
+                if (component.isConfirmation(env.getWidgetContext())) {
+                    ConfirmationDialog confirmationDialog = new ConfirmationDialog(env.getAndroidContext());
+                    confirmationDialog.show();
+
+                    confirmationDialog.getConfirmationDialogText().setText(component.getLabelConfirmation());
+                    confirmationDialog.getConfirmationDialogTitle().setText(StringUtils.upperCase(env.getAndroidContext().getString(R.string.confirmation)));
+
+                    confirmationDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            execute(env, widget);
+                            confirmationDialog.cancel();
+                        }
+                    });
+                    confirmationDialog.getCancelButton().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirmationDialog.cancel();
+                        }
+                    });
                 } else {
-                    UserEventInterceptor interceptor = env.getUserActionInterceptor();
-                    if (interceptor != null) {
-                        Event event = new Event(Event.EventType.CLICK, widget);
-                        interceptor.notify(event);
-                    }
+                    execute(env, widget);
                 }
             }
-        });
+        }
+    }
+
+    private void execute(RenderingEnv env, Widget<UIButton> widget) {
+        UserEventInterceptor interceptor = env.getUserActionInterceptor();
+        if (interceptor != null) {
+            Event event = new Event(Event.EventType.CLICK, widget);
+            interceptor.notify(event);
+        }
     }
 
     @Override

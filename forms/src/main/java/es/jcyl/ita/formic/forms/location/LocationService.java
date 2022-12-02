@@ -16,7 +16,10 @@ package es.jcyl.ita.formic.forms.location;
  * limitations under the License.
  */
 
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -32,9 +35,10 @@ import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
 
-import es.jcyl.ita.formic.forms.R;
+import java.util.List;
 
-import static androidx.core.content.ContextCompat.checkSelfPermission;
+import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -42,10 +46,11 @@ import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 public class LocationService implements LocationListener {
 
+    private static final long MAX_ELAPSED_TIME_DEFAULT = 60 * 60 * 1000; // 60 min
     private static int PERMISSION_REQUEST = 1234;
 
     private long REQUIRED_ACCURACY = 10;
-    public static int MAX_ELAPSED_TIME = 60 * 1000;
+    public static int MAX_ELAPSED_TIME_GPS = 60 * 1000; // 1 min
 
     private LocationManager locationManager;
     Context ctx;
@@ -63,23 +68,64 @@ public class LocationService implements LocationListener {
         }
     }
 
+    protected void checkPermission(String provider) {
+        if (provider.equals(LocationManager.GPS_PROVIDER) || provider.equals(LocationManager.PASSIVE_PROVIDER)) {
+            if (checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) ctx,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
+            }
+        }
+        if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
+            if (checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) ctx,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST);
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
     public Location getLastLocation() {
         Location lastLocation = null;
         //TODO: mover al inicio
-        if (checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Criteria criteria = new Criteria();
-            String provider = locationManager.getBestProvider(criteria, true);
-            lastLocation = locationManager.getLastKnownLocation(provider);
-            //if last location is too old then return null
-            if (lastLocation != null && (System.currentTimeMillis() - lastLocation.getTime() > MAX_ELAPSED_TIME)) {
-                lastLocation = null;
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, true);
+        try {
+            checkPermission(bestProvider);
+            lastLocation = locationManager.getLastKnownLocation(bestProvider);
+            lastLocation = validateLocation(lastLocation, bestProvider);
+        } catch (Exception e) {
+            DevConsole.error("Error while trying to get location from BEST provider " + bestProvider, e);
+        }
+        if (lastLocation == null) {
+            // try with other providers
+            List<String> providers = locationManager.getProviders(true);
+            for (String prv : providers) {
+                if (!prv.equals(bestProvider)) {
+                    try {
+                        checkPermission(prv);
+                        lastLocation = locationManager.getLastKnownLocation(prv);
+                        lastLocation = validateLocation(lastLocation, prv);
+                        if (lastLocation != null) {
+                            break;
+                        }
+                    } catch (Exception e) {
+                        DevConsole.error("Error while trying to get location from provider " + prv, e);
+                    }
+                }
             }
-
-        } else {
-            ActivityCompat.requestPermissions((Activity) ctx, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
         }
         return lastLocation;
+    }
+
+    private Location validateLocation(Location location, String provider) {
+        long elapsedTime = provider.equals(LocationManager.GPS_PROVIDER) ? MAX_ELAPSED_TIME_GPS :
+                MAX_ELAPSED_TIME_DEFAULT;
+        if (location == null || (System.currentTimeMillis() - location.getTime() > elapsedTime)) {
+            return null;
+        } else {
+            return location;
+        }
     }
 
     @Override

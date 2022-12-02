@@ -45,7 +45,7 @@ public class FileRepoBuilderConfigTest {
         App app = App.init("");
         String projectPath = "src/test/resources/config/project1";
         Project p = ProjectRepository.createFromFolder(new File(projectPath));
-        app.setCurrentProject(p);
+        app.openProject(p);
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos

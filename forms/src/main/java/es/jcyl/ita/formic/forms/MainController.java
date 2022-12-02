@@ -16,6 +16,8 @@ package es.jcyl.ita.formic.forms;
  */
 
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.ViewGroup;
@@ -42,20 +44,25 @@ import es.jcyl.ita.formic.forms.controllers.FormException;
 import es.jcyl.ita.formic.forms.controllers.FormListController;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
-import es.jcyl.ita.formic.forms.reactivity.ReactivityFlowManager;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.scripts.Color;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.scripts.ScriptEntityHelper;
+import es.jcyl.ita.formic.forms.scripts.ScriptViewHelper;
+import es.jcyl.ita.formic.forms.view.activities.BaseFormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormEditViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
+import es.jcyl.ita.formic.forms.view.async.AsyncRenderWorker;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
+import es.jcyl.ita.formic.forms.view.render.RendererFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
+import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -81,12 +88,11 @@ public class MainController implements ContextAwareComponent {
     private ActionController actionController;
     private ViewController viewController;
     private ViewControllerFactory formControllerFactory;
-    private ReactivityFlowManager flowManager;
     private ScriptEngine scriptEngine;
 
     // navigation control
     private Router router;
-    private static HashMap<Class, Class> staticMap;
+    private static HashMap<Class, Class> controllerMap;
     private MCState state;
 
 
@@ -98,20 +104,21 @@ public class MainController implements ContextAwareComponent {
     }
 
     MainController() {
+        // coordinate factory creation
         formControllerFactory = ViewControllerFactory.getInstance();
         formControllerFactory.setMc(this);
         router = new Router(this);
         actionController = new ActionController(this, router);
-        renderingEnv = new RenderingEnv(actionController);
+        RenderingEnvFactory.getInstance().setActionController(actionController);
         scriptEngine = ScriptEngine.getInstance();
-//        flowManager = ReactivityFlowManager.getInstance();
+        RenderingEnvFactory.getInstance().setScriptEngine(scriptEngine);
         registerFormTypeViews();
 
         // initialize uiComponent proxy factory
         UIComponentProxyFactory proxyFactory = UIComponentProxyFactory.getInstance();
         if (System.getProperty("java.vendor").toLowerCase().contains("android")) {
-            // if context is already availate in Config, use it to get the cache directory
-            // if not, relay on factory falback solution through system properties
+            // if context is already available in Config, use it to get the cache directory
+            // if not, relay on factory fallback solution through system properties
             Context androidContext = App.getInstance().getAndroidContext();
             if (androidContext != null) {
                 proxyFactory.setAndroidClassLoadingStrategy(androidContext.getCacheDir());
@@ -120,11 +127,21 @@ public class MainController implements ContextAwareComponent {
         viewRenderer.addEventHandler(new ProxyViewRendererEventHandler(proxyFactory));
     }
 
-    private void setupScriptingEnv(es.jcyl.ita.formic.core.context.Context ctx) {
+    private void initContextDependant(){
+        RenderingEnvFactory.getInstance().setGlobalContext(this.globalContext);
+        renderingEnv = RenderingEnvFactory.getInstance().create();
+        setupScriptingEnv(globalContext);
+    }
+
+    private void setupScriptingEnv(es.jcyl.ita.formic.core.context.CompositeContext ctx) {
         Map<String, Object> props = new HashMap<>();
         props.put("ctx", ctx);
         props.put("renderEnv", this.renderingEnv);
         props.put("console", new DevConsole());
+        props.put("vh", new ScriptViewHelper(this));
+        props.put("eh", new ScriptEntityHelper());
+        props.put("color", new Color());
+        props.put("session", this.globalContext.getContext("session"));
         scriptEngine.initEngine(props);
         // add event handler to execute scripts during component rendering
         this.viewRenderer.addEventHandler(new RhinoViewRenderHandler(scriptEngine));
@@ -134,7 +151,6 @@ public class MainController implements ContextAwareComponent {
     /*********************************************/
     /***  Navigation control methods */
     /*********************************************/
-
     /**
      * Implements navigation to a new view
      *
@@ -147,19 +163,25 @@ public class MainController implements ContextAwareComponent {
         saveMCState();
 
         setupParamsContext(params);
+
+        ViewController lastController = null;
+        if (this.viewController != null) {
+            lastController = viewController;
+        }
         try {
             // get form configuration for given formId and load data
-            ViewController controller = getViewController(formId);
-            this.viewController = controller;
+            this.viewController = getViewController(formId);
             this.viewController.load(globalContext);
-            this.scriptEngine.initScope(controller.getId());
         } catch (Exception e) {
             restoreMCState();
             throw e;
         }
-
-        // get the activity class for current controller
+        // get the activity class for current controller and start it
         initActivity(andContext);
+        // reset last controller to unbind UI components
+        if (lastController != null) {
+            lastController.reset();
+        }
     }
 
     protected ViewController getViewController(String formId) {
@@ -193,7 +215,6 @@ public class MainController implements ContextAwareComponent {
         }
     }
 
-
     private void setupParamsContext(@Nullable Map<String, Object> params) {
         BasicContext pContext = new BasicContext("params");
         if (params != null) {
@@ -208,8 +229,8 @@ public class MainController implements ContextAwareComponent {
         formActivity.setRouter(this.router);
         formActivity.setViewController(this.viewController);
         // set the View elements to controllers
-        this.router.registerActivity(formActivity.getActivity());
         this.viewController.setContentView(formActivity.getContentView());
+        this.viewController.setActivity(formActivity.getActivity());
         this.renderingEnv.setFormActivity(formActivity);
     }
 
@@ -221,16 +242,33 @@ public class MainController implements ContextAwareComponent {
      * static mapping to relate each form type with the implenting view.
      */
     private void registerFormTypeViews() {
-        staticMap = new HashMap<>(2);
-        staticMap.put(FormEditController.class, FormEditViewHandlerActivity.class);
-        staticMap.put(ViewController.class, FormEditViewHandlerActivity.class);
-        staticMap.put(FormListController.class, FormListViewHandlerActivity.class);
+        controllerMap = new HashMap<>(2);
+        controllerMap.put(FormEditController.class, FormEditViewHandlerActivity.class);
+        controllerMap.put(ViewController.class, FormEditViewHandlerActivity.class);
+        controllerMap.put(FormListController.class, FormListViewHandlerActivity.class);
         // TODO: dynamic mapping for extensions
-
     }
 
     protected Class getViewImpl(ViewController formController) {
-        return staticMap.get(formController.getClass());
+        return controllerMap.get(formController.getClass());
+    }
+
+    public void renderViewAsync(Context viewContext, BaseFormActivity.ActivityCallback callback) {
+        UIView uiView = viewController.getView();
+        ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
+
+        RenderingEnvFactory.getInstance().initialize(renderingEnv);
+        renderingEnv.setAndroidContext(viewContext);
+        renderingEnv.setViewDAG(viewDAG);
+//        renderingEnv.setScriptEngine(scriptEngine);
+        viewController.getStateHolder().clearViewState();
+
+        renderingEnv.setStateHolder(viewController.getStateHolder());
+        renderingEnv.disableInterceptors();
+
+        // render view Widget and restore partial state if needed
+        AsyncRenderWorker worker = new AsyncRenderWorker(this);
+        worker.runRender(uiView, new PostRenderCallBack(callback));
     }
 
     /**
@@ -243,7 +281,7 @@ public class MainController implements ContextAwareComponent {
         UIView uiView = viewController.getView();
         ViewDAG viewDAG = DAGManager.getInstance().getViewDAG(uiView.getId());
 
-        renderingEnv.initialize();
+        RenderingEnvFactory.getInstance().initialize(renderingEnv);
         renderingEnv.setAndroidContext(viewContext);
         renderingEnv.setViewDAG(viewDAG);
         renderingEnv.setScriptEngine(scriptEngine);
@@ -253,6 +291,7 @@ public class MainController implements ContextAwareComponent {
 
         // render view Widget and restore partial state if needed
         viewController.onBeforeRender();
+
         Widget widget = viewRenderer.render(renderingEnv, uiView);
         viewController.setRootWidget((ViewWidget) widget);
         restorePrevState(viewController);
@@ -261,6 +300,34 @@ public class MainController implements ContextAwareComponent {
         viewController.onAfterRender(widget); //TODO: after or before enabling Interceptors?
 
         return widget;
+    }
+
+    public void clear() {
+        router.clear();
+        actionController.clear();
+        scriptEngine.clearSources();
+        viewController = null;
+    }
+
+    public class PostRenderCallBack {
+        private final BaseFormActivity.ActivityCallback callback;
+
+        public PostRenderCallBack(BaseFormActivity.ActivityCallback callback) {
+            this.callback = callback;
+        }
+
+        public void call(Widget widget) {
+            viewController.setRootWidget((ViewWidget) widget);
+            restorePrevState(viewController);
+
+            renderingEnv.enableInterceptors();
+            viewController.onAfterRender(widget);
+            try {
+                callback.call(widget);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public Widget renderComponent(UIComponent component) {
@@ -292,10 +359,32 @@ public class MainController implements ContextAwareComponent {
     public Widget updateView(Widget widget, boolean reactiveCall) {
         // render the new Android view for the component and replace it
         renderingEnv.disableInterceptors();
-        Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
-        viewRenderer.replaceView(widget, newView);
-        renderingEnv.enableInterceptors();
+        Widget newView;
+        try {
+            newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
+            viewRenderer.replaceView(widget, newView);
+        } finally {
+            renderingEnv.enableInterceptors();
+        }
         return newView;
+    }
+
+    /**
+     * Re-renders the given widget and forces to update the view of all its dependant components.
+     *
+     * @param widget
+     */
+    public void updateViewWithDependants(IWidget widget) {
+        renderingEnv.disableInterceptors();
+        try {
+            renderingEnv.setRestoreState(false);
+            Widget newView = viewRenderer.renderSubtree(this.renderingEnv, widget);
+            viewRenderer.replaceView((Widget) widget, (Widget) newView);
+            viewRenderer.renderDeps(this.renderingEnv, widget);
+        } finally {
+            renderingEnv.setRestoreState(true);
+            renderingEnv.enableInterceptors();
+        }
     }
 
     /**
@@ -360,6 +449,10 @@ public class MainController implements ContextAwareComponent {
         return renderingEnv;
     }
 
+    public ViewRenderer getViewRenderer() {
+        return viewRenderer;
+    }
+
     public ActionController getActionController() {
         return actionController;
     }
@@ -378,10 +471,7 @@ public class MainController implements ContextAwareComponent {
             throw new IllegalArgumentException(error("MainController needs an instance of CompositeContext to use it as GlobalContext."));
         }
         this.globalContext = (CompositeContext) ctx; // global context is received
-        renderingEnv.setGlobalContext(this.globalContext);
-        setupScriptingEnv(globalContext);
-        // add state and message context
-        globalContext.addContext(new BasicContext("state"));// TODO: sobra?
+        initContextDependant();
     }
 
     /*** TODO: Just For Testing purposes until we setup dagger for Dep. injection**/

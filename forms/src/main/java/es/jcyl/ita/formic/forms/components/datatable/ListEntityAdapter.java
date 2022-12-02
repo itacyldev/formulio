@@ -35,7 +35,7 @@ import es.jcyl.ita.formic.forms.controllers.UIAction;
 import es.jcyl.ita.formic.forms.controllers.UIParam;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.util.DataUtils;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.repo.Entity;
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -235,7 +235,7 @@ public class ListEntityAdapter extends ArrayAdapter<Entity> {
             Object route = e.evaluate((JexlContext) context);
             strRoute = (String) ConvertUtils.convert(route, String.class);
         }
-        UserAction action = new UserAction(actionTemplate.getType(), strRoute, component);
+        UserAction action = UserActionHelper.newAction(actionTemplate.getType(), strRoute, component);
         action.setRegisterInHistory(actionTemplate.isRegisterInHistory());
 
         action.setRefresh(actionTemplate.getRefresh());

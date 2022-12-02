@@ -27,6 +27,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Arrays;
@@ -98,7 +99,7 @@ public class SaveLocationTest {
         //create a mock location
         LocationBuilder builder = new LocationBuilder();
         Location mockLocation = builder.withRandomData().withTime(System.currentTimeMillis()).build();
-        when(mockLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)).thenReturn(mockLocation);
+        when(mockLocationManager.getLastKnownLocation(Mockito.anyString())).thenReturn(mockLocation);
 
         CompositeContext globalCxt = createContext();
 
@@ -117,7 +118,7 @@ public class SaveLocationTest {
     }
 
     private CompositeContext createContext() {
-        LocationService locationService = new LocationService(ctx);
+        LocationService locationService = new LocationServiceFake(ctx);
         locationService.setLocationManager(mockLocationManager);
 
         CompositeContext globalContext = new UnPrefixedCompositeContext();
@@ -137,6 +138,18 @@ public class SaveLocationTest {
                 builder.withSQLExpression(expression, when);
         }
         return builder.build();
+    }
+
+    public class LocationServiceFake extends LocationService {
+
+        public LocationServiceFake(Context ctx) {
+            super(ctx);
+        }
+
+        @Override
+        protected void checkPermission(String provider) {
+            return;
+        }
     }
 
 }

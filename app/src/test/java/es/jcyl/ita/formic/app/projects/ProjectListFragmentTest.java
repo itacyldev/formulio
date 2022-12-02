@@ -15,6 +15,12 @@ package es.jcyl.ita.formic.app.projects;
  * limitations under the License.
  */
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
@@ -33,15 +39,9 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 
 /**
- * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
+ * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
 @Ignore

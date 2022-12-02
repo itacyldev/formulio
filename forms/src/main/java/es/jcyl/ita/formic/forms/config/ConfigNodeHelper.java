@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config;
  * limitations under the License.
  */
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -276,6 +277,24 @@ public class ConfigNodeHelper {
     }
 
     /**
+     * Returns the first node in the list that has the expected value in given attribute.
+     * Returns null if no node has the expected value.
+     *
+     * @param nodes
+     * @param attName
+     * @param expectedValue
+     * @return
+     */
+    public static ConfigNode findNodeByAttValue(List<ConfigNode> nodes, String attName, String expectedValue) {
+        for(ConfigNode n: nodes){
+            if(n.getAttribute(attName).equalsIgnoreCase(expectedValue)){
+                return n;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Sets a value in node if the attribute is currently not set
      *
      * @param node
@@ -302,5 +321,31 @@ public class ConfigNodeHelper {
             }
         }
     }
+
+    /**
+     * Given a list of nodes, creates an Array that holds the linked elements of the nodes.
+     *
+     * @param nodes
+     * @param <T>
+     * @return
+     */
+    public static <T> T[] nodeElementsToArray(Class<T> clazz, List<ConfigNode> nodes) {
+        List<T> items = new ArrayList<>();
+        for (int i = 0; i < nodes.size(); i++) {
+            ConfigNode node = nodes.get(i);
+            try {
+                Object element = node.getElement();
+                if (element != null) {
+                    items.add((T) element);
+                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException(String.format("Wrong type found when trying to " +
+                                "copy elements from node [%s], expected [%s] but found [%s]", node.getId(),
+                        clazz.getName(), node.getElement().getClass().getName()), e);
+            }
+        }
+        return items.toArray((T[]) Array.newInstance(clazz, items.size()));
+    }
+
 
 }

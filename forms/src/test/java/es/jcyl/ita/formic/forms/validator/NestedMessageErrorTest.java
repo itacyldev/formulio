@@ -17,6 +17,10 @@ package es.jcyl.ita.formic.forms.validator;
  *
  */
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import android.content.Context;
 
 import androidx.fragment.app.FragmentActivity;
@@ -29,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Collection;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
@@ -49,8 +54,9 @@ import es.jcyl.ita.formic.forms.validation.RequiredValidator;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.MessageHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -59,8 +65,6 @@ import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
-
-import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -93,7 +97,8 @@ public class NestedMessageErrorTest {
         ctx.setTheme(R.style.FormudruidDark);
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 
@@ -111,7 +116,7 @@ public class NestedMessageErrorTest {
         ViewWidget viewWidget = (ViewWidget) renderHelper.render(env, view);
 
         // Access widgetContexts and set all the fields to null;
-        List<WidgetContextHolder> contextHolders = viewWidget.getContextHolders();
+        Collection<WidgetContextHolder> contextHolders = viewWidget.getContextHolders();
         for (WidgetContextHolder holder : contextHolders) {
             if (holder instanceof ViewWidget) {
                 continue;

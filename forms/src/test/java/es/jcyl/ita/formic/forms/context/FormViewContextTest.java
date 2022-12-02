@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.context;
  * limitations under the License.
  */
 
+import static org.mockito.Mockito.mock;
+
 import android.content.Context;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ import org.robolectric.RobolectricTestRunner;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.builders.FormDataBuilder;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
@@ -39,6 +42,7 @@ import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -72,7 +76,8 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         MainController mc = MockingUtils.mockMainController(ctx);
-        RenderingEnv env = new RenderingEnv(mc.getActionController());
+        RenderingEnvFactory.getInstance().setActionController(mc.getActionController());
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(gCtx);
         env.setAndroidContext(ctx);
 
@@ -104,7 +109,8 @@ public class FormViewContextTest {
 
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         MainController mc = MockingUtils.mockMainController(ctx);
-        RenderingEnv env = new RenderingEnv(mc.getActionController());
+        RenderingEnvFactory.getInstance().setActionController(mc.getActionController());
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(gCtx);
         env.setAndroidContext(ctx);
 

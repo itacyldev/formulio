@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.config.builders.controllers;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -30,14 +31,15 @@ import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.UIAction;
+import es.jcyl.ita.formic.forms.controllers.UIActionGroup;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 
 
 /**
- * @author Javier Ramos (javier.ramos@itacyl.es)
+ * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
- * Tests to check commons-converters functionallity
+ * Test UIAction contruction from XML definition
  */
 @RunWith(RobolectricTestRunner.class)
 public class UIActionBuilderTest {
@@ -75,23 +77,99 @@ public class UIActionBuilderTest {
         Assert.assertEquals(actions[0].getController(), "widget1");
     }
 
-    private static final String XML_BUTTON =
+    private static final String XML_BUTTON[] = new String[]{
+            "<button id=\"myButton\" label=\"guardar\">\n" +
+                    "  <save controller=\"widget1\"/>\n" +
+                    "</button>\n",
+            ///
             "<button id=\"myButton\" label=\"guardar\">\n" +
                     "  <action type=\"save\" controller=\"widget1\"/>\n" +
-                    "</button>\n";
+                    "</button>\n"
+    };
 
     @Test
     public void testButtonAction() throws Exception {
-        String configXML = XmlConfigUtils.createEditForm(XML_BUTTON);
+        for (String xmlDef : XML_BUTTON) {
+            String configXML = XmlConfigUtils.createEditForm(xmlDef);
+            FormConfig formConfig = XmlConfigUtils.readFormConfig(configXML);
+            // find the button
+            List<UIButton> buttonList = UIComponentHelper.getChildrenByClass(formConfig.getEdits().get(0).getView(), UIButton.class);
+            UIButton button = buttonList.get(0);
+            Assert.assertNotNull(button);
+            UIAction action = button.getAction();
+            Assert.assertEquals("Error in definition " + xmlDef, "save", action.getType());
+            Assert.assertEquals("Error in definition " + xmlDef, "widget1", action.getController());
+        }
+    }
+
+    private static final String XML_NESTED_ACTIONS = "" +
+            "<button id=\"myButton\" label=\"guardar\">\n" +
+            "    <action id=\"compositeAction\">\n" +
+            "      <action id=\"nestedAction1\" type=\"save\" controller=\"widget1\">\n" +
+            "        <params>\n" +
+            "            <param name=\"parametro1\" value=\"value1\"/>\n" +
+            "        </params>\n" +
+            "      </action>\n" +
+            "      <action id=\"nestedAction2\" type=\"navigate\" controller=\"widget2\"/>\n" +
+            "    </action>\n" +
+            "</button>";
+
+    @Test
+    public void testButtonNestedAction() throws Exception {
+        String configXML = XmlConfigUtils.createEditForm(XML_NESTED_ACTIONS);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(configXML);
         // find the button
-        UIAction[] actions = formConfig.getEdits().get(0).getActions();
         List<UIButton> buttonList = UIComponentHelper.getChildrenByClass(formConfig.getEdits().get(0).getView(), UIButton.class);
         UIButton button = buttonList.get(0);
         Assert.assertNotNull(button);
         UIAction action = button.getAction();
-        Assert.assertEquals(action.getType(), "save");
-        Assert.assertEquals(action.getController(), "widget1");
+        // direct action attached to the component is of type COMPOSITE and it has no params
+        Assert.assertEquals("composite", action.getType());
+        Assert.assertEquals(UIActionGroup.class, action.getClass());
+        Assert.assertEquals("compositeAction", action.getId());
+        // Composite action has no nested parameters
+        Assert.assertTrue(ArrayUtils.isEmpty(action.getParams()));
+        // The composite action has two nested actions
+        UIActionGroup compositeAction = (UIActionGroup) action;
+        Assert.assertEquals(2, compositeAction.getActions().length);
+    }
+
+    private static final String XML_BUTTON_JS_ACTION[] = new String[]{
+            "<button id=\"myButton\" label=\"guardar\">\n" +
+                    "  <js method=\"console.log()\">\n" +
+                    "    <param name=\"param1\" value=\"value1\"/>" +
+                    "  </js>" +
+                    "</button>\n",
+            ////
+            "<button id=\"myButton\" label=\"guardar\">\n" +
+                    "  <action type=\"js\" method=\"console.log()\">\n" +
+                    "    <param name=\"param1\" value=\"value1\"/>" +
+                    "  </action>" +
+                    "</button>\n",
+            ////
+            "<button id=\"myButton\" label=\"guardar\" action=\"js\" method=\"console.log()\">\n" +
+                    "    <param name=\"param1\" value=\"value1\"/>" +
+                    "</button>\n",
+            ///
+            "<button id=\"myButton\" label=\"guardar\">\n" +
+                    "  <action type=\"js\">\n" +
+                    "    <param name=\"method\" value=\"console.log\" />\n" +
+                    "    <param name=\"param1\" value=\"value1\"/>" +
+                    "  </action>\n" +
+                    "</button>"
+    };
+
+    @Test
+    public void testJsAction() {
+        for (String xmlDef : XML_BUTTON_JS_ACTION) {
+            String configXML = XmlConfigUtils.createEditForm(xmlDef);
+            FormConfig formConfig = XmlConfigUtils.readFormConfig(configXML);
+
+            UIButton button = UIComponentHelper.findFirstByClass(formConfig.getEdits().get(0).getView(), UIButton.class);
+            UIAction action = button.getAction();
+            Assert.assertEquals("Error in xmldef" + xmlDef, "js", action.getType());
+            Assert.assertEquals("Error in xmldef" + xmlDef, 2, action.getParams().length);
+        }
     }
 
     @AfterClass

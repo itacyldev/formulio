@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.config.meta;
  * limitations under the License.
  */
 
-import androidx.annotation.NonNull;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
@@ -61,7 +59,6 @@ public class Attribute {
         this.allowsExpression = allowsExpression;
     }
 
-    @NonNull
     @Override
     public String toString() {
         return name;

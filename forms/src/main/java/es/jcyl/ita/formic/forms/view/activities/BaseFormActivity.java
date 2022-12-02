@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -32,41 +33,58 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
-public abstract class
-BaseFormActivity<F extends ViewController> extends BaseActivity
+public abstract class BaseFormActivity<F extends ViewController> extends BaseActivity
         implements FormActivity<F> {
 
     protected Router router;
     protected RenderingEnv env;
     protected F viewController;
+    private ProgressBarHelper progressBarHelper;
     /**
      * View element used to render the forms defined for this controller
      */
     private ViewGroup contentView;
 
     protected void doOnCreate() {
-        attachContentView();
+        progressBarHelper = new ProgressBarHelper(this);
+        progressBarHelper.show();
 
         MainController mc = MainController.getInstance();
+        attachContentView();
         mc.registerActivity(this);
-
-        // render edit view content and link content view
-        try {
-            View viewRoot = mc.renderView(this);
-            contentView.setFocusable(false);
-            contentView.addView(viewRoot);
-        } catch (Exception e) {
-            DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
-            router.back(this, new String[]{"Sorry, there was an error while trying to render the view. " +
-                    "See console for details."});
-        }
-
-        doRender(mc.getRenderingEnv());
-        renderToolBars(mc.getRenderingEnv());
-        showMessages();
+        ActivityCallback callable = new ActivityCallback(this, mc, this.viewController, this.contentView);
+        mc.renderViewAsync(this, callable);
     }
 
-    protected abstract void renderToolBars(RenderingEnv renderingEnv);
+    public class ActivityCallback {
+        private final ViewController viewController;
+        private final MainController mc;
+        private final ViewGroup contentView;
+        private final Activity activity;
+
+        public ActivityCallback(Activity activity, MainController mc, ViewController viewController, ViewGroup contentView) {
+            this.activity = activity;
+            this.contentView = contentView;
+            this.mc = mc;
+            this.viewController = viewController;
+        }
+
+        public void call(View view) throws Exception {
+            try {
+                contentView.addView(view);
+                contentView.setFocusable(false);
+            } catch (Exception e) {
+                DevConsole.error("Error trying to render view " + this.viewController.getId(), e);
+                router.back(activity, new String[]{"Sorry, there was an error while trying to render the view. " +
+                        "See console for details."});
+            }
+            createView(mc.getRenderingEnv());
+            createToolBars(mc.getRenderingEnv());
+            progressBarHelper.hide();
+        }
+    }
+
+    protected abstract void createToolBars(RenderingEnv renderingEnv);
 
 
     protected void attachContentView() {
@@ -77,7 +95,7 @@ BaseFormActivity<F extends ViewController> extends BaseActivity
 
     protected abstract int getLayoutResource();
 
-    protected abstract void doRender(RenderingEnv renderingEnv);
+    protected abstract void createView(RenderingEnv renderingEnv);
 
     protected void showMessages() {
         // check if there are messages to show
@@ -113,7 +131,6 @@ BaseFormActivity<F extends ViewController> extends BaseActivity
         ActivityResultLauncher<String> mGetContent = registerForActivityResult(callback.getContract(),
                 callback.getCallBack()
         );
-
         callback.setResultLauncher(this, mGetContent);
     }
 }

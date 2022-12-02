@@ -16,10 +16,7 @@ public class StartupActivity extends Activity implements DialogInterface.OnShowL
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         showAlertDialog();
-
-
     }
 
     private void startActivity() {

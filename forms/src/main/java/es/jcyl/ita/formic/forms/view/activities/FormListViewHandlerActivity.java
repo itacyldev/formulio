@@ -8,6 +8,7 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionType;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
@@ -29,19 +30,19 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
     }
 
     @Override
-    protected void doRender(RenderingEnv renderingEnv) {
+    protected void createView(RenderingEnv renderingEnv) {
         // action buttons
         setTitle(viewController.getName());
         setToolbar(viewController.getName());
     }
 
     @Override
-    protected void renderToolBars(RenderingEnv renderingEnv) {
+    protected void createToolBars(RenderingEnv renderingEnv) {
         UIView view = this.viewController.getView();
-        renderFAB(view.getFabBar());
+        createFabBar(view.getFabBar());
     }
 
-    private void renderFAB(UIButtonBar buttonBar) {
+    private void createFabBar(UIButtonBar buttonBar) {
         FloatingActionButton fab = findViewById(R.id.fab);
         if (buttonBar == null || !buttonBar.hasChildren()) {
             fab.hide();
@@ -56,10 +57,10 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
                 UIAction uiAction = fabButton.getAction();
                 if (uiAction != null) {
                     // get the first one until we refactorize this (FORMIC-229)
-                    action = new UserAction(uiAction, viewController);
+                    action = UserActionHelper.newAction(uiAction, viewController);
                 } else {
                     // no action defined, use route from button and navigate
-                    action = UserAction.navigate(fabButton.getRoute(), viewController);
+                    action = UserActionHelper.navigate(fabButton.getRoute(), viewController);
                 }
                 prepareActionParams(uiAction, action);
                 // FAB new entity button, navigate to form view without entityId
@@ -96,8 +97,8 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
     public void onBackPressed() {
         super.onBackPressed();
         MainController mc = MainController.getInstance();
-        UserAction action = new UserAction(ActionType.BACK.name(), "back", this.viewController);
-        mc.getActionController().doUserAction(action);
+        UserAction action = UserActionHelper.newAction(ActionType.BACK.name(), "back", this.viewController);
+        mc.getActionController().execAction(action);
         finish();
     }
 

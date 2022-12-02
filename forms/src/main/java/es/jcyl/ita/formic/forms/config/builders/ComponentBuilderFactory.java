@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
@@ -77,13 +79,12 @@ import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
+import es.jcyl.ita.formic.forms.controllers.UIActionGroup;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Maps each xml tag with the builder responsible for the component creation.
@@ -141,7 +142,6 @@ public class ComponentBuilderFactory {
         registerBuilder("link", newBuilder(UILinkBuilder.class, "link"));
         //registerBuilder("button", newBuilder(UIButtonBuilder.class, "button"));
         registerBuilder("button", newDefaultBuilder(UIButton.class, "button"));
-
         registerBuilder("buttonbar", newDefaultGroupBuilder(UIButtonBar.class, "buttonbar"));
 
         ComponentBuilder actionBuilder = newBuilder(UIActionBuilder.class, "action");
@@ -154,6 +154,7 @@ public class ComponentBuilderFactory {
         registerBuilder("delete", actionBuilder);
         registerBuilder("save", actionBuilder);
         registerBuilder("cancel", actionBuilder);
+        registerBuilder("js", actionBuilder);
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);

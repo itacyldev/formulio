@@ -19,7 +19,7 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.context.impl.EntityContext;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.WidgetValidator;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
@@ -67,7 +67,10 @@ public abstract class AbstractWidgetController implements WidgetController {
         // go over all the input components looking for bindings that are not readonly
         for (StatefulWidget widget : widgetContext.getStatefulWidgets()) {
             if (widget.getComponent() instanceof UIInputComponent) {
-                updateEntity(viewContext, entityContext, (UIInputComponent) widget.getComponent());
+                boolean isReadOnly = ((UIInputComponent) widget.getComponent()).isReadonly(widgetContext);
+                if (!isReadOnly) {
+                    updateEntity(viewContext, entityContext, (UIInputComponent) widget.getComponent());
+                }
             }
         }
     }

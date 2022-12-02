@@ -28,18 +28,23 @@ import org.mozilla.javascript.ScriptableObject;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.App;
+import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
+import es.jcyl.ita.formic.forms.utils.MockingUtils;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
@@ -87,9 +92,7 @@ public class RhinoScriptsTest {
             simpleTx.put("bbba", "bbbbb");
             gCtx.addContext(simpleTx);
             gCtx.put("repos", new RepoAccessContext());
-
             runScript(source, gCtx);
-
         } finally {
             RepositoryFactory.getInstance().unregister("testRepo1");
         }
@@ -126,9 +129,7 @@ public class RhinoScriptsTest {
 
         ProjectRepository projectRepo = app.getProjectRepo();
         Project prj = projectRepo.findById("project1");
-        App.getInstance().setCurrentProject(prj);
-
-        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+        App.getInstance().openProject(prj);
 
         CompositeContext gCtx = new UnPrefixedCompositeContext();
         gCtx.put("repos", new RepoAccessContext());
@@ -139,6 +140,54 @@ public class RhinoScriptsTest {
         runScript(source, gCtx);
     }
 
+    static final String IMPORTING_SOURCE =
+            " function f1() { " +
+                    " return Packages.es.jcyl.ita.formic.forms.scripts.ScriptEntityHelper.convert('123', 'Long');" +
+                    "}";
+
+    @Test
+    public void testImportUtilsFunctions() throws Exception {
+
+        CompositeContext gCtx = ContextTestUtils.createGlobalContext();
+        ScriptEngine engine = new ScriptEngine();
+        engine.initEngine(null);
+        engine.store("formTest", IMPORTING_SOURCE);
+        engine.initScope("formTest");
+
+        Object result = engine.callFunction("f1");
+
+        Assert.assertNotNull(result);
+    }
+
+
+    /**
+     * Create a view mock and try to access all the field inside the view Contexts
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testAccessViewContext() throws Exception {
+        ScriptEngine engine = new ScriptEngine();
+        RenderingEnv rendEnv = ScriptViewTestUtils.createViewMock("myWidgets", engine);
+
+        // initialize Script engine and set the ScriptViewHelper
+        Map<String, Object> props = new HashMap<>();
+        props.put("out", System.out);
+
+        MainController mc = MockingUtils.mockMainController(null, ContextTestUtils.createGlobalContext());
+        when(mc.getRenderingEnv()).thenReturn(rendEnv);
+        props.put("vh", new ScriptViewHelper(mc));
+        engine.initEngine(props);
+        engine.store("formTest", IMPORTING_SOURCE);
+        engine.initScope("formTest");
+
+        String source = "var value = vh.widgets().filter(o=> o.componentId.startsWith('myWidgets')).map(o => o.getValue())";
+
+        engine.executeScript(source);
+        ScriptableObject scope = engine.getScope();
+        Object value = scope.get("value");
+
+    }
 
     private void runScript(String source, CompositeContext gCtx) {
         Context rhino = Context.enter();
@@ -153,26 +202,4 @@ public class RhinoScriptsTest {
 
         Context.exit();
     }
-
-
-    static final String IMPORTING_SOURCE =
-            " function f1() { " +
-                    " return Packages.es.jcyl.ita.formic.forms.scripts.ScriptEntityUtils.test('hollo');" +
-                    "}";
-
-    @Test
-    public void testImportUtilsFunctions() throws Exception {
-
-        CompositeContext gCtx = ContextTestUtils.createGlobalContext();
-        ScriptEngine engine = new ScriptEngine();
-        engine.initEngine(null);
-        engine.store("formTest", IMPORTING_SOURCE);
-        engine.initScope("formTest");
-
-//        runScript(IMPORTING_SOURCE, gCtx);
-
-        Object result = engine.callFunction("f1");
-
-    }
-
 }

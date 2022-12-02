@@ -50,7 +50,7 @@ public class OnInputChangeEventHandler
             // if the component has defined an UserAction for this event, use it
             UserAction action = event.getHandler();
             if (action != null) {
-                ac.doUserAction(action);
+                ac.execAction(action);
                 if (action.isViewChangeAction()) {
                     // if the action forces a transition to another view we don't need to update
                     // view values and re-render components

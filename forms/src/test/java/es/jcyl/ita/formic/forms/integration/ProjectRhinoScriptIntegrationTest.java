@@ -54,6 +54,7 @@ import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
@@ -90,7 +91,7 @@ public class ProjectRhinoScriptIntegrationTest {
         // Open project config
         ProjectRepository projectRepo = app.getProjectRepo();
         Project prj = projectRepo.findById("project1");
-        App.getInstance().setCurrentProject(prj);
+        App.getInstance().openProject(prj);
 
         // mock main controller
         MainControllerMock mc = new MainControllerMock();
@@ -158,7 +159,8 @@ public class ProjectRhinoScriptIntegrationTest {
         ActionController mcAC = mock(ActionController.class);
 
         // Prepare rendering environment
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(globalContext);
         env.setAndroidContext(ctx);
 

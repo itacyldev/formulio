@@ -37,17 +37,16 @@ public class OnClickEventHandler
     public void handle(Event event) {
         // if the component has defined an UserAction for this event, use it
         UserAction action = event.getHandler();
-        if(event.getSource()!=null) {
-            action.addParam("parentContext", event.getSource().getRootWidget().getContext());
-        }
-        if(action != null){
-            ac.doUserAction(action);
-            if(action.isViewChangeAction()){
+        if (action != null) {
+            if (event.getSource() != null) {
+                action.addParam("parentContext", event.getSource().getRootWidget().getContext());
+            }
+            ac.execAction(action);
+            if (action.isViewChangeAction()) {
                 // if the action forces a transition to another view we don't need to update
                 // view values and re-render components
                 return;
             }
         }
     }
-
 }

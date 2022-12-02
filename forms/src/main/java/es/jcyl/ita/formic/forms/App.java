@@ -157,8 +157,10 @@ public class App {
      */
     private void initContext() {
         globalContext = new UnPrefixedCompositeContext();
-        // TODO: create context providers to implement each context creation
+        // TODO: create context providers to implement each context creation and configure
+        //  them in project file
         globalContext.addContext(new DateTimeContext());
+        globalContext.addContext(new BasicContext("session"));
         initJobsContext(globalContext);
         MainController.getInstance().setContext(globalContext);
         RepositoryFactory.getInstance().setContext(globalContext);
@@ -192,7 +194,7 @@ public class App {
             this.formConfigRepo.deleteAll();
         }
         formControllerFactory.clear();
-        MainController.getInstance().getScriptEngine().clearSources();
+        MainController.getInstance().clear();
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
         this.globalContext.clear();
@@ -335,7 +337,7 @@ public class App {
      *
      * @param project Selected project.
      */
-    public void setCurrentProject(final Project project) {
+    public void openProject(final Project project) {
         try {
             currentProject = project;
             readConfig(project);

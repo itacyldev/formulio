@@ -37,7 +37,6 @@ import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 
 /**
- * @author José Ramón Cuevas (joseramon.cuevas@itacyl.es)
  */
 public class ProjectListFragment extends Fragment {
 

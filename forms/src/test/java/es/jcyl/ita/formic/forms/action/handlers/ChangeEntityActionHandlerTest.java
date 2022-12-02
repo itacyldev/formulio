@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
+import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.actions.handlers.EntityChangeAction;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.controllers.FormEditController;
@@ -53,10 +54,10 @@ public class ChangeEntityActionHandlerTest {
         actionController.register("testAction", actionHandler);
 
         // prepare user Action
-        UserAction userAction = new UserAction("testAction", mock(UIComponent.class));
+        UserAction userAction = UserActionHelper.newAction("testAction", null, mock(UIComponent.class));
         userAction.setRefresh("all");
         // act
-        actionController.doUserAction(userAction);
+        actionController.execAction(userAction);
         // assert
         verify(mc).renderBack();
 
@@ -74,10 +75,10 @@ public class ChangeEntityActionHandlerTest {
         actionController.register("testAction", actionHandler);
 
         // prepare user Action
-        UserAction userAction = new UserAction("testAction", mock(UIComponent.class));
+        UserAction userAction = UserActionHelper.newAction("testAction", null, mock(UIComponent.class));
         userAction.setRoute("back");
         // act
-        actionController.doUserAction(userAction);
+        actionController.execAction(userAction);
         //assert
         verify(mc.getRouter()).navigate(any(ActionContext.class), any(), any());
     }

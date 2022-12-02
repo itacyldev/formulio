@@ -39,6 +39,9 @@ public class MockingUtils {
     public static MainController mockMainController(Context androidContext) {
         return mockMainController(androidContext, null);
     }
+    public static MainController mockMainController() {
+        return mockMainController(null, null);
+    }
 
     public static MainController mockMainController(Context androidContext, CompositeContext globalContext) {
         MainController mc = mock(MainController.class);
