@@ -1,0 +1,35 @@
+
+E
+java:S3740X"/Provide the parametrized type for this generic.(…Ö¹Ê
+D
+java:S3740Z"/Provide the parametrized type for this generic.(Š– &
+J
+java:S3740f"/Provide the parametrized type for this generic.(ÀÄúöúÿÿÿÿ
+J
+java:S3740t"/Provide the parametrized type for this generic.(ÿÃ‰×ùÿÿÿÿ
+J
+java:S3740y"/Provide the parametrized type for this generic.(á÷«Ãýÿÿÿÿ
+J
+java:S3740y"/Provide the parametrized type for this generic.(á÷«Ãýÿÿÿÿ
+E
+java:S3740{"/Provide the parametrized type for this generic.(×Úñ·
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+t
+java:S2293."YReplace the type specification in this constructor call with the diamond operator ("<>").(——æÊùÿÿÿÿ
+Q	java:S125A"<This block of commented-out lines of code should be removed.(¬š·´
+L
+java:S1172f"1Remove this unused method parameter "properties".(ÀÄúöúÿÿÿÿ
+t
+java:S2293y"YReplace the type specification in this constructor call with the diamond operator ("<>").(á÷«Ãýÿÿÿÿ
+_
+java:S1128"DRemove this unused import 'org.mini2Dx.collections.CollectionUtils'.(Ì·¤¡úÿÿÿÿ
+h
+java:S1128"MRemove this unused import 'es.jcyl.ita.formic.forms.config.ConfigNodeHelper'.(æ§¡æûÿÿÿÿ
+i
+java:S1128"SRemove this unused import 'es.jcyl.ita.formic.forms.config.ConfigurationException'.(íâˆ„
+h
+java:S1128&"MRemove this unused import 'es.jcyl.ita.formic.forms.config.DevConsole.error'.(ï†•©üÿÿÿÿ
+J
+java:S1068."/Remove this unused "NAV_ACTIONS" private field.(——æÊùÿÿÿÿ
+T
+java:S1155u">Use isEmpty() to check whether the collection is empty or not.(¯”¸Õ

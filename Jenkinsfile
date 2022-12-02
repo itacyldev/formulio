@@ -99,6 +99,15 @@ pipeline {
                 sh './gradlew codeCoverageReport'
             }
         }
+        stage('Assemble') {
+            steps {
+                script {
+                    sh '''
+                        ./gradlew :app:assembleRelease
+                    '''
+                }
+            }
+        }
         stage('SonarQube analysis') {
             when {
                 expression { BRANCH_NAME == 'develop' }

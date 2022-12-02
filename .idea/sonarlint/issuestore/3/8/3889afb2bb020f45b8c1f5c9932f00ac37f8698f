@@ -1,0 +1,16 @@
+
+o	java:S116"URename this field "LayoutType" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¬¾ì‚üÿÿÿÿ
+9
+java:S1948
+"#Make "fields" private or transient.(ˆÒ„æ
+U
+java:S1161":Add the "@Override" annotation above this method signature(Í¿İ¢üÿÿÿÿ
+U
+java:S1161":Add the "@Override" annotation above this method signature(ƒÄ·×ùÿÿÿÿ
+h	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(–ºí¨ıÿÿÿÿ
+1
+java:S3626#"Remove this redundant jump.(ûÁİ…
+1
+java:S3626("Remove this redundant jump.(ûÁİ…
+U
+java:S1161.":Add the "@Override" annotation above this method signature(«¿Áşÿÿÿÿ
