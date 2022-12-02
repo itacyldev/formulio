@@ -255,7 +255,7 @@ public class RenderingEnv {
         }
     }
 
-    Entity getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 

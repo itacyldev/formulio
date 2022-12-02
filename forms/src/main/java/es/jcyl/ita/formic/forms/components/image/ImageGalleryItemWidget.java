@@ -3,11 +3,13 @@ package es.jcyl.ita.formic.forms.components.image;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 
-public class ImageGalleryItemWidget extends Widget<UIImageGalleryItem> {
+public class ImageGalleryItemWidget extends Widget<UIImageGalleryItem> implements WidgetContextHolder {
 
     private ViewValueConverter converter;
 
@@ -21,6 +23,11 @@ public class ImageGalleryItemWidget extends Widget<UIImageGalleryItem> {
 
     public ImageGalleryItemWidget(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+    }
+
+    ImageResourceView getImageResourceView() {
+        ImageResourceView resourceView = this.findViewById(R.id.galleryitem_image);
+        return resourceView;
     }
 
     @Override
@@ -42,4 +49,8 @@ public class ImageGalleryItemWidget extends Widget<UIImageGalleryItem> {
         this.converter = converter;
     }
 
+    @Override
+    public String getHolderId() {
+        return null;
+    }
 }

@@ -1,5 +1,5 @@
-<main name="Form Image Gallery" description="An example of short description" id="formImagegalleryDB" repo="superHRepo">
-    <list name="Image Gallery from DB">
+<main name="Form Image Gallery DB" description="An example of short description" id="formImagegalleryDB" repo="superHImagesDBRepo">
+    <list name="Form Image Gallery DB">
         <form>
             <imagegallery repo="superHImagesDBRepo">
                 <imagegalleryitem converter="b64Image" value="${entity.image_thumb}" />

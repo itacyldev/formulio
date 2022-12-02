@@ -1,15 +1,23 @@
 package es.jcyl.ita.formic.forms.components.image;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.context.ContextUtils;
 import es.jcyl.ita.formic.forms.context.impl.AndViewContext;
+import es.jcyl.ita.formic.forms.controllers.widget.GroupWidgetController;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.repo.query.FilterHelper;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
@@ -33,7 +41,10 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
     private AndViewContext thisViewCtx = new AndViewContext(this);
     GridView gridView;
     private Repository repo;
+    private List<ImageGalleryItemWidget> items;
     private List<Entity> entities = new ArrayList<>();
+
+    private GroupWidgetController controller;
 
     // view filtering criteria
     private Filter filter;
@@ -53,12 +64,41 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
 
     public void setGridView(GridView gridView) {
         this.gridView = gridView;
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                showImage((ImageGalleryItemWidget) v);
+            }
+        });
+    }
+
+
+    private void showImage(ImageGalleryItemWidget itemWidget) {
+        ImageResourceView itemImageView = itemWidget.getImageResourceView();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+
+        LayoutInflater factory = LayoutInflater.from(getContext());
+        final View view = factory.inflate(R.layout.imagegalleryitem_dialog, null);
+        ImageView imageView = view.findViewById(R.id.imagegalleryitem_view);
+        imageView.setImageDrawable(itemImageView.getDrawable());
+        builder.setView(view);
+
+        Dialog dialog = builder.create();
+
+        dialog.show();
+
+
+        dialog.getContext();
     }
 
     @Override
     public void setup(RenderingEnv env) {
         super.setup(env);
         this.repo = component.getRepo();
+
+
 //        LinearLayout contentView = findViewById(R.id.datalist_content_layout);
 //        setContentView(contentView);
         load(env);
@@ -119,11 +159,6 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
     }
 
     @Override
-    public WidgetController getController() {
-        return null;
-    }
-
-    @Override
     public Widget getWidget() {
         return this;
     }
@@ -144,4 +179,27 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
     public void setAdapter(ImageListAdapter adapter) {
         this.gridView.setAdapter(adapter);
     }
+
+    public ImageListAdapter getAdapter() {
+        return (ImageListAdapter) this.gridView.getAdapter();
+    }
+
+    public void setItems(List<ImageGalleryItemWidget> widgets) {
+        this.items = widgets;
+    }
+
+    public List<ImageGalleryItemWidget> getItems() {
+        return this.getAdapter().getImageItemViews();
+    }
+
+    @Override
+    public WidgetController getController() {
+        return this.controller;
+    }
+
+    public void setController(GroupWidgetController controller) {
+        this.controller = controller;
+    }
+
+
 }

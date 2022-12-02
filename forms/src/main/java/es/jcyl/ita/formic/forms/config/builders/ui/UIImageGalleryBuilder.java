@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import es.jcyl.ita.formic.forms.components.datalist.UIDatalist;
 import es.jcyl.ita.formic.forms.components.image.UIImageGallery;
 import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItem;
 import es.jcyl.ita.formic.forms.config.builders.BuilderHelper;

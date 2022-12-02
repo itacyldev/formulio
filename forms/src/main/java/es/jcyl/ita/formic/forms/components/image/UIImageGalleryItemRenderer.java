@@ -1,6 +1,6 @@
 package es.jcyl.ita.formic.forms.components.image;
 /*
- * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,18 @@ package es.jcyl.ita.formic.forms.components.image;
  * limitations under the License.
  */
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.File;
+
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.repo.media.FileEntity;
 
 /**
- * @author Gustavo Río (gustavo.rio@itacyl.es)
+ * @author Javier Ramos (javier.ramos@itacyl.es)
  * <p>
  * Renders uiImage componentes using Android ImageView
  */
@@ -40,7 +46,17 @@ public class UIImageGalleryItemRenderer extends AbstractRenderer<UIImageGalleryI
     private void setValueInView(RenderingEnv env, ImageGalleryItemWidget widget) {
         ImageResourceView imageView = widget.findViewById(R.id.galleryitem_image);
         UIImageGalleryItem component = widget.getComponent();
-        Object value = getComponentValue(env, component, null);
-        component.getConverter().setViewValue(imageView, value);
+        if (env.getEntity() instanceof FileEntity) {
+            FileEntity entity = (FileEntity) env.getEntity();
+            File imgFile = entity.getFile();
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                imageView.setImageBitmap(myBitmap);
+            }
+        } else {
+            Object value = getComponentValue(env, component, null);
+            component.getConverter().setViewValue(imageView, value);
+        }
     }
+
 }

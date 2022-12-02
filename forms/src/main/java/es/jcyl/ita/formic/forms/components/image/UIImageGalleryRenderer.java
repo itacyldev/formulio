@@ -2,12 +2,17 @@ package es.jcyl.ita.formic.forms.components.image;
 
 import android.widget.GridView;
 
+import org.mini2Dx.collections.CollectionUtils;
+
 import java.util.List;
 
 import es.jcyl.ita.formic.forms.R;
+import es.jcyl.ita.formic.forms.controllers.operations.BaseWidgetValidator;
+import es.jcyl.ita.formic.forms.controllers.widget.GroupWidgetController;
 import es.jcyl.ita.formic.forms.view.render.AbstractGroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /*
@@ -31,6 +36,8 @@ import es.jcyl.ita.formic.repo.Entity;
  */
 public class UIImageGalleryRenderer extends AbstractGroupRenderer<UIImageGallery, ImageGalleryWidget> {
 
+    public BaseWidgetValidator validator;
+
     @Override
     protected int getWidgetLayoutId(UIImageGallery component) {
         return R.layout.widget_imagegallery;
@@ -38,15 +45,18 @@ public class UIImageGalleryRenderer extends AbstractGroupRenderer<UIImageGallery
 
     @Override
     protected void composeWidget(RenderingEnv env, ImageGalleryWidget widget) {
+        validator = new BaseWidgetValidator();
+
         UIImageGallery component = widget.getComponent();
         GridView gridView = widget.findViewById(R.id.imagegrid_view);
 
         widget.setGridView(gridView);
         widget.setConverter(component.getConverter());
 
-        //setValueInView();
-
+        ImageListAdapter adapter = new ImageListAdapter(env);
+        ((ImageGalleryWidget) widget).setAdapter(adapter);
     }
+
 
     /**
      * Configure widget after creation.
@@ -59,30 +69,28 @@ public class UIImageGalleryRenderer extends AbstractGroupRenderer<UIImageGallery
         List<Entity> entityList = widget.getEntities();
     }
 
-
+    @Override
     public void addViews(RenderingEnv env, Widget<UIImageGallery> root, Widget[] widgets) {
-        ImageListAdapter adapter = new ImageListAdapter(root.getComponent(), env);
-        adapter.setImageItemViews((ImageWidget[])widgets);
-        ((ImageGalleryWidget)root).setAdapter(adapter);
+        ImageGalleryWidget imageGalleryWidget = (ImageGalleryWidget) root;
+        ImageListAdapter adapter = imageGalleryWidget.getAdapter();
+        for (Widget widget : widgets) {
+            adapter.addView((ImageGalleryItemWidget) widget);
+        }
+
     }
 
+    @Override
+    public void endGroup(RenderingEnv env, Widget<UIImageGallery> root) {
+        super.endGroup(env, root);
 
-//    @Override
-//    protected void setNestedMessage(RenderingEnv env, Widget<UITab> widget) {
-//        TabLayout tabLayout = widget.findViewById(R.id.tab_layout);
-//        // find which tabs has error messages
-//        UIComponent[] kids = widget.getComponent().getChildren();
-//        if (kids == null) {
-//            return;
-//        }
-//        int pos = 0;
-//        for (UIComponent tabItem : kids) {
-//            String message = MessageHelper.getMessage(env, tabItem);
-//            if (!StringUtils.isBlank(message)) {
-//                tabLayout.getTabAt(pos).setIcon(R.drawable.ic_input_error);
-//            }
-//            pos++;
-//        }
-//    }
+        ImageGalleryWidget widget = (ImageGalleryWidget) root;
+        List<ImageGalleryItemWidget> items = widget.getItems();
 
+        WidgetContextHolder[] holdersArr = (CollectionUtils.isEmpty(items)) ? new WidgetContextHolder[0] :
+                items.toArray(new WidgetContextHolder[items.size()]);
+
+        GroupWidgetController controller = new GroupWidgetController((ImageGalleryWidget) root, holdersArr);
+        controller.setValidator(validator);
+        ((ImageGalleryWidget) root).setController(controller);
+    }
 }
