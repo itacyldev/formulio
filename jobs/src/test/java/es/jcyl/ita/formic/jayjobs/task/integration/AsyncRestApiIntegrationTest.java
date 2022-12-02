@@ -1,8 +1,5 @@
 package es.jcyl.ita.formic.jayjobs.task.integration;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import androidx.annotation.NonNull;
 
 import com.android.volley.Header;
@@ -12,6 +9,7 @@ import com.android.volley.toolbox.HttpResponse;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -36,6 +34,9 @@ import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
 import es.jcyl.ita.formic.jayjobs.utils.ContextTestUtils;
 import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
 import util.Log;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Instrumented test to check reader/writer job execution in device
@@ -89,6 +90,7 @@ public class AsyncRestApiIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void testRunAsync() throws Exception {
         // read job content
         CompositeContext context = JobContextTestUtils.createJobExecContext();
@@ -104,6 +106,7 @@ public class AsyncRestApiIntegrationTest {
         }
     }
     @Test
+    @Ignore
     public void testResponseToFile() throws TaskException, IOException, InterruptedException {
         Context taskContext = new BasicContext("t1");
         Task taskMock = createTaskMock(taskContext);

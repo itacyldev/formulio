@@ -8,8 +8,8 @@
     <style name="BottomNavigationStyle">
         <item name="android:background">?attr/primaryColor</item>
         <item name="itemBackground">?attr/primaryColor</item>
-        <item name="itemIconTint">?attr/onPrimaryColor</item>
-        <item name="itemTextColor">?attr/onPrimaryColor</item>
+        <item name="itemIconTint">@drawable/navbar_color</item>
+        <item name="itemTextColor">@drawable/navbar_color</item>
     </style>
 
     <style name="ProjectFormsCardStyle">

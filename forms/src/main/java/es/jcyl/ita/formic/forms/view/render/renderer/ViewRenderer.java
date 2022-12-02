@@ -183,7 +183,8 @@ public class ViewRenderer {
         } else if (component instanceof UIImageGalleryItem) {
             String cId = component.getId();
             // set component id to item-1,item-2, starting with 1
-            return new UIImageGalleryItemProxy(cId + "-" + (id + 1), (UIImageGalleryItem)component, entity);
+            return new
+                    UIImageGalleryItemProxy(cId + "-" + (id + 1), (UIImageGalleryItem)component, entity);
         }else {
             return component;
         }

@@ -26,9 +26,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mini2Dx.collections.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.processor.AbstractProcessor;
-import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
 import es.jcyl.ita.formic.jayjobs.utils.JsonUtils;
 import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
@@ -51,7 +50,7 @@ import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
  * @author Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class HttpRequestProcessor extends AbstractProcessor implements NonIterProcessor, Response.ErrorListener {
-    protected static final Log LOGGER = LogFactory.getLog(ContextPopulateProcessor.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestProcessor.class);
 
     private String url;
     private Map<String, Object> jsonObject;

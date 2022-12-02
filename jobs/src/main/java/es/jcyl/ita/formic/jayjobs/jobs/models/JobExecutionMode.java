@@ -35,5 +35,7 @@ public enum JobExecutionMode {
     /**
      * Execute the job in the main thread (don't use for long-running tasks)
      */
-    FG
+    FG;
+
+
 }

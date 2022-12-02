@@ -76,6 +76,7 @@ public class JobProgressListener implements JobExecListener, Serializable {
         Intent intent = new Intent(andContext, JobProgressActivity.class);
 
         intent.putExtra("jobExecId", jobExecId);
+        intent.putExtra("jobExecDescription", jobConfig.getDescription());
         andContext.startActivity(intent);
     }
 

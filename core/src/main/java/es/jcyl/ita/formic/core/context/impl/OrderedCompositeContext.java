@@ -5,8 +5,8 @@ import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
@@ -41,8 +41,7 @@ public class OrderedCompositeContext extends AbstractMapContext
 
     private static final String ASTERISK_CTX = "*";
 
-    private static final Log LOGGER = LogFactory
-            .getLog(OrderedCompositeContext.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderedCompositeContext.class);
 
     private static final SimpleDateFormat dtf = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");

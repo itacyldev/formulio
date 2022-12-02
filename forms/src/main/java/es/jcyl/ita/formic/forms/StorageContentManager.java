@@ -8,14 +8,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class StorageContentManager {
 
-    private static final Log LOGGER = LogFactory.getLog(StorageContentManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageContentManager.class);
 
     public static String PATH_SEPARATOR = "/";
 
