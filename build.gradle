@@ -100,8 +100,8 @@ allprojects {
 
 ext {
 
-    versionCode = 48
-    versionName = '0.7.26'
+    versionCode = 51
+    versionName = '0.7.29'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 30
     targetSdkVersion = 30
@@ -110,7 +110,7 @@ ext {
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.26'
+    version = '0.7.29'
     artifactId = 'Formic'
 
     sharedDeps = [
