@@ -1,0 +1,24 @@
+<main repo="provRepo">
+    <edit name="My">
+        <button action="js" label="button2"
+            method="vh.setWidgetValue('myDateInput',ctx['location'].asLatLong)" />
+        <input id="myNewInput" value="${location.asLatLong}" />
+        <input id="myDateInput" value="${date.now}" />
+        <tab>
+            <tabitem>
+                <datalist id="contactList" repo="contacts">
+                    <datalistitem>
+                        <textarea value="${entity.first_name}"/>
+                    </datalistitem>
+                </datalist>
+            </tabitem>
+            <tabitem>
+                <datalist id="contactList2" repo="contacts">
+                    <datalistitem>
+                        <textarea value="${entity.first_name}"/>
+                    </datalistitem>
+                </datalist>
+            </tabitem>
+        </tab>
+    </edit>
+</main>

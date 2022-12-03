@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.integration;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
+
 import android.util.Log;
 
 import org.junit.Assert;
@@ -41,8 +43,6 @@ import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
-
-import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -85,10 +85,10 @@ public class ProjectConfigIntegrationTest {
 
         app.openProject(prj);
         // there must be 4 repos
-        Set<String> repoIds = app.getRepoConfigReader().getRepoFactory().getRepoIds();
+        Set<String> repoIds = app.getRepoFactory().getRepoIds();
 
         // there must be three form configs
-        List<FormConfig> formConfigs = app.getFormConfigRepo().listAll();
+        List<FormConfig> formConfigs = app.getProjectManager().getFormConfigRepo().listAll();
         int expectedNumForms = getNunFilesInFolder(TestUtils.findFile("config/project1/forms"));
         assertEquals(expectedNumForms, formConfigs.size());
     }

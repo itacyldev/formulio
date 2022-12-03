@@ -63,7 +63,7 @@ public class FormConfigBuilderTest {
     public void testFileconfig() throws Exception {
         ProjectUtils.readProjectConfig("src/test/resources/config/project1");
         App app = App.getInstance();
-        app.getFormConfigRepo().findById("formPrueba");
+        app.getProjectManager().getFormConfigRepo().findById("formPrueba");
 
     }
 
