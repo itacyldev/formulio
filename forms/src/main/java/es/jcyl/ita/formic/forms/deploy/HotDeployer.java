@@ -25,6 +25,9 @@ import java.io.File;
 import es.jcyl.ita.formic.forms.MainController;
 
 /**
+ * Detects changes in project configuration files and reload configuration objects. If change affects to current view,
+ * asks de MainController to re-render it.
+ *
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class HotDeployer extends FileObserver {
@@ -37,6 +40,11 @@ public class HotDeployer extends FileObserver {
     }
 
     @Override
-    public void onEvent(int event, @Nullable String path) {
+    public void onEvent(int event, String path) {
+        // check whan kind of
+
+        // check if we have to re-render current view
+
+
     }
 }

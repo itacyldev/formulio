@@ -53,8 +53,6 @@ public class FormConfigBuilderTest {
     @BeforeClass
     public static void setUp() {
         App.init("");
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
     }

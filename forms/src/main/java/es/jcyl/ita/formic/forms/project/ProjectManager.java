@@ -65,6 +65,13 @@ public class ProjectManager {
         }
     }
 
+    public void closeProject() {
+        if(this.formConfigRepo!=null){
+            this.formConfigRepo.close();
+        }
+        this.currentProject = null;
+    }
+
     /**
      * DO NOT USE THIS METHOD, call setCurrentProject instead. Made public just for testing
      * purposes.
@@ -200,5 +207,9 @@ public class ProjectManager {
 
     public FormConfigRepository getFormConfigRepo() {
         return formConfigRepo;
+    }
+
+    public String getCurrentBaseFolder() {
+        return (currentProject == null) ? null : currentProject.getBaseFolder();
     }
 }

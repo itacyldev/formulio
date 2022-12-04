@@ -69,10 +69,6 @@ public class App {
      */
     private ViewControllerFactory formControllerFactory = ViewControllerFactory.getInstance();
 
-    private App(String appBaseFolder) {
-        this.appBaseFolder = appBaseFolder;
-    }
-
     private App(Context androidContext, String appBaseFolder) {
         this.appBaseFolder = appBaseFolder;
         this.andContext = androidContext;
@@ -80,12 +76,11 @@ public class App {
 
     public static App getInstance() {
         if (_instance == null) {
-            throw new ConfigurationException("You first have to call to init method giving " +
-                    "the base folder of the project you want to read.");
+            throw new ConfigurationException("You first have to call to init() method passing " +
+                    "the base folder of your projects.");
         }
         return _instance;
     }
-
 
     /**
      * Static initialization for
@@ -94,13 +89,12 @@ public class App {
      * @return
      */
     public static App init(String appBaseFolder) {
-        _instance = new App(appBaseFolder);
+        _instance = new App(null, appBaseFolder);
         _instance.init();
         return _instance;
     }
 
     public static App init(Context and, String appBaseFolder) {
-        // TODO: cache??
         _instance = new App(and, appBaseFolder);
         _instance.init();
         return _instance;
@@ -179,7 +173,11 @@ public class App {
      * @param project Selected project.
      */
     public void openProject(final Project project) {
+        // clear previous repo and entity sources
+        RepositoryFactory.getInstance().clear();
+        EntitySourceFactory.getInstance().clear();
         try {
+            projectManager.closeProject();
             projectManager.openProject(project);
         } catch (Exception e) {
             throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e), e);
@@ -220,7 +218,7 @@ public class App {
     }
 
     public String getCurrentBaseFolder() {
-        return this.projectManager.getCurrentProject().getBaseFolder();
+        return this.projectManager.getCurrentBaseFolder();
     }
 
     public Resources getResources() {

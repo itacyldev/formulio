@@ -146,6 +146,11 @@ public class MemoRepository extends AbstractEditableRepository<Entity, Object, B
         return BaseFilter.class;
     }
 
+    @Override
+    public void close() {
+        this.repo.clear();
+    }
+
     protected Object generateKey() {
         keyCounter++;
         return keyCounter;
@@ -177,4 +182,6 @@ public class MemoRepository extends AbstractEditableRepository<Entity, Object, B
                 new String[]{"id"});
         this.meta = meta;
     }
+
+
 }

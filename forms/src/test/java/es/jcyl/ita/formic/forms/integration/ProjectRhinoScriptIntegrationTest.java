@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.integration;
  * limitations under the License.
  */
 
+import static org.mockito.Mockito.mock;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.view.View;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,7 +43,6 @@ import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.datatable.DatatableWidget;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
@@ -52,6 +54,7 @@ import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
+import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
@@ -61,8 +64,6 @@ import es.jcyl.ita.formic.repo.builders.RepositoryBuilder;
 import es.jcyl.ita.formic.repo.memo.MemoRepository;
 import es.jcyl.ita.formic.repo.memo.source.MemoSource;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
-
-import static org.mockito.Mockito.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -75,8 +76,6 @@ public class ProjectRhinoScriptIntegrationTest {
     @BeforeClass
     public static void setUp() {
         App.init("");
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
         // register repos
         DevConsole.setLevel(Log.DEBUG);
     }
@@ -109,6 +108,8 @@ public class ProjectRhinoScriptIntegrationTest {
     public void testUseRepoInMemory() throws Exception {
         Context ctx = InstrumentationRegistry.getInstrumentation().getContext();
         ctx.setTheme(R.style.FormudruidLight);
+
+        App.getInstance().clear();
 
         // register memory repo
         RepositoryFactory factory = RepositoryFactory.getInstance();

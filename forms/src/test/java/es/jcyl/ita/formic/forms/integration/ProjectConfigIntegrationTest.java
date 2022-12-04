@@ -19,6 +19,7 @@ import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
 
 import android.util.Log;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,6 +43,7 @@ import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
@@ -55,17 +57,18 @@ public class ProjectConfigIntegrationTest {
     @BeforeClass
     public static void setUp() {
         App.init("");
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
         // register repos
         DevConsole.setLevel(Log.DEBUG);
     }
 
+    @AfterClass
+    public static void tearDown() {
+//        RepositoryFactory.getInstance().clear();
+    }
 
     /**
      * Check formEdit and formList are properly created
      */
-
     @Test
     public void testFormConfig() throws Exception {
         File baseFolder = TestUtils.findFile("config");

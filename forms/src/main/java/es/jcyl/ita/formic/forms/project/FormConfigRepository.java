@@ -41,7 +41,7 @@ public class FormConfigRepository extends AbstractEditableRepository<FormConfig,
     private final EntitySource source;
     private final EntityMeta meta;
 
-    private Map<String, FormConfig> memoryRepo = new HashMap<String, FormConfig>();
+    private Map<String, FormConfig> memoryRepo = new HashMap<>();
 
     public FormConfigRepository(Project project) {
         this.project = project;
@@ -162,6 +162,11 @@ public class FormConfigRepository extends AbstractEditableRepository<FormConfig,
     @Override
     public void addMapping(EntityMapping mapping) {
 
+    }
+
+    @Override
+    public void close() {
+        memoryRepo.clear();
     }
 
 
