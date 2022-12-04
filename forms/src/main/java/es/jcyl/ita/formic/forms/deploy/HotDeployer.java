@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 
 import java.io.File;
 
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 
 /**
@@ -44,7 +45,23 @@ public class HotDeployer extends FileObserver {
         // check whan kind of
 
         // check if we have to re-render current view
+        if(changeRequiresRendering(path)){
+            mc.renderBack();
+        }
 
 
+    }
+
+    /**
+     * Checks if current file affects to current view so it has to be re-rendered
+     * @param path
+     * @return
+     */
+    private boolean changeRequiresRendering(String path) {
+        if(path.endsWith("repos.xml") || path.endsWith(".js")){
+            return true;
+        }
+        App.getInstance().getProjectManager().getFormConfigRepo().listAll();
+        mc.getViewController().g
     }
 }
