@@ -15,6 +15,9 @@ package es.jcyl.ita.formic.forms.config.meta;
  * limitations under the License.
  */
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ACTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ALLOWS_PARTIAL_RESTORE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
@@ -22,6 +25,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BOLD;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMNS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONFIRMATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONTROLLER;
@@ -51,6 +55,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HINT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_POSITION;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ITALIC;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
@@ -98,9 +103,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WEIGHTS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WIDTH;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -203,8 +205,8 @@ public class TagDef {
         register("divisor", define(base, new Attribute[]{NAME, COLOR, STROKE_WIDTH}));
 
 
-        register("imagegallery", define(baseRepoAccessor, new Attribute[]{ROUTE}));
-        register("imagegalleryitem", define(new Attribute[]{ID,VALUE, CONVERTER}));
+        register("imagegallery", define(baseRepoAccessor, new Attribute[]{ROUTE, COLUMNS}));
+        register("imagegalleryitem", define(new Attribute[]{ID,VALUE, CONVERTER, IMAGE_TEXT }));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

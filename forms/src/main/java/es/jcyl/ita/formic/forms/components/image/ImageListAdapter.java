@@ -43,7 +43,7 @@ public class ImageListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, @NonNull ViewGroup parent) {
-        if (view == null && imageItemViews.size() > 0) {
+        if (imageItemViews.size() > 0) {
             view = imageItemViews.get(position);
         }
 

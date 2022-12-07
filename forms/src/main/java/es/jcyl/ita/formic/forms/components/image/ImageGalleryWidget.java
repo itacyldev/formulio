@@ -74,6 +74,10 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
     }
 
 
+    /**
+     *
+     * @param itemWidget
+     */
     private void showImage(ImageGalleryItemWidget itemWidget) {
         ImageResourceView itemImageView = itemWidget.getImageResourceView();
 

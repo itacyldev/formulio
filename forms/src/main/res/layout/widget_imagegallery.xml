@@ -9,10 +9,11 @@
     <GridView
         android:id="@+id/imagegrid_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnWidth="120dp"
+        android:layout_height="match_parent"
         android:horizontalSpacing="1dp"
         android:numColumns="auto_fit"
         android:padding="1dp"
-        android:verticalSpacing="1dp" />
+        android:verticalSpacing="1dp"
+        />
+
 </es.jcyl.ita.formic.forms.components.image.ImageGalleryWidget>

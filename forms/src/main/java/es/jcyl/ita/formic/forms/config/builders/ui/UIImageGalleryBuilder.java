@@ -98,7 +98,7 @@ public class UIImageGalleryBuilder extends BaseUIComponentBuilder<UIImageGallery
     }
 
     /**
-     * Adds the datalistitem node if needed
+     * Adds the imagegalleryitem node if needed
      *
      * @param node
      */

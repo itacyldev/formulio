@@ -5,11 +5,13 @@
     <es.jcyl.ita.formic.forms.components.image.ImageResourceView
         android:id="@+id/galleryitem_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="400dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:src="@drawable/no_image"
-        android:scaleType="fitCenter"
-        android:layout_marginRight="10dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:layout_marginRight="5dp"
         />
     <TextView
         android:id="@+id/galleryitem_text"

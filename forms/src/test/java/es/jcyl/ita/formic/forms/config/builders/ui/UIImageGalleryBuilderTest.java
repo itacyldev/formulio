@@ -90,14 +90,14 @@ public class UIImageGalleryBuilderTest {
         Assert.assertEquals(RepositoryUtils.getRepo("pictures"), imageGallery.getRepo());
     }
 
-    private static final String XML_TEST_WITH_TITEM = "<imagegallery  id=\"myimagegallery\" >"
-            + "  <imagegalleryitem id=\"my_imagegalleryitem\" converter=\"b64Image\">"
+    private static final String XML_TEST_WITH_ITEM = "<imagegallery  id=\"myimagegallery\" >"
+            + "  <imagegalleryitem id=\"my_imagegalleryitem\" converter=\"b64Image\" imageText=\"text1\">"
             + "  </imagegalleryitem>"
             + "</imagegallery>";
 
     @Test
     public void testImageGalleryitem() throws Exception {
-        String xml = XmlConfigUtils.createMainList(XML_TEST_WITH_TITEM);
+        String xml = XmlConfigUtils.createMainList(XML_TEST_WITH_ITEM);
 
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         List<UIImageGallery> imageGalleries = UIComponentHelper.getChildrenByClass(formConfig.getList().getView(), UIImageGallery.class);
@@ -111,6 +111,9 @@ public class UIImageGalleryBuilderTest {
         UIImageGalleryItem item = (UIImageGalleryItem) children[0];
 
         Assert.assertEquals("my_imagegalleryitem", item.getId());
+
+        Assert.assertEquals("b64Image", item.getValueConverter());
+        Assert.assertEquals("text1", item.getImageText());
     }
 
 

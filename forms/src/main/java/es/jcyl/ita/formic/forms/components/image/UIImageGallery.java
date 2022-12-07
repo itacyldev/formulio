@@ -16,6 +16,8 @@ public class UIImageGallery extends AbstractUIComponent implements FilterableCom
     private Repository repo;
     private String route;
 
+    private Integer columns;
+
     private int numItems;
 
     public UIImageGallery() {
@@ -70,6 +72,7 @@ public class UIImageGallery extends AbstractUIComponent implements FilterableCom
     public void setValueConverter(String valueConverter) {
         this.valueConverter = valueConverter;
     }
+
     public String getRoute() {
         return route;
     }
@@ -77,4 +80,14 @@ public class UIImageGallery extends AbstractUIComponent implements FilterableCom
     public void setRoute(String route) {
         this.route = route;
     }
+
+
+    public Integer getColumns() {
+        return columns;
+    }
+
+    public void setColumns(Integer columns) {
+        this.columns = columns;
+    }
+
 }

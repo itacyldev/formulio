@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.forms.config.builders;
  * limitations under the License.
  */
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.Set;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.components.buttonbar.UIButtonBar;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
-import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItem;
 import es.jcyl.ita.formic.forms.components.link.UIButton;
 import es.jcyl.ita.formic.forms.components.option.UIOption;
 import es.jcyl.ita.formic.forms.components.placeholders.UIDivisor;
@@ -60,6 +57,7 @@ import es.jcyl.ita.formic.forms.config.builders.ui.UIDatalistBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIDatatableBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFieldBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIFormBuilder;
+import es.jcyl.ita.formic.forms.config.builders.ui.UIIMageGalleryItemBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UIImageGalleryBuilder;
 import es.jcyl.ita.formic.forms.config.builders.ui.UILinkBuilder;
@@ -79,12 +77,13 @@ import es.jcyl.ita.formic.forms.config.resolvers.ComponentResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RelativePathAttResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.RepositoryAttributeResolver;
 import es.jcyl.ita.formic.forms.config.resolvers.ValidatorAttResolver;
-import es.jcyl.ita.formic.forms.controllers.UIActionGroup;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * Maps each xml tag with the builder responsible for the component creation.
@@ -184,7 +183,7 @@ public class ComponentBuilderFactory {
         registerBuilder("script", newBuilder(ScriptSourceBuilder.class, "script"));
 
         registerBuilder("imagegallery", newBuilder(UIImageGalleryBuilder.class, "imagegallery"));
-        registerBuilder("imagegalleryitem", newBasicBuilder(UIImageGalleryItem.class, "imagegalleryitem"));
+        registerBuilder("imagegalleryitem", newBuilder(UIIMageGalleryItemBuilder.class, "imagegalleryitem"));
 
         BindingExpressionAttResolver exprResolver = new BindingExpressionAttResolver();
         registerAttResolver("binding", exprResolver);
