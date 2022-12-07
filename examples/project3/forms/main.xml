@@ -1,7 +1,13 @@
-<main repo="provRepo">
+<main repo="contacts">
+    <list>
+        <input value="mi ejemplo nuevo"/>
+        <datatable id="mydatalist" repo="contacts" properties="first_name, contact_id"/>
+
+    </list>
     <edit name="My">
-        <button action="js" label="button2"
-            method="vh.setWidgetValue('myDateInput',ctx['location'].asLatLong)" />
+        <script src="scripts/control.js"/>
+        <button action="js" label="button2" method="myfunction()" />
+        <input id="myNewView" value="${(entity.contact_id+' ').substring(0,3)}" />
         <input id="myNewInput" value="${location.asLatLong}" />
         <input id="myDateInput" value="${date.now}" />
         <tab>

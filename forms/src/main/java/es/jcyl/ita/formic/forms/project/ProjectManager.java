@@ -137,20 +137,23 @@ public class ProjectManager {
             // process files in RESOURCE_ORDER order (configuration flow)
             for (ProjectResource.ResourceType resType : ORDERED_RESOURCES) {
                 configFiles = project.getConfigFiles(resType);
-
                 // TODO: Create class ProjectResources to handle files, projectTemplates, etc. #204283
                 // TODO: do we need additional events? (post repo creation, post form creation....)
                 for (ProjectResource resource : configFiles) {
-                    readingListener.fileStart(resource.file.getAbsolutePath());
-                    DevConsole.info("Processing file '${file}'");
-                    // get a reader for the file and a register for the resulting config object
-                    _handlers.get(resource.type).handle(resource);
-                    readingListener.fileEnd(resource.file.getAbsolutePath());
+                    processResource(resource);
                 }
                 // anything to do after resource-type files treatment?
                 onAfterResourceTypeReading(project, resType);
             }
         }
+    }
+
+    public void processResource(ProjectResource resource) {
+        readingListener.fileStart(resource.file.getAbsolutePath());
+        DevConsole.info("Processing file '${file}'");
+        // get a reader for the file and a register for the resulting config object
+        _handlers.get(resource.type).handle(resource);
+        readingListener.fileEnd(resource.file.getAbsolutePath());
     }
 
     /**
@@ -212,4 +215,8 @@ public class ProjectManager {
     public String getCurrentBaseFolder() {
         return (currentProject == null) ? null : currentProject.getBaseFolder();
     }
+
+    public void loadFile(String path) {
+    }
+
 }

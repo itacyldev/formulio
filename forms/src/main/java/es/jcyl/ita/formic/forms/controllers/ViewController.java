@@ -56,7 +56,8 @@ public class ViewController implements Identificable {
     protected String name;
     protected String description;
     protected UIView view;
-    protected WeakReference<FormConfig> formConfig;
+    //    protected WeakReference<FormConfig> formConfig;
+    protected FormConfig formConfig;
 
     /////////////////////
     // Android UI elements
@@ -275,10 +276,10 @@ public class ViewController implements Identificable {
     }
 
     public FormConfig getFormConfig() {
-        return (formConfig == null) ? null : formConfig.get();
+        return formConfig;
     }
 
     public void setFormConfig(FormConfig formConfig) {
-        this.formConfig = new WeakReference<>(formConfig);
+        this.formConfig = formConfig;
     }
 }

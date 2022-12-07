@@ -15,15 +15,32 @@ package es.jcyl.ita.formic.forms.deploy;
  * limitations under the License.
  */
 
-import android.os.FileObserver;
+import android.os.Handler;
+import android.os.Looper;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import org.apache.commons.io.FileUtils;
+import org.mini2Dx.collections.CollectionUtils;
+import org.mini2Dx.collections.IteratorUtils;
+import org.mozilla.javascript.Context;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.project.FormConfigRepository;
+import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectManager;
+import es.jcyl.ita.formic.forms.project.ProjectResource;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
 /**
  * Detects changes in project configuration files and reload configuration objects. If change affects to current view,
@@ -31,37 +48,202 @@ import es.jcyl.ita.formic.forms.MainController;
  *
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class HotDeployer extends FileObserver {
+public class HotDeployer {
+
+    private static final long DELAY_MS = 5_000;
+    private static final long TIME_BETWEEN_CHECKS_MS = 2_500;
 
     private final MainController mc;
+    private final ProjectManager projectManager;
+    private final RedeployChanges changes;
+    private final Handler uiHandler;
+    private String baseFolder;
+    private Thread worker;
+    private boolean stop = false;
+    private long lastExecution = System.currentTimeMillis();
+    private Map<String, Long> filesModTimes = new HashMap<>();
 
-    public HotDeployer(String path, MainController mc) {
-        super(path);
+    public HotDeployer(MainController mc, ProjectManager projectManager) {
+        this.projectManager = projectManager;
         this.mc = mc;
+        changes = new RedeployChanges(this.mc);
+        this.uiHandler = new Handler(Looper.getMainLooper());
+        // create thread to observe changes in project files
+        worker = new Thread(new FileWatcher());
+        worker.start();
     }
 
-    @Override
-    public void onEvent(int event, String path) {
-        // check whan kind of
 
-        // check if we have to re-render current view
-        if(changeRequiresRendering(path)){
-            mc.renderBack();
+    public void setPath(String path) {
+        this.baseFolder = path;
+    }
+
+
+    private List<String> detectFileChanges(String baseFolder) {
+        // Android fsystem truncate file modification timestamp to seconds
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+        long newTimeStamp = 1000 * (System.currentTimeMillis() / 1000); // truncate timestamp
+        List<String> lst = new ArrayList<>();
+        Iterator<File> data1 = FileUtils.iterateFiles(new File(baseFolder, "data"),
+                new String[]{"xml"}, false);
+        Iterator<File> data2 = FileUtils.iterateFiles(new File(baseFolder, "forms"),
+                new String[]{"xml", "js"}, true);
+        Iterator iterator = IteratorUtils.chainedIterator(data1, data2);
+        while (iterator.hasNext()) {
+            File file = (File) iterator.next();
+            if (isModified(file)) {
+                DevConsole.info("Change detected in file " + file.getAbsolutePath());
+                lst.add(file.getAbsolutePath());
+            }
+        }
+        lastExecution = newTimeStamp;
+        return lst;
+    }
+
+    private boolean isModified(File file) {
+        boolean isModified = false;
+        Long lastModified = file.lastModified();
+        // get last mod from cache
+        Long cachedLastMod = filesModTimes.get(file.getAbsolutePath());
+        if (cachedLastMod == null) {
+            // no cached value, check against last execution
+            isModified = lastModified >= lastExecution;
+        } else {
+            isModified = lastModified > cachedLastMod;
+        }
+        if (isModified || cachedLastMod == null) {
+            filesModTimes.put(file.getAbsolutePath(), lastModified);
+        }
+        return isModified;
+    }
+
+    public void start() {
+        this.stop = false;
+    }
+
+    public void stop() {
+        this.filesModTimes.clear();
+        this.stop = true;
+    }
+
+    private void deployChanges(List<String> paths) {
+        changes.classify(paths);
+        if (changes.isRepoChanged()) {
+            DevConsole.info("Reloading repo definition " + changes.repoPath);
+            try {
+                reloadRepoDef(changes.repoPath);
+            } catch (Exception e) {
+                DevConsole.error("An error occurred while trying to reload resource repo.xml. Reload is stopped.", e);
+            }
+        }
+        if (changes.isFormsChanged()) {
+            for (String path : changes.forms) {
+                DevConsole.info("Reloading form file " + path);
+                try {
+                    reloadFormDefinition(path);
+                } catch (Exception e) {
+                    DevConsole.error("An error occurred while trying to reload resource: " + path, e);
+                    return;
+                }
+            }
+        }
+        if (changes.isJsChanged()) {
+            for (String path : changes.js) {
+                DevConsole.info("Reloading script file " + path);
+                try {
+                    reloadScriptFile(path);
+                } catch (Exception e) {
+                    DevConsole.error("An error occurred while trying to reload resource: " + path, e);
+                    return;
+                }
+            }
+        }
+        if (changes.requiresRendering) {
+            DevConsole.info("Re-rendering current view....");
+            reRenderRunnable.setRequiresControllerReload(changes.requiresControllerReload);
+            uiHandler.post(reRenderRunnable);
+        }
+    }
+
+    private void reloadRepoDef(String path) {
+        DevConsole.info("Detected modification in repo.xml, reopening project...");
+        // clear previous repo and entity sources
+        RepositoryFactory.getInstance().clear();
+        EntitySourceFactory.getInstance().clear();
+        // reopen current project
+        Project current = projectManager.getCurrentProject();
+        projectManager.closeProject();
+        projectManager.openProject(current);
+    }
+
+    private void reloadFormDefinition(String path) {
+        Project project = App.getInstance().getCurrentProject();
+        ProjectResource pResource = new ProjectResource(project, new File(path), ProjectResource.ResourceType.FORM);
+        // remove all the form definitions included in this file
+        FormConfigRepository formConfigRepo = projectManager.getFormConfigRepo();
+        List<FormConfig> formConfigs = formConfigRepo.findByDefinitionFile(path);
+        for (FormConfig formConfig : formConfigs) {
+            formConfigRepo.delete(formConfig);
+        }
+        // remove related scripts before reading form definition
+        mc.getScriptEngine().clearScriptsByFormFile(pResource.file.getAbsolutePath());
+        // reload forms defined in file and all its scripts
+        projectManager.processResource(pResource);
+    }
+
+    private void reloadScriptFile(String path) {
+        mc.getScriptEngine().reloadScriptFile(path);
+    }
+
+    class FileWatcher implements Runnable {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(DELAY_MS);
+                // initialize scripts context so we can compile scripts in this thread
+                Context.enter();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return;
+            }
+            while (!stop) {
+                if (!App.getInstance().isLoading()) {
+                    List<String> paths = detectFileChanges(baseFolder);
+                    if (CollectionUtils.isNotEmpty(paths)) {
+                        try {
+                            deployChanges(paths);
+                        } catch (Exception e) {
+                            // pass
+                        }
+                    }
+                }
+                try {
+                    Thread.sleep(TIME_BETWEEN_CHECKS_MS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    RenderingRunnable reRenderRunnable = new RenderingRunnable();
+
+    public class RenderingRunnable implements Runnable {
+        private boolean requiresControllerReload = false;
+
+        @Override
+        public void run() {
+            // reload js rhino context for current view
+            String currentViewId = mc.getViewController().getId();
+            mc.getScriptEngine().initScope(currentViewId);
+            // render current view
+            mc.renderBack(this.requiresControllerReload);
         }
 
-
-    }
-
-    /**
-     * Checks if current file affects to current view so it has to be re-rendered
-     * @param path
-     * @return
-     */
-    private boolean changeRequiresRendering(String path) {
-        if(path.endsWith("repos.xml") || path.endsWith(".js")){
-            return true;
+        public void setRequiresControllerReload(boolean requiresControllerReload) {
+            this.requiresControllerReload = requiresControllerReload;
         }
-        App.getInstance().getProjectManager().getFormConfigRepo().listAll();
-        mc.getViewController().g
     }
+
 }

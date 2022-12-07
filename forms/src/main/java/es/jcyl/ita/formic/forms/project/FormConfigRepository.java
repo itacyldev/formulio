@@ -49,6 +49,17 @@ public class FormConfigRepository extends AbstractEditableRepository<FormConfig,
         this.source = createSource();
     }
 
+    public List<FormConfig> findByDefinitionFile(String formXMLPath) {
+        // finds all the formConfig defined in the given file path
+        List<FormConfig> configs = new ArrayList<>();
+        for (FormConfig formConfig : this.memoryRepo.values()) {
+            if (formXMLPath.endsWith(formConfig.getFilePath())) {
+                configs.add(formConfig);
+            }
+        }
+        return configs;
+    }
+
     @Override
     public FormConfig doFindById(String s) {
         return memoryRepo.get(s);

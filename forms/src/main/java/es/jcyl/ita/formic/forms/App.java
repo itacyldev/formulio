@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
+import es.jcyl.ita.formic.forms.deploy.HotDeployer;
 import es.jcyl.ita.formic.forms.jobs.reader.RepoReader;
 import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.Project;
@@ -60,6 +61,8 @@ public class App {
 
     private JobFacade jobFacade;
     private ProjectManager projectManager;
+    private HotDeployer deployer;
+    private boolean loading = false;
 
     /**
      * Stores current project form configurations (each entity form setting).
@@ -102,6 +105,7 @@ public class App {
 
     private void init() {
         if (!configLoaded) {
+            loading = true;
             // initialize global context and set to ContextAware components
             initContext();
             // customize data type converters
@@ -114,7 +118,14 @@ public class App {
             jobFacade = new JobFacade();
             configLoaded = true;
             registerRepoReader();
+            // limit to DEBUG environment
+            deployer = new HotDeployer(MainController.getInstance(), this.projectManager);
+            loading = false;
         }
+    }
+
+    public boolean isLoading() {
+        return loading;
     }
 
     /**
@@ -173,14 +184,22 @@ public class App {
      * @param project Selected project.
      */
     public void openProject(final Project project) {
+        loading = true;
         // clear previous repo and entity sources
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
         try {
             projectManager.closeProject();
             projectManager.openProject(project);
+            File basePath = new File(projectManager.getCurrentBaseFolder());
+
+            deployer.stop();
+            deployer.setPath(basePath.getCanonicalPath());
+            deployer.start();
         } catch (Exception e) {
             throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e), e);
+        } finally {
+            loading = false;
         }
     }
 
