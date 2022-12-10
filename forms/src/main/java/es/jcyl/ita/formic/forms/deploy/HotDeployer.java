@@ -199,6 +199,7 @@ public class HotDeployer {
     class FileWatcher implements Runnable {
         @Override
         public void run() {
+            stop = checkBaseFolder();
             try {
                 Thread.sleep(DELAY_MS);
                 // initialize scripts context so we can compile scripts in this thread
@@ -225,6 +226,23 @@ public class HotDeployer {
                 }
             }
         }
+    }
+
+    private boolean checkBaseFolder() {
+        boolean error = false;
+        if (baseFolder == null){
+            error = true;
+        } else {
+            File f = new File(baseFolder);
+            if (!f.exists() || !f.isDirectory()) {
+                error = true;
+            }
+        }
+        if(error){
+            DevConsole.error("Invalid folder, the directory doesn't exists or is not" +
+                    " a directory: " + baseFolder);
+        }
+        return error;
     }
 
     RenderingRunnable reRenderRunnable = new RenderingRunnable();

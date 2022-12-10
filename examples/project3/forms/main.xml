@@ -1,20 +1,19 @@
 <main repo="contacts">
     <list>
-        <input value="mi ejemplo nuevo"/>
+        <input value="quita esto"/>
         <datatable id="mydatalist" repo="contacts" properties="first_name, contact_id"/>
-
     </list>
     <edit name="My">
         <script src="scripts/control.js"/>
         <button action="js" label="button2" method="myfunction()" />
-        <input id="myNewView" value="${(entity.contact_id+' ').substring(0,3)}" />
+        <input id="myNewView" value="hola mundo!" />
         <input id="myNewInput" value="${location.asLatLong}" />
         <input id="myDateInput" value="${date.now}" />
         <tab>
             <tabitem>
                 <datalist id="contactList" repo="contacts">
                     <datalistitem>
-                        <textarea value="${entity.first_name}"/>
+                        <textarea value="${entity.contact_id}"/>
                     </datalistitem>
                 </datalist>
             </tabitem>
