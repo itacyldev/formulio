@@ -113,7 +113,7 @@ public class RhinoScriptsTest {
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         ScriptEngine engine = new ScriptEngine();
         engine.initEngine(null);
-        engine.store("formTest", SCRIPT_SOURCE);
+        engine.store("formTest", ScriptRef.createInlineScriptRef(SCRIPT_SOURCE,""));
         engine.initScope("formTest");
 
         String expected = RandomUtils.randomString(10);
@@ -154,7 +154,7 @@ public class RhinoScriptsTest {
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         ScriptEngine engine = new ScriptEngine();
         engine.initEngine(null);
-        engine.store("formTest", IMPORTING_SOURCE);
+        engine.store("formTest", ScriptRef.createInlineScriptRef(IMPORTING_SOURCE,""));
         engine.initScope("formTest");
 
         Object result = engine.callFunction("f1");
@@ -181,7 +181,7 @@ public class RhinoScriptsTest {
         when(mc.getRenderingEnv()).thenReturn(rendEnv);
         props.put("vh", new ScriptViewHelper(mc));
         engine.initEngine(props);
-        engine.store("formTest", IMPORTING_SOURCE);
+        engine.store("formTest", ScriptRef.createInlineScriptRef(IMPORTING_SOURCE,""));
         engine.initScope("formTest");
 
         String source = "var value = vh.widgets().filter(o=> o.componentId.startsWith('myWidgets')).map(o => o.getValue())";

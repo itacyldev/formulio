@@ -51,6 +51,7 @@ import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.scripts.RhinoViewRenderHandler;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.scripts.ScriptRef;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.DevFormNav;
@@ -129,7 +130,8 @@ public class ProjectRhinoScriptIntegrationTest {
         // Store JS related to form controller
         File srcFile = TestUtils.findFile("scripts/mixRepoData.js");
         ScriptEngine engine = ScriptEngine.getInstance();
-        engine.store(formController.getId(), FileUtils.readFileToString(srcFile, "UTF-8"));
+        ScriptRef source = ScriptRef.createInlineScriptRef(FileUtils.readFileToString(srcFile, "UTF-8"),"");
+        engine.store(formController.getId(), source);
 
         // prepare rendering env.
         RenderingEnv env = prepareRenderingEnv(ctx, engine);

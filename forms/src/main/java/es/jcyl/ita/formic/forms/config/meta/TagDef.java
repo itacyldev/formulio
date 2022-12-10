@@ -99,6 +99,8 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WEIGHTS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WIDTH;
 
+import org.mini2Dx.collections.MapUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -237,6 +239,10 @@ public class TagDef {
         return registry.get(name.toUpperCase());
     }
 
+    public static Map<String, Map<String, Attribute>> getDefinitions() {
+        return MapUtils.unmodifiableMap(registry);
+    }
+
     public static boolean isDefinedTag(String tagName) {
         return registry.containsKey(tagName.toUpperCase());
     }
@@ -265,6 +271,4 @@ public class TagDef {
         }
         return false;
     }
-
-
 }
