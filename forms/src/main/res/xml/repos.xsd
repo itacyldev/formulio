@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.itacyl.es/formic/repos" xmlns="http://www.itacyl.es/formic/repos"
+	elementFormDefault="qualified" version="1.0">
+
+
+	<xs:annotation>
+		<xs:documentation> ================== Meta =================
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:complexType name="propertyType">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="calculated" type="xs:string" use="optional" />
+		<xs:attribute name="calculatedOn" type="xs:string" use="optional" />
+		<xs:attribute name="columnName" type="xs:string" use="optional" />
+		<xs:attribute name="converter" type="xs:string" use="optional" />
+		<xs:attribute name="expression" type="xs:string" use="optional" />
+	</xs:complexType>
+
+	<xs:element name="meta">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="property" maxOccurs="unbounded" minOccurs="0" type="propertyType" />
+			</xs:sequence>
+			<xs:attribute name="properties" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mapping">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required" />
+			<xs:attribute name="deletable" type="xs:string" />
+			<xs:attribute name="fk" type="xs:string" />
+			<xs:attribute name="insertable" type="xs:string" />
+			<xs:attribute name="property" type="xs:string" />
+			<xs:attribute name="repo" type="xs:string" />
+			<xs:attribute name="retrieveMeta" type="xs:string" />
+			<xs:attribute name="updatable" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:annotation>
+		<xs:documentation> ================== Filter expressions =================
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:complexType name="conditionType">
+		<xs:attribute name="property" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="valuedConditionType">
+		<xs:complexContent>
+			<xs:extension base="conditionType">
+				<xs:attribute name="value" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="conditionAbs" abstract="true" type="conditionType" />
+
+	<xs:element name="eq" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="gt" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="ge" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="lt" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="le" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="in" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="notin" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="like" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="contains" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="startswith" substitutionGroup="conditionAbs"
+		type="valuedConditionType" />
+	<xs:element name="endswith" substitutionGroup="conditionAbs" type="valuedConditionType" />
+	<xs:element name="isnull" substitutionGroup="conditionAbs" />
+	<xs:element name="notnull" substitutionGroup="conditionAbs" />
+
+
+	<xs:complexType name="criteriaType">
+		<xs:all>
+			<xs:element ref="criteriaAbstract" />
+			<xs:element ref="conditionAbs" />
+		</xs:all>
+	</xs:complexType>
+	<xs:element name="criteriaAbstract" abstract="true" type="criteriaType" />
+	<xs:element name="and" substitutionGroup="criteriaAbstract" />
+	<xs:element name="or" substitutionGroup="criteriaAbstract" />
+
+	<xs:annotation>
+		<xs:documentation> ================== Repos =================
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:complexType name="repoType">
+		<xs:attribute name="id" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="dbRepoType">
+		<xs:complexContent>
+			<xs:extension base="repoType">
+				<xs:sequence>
+					<xs:element ref="meta" minOccurs="0" />
+					<xs:element ref="mapping" minOccurs="0" />
+					<xs:element name="repofilter" type="criteriaType" minOccurs="0" />
+				</xs:sequence>
+				<xs:attribute name="dbFile" type="xs:string" use="required" />
+				<xs:attribute name="dbTable" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="fileRepoType">
+		<xs:complexContent>
+			<xs:extension base="repoType">
+				<xs:attribute name="folder" type="xs:string" use="required" />
+				<xs:attribute name="defaultExtension" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="memoRepoType">
+		<xs:complexContent>
+			<xs:extension base="repoType">
+				<xs:attribute name="properties" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="repoAbstract" abstract="true" type="repoType" />
+	<xs:element name="repo" substitutionGroup="repoAbstract" type="dbRepoType" />
+	<xs:element name="filerepo" substitutionGroup="repoAbstract" type="fileRepoType" />
+	<xs:element name="memorepo" substitutionGroup="repoAbstract" type="memoRepoType" />
+
+	<xs:element name="repos">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="repoAbstract" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

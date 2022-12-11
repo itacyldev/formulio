@@ -131,7 +131,7 @@ public class TagDef {
         register("form", define(baseRepoAccessor, new Attribute[]{ON_SAVE}));
 
         register("datatable", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, ACTION, ALLOWS_PARTIAL_RESTORE}));
-        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, TEMPLATE, ACTION, ALLOWS_PARTIAL_RESTORE}));
+        register("datalist", define(baseRepoAccessor, new Attribute[]{ROUTE, NUM_VISIBLE_ROWS, ACTION, ALLOWS_PARTIAL_RESTORE, TEMPLATE}));
         register("datalistitem", define(scriptHooks, new Attribute[]{ID}));
         register("card", define(scriptHooks, new Attribute[]{ID, TEMPLATE, TITLE, SUBTITLE, IMAGE, LABEL, EXPANDED, EXPANDABLE,
                 IMAGE_POSITION, ON_BEFORE_RENDER, ON_AFTER_RENDER, ACTION, ALLOWS_PARTIAL_RESTORE}));
