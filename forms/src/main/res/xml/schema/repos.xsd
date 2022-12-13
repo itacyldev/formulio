@@ -11,8 +11,23 @@
 
 	<xs:complexType name="propertyType">
 		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="calculated" type="xs:string" use="optional" />
-		<xs:attribute name="calculatedOn" type="xs:string" use="optional" />
+		<xs:attribute name="calculated" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="jexl" />
+					<xs:enumeration value="sql" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="calculatedOn" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="select" />
+					<xs:enumeration value="insert" />
+					<xs:enumeration value="update" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="columnName" type="xs:string" use="optional" />
 		<xs:attribute name="converter" type="xs:string" use="optional" />
 		<xs:attribute name="expression" type="xs:string" use="optional" />
@@ -30,13 +45,13 @@
 	<xs:element name="mapping">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:string" use="required" />
-			<xs:attribute name="deletable" type="xs:string" />
 			<xs:attribute name="fk" type="xs:string" />
-			<xs:attribute name="insertable" type="xs:string" />
-			<xs:attribute name="property" type="xs:string" />
 			<xs:attribute name="repo" type="xs:string" />
+			<xs:attribute name="property" type="xs:string" />
 			<xs:attribute name="retrieveMeta" type="xs:string" />
-			<xs:attribute name="updatable" type="xs:string" />
+			<xs:attribute name="insertable" type="xs:boolean" />
+			<xs:attribute name="updatable" type="xs:boolean" />
+			<xs:attribute name="deletable" type="xs:boolean" />
 		</xs:complexType>
 	</xs:element>
 

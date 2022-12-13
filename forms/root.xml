@@ -17,10 +17,6 @@
         registerInHistory="" restoreView="" route="" type="" />
     <card action="" allowsPartialRestore="" expandable="" expanded="" id="RvnUsJkw" image="" imagePosition=""
         label="" onAfterRender="" onBeforeRender="" subtitle="" template="" title="" />
-    <checkbox action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
-        id="PtKgyybS" inputType="" label="" onAfterRender=""
-        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" type=""
-        validator="" value="" />
     <column action="" allowsPartialRestore="" filtering="" headerText="" id="EsfyPgyP"
         onAfterRender="" onBeforeRender="" ordering="" readonly="true" readonlyMessage="" render=""
         value="" />
@@ -32,6 +28,15 @@
     <datatable action="" allowsPartialRestore="" dbFile="" dbTable="" id="bPTdJtJR" numVisibleRows=""
         onAfterRender="" onBeforeRender="" properties="" repo="" route="" />
 
+
+    <checkbox action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="PtKgyybS" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" type=""
+        validator="" value="" />
+    <radio action="" allowsPartialRestore="" converter="" forceSelection="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="IeBRsuGX" inputType="" label="" onAfterRender="" onBeforeRender=""
+        orientation="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render=""
+        repo="" type="" validator="" value="" weights="" />
 
     <input action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
         id="XpMZtaDy" inputType="" label="" onAfterRender=""
@@ -85,10 +90,6 @@
     <param name="" action="" allowsPartialRestore="" id="MwIOZDRG" onAfterRender="" onBeforeRender=""
         readonly="false" readonlyMessage="" render="" value="" />
     <property name="" columnName="" converter="" evalOn="" expression="" expressionType="" />
-    <radio action="" allowsPartialRestore="" converter="" forceSelection="" hasDeleteButton="" hasTodayButton="" hint=""
-        id="IeBRsuGX" inputType="" label="" onAfterRender="" onBeforeRender=""
-        orientation="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render=""
-        repo="" type="" validator="" value="" weights="" />
 
     <row action="" allowsPartialRestore="" colspans="" id="idbCJcXB" label=""
         onAfterRender="" onBeforeRender="" properties="" readonly="true" readonlyMessage="" render="" value=""

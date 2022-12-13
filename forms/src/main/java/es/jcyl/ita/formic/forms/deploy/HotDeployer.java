@@ -86,7 +86,7 @@ public class HotDeployer {
         long newTimeStamp = 1000 * (System.currentTimeMillis() / 1000); // truncate timestamp
         List<String> lst = new ArrayList<>();
         Iterator<File> data1 = FileUtils.iterateFiles(new File(baseFolder, "data"),
-                new String[]{"xml"}, false);
+                new String[]{"xml", "sqlite"}, false);
         Iterator<File> data2 = FileUtils.iterateFiles(new File(baseFolder, "forms"),
                 new String[]{"xml", "js"}, true);
         Iterator iterator = IteratorUtils.chainedIterator(data1, data2);

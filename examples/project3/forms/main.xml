@@ -1,6 +1,6 @@
 <main repo="contacts">
     <list>
-        <input value="quita esto"/>
+        <input value="quita de aasdfaquí"/>
         <datatable id="mydatalist" repo="contacts" properties="first_name, contact_id"/>
     </list>
     <edit name="My">

@@ -35,6 +35,7 @@ class RedeployChanges {
     String repoPath;
     List<String> forms = new ArrayList<>();
     List<String> js = new ArrayList<>();
+    boolean dbChanged = false;
     boolean requiresControllerReload = false;
     boolean requiresRendering = false;
 
@@ -48,6 +49,8 @@ class RedeployChanges {
         for (String str : paths) {
             if (str.endsWith("repos.xml")) {
                 this.repoPath = str;
+            } else if (str.contains("data/") && str.endsWith(".sqlite")) {
+                this.dbChanged = true;
             } else if (str.contains("forms/") && str.endsWith(".xml")) {
                 this.forms.add(str);
             }
@@ -59,7 +62,7 @@ class RedeployChanges {
     }
 
     private void checkRenderingRequirement() {
-        if (this.repoPath != null) {
+        if (this.repoPath != null || this.dbChanged) {
             // repo definition has changed
             this.requiresRendering = true;
             this.requiresControllerReload = true;
@@ -81,13 +84,17 @@ class RedeployChanges {
             formIds.addAll(mc.getScriptEngine().findDependantForms(jsFile));
         }
         String currentViewId = mc.getViewController().getId();
-        if (formIds.contains(currentViewId)){
+        if (formIds.contains(currentViewId)) {
             this.requiresRendering = true;
         }
     }
 
     public boolean isRepoChanged() {
         return this.repoPath != null;
+    }
+
+    public boolean isDbChanged() {
+        return dbChanged;
     }
 
     public boolean isFormsChanged() {
@@ -101,6 +108,7 @@ class RedeployChanges {
     public void clear() {
         this.requiresRendering = false;
         this.requiresControllerReload = false;
+        this.dbChanged = false;
         this.repoPath = null;
         this.forms.clear();
         this.js.clear();
