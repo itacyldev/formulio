@@ -55,9 +55,9 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
             Context context = this.contexts.get(newKey[0]);
             value = (context == null) ? null : context.get(newKey[1]);
         }
-        if(value == null) {
+        if (value == null) {
             for (Context c : contexts.values()) {
-                if(c instanceof CompositeContext){
+                if (c instanceof CompositeContext) {
                     value = ((CompositeContext) c).getValue(key);
                     if (value != null) {
                         return value;
@@ -241,7 +241,14 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
         if (prefix == null) {
             throw new IllegalArgumentException("Prefix cannot be null.");
         }
-        return this.contexts.get(getMapKey(prefix));
+        String key = getMapKey(prefix);
+        Context ctx = this.contexts.get(key);
+        if (ctx != null) {
+            return ctx;
+        } else {
+            return (!this.contexts.containsKey("global")) ? null :
+                    ((CompositeContext) this.contexts.get("global")).getContext(key);
+        }
     }
 
     @Override
