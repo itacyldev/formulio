@@ -21,6 +21,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.JsDevTools;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
@@ -179,7 +180,7 @@ public class ScriptEngine {
             result = function.call(rhino, scope, scope, args);
         } catch (Exception e) {
             DevConsole.error(String.format("Error while executing js function [%s] ",
-                    function.toString()),e);
+                    JsDevTools.decompile(function), e));
         }
         return (result instanceof Undefined) ? null : result;
     }

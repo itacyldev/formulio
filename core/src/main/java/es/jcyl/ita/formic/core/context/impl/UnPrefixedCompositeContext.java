@@ -89,7 +89,7 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
         if (newKey == null) {
             return super.containsKey(key);
         } else {
-            return (!this.hasContext(newKey[0])) ? false : this.contexts.get(newKey[0]).containsKey(newKey[1]);
+            return (!this.hasContext(newKey[0])) ? false : this.getContext(newKey[0]).containsKey(newKey[1]);
         }
     }
 
@@ -193,9 +193,6 @@ public class UnPrefixedCompositeContext extends MapCompositeContext implements C
             return null;
         }
         String prefix = key.substring(0, firstPointPos);
-        if (!this.contexts.containsKey(prefix)) {
-//            throw new ContextException(String.format("No context found with the prefix [%s].", prefix));
-        }
         return new String[]{prefix, key.substring(firstPointPos + 1)};
     }
 
