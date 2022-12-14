@@ -83,7 +83,6 @@ public class AttributeDef {
 
     // image gallery
     public static final Attribute COLUMNS = new Attribute("columns", Integer.class);
-    public static final Attribute IMAGE_TEXT = new Attribute("imageText");
 
     // card
     public static final Attribute TEMPLATE = new Attribute("template", true);

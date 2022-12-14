@@ -45,7 +45,7 @@ public class UIImageGalleryItemProxy extends UIImageGalleryItem implements Entit
         this.entity = entity;
         this.valueConverter = component.getValueConverter();
         this.valueExpression = component.getValueExpression();
-        this.imageText = component.getImageText();
+        this.label = component.getLabel();
     }
 
 

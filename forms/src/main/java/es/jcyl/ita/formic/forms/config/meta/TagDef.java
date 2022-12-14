@@ -55,7 +55,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.HINT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ID;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_POSITION;
-import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_TEXT;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ITALIC;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
@@ -206,7 +205,7 @@ public class TagDef {
 
 
         register("imagegallery", define(baseRepoAccessor, new Attribute[]{ROUTE, COLUMNS}));
-        register("imagegalleryitem", define(new Attribute[]{ID,VALUE, CONVERTER, IMAGE_TEXT }));
+        register("imagegalleryitem", define(new Attribute[]{ID,VALUE, CONVERTER, LABEL }));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

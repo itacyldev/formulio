@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 
 public class UIImageGalleryItem extends AbstractUIComponent {
 
-    protected String imageText;
+    protected String label;
 
     protected String valueConverter;
 
@@ -46,12 +46,12 @@ public class UIImageGalleryItem extends AbstractUIComponent {
         return ViewValueConverterFactory.getInstance().get(this.getValueConverter());
     }
 
-    public String getImageText() {
-        return imageText;
+    public String getLabel() {
+        return label;
     }
 
-    public void setImageText(String imageText) {
-        this.imageText = imageText;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
 }
