@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.forms.project;
  * limitations under the License.
  */
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
@@ -42,6 +44,11 @@ public class ProjectTest {
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         // register repos
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        RepositoryFactory.getInstance().clear();
     }
 
     @Test
@@ -76,7 +83,5 @@ public class ProjectTest {
 
         App.init(templateFolder.getAbsolutePath());
         App.getInstance().openProject(prj);
-//        Config.getInstance().readConfig(prj);
     }
-
 }

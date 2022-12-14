@@ -41,12 +41,23 @@ public class FormConfigRepository extends AbstractEditableRepository<FormConfig,
     private final EntitySource source;
     private final EntityMeta meta;
 
-    private Map<String, FormConfig> memoryRepo = new HashMap<String, FormConfig>();
+    private Map<String, FormConfig> memoryRepo = new HashMap<>();
 
     public FormConfigRepository(Project project) {
         this.project = project;
         this.meta = createMeta();
         this.source = createSource();
+    }
+
+    public List<FormConfig> findByDefinitionFile(String formXMLPath) {
+        // finds all the formConfig defined in the given file path
+        List<FormConfig> configs = new ArrayList<>();
+        for (FormConfig formConfig : this.memoryRepo.values()) {
+            if (formXMLPath.endsWith(formConfig.getFilePath())) {
+                configs.add(formConfig);
+            }
+        }
+        return configs;
     }
 
     @Override
@@ -162,6 +173,11 @@ public class FormConfigRepository extends AbstractEditableRepository<FormConfig,
     @Override
     public void addMapping(EntityMapping mapping) {
 
+    }
+
+    @Override
+    public void close() {
+        memoryRepo.clear();
     }
 
 

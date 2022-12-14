@@ -1,0 +1,128 @@
+<root>
+    <action controller="" id="FziCEmqU" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <add controller="" id="nbzrLNEz" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <autocomplete action="" allowsPartialRestore="" converter="" forceSelection="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="ohfxPQll" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" repo=""
+        type="" validator="" value="" />
+    <button action="" allowsPartialRestore="" confirmation="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="MAgfzoZb" inputType="" label="" labelConfirmation="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render=""
+        route="" type="" validator="" value="" />
+    <buttonbar action="" allowsPartialRestore="" id="cEnFSOCJ" onAfterRender="" onBeforeRender=""
+        readonly="true" readonlyMessage="" render="" type="" value="" />
+    <cancel controller="" id="pUMexIAA" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <card action="" allowsPartialRestore="" expandable="" expanded="" id="RvnUsJkw" image="" imagePosition=""
+        label="" onAfterRender="" onBeforeRender="" subtitle="" template="" title="" />
+    <column action="" allowsPartialRestore="" filtering="" headerText="" id="EsfyPgyP"
+        onAfterRender="" onBeforeRender="" ordering="" readonly="true" readonlyMessage="" render=""
+        value="" />
+    <create controller="" id="okIBeVGU" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <datalist action="" allowsPartialRestore="" dbFile="" dbTable="" id="KZYAYrEV" numVisibleRows=""
+        onAfterRender="" onBeforeRender="" properties="" repo="" route="" template="" />
+    <datalistitem id="bxLYTfuo" onAfterRender="" onBeforeRender="" />
+    <datatable action="" allowsPartialRestore="" dbFile="" dbTable="" id="bPTdJtJR" numVisibleRows=""
+        onAfterRender="" onBeforeRender="" properties="" repo="" route="" />
+
+
+    <checkbox action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="PtKgyybS" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" type=""
+        validator="" value="" />
+    <radio action="" allowsPartialRestore="" converter="" forceSelection="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="IeBRsuGX" inputType="" label="" onAfterRender="" onBeforeRender=""
+        orientation="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render=""
+        repo="" type="" validator="" value="" weights="" />
+
+    <input action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="XpMZtaDy" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" type=""
+        validator="" value="" />
+    <date action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint="" id="IHYKeLDA"
+        inputType="" label="" onAfterRender="" onBeforeRender="" pattern=""
+        placeHolder="" readonly="false" readonlyMessage="" render="" type="" validator="" value="" />
+    <datetime action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="LXMfxRyX" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" type=""
+        validator="" value="" />
+
+    <delete controller="" id="cdbLYxxP" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <divisor name="" action="" allowsPartialRestore="" color="" id="RhwjQHYo" onAfterRender=""
+        onBeforeRender="" readonly="false" readonlyMessage="" render="" strokeWidth="" value="" />
+    <edit name="" allowsPartialRestore="" dbFile="" dbTable="" description="" id="gmAPbPec" mainForm=""
+        onAfterRender="" onBeforeRender="" properties="" repo="" />
+    <filerepo defaultExtension="" folder="" id="GlIgbVRB" />
+    <form allowsPartialRestore="" dbFile="" dbTable="" id="ybMnTBCO" onAfterRender="" onBeforeRender=""
+        onsave="" properties="" repo="" />
+    <image action="" allowsPartialRestore="" converter="" embedded="" hasDeleteButton="" hasTodayButton="" height=""
+        hint="" id="zApjuvbo" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="false" readonlyMessage="" render="" repo=""
+        repoProperty="" type="" validator="" value="" width="" />
+
+    <js controller="" id="jYvYUVsm" label="" message="" method="" popHistory=""
+        refresh="" registerInHistory="" restoreView="" route="" type="" />
+
+    <link action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint="" id="pjAQckJb"
+        inputType="" label="" onAfterRender="" onBeforeRender="" pattern=""
+        placeHolder="" readonly="true" readonlyMessage="" render="" route="" type="" validator=""
+        value="" />
+    <p name="" action="" allowsPartialRestore="" backgroundColor="" bold="" fontColor=""
+        fontFamily="" fontSize="" id="sDUQjcoq" italic="" onAfterRender="" onBeforeRender=""
+        readonly="true" readonlyMessage="" render="" underlined="" uppercase="" value="" />
+
+    <main name="" allowsPartialRestore="" dbFile="" dbTable="" description="" id="gaKEcQmM" mainForm=""
+        onAfterRender="" onBeforeRender="" properties="" repo="" />
+    <mapping deletable="" fk="" id="QWllFFil" insertable="" property="" repo="" retrieveMeta=""
+        updatable="" />
+    <memorepo id="nRLpvQnt" properties="" />
+    <meta properties="" />
+    <nav controller="" id="cYSGIddk" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <option id="UwejlIpb" label="" onAfterRender="" onBeforeRender="" value="" />
+    <options labelExpression="" labelFilteringProperty="" onAfterRender="" onBeforeRender=""
+        valueProperty="" />
+
+    <param name="" action="" allowsPartialRestore="" id="MwIOZDRG" onAfterRender="" onBeforeRender=""
+        readonly="false" readonlyMessage="" render="" value="" />
+    <property name="" columnName="" converter="" evalOn="" expression="" expressionType="" />
+
+    <row action="" allowsPartialRestore="" colspans="" id="idbCJcXB" label=""
+        onAfterRender="" onBeforeRender="" properties="" readonly="true" readonlyMessage="" render="" value=""
+        weights="" />
+    <save controller="" id="fjEbWOVQ" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <script src="" />
+    <select action="" allowsPartialRestore="" converter="" forceSelection="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="PUdNGCsR" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" repo=""
+        type="" validator="" value="" />
+    <switcher action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="EvKJCKya" inputType="" label="" onAfterRender=""
+        onBeforeRender="" pattern="" placeHolder="" readonly="true" readonlyMessage="" render="" type=""
+        validator="" value="" />
+    <tab action="" allowsPartialRestore="" id="mHYjQORA" onAfterRender="" onBeforeRender="" readonly="true"
+        readonlyMessage="" render="" value="" />
+    <tabitem action="" allowsPartialRestore="" id="hQoBugjb" label="" onAfterRender=""
+        onBeforeRender="" properties="" readonly="true" readonlyMessage="" render="" selected=""
+        value="" />
+    <table action="" allowsPartialRestore="" border="" headerText="" id="dYPFKVMK" onAfterRender=""
+        onBeforeRender="" readonly="true" readonlyMessage="" render="" value="" weights="" />
+    <text action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint="" id="GowyDciM"
+        inputType="" label="" onAfterRender="" onBeforeRender="" pattern=""
+        placeHolder="" readonly="true" readonlyMessage="" render="" type="" validator="" value="" />
+    <textarea action="" allowsPartialRestore="" converter="" hasDeleteButton="" hasTodayButton="" hint=""
+        id="VPqLnKPA" inputType="" label="" lines=""
+        onAfterRender="" onBeforeRender="" pattern="" placeHolder="" readonly="false" readonlyMessage="" render=""
+        type="" validator="" value="" />
+    <update controller="" id="IZAlWFcW" label="" message="" popHistory="" refresh=""
+        registerInHistory="" restoreView="" route="" type="" />
+    <validator action="" allowsPartialRestore="" id="TKaiemkp" onAfterRender="" onBeforeRender=""
+        readonly="false" readonlyMessage="" render="" type="" value="" />
+    <view name="" allowsPartialRestore="" dbFile="" dbTable="" description="" entityList="" id="JzWvoccC"
+        mainForm="" onAfterRender="" onBeforeRender="" properties="" repo="" />
+</root>

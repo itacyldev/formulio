@@ -40,7 +40,7 @@ public class DaoSession extends AbstractDaoSession {
 
     public DaoSession(Database db, IdentityScopeType type, Map<String, EntityDaoConfig> daoConfigMap) {
         super(db);
-        this.entityToDao = new HashMap<String, EntityDao>();
+        this.entityToDao = new HashMap<>();
 
         EntityDaoConfig config = null;
         EntityDao dao = null;

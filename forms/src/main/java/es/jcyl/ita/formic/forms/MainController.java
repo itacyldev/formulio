@@ -57,7 +57,6 @@ import es.jcyl.ita.formic.forms.view.activities.FormListViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.async.AsyncRenderWorker;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.forms.view.dag.ViewDAG;
-import es.jcyl.ita.formic.forms.view.render.RendererFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
@@ -127,7 +126,7 @@ public class MainController implements ContextAwareComponent {
         viewRenderer.addEventHandler(new ProxyViewRendererEventHandler(proxyFactory));
     }
 
-    private void initContextDependant(){
+    private void initContextDependant() {
         RenderingEnvFactory.getInstance().setGlobalContext(this.globalContext);
         renderingEnv = RenderingEnvFactory.getInstance().create();
         setupScriptingEnv(globalContext);
@@ -161,9 +160,7 @@ public class MainController implements ContextAwareComponent {
     public void navigate(android.content.Context andContext, String formId,
                          Map<String, Object> params) {
         saveMCState();
-
         setupParamsContext(params);
-
         ViewController lastController = null;
         if (this.viewController != null) {
             lastController = viewController;
@@ -405,8 +402,20 @@ public class MainController implements ContextAwareComponent {
      * Re-renders last view to show validation errors or updated entity values.
      */
     public void renderBack() {
+        renderBack(false);
+    }
+
+    public void renderBack(boolean forceViewCtrlReload) {
         // render again the form to show validation error
         renderingEnv.disableInterceptors();
+        if (forceViewCtrlReload) {
+            // get form configuration for given formId and load data
+            ViewController currentViewCtrl = this.viewController;
+            this.viewController = getViewController(currentViewCtrl.getId());
+            this.viewController.setContentView(currentViewCtrl.getContentView());
+            this.viewController.setActivity(currentViewCtrl.getActivity());
+            this.viewController.load(globalContext);
+        }
         try {
             Widget newRootWidget = viewRenderer.render(renderingEnv, viewController.getView());
             // the View elements to replace hang from the content view of the formController

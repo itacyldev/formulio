@@ -56,7 +56,7 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
         UIRow component = root.getComponent();
 
         // set label if the attribute is set
-        if(StringUtils.isNotBlank(component.getLabel())){
+        if (StringUtils.isNotBlank(component.getLabel())) {
             TextView label = ViewHelper.findViewAndSetId(root, R.id.label_view,
                     TextView.class);
             label.setText(component.getLabel());
@@ -73,7 +73,7 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
             int maxNumColumns = maxNumColumns(component);
             weigthts = getWeigths(maxNumColumns, component);
             weightsWithColspans = getWeightsWithColspans(weigthts, colspans);
-        }else{
+        } else {
             weigthts = getWeigths(views.length, component);
         }
 
@@ -93,37 +93,36 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
                 params.span = colspans[i];
                 view.setLayoutParams(params);
 
-            }else {
+            } else {
                 TableUtils.setLayoutParams(weigthts, i, view);
             }
 
             i++;
         }
 
-        rowView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout()
-            {
-                adjustRowHeight(rowView);
-            }
-        });
+//        rowView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//
+//            @Override
+//            public void onGlobalLayout() {
+//                adjustRowHeight(rowView);
+//            }
+//        });
 
     }
 
-    private int gatMaxRowHeight(TableRow rowView){
+    private int gatMaxRowHeight(TableRow rowView) {
         int maxRowHeight = 0;
         Integer nChild = rowView.getChildCount();
         for (int i = 0; i < nChild; i++) {
             View cellView = rowView.getChildAt(i);
-            if (maxRowHeight < cellView.getHeight()){
+            if (maxRowHeight < cellView.getHeight()) {
                 maxRowHeight = cellView.getHeight();
             }
         }
         return maxRowHeight;
     }
 
-    private void adjustRowHeight(TableRow rowView){
+    private void adjustRowHeight(TableRow rowView) {
         int maxRowHeight = gatMaxRowHeight(rowView);
         Integer nChild = rowView.getChildCount();
         for (int i = 0; i < nChild; i++) {
@@ -142,16 +141,17 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
 
     private float[] getWeigths(int length, UIRow component) {
         // handle cell weigthts
-        return ComponentUtils.getWeigths(StringUtils.isNotBlank(component.getWeights())?component.getWeights():((UITable) component.getParent()).getWeights(), length, component.getParent().getId(), component.getId());
+        return ComponentUtils.getWeigths(StringUtils.isNotBlank(component.getWeights()) ? component.getWeights() :
+                ((UITable) component.getParent()).getWeights(), length, component.getParent().getId(), component.getId());
     }
 
-    private float[] getWeightsWithColspans(float[] weigthts, Integer[] colspans){
+    private float[] getWeightsWithColspans(float[] weigthts, Integer[] colspans) {
         float[] weightsWithColspans = new float[colspans.length];
         int j = 0;
-        for (int i = 0; i<colspans.length; i++){
+        for (int i = 0; i < colspans.length; i++) {
             int value = colspans[i];
             float sum = 0;
-            while(value > 0){
+            while (value > 0) {
                 sum = weigthts[j] + sum;
                 value--;
                 j++;
@@ -161,10 +161,10 @@ public class UIRowRenderer extends AbstractGroupRenderer<UIRow, Widget<UIRow>> {
         return weightsWithColspans;
     }
 
-    private int maxNumColumns(UIRow component){
+    private int maxNumColumns(UIRow component) {
         int max = 0;
         for (UIComponent row : component.getParent().getChildren()) {
-            max = max < row.getChildren().length?row.getChildren().length:max;
+            max = max < row.getChildren().length ? row.getChildren().length : max;
         }
         return max;
     }

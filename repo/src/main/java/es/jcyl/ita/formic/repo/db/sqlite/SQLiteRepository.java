@@ -131,6 +131,11 @@ public class SQLiteRepository extends AbstractEditableRepository<Entity, Object,
     }
 
     @Override
+    public void close() {
+        this.dao.getDatabase().close();
+    }
+
+    @Override
     public void setContext(Context ctx) {
         super.setContext(ctx);
         this.dao.setContext(ctx);

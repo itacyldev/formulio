@@ -33,6 +33,7 @@ import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
@@ -55,6 +56,8 @@ public class ViewController implements Identificable {
     protected String name;
     protected String description;
     protected UIView view;
+    //    protected WeakReference<FormConfig> formConfig;
+    protected FormConfig formConfig;
 
     /////////////////////
     // Android UI elements
@@ -270,5 +273,13 @@ public class ViewController implements Identificable {
 
     public void setActivity(Activity activity) {
         this.activity = new WeakReference<>(activity);
+    }
+
+    public FormConfig getFormConfig() {
+        return formConfig;
+    }
+
+    public void setFormConfig(FormConfig formConfig) {
+        this.formConfig = formConfig;
     }
 }

@@ -60,4 +60,9 @@ public interface Repository<T extends Entity, F extends Filter> {
 
     void addMapping(EntityMapping mapping);
 
+    /**
+     * Close repository and dispose internal objects
+     */
+    void close();
+
 }

@@ -19,13 +19,8 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import org.apache.commons.io.FileUtils;
-import org.mini2Dx.collections.CollectionUtils;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
@@ -33,22 +28,15 @@ import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
-import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
+import es.jcyl.ita.formic.forms.deploy.HotDeployer;
 import es.jcyl.ita.formic.forms.jobs.reader.RepoReader;
 import es.jcyl.ita.formic.forms.location.LocationService;
-import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
+import es.jcyl.ita.formic.forms.project.ProjectManager;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
-import es.jcyl.ita.formic.forms.project.ProjectResource;
-import es.jcyl.ita.formic.forms.project.handlers.ContextConfigHandler;
-import es.jcyl.ita.formic.forms.project.handlers.DefaultImageRepositoryHandler;
-import es.jcyl.ita.formic.forms.project.handlers.FormConfigHandler;
-import es.jcyl.ita.formic.forms.project.handlers.ProjectResourceHandler;
-import es.jcyl.ita.formic.forms.project.handlers.RepoConfigHandler;
 import es.jcyl.ita.formic.forms.view.dag.DAGManager;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
@@ -65,34 +53,24 @@ import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
  */
 public class App {
     private static App _instance;
-    private static Map<ProjectResource.ResourceType, ProjectResourceHandler> _handlers = new HashMap<ProjectResource.ResourceType, ProjectResourceHandler>();
 
     private boolean configLoaded = false;
     private String appBaseFolder;
     private Context andContext;
     private CompositeContext globalContext;
 
-    private Project currentProject;
     private JobFacade jobFacade;
+    private ProjectManager projectManager;
+    private HotDeployer deployer;
+    private boolean loading = false;
 
-    /**
-     * Reads project list
-     */
-    private ProjectRepository projectRepo;
     /**
      * Stores current project form configurations (each entity form setting).
      */
-    private FormConfigRepository formConfigRepo;
     /**
      * Stores formControllers instances
      */
     private ViewControllerFactory formControllerFactory = ViewControllerFactory.getInstance();
-
-    private static ConfigReadingInfo readingListener = new ConfigReadingInfo();
-
-    private App(String appBaseFolder) {
-        this.appBaseFolder = appBaseFolder;
-    }
 
     private App(Context androidContext, String appBaseFolder) {
         this.appBaseFolder = appBaseFolder;
@@ -101,12 +79,11 @@ public class App {
 
     public static App getInstance() {
         if (_instance == null) {
-            throw new ConfigurationException("You first have to call to init method giving " +
-                    "the base folder of the project you want to read.");
+            throw new ConfigurationException("You first have to call to init() method passing " +
+                    "the base folder of your projects.");
         }
         return _instance;
     }
-
 
     /**
      * Static initialization for
@@ -115,13 +92,12 @@ public class App {
      * @return
      */
     public static App init(String appBaseFolder) {
-        _instance = new App(appBaseFolder);
+        _instance = new App(null, appBaseFolder);
         _instance.init();
         return _instance;
     }
 
     public static App init(Context and, String appBaseFolder) {
-        // TODO: cache??
         _instance = new App(and, appBaseFolder);
         _instance.init();
         return _instance;
@@ -129,27 +105,28 @@ public class App {
 
     private void init() {
         if (!configLoaded) {
+            loading = true;
             // initialize global context and set to ContextAware components
             initContext();
             // customize data type converters
             ConfigConverters confConverter = new ConfigConverters();
             confConverter.init();
-            // project repository
-            projectRepo = new ProjectRepository(new File(this.appBaseFolder));
-            registerHandlers();
-
+            // setup project manager
+            projectManager = new ProjectManager(new File(this.appBaseFolder));
+            projectManager.setGlobalContext(globalContext);
             // configure job facade
             jobFacade = new JobFacade();
             configLoaded = true;
             registerRepoReader();
+            // limit to DEBUG environment
+            deployer = new HotDeployer(MainController.getInstance(), this.projectManager);
+            loading = false;
         }
     }
 
-    private static void registerRepoReader() {
-        TaskConfigFactory factory = TaskConfigFactory.getInstance();
-        factory.addTaskStep("repoReader", RepoReader.class);
+    public boolean isLoading() {
+        return loading;
     }
-
 
     /**
      * Create globalContext and set it to all ContextAwareComponents
@@ -161,7 +138,14 @@ public class App {
         //  them in project file
         globalContext.addContext(new DateTimeContext());
         globalContext.addContext(new BasicContext("session"));
+        // TODO: configure context and default sync properties in XML in res folder
+        if (this.andContext != null) {
+            this.globalContext.put("location", new LocationService(this.andContext));
+        }
+        this.globalContext.put("repos", new RepoAccessContext());
+
         initJobsContext(globalContext);
+        // set context to context dependant objects
         MainController.getInstance().setContext(globalContext);
         RepositoryFactory.getInstance().setContext(globalContext);
     }
@@ -188,148 +172,10 @@ public class App {
         globalContext.addContext(appCtx);
     }
 
-    public void clear() {
-        // clear defined forms configs, form controllers and repos
-        if (formConfigRepo != null) {
-            this.formConfigRepo.deleteAll();
-        }
-        formControllerFactory.clear();
-        MainController.getInstance().clear();
-        RepositoryFactory.getInstance().clear();
-        EntitySourceFactory.getInstance().clear();
-        this.globalContext.clear();
-        DAGManager.getInstance().flush();
-    }
 
-    /**
-     * Register instances responsible for reading each XML file type (form/data).
-     */
-    private static void registerHandlers() {
-        //TODO: add additional resource handlers (synchronization, security, etc.)
-        ProjectResourceHandler handler = new FormConfigHandler();
-        handler.setListener(readingListener);
-        _handlers.put(ProjectResource.ResourceType.FORM, handler);
-        handler = new RepoConfigHandler();
-        handler.setListener(readingListener);
-        _handlers.put(ProjectResource.ResourceType.REPO, handler);
-        handler = new ContextConfigHandler();
-        _handlers.put(ProjectResource.ResourceType.CONTEXT, handler);
-    }
-
-    /**
-     * DO NOT USE THIS METHOD, call setCurrentProject instead. Made public just for testing
-     * purposes.
-     *
-     * @param project
-     */
-    private void readConfig(Project project) {
-        if (!project.isOpened()) {
-            project.open();
-        }
-        // clear all previous configs
-        clear();
-
-        // update project context
-        populateProjectContext(project);
-
-        readingListener.setProject(project);
-        DevConsole.setConfigReadingInfo(readingListener);
-
-        // create new formConfig repo to hold current project configuration (forms.xml
-        // configurations of current project)
-        formConfigRepo = new FormConfigRepository(project);
-        FormConfigHandler formConfigHandler = (FormConfigHandler) _handlers.get(ProjectResource.ResourceType.FORM);
-        formConfigHandler.setFormConfigRepo(formConfigRepo);
-
-        // share current reading process info using componentBuilderFactory
-        ComponentBuilderFactory.getInstance().setInfo(readingListener);
-
-        processDefaultResources();
-        processProjectResources(project);
-    }
-
-    /**
-     * Updates project context with current project
-     *
-     * @param project
-     */
-    private void populateProjectContext(Project project) {
-        // Create project and app contexts and add them to Global context
-        BasicContext projectCtx = new BasicContext("project");
-        projectCtx.put("folder", project.getBaseFolder());
-        projectCtx.put("name", project.getName());
-        globalContext.addContext(projectCtx);
-    }
-
-    private void processDefaultResources() {
-        // TODO: configure context and default sync properties in XML in res folder
-        this.globalContext.put("date", new DateTimeContext());
-        if (this.andContext != null) {
-            this.globalContext.put("location", new LocationService(this.andContext));
-        }
-        // add repo access context
-        this.globalContext.put("repos", new RepoAccessContext());
-    }
-
-    private static final ProjectResource.ResourceType[] ORDERED_RESOURCES =
-            {ProjectResource.ResourceType.CONTEXT, ProjectResource.ResourceType.REPO,
-                    ProjectResource.ResourceType.FORM};
-
-    /**
-     * Reads the project config files calling the proper handler for each resource and assuring
-     * the right processing order: repo > forms > security
-     *
-     * @param project
-     */
-    private void processProjectResources(Project project) {
-        // check configFiles exist
-        List<ProjectResource> configFiles = project.getConfigFiles();
-        if (CollectionUtils.isEmpty(configFiles)) {
-            throw new ConfigurationException(
-                    DevConsole.error(String.format("Couldn't find any config file in project [%s], " +
-                            "check the folder.", project.getBaseFolder())));
-        } else {
-            // process files in RESOURCE_ORDER order (configuration flow)
-            for (ProjectResource.ResourceType resType : ORDERED_RESOURCES) {
-                configFiles = project.getConfigFiles(resType);
-
-                // TODO: Create class ProjectResources to handle files, projectTemplates, etc. #204283
-                // TODO: do we need additional events? (post repo creation, post form creation....)
-                for (ProjectResource resource : configFiles) {
-                    readingListener.fileStart(resource.file.getAbsolutePath());
-                    DevConsole.info("Processing file '${file}'");
-                    // get a reader for the file and a register for the resulting config object
-                    _handlers.get(resource.type).handle(resource);
-                    readingListener.fileEnd(resource.file.getAbsolutePath());
-                }
-                // anything to do after resource-type files treatment?
-                onAfterResourceTypeReading(project, resType);
-            }
-        }
-    }
-
-    /**
-     * Specific actions to perform after a specific resource type files have been treated.
-     *
-     * @param resType
-     */
-    private void onAfterResourceTypeReading(Project project, ProjectResource.ResourceType resType) {
-        if (resType == ProjectResource.ResourceType.REPO) {
-            // Create default image repository for current project
-            DefaultImageRepositoryHandler handler = new DefaultImageRepositoryHandler();
-            ProjectResource pr = new ProjectResource(project, null, null);
-            handler.handle(pr);
-        }
-    }
-
-
-    /**
-     * Common repositories
-     *
-     * @return
-     */
-    public ProjectRepository getProjectRepo() {
-        return projectRepo;
+    private static void registerRepoReader() {
+        TaskConfigFactory factory = TaskConfigFactory.getInstance();
+        factory.addTaskStep("repoReader", RepoReader.class);
     }
 
     /**
@@ -338,38 +184,60 @@ public class App {
      * @param project Selected project.
      */
     public void openProject(final Project project) {
+        loading = true;
+        // clear previous repo and entity sources
+        RepositoryFactory.getInstance().clear();
+        EntitySourceFactory.getInstance().clear();
         try {
-            currentProject = project;
-            readConfig(project);
-            debugConfig();
+            projectManager.closeProject();
+            projectManager.openProject(project);
+            File basePath = new File(projectManager.getCurrentBaseFolder());
+
+            deployer.stop();
+            deployer.setPath(basePath.getCanonicalPath());
+            deployer.start();
         } catch (Exception e) {
             throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e), e);
+        } finally {
+            loading = false;
         }
     }
 
+    public void clear() {
+        // clear defined forms configs, form controllers and repos
+        projectManager.clear();
+        formControllerFactory.clear();
+        MainController.getInstance().clear();
+        RepositoryFactory.getInstance().clear();
+        EntitySourceFactory.getInstance().clear();
+        this.globalContext.clear();
+        DAGManager.getInstance().flush();
+    }
+
+    /******** GETTERS/SETTERS *******/
     /**
-     * Read the configuration of the selected project as current. If there are problems do not set it.
+     * Common repositories
+     *
+     * @return
      */
-    private void debugConfig() {
-        RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-        Set<String> repoIds = repoFactory.getRepoIds();
-        DevConsole.info("Repos registered: " + repoIds);
+    public ProjectRepository getProjectRepo() {
+        return projectManager.getProjectRepo();
+    }
+
+    public RepositoryFactory getRepoFactory() {
+        return RepositoryFactory.getInstance();
+    }
+
+    public ProjectManager getProjectManager() {
+        return projectManager;
     }
 
     public Project getCurrentProject() {
-        return this.currentProject;
+        return this.projectManager.getCurrentProject();
     }
 
     public String getCurrentBaseFolder() {
-        return this.currentProject.getBaseFolder();
-    }
-
-    public RepoConfigHandler getRepoConfigReader() {
-        return (RepoConfigHandler) _handlers.get(ProjectResource.ResourceType.REPO);
-    }
-
-    public FormConfigRepository getFormConfigRepo() {
-        return formConfigRepo;
+        return this.projectManager.getCurrentBaseFolder();
     }
 
     public Resources getResources() {
@@ -399,7 +267,6 @@ public class App {
     public void setJobFacade(JobFacade jobFacade) {
         this.jobFacade = jobFacade;
     }
-
 
     public void setJobListener(JobExecListener jobListener) {
         this.jobFacade.setListener(jobListener);
