@@ -16,10 +16,12 @@ package es.jcyl.ita.formic.forms.scripts;
  */
 
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.JsDevTools;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
@@ -31,6 +33,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import es.jcyl.ita.formic.forms.config.DevConsole;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -167,12 +171,17 @@ public class ScriptEngine {
             throw new ScriptEngineException("Function not found: " + method);
         }
         Function function = (Function) fObj;
-        Object result = function.call(rhino, scope, scope, args);
-        return (result instanceof Undefined) ? null : result;
+        return callFunction(function, args);
     }
 
     public Object callFunction(Function function, Object... args) {
-        Object result = function.call(rhino, scope, scope, args);
+        Object result = null;
+        try {
+            result = function.call(rhino, scope, scope, args);
+        } catch (Exception e) {
+            DevConsole.error(String.format("Error while executing js function [%s] ",
+                    JsDevTools.decompile(function), e));
+        }
         return (result instanceof Undefined) ? null : result;
     }
 

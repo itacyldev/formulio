@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.jayjobs.task.utils;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
 
 /**
  * Helper to access most common variables from context
@@ -53,7 +54,7 @@ public class ContextAccessor {
         }
         Context jobContext = ctx.getContext(PRJ_CTX);
         if (jobContext == null) {
-            return null;
+            throw new JobRuntimeException("Project context is empty!");
         } else if (jobContext.containsKey("jobsFolder")) {
             return jobContext.getString("jobsFolder");
         } else {
