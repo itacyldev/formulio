@@ -64,14 +64,6 @@ public class App {
     private HotDeployer deployer;
     private boolean loading = false;
 
-    /**
-     * Stores current project form configurations (each entity form setting).
-     */
-    /**
-     * Stores formControllers instances
-     */
-    private ViewControllerFactory formControllerFactory = ViewControllerFactory.getInstance();
-
     private App(Context androidContext, String appBaseFolder) {
         this.appBaseFolder = appBaseFolder;
         this.andContext = androidContext;
@@ -188,6 +180,8 @@ public class App {
         // clear previous repo and entity sources
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
+        // clear previous view controllers
+        ViewControllerFactory.getInstance().clear();
         try {
             projectManager.closeProject();
             projectManager.openProject(project);
@@ -206,10 +200,10 @@ public class App {
     public void clear() {
         // clear defined forms configs, form controllers and repos
         projectManager.clear();
-        formControllerFactory.clear();
         MainController.getInstance().clear();
         RepositoryFactory.getInstance().clear();
         EntitySourceFactory.getInstance().clear();
+        ViewControllerFactory.getInstance().clear();
         this.globalContext.clear();
         DAGManager.getInstance().flush();
     }

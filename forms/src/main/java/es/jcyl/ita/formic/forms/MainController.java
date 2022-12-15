@@ -86,7 +86,7 @@ public class MainController implements ContextAwareComponent {
     // user action management
     private ActionController actionController;
     private ViewController viewController;
-    private ViewControllerFactory formControllerFactory;
+    private ViewControllerFactory viewControllerFactory;
     private ScriptEngine scriptEngine;
 
     // navigation control
@@ -104,8 +104,8 @@ public class MainController implements ContextAwareComponent {
 
     MainController() {
         // coordinate factory creation
-        formControllerFactory = ViewControllerFactory.getInstance();
-        formControllerFactory.setMc(this);
+        viewControllerFactory = ViewControllerFactory.getInstance();
+        viewControllerFactory.setMc(this);
         router = new Router(this);
         actionController = new ActionController(this, router);
         RenderingEnvFactory.getInstance().setActionController(actionController);
@@ -182,11 +182,11 @@ public class MainController implements ContextAwareComponent {
     }
 
     protected ViewController getViewController(String formId) {
-        ViewController controller = formControllerFactory.getController(formId);
+        ViewController controller = viewControllerFactory.getController(formId);
         if (controller == null) {
             throw new FormException(error(String.format("No form controller found with id [%s] " +
                             "check route string. Available ids: %s", formId,
-                    new TreeSet<>(formControllerFactory.getControllerIds()))));
+                    new TreeSet<>(viewControllerFactory.getControllerIds()))));
         }
         return controller;
     }
@@ -301,6 +301,7 @@ public class MainController implements ContextAwareComponent {
 
     public void clear() {
         router.clear();
+        viewControllerFactory.clear();
         actionController.clear();
         scriptEngine.clearSources();
         viewController = null;

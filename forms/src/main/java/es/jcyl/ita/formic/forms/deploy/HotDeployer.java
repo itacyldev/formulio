@@ -70,7 +70,19 @@ public class HotDeployer {
         this.uiHandler = new Handler(Looper.getMainLooper());
         // create thread to observe changes in project files
         worker = new Thread(new FileWatcher());
-        worker.start();
+        if (!isJUnitTest()) {
+            // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
+            worker.start();
+        }
+    }
+
+    public static boolean isJUnitTest() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -230,7 +242,7 @@ public class HotDeployer {
 
     private boolean checkBaseFolder() {
         boolean error = false;
-        if (baseFolder == null){
+        if (baseFolder == null) {
             error = true;
         } else {
             File f = new File(baseFolder);
@@ -238,7 +250,7 @@ public class HotDeployer {
                 error = true;
             }
         }
-        if(error){
+        if (error) {
             DevConsole.error("Invalid folder, the directory doesn't exists or is not" +
                     " a directory: " + baseFolder);
         }
