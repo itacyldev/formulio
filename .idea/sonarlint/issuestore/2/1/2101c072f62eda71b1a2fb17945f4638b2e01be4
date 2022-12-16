@@ -1,0 +1,16 @@
+
+E
+java:S3740$"/Provide the parametrized type for this generic.(ñ¬’
+J
+java:S3740&"/Provide the parametrized type for this generic.(‡âÙáşÿÿÿÿ
+E
+java:S3740+"/Provide the parametrized type for this generic.(½êù
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+>
+java:S1948$"(Make "entity" transient or serializable.(ñ¬’
+~
+java:S1157R"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(™¬ÎØûÿÿÿÿ
+o
+java:S2293w"YReplace the type specification in this constructor call with the diamond operator ("<>").(è¹ƒ×
+u
+java:S2293ƒ"YReplace the type specification in this constructor call with the diamond operator ("<>").( ³ìØøÿÿÿÿ

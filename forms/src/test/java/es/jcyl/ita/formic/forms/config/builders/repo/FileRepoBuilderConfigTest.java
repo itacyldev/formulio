@@ -25,13 +25,14 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.File;
 
 import es.jcyl.ita.formic.forms.App;
-import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
+import es.jcyl.ita.formic.repo.RepositoryFactory;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)
@@ -42,14 +43,13 @@ public class FileRepoBuilderConfigTest {
 
     @BeforeClass
     public static void setUp() {
-        App app = App.init("");
-        String projectPath = "src/test/resources/config/project1";
-        Project p = ProjectRepository.createFromFolder(new File(projectPath));
-        app.openProject(p);
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
-        // register repos
-        RepositoryUtils.registerMock("contacts");
+        App.init("");
+    }
+
+    @AfterClass
+    public static void tearDown(){
+        RepositoryUtils.unregisterMock("contacts");
+//        RepositoryFactory.getInstance().clear();
     }
 
     private static final String XML_TEST_BASIC = "<fileRepo id=\"fileRepo1\" folder=\".\"/>";
@@ -57,14 +57,10 @@ public class FileRepoBuilderConfigTest {
 
     @Test
     public void testBasicFileRepo() throws Exception {
+        RepositoryUtils.registerMock("contacts");
+
         String xml = XmlConfigUtils.createEditForm(XML_TEST_BASIC);
         FormConfig formConfig = XmlConfigUtils.readFormConfig(xml);
         Assert.assertNotNull(repoFactory.getRepo("fileRepo1"));
     }
-
-    @AfterClass
-    public static void tearDown() {
-        RepositoryUtils.unregisterMock("contacts");
-    }
-
 }

@@ -26,14 +26,14 @@ public interface EntitySource {
      *
      * @return
      */
-    public String getSourceId();
+    String getSourceId();
 
-    public Source getSource();
+    Source getSource();
 
     /**
      * Unique identifier of the entity type that this source will provide.
      *
      * @return
      */
-    public String getEntityTypeId();
+    String getEntityTypeId();
 }

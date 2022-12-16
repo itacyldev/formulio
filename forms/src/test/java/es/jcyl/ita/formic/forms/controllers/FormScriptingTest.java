@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.context.impl.ViewContext;
 import es.jcyl.ita.formic.forms.controllers.operations.FormValidator;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.scripts.ScriptRef;
 import es.jcyl.ita.formic.forms.utils.DevFormBuilder;
 import es.jcyl.ita.formic.forms.utils.RepositoryUtils;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
@@ -116,7 +117,7 @@ public class FormScriptingTest {
         String source = TestUtils.readAsString(TestUtils.findFile("scripts/formValidation1.js"));
 
         ScriptEngine engine = recipe.mc.getScriptEngine();
-        engine.store(recipe.mc.getViewController().getId(), source);
+        engine.store(recipe.mc.getViewController().getId(), ScriptRef.createInlineScriptRef(source,""));
         engine.initEngine(null);
         engine.initScope(recipe.mc.getViewController().getId());
         engine.putProperty("out", System.out);

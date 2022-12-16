@@ -53,7 +53,6 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
         return imageWidget;
     }
 
-
     @Override
     protected void composeInputView(RenderingEnv env, InputWidget<UIImage, ImageResourceView> widget) {
         ImageResourceView inputView = widget.getInputView();
