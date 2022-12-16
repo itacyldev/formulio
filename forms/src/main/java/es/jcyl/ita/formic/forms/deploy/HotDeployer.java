@@ -68,12 +68,6 @@ public class HotDeployer {
         this.mc = mc;
         changes = new RedeployChanges(this.mc);
         this.uiHandler = new Handler(Looper.getMainLooper());
-        // create thread to observe changes in project files
-        worker = new Thread(new FileWatcher());
-        if (!isJUnitTest()) {
-            // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
-            worker.start();
-        }
     }
 
     public static boolean isJUnitTest() {
@@ -88,6 +82,12 @@ public class HotDeployer {
 
     public void setPath(String path) {
         this.baseFolder = path;
+        // create thread to observe changes in project files
+        worker = new Thread(new FileWatcher());
+        if (!isJUnitTest()) {
+            // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
+            worker.start();
+        }
     }
 
 
