@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectManager;
@@ -265,10 +266,13 @@ public class HotDeployer {
         @Override
         public void run() {
             // reload js rhino context for current view
-            String currentViewId = mc.getViewController().getId();
-            mc.getScriptEngine().initScope(currentViewId);
-            // render current view
-            mc.renderBack(this.requiresControllerReload);
+            ViewController viewController = mc.getViewController();
+            if (viewController != null) { 
+                String currentViewId = mc.getViewController().getId();
+                mc.getScriptEngine().initScope(currentViewId);
+                // render current view
+                mc.renderBack(this.requiresControllerReload);
+            }
         }
 
         public void setRequiresControllerReload(boolean requiresControllerReload) {
