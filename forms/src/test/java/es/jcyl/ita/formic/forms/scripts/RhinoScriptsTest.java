@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.scripts;
 
 import android.util.Log;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -70,6 +71,11 @@ public class RhinoScriptsTest {
         DevConsole.setLevel(Log.ERROR);
     }
 
+    @AfterClass
+    public static void tearDown() {
+//        RepositoryFactory.getInstance().clear();
+    }
+
     public static void log(String msg) {
         android.util.Log.i("RHINO_LOG", msg);
     }
@@ -104,11 +110,10 @@ public class RhinoScriptsTest {
 
     @Test
     public void testCallFunction() throws Exception {
-
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         ScriptEngine engine = new ScriptEngine();
         engine.initEngine(null);
-        engine.store("formTest", SCRIPT_SOURCE);
+        engine.store("formTest", ScriptRef.createInlineScriptRef(SCRIPT_SOURCE,""));
         engine.initScope("formTest");
 
         String expected = RandomUtils.randomString(10);
@@ -119,10 +124,8 @@ public class RhinoScriptsTest {
         runScript(SCRIPT_SOURCE, gCtx);
     }
 
-
     @Test
     public void testFormConfig() throws Exception {
-
         File baseFolder = TestUtils.findFile("config");
         App.init(baseFolder.getAbsolutePath());
         App app = App.getInstance();
@@ -151,7 +154,7 @@ public class RhinoScriptsTest {
         CompositeContext gCtx = ContextTestUtils.createGlobalContext();
         ScriptEngine engine = new ScriptEngine();
         engine.initEngine(null);
-        engine.store("formTest", IMPORTING_SOURCE);
+        engine.store("formTest", ScriptRef.createInlineScriptRef(IMPORTING_SOURCE,""));
         engine.initScope("formTest");
 
         Object result = engine.callFunction("f1");
@@ -178,7 +181,7 @@ public class RhinoScriptsTest {
         when(mc.getRenderingEnv()).thenReturn(rendEnv);
         props.put("vh", new ScriptViewHelper(mc));
         engine.initEngine(props);
-        engine.store("formTest", IMPORTING_SOURCE);
+        engine.store("formTest", ScriptRef.createInlineScriptRef(IMPORTING_SOURCE,""));
         engine.initScope("formTest");
 
         String source = "var value = vh.widgets().filter(o=> o.componentId.startsWith('myWidgets')).map(o => o.getValue())";

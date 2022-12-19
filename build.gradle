@@ -1,8 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+//apply plugin: 'jacoco'
+//apply plugin: "org.sonarqube:3.5.0.2730"
 
-apply plugin: 'jacoco'
-apply plugin: "org.sonarqube"
-
+//
+//plugins {
+//    id "jacoco"
+//    id "org.sonarqube" version "3.3"
+//    id "org.owasp.dependencycheck" version "7.1.2"
+//}
 buildscript {
     repositories {
         flatDir {
@@ -23,6 +28,15 @@ buildscript {
     }
 }
 
+//plugins {
+//    id 'jacoco-report-aggregation'
+//    id "org.sonarqube" version "3.5.0.2730"
+//}
+plugins {
+    id 'base'
+    id 'jacoco'
+    id 'jacoco-report-aggregation'
+}
 
 allprojects {
     repositories {
@@ -79,24 +93,24 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
+//task clean(type: Delete) {
+//    delete rootProject.buildDir
+//}
 
 
 ext {
 
-    versionCode = 48
-    versionName = '0.7.26'
+    versionCode = 52
+    versionName = '0.7.30'
     applicationId = "es.jcyl.ita.formic"
-    compileSdkVersion = 30
-    targetSdkVersion = 30
+    compileSdkVersion = 31
+    targetSdkVersion = 31
     minSdkVersion = 21
-    buildToolsVersion = '30.0.3'
+    buildToolsVersion = '31.0.0'
     encoding = "UTF-8"
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.26'
+    version = '0.7.30'
     artifactId = 'Formic'
 
     sharedDeps = [
@@ -115,3 +129,7 @@ ext {
             'org.hamcrest:hamcrest:2.2',
     ]
 }
+
+//apply from: rootProject.file('gradle/tasks.gradle')
+//apply from: rootProject.file('gradle/code-coverage.gradle')
+

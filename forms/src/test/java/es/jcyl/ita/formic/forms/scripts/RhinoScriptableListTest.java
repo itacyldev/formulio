@@ -244,7 +244,7 @@ public class RhinoScriptableListTest {
         Map<String, Object> props = new HashMap<>();
         props.put("out", System.out);
         engine.initEngine(props);
-        engine.store("formTest", source);
+        engine.store("formTest", ScriptRef.createInlineScriptRef(source,""));
         engine.initScope("formTest");
 
         return engine.callFunction(fncName, params);

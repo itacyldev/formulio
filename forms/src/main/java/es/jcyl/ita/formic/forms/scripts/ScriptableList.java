@@ -50,7 +50,7 @@ public class ScriptableList<T> extends ArrayList<T> {
             Object result = engine.callFunction((Function) object, item);
             if (result == null) {
                 throw new IllegalArgumentException("The callback function passed to map() returned a null value. " +
-                        JsDevTools.decompile((BaseFunction) object));
+                        JsDevTools.decompile((Function) object));
             }
             if (result instanceof NativeJavaObject) {
                 result = ((NativeJavaObject) result).unwrap();
@@ -73,7 +73,7 @@ public class ScriptableList<T> extends ArrayList<T> {
             Object result = engine.callFunction((Function) object, item);
             if (result == null) {
                 throw new IllegalArgumentException("The callback function passed to map() returned a null value. " +
-                        JsDevTools.decompile((BaseFunction) object));
+                        JsDevTools.decompile((Function) object));
             }
             if (result instanceof NativeJavaObject) {
                 result = ((NativeJavaObject) result).unwrap();
@@ -146,7 +146,7 @@ public class ScriptableList<T> extends ArrayList<T> {
             } catch (Exception e) {
                 throw new IllegalArgumentException(String.format("The return of the filter function must be a " +
                                 "boolean value. Found: [%s] when applying on item [%s]. %s", result, item,
-                        JsDevTools.decompile((BaseFunction) object)));
+                        JsDevTools.decompile((Function) object)));
             }
         }
         if (returnFirst) {
@@ -198,7 +198,7 @@ public class ScriptableList<T> extends ArrayList<T> {
     private void checkFunctionParameter(Object object, String functionName) {
         if (!(object instanceof Function)) {
             throw new IllegalArgumentException(String.format("Illegal object passed callback in %s, it must be a " +
-                    "function. Found: [%s]. %s.", functionName, object.getClass(), JsDevTools.decompile((BaseFunction) object)));
+                    "function. Found: [%s]. %s.", functionName, object.getClass(), JsDevTools.decompile((Function) object)));
         }
     }
 

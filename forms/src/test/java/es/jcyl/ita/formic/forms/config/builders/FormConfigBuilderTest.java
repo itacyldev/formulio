@@ -53,8 +53,6 @@ public class FormConfigBuilderTest {
     @BeforeClass
     public static void setUp() {
         App.init("");
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
         // register repos
         RepositoryUtils.registerMock("contacts");
     }
@@ -63,7 +61,7 @@ public class FormConfigBuilderTest {
     public void testFileconfig() throws Exception {
         ProjectUtils.readProjectConfig("src/test/resources/config/project1");
         App app = App.getInstance();
-        app.getFormConfigRepo().findById("formPrueba");
+        app.getProjectManager().getFormConfigRepo().findById("formPrueba");
 
     }
 

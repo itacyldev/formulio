@@ -49,22 +49,19 @@ public class RepositoryConfHandlerTest {
     @BeforeClass
     public static void setUp() {
         App.init("");
-        ConfigConverters confConverter = new ConfigConverters();
-        confConverter.init();
-        // register repos
     }
 
     @AfterClass
     public static void tearDown() {
-        // remove invalid repos
-
+//        RepositoryFactory.getInstance().clear();
     }
+
 
     @Test
     public void testOkRepoReading() throws Exception {
         String REPO_ID = "RepositoryConfHandlerTestValidRepo";
         try {
-            // create a repo with a meta with no column. Mockup everything and call the handler to make it fail
+            // create a repo with a meta with no column
             EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
             EntityMeta meta = metaBuilder.withNumProps(3).build();
             EditableRepository repo = mock(AbstractEditableRepository.class);
@@ -84,7 +81,6 @@ public class RepositoryConfHandlerTest {
         } finally {
             RepositoryFactory.getInstance().unregister(REPO_ID);
         }
-
     }
 
     /**

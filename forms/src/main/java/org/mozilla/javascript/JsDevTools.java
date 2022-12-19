@@ -20,7 +20,13 @@ package org.mozilla.javascript;
  */
 public class JsDevTools {
 
-    public static String decompile(BaseFunction function) {
-        return function.decompile(3, 1);
+    public static String decompile(Function function) {
+        if(function instanceof BaseFunction){
+            return ((BaseFunction)function).decompile(3, 1);
+        } else if(function instanceof NativeJavaClass){
+            return ((NativeJavaClass)function).getClassName();
+        } else {
+            return "";
+        }
     }
 }

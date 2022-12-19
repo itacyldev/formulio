@@ -3,6 +3,8 @@ package es.jcyl.ita.formic.forms.config.builders.scripts;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mini2Dx.collections.CollectionUtils;
+import org.mini2Dx.collections.ListUtils;
 import org.mozilla.javascript.Script;
 import org.robolectric.RobolectricTestRunner;
 
@@ -17,7 +19,10 @@ import es.jcyl.ita.formic.forms.utils.XmlConfigUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
+
+import java.util.List;
 
 /**
  * <Your description here>
@@ -49,8 +54,8 @@ public class ScriptSourceBuilderTest {
         ViewController editCtl = formConfig.getEdits().get(0);
 
         // check there's a script related to current form
-        Script script = ScriptEngine.getInstance().getScript(editCtl.getId());
-        assertNotNull(script);
+        List<Script> script = ScriptEngine.getInstance().getScripts(editCtl.getId());
+        assertTrue(CollectionUtils.isNotEmpty(script));
     }
 
     private static final String XML_INFILE_TEST = "<script src=\"script1.js\"/>";
@@ -66,7 +71,7 @@ public class ScriptSourceBuilderTest {
         ViewController editCtl = formConfig.getEdits().get(0);
 
         // check there's a script related to current form
-        Script script = ScriptEngine.getInstance().getScript(editCtl.getId());
-        assertNotNull(script);
+        List<Script> script = ScriptEngine.getInstance().getScripts(editCtl.getId());
+        assertTrue(CollectionUtils.isNotEmpty(script));
     }
 }

@@ -43,6 +43,7 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
 import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.scripts.ScriptEngine;
+import es.jcyl.ita.formic.forms.scripts.ScriptRef;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 
 /**
@@ -81,7 +82,7 @@ public class JsActionHandlerTest {
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.store(mc.getViewController().getId(), ScriptRef.createInlineScriptRef(JS_SOURCE,""));
         scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();
@@ -108,7 +109,7 @@ public class JsActionHandlerTest {
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.store(mc.getViewController().getId(), ScriptRef.createInlineScriptRef(JS_SOURCE,""));
         scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();
@@ -134,7 +135,7 @@ public class JsActionHandlerTest {
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.store(mc.getViewController().getId(), ScriptRef.createInlineScriptRef(JS_SOURCE,""));
         scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();
@@ -158,7 +159,7 @@ public class JsActionHandlerTest {
 
         // create engine and store js function
         ScriptEngine scriptEngine = mc.getScriptEngine();
-        scriptEngine.store(mc.getViewController().getId(), JS_SOURCE);
+        scriptEngine.store(mc.getViewController().getId(), ScriptRef.createInlineScriptRef(JS_SOURCE,""));
         scriptEngine.initScope(mc.getViewController().getId());
 
         List<String> out = new ArrayList();

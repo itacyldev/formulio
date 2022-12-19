@@ -126,6 +126,11 @@ public class FileRepository extends AbstractEditableRepository<FileEntity, Strin
         return BaseFilter.class;
     }
 
+    @Override
+    public void close() {
+        // nothing to do
+    }
+
 
     /**
      * Inserts the file content in the repository folder and fills the entity id and calculated attributes

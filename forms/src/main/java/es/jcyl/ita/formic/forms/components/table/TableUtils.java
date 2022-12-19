@@ -40,6 +40,4 @@ public class TableUtils {
             view.setLayoutParams(lp);
         }
     }
-
-
 }
