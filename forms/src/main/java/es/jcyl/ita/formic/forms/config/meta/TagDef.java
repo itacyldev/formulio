@@ -210,7 +210,7 @@ public class TagDef {
 
 
         register("imagegallery", define(baseRepoAccessor, new Attribute[]{ROUTE, COLUMNS}));
-        register("imagegalleryitem", define(new Attribute[]{ID,VALUE, CONVERTER, IMAGE_TEXT }));
+        register("imagegalleryitem", define(new Attribute[]{ID,VALUE, CONVERTER, LABEL }));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {
