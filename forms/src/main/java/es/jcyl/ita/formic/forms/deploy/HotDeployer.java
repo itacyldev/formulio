@@ -24,7 +24,6 @@ import org.mini2Dx.collections.IteratorUtils;
 import org.mozilla.javascript.Context;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -79,17 +78,9 @@ public class HotDeployer {
         return false;
     }
 
-
     public void setPath(String path) {
         this.baseFolder = path;
-        // create thread to observe changes in project files
-        worker = new Thread(new FileWatcher());
-        if (!isJUnitTest()) {
-            // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
-            worker.start();
-        }
     }
-
 
     private List<String> detectFileChanges(String baseFolder) {
         // Android fsystem truncate file modification timestamp to seconds
@@ -132,7 +123,7 @@ public class HotDeployer {
         // stop previous thread if exists
         this.stopThread();
         if (!isJUnitTest()) {
-            DevConsole.info("Staring file watcher in folder" + this.baseFolder);
+            DevConsole.info("Starting file watcher in folder " + this.baseFolder);
             // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
             // create thread to observe changes in project files
             worker = new FileWatcher();
