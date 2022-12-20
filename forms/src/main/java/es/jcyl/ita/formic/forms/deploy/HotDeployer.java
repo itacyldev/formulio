@@ -82,6 +82,12 @@ public class HotDeployer {
 
     public void setPath(String path) {
         this.baseFolder = path;
+        // create thread to observe changes in project files
+        worker = new Thread(new FileWatcher());
+        if (!isJUnitTest()) {
+            // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
+            worker.start();
+        }
     }
 
 
