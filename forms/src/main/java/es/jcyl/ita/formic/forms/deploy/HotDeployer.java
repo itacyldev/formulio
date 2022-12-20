@@ -39,6 +39,8 @@ import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectManager;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
+import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -276,10 +278,16 @@ public class HotDeployer {
             // reload js rhino context for current view
             ViewController viewController = mc.getViewController();
             if (viewController != null) {
-                String currentViewId = mc.getViewController().getId();
-                mc.getScriptEngine().initScope(currentViewId);
-                // render current view
-                mc.renderBack(this.requiresControllerReload);
+                try {
+                    String currentViewId = mc.getViewController().getId();
+                    mc.getScriptEngine().initScope(currentViewId);
+                    // render current view
+                    mc.renderBack(this.requiresControllerReload);
+                } catch (Exception e) {
+                    UserMessagesHelper.toast(mc.getViewController().getActivity(),
+                            "Error while trying to reload current page");
+                    DevConsole.error("Deployment error.", e);
+                }
             }
         }
 
