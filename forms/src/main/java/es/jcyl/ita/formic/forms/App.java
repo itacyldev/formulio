@@ -265,4 +265,8 @@ public class App {
     public void setJobListener(JobExecListener jobListener) {
         this.jobFacade.setListener(jobListener);
     }
+
+    public HotDeployer getDeployer() {
+        return deployer;
+    }
 }
