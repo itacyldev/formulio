@@ -327,9 +327,9 @@ public class ComponentBuilderFactory {
         this.info = info;
     }
 
-    public RepoConfigHandler getRepoReader() {
-        return App.getInstance().getRepoConfigReader();
-    }
+//    public RepoConfigHandler getRepoReader() {
+//        return App.getInstance().getRepoConfigReader();
+//    }
 
     public RepositoryFactory getRepoFactory() {
         return repoFactory;

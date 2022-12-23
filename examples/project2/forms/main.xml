@@ -6,6 +6,34 @@
             </action>
         </button>
         <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
+        <input id="myInput" value="you are in view 1" />
         <datatable repo="contacts" />
         <buttonbar type="fab">
             <button action="create" route="form7-edit1">

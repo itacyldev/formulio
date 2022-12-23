@@ -148,7 +148,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
         C component = widget.getComponent();
         String hint = component.getHint();
         if (StringUtils.isBlank(hint)){
-            component.getInfoButton().setVisibility(View.INVISIBLE);
+            component.getInfoButton().setVisibility(View.GONE);
         }
     }
 

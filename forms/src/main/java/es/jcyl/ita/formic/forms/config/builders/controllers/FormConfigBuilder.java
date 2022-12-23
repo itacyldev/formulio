@@ -74,6 +74,9 @@ public class FormConfigBuilder extends AbstractComponentBuilder<FormConfig> {
             throw new ConfigurationException(error("The form has more than one view component in file ${file}"));
         }
         BuilderHelper.addDefaultRepoNode(node);
+        // set current file
+        String currentFile = this.getFactory().getInfo().getCurrentFile();
+        formConfig.setFilePath(currentFile);
     }
 
     private ConfigNode addDefaultNode(FormConfig formConfig, ConfigNode node, String tag) {

@@ -14,6 +14,9 @@
       </map>
     </option>
   </component>
+  <component name="ProjectResources">
+    <resource url="http://formic.itacyl.es/repos" location="$PROJECT_DIR$/xsd/repos.xsd" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
