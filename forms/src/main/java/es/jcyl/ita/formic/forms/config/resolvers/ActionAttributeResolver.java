@@ -162,6 +162,11 @@ public class ActionAttributeResolver extends AbstractAttributeResolver implement
             pNode.setParent(actionNode);
             actionNode.addChild(pNode);
         }
+        if(actionType.equalsIgnoreCase("js")){
+            // add method attribute
+            actionNode.setAttribute(AttributeDef.METHOD.name,
+                    node.getAttribute(AttributeDef.METHOD.name));
+        }
         // add action conf node to current component node
         node.addChild(actionNode);
     }

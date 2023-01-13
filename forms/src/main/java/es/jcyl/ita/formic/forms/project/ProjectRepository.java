@@ -159,6 +159,11 @@ public class ProjectRepository extends AbstractEditableRepository<Project, Strin
         return null;
     }
 
+    @Override
+    public void close() {
+        // nothing to do
+    }
+
     private EntitySource createSource() {
         return new EntitySource() {
             String folderPath = baseFolder.getAbsolutePath();

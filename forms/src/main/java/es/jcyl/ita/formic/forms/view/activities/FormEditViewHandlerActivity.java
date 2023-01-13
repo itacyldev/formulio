@@ -62,21 +62,20 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
     }
 
     @Override
-    protected void doRender(RenderingEnv renderingEnv) {
+    protected void createView(RenderingEnv renderingEnv) {
     }
 
-    protected void renderToolBars(RenderingEnv env) {
-        // configurar menu
+    protected void createToolBars(RenderingEnv env) {
         UIView view = this.viewController.getView();
         if(view == null){
             return; // just in testing cases
         }
-        renderBottomBar(view.getBottomNav());
-        renderMenuBar(view.getMenuBar());
-        renderFabBar(view.getFabBar());
+        createBottomBar(view.getBottomNav());
+        createMenuBar(view.getMenuBar());
+        createFabBar(view.getFabBar());
     }
 
-    private void renderBottomBar(UIButtonBar bottomNav) {
+    private void createBottomBar(UIButtonBar bottomNav) {
         ViewGroup toolBar = findViewById(R.id.form_toolbar);
         if(bottomNav == null || ArrayUtils.isEmpty(bottomNav.getChildren())){
             toolBar.setVisibility(View.GONE);
@@ -95,10 +94,10 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
         }
     }
 
-    private void renderFabBar(UIButtonBar menuBar) {
+    private void createFabBar(UIButtonBar menuBar) {
     }
 
-    private void renderMenuBar(UIButtonBar menuBar) {
+    private void createMenuBar(UIButtonBar menuBar) {
     }
 
     protected void close() {
@@ -112,7 +111,7 @@ public class FormEditViewHandlerActivity extends BaseFormActivity<ViewController
         UserAction action = UserActionHelper.newAction(ActionType.BACK.name(), "back", this.viewController);
         action.setRestoreView(true);
 //        action.setOrigin(formController.getId());
-        mc.getActionController().doUserAction(action);
+        mc.getActionController().execAction(action);
         finish();
     }
 

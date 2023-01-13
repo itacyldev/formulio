@@ -278,6 +278,24 @@ public class ConfigNodeHelper {
     }
 
     /**
+     * Returns the first node in the list that has the expected value in given attribute.
+     * Returns null if no node has the expected value.
+     *
+     * @param nodes
+     * @param attName
+     * @param expectedValue
+     * @return
+     */
+    public static ConfigNode findNodeByAttValue(List<ConfigNode> nodes, String attName, String expectedValue) {
+        for(ConfigNode n: nodes){
+            if(n.getAttribute(attName).equalsIgnoreCase(expectedValue)){
+                return n;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Sets a value in node if the attribute is currently not set
      *
      * @param node

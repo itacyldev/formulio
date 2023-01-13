@@ -57,7 +57,7 @@ public class ChangeEntityActionHandlerTest {
         UserAction userAction = UserActionHelper.newAction("testAction", null, mock(UIComponent.class));
         userAction.setRefresh("all");
         // act
-        actionController.doUserAction(userAction);
+        actionController.execAction(userAction);
         // assert
         verify(mc).renderBack();
 
@@ -78,7 +78,7 @@ public class ChangeEntityActionHandlerTest {
         UserAction userAction = UserActionHelper.newAction("testAction", null, mock(UIComponent.class));
         userAction.setRoute("back");
         // act
-        actionController.doUserAction(userAction);
+        actionController.execAction(userAction);
         //assert
         verify(mc.getRouter()).navigate(any(ActionContext.class), any(), any());
     }

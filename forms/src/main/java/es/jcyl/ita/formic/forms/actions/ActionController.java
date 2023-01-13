@@ -19,8 +19,8 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.forms.App;
@@ -30,6 +30,8 @@ import es.jcyl.ita.formic.forms.actions.handlers.CreateEntityActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.DeleteFromListActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.EmptyActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.JobActionHandler;
+import es.jcyl.ita.formic.forms.actions.handlers.JsActionHandler;
 import es.jcyl.ita.formic.forms.actions.handlers.SaveActionHandler;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
@@ -76,7 +78,7 @@ public class ActionController {
         handlerMap.put(type.toLowerCase(), handler);
     }
 
-    public synchronized void doUserAction(UserAction action) {
+    public synchronized void execAction(UserAction action) {
         if (action.getOrigin() != null && action.getOrigin() != mc.getViewController()) {
             // Make sure the formController referred by the action is the current form controller,
             // in other case dismiss action to prevent executing delayed actions
@@ -87,11 +89,11 @@ public class ActionController {
             ActionContext actionContext = new ActionContext(mc.getViewController(),
                     mc.getRenderingEnv().getAndroidContext());
             if (action instanceof UserCompositeAction) {
-                execAction(actionContext, (UserCompositeAction) action);
+                doExecAction(actionContext, (UserCompositeAction) action);
             } else {
-                execAction(actionContext, action);
+                doExecAction(actionContext, action);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             String msg = App.getInstance().getStringResource(R.string.action_generic_error);
             error(msg, e);
             mc.renderBack();
@@ -107,14 +109,14 @@ public class ActionController {
      * @param actionContext
      * @param action
      */
-    private void execAction(ActionContext actionContext, UserCompositeAction action) {
+    private void doExecAction(ActionContext actionContext, UserCompositeAction action) {
         UserAction[] subActions = action.getActions();
         int i = 0;
         for (UserAction sbAction : subActions) {
             // navigate just in last action
             boolean doNavigate = i == subActions.length - 1;
             try {
-                execAction(actionContext, sbAction, doNavigate, true);
+                doExecAction(actionContext, sbAction, doNavigate, true);
             } catch (StopCompositeActionException e){
                 break;
             }
@@ -122,8 +124,8 @@ public class ActionController {
         }
     }
 
-    private void execAction(ActionContext actionContext, UserAction action) {
-        execAction(actionContext, action, true, false);
+    private void doExecAction(ActionContext actionContext, UserAction action) {
+        doExecAction(actionContext, action, true, false);
     }
 
     /**
@@ -133,7 +135,7 @@ public class ActionController {
      * @param action
      * @param withNavigation
      */
-    private void execAction(ActionContext actionContext, UserAction action, boolean withNavigation, boolean rethrow) {
+    private void doExecAction(ActionContext actionContext, UserAction action, boolean withNavigation, boolean rethrow) {
         ActionHandler handler = handlerMap.get(action.getType().toLowerCase());
         if (handler == null) {
             throw new ConfigurationException(error("No action handler found for action type: " + action.getType()));
@@ -199,7 +201,7 @@ public class ActionController {
     }
 
     private String createMessage(UserAction action, Widget widget) {
-        List<WidgetContextHolder> contextHolders = widget.getRootWidget().getContextHolders();
+        Collection<WidgetContextHolder> contextHolders = widget.getRootWidget().getContextHolders();
         String holderIds;
         if (contextHolders == null) {
             holderIds = "none";
@@ -225,6 +227,10 @@ public class ActionController {
 
     public UserAction getCurrentAction() {
         return this.currentAction;
+    }
+
+    public void clear() {
+        this.currentAction = null;
     }
 }
 

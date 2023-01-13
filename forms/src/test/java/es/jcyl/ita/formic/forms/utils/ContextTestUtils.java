@@ -22,7 +22,7 @@ import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 
 import static org.mockito.Mockito.*;
 
@@ -80,6 +80,11 @@ public class ContextTestUtils {
             @Override
             public WidgetContextHolder getHolder() {
                 return null;
+            }
+
+            @Override
+            public void dispose() {
+
             }
 
             @Override

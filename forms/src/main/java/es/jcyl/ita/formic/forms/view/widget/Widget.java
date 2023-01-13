@@ -24,7 +24,6 @@ import androidx.annotation.Nullable;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
 
 /**
  * Base class to implement view components.
@@ -92,6 +91,13 @@ public class Widget<C extends UIComponent> extends LinearLayout implements IWidg
 
     public WidgetContextHolder getHolder() {
         return (widgetContext == null) ? null : widgetContext.getHolder();
+    }
+
+    @Override
+    public void dispose() {
+        this.component = null;
+        this.rootWidget = null;
+        this.widgetContext = null;
     }
 
     public void setWidgetContext(WidgetContext widgetContext) {

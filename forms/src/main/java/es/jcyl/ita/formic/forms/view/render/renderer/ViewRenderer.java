@@ -50,8 +50,10 @@ import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
+import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
@@ -70,7 +72,7 @@ public class ViewRenderer {
         return doRender(env, component, component, true);
     }
 
-    public Widget renderSubtree(RenderingEnv env, Widget widget) {
+    public Widget renderSubtree(RenderingEnv env, IWidget widget) {
         env.clearDeferredViews();
         // find current widget context holder and set context in rendering environment
         WidgetContext wCtx = widget.getWidgetContext();
@@ -190,33 +192,12 @@ public class ViewRenderer {
      * @param widget
      */
     private void registerWidget(RenderingEnv env, Widget widget) {
-        if (widget instanceof WidgetContextHolder) {
-            // create widgetContext and set to current widget
-            WidgetContext wCtx = new WidgetContext((WidgetContextHolder) widget);
-            // set the entity used to render this widget in its context
-            wCtx.setEntity(env.getEntity());
-            // set message context
-            BasicContext msgCtx = env.getMessageContext(widget.getComponentId());
-            wCtx.setMessageContext(msgCtx);
-            // add global context
-            wCtx.addContext(env.getGlobalContext());
-            widget.setWidgetContext(wCtx);
-            // set as current WidgetContext so nested elements will use it
-            env.setWidgetContext(wCtx);
-            onWidgetContextChange(wCtx);
-            // register current widget in view
-            if (env.getRootWidget() != null) {
-                env.getRootWidget().registerContextHolder((WidgetContextHolder) widget);
-            }
-        } else {
-            widget.setWidgetContext(env.getWidgetContext());
-            if (env.getWidgetContext() != null) {
-                env.getWidgetContext().registerWidget(widget);
-            }
-        }
-        widget.setRootWidget(env.getRootWidget());
-        if ((widget instanceof ControllableWidget) && (env.getRootWidget() != null)) { // rootWidget == null just in tests
-            env.getRootWidget().registerControllableWidget((ControllableWidget) widget);
+        WidgetContext currentWCtx = env.getWidgetContext();
+        WidgetManager wManager = env.getWidgetManager();
+
+        WidgetContext newWidgetCtx = wManager.registerWidget(env, widget);
+        if (currentWCtx != newWidgetCtx) {
+            onWidgetContextChange(newWidgetCtx);
         }
     }
 
@@ -290,7 +271,7 @@ public class ViewRenderer {
                     if (defViewList != null) {
                         for (DeferredView defView : defViewList) {
                             // render the view and replace deferred element
-                            RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
+                            RenderingEnv widgetRendEnv = env.getFactory().clone(env);
                             widgetRendEnv.setWidgetContext(defView.getWidgetContext());
                             Widget newWidget = this.doRender(widgetRendEnv, node.getComponent(), null, false);
                             registerWidget(env, newWidget);
@@ -314,7 +295,7 @@ public class ViewRenderer {
     /**
      * Given an element in current view, renders all the dependant elements
      */
-    public void renderDeps(RenderingEnv env, Widget widget) {
+    public void renderDeps(RenderingEnv env, IWidget widget) {
         // get element dags
         UIComponent component = widget.getComponent();
         ViewDAG viewDAG = env.getViewDAG();
@@ -348,7 +329,7 @@ public class ViewRenderer {
                     ((DynamicWidget) dependantWidget).load(env);
                 } else {
                     // update widget content using render flow
-                    RenderingEnv widgetRendEnv = RenderingEnv.clone(env);
+                    RenderingEnv widgetRendEnv = env.getFactory().clone(env);
                     if (dependantWidget != null) {
                         widgetRendEnv.setWidgetContext(dependantWidget.getWidgetContext());
                         Widget newWidget = this.doRender(widgetRendEnv, node.getComponent(), null, false);

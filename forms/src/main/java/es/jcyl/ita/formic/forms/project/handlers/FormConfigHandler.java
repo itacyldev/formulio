@@ -81,12 +81,14 @@ public class FormConfigHandler extends AbstractProjectResourceHandler {
                     formConfig.getId())));
         }
         formConfigRepo.save(formConfig);
-
+        // link every ViewController with its Configuration and register in factory
         if (formConfig.getList() != null && formConfig.isMainForm()) {
+            formConfig.getList().setFormConfig(formConfig);
             viewControllerFactory.register(formConfig.getList());
         }
         if (CollectionUtils.isNotEmpty(formConfig.getEdits())) {
             for (ViewController edit : formConfig.getEdits()) {
+                edit.setFormConfig(formConfig);
                 viewControllerFactory.register(edit);
             }
         }

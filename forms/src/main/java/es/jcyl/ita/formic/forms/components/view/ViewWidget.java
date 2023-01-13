@@ -20,6 +20,8 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
+import org.mini2Dx.collections.MapUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,7 +38,7 @@ import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
  */
 public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
 
-    private List<WidgetContextHolder> contextHolders;
+    private Map<String, WidgetContextHolder> contextHolders;
     private Map<String, ControllableWidget> widgetControllers = new HashMap<>();
 
     public ViewWidget(Context context) {
@@ -57,14 +59,18 @@ public class ViewWidget extends Widget<UIView> implements WidgetContextHolder {
 
     public void registerContextHolder(WidgetContextHolder widget) {
         if (this.contextHolders == null) {
-            this.contextHolders = new ArrayList<>();
+            this.contextHolders = new HashMap<>();
         }
-        this.contextHolders.add(widget);
+        this.contextHolders.put(widget.getHolderId(), widget);
     }
 
-    public List<WidgetContextHolder> getContextHolders() {
-        return contextHolders;
+    public Collection<WidgetContextHolder> getContextHolders() {
+        return contextHolders.values();
     }
+    public Map<String, WidgetContextHolder> getContextHoldersMap() {
+        return MapUtils.unmodifiableMap(contextHolders);
+    }
+
 
     @Override
     public String getHolderId() {

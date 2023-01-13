@@ -127,7 +127,16 @@ public class RepositoryFactory implements ContextAwareComponent {
         }
     }
 
+    /**
+     * Closes all repository instances
+     */
     public void clear() {
+        for (Repository repo : _instances.values()) {
+            try {
+                repo.close();
+            } catch (Exception e) {
+            }
+        }
         _instances.clear();
     }
 

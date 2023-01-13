@@ -144,8 +144,8 @@ public class DAGManager {
             List<String> dependingVariables = ve.getDependingVariables();
 
             for (String depString : dependingVariables) {
-                if (depString.startsWith("entity")|| depString.startsWith("param")) {
-                    // entity properties mapping are skipped
+                if (depString.startsWith("entity") || depString.startsWith("param") || depString.startsWith("this")) {
+                    // entity properties, current components and params skipped
                     continue;
                 }
                 String dependingComponentId = createAbsoluteReference(component, depString);
@@ -310,7 +310,6 @@ public class DAGManager {
     }
 
     /**
-     *
      * @param viewId
      * @param nodeId
      * @return

@@ -52,42 +52,54 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
         if (StringUtils.isNotBlank(component.getLabel())) {
             addButton.setText(component.getLabel());
         }
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-                    UserMessagesHelper.toast(env.getAndroidContext(), component.getReadonlyMessage(),
-                            Toast.LENGTH_LONG);
-                } else {
-                    if (component.isConfirmation(env.getWidgetContext())) {
-                        ConfirmationDialog confirmationDialog = new ConfirmationDialog(env.getAndroidContext());
-                        confirmationDialog.show();
-
-                        confirmationDialog.getConfirmationDialogText().setText(component.getLabelConfirmation());
-                        confirmationDialog.getConfirmationDialogTitle().setText(StringUtils.upperCase(env.getAndroidContext().getString(R.string.confirmation)));
-
-                        confirmationDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                execute(env, widget);
-                                confirmationDialog.cancel();
-                            }
-                        });
-                        confirmationDialog.getCancelButton().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                confirmationDialog.cancel();
-                            }
-                        });
-                    }else{
-                        execute(env, widget);
-                    }
-                }
-            }
-        });
+        addButton.setOnClickListener(new ButtonClickListener(widget, env));
     }
 
-    private void execute(RenderingEnv env, Widget<UIButton> widget){
+    public class ButtonClickListener implements View.OnClickListener {
+
+        private final Widget widget;
+        private final RenderingEnv env;
+
+        public ButtonClickListener(Widget widget, RenderingEnv env) {
+            this.widget = widget;
+            this.env = env;
+        }
+
+        @Override
+        public void onClick(View v) {
+            UIButton component = (UIButton) widget.getComponent();
+            if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
+                UserMessagesHelper.toast(env.getAndroidContext(), component.getReadonlyMessage(),
+                        Toast.LENGTH_LONG);
+            } else {
+                if (component.isConfirmation(env.getWidgetContext())) {
+                    ConfirmationDialog confirmationDialog = new ConfirmationDialog(env.getAndroidContext());
+                    confirmationDialog.show();
+
+                    confirmationDialog.getConfirmationDialogText().setText(component.getLabelConfirmation());
+                    confirmationDialog.getConfirmationDialogTitle().setText(StringUtils.upperCase(env.getAndroidContext().getString(R.string.confirmation)));
+
+                    confirmationDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            execute(env, widget);
+                            confirmationDialog.cancel();
+                        }
+                    });
+                    confirmationDialog.getCancelButton().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirmationDialog.cancel();
+                        }
+                    });
+                } else {
+                    execute(env, widget);
+                }
+            }
+        }
+    }
+
+    private void execute(RenderingEnv env, Widget<UIButton> widget) {
         UserEventInterceptor interceptor = env.getUserActionInterceptor();
         if (interceptor != null) {
             Event event = new Event(Event.EventType.CLICK, widget);

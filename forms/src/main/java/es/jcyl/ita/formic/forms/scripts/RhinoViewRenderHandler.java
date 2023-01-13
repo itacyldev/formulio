@@ -15,17 +15,19 @@ package es.jcyl.ita.formic.forms.scripts;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
+
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Collections;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.Entity;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -54,12 +56,20 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
 
     @Override
     public void onBeforeRenderComponent(UIComponent component) {
-        if (component == null || StringUtils.isBlank(component.getOnBeforeRenderAction())) {
+        if (component == null) {
+            return;
+        }
+        String method = component.getOnBeforeRenderAction();
+        if (StringUtils.isBlank(method)) {
             return;
         }
         try {
             // get current controller
-            engine.callFunction(component.getOnBeforeRenderAction(), component);
+            if (engine.isFunction(method)) {
+                engine.callFunction(method, component);
+            } else {
+                engine.executeScript(method, Collections.singletonMap("this", component));
+            }
         } catch (Exception e) {
             error(String.format("Error while executing onBeforeRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);
@@ -70,11 +80,20 @@ public class RhinoViewRenderHandler implements ViewRendererEventHandler {
     @Override
     public void onAfterRenderComponent(Widget widget) {
         UIComponent component = widget.getComponent();
-        if (component == null || StringUtils.isBlank(component.getOnAfterRenderAction())) {
+        if (component == null) {
+            return;
+        }
+        String method = component.getOnAfterRenderAction();
+        if (StringUtils.isBlank(method)) {
             return;
         }
         try {
-            engine.callFunction(component.getOnAfterRenderAction(), widget);
+            // get current controller
+            if (engine.isFunction(method)) {
+                engine.callFunction(method, widget);
+            } else {
+                engine.executeScript(method, Collections.singletonMap("this", widget));
+            }
         } catch (Exception e) {
             error(String.format("Error while executing onAfterRenderAction: [%s] in component [%s].",
                     component.getOnBeforeRenderAction(), component.getId()), e);

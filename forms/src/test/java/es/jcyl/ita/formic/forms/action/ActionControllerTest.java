@@ -61,7 +61,7 @@ public class ActionControllerTest {
         UserAction action = UserActionHelper.navigate(myExpectedFormId);
 
         // Act
-        controller.doUserAction(action);
+        controller.execAction(action);
 
         // assert
         assertEquals(myExpectedFormId, router.getCurrent().getFormId());
@@ -91,7 +91,7 @@ public class ActionControllerTest {
         UserCompositeAction compositeAction = new UserCompositeAction(subActions);
 
         // Act
-        controller.doUserAction(compositeAction);
+        controller.execAction(compositeAction);
 
         // assert
         assertEquals(myExpectedFormId, router.getCurrent().getFormId());
@@ -128,7 +128,7 @@ public class ActionControllerTest {
         UserCompositeAction compositeAction = new UserCompositeAction(subActions);
 
         // Act
-        controller.doUserAction(compositeAction);
+        controller.execAction(compositeAction);
 
         // assert
         assertEquals(mockErrorAction, controller.getCurrentAction());

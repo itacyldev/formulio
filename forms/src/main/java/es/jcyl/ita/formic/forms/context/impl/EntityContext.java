@@ -33,7 +33,7 @@ import es.jcyl.ita.formic.repo.Entity;
 
 public class EntityContext extends AbstractBaseContext implements Serializable {
 
-    private final Entity entity;
+    private Entity entity;
 
     public EntityContext(Entity entity) {
         this.entity = entity;
@@ -110,7 +110,7 @@ public class EntityContext extends AbstractBaseContext implements Serializable {
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Cannot remove entity properties from the context!");
+        this.entity = null;
     }
 
     @NonNull

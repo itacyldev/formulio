@@ -15,12 +15,15 @@ package es.jcyl.ita.formic.forms.controllers;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
+import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +33,7 @@ import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
+import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.operations.FormEntityLoader;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
 import es.jcyl.ita.formic.forms.repo.meta.Identificable;
@@ -46,11 +50,19 @@ import es.jcyl.ita.formic.repo.Entity;
  * Stores form configuration, view, permissions, etc. and provides operations to perform CRUD over and entity
  */
 public class ViewController implements Identificable {
+
     protected MainController mc;
     protected String id;
     protected String name;
     protected String description;
     protected UIView view;
+    //    protected WeakReference<FormConfig> formConfig;
+    protected FormConfig formConfig;
+
+    /////////////////////
+    // Android UI elements
+    /////////////////////
+    private WeakReference<Activity> activity;
     private ViewWidget rootWidget;
     protected ViewGroup contentView; // Android view element where the UIView is rendered
     protected ViewStateHolder stateHolder = new ViewStateHolder();
@@ -179,20 +191,39 @@ public class ViewController implements Identificable {
         this.contentView = contentView;
     }
 
+    public void reset() {
+        this.rootWidget = null;
+        this.contentView = null;
+        this.stateHolder.clearViewState();
+        if (this.activity != null) {
+            this.activity.get().finish();
+        }
+    }
+
     /***
      * LIFECYCLE HOOKS
      */
     public void onBeforeRender() {
-        if (StringUtils.isNotBlank(this.onBeforeRenderAction)) {
+        String method = this.onBeforeRenderAction;
+        if (StringUtils.isNotBlank(method)) {
             ScriptEngine engine = mc.getScriptEngine();
-            engine.callFunction(this.onBeforeRenderAction, this);
+            if (engine.isFunction(method)) {
+                engine.callFunction(method, view);
+            } else {
+                engine.executeScript(method, Collections.singletonMap("this", this));
+            }
         }
     }
 
     public void onAfterRender(View view) {
-        if (StringUtils.isNotBlank(this.onAfterRenderAction)) {
+        String method = this.onAfterRenderAction;
+        if (StringUtils.isNotBlank(method)) {
             ScriptEngine engine = mc.getScriptEngine();
-            engine.callFunction(this.onAfterRenderAction, view);
+            if (engine.isFunction(method)) {
+                engine.callFunction(method, view);
+            } else {
+                engine.executeScript(method, Collections.singletonMap("this", view));
+            }
         }
     }
 
@@ -234,5 +265,21 @@ public class ViewController implements Identificable {
 
     public UIAction[] getActions() {
         return this.view.getActions();
+    }
+
+    public Activity getActivity() {
+        return activity.get();
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = new WeakReference<>(activity);
+    }
+
+    public FormConfig getFormConfig() {
+        return formConfig;
+    }
+
+    public void setFormConfig(FormConfig formConfig) {
+        this.formConfig = formConfig;
     }
 }

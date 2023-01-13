@@ -199,4 +199,11 @@ public class RawSQLiteRepository extends AbstractBaseRepository<Entity, SQLQuery
     public Class<SQLQueryFilter> getFilterClass() {
         return SQLQueryFilter.class;
     }
+
+    @Override
+    public void close() {
+        if (this.source != null && this.source.getDb() != null) {
+            this.source.getDb().close();
+        }
+    }
 }

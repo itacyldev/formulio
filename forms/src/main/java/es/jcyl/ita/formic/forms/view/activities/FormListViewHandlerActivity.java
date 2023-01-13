@@ -30,19 +30,19 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
     }
 
     @Override
-    protected void doRender(RenderingEnv renderingEnv) {
+    protected void createView(RenderingEnv renderingEnv) {
         // action buttons
         setTitle(viewController.getName());
         setToolbar(viewController.getName());
     }
 
     @Override
-    protected void renderToolBars(RenderingEnv renderingEnv) {
+    protected void createToolBars(RenderingEnv renderingEnv) {
         UIView view = this.viewController.getView();
-        renderFAB(view.getFabBar());
+        createFabBar(view.getFabBar());
     }
 
-    private void renderFAB(UIButtonBar buttonBar) {
+    private void createFabBar(UIButtonBar buttonBar) {
         FloatingActionButton fab = findViewById(R.id.fab);
         if (buttonBar == null || !buttonBar.hasChildren()) {
             fab.hide();
@@ -98,7 +98,7 @@ public class FormListViewHandlerActivity extends BaseFormActivity<FormListContro
         super.onBackPressed();
         MainController mc = MainController.getInstance();
         UserAction action = UserActionHelper.newAction(ActionType.BACK.name(), "back", this.viewController);
-        mc.getActionController().doUserAction(action);
+        mc.getActionController().execAction(action);
         finish();
     }
 

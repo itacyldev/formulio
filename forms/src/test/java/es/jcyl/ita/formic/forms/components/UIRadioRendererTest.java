@@ -35,6 +35,7 @@ import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
+import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
@@ -69,7 +70,8 @@ public class UIRadioRendererTest {
         confConverter.init();
 
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
         env.disableInterceptors();
@@ -100,7 +102,25 @@ public class UIRadioRendererTest {
     @Test
     public void testNotVisibleRadio() {
         ActionController mcAC = mock(ActionController.class);
-        RenderingEnv env = new RenderingEnv(mcAC);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
+        env.setGlobalContext(ContextTestUtils.createGlobalContext());
+        env.setAndroidContext(ctx);
+
+        UIRadio select = new UIRadio();
+        select.setId(RandomUtils.randomString(4));
+        select.setRenderExpression(exprFactory.create("false"));
+        View view = renderHelper.render(env, select);
+
+        Assert.assertNotNull(view);
+        Assert.assertTrue(view.getVisibility() == View.GONE);
+    }
+
+    @Test
+    public void testNotVisibleRadio2() {
+        ActionController mcAC = mock(ActionController.class);
+        RenderingEnvFactory.getInstance().setActionController(mcAC);
+        RenderingEnv env = RenderingEnvFactory.getInstance().create();
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 

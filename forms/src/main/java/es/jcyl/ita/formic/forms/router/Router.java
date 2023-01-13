@@ -15,7 +15,7 @@ package es.jcyl.ita.formic.forms.router;
  * limitations under the License.
  */
 
-import android.app.Activity;
+import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
 
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -26,8 +26,6 @@ import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.config.DevConsole;
-
-import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -40,7 +38,6 @@ public class Router {
     MainController mc;
     private List<State> memento;
     private State current;
-    private Activity currentActivity;
     private String[] currentViewMessages;
 
     public Router(MainController mainController) {
@@ -123,10 +120,6 @@ public class Router {
      */
     private State popHistory() {
         this.current = null;
-        if (this.currentActivity != null) {
-            this.currentActivity.finish();
-            this.currentActivity = null;
-        }
         if (hasHistory()) {
             // get last state from history
             int lastPos = this.memento.size() - 1;
@@ -158,14 +151,6 @@ public class Router {
         }
     }
 
-    public void registerActivity(Activity activity) {
-        if (currentActivity != null) {
-            // destroy last activity
-            this.currentActivity.finish();
-        }
-        this.currentActivity = activity;
-    }
-
     /**
      * Removes from history the number of given steps
      *
@@ -185,6 +170,12 @@ public class Router {
 
     public State getCurrent() {
         return current;
+    }
+
+    public void clear() {
+        this.current = null;
+        this.memento.clear();
+        this.clearGlobalMessages();
     }
 
     public class State {

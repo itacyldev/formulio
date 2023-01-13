@@ -152,7 +152,7 @@ public class ComponentBuilderFactory {
         registerBuilder("delete", actionBuilder);
         registerBuilder("save", actionBuilder);
         registerBuilder("cancel", actionBuilder);
-        registerBuilder("actiongroup", newDefaultGroupBuilder(UIActionGroup.class, "actiongroup"));
+        registerBuilder("js", actionBuilder);
 
         ComponentBuilder inputFieldBuilder = newBuilder(UIFieldBuilder.class, "input");
         registerBuilder("input", inputFieldBuilder);
@@ -327,9 +327,9 @@ public class ComponentBuilderFactory {
         this.info = info;
     }
 
-    public RepoConfigHandler getRepoReader() {
-        return App.getInstance().getRepoConfigReader();
-    }
+//    public RepoConfigHandler getRepoReader() {
+//        return App.getInstance().getRepoConfigReader();
+//    }
 
     public RepositoryFactory getRepoFactory() {
         return repoFactory;

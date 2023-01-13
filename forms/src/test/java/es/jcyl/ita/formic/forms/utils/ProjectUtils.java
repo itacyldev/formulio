@@ -34,7 +34,7 @@ public class ProjectUtils {
     public static Project readProjectConfig(File folder) {
         App app = App.getInstance();
         Project p = ProjectRepository.createFromFolder(folder);
-        app.setCurrentProject(p);
+        app.openProject(p);
         ConfigConverters confConverter = new ConfigConverters();
         confConverter.init();
         return p;

@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 import es.jcyl.ita.formic.forms.controllers.widget.BasicWidgetController;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.forms.controllers.widget.WidgetController;
-import es.jcyl.ita.formic.forms.view.render.renderer.WidgetContext;
+import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
 import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 
