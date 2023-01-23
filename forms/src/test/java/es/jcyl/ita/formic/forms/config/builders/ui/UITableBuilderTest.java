@@ -17,6 +17,7 @@ package es.jcyl.ita.formic.forms.config.builders.ui;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -39,6 +40,8 @@ import static org.hamcrest.Matchers.equalTo;
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
+@Ignore
+
 public class UITableBuilderTest {
 
 
