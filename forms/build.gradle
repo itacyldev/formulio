@@ -60,6 +60,11 @@ android {
             }
         }
     }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST']
+        }
+    }
 //    useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
@@ -97,9 +102,7 @@ dependencies {
 
     implementation  "net.bytebuddy:byte-buddy:1.11.2"
     implementation  "net.bytebuddy:byte-buddy-android:1.11.2"
-    implementation 'com.airbnb.android:paris:1.7.3'
-
-    //implementation 'org.jsoup:jsoup:1.14.3'
+//    implementation 'com.airbnb.android:paris:1.7.3'
 
     api 'commons-collections:commons-collections:20040616'
     api "commons-validator:commons-validator:1.6"
@@ -116,21 +119,21 @@ dependencies {
     // Instrumentation test dependencies
     /////////////////////////////////////
     // Core library
-    androidTestImplementation 'androidx.test:core:1.4.0'
+    androidTestImplementation "androidx.test:core:${androidTestVersion}"
     // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation('androidx.test:runner:1.4.0') {
+    androidTestImplementation("androidx.test:runner:${androidTestVersion}") {
         exclude group: 'net.sf.kxml', module: ''
     }
-    androidTestImplementation('androidx.test:rules:1.4.0') {
+    androidTestImplementation("androidx.test:rules:${androidTestVersion}") {
         exclude group: 'androidx.test', module: ''
     }
 
     // Assertions
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
+    androidTestImplementation "androidx.test.ext:truth:${androidTestVersion}"
     androidTestImplementation 'com.google.truth:truth:0.46'
     // Espresso dependencies
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1') {
+    androidTestImplementation("androidx.test.espresso:espresso-core:${espressoVersion}") {
         exclude group: 'androidx.test', module: 'runner'
     }
 
@@ -142,8 +145,8 @@ dependencies {
     testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
-    testImplementation 'androidx.test:core:1.2.0'
-    testImplementation('androidx.test:rules:1.2.0') {
+    testImplementation "androidx.test:core:${androidTestVersion}"
+    testImplementation("androidx.test:rules:${androidTestVersion}") {
         exclude group: 'androidx.test', module: ''
     }
 }

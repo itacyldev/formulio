@@ -27,6 +27,7 @@ import es.jcyl.ita.formic.repo.db.spatialite.meta.SpatiaLiteMetaModeler;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import jsqlite.Database;
 
 /**
@@ -64,7 +65,7 @@ public class SpatialiteMetaModelerTest {
         //check sdcard availability
         Assert.assertEquals("Media is not mounted!", Environment.getExternalStorageState(), Environment.MEDIA_MOUNTED);
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        File dbFile = new File("/sdcard/test/ribera.sqlite");
+        File dbFile = TestUtils.copyTestResource("ribera.sqlite", "/sdcard/test/ribera.sqlite");
 
         DBTableEntitySource source = createDBSources(dbFile);
 

@@ -1,4 +1,4 @@
-package com.example.app;
+package es.jcyl.ita.formic.app.jobs;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -15,6 +15,14 @@ package com.example.app;
  * limitations under the License.
  */
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -25,14 +33,6 @@ import org.junit.runner.RunWith;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.MainActivity;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 /**
@@ -67,7 +67,7 @@ public class AppStartTest {
                 .perform(click());
 
         // check first element in view
-        onView(withId(es.jcyl.ita.formic.forms.R.id.form_list))
+        onView(withId(es.jcyl.ita.formic.R.id.form_list))
                 .check(matches(hasDescendant(withText("Form Card"))));
 
     }

@@ -26,12 +26,48 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Paths;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 
 public class TestUtils {
+    public static File copyTestResource(String fileName, File destFolder) {
+        if (destFolder.exists() && !destFolder.isDirectory()) {
+            throw new RuntimeException(String.format("Destination file object must be a " +
+                    "directory.", destFolder.getAbsolutePath()));
+        }
+        if(!destFolder.exists()){
+            destFolder.mkdirs();
+        }
+        File destFileObject = new File (destFolder, FilenameUtils.getName(fileName));
+        return copyTestResource(fileName, destFileObject.getAbsoluteFile());
+    }
+
+    /**
+     * Copies a file from the test resource directory to the device destination file path
+     * @param fileName
+     * @param destFile
+     * @return
+     */
+    public static File copyTestResource(String fileName, String destFile) {
+        ClassLoader classLoader = TestUtils.class.getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new RuntimeException(String.format("Coudn't find file %s, make sure the file is included" +
+                    " in the test-resource folder, or in the device's sdcard.", fileName));
+        }
+        // copy to destFile
+        File destFileObject = new File(destFile);
+        try {
+            FileUtils.copyInputStreamToFile(resource.openStream(), destFileObject);
+            return destFileObject;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static File findFile(String fileName) {
         ClassLoader classLoader = TestUtils.class.getClassLoader();
@@ -103,14 +139,15 @@ public class TestUtils {
 
     /**
      * Copies the resource to the expected folder
+     *
      * @param resourceName
      * @param folder
      */
-    public static void copyResourceToFolder(String resourceName, File folder){
+    public static void copyResourceToFolder(String resourceName, File folder) {
         try {
-            File resourceFile =  getResourceAsFile(resourceName);
+            File resourceFile = getResourceAsFile(resourceName);
             File destFile = new File(folder, FilenameUtils.getName(resourceName));
-            FileUtils.moveFile(resourceFile, destFile);
+            FileUtils.copyFile(resourceFile, destFile);
 //            FileUtils.copyFileToDirectory(resourceFile, folder);
 //            // rename the file to keep the original fileName
 //            String fileName = FilenameUtils.getName(resourceName);
@@ -122,7 +159,7 @@ public class TestUtils {
     }
 
 
-    public static File createTempDirectory(){
+    public static File createTempDirectory() {
         File osTempDirectory = FileUtils.getTempDirectory();
         File tmpFolder = new File(osTempDirectory, RandomUtils.randomString(10));
         tmpFolder.mkdir();
