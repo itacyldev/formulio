@@ -15,7 +15,11 @@ package es.jcyl.ita.formic.jayjobs.utils;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.net.URL;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
@@ -25,8 +29,22 @@ import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
  */
 public class ContextTestUtils {
 
+    public static File getBuildDir(){
+        ClassLoader classLoader = ContextTestUtils.class.getClassLoader();
+        URL resource = classLoader.getResource(".");
+        if (resource == null) {
+            throw new RuntimeException(String.format("Couldn't find build folder, make sure the file is included" +
+                    " in the test-resource folder, or in the device's sdcard."));
+        }
+        return new File(resource.getFile());
+    }
+
     public static CompositeContext createGlobalContext() {
         CompositeContext ctx = new UnPrefixedCompositeContext();
+        Context appContext = new BasicContext("app");
+        // set build folder as working file
+        appContext.put("workingFolder", ContextTestUtils.getBuildDir().getAbsolutePath());
+        ctx.addContext(appContext);
         return ctx;
     }
 

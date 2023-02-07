@@ -42,6 +42,7 @@ public abstract class AbstractProcessor extends AbstractTaskSepItem {
                     "The 'outputFile' attribute is not set in the %s, a random file name will be " +
                             "used [%s].", tag, this.outputFile));
         }
+        // set folder
         this.outputFile = TaskResourceAccessor
                 .getWorkingFile(this.getGlobalContext(), this.outputFile);
         LOGGER.info("Output file path: " + this.outputFile);
