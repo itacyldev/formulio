@@ -71,7 +71,10 @@ dependencies {
     api 'org.mini2Dx:android-beans:1.0.0'
     api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     api 'commons-io:commons-io:2.6'
-    api 'com.opencsv:opencsv:5.2'
+    api('com.opencsv:opencsv:5.2') {
+        exclude group: 'commons-logging', module: '*'
+    }
+
 /*
     implementation('es.jcyl.ita.crtdrd:crtsyn:0.4.3') {
         exclude group: 'xpp3', module: 'xpp3'
