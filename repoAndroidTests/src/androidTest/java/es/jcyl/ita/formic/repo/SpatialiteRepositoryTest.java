@@ -8,12 +8,14 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 import es.jcyl.ita.formic.repo.meta.types.Geometry;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import jsqlite.Database;
 
 /**
@@ -61,13 +64,11 @@ public class SpatialiteRepositoryTest {
     private static final String SPATIALITE_ENTITY_TYPE = "spatialiteEntityType";
 
     @Test
-    public void testExistingSpatialiteDB() {
+    public void testExistingSpatialiteDB() throws IOException {
         Assert.assertEquals("Media is not mounted!", Environment.getExternalStorageState(), Environment.MEDIA_MOUNTED);
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        File dbFile = new File("/sdcard/test/ribera.sqlite");
 
+        File dbFile = TestUtils.copyTestResource("ribera.sqlite", "/sdcard/test/ribera.sqlite");
         DBTableEntitySource source = createDBSources(dbFile);
-
         // read meta information from table using one of the sources
         SQLiteMetaModeler modeler = new SpatiaLiteMetaModeler();
         EntityMeta meta = modeler.readFromSource(source);
