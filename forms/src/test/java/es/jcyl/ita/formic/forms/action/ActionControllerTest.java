@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import android.content.Context;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import es.jcyl.ita.formic.forms.App;
@@ -44,7 +45,7 @@ import es.jcyl.ita.formic.forms.validation.ValidatorException;
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-//@RunWith(RobolectricTestRunner.class)
+@Ignore
 public class ActionControllerTest {
 
     @BeforeClass

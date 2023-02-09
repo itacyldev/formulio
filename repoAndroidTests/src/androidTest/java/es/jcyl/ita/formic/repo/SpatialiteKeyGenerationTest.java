@@ -33,6 +33,7 @@ import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.source.EntitySource;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 import es.jcyl.ita.formic.repo.source.Source;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
  * Test MaxRowId generation strategy throw spatialite db access api.
@@ -106,7 +107,7 @@ public class SpatialiteKeyGenerationTest {
     }
 
     private void createDBSource() {
-        File dbFile = new File("/sdcard/test/ribera.sqlite");
+        File dbFile = TestUtils.copyTestResource("ribera.sqlite", "/sdcard/test/ribera.sqlite");
         SQLiteDatabase sqDb = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         SpatialiteDataBase db = new SpatialiteDataBase(dbFile.getAbsolutePath(), new jsqlite.Database());
         this.sourceFactory.registerSource(new Source<>("ribera", dbFile.getAbsolutePath(), db));

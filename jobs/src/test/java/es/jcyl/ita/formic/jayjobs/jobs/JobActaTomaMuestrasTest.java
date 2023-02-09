@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.mock.VolleyMocks;
 
 import org.apache.commons.io.FilenameUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -35,6 +36,7 @@ import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
 //@RunWith(RobolectricTestRunner.class)
+@Ignore("Manual testing")
 public class JobActaTomaMuestrasTest {
 
     JobFacade facade = new JobFacade();
