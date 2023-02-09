@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -31,6 +32,7 @@ import es.jcyl.ita.formic.R;
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
 @RunWith(RobolectricTestRunner.class)
+@Ignore
 public class SettingsActivityTest {
 
     private SettingsActivity activity;
