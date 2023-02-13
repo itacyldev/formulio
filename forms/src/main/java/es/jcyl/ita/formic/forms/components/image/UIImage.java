@@ -15,7 +15,10 @@ package es.jcyl.ita.formic.forms.components.image;
  * limitations under the License.
  */
 
+import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
@@ -26,6 +29,7 @@ import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.S
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.SKETCH_AND_GALLERY;
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.SKETCH_AND_GALLERY_AND_CAMERA;
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.SKETCH_ONLY;
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -148,6 +152,29 @@ public class UIImage extends UIInputComponent {
                     " expected one of [0,1,2,3].", value));
         }
     }
+
+
+//    @Override
+//    protected Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
+//        Object value = null;
+//        try {
+//            boolean nonNullVars = false;
+//            for (String variable : valueBindingExpression.getDependingVariables()) {
+//                Object varContextValue = context.getValue(variable);
+//                if (varContextValue != null) {
+//                    nonNullVars = true;
+//                    break;
+//                }
+//            }
+//            if (nonNullVars) {
+//                value = JexlFormUtils.eval(context, valueBindingExpression);
+//            }
+//        } catch (Exception e) {
+//            error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
+//            value = null;
+//        }
+//        return value;
+//    }
 
     public boolean getEmbedded() {
         return embedded;

@@ -72,6 +72,11 @@ public class LiteralBindingExpression implements ValueBindingExpression, JxltEng
     }
 
     @Override
+    public boolean dependsOnView() {
+        return false;
+    }
+
+    @Override
     public String asString() {
         return stringValue;
     }

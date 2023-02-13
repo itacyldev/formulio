@@ -61,4 +61,6 @@ public interface ValueBindingExpression {
 
      void setExpectedType(Class expectedType);
 
+
+     boolean dependsOnView();
 }
