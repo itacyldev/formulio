@@ -3,51 +3,52 @@ V	java:S125"<This block of commented-out lines of code should be removed.(Í›
 s	java:S116="_Rename this field "project_nameTextView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ˆ€´g
 €	java:S116>"fRename this field "project_descriptionTextView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Çı¾Ğûÿÿÿÿ
 Q
-java:S2696H"6Make the enclosing method "static" or remove this set.(ŠÎ„»ùÿÿÿÿ
+java:S2696F"6Make the enclosing method "static" or remove this set.(ŠÎ„»ùÿÿÿÿ
 J
-java:S1874I"/Remove this use of "execute"; it is deprecated.(Î‹½çıÿÿÿÿ
-h	java:S100U"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã‚óúıÿÿÿÿ
-c	java:S100Y"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ûÚ
+java:S1874G"/Remove this use of "execute"; it is deprecated.(Î‹½çıÿÿÿÿ
+h	java:S100O"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã‚óúıÿÿÿÿ
+c	java:S100S"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ûÚ
 G
-java:S1874a"1Remove this use of "AsyncTask"; it is deprecated.(”ÜĞ
+java:S1874["1Remove this use of "AsyncTask"; it is deprecated.(”ÜĞ
 H
-java:S1135m"2Complete the task associated to this TODO comment.(ş•ÚÊ
-V	java:S125o"<This block of commented-out lines of code should be removed.(¿š¤­ùÿÿÿÿ
+java:S1135g"2Complete the task associated to this TODO comment.(ş•ÚÊ
+V	java:S125i"<This block of commented-out lines of code should be removed.(¿š¤­ùÿÿÿÿ
 O
-java:S1874p"9Remove this use of "PreferenceManager"; it is deprecated.(Ü¯“¤
+java:S1874j"9Remove this use of "PreferenceManager"; it is deprecated.(Ü¯“¤
 Y
-java:S1874p"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Ü¯“¤
+java:S1874j"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Ü¯“¤
 _
-java:S1874v"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(­–ÀS
+java:S1874w"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(­–ÀS
 a
-java:S1874‹"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ
+java:S1874"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ
 f
-java:S1874”"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(şîºíúÿÿÿÿ
+java:S1874–"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(şîºíúÿÿÿÿ
 ?
-java:S3010›"(Remove this assignment of "projectList".(ŞÒÇ
+java:S3010"(Remove this assignment of "projectList".(ŞÒÇ
 @
-java:S3010œ"$Remove this assignment of "context".(€¾Ê¸ıÿÿÿÿ
+java:S3010"$Remove this assignment of "context".(€¾Ê¸ıÿÿÿÿ
 F
-java:S1874º"/Remove this use of "execute"; it is deprecated.(ˆªÍÏ
-W	java:S125Ì"<This block of commented-out lines of code should be removed.(…€«ÿÿÿÿÿ
+java:S1874¼"/Remove this use of "execute"; it is deprecated.(ˆªÍÏ
 M
-java:S1874ü"1Remove this use of "AsyncTask"; it is deprecated.(­öà‰üÿÿÿÿ
+java:S1874Ë"1Remove this use of "AsyncTask"; it is deprecated.(­öà‰üÿÿÿÿ
 P
-java:S1874„"9Remove this use of "PreferenceManager"; it is deprecated.(Òş£Â
+java:S1874Ó"9Remove this use of "PreferenceManager"; it is deprecated.(Òş£Â
 Z
-java:S1874„"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òş£Â
+java:S1874Ó"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òş£Â
 f
-java:S1874"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(›äÊùÿÿÿÿ
+java:S1874ß"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(›äÊùÿÿÿÿ
 a
-java:S1874œ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ
+java:S1874ì"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ
 =
 java:S10686"'Remove this unused "TAG" private field.(Ç˜Éë
-l	java:S117š"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µÀÇæûÿÿÿÿ
+h
+java:S1192q"FDefine a constant instead of duplicating this literal "error" 3 times.(Âşÿÿÿÿ8Á¸µ£Ó0
+l	java:S117œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µÀÇæûÿÿÿÿ
 >
-java:S1604D"(Make this anonymous inner class a lambda(ú“Úå
+java:S1604C"(Make this anonymous inner class a lambda(ú“Úå
 ?
-java:S1604¶"(Make this anonymous inner class a lambda(îë Ì
+java:S1604¸"(Make this anonymous inner class a lambda(îë Ì
 D
-java:S1604¬"(Make this anonymous inner class a lambda(ÇÈ£ãıÿÿÿÿ
+java:S1604®"(Make this anonymous inner class a lambda(ÇÈ£ãıÿÿÿÿ
 F
-java:S1604£"(Make this anonymous inner class a lambda(çºŠ„8 à ô·0
+java:S1604ó"(Make this anonymous inner class a lambda(çºŠ„8 à ô·0

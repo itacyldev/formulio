@@ -36,7 +36,7 @@ public class MaxRowIdKeyGenerator extends KeyGeneratorStrategy {
     private static final Class[] SUPPORTED_TYPES = {Date.class, Integer.class, Long.class, Short.class, Double.class, Float.class};
 
     public MaxRowIdKeyGenerator() {
-        super(TYPE.MAX_ROWID);
+        super(TYPE.MAXROWID);
     }
 
     @Override

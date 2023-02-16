@@ -50,7 +50,8 @@
             android:id="@+id/input_view"
             style="@style/Autocomplete_edittext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:dropDownWidth="wrap_content"/>
         <!--android:drawableEnd="@drawable/bg_spinner_dropdown"-->
         <ImageView
             android:id="@+id/input_view_image"

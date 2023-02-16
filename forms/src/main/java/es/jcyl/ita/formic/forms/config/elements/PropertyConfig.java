@@ -27,6 +27,7 @@ public class PropertyConfig {
     private String expression;
     private String expressionType; // jexl/sql
     private String evalOn;//insert/update/select
+    private String keyGenerator;
 
 
     public String getName() {
@@ -79,5 +80,13 @@ public class PropertyConfig {
 
     public void setValueConverter(String valueConverter) {
         this.valueConverter = valueConverter;
+    }
+
+    public String getKeyGenerator() {
+        return keyGenerator;
+    }
+
+    public void setKeyGenerator(String keyGenerator) {
+        this.keyGenerator = keyGenerator;
     }
 }

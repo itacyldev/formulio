@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.repo.db.sqlite.greendao.EntityDao;
  */
 public abstract class KeyGeneratorStrategy {
 
-    public enum TYPE {MAX_ROWID, TIMESTAMP, UUID}
+    public enum TYPE {MAXROWID, TIMESTAMP, UUID, NUMERICUUID}
 
     private final TYPE type;
 

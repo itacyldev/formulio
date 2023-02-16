@@ -110,6 +110,16 @@ public class RepoMetaConfigBuilder extends AbstractComponentBuilder<EntityMeta> 
             // set effective properties to entity-meta
             meta.setProperties(lstProps.toArray(new PropertyType[lstProps.size()]));
         }
+        prpList = BuilderHelper.findChildrenByTag(node, "keyGenerator");
+        String type = null;
+        if (prpList != null && prpList.size() > 0) {
+           for (ConfigNode<PropertyConfig> propNode : prpList) {
+                type = propNode.getAttribute("type");
+            }
+            // set effective keyGenerator to entity-meta
+            meta.setKeyGenerator(type);
+        }
+
     }
 
     private PropertyType findPropertyByColumnName(EntityMeta meta, String columnName) {

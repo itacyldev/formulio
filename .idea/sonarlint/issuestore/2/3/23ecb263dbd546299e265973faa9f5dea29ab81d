@@ -1,8 +1,8 @@
 
 E
 java:S3740a"/Provide the parametrized type for this generic.(æœØú
-F
-java:S3740"/Provide the parametrized type for this generic.(æœØú
+E
+java:S3740"/Provide the parametrized type for this generic.(æœØú
 j
 java:S30087"TRename this field "_instance" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎÈÛô
 l
@@ -12,23 +12,23 @@ java:S2885<"(Make "timeStamper" an instance variable.(çïæ¤
 S
 java:S1854f"8Remove this useless assignment to local variable "name".(ó¢Ÿüÿÿÿÿ
 D
-java:S1172{".Remove this unused method parameter "context".(¯…Ïè
+java:S1172y".Remove this unused method parameter "context".(¯…Ïè
 X
-java:S3457Š"AFormat specifiers should be used instead of string concatenation.(Å©–²
+java:S3457ˆ"AFormat specifiers should be used instead of string concatenation.(Å©–²
 P
-java:S1874®"9Remove this use of "PreferenceManager"; it is deprecated.(Òş£Â
+java:S1874¬"9Remove this use of "PreferenceManager"; it is deprecated.(Òş£Â
 Z
-java:S1874®"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òş£Â
+java:S1874¬"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òş£Â
 P
-java:S1874Î"9Remove this use of "PreferenceManager"; it is deprecated.(Òş£Â
+java:S1874Ë"9Remove this use of "PreferenceManager"; it is deprecated.(Òş£Â
 Z
-java:S1874Î"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òş£Â
+java:S1874Ë"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òş£Â
 Z
-java:S1874Ï"CRemove this use of "getExternalStorageDirectory"; it is deprecated.(ß°×
+java:S1874Ì"CRemove this use of "getExternalStorageDirectory"; it is deprecated.(ß°×
 Q
-java:S1117ï":Rename "BUFFER" which hides the field declared at line 61.(˜İß
+java:S1117î":Rename "BUFFER" which hides the field declared at line 61.(˜İß
 T
-java:S1197ø"8Move the array designator from the variable to the type.(†êê¾ûÿÿÿÿ
+java:S1197÷"8Move the array designator from the variable to the type.(†êê¾ûÿÿÿÿ
 B
 java:S1068?"-Remove this unused "DIR_FORMS" private field.(ï»“I
 G
@@ -40,15 +40,15 @@ java:S1068B"1Remove this unused "FORM_FILE_EXT" private field.(ö¤û
 G
 java:S1068C"1Remove this unused "DATA_FILE_EXT" private field.(²‘˜ı
 F
-java:S1066¹"/Merge this if statement with the enclosing one.(Ñ®Œ“
-g	java:S117Û"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ıİ’Ú
+java:S1066·"/Merge this if statement with the enclosing one.(Ñ®Œ“
+g	java:S117Ù"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ıİ’Ú
 N
-java:S2629Š"7Use the built-in formatting to construct this argument.(Å©–²
-h
-java:S2095ş"QUse try-with-resources or close this "BufferedInputStream" in a "finally" clause.(åœ«•
-i
-java:S2095İ"MUse try-with-resources or close this "ZipOutputStream" in a "finally" clause.(îíå»øÿÿÿÿ
-n
-java:S2095"RUse try-with-resources or close this "BufferedOutputStream" in a "finally" clause.(óŠ±ƒıÿÿÿÿ
+java:S2629ˆ"7Use the built-in formatting to construct this argument.(Å©–²
 `
-java:S2095}"EUse try-with-resources or close this "ZipFile" in a "finally" clause.(æûğäúÿÿÿÿ
+java:S2095{"EUse try-with-resources or close this "ZipFile" in a "finally" clause.(æûğäúÿÿÿÿ
+h
+java:S2095ı"QUse try-with-resources or close this "BufferedInputStream" in a "finally" clause.(åœ«•
+i
+java:S2095Û"MUse try-with-resources or close this "ZipOutputStream" in a "finally" clause.(îíå»øÿÿÿÿ
+n
+java:S2095Œ"RUse try-with-resources or close this "BufferedOutputStream" in a "finally" clause.(óŠ±ƒıÿÿÿÿ
