@@ -24,6 +24,12 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.formic.repo.db.meta.KeyGeneratorStrategy;
+import es.jcyl.ita.formic.repo.db.meta.MaxRowIdKeyGenerator;
+import es.jcyl.ita.formic.repo.db.meta.NumericUUIDGenerator;
+import es.jcyl.ita.formic.repo.db.meta.TimeStampKeyGenerator;
+import es.jcyl.ita.formic.repo.db.meta.UUIDKeyGenerator;
+
 /**
  * Describes the information needed to persist the current type of entity.
  */
@@ -47,6 +53,8 @@ public class EntityMeta<P extends PropertyType> {
     private Integer[] idIndexes;
 
     private String propertiesImplementor;
+
+    private KeyGeneratorStrategy keyGenerator;
 
     public EntityMeta(String name, P[] props, String[] idProperties) {
         this.name = name;
@@ -204,5 +212,26 @@ public class EntityMeta<P extends PropertyType> {
 
     public void setPropertiesImplementor(String propertiesImplementor) {
         this.propertiesImplementor = propertiesImplementor;
+    }
+
+    public KeyGeneratorStrategy getKeyGenerator() {
+        return keyGenerator;
+    }
+
+    public void setKeyGenerator(KeyGeneratorStrategy keyGenerator) {
+        this.keyGenerator = keyGenerator;
+    }
+
+    public void setKeyGenerator(String type) {
+        if (type.equalsIgnoreCase(KeyGeneratorStrategy.TYPE.NUMERICUUID.name())){
+            setKeyGenerator(new NumericUUIDGenerator());
+        }else if (type.equalsIgnoreCase(KeyGeneratorStrategy.TYPE.TIMESTAMP.name())){
+            setKeyGenerator(new TimeStampKeyGenerator());
+        }else if (type.equalsIgnoreCase(KeyGeneratorStrategy.TYPE.UUID.name())){
+            setKeyGenerator(new UUIDKeyGenerator());
+        }else{
+            setKeyGenerator(new MaxRowIdKeyGenerator());
+        }
+
     }
 }

@@ -1,52 +1,64 @@
 
-E
-java:S3740Y"/Provide the parametrized type for this generic.(¤ÙÇó
-E
-java:S3740Y"/Provide the parametrized type for this generic.(¤ÙÇó
+L
+java:S3740^"/Provide the parametrized type for this generic.(”â¤ó8«§ä¸á0
+L
+java:S3740^"/Provide the parametrized type for this generic.(”â¤ó8¬§ä¸á0
 F
-java:S3740°"/Provide the parametrized type for this generic.(ü‡¦Õ
+java:S3740Ã"/Provide the parametrized type for this generic.(ü‡¦Õ
 F
-java:S3740Í"/Provide the parametrized type for this generic.(òóäè
+java:S3740ß"/Provide the parametrized type for this generic.(òóäè
 F
-java:S3740è"/Provide the parametrized type for this generic.(Ï£¬—
+java:S3740ù"/Provide the parametrized type for this generic.(Ï£¬—
+M
+java:S3740ı"/Provide the parametrized type for this generic.(âºİ8®§ä¸á0
 F
-java:S3740ò"/Provide the parametrized type for this generic.(¸˜¶
+java:S3740•"/Provide the parametrized type for this generic.(¸˜¶
 F
-java:S3740€"/Provide the parametrized type for this generic.(Êö£·
+java:S3740¤"/Provide the parametrized type for this generic.(Êö£·
+M
+java:S3740·"/Provide the parametrized type for this generic.(¬Ôëå8¯§ä¸á0
+R
+java:S3740¹"/Provide the parametrized type for this generic.(ËÖÇŠşÿÿÿÿ8°§ä¸á0
+R
+java:S3740½"/Provide the parametrized type for this generic.(„›áøıÿÿÿÿ8°§ä¸á0
 F
-java:S3740Š"/Provide the parametrized type for this generic.(ƒŞˆÎ
+java:S3740Ë"/Provide the parametrized type for this generic.(ƒŞˆÎ
 F
-java:S3740Œ"/Provide the parametrized type for this generic.(Ùµ…—
+java:S3740Í"/Provide the parametrized type for this generic.(Ùµ…—
 F
-java:S3740 "/Provide the parametrized type for this generic.(ùÑŠÓ
+java:S3740á"/Provide the parametrized type for this generic.(ùÑŠÓ
 F
-java:S3740 "/Provide the parametrized type for this generic.(ùÑŠÓ
+java:S3740á"/Provide the parametrized type for this generic.(ùÑŠÓ
 F
-java:S3740¤"/Provide the parametrized type for this generic.(ı¶’æ
-F
-java:S3740¤"/Provide the parametrized type for this generic.(ı¶’æ
+java:S3740å"/Provide the parametrized type for this generic.(ı¶’æ
+M
+java:S3740å"/Provide the parametrized type for this generic.(ı¶’æ8±§ä¸á0
+R
+java:S3740è"/Provide the parametrized type for this generic.(œüúÿÿÿÿ8±§ä¸á0
 K
-java:S3740§"/Provide the parametrized type for this generic.(ğ„½øÿÿÿÿ
+java:S3740û"/Provide the parametrized type for this generic.(ğ„½øÿÿÿÿ
 F
-java:S3740²"/Provide the parametrized type for this generic.(×ïÿé
+java:S3740‰"/Provide the parametrized type for this generic.(×ïÿé
 K
-java:S3740Â"/Provide the parametrized type for this generic.(ó¹›­ùÿÿÿÿ
+java:S3740¥"/Provide the parametrized type for this generic.(ó¹›­ùÿÿÿÿ
 V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
 j
-java:S3008G"TRename this field "_instance" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã³¤Ì
-Q	java:S125k"<This block of commented-out lines of code should be removed.(òâÉ÷
-R
-java:S2696à"6Make the enclosing method "static" or remove this set.(Í°¿¨üÿÿÿÿ
+java:S3008M"TRename this field "_instance" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã³¤Ì
+P
+java:S2440"2Remove this instantiation of "ScriptEntityHelper".( ÊÙ8¡¨ä¸á0
+B
+java:S2440"%Remove this instantiation of "Color".(š÷ˆ8¢¨ä¸á0
+T
+java:S2696ò"6Make the enclosing method "static" or remove this set.(Ì×È’8Á¨ä¸á0
 I
-java:S1135ä"2Complete the task associated to this TODO comment.(Ñ–•à
+java:S1135ö"2Complete the task associated to this TODO comment.(Ñ–•à
+^	java:S125„"<This block of commented-out lines of code should be removed.(ª…‚üÿÿÿÿ8Æ¨ä¸á0
 I
-java:S1135…"2Complete the task associated to this TODO comment.(Á´ÚÔ
+java:S1135©"2Complete the task associated to this TODO comment.(Á´ÚÔ
 J
-java:S1172¤"3Remove this unused method parameter "reactiveCall".(ı¶’æ
-R	java:S125È"<This block of commented-out lines of code should be removed.(‡äñó
+java:S1172å"3Remove this unused method parameter "reactiveCall".(ı¶’æ
+L
+java:S1905ü")Remove this unnecessary cast to "Widget".(šç’‡úÿÿÿÿ8Õ¨ä¸á0
+R	java:S125«"<This block of commented-out lines of code should be removed.(‡äñó
 N
-java:S1135€"2Complete the task associated to this TODO comment.(ÓÏ±·ûÿÿÿÿ
-N
-java:S1135ƒ"2Complete the task associated to this TODO comment.(ùëÜìüÿÿÿÿ
-J
-java:S1068T"/Remove this unused "flowManager" private field.(ÁªÂ”ıÿÿÿÿ
+java:S1135ç"2Complete the task associated to this TODO comment.(ùëÜìüÿÿÿÿ
