@@ -29,6 +29,7 @@ import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.CalculatedProperty;
 import es.jcyl.ita.formic.repo.EntityMapping;
 import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.media.FileRepository;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -93,10 +94,15 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
                 usesExternalRepo = true;
             }
         }
-        if (!node.hasAttribute(AttributeDef.CONVERTER.name)) { // by default treat image content as raw-bytes
-            image.setValueConverter("byteArrayImage");
+        if (!node.hasAttribute(AttributeDef.CONVERTER.name)) {
+            if (node.getElement().getRepo() instanceof FileRepository) {
+                image.setValueConverter("urlImage");
+            } else {
+                // treat image content as raw-bytes
+                image.setValueConverter("byteArrayImage");
+            }
         }
-        if (usesExternalRepo && !valueExpr.dependsOnView()) {
+        if (usesExternalRepo && !valueExpr.isReadonly()) {
             // The component uses an external image repository to retrieve/store the related image,
             // find the first parent that can hold a repository and set the mapping
             ConfigNode parentRepo = BuilderHelper.findParentRepo(node);

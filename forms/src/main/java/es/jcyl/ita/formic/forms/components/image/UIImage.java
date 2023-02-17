@@ -20,6 +20,8 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.repo.Repository;
+import es.jcyl.ita.formic.repo.media.FileEntity;
+import es.jcyl.ita.formic.repo.media.FileRepository;
 import es.jcyl.ita.formic.repo.query.Filter;
 
 import static es.jcyl.ita.formic.forms.components.image.UIImage.ImageInputType.CAMERA_ONLY;
@@ -153,28 +155,53 @@ public class UIImage extends UIInputComponent {
         }
     }
 
+    @Override
+    public Object getValue(Context context) {
+        if (this.valueExpression == null) {
+            return null;
+        } else {
+            boolean nullValues = true;
+            for (String depVar : this.valueExpression.getDependingVariables()) {
+                if (context.get(depVar) != null) {
+                    nullValues = false;
+                    break;
+                }
+            }
+            Object value = null;
+            if (!nullValues) {
+                value = getValue(context, this.valueExpression);
+                if (value == null) {
+                    if (this.placeHolder == null) {
+                        return null;
+                    }
+                    value = getValue(context, this.placeHolder);
+                }
+            }
 
-//    @Override
-//    protected Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
-//        Object value = null;
-//        try {
-//            boolean nonNullVars = false;
-//            for (String variable : valueBindingExpression.getDependingVariables()) {
-//                Object varContextValue = context.getValue(variable);
-//                if (varContextValue != null) {
-//                    nonNullVars = true;
-//                    break;
-//                }
-//            }
-//            if (nonNullVars) {
-//                value = JexlFormUtils.eval(context, valueBindingExpression);
-//            }
-//        } catch (Exception e) {
-//            error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
-//            value = null;
-//        }
-//        return value;
-//    }
+            if (value != null && this.getRepo() instanceof FileRepository) {
+                FileEntity entity = ((FileRepository) this.getRepo()).findById(value.toString());
+                if (entity != null) {
+                    value = entity.getFile().getAbsolutePath();
+                }
+            }
+
+
+            return value;
+        }
+    }
+
+
+    @Override 
+    protected Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
+        Object value;
+        try {
+            value = JexlFormUtils.eval(context, valueBindingExpression);
+        } catch (Exception e) {
+            error("Error while trying to evaluate JEXL expression: " + valueBindingExpression.toString(), e);
+            value = null;
+        }
+        return value;
+    }
 
     public boolean getEmbedded() {
         return embedded;
