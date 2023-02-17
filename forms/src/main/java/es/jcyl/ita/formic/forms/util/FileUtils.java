@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 
@@ -22,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +141,24 @@ public class FileUtils {
         }
 
         return output;
+    }
+
+    public static String getFileType(final File file) {
+        String output = null;
+
+        if (file == null) {
+            return output;
+        }
+
+        final String extension = getFileExtension(file);
+        if (extension.equalsIgnoreCase("frmd")){
+            output = "application/zip";
+        }else{
+            output = URLConnection.guessContentTypeFromName(file.getName());
+        }
+
+        return output;
+
     }
 
     /**
