@@ -24,7 +24,6 @@ import org.mini2Dx.collections.IteratorUtils;
 import org.mozilla.javascript.Context;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,10 +34,13 @@ import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
+import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.FormConfigRepository;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectManager;
 import es.jcyl.ita.formic.forms.project.ProjectResource;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
+import es.jcyl.ita.formic.forms.view.render.DeferredView;
 import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.source.EntitySourceFactory;
 
@@ -58,8 +60,7 @@ public class HotDeployer {
     private final RedeployChanges changes;
     private final Handler uiHandler;
     private String baseFolder;
-    private Thread worker;
-    private boolean stop = false;
+    private FileWatcher worker;
     private long lastExecution = System.currentTimeMillis();
     private Map<String, Long> filesModTimes = new HashMap<>();
 
@@ -68,12 +69,6 @@ public class HotDeployer {
         this.mc = mc;
         changes = new RedeployChanges(this.mc);
         this.uiHandler = new Handler(Looper.getMainLooper());
-        // create thread to observe changes in project files
-        worker = new Thread(new FileWatcher());
-        if (!isJUnitTest()) {
-            // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
-            worker.start();
-        }
     }
 
     public static boolean isJUnitTest() {
@@ -85,16 +80,12 @@ public class HotDeployer {
         return false;
     }
 
-
     public void setPath(String path) {
         this.baseFolder = path;
     }
 
-
     private List<String> detectFileChanges(String baseFolder) {
         // Android fsystem truncate file modification timestamp to seconds
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-
         long newTimeStamp = 1000 * (System.currentTimeMillis() / 1000); // truncate timestamp
         List<String> lst = new ArrayList<>();
         Iterator<File> data1 = FileUtils.iterateFiles(new File(baseFolder, "data"),
@@ -131,12 +122,26 @@ public class HotDeployer {
     }
 
     public void start() {
-        this.stop = false;
+        // stop previous thread if exists
+        this.stopThread();
+        if (!isJUnitTest()) {
+            DevConsole.info("Starting file watcher in folder " + this.baseFolder);
+            // TODO: cambiar por un servicio en segundo plano que ejecute cuando se invoque desde un intent
+            // create thread to observe changes in project files
+            worker = new FileWatcher();
+            worker.start();
+        }
     }
 
     public void stop() {
+        stopThread();
         this.filesModTimes.clear();
-        this.stop = true;
+    }
+
+    private void stopThread() {
+        if (this.worker != null) {
+            this.worker.stopWatch();
+        }
     }
 
     private void deployChanges(List<String> paths) {
@@ -208,10 +213,16 @@ public class HotDeployer {
         mc.getScriptEngine().reloadScriptFile(path);
     }
 
-    class FileWatcher implements Runnable {
+    class FileWatcher extends Thread {
+        private boolean stop = false;
+
+        public void stopWatch() {
+            this.stop = true;
+        }
+
         @Override
         public void run() {
-            stop = checkBaseFolder();
+            this.stop = checkBaseFolder();
             try {
                 Thread.sleep(DELAY_MS);
                 // initialize scripts context so we can compile scripts in this thread
@@ -220,7 +231,7 @@ public class HotDeployer {
                 e.printStackTrace();
                 return;
             }
-            while (!stop) {
+            while (!this.stop) {
                 if (!App.getInstance().isLoading()) {
                     List<String> paths = detectFileChanges(baseFolder);
                     if (CollectionUtils.isNotEmpty(paths)) {
@@ -265,10 +276,19 @@ public class HotDeployer {
         @Override
         public void run() {
             // reload js rhino context for current view
-            String currentViewId = mc.getViewController().getId();
-            mc.getScriptEngine().initScope(currentViewId);
-            // render current view
-            mc.renderBack(this.requiresControllerReload);
+            ViewController viewController = mc.getViewController();
+            if (viewController != null) {
+                try {
+                    String currentViewId = mc.getViewController().getId();
+                    mc.getScriptEngine().initScope(currentViewId);
+                    // render current view
+                    mc.renderBack(this.requiresControllerReload);
+                } catch (Exception e) {
+                    UserMessagesHelper.toast(mc.getViewController().getActivity(),
+                            "Error while trying to reload current page");
+                    DevConsole.error("Deployment error.", e);
+                }
+            }
         }
 
         public void setRequiresControllerReload(boolean requiresControllerReload) {

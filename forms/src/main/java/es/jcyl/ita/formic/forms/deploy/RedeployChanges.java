@@ -49,8 +49,8 @@ class RedeployChanges {
         for (String str : paths) {
             if (str.endsWith("repos.xml")) {
                 this.repoPath = str;
-            } else if (str.contains("data/") && str.endsWith(".sqlite")) {
-                this.dbChanged = true;
+//            } else if (str.contains("data/") && str.endsWith(".sqlite")) {
+//                this.dbChanged = true;
             } else if (str.contains("forms/") && str.endsWith(".xml")) {
                 this.forms.add(str);
             }

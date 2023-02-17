@@ -62,7 +62,7 @@ public class ActionHandlerHelper {
                 availableControllers = availableControllers.substring(0, availableControllers.length() - 2);
             }
             throw new UserActionException(error(String.format("An attempt to execute save() on " +
-                            "WidgetController(s) [%s] was made but %s cannot be found in current view." +
+                            "WidgetController(s) [%s] was made but %s cannot be found in current view. " +
                             "Check the 'controller' attribute in action [%s]. Available controllers: [%s]",
                     notFoundIds, (notFoundIds.length() == 1 ? "it" : "they"), action, availableControllers)));
         }

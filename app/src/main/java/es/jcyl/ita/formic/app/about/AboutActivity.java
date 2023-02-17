@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,7 +65,6 @@ public class AboutActivity extends BaseActivity {
                         Build.MANUFACTURER, Build.MODEL, Build.PRODUCT, Build.ID)));
     }
 
-    @NotNull
     public String getVersion() {
         String version = "";
         try {

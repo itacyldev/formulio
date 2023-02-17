@@ -96,7 +96,7 @@ public class UIImageBuilder extends BaseUIComponentBuilder<UIImage> {
         if (!node.hasAttribute(AttributeDef.CONVERTER.name)) { // by default treat image content as raw-bytes
             image.setValueConverter("byteArrayImage");
         }
-        if (usesExternalRepo) {
+        if (usesExternalRepo && !valueExpr.dependsOnView()) {
             // The component uses an external image repository to retrieve/store the related image,
             // find the first parent that can hold a repository and set the mapping
             ConfigNode parentRepo = BuilderHelper.findParentRepo(node);

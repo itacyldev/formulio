@@ -31,6 +31,7 @@ import es.jcyl.ita.formic.repo.db.spatialite.greendao.SpatialiteDataBase;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import jsqlite.Database;
 
 /**
@@ -61,7 +62,7 @@ public class BasicGreenDAODBAccessTest {
 
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        File dbFile = new File("/sdcard/test/ribera.sqlite");
+        File dbFile = TestUtils.copyTestResource("ribera.sqlite", "/sdcard/test/ribera.sqlite");
         if(!dbFile.exists()){
             Assert.fail("Test database not found: " + dbFile.getAbsolutePath());
         }

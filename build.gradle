@@ -21,7 +21,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
         classpath 'org.jacoco:org.jacoco.core:0.8.6'
@@ -64,23 +64,23 @@ allprojects {
             url "$androidHome/extras/google/m2repository/"
         }
 
-       maven {
-           name "ITACyL - snapshots"
-           url "https://servicios.itacyl.es/nexus/repository/snapshots/"
-       }
-       maven {
-           name "ITACyL - internal"
-           url "https://servicios.itacyl.es/nexus/repository/internal/"
-       }
-       maven {
-           name "ITACyL - thirdparty"
-           url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
-       }
+        maven {
+            name "ITACyL - snapshots"
+            url "https://servicios.itacyl.es/nexus/repository/snapshots/"
+        }
+        maven {
+            name "ITACyL - internal"
+            url "https://servicios.itacyl.es/nexus/repository/internal/"
+        }
+        maven {
+            name "ITACyL - thirdparty"
+            url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
+        }
     }
 
     configurations.all {
         exclude group: 'xpp3', module: 'xpp3'
-         resolutionStrategy.eachDependency { details ->
+        resolutionStrategy.eachDependency { details ->
 
             if (details.requested.group == "androidx") {
                 if (!details.requested.name.startsWith("multidex")) {
@@ -100,8 +100,8 @@ allprojects {
 
 ext {
 
-    versionCode = 52
-    versionName = '0.7.30'
+    versionCode = 53
+    versionName = '0.7.31'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 31
     targetSdkVersion = 31
@@ -109,8 +109,11 @@ ext {
     buildToolsVersion = '31.0.0'
     encoding = "UTF-8"
 
+    espressoVersion = '3.5.1'
+    androidTestVersion= '1.2.0'
+
     group = 'es.jcyl.ita.formic'
-    version = '0.7.30'
+    version = '0.7.31'
     artifactId = 'Formic'
 
     sharedDeps = [
@@ -120,10 +123,10 @@ ext {
     ]
     unitTestDeps = [
             'junit:junit:4.12',
-            'androidx.test.espresso:espresso-core:3.2.0',
-            'androidx.test.espresso:espresso-contrib:3.2.0',
-            'androidx.test.espresso:espresso-accessibility:3.2.0',
-            'org.robolectric:robolectric:4.5',
+            "androidx.test.espresso:espresso-core:${espressoVersion}",
+            "androidx.test.espresso:espresso-contrib:${espressoVersion}",
+            "androidx.test.espresso:espresso-accessibility:${espressoVersion}",
+            'org.robolectric:robolectric:4.2',
             'org.mini2Dx:android-beans:1.0.0',
             'org.mockito:mockito-core:2.28.2',
             'org.hamcrest:hamcrest:2.2',

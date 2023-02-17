@@ -175,6 +175,18 @@ public class JexlBindingExpression implements ValueBindingExpression {
     }
 
     @Override
+    public boolean dependsOnView() {
+        boolean depends = false;
+        for (String var : getDependingVariables()) {
+            if (var.startsWith("view.")) {
+                depends = true;
+                break;
+            }
+        }
+        return depends;
+    }
+
+    @Override
     public String toString() {
         return expression.getSource().toString();
     }

@@ -252,7 +252,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
         }
     }
 
-    private Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
+    protected Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
         Object value;
         try {
             value = JexlFormUtils.eval(context, valueBindingExpression);
