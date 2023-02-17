@@ -272,9 +272,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
             try {
                 return (Boolean) ConvertUtils.convert(value, Boolean.class);
             } catch (Exception e) {
-                throw new ViewConfigException(String.format("Invalid rendering expression in " +
-                                "component [%s] the resulting value couldn't be cast to Boolean.",
-                        this.getId(), this.renderExpression, e));
+                throw new ViewConfigException(String.format("Invalid rendering expression in " + "component [%s] the resulting value couldn't be cast to Boolean.", this.getId(), this.renderExpression, e));
             }
         }
     }
@@ -313,12 +311,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{" +
-                "id='" + id + '\'' +
-                ", label='" + label + '\'' +
-                ", valueExpr=" + valueExpression +
-                ", renderExpr=" + renderExpression +
-                '}';
+        return this.getClass().getSimpleName() + "{" + "id='" + id + '\'' + ", label='" + label + '\'' + ", valueExpr=" + valueExpression + ", renderExpr=" + renderExpression + '}';
     }
 
     /**

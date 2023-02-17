@@ -160,15 +160,10 @@ public class UIImage extends UIInputComponent {
         if (this.valueExpression == null) {
             return null;
         } else {
-            boolean nullValues = true;
-            for (String depVar : this.valueExpression.getDependingVariables()) {
-                if (context.get(depVar) != null) {
-                    nullValues = false;
-                    break;
-                }
-            }
             Object value = null;
-            if (!nullValues) {
+            if (this.valueExpression.isLiteral()) {
+                value = valueExpression.toString();
+            } else {
                 value = getValue(context, this.valueExpression);
                 if (value == null) {
                     if (this.placeHolder == null) {
@@ -185,13 +180,13 @@ public class UIImage extends UIInputComponent {
                 }
             }
 
-
             return value;
         }
+
     }
 
 
-    @Override 
+    @Override
     protected Object getValue(Context context, ValueBindingExpression valueBindingExpression) {
         Object value;
         try {
