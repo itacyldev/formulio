@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.forms.utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -36,6 +37,7 @@ import es.jcyl.ita.formic.forms.config.meta.TagDef;
 public class XSDGenerator {
 
     @Test
+    @Ignore("Solo para generación manual del de fichero")
     public void generateXSD() throws IOException {
         StringBuilder stb = new StringBuilder();
         stb.append("<root>");

@@ -94,20 +94,19 @@ pipeline {
         //        }
         //    }
         //}
-        stage('Report Jacoco') {
-            steps {
-                sh './gradlew codeCoverageReport'
-            }
-        }
+//         stage('Report Jacoco') {
+//             steps {
+//                 sh './gradlew codeCoverageReport'
+//             }
+//         }
         stage('Assemble') {
             steps {
                 script {
-                    sh '''
-                        ./gradlew :app:assembleRelease
-                    '''
+                    sh './gradlew :app:assembleRelease'
                 }
             }
         }
+        /*
         stage('SonarQube analysis') {
             when {
                 expression { BRANCH_NAME == 'develop' }
@@ -130,6 +129,7 @@ pipeline {
                 }
             }
         }
+        */
     }
     post {
         failure {

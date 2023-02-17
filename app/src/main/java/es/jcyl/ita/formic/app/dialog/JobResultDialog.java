@@ -44,13 +44,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.forms.util.FileUtils;
 
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
@@ -190,7 +190,9 @@ public class JobResultDialog extends Dialog{
                 final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
 
                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
+                final String fileType = FileUtils
+                        .getFileType(file);
+                intentShareFile.setType(fileType);
                 intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
                 activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));
             }
