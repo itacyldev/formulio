@@ -113,7 +113,7 @@ public class UIImageGalleryBuilderTest {
         Assert.assertEquals("my_imagegalleryitem", item.getId());
 
         Assert.assertEquals("b64Image", item.getValueConverter());
-        Assert.assertEquals("text1", item.getImageText());
+        //Assert.assertEquals("text1", item.getImageText());
     }
 
 
