@@ -203,7 +203,7 @@ public class ProjectImporter {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
 
-        zipFolder(new File(projectsFolder), projectName, new File(dest));
+        zipFolder(new File(projectsFolder), projectName, new File(dest), null);
 
     }
 
@@ -213,11 +213,11 @@ public class ProjectImporter {
      * @param toZipFolder Folder to be zipped
      * @return the resulting ZipFile
      */
-    public File zipFolder(File toZipFolder, String projectName, File dest) {
+    public File zipFolder(File toZipFolder, String projectName, File dest, File subfolder) {
         File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", projectName, timeStamper.format(new Date()), "frmd"));
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(ZipFile));
-            zipSubFolder(out, new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length());
+            zipSubFolder(out, new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length(), subfolder);
             out.close();
             return ZipFile;
         } catch (Exception ex) {
@@ -233,7 +233,7 @@ public class ProjectImporter {
      * @param folder         Folder to be zipped
      * @param basePathLength Length of original Folder Path (for recursion)
      */
-    private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength) throws IOException {
+    private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength, File subfolder) throws IOException {
 
         final int BUFFER = 2048;
 
@@ -242,7 +242,9 @@ public class ProjectImporter {
         if (fileList != null) {
             for (File file : fileList) {
                 if (file.isDirectory()) {
-                    zipSubFolder(out, file, basePathLength);
+                    if (subfolder == null || (subfolder!=null && file.getAbsolutePath().startsWith(subfolder.getAbsolutePath()))) {
+                        zipSubFolder(out, file, basePathLength, subfolder);
+                    }
                 } else {
                     byte data[] = new byte[BUFFER];
 

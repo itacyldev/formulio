@@ -14,6 +14,7 @@
     <string name="forms_of">"Formularios de "</string>
     <string name="no_current_project">No hay proyecto activo</string>
     <string name="export">Exportar</string>
+    <string name="log">Log</string>
     <string name="detail">Detalle</string>
     <string name="synchro">Sincronización</string>
     <string name="action_delete_success">Entidad eliminada con éxito.</string>
