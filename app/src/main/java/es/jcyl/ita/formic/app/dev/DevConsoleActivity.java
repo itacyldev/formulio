@@ -31,6 +31,7 @@ import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.io.IOException;
 
 import ch.qos.logback.classic.Level;
 import es.jcyl.ita.formic.R;
@@ -40,6 +41,7 @@ import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.radio.RadioButtonStyleHolder;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.project.ProjectImporter;
+import es.jcyl.ita.formic.forms.util.FileUtils;
 import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
@@ -155,19 +157,24 @@ public class DevConsoleActivity extends BaseActivity {
             public void onClick(final View view) {
                 context = view.getContext();
                 try {
+
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                     String projectName = sharedPreferences.getString("projectName", "");
                     String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
                     String logsFolder = projectsFolder+"/"+projectName+"/logs";
-                    String url = logsFolder+"/"+projectName+".log";
+                    String urlOrigen = logsFolder+"/"+projectName+".log";
+                    String urlDestino = ContextAccessor.workingFolder(App.getInstance().getGlobalContext())+"/"+projectName+".log";
+                    File fileOrigen = new File(urlOrigen);
+                    File fileDestino = new File(urlDestino);
 
-                    final File file = new File(url);
-                    final Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+                    FileUtils.copyFile(context, fileOrigen, fileDestino);
+
+                    final Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", fileDestino);
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(uri, "text/plain");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-                } catch (ActivityNotFoundException e) {
+                } catch (ActivityNotFoundException | IOException e) {
                     Toast.makeText(context, "No application found which can open the file", Toast.LENGTH_SHORT).show();
                 }
             }
