@@ -153,7 +153,7 @@ public class DevConsoleActivity extends BaseActivity {
         logtButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                context = logtButton.getContext();
+                context = view.getContext();
                 try {
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                     String projectName = sharedPreferences.getString("projectName", "");
@@ -162,7 +162,7 @@ public class DevConsoleActivity extends BaseActivity {
                     String url = logsFolder+"/"+projectName+".log";
 
                     final File file = new File(url);
-                    final Uri uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
+                    final Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(uri, "text/plain");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
