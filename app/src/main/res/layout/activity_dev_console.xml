@@ -28,14 +28,47 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_marginTop="10dp">
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:gravity="left|center"
-                android:layout_marginLeft="10dp"
-                android:text="@string/systemLogLevel"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:gravity="left|center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="8"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/systemLogLevel"/>
+
+                <Button
+                    android:id="@+id/log"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:text="@string/log"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/roundbutton"/>
+                <Button
+                    android:id="@+id/export"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:text="@string/export"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/roundbutton"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
