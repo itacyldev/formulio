@@ -13,6 +13,7 @@
     <string name="forms_of">"Forms of "</string>
     <string name="no_current_project">No current project</string>
     <string name="export">Export</string>
+    <string name="log">Log</string>
     <string name="detail">Detail</string>
     <string name="synchro">Synchronization</string>
     <string name="action_delete_success">Entity successfully deleted.</string>
