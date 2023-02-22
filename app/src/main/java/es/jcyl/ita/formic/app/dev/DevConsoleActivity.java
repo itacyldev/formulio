@@ -330,19 +330,19 @@ public class DevConsoleActivity extends BaseActivity {
 
         protected String doInBackground(final String... params) {
 
-            String logsFolder = getLogsFolder();
             String projectsFolder = getProjectsFolder();
             String projectName = getProjectName();
 
+            ProjectImporter projectImporter = ProjectImporter.getInstance();
+
             String dest = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
             new File(dest).mkdirs();
-
-
-            ProjectImporter projectImporter = ProjectImporter.getInstance();
             projectImporter.zipFolder(new File(projectsFolder), projectName, projectName, new File(dest), null);
+
             dest = currentContext.getCacheDir().getAbsolutePath()+File.separator+currentContext.getString(R.string.export);
             new File(dest).mkdirs();
             File file = projectImporter.zipFolder(currentContext.getCacheDir(), "tmp", currentContext.getString(R.string.export), new File(dest), null);
+            
             jobResultDialog.addResource(file.getPath());
 
             return "";
