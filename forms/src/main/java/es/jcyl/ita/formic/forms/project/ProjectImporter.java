@@ -203,7 +203,7 @@ public class ProjectImporter {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
 
-        zipFolder(new File(projectsFolder), projectName, new File(dest), null);
+        zipFolder(new File(projectsFolder), projectName, projectName, new File(dest), null);
 
     }
 
@@ -213,8 +213,8 @@ public class ProjectImporter {
      * @param toZipFolder Folder to be zipped
      * @return the resulting ZipFile
      */
-    public File zipFolder(File toZipFolder, String projectName, File dest, File subfolder) {
-        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", projectName, timeStamper.format(new Date()), "frmd"));
+    public File zipFolder(File toZipFolder, String zipName, String projectName, File dest, File subfolder) {
+        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", zipName, timeStamper.format(new Date()), "frmd"));
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(ZipFile));
             zipSubFolder(out, new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length(), subfolder);

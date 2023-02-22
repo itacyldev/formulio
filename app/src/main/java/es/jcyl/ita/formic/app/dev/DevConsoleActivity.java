@@ -157,29 +157,72 @@ public class DevConsoleActivity extends BaseActivity {
             public void onClick(final View view) {
                 context = view.getContext();
                 try {
-
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                    String projectName = sharedPreferences.getString("projectName", "");
-                    String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
-                    String logsFolder = projectsFolder+"/"+projectName+"/logs";
-                    String urlOrigen = logsFolder+"/"+projectName+".log";
-                    String urlDestino = ContextAccessor.workingFolder(App.getInstance().getGlobalContext())+"/"+projectName+".log";
-                    File fileOrigen = new File(urlOrigen);
-                    File fileDestino = new File(urlDestino);
-
-                    FileUtils.copyFile(context, fileOrigen, fileDestino);
-
-                    final Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", fileDestino);
+                    final Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", getLogFile());
                     Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setDataAndType(uri, "text/plain");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-                } catch (ActivityNotFoundException | IOException e) {
+                } catch (ActivityNotFoundException e) {
                     Toast.makeText(context, "No application found which can open the file", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+    }
+
+    private static String getProjectName(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectName = sharedPreferences.getString("projectName", "");
+        return projectName;
+    }
+
+    private static String getProjectsFolder(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+        return projectsFolder;
+    }
+
+    private static String getLogsFolder(){
+        String projectName = getProjectName();
+        String projectsFolder = getProjectsFolder();
+        String logsFolder = projectsFolder+"/"+projectName+"/logs";
+        return logsFolder;
+    }
+
+    private static File getLogFile(){
+        String logFolder = getLogsFolder();
+        String logFile = logFolder+"/"+getProjectName()+".log";
+        return new File(logFile);
+    }
+
+    private File copyLogFiles() throws IOException {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectName = sharedPreferences.getString("projectName", "");
+        String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+        String logsFolder = projectsFolder+"/"+projectName+"/logs";
+
+        String destination = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
+        //new File(dest).mkdirs();
+
+        File originFile = new File(logsFolder);
+        File destinationFile = new File(destination);
+
+        FileUtils.copyDirectory(context, logsFolder, destination);
+
+
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectName = sharedPreferences.getString("projectName", "");
+        String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+        String logsFolder = projectsFolder+"/"+projectName+"/logs";
+        String urlOrigen = logsFolder+"/"+projectName+".log";
+        String urlDestino = ContextAccessor.workingFolder(App.getInstance().getGlobalContext())+"/"+projectName+".log";
+        File fileOrigen = new File(urlOrigen);
+        File fileDestino = new File(urlDestino);
+
+        FileUtils.copyFile(context, fileOrigen, fileDestino);*/
+
+        return destinationFile;
     }
 
     private Spinner createSpinner() {
@@ -287,16 +330,16 @@ public class DevConsoleActivity extends BaseActivity {
 
         protected String doInBackground(final String... params) {
 
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(currentContext);
-            String projectName = sharedPreferences.getString("projectName", "");
-            String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
-            String logsFolder = projectsFolder+"/"+projectName+"/logs";
+            String logsFolder = getLogsFolder();
+            String projectsFolder = getProjectsFolder();
+            String projectName = getProjectName();
 
             String dest = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
             new File(dest).mkdirs();
 
             ProjectImporter projectImporter = ProjectImporter.getInstance();
-            File file = projectImporter.zipFolder(new File(projectsFolder), projectName, new File(dest), new File(logsFolder));
+            projectImporter.zipFolder(new File(projectsFolder), projectName, projectName, new File(dest), null);
+            File file = projectImporter.zipFolder(new File(dest), "ALLFILES", projectName, new File(dest), null);
             jobResultDialog.addResource(file.getPath());
 
             return "";
