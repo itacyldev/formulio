@@ -32,6 +32,7 @@ import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 
 import ch.qos.logback.classic.Level;
 import es.jcyl.ita.formic.R;
@@ -341,7 +342,11 @@ public class DevConsoleActivity extends BaseActivity {
 
             dest = currentContext.getCacheDir().getAbsolutePath()+File.separator+currentContext.getString(R.string.export);
             new File(dest).mkdirs();
-            File file = projectImporter.zipFolder(currentContext.getCacheDir(), "tmp", currentContext.getString(R.string.export), new File(dest), null);
+
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.MINUTE, -15);
+
+            File file = projectImporter.zipFolder(currentContext.getCacheDir(), "tmp", currentContext.getString(R.string.export), new File(dest), date);
             
             jobResultDialog.addResource(file.getPath());
 
