@@ -1,5 +1,6 @@
 package es.jcyl.ita.formic.forms.view.activities;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -41,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        lockOrientation();
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
@@ -137,9 +139,10 @@ public abstract class BaseActivity extends AppCompatActivity  {
         super.setRequestedOrientation(requestedOrientation);
     }
 
+    @SuppressLint("WrongConstant")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void lockOrientationJellyBean() {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     private void lockOrientationAllVersions() {
