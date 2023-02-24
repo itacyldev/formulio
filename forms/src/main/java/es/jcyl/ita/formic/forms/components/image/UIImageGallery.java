@@ -1,8 +1,12 @@
 package es.jcyl.ita.formic.forms.components.image;
 
+import java.util.Set;
+
 import es.jcyl.ita.formic.forms.components.AbstractUIComponent;
 import es.jcyl.ita.formic.forms.components.EntitySelectorComponent;
+import es.jcyl.ita.formic.forms.components.ExpressionHelper;
 import es.jcyl.ita.formic.forms.components.FilterableComponent;
+import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 import es.jcyl.ita.formic.repo.Repository;
@@ -14,6 +18,7 @@ public class UIImageGallery extends AbstractUIComponent implements FilterableCom
 
     private String valueConverter;
     private Repository repo;
+    private Filter filter;
     private String route;
 
     private Integer columns;
@@ -39,12 +44,12 @@ public class UIImageGallery extends AbstractUIComponent implements FilterableCom
 
     @Override
     public void setFilter(Filter filter) {
-
+        this.filter = filter;
     }
 
     @Override
     public Filter getFilter() {
-        return null;
+        return filter;
     }
 
     @Override
@@ -90,4 +95,13 @@ public class UIImageGallery extends AbstractUIComponent implements FilterableCom
         this.columns = columns;
     }
 
+    @Override
+    public Set<ValueBindingExpression> getValueBindingExpressions() {
+        Set<ValueBindingExpression> expressions = super.getValueBindingExpressions();
+        // If repo filter is defined, add binding expressions to establish dependencies
+        if (this.filter != null) {
+            expressions.addAll(ExpressionHelper.getExpressions(this.filter.getExpression()));
+        }
+        return expressions;
+    }
 }

@@ -49,14 +49,12 @@ import es.jcyl.ita.formic.forms.view.render.GroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.Renderer;
 import es.jcyl.ita.formic.forms.view.render.RendererFactory;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
-import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
 import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -135,20 +133,23 @@ public class ViewRenderer {
                 List<View> viewList = new ArrayList<>();
                 if (groupView instanceof EntityListProviderWidget) {
                     // save the old entityContext
-                    WidgetContext prev = env.getWidgetContext();
+                    Entity parentEntity = env.getEntity();
+                    RenderingEnv altEnv = RenderingEnvFactory.getInstance().clone(env);
                     List<Entity> entities = ((EntityListProviderWidget) groupView).getEntities();
                     int iter = 0;
                     // TODO: FORMIC-249 Refactorizar viewRenderer
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         onEntityContextChanged(entity);
+                        altEnv.getWidgetContext().setEntity(entity);
                         UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
-                        Widget view = doRender(env, componentProxy, root, checkDeferred);
+                        Widget view = doRender(altEnv, componentProxy, root, checkDeferred);
                         viewList.add(view);
                         iter++;
                     }
                     // restore entity context
-                    env.setWidgetContext(prev);
+                    env.getWidgetContext().setEntity(parentEntity);
+                    env.setEntity(parentEntity);
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
@@ -186,8 +187,8 @@ public class ViewRenderer {
             String cId = component.getId();
             // set component id to item-1,item-2, starting with 1
             return new
-                    UIImageGalleryItemProxy(cId + "-" + (id + 1), (UIImageGalleryItem)component, entity);
-        }else {
+                    UIImageGalleryItemProxy(cId + "-" + (id + 1), (UIImageGalleryItem) component, entity);
+        } else {
             return component;
         }
     }
