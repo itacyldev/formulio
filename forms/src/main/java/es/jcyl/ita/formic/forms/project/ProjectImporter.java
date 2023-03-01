@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.forms.project;/*
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import org.apache.commons.lang3.EnumUtils;
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -201,9 +201,10 @@ public class ProjectImporter {
         new File(dest).mkdirs();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+        //String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
+        String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
 
-        zipFolder(new File(projectsFolder), projectName, new File(dest));
+        zipFolder(new File(projectsFolder), projectName, projectName, new File(dest), null);
 
     }
 
@@ -213,11 +214,11 @@ public class ProjectImporter {
      * @param toZipFolder Folder to be zipped
      * @return the resulting ZipFile
      */
-    public File zipFolder(File toZipFolder, String projectName, File dest) {
-        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", projectName, timeStamper.format(new Date()), "frmd"));
+    public File zipFolder(File toZipFolder, String projectName, String zipName, File dest, Calendar date) {
+        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", zipName, timeStamper.format(new Date()), "frmd"));
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(ZipFile));
-            zipSubFolder(out, new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length());
+            zipSubFolder(out, new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length(), date);
             out.close();
             return ZipFile;
         } catch (Exception ex) {
@@ -233,7 +234,7 @@ public class ProjectImporter {
      * @param folder         Folder to be zipped
      * @param basePathLength Length of original Folder Path (for recursion)
      */
-    private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength) throws IOException {
+    private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength, Calendar date) throws IOException {
 
         final int BUFFER = 2048;
 
@@ -242,26 +243,28 @@ public class ProjectImporter {
         if (fileList != null) {
             for (File file : fileList) {
                 if (file.isDirectory()) {
-                    zipSubFolder(out, file, basePathLength);
+                    zipSubFolder(out, file, basePathLength, date);
                 } else {
-                    byte data[] = new byte[BUFFER];
+                    if (date == null || (date != null && file.lastModified()>date.getTimeInMillis())) {
+                        byte data[] = new byte[BUFFER];
 
-                    String unmodifiedFilePath = file.getPath();
-                    String relativePath = unmodifiedFilePath.substring(basePathLength + 1);
+                        String unmodifiedFilePath = file.getPath();
+                        String relativePath = unmodifiedFilePath.substring(basePathLength + 1);
 
-                    FileInputStream fi = new FileInputStream(unmodifiedFilePath);
-                    origin = new BufferedInputStream(fi, BUFFER);
+                        FileInputStream fi = new FileInputStream(unmodifiedFilePath);
+                        origin = new BufferedInputStream(fi, BUFFER);
 
-                    ZipEntry entry = new ZipEntry(relativePath);
-                    entry.setTime(file.lastModified()); // to keep modification time after unzipping
-                    out.putNextEntry(entry);
+                        ZipEntry entry = new ZipEntry(relativePath);
+                        entry.setTime(file.lastModified()); // to keep modification time after unzipping
+                        out.putNextEntry(entry);
 
-                    int count;
-                    while ((count = origin.read(data, 0, BUFFER)) != -1) {
-                        out.write(data, 0, count);
+                        int count;
+                        while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                            out.write(data, 0, count);
+                        }
+                        origin.close();
+                        out.closeEntry();
                     }
-                    origin.close();
-                    out.closeEntry();
                 }
             }
         }

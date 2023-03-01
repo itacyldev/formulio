@@ -1,7 +1,13 @@
 package es.jcyl.ita.formic.app.dev;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -13,20 +19,33 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatCheckedTextView;
+import androidx.core.content.FileProvider;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
 
 import ch.qos.logback.classic.Level;
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.dialog.JobResultDialog;
+import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
 import es.jcyl.ita.formic.forms.components.radio.RadioButtonStyleHolder;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.project.ProjectImporter;
+import es.jcyl.ita.formic.forms.util.FileUtils;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
+import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 
 public class DevConsoleActivity extends BaseActivity {
 
@@ -34,6 +53,8 @@ public class DevConsoleActivity extends BaseActivity {
     public static final int COLOR_INFO = Color.GREEN;
     public static final int COLOR_WARN = Color.YELLOW;
     public static final int COLOR_DEBUG = Color.BLUE;
+
+    private static Context context;
 
     @Override
     protected void doOnCreate() {
@@ -121,6 +142,88 @@ public class DevConsoleActivity extends BaseActivity {
             }
         });
 
+        Button exportButton = (Button) findViewById(R.id.export);
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                context = exportButton.getContext();
+                ExportTask exportTask = new ExportTask(context);
+                exportTask.execute();
+            }
+        });
+
+        Button logtButton = (Button) findViewById(R.id.log);
+        logtButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                context = view.getContext();
+                try {
+                    final Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", getLogFile());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.setDataAndType(uri, "text/plain");
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(context, "No application found which can open the file", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    private static String getProjectName(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectName = sharedPreferences.getString("projectName", "");
+        return projectName;
+    }
+
+    private static String getProjectsFolder(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+        return projectsFolder;
+    }
+
+    private static String getLogsFolder(){
+        String projectName = getProjectName();
+        String projectsFolder = getProjectsFolder();
+        String logsFolder = projectsFolder+"/"+projectName+"/logs";
+        return logsFolder;
+    }
+
+    private static File getLogFile(){
+        String logFolder = getLogsFolder();
+        String logFile = logFolder+"/"+getProjectName()+".log";
+        return new File(logFile);
+    }
+
+    private File copyLogFiles() throws IOException {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectName = sharedPreferences.getString("projectName", "");
+        String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+        String logsFolder = projectsFolder+"/"+projectName+"/logs";
+
+        String destination = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
+        //new File(dest).mkdirs();
+
+        File originFile = new File(logsFolder);
+        File destinationFile = new File(destination);
+
+        FileUtils.copyDirectory(context, logsFolder, destination);
+
+
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String projectName = sharedPreferences.getString("projectName", "");
+        String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+        String logsFolder = projectsFolder+"/"+projectName+"/logs";
+        String urlOrigen = logsFolder+"/"+projectName+".log";
+        String urlDestino = ContextAccessor.workingFolder(App.getInstance().getGlobalContext())+"/"+projectName+".log";
+        File fileOrigen = new File(urlOrigen);
+        File fileDestino = new File(urlDestino);
+
+        FileUtils.copyFile(context, fileOrigen, fileDestino);*/
+
+        return destinationFile;
     }
 
     private Spinner createSpinner() {
@@ -188,7 +291,7 @@ public class DevConsoleActivity extends BaseActivity {
         } else if (msg.contains("[INFO]")) {
             color = COLOR_INFO;
         } else
-            if (msg.contains("[ERROR]")) {
+        if (msg.contains("[ERROR]")) {
             color = COLOR_ERROR;
         } else if (msg.contains("[WARN]")) {
             color = COLOR_WARN;
@@ -216,5 +319,68 @@ public class DevConsoleActivity extends BaseActivity {
         logger.setLevel(logLevel);*/
 
         DevConsole.setLevel(level);
+    }
+
+    private class ExportTask extends AsyncTask<String, String, String> {
+        JobResultDialog jobResultDialog;
+        Context currentContext;
+
+        public ExportTask(Context context) {
+            currentContext = context;
+        }
+
+        protected String doInBackground(final String... params) {
+
+            String projectsFolder = getProjectsFolder();
+            String projectName = getProjectName();
+
+            ProjectImporter projectImporter = ProjectImporter.getInstance();
+
+            String dest = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
+            new File(dest).mkdirs();
+            projectImporter.zipFolder(new File(projectsFolder), projectName, projectName, new File(dest), null);
+
+            dest = currentContext.getCacheDir().getAbsolutePath()+File.separator+currentContext.getString(R.string.export);
+            new File(dest).mkdirs();
+
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.MINUTE, -15);
+
+            File file = projectImporter.zipFolder(currentContext.getCacheDir(), "tmp", currentContext.getString(R.string.export), new File(dest), date);
+            
+            jobResultDialog.addResource(file.getPath());
+
+            return "";
+        }
+
+        @SuppressLint("NewApi")
+        @Override
+        protected void onPostExecute(final String success) {
+            if (success.isEmpty()) {
+                jobResultDialog.setText("Export successful!");
+                UserMessagesHelper.toast(context, "Export successful!", Toast.LENGTH_SHORT);
+            } else {
+                jobResultDialog.setText("Export failed!");
+                UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
+            }
+            jobResultDialog.endJob();
+            jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            jobResultDialog = new JobResultDialog((DevConsoleActivity)context, false);
+            jobResultDialog.show();
+            jobResultDialog.setProgressTitle(context.getString(R.string.export));
+            jobResultDialog.setText(context.getString(R.string.exporting));
+            jobResultDialog.getBackButton().setVisibility(View.GONE);
+
+            jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    jobResultDialog.dismiss();
+                }
+            });
+        }
     }
 }
