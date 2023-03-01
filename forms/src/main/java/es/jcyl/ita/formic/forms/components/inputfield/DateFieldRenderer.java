@@ -80,7 +80,6 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
                         c.set(year, monthOfYear, dayOfMonth);
 
                         if (widget.getComponent().getType().equals(UIField.TYPE.DATETIME.name())) {
-                            Calendar c = Calendar.getInstance();
                             int hour = c.get(Calendar.HOUR);
                             int minute = c.get(Calendar.MINUTE);
                             TimePickerDialog timePickerDialog = new TimePickerDialog(widget.getContext(), R.style.DialogStyle, new TimePickerDialog.OnTimeSetListener() {
@@ -158,12 +157,8 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     private String formatDate(String value, InputWidget<UIField, Button> widget) {
         String formattedDate = "";
-        long millisInDay = 60 * 60 * 24 * 1000;
         try {
-            long currentTime = ((Date) ConvertUtils.convert(value, Date.class)).getTime();
-            long dateOnly = (currentTime / millisInDay) * millisInDay;
-            Date clearDate = new Date(widget.getComponent().getType().equals(UIField.TYPE.DATE.name()) ? dateOnly : currentTime);
-            formattedDate = new SimpleDateFormat(widget.getComponent().getPattern()).format(clearDate);
+            formattedDate = new SimpleDateFormat(widget.getComponent().getPattern()).format(((Date) ConvertUtils.convert(value, Date.class)));
         } catch (Exception e) {
             DevConsole.error(String.format("An error occurred while trying to format the date [%s].", value));
             return value;
