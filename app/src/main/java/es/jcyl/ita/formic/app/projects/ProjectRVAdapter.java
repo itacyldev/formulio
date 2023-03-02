@@ -212,7 +212,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
 
             ProjectImporter projectImporter = ProjectImporter.getInstance();
-            File file = projectImporter.zipFolder(new File(projectsFolder), params[0], new File(dest));
+            File file = projectImporter.zipFolder(new File(projectsFolder), params[0], params[0], new File(dest), null);
             jobResultDialog.addResource(file.getPath());
 
             return "";

@@ -1,0 +1,48 @@
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+///////////////////////////////////
+// JACOCO COVERAGE REPORT
+///////////////////////////////////
+
+def fileFilter = ['**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*']
+
+task coverageReport(type: JacocoReport) {
+//    dependsOn ':compileDebugAndroidTestSources'
+    dependsOn 'testDebugUnitTest'
+
+
+    doFirst {
+        println ' ----------------------------------------------------------------------------------------'
+        println '       Building code coverage report '
+        println ' ----------------------------------------------------------------------------------------'
+    }
+
+    reports {
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/reports/jacoco/html")
+    }
+
+    def coverageMainSrc = [
+            "${rootDir}/src/main/java",
+    ]
+
+    def coverageDebugTree = [
+            fileTree(dir: "${rootDir}/build/classes", excludes: fileFilter),
+    ]
+
+    getSourceDirectories().setFrom(files(coverageMainSrc))
+    getClassDirectories().setFrom(files(coverageDebugTree))
+////    executionData fileTree(buildDir.absolutePath).include()
+    executionData.from(fileTree(
+            dir: "$buildDir",
+            includes: [
+                    "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+//                    "outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec"
+            ]
+    ))
+}
+
+
