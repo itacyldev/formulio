@@ -37,7 +37,7 @@ public class ConditionalStopProcessor extends AbstractProcessor
     protected static final Log LOGGER = LogFactory.getLog(ConditionalStopProcessor.class);
 
     /**
-     * Expresión JEXLs to evaluate against the context
+     * JEXL expression to evaluate against the context
      */
     private String expression;
     /**
@@ -45,7 +45,7 @@ public class ConditionalStopProcessor extends AbstractProcessor
      */
     private boolean forceError = false;
     /**
-     * Mensaje a utilizar en la excepción
+     * Message for the exception
      */
     private String message;
     private List<EvalExpression> expressionList = new ArrayList<>();
@@ -55,7 +55,7 @@ public class ConditionalStopProcessor extends AbstractProcessor
         initExpression();
         if (evaluate()) {
             throw new StopTaskExecutionSignal(
-                    String.format("Ejecución detenida desde tarea: [%s], expression: [%s].",
+                    String.format("Execution stopped: [%s], expression: [%s].",
                             getTask().getId(), expression));
         }
         return page;
@@ -67,7 +67,7 @@ public class ConditionalStopProcessor extends AbstractProcessor
         if (evaluate()) {
             String msg = (StringUtils.isBlank(message) ? message
                     : String.format(
-                    "Se ha cumplido la condición [%s] de la tarea [%s] se detiene el proceso.",
+                    "The condition [%s] has been fulfilled, the task [%s] stops.",
                     expression, task.getName()));
             if (forceError) {
                 throw new TaskException(msg);
@@ -87,23 +87,16 @@ public class ConditionalStopProcessor extends AbstractProcessor
 
     private boolean evaluate() {
         boolean eval = false;
-/**
- * Iteramos sobre las expresiones evaluando y notificando al listener los
- * mensajes de error
- */
         for (EvalExpression evalExpression : expressionList) {
             try {
                 eval = ExpressionEvaluator.evalAsBool(getGlobalContext(), evalExpression.getExpression()
                 );
             } catch (Exception e) {
-                LOGGER.error("Error al evaluar la expresión " + evalExpression.getExpression(), e);
+                LOGGER.error("Error evaluating expression " + evalExpression.getExpression(), e);
                 eval = true;
             }
             if (eval) {
-                String msgType = ("INFO".equalsIgnoreCase(evalExpression.getMessageType())) ? "INFO"
-                        : "ERROR";
                 String msg = evalExpression.getMessage();
-//                getListener().msg(msgType, 0, msg, evalExpression.getExpression());
                 LOGGER.info(msg);
                 eval = true;
             }

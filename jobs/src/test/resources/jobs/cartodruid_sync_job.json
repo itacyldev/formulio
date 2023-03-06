@@ -43,6 +43,15 @@
     },
     {
       "name": "t3",
+      "description": "Checking sync process result",
+      "processor": {
+        "type": "ConditionalStopProcessor",
+        "expression": "g1.output.contains('ERROR')",
+        "message": "The sync process ended with an error, check log for details."
+      }
+    },
+    {
+      "name": "t4",
       "description": "Downloading file",
       "processor": {
         "type": "httpRequestProcessor",
