@@ -107,8 +107,6 @@ public class JobFacade {
         AggregatedJobListener jobListener = new AggregatedJobListener();
         jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo()));
         if (this.listener != null) {
-
-            
             jobListener.addListener(this.listener);
         }
         runner.setListener(jobListener);

@@ -1,31 +1,61 @@
 {
-  "description": "job example",
-  "requiredContexts": [
-    "user",
-    "job"
-  ],
-  "executionMode": "FG",
+  "description": "crtdrd syncronization",
   "tasks": [
     {
-        "name": "t1",
-        "processor": {
-          "type": "cartodruidSync",
-          "endpoint": "sampleEndpoint",
-          "workspace": "test",
-          "password": "password",
-          "files": [
-             {
-                "name": "file1",
-                "readwrite": "W",
-                "compress": true
-              },
-              {
-                "name": "file2",
-                "readwrite": "RW",
-                "compress": true
-             }
-            ]
+      "name": "t1",
+      "description": "Starting synchronization",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "inputFile": "${gparams.dbFile}",
+        "url": "${gparams.endpoint}",
+        "contentType": "multipart/form-data",
+        "headers": {
+          "wks": "${gparams.wksId}",
+          "user": "${gparams.wksUser}",
+          "password": "${gparams.wksPwd}"
         }
+      }
+    },
+    {
+      "name": "g1",
+      "iterSize": 30,
+      "iterDelay": 3000,
+      "description": "Checking synchronization state",
+      "exitLoopExpression": "${t2.output.contains('FINISHED') || t2.output.contains('ERROR')}",
+      "tasks": [
+        {
+          "name": "t2",
+          "processor": {
+            "type": "httpRequestProcessor",
+            "method": "get",
+            "url": "${t2.responseHeaders['Location']}",
+            "headers": {
+              "wks": "${gparams.wksId}",
+              "user": "${gparams.wksUser}",
+              "password": "${gparams.wksPwd}"
+            },
+            "outputContext": "g1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "t3",
+      "description": "Downloading file",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t2.responseHeaders['Location'].replace('synchro','synchroFile'}",
+        "outputFileExtension": "zip"
+      }
+    },
+    {
+      "name": "t4",
+      "processor": {
+        "type": "ContextDebugProcessor",
+        "output": "console"
+      }
     }
   ]
 }

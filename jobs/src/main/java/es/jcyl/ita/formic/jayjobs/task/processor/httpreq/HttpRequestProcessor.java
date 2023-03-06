@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.jayjobs.task.processor.httpreq;
  * limitations under the License.
  */
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -96,7 +97,8 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         try {
             entity = future.get(timeout, TimeUnit.SECONDS);
         } catch (Exception e) {
-            this.onErrorResponse(new VolleyError(e));
+            VolleyError error = processException(e);
+            this.onErrorResponse(error);
             throw new TaskException("There was an error while trying to execute request: " + request, e);
         }
         // treat response
@@ -108,6 +110,17 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         }
         storeResponseInfo(entity);
         LOGGER.debug(String.format("Http request to %s completed", url));
+    }
+
+    private VolleyError processException(Throwable exception) {
+        Throwable t = exception;
+        do {
+            if (t instanceof VolleyError) {
+                 return (VolleyError) t;
+            }
+            t = t.getCause();
+        } while (t != null);
+        return new VolleyError(exception);
     }
 
     /**
@@ -238,7 +251,6 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         }
         if (headers.containsKey("contentType") && StringUtils.isNotBlank(contentType)) {
             headers.put("contentType", contentType);
-            //headers.put("Content-Type", "multipart/form-data");
         }
         HttpEntity entity = new HttpEntity(content, this.headers);
         entity.setParams(this.params);
@@ -247,7 +259,25 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
     }
 
     public void onErrorResponse(VolleyError error) {
-
+        if (error.networkResponse != null) {
+            NetworkResponse networkResponse = error.networkResponse;
+            String msg = "";
+            int statusCode = networkResponse.statusCode;
+            String responseEntity = new String(networkResponse.data);
+            if (statusCode >= 500) {
+                msg = "Unexpected error in server.";
+            } else if (statusCode >= 400) {
+                if (statusCode == 401 || statusCode == 403) {
+                    msg = "Unexpected error in server.";
+                } else if (statusCode == 404) {
+                    msg = "Resource not found";
+                } else {
+                    msg = "Invalid client request";
+                }
+            }
+            String logMsg = String.format("%s statusCode: %s url: %s %n%s", msg, statusCode, this.url, responseEntity);
+            LOGGER.error(logMsg);
+        }
     }
 
 

@@ -62,6 +62,9 @@ public class JobContextTestUtils {
         appContext.put("workingFolder", tmpDir.getAbsolutePath());
         ctx.addContext(appContext);
 
+        Context globalContext = new BasicContext("gParams");
+        ctx.addContext(globalContext);
+
         // create job context and set the folder of job definition files
         Context projectCtx = new BasicContext("project");
         projectCtx.put("folder", projectBaseFolder);//resources folder

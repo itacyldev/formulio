@@ -53,23 +53,23 @@ public class RawRequest extends Request<HttpEntity> {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> entityHeaders = entity.getHeaders();
-        if (entityHeaders.containsKey("Content-Type") && ((String)entityHeaders.get("Content-Type")).contains("multipart")) {
+        if (entityHeaders.containsKey("Content-Type") && (entityHeaders.get("Content-Type")).contains("multipart")) {
             entityHeaders.put("Content-Type", "multipart/form-data; boundary=" + boundary);
         }
         return entityHeaders != null ? entityHeaders : super.getHeaders();
-            }
+    }
 
     @Override
     public byte[] getBody() throws AuthFailureError {
         byte[] body = this.entity.getContent();
-        if (getHeaders().containsKey("Content-Type") && ((String)getHeaders().get("Content-Type")).contains("multipart")){
+        if (getHeaders().containsKey("Content-Type") && (getHeaders().get("Content-Type")).contains("multipart")) {
             try {
-               this.entity.setContentType("multipart/form-data; boundary=");
+                this.entity.setContentType("multipart/form-data; boundary=");
                 body = createFileContent(this.entity.getContent(), boundary, getBodyContentType(), "filename.csv");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             body = this.entity.getContent();
         }
         return body;
@@ -77,17 +77,13 @@ public class RawRequest extends Request<HttpEntity> {
 
     private byte[] createFileContent(byte[] data, String boundary, String contentType, String fileName) throws IOException {
         String start = //"Content-Type: "+ contentType + "\"--"+  boundary + "\"\r\n\r\n"+
-                "--"+  boundary + "\r\n"+
-                        "Content-Type: application/octet-stream; name="+fileName + "\r\n"+
-                        "Content-Transfer-Encoding: binary"+"\r\n"+
+                "--" + boundary + "\r\n" +
+                        "Content-Type: application/octet-stream; name=" + fileName + "\r\n" +
+                        "Content-Transfer-Encoding: binary" + "\r\n" +
                         "Content-Disposition: form-data; name=\"contentFile\"; filename=\"" + fileName + "\"\r\n\r\n";
 
         String end = "\r\n--" + boundary + "--";
-
-
         byte[] bytesFileContent = ArrayUtils.addAll(start.getBytes(), ArrayUtils.addAll(data, end.getBytes()));
-
-        //FileUtils.writeByteArrayToFile(new File("C:\\Desarrollo\\workspaces\\wks-and\\FRMDRD\\jobs\\build\\intermediates\\java_res\\debugUnitTest\\out\\prueba2.txt"), bytesFileContent);
         return bytesFileContent;
     }
 
