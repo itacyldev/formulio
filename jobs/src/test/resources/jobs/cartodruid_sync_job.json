@@ -8,6 +8,7 @@
         "type": "httpRequestProcessor",
         "method": "post",
         "inputFile": "${gparams.dbFile}",
+        "inputFileName": "clientDB.sqlite",
         "url": "${gparams.endpoint}",
         "contentType": "multipart/form-data",
         "headers": {
@@ -22,14 +23,14 @@
       "iterSize": 30,
       "iterDelay": 3000,
       "description": "Checking synchronization state",
-      "exitLoopExpression": "${t2.output.contains('FINISHED') || t2.output.contains('ERROR')}",
+      "exitLoopExpression": "${g1.output.contains('FINISHED') || g1.output.contains('ERROR')}",
       "tasks": [
         {
           "name": "t2",
           "processor": {
             "type": "httpRequestProcessor",
             "method": "get",
-            "url": "${t2.responseHeaders['Location']}",
+            "url": "${t1.responseHeaders['Location']}",
             "headers": {
               "wks": "${gparams.wksId}",
               "user": "${gparams.wksUser}",
@@ -46,7 +47,7 @@
       "processor": {
         "type": "httpRequestProcessor",
         "method": "get",
-        "url": "${t2.responseHeaders['Location'].replace('synchro','synchroFile'}",
+        "url": "${g1.responseHeaders['Location'].replace('synchro','synchroFile'}",
         "outputFileExtension": "zip"
       }
     },

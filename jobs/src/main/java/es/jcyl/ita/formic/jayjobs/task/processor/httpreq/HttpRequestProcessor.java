@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.jayjobs.task.processor.httpreq;
  * limitations under the License.
  */
 
+import static com.android.volley.toolbox.HttpHeaderParser.HEADER_CONTENT_TYPE;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.MapUtils;
 import org.slf4j.Logger;
@@ -52,7 +55,7 @@ import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
  */
 public class HttpRequestProcessor extends AbstractProcessor implements NonIterProcessor, Response.ErrorListener {
     protected static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestProcessor.class);
-
+    public static final String HEADER_CONTENT_TYPE = "Content-Type";
     private String url;
     private Map<String, Object> jsonObject;
     private String method;
@@ -60,6 +63,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
     private String body;
 
     private String inputFile;
+    private String inputFileName;
 
     // context where additionally the results of the processor will be published
     private String outputContext;
@@ -116,7 +120,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         Throwable t = exception;
         do {
             if (t instanceof VolleyError) {
-                 return (VolleyError) t;
+                return (VolleyError) t;
             }
             t = t.getCause();
         } while (t != null);
@@ -142,6 +146,10 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         // set charset
         if (StringUtils.isNotBlank(this.contentCharset)) {
             this.charset = Charset.forName(this.contentCharset);
+        }
+        if(StringUtils.isBlank(outputContext)){
+            // use task context to output response info
+            this.outputContext = this.getTask().getName();
         }
     }
 
@@ -224,7 +232,6 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
      * @param entity
      */
     private void storeResponseInfo(HttpEntity entity) {
-        this.getTaskContext().put("responseHeaders", entity.getResponseHeaders());
         if (StringUtils.isNotBlank(outputContext)) {
             this.getGlobalContext().put(outputContext + ".responseHeaders", entity.getResponseHeaders());
         }
@@ -236,7 +243,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
             try {
                 content = FileUtils.readFileToByteArray(new File(inputFile));
             } catch (IOException e) {
-                throw new TaskException("There was an error while trying to read inputfile: ", e);
+                throw new TaskException("There was an error while trying to read the input file: " + this.inputFile, e);
             }
         } else {
             if (body != null) {
@@ -249,12 +256,13 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         if (params == null) {
             params = new HashMap<>();
         }
-        if (headers.containsKey("contentType") && StringUtils.isNotBlank(contentType)) {
-            headers.put("contentType", contentType);
+        if (!headers.containsKey(HEADER_CONTENT_TYPE) && StringUtils.isNotBlank(contentType)) {
+            headers.put(HEADER_CONTENT_TYPE, contentType);
         }
         HttpEntity entity = new HttpEntity(content, this.headers);
         entity.setParams(this.params);
         entity.setContentType(this.contentType);
+        entity.setContentName((StringUtils.isNotBlank(this.inputFileName) ? this.inputFile : RandomStringUtils.randomAlphanumeric(10)));
         return new RawRequest(httpMethod, url, entity, future, future);
     }
 
@@ -393,4 +401,11 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         this.inputFile = inputFile;
     }
 
+    public String getInputFileName() {
+        return inputFileName;
+    }
+
+    public void setInputFileName(String inputFileName) {
+        this.inputFileName = inputFileName;
+    }
 }
