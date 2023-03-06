@@ -26,6 +26,8 @@ import org.apache.commons.logging.LogFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.jcyl.ita.formic.jayjobs.jexl.EvalExpression;
+import es.jcyl.ita.formic.jayjobs.jexl.ExpressionEvaluator;
 import es.jcyl.ita.formic.jayjobs.task.exception.StopTaskExecutionSignal;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
@@ -60,7 +62,7 @@ public class ConditionalStopProcessor extends AbstractProcessor
     }
 
     @Override
-    public void process() {
+    public void process() throws TaskException {
         initExpression();
         if (evaluate()) {
             String msg = (StringUtils.isBlank(message) ? message
@@ -76,7 +78,6 @@ public class ConditionalStopProcessor extends AbstractProcessor
     }
 
     private void initExpression() {
-// creamos la expresión a partir de los atributos básicos
         if (StringUtils.isNotBlank(expression)) {
             EvalExpression expr = new EvalExpression(expression, (forceError) ? "ERROR" : "INFO",
                     message);
@@ -92,11 +93,9 @@ public class ConditionalStopProcessor extends AbstractProcessor
  */
         for (EvalExpression evalExpression : expressionList) {
             try {
-                eval = ExpressionEvaluator.evalAsBool(evalExpression.getExpression(),
-                        getGlobalContext());
+                eval = ExpressionEvaluator.evalAsBool(getGlobalContext(), evalExpression.getExpression()
+                );
             } catch (Exception e) {
-// Un error en la evaluación también lo consideramos como condición para
-// detenerse
                 LOGGER.error("Error al evaluar la expresión " + evalExpression.getExpression(), e);
                 eval = true;
             }
@@ -104,7 +103,7 @@ public class ConditionalStopProcessor extends AbstractProcessor
                 String msgType = ("INFO".equalsIgnoreCase(evalExpression.getMessageType())) ? "INFO"
                         : "ERROR";
                 String msg = evalExpression.getMessage();
-                getListener().msg(msgType, 0, msg, evalExpression.getExpression());
+//                getListener().msg(msgType, 0, msg, evalExpression.getExpression());
                 LOGGER.info(msg);
                 eval = true;
             }
