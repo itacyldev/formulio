@@ -15,8 +15,6 @@ package es.jcyl.ita.formic.jayjobs.task.processor.httpreq;
  * limitations under the License.
  */
 
-import static com.android.volley.toolbox.HttpHeaderParser.HEADER_CONTENT_TYPE;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +24,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.RequestFuture;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -56,8 +55,11 @@ import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
 public class HttpRequestProcessor extends AbstractProcessor implements NonIterProcessor, Response.ErrorListener {
     protected static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestProcessor.class);
     public static final String HEADER_CONTENT_TYPE = "Content-Type";
+    protected static ObjectMapper mapper; // threadsafe
+
+
     private String url;
-    private Map<String, Object> jsonObject;
+    private Map<String, Object> jsonBody;
     private String method;
     private String store;
     private String body;
@@ -147,7 +149,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         if (StringUtils.isNotBlank(this.contentCharset)) {
             this.charset = Charset.forName(this.contentCharset);
         }
-        if(StringUtils.isBlank(outputContext)){
+        if (StringUtils.isBlank(outputContext)) {
             // use task context to output response info
             this.outputContext = this.getTask().getName();
         }
@@ -239,17 +241,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     private RawRequest createRequest(RequestFuture future) throws TaskException {
         byte[] content = null;
-        if (inputFile != null) {
-            try {
-                content = FileUtils.readFileToByteArray(new File(inputFile));
-            } catch (IOException e) {
-                throw new TaskException("There was an error while trying to read the input file: " + this.inputFile, e);
-            }
-        } else {
-            if (body != null) {
-                content = body.getBytes(this.charset);
-            }
-        }
+        content = getEntityContent(content);
         if (headers == null) {
             headers = new HashMap<>();
         }
@@ -264,6 +256,29 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         entity.setContentType(this.contentType);
         entity.setContentName((StringUtils.isNotBlank(this.inputFileName) ? this.inputFile : RandomStringUtils.randomAlphanumeric(10)));
         return new RawRequest(httpMethod, url, entity, future, future);
+    }
+
+    private byte[] getEntityContent(byte[] content) throws TaskException {
+        if (inputFile != null) {
+            try {
+                content = FileUtils.readFileToByteArray(new File(inputFile));
+            } catch (IOException e) {
+                throw new TaskException("There was an error while trying to read the input file: " + this.inputFile, e);
+            }
+        } else {
+            if (body != null) {
+                content = body.getBytes(this.charset);
+            }
+            if (jsonBody != null) {
+                // serialize to set as content
+                try {
+                    content = mapper.writeValueAsBytes(this.jsonBody);
+                } catch (JsonProcessingException e) {
+                    throw new TaskException("An error occurred while trying to write json object", e);
+                }
+            }
+        }
+        return content;
     }
 
     public void onErrorResponse(VolleyError error) {
@@ -305,12 +320,12 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         this.url = url;
     }
 
-    public Map<String, Object> getJsonObject() {
-        return jsonObject;
+    public Map<String, Object> getJsonBody() {
+        return jsonBody;
     }
 
-    public void setJsonObject(Map<String, Object> jsonObject) {
-        this.jsonObject = jsonObject;
+    public void setJsonBody(Map<String, Object> jsonBody) {
+        this.jsonBody = jsonBody;
     }
 
     public String getBody() {

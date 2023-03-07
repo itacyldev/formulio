@@ -7,10 +7,10 @@
       "processor": {
         "type": "httpRequestProcessor",
         "method": "post",
+        "contentType": "multipart/form-data",
         "inputFile": "${gparams.dbFile}",
         "inputFileName": "clientDB.sqlite",
         "url": "${gparams.endpoint}",
-        "contentType": "multipart/form-data",
         "headers": {
           "wks": "${gparams.wksId}",
           "user": "${gparams.wksUser}",
@@ -43,16 +43,63 @@
     },
     {
       "name": "t3",
-      "description": "Downloading file",
+      "description": "Checking sync process result",
       "processor": {
-        "type": "httpRequestProcessor",
-        "method": "get",
-        "url": "${g1.responseHeaders['Location'].replace('synchro','synchroFile'}",
-        "outputFileExtension": "zip"
+        "type": "ConditionalStopProcessor",
+        "expression": "g1.output.contains('ERROR')",
+        "message": "The sync process ended with an error, check log for details."
       }
     },
     {
       "name": "t4",
+      "description": "Downloading file",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "contentType": "application/octet-stream",
+        "url": "${t1.responseHeaders['Location'].replace('syncro','syncroFile')}",
+        "headers": {
+          "wks": "${gparams.wksId}",
+          "user": "${gparams.wksUser}",
+          "password": "${gparams.wksPwd}"
+        },
+        "outputFileExtension": "zip"
+      }
+    },
+    {
+      "name": "t5",
+      "description": "Updating sync state",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "put",
+        "contentType": "application/json",
+        "url": "${t1.responseHeaders['Location']}",
+        "headers": {
+          "wks": "${gparams.wksId}",
+          "user": "${gparams.wksUser}",
+          "password": "${gparams.wksPwd}"
+        },
+        "body": "{}"
+      }
+    },
+    {
+      "name": "t6",
+      "description": "UnzipFile",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "put",
+        "contentType": "application/json",
+        "url": "${t1.responseHeaders['Location']}",
+        "headers": {
+          "wks": "${gparams.wksId}",
+          "user": "${gparams.wksUser}",
+          "password": "${gparams.wksPwd}"
+        },
+        "body": "{}"
+      }
+    },
+    {
+      "name": "t99",
       "processor": {
         "type": "ContextDebugProcessor",
         "output": "console"

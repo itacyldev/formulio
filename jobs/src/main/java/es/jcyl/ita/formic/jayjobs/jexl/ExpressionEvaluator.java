@@ -23,7 +23,7 @@ public class ExpressionEvaluator {
 		return caster.decimal(eval(context, expression));
 	}
 
-	public static int evalAsInt(Context context, String expression, ) {
+	public static int evalAsInt(Context context, String expression) {
 		return caster.integer(eval(context, expression));
 	}
 

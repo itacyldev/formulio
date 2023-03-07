@@ -38,6 +38,7 @@ import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.processor.CartodruidSyncProcessor;
+import es.jcyl.ita.formic.jayjobs.task.processor.ConditionalStopProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextDebugProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.HttpRequestProcessor;
@@ -83,11 +84,16 @@ public class TaskConfigFactory {
         registerClass(CartodruidSyncProcessor.class);
         registerClass(HttpRequestProcessor.class);
         registerClass(ContextDebugProcessor.class);
+        registerClass(ConditionalStopProcessor.class);
     }
 
 
     private static void registerClass(Class clazz) {
-        registry.put(clazz.getSimpleName().toUpperCase(Locale.ROOT), clazz);
+        registerClass(clazz.getSimpleName().toUpperCase(Locale.ROOT), clazz);
+    }
+
+    private static void registerClass(String alias, Class clazz) {
+        registry.put(alias, clazz);
     }
 
     private boolean validateConfig = true;

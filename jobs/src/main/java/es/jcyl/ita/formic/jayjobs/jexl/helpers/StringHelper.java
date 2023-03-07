@@ -1,12 +1,11 @@
 package es.jcyl.ita.formic.jayjobs.jexl.helpers;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.lang3.StringUtils;
-
 import es.jcyl.ita.formic.jayjobs.jexl.JexlExpressionException;
-import es.jcyl.ita.uqserv.jexl.JexlExpressionException;
 
 public class StringHelper {
 
