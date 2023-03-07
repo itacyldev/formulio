@@ -87,10 +87,6 @@ public class ConditionalStopProcessor extends AbstractProcessor
 
     private boolean evaluate() {
         boolean eval = false;
-/**
- * Iteramos sobre las expresiones evaluando y notificando al listener los
- * mensajes de error
- */
         for (EvalExpression evalExpression : expressionList) {
             try {
                 eval = ExpressionEvaluator.evalAsBool(getGlobalContext(), evalExpression.getExpression()
