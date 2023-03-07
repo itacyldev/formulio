@@ -7,10 +7,10 @@
       "processor": {
         "type": "httpRequestProcessor",
         "method": "post",
+        "contentType": "multipart/form-data",
         "inputFile": "${gparams.dbFile}",
         "inputFileName": "clientDB.sqlite",
         "url": "${gparams.endpoint}",
-        "contentType": "multipart/form-data",
         "headers": {
           "wks": "${gparams.wksId}",
           "user": "${gparams.wksUser}",
@@ -56,12 +56,50 @@
       "processor": {
         "type": "httpRequestProcessor",
         "method": "get",
-        "url": "${g1.responseHeaders['Location'].replace('synchro','synchroFile'}",
+        "contentType": "application/octet-stream",
+        "url": "${t1.responseHeaders['Location'].replace('syncro','syncroFile')}",
+        "headers": {
+          "wks": "${gparams.wksId}",
+          "user": "${gparams.wksUser}",
+          "password": "${gparams.wksPwd}"
+        },
         "outputFileExtension": "zip"
       }
     },
     {
-      "name": "t4",
+      "name": "t5",
+      "description": "Updating sync state",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "put",
+        "contentType": "application/json",
+        "url": "${t1.responseHeaders['Location']}",
+        "headers": {
+          "wks": "${gparams.wksId}",
+          "user": "${gparams.wksUser}",
+          "password": "${gparams.wksPwd}"
+        },
+        "body": "{}"
+      }
+    },
+    {
+      "name": "t6",
+      "description": "UnzipFile",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "put",
+        "contentType": "application/json",
+        "url": "${t1.responseHeaders['Location']}",
+        "headers": {
+          "wks": "${gparams.wksId}",
+          "user": "${gparams.wksUser}",
+          "password": "${gparams.wksPwd}"
+        },
+        "body": "{}"
+      }
+    },
+    {
+      "name": "t99",
       "processor": {
         "type": "ContextDebugProcessor",
         "output": "console"

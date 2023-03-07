@@ -40,15 +40,15 @@ public class ConditionalStopProcessor extends AbstractProcessor
      * JEXL expression to evaluate against the context
      */
     private String expression;
+    private List<EvalExpression> expressionList = new ArrayList<>();
     /**
-     * if true, the task will stop when an error is found
+     * if true, the task will stop throwing and exception
      */
     private boolean forceError = false;
     /**
      * Message for the exception
      */
     private String message;
-    private List<EvalExpression> expressionList = new ArrayList<>();
 
     @Override
     public RecordPage process(RecordPage page) {

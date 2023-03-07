@@ -53,18 +53,21 @@ public class RawRequest extends Request<HttpEntity> {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> entityHeaders = entity.getHeaders();
-        if (entityHeaders.containsKey("Content-Type") && ((String)entityHeaders.get("Content-Type")).contains("multipart")) {
+        if (isMultipart(entityHeaders)) {
             entityHeaders.put("Content-Type", "multipart/form-data; boundary=" + boundary);
         }
         return entityHeaders != null ? entityHeaders : super.getHeaders();
     }
 
+    private boolean isMultipart(Map<String, String> headers) {
+        return headers.containsKey("Content-Type") && (headers.get("Content-Type")).contains("multipart");
+    }
+
     @Override
     public byte[] getBody() throws AuthFailureError {
         byte[] body = this.entity.getContent();
-        if (getHeaders().containsKey("Content-Type") && ((String)getHeaders().get("Content-Type")).contains("multipart")){
+        if (isMultipart(getHeaders())){
             try {
-                this.entity.setContentType("multipart/form-data; boundary=");
                 body = addPart(this.entity.getContent(), boundary,this.entity.getContentName());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -83,11 +86,7 @@ public class RawRequest extends Request<HttpEntity> {
                         "Content-Disposition: form-data; name=\"contentFile\"; filename=\"" + contentName + "\"\r\n\r\n";
 
         String end = "\r\n--" + boundary + "--";
-
-
         byte[] bytesFileContent = ArrayUtils.addAll(start.getBytes(), ArrayUtils.addAll(data, end.getBytes()));
-
-        //FileUtils.writeByteArrayToFile(new File("C:\\Desarrollo\\workspaces\\wks-and\\FRMDRD\\jobs\\build\\intermediates\\java_res\\debugUnitTest\\out\\prueba2.txt"), bytesFileContent);
         return bytesFileContent;
     }
 
@@ -113,7 +112,6 @@ public class RawRequest extends Request<HttpEntity> {
 
     @Override
     public String toString() {
-        return "RawRequest{url=" + this.getUrl() + ", method=" + VolleyUtils.getMethodName(this.getMethod()) +
-                ", entity=" + entity + '}';
+        return String.format("%s %s   entity=[%s]", VolleyUtils.getMethodName(this.getMethod()),this.getUrl(),  entity);
     }
 }
