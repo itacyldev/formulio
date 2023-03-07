@@ -15,10 +15,6 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
 import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -36,7 +32,6 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
@@ -45,7 +40,6 @@ import es.jcyl.ita.formic.forms.components.tab.UITabItem;
 import es.jcyl.ita.formic.forms.components.tab.ViewPagerAdapter;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.utils.ContextTestUtils;
-import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.forms.utils.dummy.DummyViewHandlerActivity;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
@@ -53,6 +47,10 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Javier Ramos (javier.ramos@itacyl.es)

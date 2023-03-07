@@ -17,13 +17,13 @@ import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityDataBuilder;
 import es.jcyl.ita.formic.repo.builders.EntityMetaDataBuilder;
 import es.jcyl.ita.formic.repo.db.meta.MaxRowIdKeyGenerator;
+import es.jcyl.ita.formic.repo.db.meta.NumericUUIDGenerator;
 import es.jcyl.ita.formic.repo.db.meta.TimeStampKeyGenerator;
 import es.jcyl.ita.formic.repo.db.meta.UUIDKeyGenerator;
 import es.jcyl.ita.formic.repo.db.sqlite.SQLiteRepository;
 import es.jcyl.ita.formic.repo.db.sqlite.greendao.EntityDao;
-import es.jcyl.ita.formic.repo.meta.EntityMeta;
-import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
+import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -124,6 +124,35 @@ public class KeyGeneratorStrategyTest {
                 boolean hasfailed = false;
                 try {
                     generator.getKey(dao, entity, pkType);
+                } catch (Exception e) {
+                    hasfailed = true;
+                }
+                Assert.assertTrue("It should have failed with type: " + pkType, hasfailed);
+            }
+        }
+    }
+
+    @Test
+    public void testNumericUUIDGenerator() {
+        NumericUUIDGenerator generator = new NumericUUIDGenerator();
+
+        EntityMeta meta = metaBuilder.withNumProps(1).build();
+        EntityDataBuilder entityBuilder = new EntityDataBuilder(meta);
+        Entity entity = entityBuilder.withRandomData().build();
+
+        EntityDao daoMock = Mockito.mock(EntityDao.class);
+
+        Class[] pkTypes = new Class[]{String.class, Integer.class, Long.class, Double.class, ByteArray.class, Date.class};
+
+        for (Class pkType : pkTypes) {
+            if (generator.supports(pkType)) {
+                Object value = generator.getKey(daoMock, entity, pkType);
+                Assert.assertNotNull(value);
+                Assert.assertEquals(pkType, value.getClass());
+            } else {
+                boolean hasfailed = false;
+                try {
+                    generator.getKey(daoMock, entity, pkType);
                 } catch (Exception e) {
                     hasfailed = true;
                 }
