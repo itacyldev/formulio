@@ -42,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        lockOrientation();
+        lockOrientationAllVersions();
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentTheme = sharedPreferences.getString("current_theme", "light");
