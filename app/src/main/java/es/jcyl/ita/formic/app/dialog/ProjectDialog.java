@@ -22,6 +22,8 @@ public class ProjectDialog {
 
     private static final int PROJECT_IMPORT_FILE_SELECT = 725353137;
 
+    private static final String PROJECT_EXTENSION = "fml";
+
     public ProjectDialog(final MainActivity mainActivity, String currentTheme) {
         this.mainActivity = mainActivity;
         this.currentTheme = currentTheme;
@@ -69,8 +71,8 @@ public class ProjectDialog {
 
     protected final void importProject() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        final String mime_type = MimeTypeMap.getSingleton().hasExtension("frmd")?
-                MimeTypeMap.getSingleton().getMimeTypeFromExtension("frmd") :
+        final String mime_type = MimeTypeMap.getSingleton().hasExtension(PROJECT_EXTENSION)?
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension(PROJECT_EXTENSION) :
                 "*/*";
         intent.setType(mime_type);
         intent.addCategory(Intent.CATEGORY_OPENABLE);

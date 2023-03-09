@@ -1,9 +1,5 @@
 package es.jcyl.ita.formic.app;
 
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -67,6 +62,10 @@ import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
     private final Activity activity = this;
@@ -78,7 +77,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private static final int PERMISSION_STORAGE_REQUEST = 5708463;
     private static final int PROJECT_IMPORT_FILE_SELECT = 725353137;
 
-    private static final String PROJECT_IMPORT_EXTENSION = "FRMD";
+    private static final String PROJECT_IMPORT_EXTENSION = "FML";
 
     protected ProgressDialog pd = null;
 
@@ -433,7 +432,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                             final String extension = FileUtils
                                     .getFileExtension(file);
 
-                            if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
+                            if (extension == null || extension.isEmpty() || PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension)) {
                                 Uri fileUri = Uri.fromFile(file);
                                 ImportTask importTask = new ImportTask(this);
                                 importTask.execute(fileUri);

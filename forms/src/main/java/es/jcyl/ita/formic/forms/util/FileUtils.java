@@ -29,6 +29,8 @@ import java.util.List;
 
 public class FileUtils {
 
+    private static final String PROJECT_EXTENSION = "fml";
+
 
     /**
      * We get the path from a URI
@@ -151,7 +153,7 @@ public class FileUtils {
         }
 
         final String extension = getFileExtension(file);
-        if (extension.equalsIgnoreCase("frmd")){
+        if (extension.equalsIgnoreCase(PROJECT_EXTENSION)){
             output = "application/zip";
         }else{
             output = URLConnection.guessContentTypeFromName(file.getName());

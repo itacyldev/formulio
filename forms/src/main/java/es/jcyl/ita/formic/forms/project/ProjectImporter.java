@@ -66,6 +66,9 @@ public class ProjectImporter {
     private static final String FORM_FILE_EXT = ".xml";
     private static final String DATA_FILE_EXT = ".sqlite";
 
+    private static final String PROJECT_EXTENSION_FML = ".fml";
+    private static final String PROJECT_EXTENSION = "fml";
+
     public enum Extensions {
         XML("xml"), SQLITE("sqlite"), JS("js");
 
@@ -163,7 +166,7 @@ public class ProjectImporter {
     }
 
     public String getProjectName(Context context, String lastPathSegment) {
-        String projectName = lastPathSegment.split(".frmd")[0];
+        String projectName = lastPathSegment.split(PROJECT_EXTENSION_FML)[0];
         Matcher matcher = projectNamePattern.matcher(projectName);
         if (matcher.find()) {
             projectName = matcher.group(1);
@@ -215,7 +218,7 @@ public class ProjectImporter {
      * @return the resulting ZipFile
      */
     public File zipFolder(File toZipFolder, String projectName, String zipName, File dest, Calendar date) {
-        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", zipName, timeStamper.format(new Date()), "frmd"));
+        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", zipName, timeStamper.format(new Date()), PROJECT_EXTENSION));
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(ZipFile));
             zipSubFolder(out, new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length(), date);
