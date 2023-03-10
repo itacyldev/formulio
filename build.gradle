@@ -99,7 +99,6 @@ allprojects {
 //    delete rootProject.buildDir
 //}
 
-
 ext {
     versionCode = 56
     versionName = '0.7.34'
