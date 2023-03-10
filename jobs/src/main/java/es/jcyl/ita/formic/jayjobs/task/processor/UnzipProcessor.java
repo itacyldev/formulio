@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -30,9 +32,43 @@ public class UnzipProcessor extends AbstractProcessor implements NonIterProcesso
 
     private File file;
 
+    private List<String> extractedFiles = new ArrayList<>();
+    private String outputContext;
+
     @Override
     public void process() throws TaskException {
         init();
+        extractFiles();
+        // publish extracted file list in context
+        this.getGlobalContext().put(outputContext + ".outputFolder", outputFolder);
+        this.getGlobalContext().put(outputContext + ".outputFiles", extractedFiles);
+    }
+
+    private void init() throws TaskException {
+        checkParams();
+        outputFolder = TaskResourceAccessor.getWorkingFile(getGlobalContext(), outputFolder);
+
+        if (StringUtils.isBlank(outputContext)) {
+            // use task context to output response info
+            this.outputContext = this.getTask().getName();
+        }
+
+        LOGGER.info("outputFolder:" + outputFolder);
+        File folder = new File(outputFolder);
+        if (!folder.exists()) {
+            if (!mkdir) {
+                throw new TaskException(
+                        String.format("The destination folder %s doesn't exists and the parameter " +
+                                "mkdir is false ", outputFolder));
+            } else {
+                folder.mkdirs();
+            }
+        }
+        file = TaskResourceAccessor.locateInputFile(getGlobalContext(), inputFile);
+        LOGGER.info("inputFile:" + file);
+    }
+
+    private void extractFiles() throws TaskException {
         FileInputStream fis;
         // buffer for read and write data to file
         byte[] buffer = new byte[1024];
@@ -43,6 +79,7 @@ public class UnzipProcessor extends AbstractProcessor implements NonIterProcesso
             while (ze != null) {
                 String fileName = ze.getName();
                 File newFile = new File(outputFolder, fileName);
+                extractedFiles.add(newFile.getAbsolutePath().replace("\\","/"));
                 new File(newFile.getParent()).mkdirs();
                 FileOutputStream fos = new FileOutputStream(newFile);
                 int len;
@@ -63,23 +100,8 @@ public class UnzipProcessor extends AbstractProcessor implements NonIterProcesso
         }
     }
 
-    private void init() throws TaskException {
-        checkParams();
-        outputFolder = TaskResourceAccessor.getWorkingFile(getGlobalContext(), outputFolder);
+    private void publishInContext() {
 
-        LOGGER.info("outputFolder:" + outputFolder);
-        File folder = new File(outputFolder);
-        if (!folder.exists()) {
-            if (!mkdir) {
-                throw new TaskException(
-                        String.format("The destination folder %s doesn't exists and the parameter " +
-                                        "mkdir is false ", outputFolder));
-            } else {
-                folder.mkdirs();
-            }
-        }
-        file = TaskResourceAccessor.locateInputFile(getGlobalContext(), inputFile);
-        LOGGER.info("inputFile:" + file);
     }
 
     private void checkParams() throws TaskException{

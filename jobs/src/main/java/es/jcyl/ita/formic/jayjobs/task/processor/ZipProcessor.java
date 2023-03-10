@@ -1,6 +1,7 @@
 package es.jcyl.ita.formic.jayjobs.task.processor;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -32,13 +33,7 @@ public class ZipProcessor extends AbstractProcessor implements NonIterProcessor 
 	private boolean appendPrevOutput = false;
 
 	private List<File> inputFileObjects;
-
-	private void init() throws TaskException {
-		outputFile = TaskResourceAccessor.locateOutputFile(getGlobalContext(), outputFile, outputFileExtension);
-		LOGGER.info("outputFile:" + outputFile);
-		inputFileObjects = TaskResourceAccessor.locateInputFiles(getGlobalContext(), inputFiles);
-		LOGGER.info("inputFiles:" + inputFiles);
-	}
+	private String outputContext;
 
 
 	@Override
@@ -62,6 +57,12 @@ public class ZipProcessor extends AbstractProcessor implements NonIterProcessor 
 		}
 	}
 
+	private void init() throws TaskException {
+		outputFile = TaskResourceAccessor.locateOutputFile(getGlobalContext(), outputFile, outputFileExtension);
+		LOGGER.info("outputFile:" + outputFile);
+		inputFileObjects = TaskResourceAccessor.locateInputFiles(getGlobalContext(), inputFiles);
+		LOGGER.info("inputFiles:" + inputFiles);
+	}
 	public List<String> getInputFiles() {
 		return inputFiles;
 	}
@@ -96,5 +97,13 @@ public class ZipProcessor extends AbstractProcessor implements NonIterProcessor 
 
 	public void setAppendPrevOutput(boolean appendPrevOutput) {
 		this.appendPrevOutput = appendPrevOutput;
+	}
+
+	public String getOutputContext() {
+		return outputContext;
+	}
+
+	public void setOutputContext(String outputContext) {
+		this.outputContext = outputContext;
 	}
 }
