@@ -47,15 +47,25 @@
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name="es.jcyl.ita.formic.app.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|keyboard|locale|screenLayout|uiMode|smallestScreenSize"
+            android:configChanges="orientation|keyboardHidden|screenSize|keyboard|locale|uiMode|smallestScreenSize"
             android:label="@string/app_name"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="landscape">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.fml" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
             </intent-filter>
         </activity>
 

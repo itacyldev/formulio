@@ -16,9 +16,6 @@ package es.jcyl.ita.formic.forms.scripts;
  */
 
 
-import static es.jcyl.ita.formic.forms.config.DevConsole.debug;
-import static es.jcyl.ita.formic.forms.config.DevConsole.error;
-
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.JsDevTools;
@@ -35,6 +32,8 @@ import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.config.DevConsole;
+
+import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

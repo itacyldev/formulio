@@ -99,10 +99,9 @@ allprojects {
 //    delete rootProject.buildDir
 //}
 
-
 ext {
-    versionCode = 55
-    versionName = '0.7.33'
+    versionCode = 56
+    versionName = '0.7.34'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 31
     targetSdkVersion = 31
@@ -114,7 +113,7 @@ ext {
     androidTestVersion= '1.2.0'
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.33'
+    version = '0.7.34'
     artifactId = 'Formic'
 
     sharedDeps = [

@@ -1,9 +1,5 @@
 package es.jcyl.ita.formic.app;
 
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -30,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -67,6 +63,10 @@ import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.forms.view.activities.FormListFragment;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class MainActivity extends BaseActivity implements FormListFragment.OnListFragmentInteractionListener {
 
     private final Activity activity = this;
@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private static final int PERMISSION_STORAGE_REQUEST = 5708463;
     private static final int PROJECT_IMPORT_FILE_SELECT = 725353137;
 
-    private static final String PROJECT_IMPORT_EXTENSION = "FRMD";
+    private static final String PROJECT_IMPORT_EXTENSION = "FML";
 
     protected ProgressDialog pd = null;
 
@@ -300,9 +300,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
-            doInitConfiguration(this);
-            loadImageNoProjects();
-            //new InitConfigurationTask(this).execute();
+            Uri uri = this.getIntent().getData();
+            if (uri != null) {
+                importFromUri(FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", new File(FileUtils.getPath(this, uri))));
+            } else {
+                doInitConfiguration(this);
+                loadImageNoProjects();
+            }
         }
     }
 
@@ -425,27 +429,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             case PROJECT_IMPORT_FILE_SELECT:
                 if (resultCode == RESULT_OK) {
                     final Uri uri = data.getData();
-                    if (uri != null) {
-
-                        final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
-                        if (path != null) {
-                            final File file = new File(path);
-                            final String extension = FileUtils
-                                    .getFileExtension(file);
-
-                            if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
-                                Uri fileUri = Uri.fromFile(file);
-                                ImportTask importTask = new ImportTask(this);
-                                importTask.execute(fileUri);
-                            } else {
-                                Toast.makeText(
-                                        this,
-                                        getString(R.string.error_fileload_extension)
-                                                + " " + PROJECT_IMPORT_EXTENSION,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
+                    importFromUri(uri);
                     break;
                 }
         }
@@ -674,6 +658,30 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private void checkNavigationButton(int id) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
+    }
+
+    private void importFromUri(Uri uri) {
+        if (uri != null) {
+
+            final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
+            if (path != null) {
+                final File file = new File(path);
+                final String extension = FileUtils
+                        .getFileExtension(file);
+
+                if (extension == null || extension.isEmpty() || PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension)) {
+                    Uri fileUri = Uri.fromFile(file);
+                    ImportTask importTask = new ImportTask(this);
+                    importTask.execute(fileUri);
+                } else {
+                    Toast.makeText(
+                            this,
+                            getString(R.string.error_fileload_extension)
+                                    + " " + PROJECT_IMPORT_EXTENSION,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
 }
