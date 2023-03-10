@@ -15,6 +15,11 @@ package es.jcyl.ita.formic.forms.config.meta;
  * limitations under the License.
  */
 
+import org.mini2Dx.collections.MapUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ACTION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ALLOWS_PARTIAL_RESTORE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BACKGROUND_COLOR;
@@ -54,6 +59,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.IMAGE_POSITION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.INPUT_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.ITALIC;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.KEYGENERATOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_CONFIRMATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LABEL_EXPRESSION;
@@ -100,11 +106,6 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.VALUE_PROPERTY;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WEIGHTS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.WIDTH;
 
-import org.mini2Dx.collections.MapUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -143,7 +144,8 @@ public class TagDef {
         register("memoRepo", define(new Attribute[]{ID, PROPERTIES}));
 
         register("repofilter", define(new Attribute[]{ID}));
-        register("meta", define(new Attribute[]{PROPERTIES}));
+        register("keyGenerator", define(new Attribute[]{TYPE}));
+        register("meta", define(new Attribute[]{PROPERTIES, KEYGENERATOR}));
         register("property", define(new Attribute[]{NAME, EXPRESSION, COLUMN_NAME, EXPRESSION_TYPE, CONVERTER, EVAL_ON}));
         register("mapping", define(new Attribute[]{ID, REPO, PROPERTY,
                 new Attribute("fk", String.class, false),

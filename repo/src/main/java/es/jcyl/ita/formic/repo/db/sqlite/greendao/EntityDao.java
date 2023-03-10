@@ -233,7 +233,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
             }
             DBPropertyType pkProperty = (DBPropertyType) entity.getMetadata().getIdProperties()[0];
             Class pkType = pkProperty.getType();
-            KeyGeneratorStrategy keyGenerator = pkProperty.getKeyGenerator();
+            KeyGeneratorStrategy keyGenerator = this.entityConfig().getMeta().getKeyGenerator();
             if (keyGenerator == null) {
                 // try to use given rowId or use a rowId generator
                 if (rowId != -1) {
@@ -242,7 +242,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
                     pkValue = rowIdKeyGenerator.getKey(this, entity, pkType);
                 }
             } else {
-                if (rowId != -1 && keyGenerator.getType() == KeyGeneratorStrategy.TYPE.MAX_ROWID) {
+                if (rowId != -1 && keyGenerator.getType() == KeyGeneratorStrategy.TYPE.MAXROWID){
                     // used the already obtained key
                     pkValue = ConvertUtils.convert(rowId, pkType);
                 } else {
