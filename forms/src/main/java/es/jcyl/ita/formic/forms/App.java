@@ -28,6 +28,7 @@ import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.context.ContextProvider;
 import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
@@ -63,10 +64,12 @@ public class App {
     private ProjectManager projectManager;
     private HotDeployer deployer;
     private boolean loading = false;
+    private ContextProvider contextProvider;
 
     private App(Context androidContext, String appBaseFolder) {
         this.appBaseFolder = appBaseFolder;
         this.andContext = androidContext;
+        contextProvider = new ContextProvider(androidContext);
     }
 
     public static App getInstance() {
@@ -122,48 +125,13 @@ public class App {
 
     /**
      * Create globalContext and set it to all ContextAwareComponents
-     * //TODO: manage with dependency injection
      */
     private void initContext() {
-        globalContext = new UnPrefixedCompositeContext();
-        // TODO: create context providers to implement each context creation and configure
-        //  them in project file
-        globalContext.addContext(new DateTimeContext());
-        globalContext.addContext(new BasicContext("session"));
-        // TODO: configure context and default sync properties in XML in res folder
-        if (this.andContext != null) {
-            this.globalContext.put("location", new LocationService(this.andContext));
-        }
-        this.globalContext.put("repos", new RepoAccessContext());
-
-        initJobsContext(globalContext);
+        globalContext = contextProvider.createContext();
         // set context to context dependant objects
         MainController.getInstance().setContext(globalContext);
         RepositoryFactory.getInstance().setContext(globalContext);
     }
-
-    /**
-     * Prepares temp execution folder and context information to execute jobs.
-     *
-     * @param ctx
-     */
-    private void initJobsContext(CompositeContext ctx) {
-        // Create temporary directory for job execution if it doesn't already exists
-        File osTempDirectory = FileUtils.getTempDirectory();
-        if (!osTempDirectory.exists()) {
-            // use cache dir
-            osTempDirectory = andContext.getCacheDir();
-        }
-        File tmpFolder = new File(osTempDirectory, "tmp");
-        if (!tmpFolder.exists()) {
-            tmpFolder.mkdir();
-        }
-        // application context
-        BasicContext appCtx = new BasicContext("app");
-        appCtx.put("workingFolder", tmpFolder.getAbsolutePath());
-        globalContext.addContext(appCtx);
-    }
-
 
     private static void registerRepoReader() {
         TaskConfigFactory factory = TaskConfigFactory.getInstance();
@@ -185,9 +153,10 @@ public class App {
         try {
             projectManager.closeProject();
             projectManager.openProject(project);
-            File basePath = new File(projectManager.getCurrentBaseFolder());
+            contextProvider.setupProjectContext(globalContext, project);
 
             deployer.stop();
+            File basePath = new File(projectManager.getCurrentBaseFolder());
             deployer.setPath(basePath.getCanonicalPath());
             deployer.start();
         } catch (Exception e) {

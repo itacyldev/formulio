@@ -41,6 +41,8 @@ import es.jcyl.ita.formic.jayjobs.task.processor.CartodruidSyncProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ConditionalStopProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextDebugProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.ContextPopulateProcessor;
+import es.jcyl.ita.formic.jayjobs.task.processor.UnzipProcessor;
+import es.jcyl.ita.formic.jayjobs.task.processor.ZipProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.HttpRequestProcessor;
 import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
 import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
@@ -85,6 +87,8 @@ public class TaskConfigFactory {
         registerClass(HttpRequestProcessor.class);
         registerClass(ContextDebugProcessor.class);
         registerClass(ConditionalStopProcessor.class);
+        registerClass(ZipProcessor.class);
+        registerClass(UnzipProcessor.class);
     }
 
 

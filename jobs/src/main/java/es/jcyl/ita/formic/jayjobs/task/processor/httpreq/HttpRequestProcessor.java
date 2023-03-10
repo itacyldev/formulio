@@ -54,9 +54,9 @@ import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
  */
 public class HttpRequestProcessor extends AbstractProcessor implements NonIterProcessor, Response.ErrorListener {
     protected static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestProcessor.class);
+
     public static final String HEADER_CONTENT_TYPE = "Content-Type";
     protected static ObjectMapper mapper; // threadsafe
-
 
     private String url;
     private Map<String, Object> jsonBody;
@@ -81,6 +81,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     private int httpMethod = Request.Method.GET;
     private Charset charset = Charset.defaultCharset();
+    private boolean storeResponseAsString = false;
 
     private enum STORE_TYPE {CONTEXT, FILE, BOTH}
 
@@ -195,10 +196,13 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         } catch (UnsupportedEncodingException e) {
             throw new TaskException("Invalid charset received from server: " + cs, e);
         }
-        // publish response as string
-        this.getTaskContext().put("output", strContent);
-        if (StringUtils.isNotBlank(outputContext)) {
-            this.getGlobalContext().put(outputContext + ".output", strContent);
+
+        if (storeResponseAsString) {
+            // publish response as string
+            this.getTaskContext().put("output", strContent);
+            if (StringUtils.isNotBlank(outputContext)) {
+                this.getGlobalContext().put(outputContext + ".output", strContent);
+            }
         }
         if (isJsonContent(entity)) {
             // parse to json object
@@ -422,5 +426,13 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     public void setInputFileName(String inputFileName) {
         this.inputFileName = inputFileName;
+    }
+
+    public boolean isStoreResponseAsString() {
+        return storeResponseAsString;
+    }
+
+    public void setStoreResponseAsString(boolean storeResponseAsString) {
+        this.storeResponseAsString = storeResponseAsString;
     }
 }

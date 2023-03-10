@@ -16,6 +16,8 @@ import android.util.Log;
 import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -122,26 +124,6 @@ public class FileUtils {
         return null;
     }
 
-    /**
-     * Devuelve la extensi�n de un fichero.
-     *
-     * @param file
-     * @return
-     */
-    public static String getFileExtension(final File file) {
-        String output = null;
-
-        if (file == null) {
-            return output;
-        }
-
-        final int i = file.getName().lastIndexOf('.');
-        if (i > 0) {
-            output = file.getName().substring(i + 1);
-        }
-
-        return output;
-    }
 
     public static String getFileType(final File file) {
         String output = null;
@@ -149,8 +131,7 @@ public class FileUtils {
         if (file == null) {
             return output;
         }
-
-        final String extension = getFileExtension(file);
+        final String extension = FilenameUtils.getExtension(file.getName());
         if (extension.equalsIgnoreCase("frmd")){
             output = "application/zip";
         }else{
@@ -205,7 +186,7 @@ public class FileUtils {
         try {
             sourceChannel = new FileInputStream(source).getChannel();
             targetChannel = new FileOutputStream(target).getChannel();
-            targetChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            targetChannel.transferFrom(sourceChannel, 0, sourceCh   annel.size());
 
             refreshFilesystem(context, target);
         } finally {
