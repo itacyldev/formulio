@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -299,9 +300,13 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             ActivityCompat.requestPermissions(this, permsList
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
-            doInitConfiguration(this);
-            loadImageNoProjects();
-            //new InitConfigurationTask(this).execute();
+            Uri uri = this.getIntent().getData();
+            if (uri != null) {
+                importFromUri(FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", new File(FileUtils.getPath(this, uri))));
+            } else {
+                doInitConfiguration(this);
+                loadImageNoProjects();
+            }
         }
     }
 
@@ -424,27 +429,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             case PROJECT_IMPORT_FILE_SELECT:
                 if (resultCode == RESULT_OK) {
                     final Uri uri = data.getData();
-                    if (uri != null) {
-
-                        final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
-                        if (path != null) {
-                            final File file = new File(path);
-                            final String extension = FileUtils
-                                    .getFileExtension(file);
-
-                            if (extension == null || extension.isEmpty() || PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension)) {
-                                Uri fileUri = Uri.fromFile(file);
-                                ImportTask importTask = new ImportTask(this);
-                                importTask.execute(fileUri);
-                            } else {
-                                Toast.makeText(
-                                        this,
-                                        getString(R.string.error_fileload_extension)
-                                                + " " + PROJECT_IMPORT_EXTENSION,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
+                    importFromUri(uri);
                     break;
                 }
         }
@@ -673,6 +658,30 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
     private void checkNavigationButton(int id) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
+    }
+
+    private void importFromUri(Uri uri) {
+        if (uri != null) {
+
+            final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
+            if (path != null) {
+                final File file = new File(path);
+                final String extension = FileUtils
+                        .getFileExtension(file);
+
+                if (extension == null || extension.isEmpty() || PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension)) {
+                    Uri fileUri = Uri.fromFile(file);
+                    ImportTask importTask = new ImportTask(this);
+                    importTask.execute(fileUri);
+                } else {
+                    Toast.makeText(
+                            this,
+                            getString(R.string.error_fileload_extension)
+                                    + " " + PROJECT_IMPORT_EXTENSION,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
 }
