@@ -544,6 +544,9 @@ public class DatatableWidget extends Widget<UIDatatable>
 
     @Override
     public void setState(Object value) {
+        if(value == null){
+            return;
+        }
         this.filter = ((DatatableState) value).getFilter();
         this.sort = ((DatatableState) value).getSort();
         int offset = (((DatatableState) value).getOffset()) < this.offset ? this.offset : (((DatatableState) value).getOffset());
