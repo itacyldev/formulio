@@ -111,9 +111,13 @@ public class App {
             configLoaded = true;
             registerRepoReader();
             // limit to DEBUG environment
-            deployer = new HotDeployer(MainController.getInstance(), this.projectManager);
+            //deployer = initDeployer(projectManager);
             loading = false;
         }
+    }
+
+    public static HotDeployer initDeployer(ProjectManager projectManager) {
+        return new HotDeployer(MainController.getInstance(), projectManager);
     }
 
     public boolean isLoading() {
@@ -269,4 +273,5 @@ public class App {
     public HotDeployer getDeployer() {
         return deployer;
     }
+
 }
