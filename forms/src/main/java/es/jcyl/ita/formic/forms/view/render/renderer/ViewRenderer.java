@@ -133,23 +133,24 @@ public class ViewRenderer {
                 List<View> viewList = new ArrayList<>();
                 if (groupView instanceof EntityListProviderWidget) {
                     // save the old entityContext
-                    Entity parentEntity = env.getEntity();
-                    RenderingEnv altEnv = RenderingEnvFactory.getInstance().clone(env);
+                    WidgetContext prev = env.getWidgetContext();
+
                     List<Entity> entities = ((EntityListProviderWidget) groupView).getEntities();
                     int iter = 0;
                     // TODO: FORMIC-249 Refactorizar viewRenderer
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         onEntityContextChanged(entity);
-                        altEnv.getWidgetContext().setEntity(entity);
+                        WidgetContext entityWidgetContext = new WidgetContext();
+                        env.setWidgetContext(entityWidgetContext);
+                        env.getWidgetContext().setEntity(entity);
                         UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
-                        Widget view = doRender(altEnv, componentProxy, root, checkDeferred);
+                        Widget view = doRender(env, componentProxy, root, checkDeferred);
                         viewList.add(view);
                         iter++;
                     }
                     // restore entity context
-                    env.getWidgetContext().setEntity(parentEntity);
-                    env.setEntity(parentEntity);
+                    env.setWidgetContext(prev);
                 } else {
                     UIComponent[] kids = component.getChildren();
                     int numKids = kids.length;
