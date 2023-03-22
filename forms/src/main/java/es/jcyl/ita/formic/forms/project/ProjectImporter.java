@@ -207,7 +207,9 @@ public class ProjectImporter {
         //String projectsFolder = sharedPreferences.getString("current_workspace", Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
         String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
 
-        zipFolder(new File(projectsFolder), projectName, projectName, new File(dest), null);
+        String projectExtension = "fml";
+
+        zipFolder(new File(projectsFolder), projectName, projectName, projectExtension, new File(dest), null);
 
     }
 
@@ -217,8 +219,8 @@ public class ProjectImporter {
      * @param toZipFolder Folder to be zipped
      * @return the resulting ZipFile
      */
-    public File zipFolder(File toZipFolder, String projectName, String zipName, File dest, Calendar date) {
-        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", zipName, timeStamper.format(new Date()), PROJECT_EXTENSION));
+    public File zipFolder(File toZipFolder, String projectName, String zipName, String zipExtension, File dest, Calendar date) {
+        File ZipFile = new File(dest != null ? dest : toZipFolder, String.format("%s_%s.%s", zipName, timeStamper.format(new Date()), zipExtension!=null?zipExtension:PROJECT_EXTENSION));
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(ZipFile));
             zipSubFolder(out, new File(toZipFolder.getPath() + File.separator + projectName), toZipFolder.getPath().length(), date);

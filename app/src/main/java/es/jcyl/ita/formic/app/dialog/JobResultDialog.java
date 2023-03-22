@@ -59,8 +59,10 @@ public class JobResultDialog extends Dialog{
     public Activity activity;
     private ProgressBar mProgressBar;
     private MaterialButton acceptButton;
-    private MaterialButton backButton;
     private MaterialButton showConsoleButton;
+
+    private ImageView closeButton;
+
     private TextView progressText;
     private TextView progressTitle;
     private EditText progressConsole;
@@ -81,16 +83,16 @@ public class JobResultDialog extends Dialog{
         this.finishActivity = finishActivity;
     }
 
-    public MaterialButton getBackButton() {
-        return backButton;
-    }
-
-    public MaterialButton getAcceptButton() {
+   public MaterialButton getAcceptButton() {
         return acceptButton;
     }
 
     public MaterialButton getShowConsoleButton() {
         return showConsoleButton;
+    }
+
+    public ImageView getCloseButton() {
+        return closeButton;
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,9 +108,11 @@ public class JobResultDialog extends Dialog{
         setCanceledOnTouchOutside(false);
 
         mProgressBar = findViewById(R.id.progress_bar);
-        backButton = findViewById(R.id.back_button);
         acceptButton = findViewById(R.id.accept_button);
         showConsoleButton = findViewById(R.id.show_console_button);
+
+        closeButton = findViewById(R.id.close_button);
+
         progressText = findViewById(R.id.text_loading_dialog);
         progressText.setMovementMethod(new ScrollingMovementMethod());
         progressTitle = findViewById(R.id.progress_title);
@@ -123,7 +127,7 @@ public class JobResultDialog extends Dialog{
         builder = new StringBuilder();
 
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -132,6 +136,7 @@ public class JobResultDialog extends Dialog{
                 }
             }
         });
+
 
         showConsoleButton.setOnClickListener(new View.OnClickListener() {
             @Override

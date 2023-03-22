@@ -532,6 +532,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         protected void onPostExecute(final String text) {
             jobResultDialog.endJob();
             jobResultDialog.getAcceptButton().setVisibility(showAcceptButton ? View.VISIBLE : View.GONE);
+            jobResultDialog.getCloseButton().setVisibility(View.VISIBLE);
             jobResultDialog.setText(text);
         }
 
@@ -574,6 +575,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
             jobResultDialog.setText(text);
             jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
+            jobResultDialog.getCloseButton().setVisibility(View.VISIBLE);
 
         }
 
@@ -582,7 +584,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             jobResultDialog = new JobResultDialog(activity, false);
             jobResultDialog.show();
             jobResultDialog.setProgressTitle(activity.getString(R.string.project_opening));
-            jobResultDialog.getBackButton().setVisibility(View.GONE);
             jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
             jobResultDialog.setText(currentContext.getString(R.string.project_opening));
 
