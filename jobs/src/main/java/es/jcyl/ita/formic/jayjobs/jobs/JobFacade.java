@@ -72,8 +72,8 @@ public class JobFacade {
 
     public Long executeJob(CompositeContext ctx, String jobType) throws JobException {
         JobConfig job = jobConfigRepo.get(ctx, jobType);
-        JobExecutionMode exedMode = (job.getExecMode() == null) ? JobExecutionMode.FG_ASYNC : job.getExecMode();
-        return doExecuteJob(ctx, job, exedMode);
+        JobExecutionMode execMode = (job.getExecMode() == null) ? JobExecutionMode.FG_ASYNC : job.getExecMode();
+        return doExecuteJob(ctx, job, execMode);
     }
 
     public Long executeJob(CompositeContext ctx, String jobType, JobExecutionMode execMode) throws JobException {

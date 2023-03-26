@@ -67,7 +67,7 @@ public class JobProgressActivity extends BaseActivity {
 
         jobResultDialog = new JobResultDialog(activity, true);
         jobResultDialog.show();
-        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription)?jobDescription:activity.getString(R.string.job_result));
+        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription) ? jobDescription : activity.getString(R.string.job_result));
 
         mainThreadHandler = new JobProgressHandler();
 
@@ -92,16 +92,16 @@ public class JobProgressActivity extends BaseActivity {
     private void publishResources() {
         try {
             List<JobResource> resources = jobExecRepo.getResources(jobId);
-            for (JobResource resource : resources) {
-                String resourcePath = resource.getResourcePath();
-                addResource(resourcePath);
+            if (resources != null) {
+                for (JobResource resource : resources) {
+                    String resourcePath = resource.getResourcePath();
+                    addResource(resourcePath);
+                }
             }
         } catch (JobException e) {
-
+// Y esto?????
         }
     }
-
-
 
 
     public void addResource(String resourcePath) {

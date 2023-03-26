@@ -40,7 +40,7 @@ public class Log {
         logger = new NoOpLogger();
     }
 
-    private static int level = android.util.Log.INFO;
+    private static int level = android.util.Log.DEBUG;
 
     public static void setLevel(int l) {
         level = l;
