@@ -21,6 +21,8 @@ out/
 # Gradle files
 .gradle/
 build/
+# Maven files
+target
 
 # Local configuration file (sdk path, etc)
 local.properties
