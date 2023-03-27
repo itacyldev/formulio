@@ -55,8 +55,8 @@ public class CrtdrdSynchroIntTest {
 
         Map<String, Object> gParams = getCredentials();
 
-        File file = TestUtils.findFile("jobs/testsyn.sqlite");
-        gParams.put("dbFile", file.getAbsolutePath());
+        String fileName = TestUtils.findFileName("jobs/testsyn.sqlite");
+        gParams.put("dbFile", fileName);
 
         JobConfig jobConfig = repo.get(context, "cartodruid_sync_job");
         jobConfig.setGlobalParams(gParams);

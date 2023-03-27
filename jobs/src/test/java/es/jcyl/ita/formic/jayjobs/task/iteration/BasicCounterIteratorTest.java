@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.processor.AbstractProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
-import es.jcyl.ita.formic.jayjobs.utils.ContextTestUtils;
+import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
@@ -40,7 +40,7 @@ public class BasicCounterIteratorTest {
     @Test
     public void testLoopExpression() throws Exception {
         int NUM_ITERS = 5;
-        CompositeContext context = ContextTestUtils.createGlobalContext();
+        CompositeContext context = TestContextUtils.createGlobalContext();
 
         // Prepare tasks
         NonIterTask task1 = new NonIterTask(null, "t1");
