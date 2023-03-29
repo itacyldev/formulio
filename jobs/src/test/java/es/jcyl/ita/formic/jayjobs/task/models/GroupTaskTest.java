@@ -10,7 +10,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
 import es.jcyl.ita.formic.jayjobs.task.iteration.BasicCounterIterator;
-import es.jcyl.ita.formic.jayjobs.utils.ContextTestUtils;
+import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -21,7 +21,7 @@ public class GroupTaskTest {
     @Test
     public void testBasicGroup() throws Exception {
         int NUM_ITERS = 5;
-        CompositeContext context = ContextTestUtils.createGlobalContext();
+        CompositeContext context = TestContextUtils.createGlobalContext();
 
         // Prepare tasks
         NonIterTask task1 = new NonIterTask(null, "t1");

@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.jayjobs.task.processor.httpreq;
  * limitations under the License.
  */
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,8 +24,10 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.RequestFuture;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.MapUtils;
 import org.slf4j.Logger;
@@ -52,13 +55,17 @@ import es.jcyl.ita.formic.jayjobs.utils.VolleyUtils;
 public class HttpRequestProcessor extends AbstractProcessor implements NonIterProcessor, Response.ErrorListener {
     protected static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestProcessor.class);
 
+    public static final String HEADER_CONTENT_TYPE = "Content-Type";
+    protected static ObjectMapper mapper; // threadsafe
+
     private String url;
-    private Map<String, Object> jsonObject;
+    private Map<String, Object> jsonBody;
     private String method;
     private String store;
     private String body;
 
     private String inputFile;
+    private String inputFileName;
 
     // context where additionally the results of the processor will be published
     private String outputContext;
@@ -74,6 +81,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     private int httpMethod = Request.Method.GET;
     private Charset charset = Charset.defaultCharset();
+    private boolean storeResponseAsString = true;
 
     private enum STORE_TYPE {CONTEXT, FILE, BOTH}
 
@@ -96,7 +104,8 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         try {
             entity = future.get(timeout, TimeUnit.SECONDS);
         } catch (Exception e) {
-            this.onErrorResponse(new VolleyError(e));
+            VolleyError error = processException(e);
+            this.onErrorResponse(error);
             throw new TaskException("There was an error while trying to execute request: " + request, e);
         }
         // treat response
@@ -108,6 +117,17 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         }
         storeResponseInfo(entity);
         LOGGER.debug(String.format("Http request to %s completed", url));
+    }
+
+    private VolleyError processException(Throwable exception) {
+        Throwable t = exception;
+        do {
+            if (t instanceof VolleyError) {
+                return (VolleyError) t;
+            }
+            t = t.getCause();
+        } while (t != null);
+        return new VolleyError(exception);
     }
 
     /**
@@ -129,6 +149,10 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         // set charset
         if (StringUtils.isNotBlank(this.contentCharset)) {
             this.charset = Charset.forName(this.contentCharset);
+        }
+        if (StringUtils.isBlank(outputContext)) {
+            // use task context to output response info
+            this.outputContext = this.getTask().getName();
         }
     }
 
@@ -172,10 +196,13 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         } catch (UnsupportedEncodingException e) {
             throw new TaskException("Invalid charset received from server: " + cs, e);
         }
-        // publish response as string
-        this.getTaskContext().put("output", strContent);
-        if (StringUtils.isNotBlank(outputContext)) {
-            this.getGlobalContext().put(outputContext + ".output", strContent);
+
+        if (storeResponseAsString) {
+            // publish response as string
+            this.getTaskContext().put("output", strContent);
+            if (StringUtils.isNotBlank(outputContext)) {
+                this.getGlobalContext().put(outputContext + ".output", strContent);
+            }
         }
         if (isJsonContent(entity)) {
             // parse to json object
@@ -211,7 +238,6 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
      * @param entity
      */
     private void storeResponseInfo(HttpEntity entity) {
-        this.getTaskContext().put("responseHeaders", entity.getResponseHeaders());
         if (StringUtils.isNotBlank(outputContext)) {
             this.getGlobalContext().put(outputContext + ".responseHeaders", entity.getResponseHeaders());
         }
@@ -219,35 +245,66 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     private RawRequest createRequest(RequestFuture future) throws TaskException {
         byte[] content = null;
-        if (inputFile != null) {
-            try {
-                content = FileUtils.readFileToByteArray(new File(inputFile));
-            } catch (IOException e) {
-                throw new TaskException("There was an error while trying to read inputfile: ", e);
-            }
-        } else {
-            if (body != null) {
-                content = body.getBytes(this.charset);
-            }
-        }
+        content = getEntityContent(content);
         if (headers == null) {
             headers = new HashMap<>();
         }
         if (params == null) {
             params = new HashMap<>();
         }
-        if (headers.containsKey("contentType") && StringUtils.isNotBlank(contentType)) {
-            headers.put("contentType", contentType);
-            //headers.put("Content-Type", "multipart/form-data");
+        if (!headers.containsKey(HEADER_CONTENT_TYPE) && StringUtils.isNotBlank(contentType)) {
+            headers.put(HEADER_CONTENT_TYPE, contentType);
         }
         HttpEntity entity = new HttpEntity(content, this.headers);
         entity.setParams(this.params);
         entity.setContentType(this.contentType);
+        entity.setContentName((StringUtils.isNotBlank(this.inputFileName) ? this.inputFile : RandomStringUtils.randomAlphanumeric(10)));
         return new RawRequest(httpMethod, url, entity, future, future);
     }
 
-    public void onErrorResponse(VolleyError error) {
+    private byte[] getEntityContent(byte[] content) throws TaskException {
+        if (inputFile != null) {
+            try {
+                content = FileUtils.readFileToByteArray(new File(inputFile));
+            } catch (IOException e) {
+                throw new TaskException("There was an error while trying to read the input file: " + this.inputFile, e);
+            }
+        } else {
+            if (body != null) {
+                content = body.getBytes(this.charset);
+            }
+            if (jsonBody != null) {
+                // serialize to set as content
+                try {
+                    content = mapper.writeValueAsBytes(this.jsonBody);
+                } catch (JsonProcessingException e) {
+                    throw new TaskException("An error occurred while trying to write json object", e);
+                }
+            }
+        }
+        return content;
+    }
 
+    public void onErrorResponse(VolleyError error) {
+        if (error.networkResponse != null) {
+            NetworkResponse networkResponse = error.networkResponse;
+            String msg = "";
+            int statusCode = networkResponse.statusCode;
+            String responseEntity = new String(networkResponse.data);
+            if (statusCode >= 500) {
+                msg = "Unexpected error in server.";
+            } else if (statusCode >= 400) {
+                if (statusCode == 401 || statusCode == 403) {
+                    msg = "Unexpected error in server.";
+                } else if (statusCode == 404) {
+                    msg = "Resource not found";
+                } else {
+                    msg = "Invalid client request";
+                }
+            }
+            String logMsg = String.format("%s statusCode: %s url: %s %n%s", msg, statusCode, this.url, responseEntity);
+            LOGGER.error(logMsg);
+        }
     }
 
 
@@ -267,12 +324,12 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         this.url = url;
     }
 
-    public Map<String, Object> getJsonObject() {
-        return jsonObject;
+    public Map<String, Object> getJsonBody() {
+        return jsonBody;
     }
 
-    public void setJsonObject(Map<String, Object> jsonObject) {
-        this.jsonObject = jsonObject;
+    public void setJsonBody(Map<String, Object> jsonBody) {
+        this.jsonBody = jsonBody;
     }
 
     public String getBody() {
@@ -363,4 +420,19 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
         this.inputFile = inputFile;
     }
 
+    public String getInputFileName() {
+        return inputFileName;
+    }
+
+    public void setInputFileName(String inputFileName) {
+        this.inputFileName = inputFileName;
+    }
+
+    public boolean isStoreResponseAsString() {
+        return storeResponseAsString;
+    }
+
+    public void setStoreResponseAsString(boolean storeResponseAsString) {
+        this.storeResponseAsString = storeResponseAsString;
+    }
 }

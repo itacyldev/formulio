@@ -113,6 +113,9 @@ public class ProjectManager {
         BasicContext projectCtx = new BasicContext("project");
         projectCtx.put("folder", project.getBaseFolder());
         projectCtx.put("name", project.getName());
+        projectCtx.put("dataFolder", project.getDataFolder());
+        projectCtx.put("formsFolder", project.getFormsFolder());
+        projectCtx.put("picturesFolder", project.getPicturesFolder());
         globalContext.addContext(projectCtx);
     }
 

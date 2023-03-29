@@ -12,7 +12,7 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.utils.ContextTestUtils;
+import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 public class ContextPopulateProcessorTest {
@@ -23,7 +23,7 @@ public class ContextPopulateProcessorTest {
         // create task mock and set contexts
         Task taskMock = mock(Task.class);
         when(taskMock.getTaskContext()).thenReturn(taskContext);
-        when(taskMock.getGlobalContext()).thenReturn(ContextTestUtils.createGlobalContext());
+        when(taskMock.getGlobalContext()).thenReturn(TestContextUtils.createGlobalContext());
 
         ContextPopulateProcessor processor = new ContextPopulateProcessor();
         processor.setName("myVariable");

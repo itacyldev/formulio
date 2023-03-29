@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,8 +112,7 @@ public class ProjectImporter {
                 if (nameSplit.length > 0) {
                     name = nameSplit[nameSplit.length - 1];
                 }
-
-                if (FileUtils.fileExists(newFileName) && EnumUtils.isValidEnum(Extensions.class, FileUtils.getFileExtension(new File(newFileName)).toUpperCase())) {
+                if (FileUtils.fileExists(newFileName) && EnumUtils.isValidEnum(Extensions.class, FilenameUtils.getExtension(newFileName).toUpperCase())) {
                     existingFiles.put(name, newFileName);
                 }
             }
@@ -250,7 +250,7 @@ public class ProjectImporter {
                 if (file.isDirectory()) {
                     zipSubFolder(out, file, basePathLength, date);
                 } else {
-                    if (date == null || (date != null && file.lastModified()>date.getTimeInMillis())) {
+                    if (date == null || (date != null && file.lastModified() > date.getTimeInMillis())) {
                         byte data[] = new byte[BUFFER];
 
                         String unmodifiedFilePath = file.getPath();

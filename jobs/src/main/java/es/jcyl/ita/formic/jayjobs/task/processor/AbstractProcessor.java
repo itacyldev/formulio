@@ -20,6 +20,7 @@ public abstract class AbstractProcessor extends AbstractTaskSepItem {
 
     private boolean failOnError = true;
 
+
     public boolean isFailOnError() {
         return this.failOnError;
     }

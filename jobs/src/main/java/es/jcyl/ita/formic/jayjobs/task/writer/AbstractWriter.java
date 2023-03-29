@@ -74,8 +74,7 @@ public abstract class AbstractWriter extends AbstractTaskSepItem implements Writ
                     "The 'outputFile' attribute is not set in the %s, a random file name will be " +
                             "used [%s].", tag, this.outputFile));
         }
-        this.outputFile = TaskResourceAccessor
-                .getWorkingFile(this.getGlobalContext(), this.outputFile);
+        this.outputFile = TaskResourceAccessor.locateOutputFile(this.getGlobalContext(), this.outputFile, ".csv");
         LOGGER.info("Output file path: " + this.outputFile);
         return new File(outputFile);
     }
