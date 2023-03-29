@@ -232,7 +232,6 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
             }
             jobResultDialog.endJob();
-            jobResultDialog.getCloseButton().setVisibility(View.VISIBLE);
         }
 
         @Override
