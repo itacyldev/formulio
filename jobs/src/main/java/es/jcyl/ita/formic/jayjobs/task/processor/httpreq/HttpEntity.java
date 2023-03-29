@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.jayjobs.task.processor.httpreq;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +34,7 @@ public class HttpEntity {
     // request
     private Map<String, String> params;
     private byte[] content;
+    private String contentName;
     private String contentType;
     private Map<String, String> headers;
     // response
@@ -124,8 +127,17 @@ public class HttpEntity {
         this.responseContent = responseContent;
     }
 
+    public String getContentName() {
+        return contentName;
+    }
+
+    public void setContentName(String contentName) {
+        this.contentName = contentName;
+    }
+
     @Override
     public String toString() {
-        return "HttpEntity{" + "content=" + Arrays.toString(content) + ", headers=" + headers + ", httpStatus=" + httpStatus + ", responseHeaders=" + responseHeaders + '}';
+        return "HttpEntity{headers=" + headers + ", httpStatus=" + httpStatus + ", responseHeaders=" + responseHeaders
+                + " content=" + Arrays.toString(content) + '}';
     }
 }

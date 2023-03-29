@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,6 +27,8 @@ import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.dialog.JobResultDialog;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
@@ -67,7 +70,7 @@ public class JobProgressActivity extends BaseActivity {
 
         jobResultDialog = new JobResultDialog(activity, true);
         jobResultDialog.show();
-        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription)?jobDescription:activity.getString(R.string.job_result));
+        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription) ? jobDescription : activity.getString(R.string.job_result));
 
         mainThreadHandler = new JobProgressHandler();
 
@@ -92,16 +95,17 @@ public class JobProgressActivity extends BaseActivity {
     private void publishResources() {
         try {
             List<JobResource> resources = jobExecRepo.getResources(jobId);
-            for (JobResource resource : resources) {
-                String resourcePath = resource.getResourcePath();
-                addResource(resourcePath);
+            if (resources != null) {
+                for (JobResource resource : resources) {
+                    String resourcePath = resource.getResourcePath();
+                    addResource(resourcePath);
+                }
             }
         } catch (JobException e) {
-
+            UserMessagesHelper.toast(this,
+                    DevConsole.error(this.getString(R.string.job_error_publishing),e), Toast.LENGTH_LONG);
         }
     }
-
-
 
 
     public void addResource(String resourcePath) {

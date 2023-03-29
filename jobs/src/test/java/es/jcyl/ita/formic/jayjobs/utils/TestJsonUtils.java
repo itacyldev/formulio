@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class JsonUtilsTest {
+public class TestJsonUtils {
 
     @Test
     public void testCopyFieldsFromNode() throws Exception {

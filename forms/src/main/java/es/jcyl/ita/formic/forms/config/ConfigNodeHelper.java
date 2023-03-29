@@ -287,7 +287,7 @@ public class ConfigNodeHelper {
      */
     public static ConfigNode findNodeByAttValue(List<ConfigNode> nodes, String attName, String expectedValue) {
         for(ConfigNode n: nodes){
-            if(n.getAttribute(attName).equalsIgnoreCase(expectedValue)){
+            if(n.getAttribute(attName)!=null && n.getAttribute(attName).equalsIgnoreCase(expectedValue)){
                 return n;
             }
         }

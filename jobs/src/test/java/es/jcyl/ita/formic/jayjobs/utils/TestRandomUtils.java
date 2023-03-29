@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-public class RandomTestUtils {
+public class TestRandomUtils {
 
     public static List<Map<String, Object>> emptyResultSet() {
         return new ArrayList<Map<String, Object>>();

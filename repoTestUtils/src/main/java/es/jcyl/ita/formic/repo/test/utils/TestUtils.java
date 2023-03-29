@@ -79,7 +79,9 @@ public class TestUtils {
         File file = new File(resource.getFile());
         return file;
     }
-
+    public static String findFileName(String fileName) {
+        return findFile(fileName).getAbsolutePath().replace("\\","/");
+    }
     public static String readAsString(final String file) {
         File f = TestUtils.findFile(file);
         return readAsString(f);

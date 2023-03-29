@@ -1,38 +1,15 @@
 <main>
     <view name="My">
-        <button>
-            <action type="js">
-                <param method="vh.setWidgetValue('myInput',123.5);console.log(vh.widget('myInput'))"/>
+        <button label="jsAction">
+            <action type="js" method="vh.setWidgetValue('myInput',123.5);console.log(vh.widget('myInput'))"/>
+        </button>
+        <button label="run Job">
+            <action registerInHistory="false" type="job">
+                <param name="jobId" value="cartodruid_sync_job" />
+                <param name="param1" value="value1" />
+                <param name="param2" value="value2" />
             </action>
         </button>
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
-        <input id="myInput" value="you are in view 1" />
         <input id="myInput" value="you are in view 1" />
         <datatable repo="contacts" />
         <buttonbar type="fab">
