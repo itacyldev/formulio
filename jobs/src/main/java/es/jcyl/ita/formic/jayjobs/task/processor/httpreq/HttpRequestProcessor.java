@@ -81,7 +81,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
 
     private int httpMethod = Request.Method.GET;
     private Charset charset = Charset.defaultCharset();
-    private boolean storeResponseAsString = false;
+    private boolean storeResponseAsString = true;
 
     private enum STORE_TYPE {CONTEXT, FILE, BOTH}
 

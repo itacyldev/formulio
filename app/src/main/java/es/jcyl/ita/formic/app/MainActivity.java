@@ -34,6 +34,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
@@ -430,10 +431,8 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                         final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
                         if (path != null) {
                             final File file = new File(path);
-                            final String extension = FileUtils
-                                    .getFileExtension(file);
-
-                            if (extension == null || extension.isEmpty() || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
+                            final String extension = FilenameUtils.getExtension(path);
+                            if (StringUtils.isBlank(extension) || (PROJECT_IMPORT_EXTENSION.equalsIgnoreCase(extension))) {
                                 Uri fileUri = Uri.fromFile(file);
                                 ImportTask importTask = new ImportTask(this);
                                 importTask.execute(fileUri);

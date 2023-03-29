@@ -21,7 +21,6 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
@@ -55,10 +54,11 @@ public class PublishTaskResourceListener implements JobExecListener {
         Long jobExecId = ContextAccessor.jobExecId(task.getGlobalContext());
         try {
             // publish task outputFiles and add to the job execution published resources
-            String outputFile = (String) task.getTaskContext().get("outputFile");
-            JobResource resource = new JobResource();
-            resource.setResourcePath(outputFile);
-            repo.publishResource(jobExecId, resource);
+            if (task.getTaskContext().containsKey("outputFile")) {
+                JobResource resource = new JobResource();
+                resource.setResourcePath(task.getTaskContext().getString("outputFile"));
+                repo.publishResource(jobExecId, resource);
+            }
         } catch (JobException e) {
             throw new JobRuntimeException("There was an error while trying to publish the resources for " +
                     "job execution " + jobExecId);

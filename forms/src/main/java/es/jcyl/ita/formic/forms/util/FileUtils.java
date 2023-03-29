@@ -186,7 +186,7 @@ public class FileUtils {
         try {
             sourceChannel = new FileInputStream(source).getChannel();
             targetChannel = new FileOutputStream(target).getChannel();
-            targetChannel.transferFrom(sourceChannel, 0, sourceCh   annel.size());
+            targetChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
 
             refreshFilesystem(context, target);
         } finally {

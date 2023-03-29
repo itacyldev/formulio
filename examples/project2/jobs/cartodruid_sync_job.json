@@ -26,7 +26,7 @@
     },
     {
       "name": "g1",
-      "iterSize": 30,
+      "iterSize": 10,
       "iterDelay": 3000,
       "description": "Checking synchronization state",
       "exitLoopExpression": "${g1.output.contains('FINISHED') || g1.output.contains('ERROR')}",
@@ -90,18 +90,12 @@
     },
     {
       "name": "t6",
-      "description": "UnzipFile",
+      "description": "Unzipping downloaded database file",
       "processor": {
-        "type": "httpRequestProcessor",
-        "method": "put",
-        "contentType": "application/json",
-        "url": "${t1.responseHeaders['Location']}",
-        "headers": {
-          "wks": "${gparams.wksId}",
-          "user": "${gparams.wksUser}",
-          "password": "${gparams.wksPwd}"
-        },
-        "body": "{}"
+        "type": "unzipProcessor",
+        "inputFile": "${t4.outputFile}",
+        "mkdir": true,
+        "outputFolder": "${project.dataFolder}"
       }
     },
     {

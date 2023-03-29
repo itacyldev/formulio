@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,6 +27,8 @@ import java.util.List;
 
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.dialog.JobResultDialog;
+import es.jcyl.ita.formic.forms.config.DevConsole;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
@@ -99,7 +102,8 @@ public class JobProgressActivity extends BaseActivity {
                 }
             }
         } catch (JobException e) {
-// Y esto?????
+            UserMessagesHelper.toast(this,
+                    DevConsole.error(this.getString(R.string.job_error_publishing),e), Toast.LENGTH_LONG);
         }
     }
 
