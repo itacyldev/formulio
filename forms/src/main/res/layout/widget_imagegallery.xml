@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<es.jcyl.ita.formic.forms.components.image.ImageGalleryWidget xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/imagegallery_layout"
+    style="@style/Component_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <GridView
+        android:id="@+id/imagegrid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:horizontalSpacing="1dp"
+        android:numColumns="auto_fit"
+        android:padding="1dp"
+        android:verticalSpacing="1dp"
+        />
+
+</es.jcyl.ita.formic.forms.components.image.ImageGalleryWidget>

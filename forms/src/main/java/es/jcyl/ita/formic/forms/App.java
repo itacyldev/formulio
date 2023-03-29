@@ -61,7 +61,7 @@ public class App {
 
     private JobFacade jobFacade;
     private ProjectManager projectManager;
-    private HotDeployer deployer;
+    //private HotDeployer deployer;
     private boolean loading = false;
 
     private App(Context androidContext, String appBaseFolder) {
@@ -111,9 +111,13 @@ public class App {
             configLoaded = true;
             registerRepoReader();
             // limit to DEBUG environment
-            deployer = new HotDeployer(MainController.getInstance(), this.projectManager);
+            //deployer = initDeployer(projectManager);
             loading = false;
         }
+    }
+
+    public static HotDeployer initDeployer(ProjectManager projectManager) {
+        return new HotDeployer(MainController.getInstance(), projectManager);
     }
 
     public boolean isLoading() {
@@ -187,9 +191,9 @@ public class App {
             projectManager.openProject(project);
             File basePath = new File(projectManager.getCurrentBaseFolder());
 
-            deployer.stop();
-            deployer.setPath(basePath.getCanonicalPath());
-            deployer.start();
+//            deployer.stop();
+//            deployer.setPath(basePath.getCanonicalPath());
+//            deployer.start();
         } catch (Exception e) {
             throw new ConfigurationException(DevConsole.error("Error while trying to open project.", e), e);
         } finally {
@@ -266,7 +270,8 @@ public class App {
         this.jobFacade.setListener(jobListener);
     }
 
-    public HotDeployer getDeployer() {
-        return deployer;
-    }
+//    public HotDeployer getDeployer() {
+//        return deployer;
+//    }
+
 }

@@ -161,7 +161,7 @@ public abstract class AbstractComponentBuilder<E> implements ComponentBuilder<E>
         }
     }
 
-    private boolean isExpression(String value) {
+    protected boolean isExpression(String value) {
         return value != null && (value.contains("${") || value.contains("#{"));
     }
 

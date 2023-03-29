@@ -30,7 +30,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -51,6 +50,7 @@ import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.render.renderer.ViewRenderer;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
@@ -62,7 +62,6 @@ import static org.mockito.Mockito.mock;
  */
 @RunWith(RobolectricTestRunner.class)
 //@RunWith(AndroidJUnit4.class)
-@Ignore("Mayor refactoring pending")
 public class UIImageRendererTest {
 
     ValueExpressionFactory exprFactory = ValueExpressionFactory.getInstance();
@@ -88,6 +87,7 @@ public class UIImageRendererTest {
         RenderingEnv env = createRenderingEnv();
         // create
         UIImage uiImg = new UIImage();
+        uiImg.setInputType(0);
         uiImg.setValueExpression(exprFactory.create(imgFile.getAbsolutePath()));
         View view = renderHelper.render(env, uiImg);
 
@@ -108,6 +108,7 @@ public class UIImageRendererTest {
         RenderingEnv env = createRenderingEnv();
         // create
         UIImage uiImg = new UIImage();
+        uiImg.setInputType(0);
         uiImg.setValueExpression(exprFactory.create("not_existing_image_path"));
         View view = renderHelper.render(env, uiImg);
 
@@ -128,6 +129,7 @@ public class UIImageRendererTest {
         RenderingEnv env = createRenderingEnv();
         // create
         UIImage uiImg = new UIImage();
+        uiImg.setInputType(0);
         uiImg.setValueExpression(null); // no image
         View view = renderHelper.render(env, uiImg);
 
@@ -151,6 +153,9 @@ public class UIImageRendererTest {
         env.setGlobalContext(ContextTestUtils.createGlobalContext());
         env.setAndroidContext(ctx);
 
+        Entity mockEntity = mock(Entity.class);
+        env.getWidgetContext().setEntity(mockEntity);
+
         FormActivity mockFormActivity = mock(FormActivity.class);
         env.setFormActivity(mockFormActivity);
         return env;
@@ -168,6 +173,7 @@ public class UIImageRendererTest {
 
         // create
         UIImage uiImg = new UIImage();
+        uiImg.setInputType(0);
         uiImg.setValueConverter("b64Image");
         uiImg.setValueExpression(exprFactory.create(encodedImage));
         View view = renderHelper.render(env, uiImg);
@@ -197,6 +203,7 @@ public class UIImageRendererTest {
         ByteArray bArray = new ByteArray(imgBytes);
 
         RenderingEnv env = createRenderingEnv();
+        env.getWidgetContext().setEntity(null);
 
         BasicContext entityContext = new BasicContext("entity");
         entityContext.put("imageProperty", bArray);
@@ -204,6 +211,7 @@ public class UIImageRendererTest {
 
         // create
         UIImage uiImg = new UIImage();
+        uiImg.setInputType(0);
         uiImg.setValueConverter("byteArrayImage");
         uiImg.setValueExpression(exprFactory.create("${entity.imageProperty}"));
         View view = renderHelper.render(env, uiImg);

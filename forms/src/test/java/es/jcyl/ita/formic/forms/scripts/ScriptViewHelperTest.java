@@ -15,14 +15,12 @@ package es.jcyl.ita.formic.forms.scripts;
  * limitations under the License.
  */
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.mini2Dx.collections.CollectionUtils;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
+
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
@@ -33,6 +31,9 @@ import es.jcyl.ita.formic.forms.utils.dummy.DummyWidgetContextHolder;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnvFactory;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)

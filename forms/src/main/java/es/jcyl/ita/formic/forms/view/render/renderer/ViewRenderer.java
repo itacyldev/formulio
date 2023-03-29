@@ -35,6 +35,8 @@ import es.jcyl.ita.formic.forms.components.EntityHolder;
 import es.jcyl.ita.formic.forms.components.UIComponent;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItem;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistItemProxy;
+import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItem;
+import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItemProxy;
 import es.jcyl.ita.formic.forms.components.view.UIView;
 import es.jcyl.ita.formic.forms.components.view.ViewWidget;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
@@ -47,14 +49,12 @@ import es.jcyl.ita.formic.forms.view.render.GroupRenderer;
 import es.jcyl.ita.formic.forms.view.render.Renderer;
 import es.jcyl.ita.formic.forms.view.render.RendererFactory;
 import es.jcyl.ita.formic.forms.view.render.ViewRendererEventHandler;
-import es.jcyl.ita.formic.forms.view.widget.ControllableWidget;
 import es.jcyl.ita.formic.forms.view.widget.DynamicWidget;
 import es.jcyl.ita.formic.forms.view.widget.EntityListProviderWidget;
 import es.jcyl.ita.formic.forms.view.widget.IWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContext;
-import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
 import es.jcyl.ita.formic.repo.Entity;
 
 /**
@@ -134,12 +134,16 @@ public class ViewRenderer {
                 if (groupView instanceof EntityListProviderWidget) {
                     // save the old entityContext
                     WidgetContext prev = env.getWidgetContext();
+
                     List<Entity> entities = ((EntityListProviderWidget) groupView).getEntities();
                     int iter = 0;
                     // TODO: FORMIC-249 Refactorizar viewRenderer
                     for (Entity entity : entities) {
                         // create an EntityContext to render each entity
                         onEntityContextChanged(entity);
+                        WidgetContext entityWidgetContext = new WidgetContext();
+                        env.setWidgetContext(entityWidgetContext);
+                        env.getWidgetContext().setEntity(entity);
                         UIComponent componentProxy = proxify(iter, component.getChildren()[0], entity);
                         Widget view = doRender(env, componentProxy, root, checkDeferred);
                         viewList.add(view);
@@ -167,7 +171,7 @@ public class ViewRenderer {
     }
 
     /**
-     * Creates a component proxy for curren elemnt
+     * Creates a component proxy for current element
      *
      * @param id
      * @param component
@@ -180,6 +184,11 @@ public class ViewRenderer {
             String cId = component.getId();
             // set component id to item-1,item-2, starting with 1
             return new UIDatalistItemProxy(cId + "-" + (id + 1), component, entity);
+        } else if (component instanceof UIImageGalleryItem) {
+            String cId = component.getId();
+            // set component id to item-1,item-2, starting with 1
+            return new
+                    UIImageGalleryItemProxy(cId + "-" + (id + 1), (UIImageGalleryItem) component, entity);
         } else {
             return component;
         }

@@ -54,7 +54,6 @@ import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
-import es.jcyl.ita.formic.forms.deploy.HotDeployer;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectImporter;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
@@ -443,12 +442,12 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
 
     private void importProject(Context context, String origin, String destination, String projectName, ProjectImporter projectImporter) {
         try {
-            HotDeployer deployer = App.getInstance().getDeployer();
-            deployer.stop();
+            //HotDeployer deployer = App.getInstance().getDeployer();
+            //deployer.stop();
             projectImporter.moveFiles2BackUp(context, projectName);
             projectImporter.extractFiles(context, origin, destination);
             launchActivity(context, projectName);
-            deployer.start();
+            //deployer.start();
         } catch (IOException e) {
             Toast.makeText(
                     this,
@@ -574,7 +573,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 text = currentContext.getString(R.string.project_opening_finish);
             }
             jobResultDialog.setText(text);
-            jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
 
         }
 
@@ -583,7 +581,6 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             jobResultDialog = new JobResultDialog(activity, false);
             jobResultDialog.show();
             jobResultDialog.setProgressTitle(activity.getString(R.string.project_opening));
-            jobResultDialog.getBackButton().setVisibility(View.GONE);
             jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
             jobResultDialog.setText(currentContext.getString(R.string.project_opening));
 

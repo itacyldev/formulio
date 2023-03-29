@@ -125,7 +125,6 @@
                 android:drawableLeft="@drawable/ic_action_picture"
                 android:drawableTint="?attr/onPrimaryColor"
                 android:background="@drawable/roundbutton"
-                android:visibility="invisible"
                 />
         </LinearLayout>
     </LinearLayout>

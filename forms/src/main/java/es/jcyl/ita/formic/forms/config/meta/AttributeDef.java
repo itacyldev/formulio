@@ -82,6 +82,9 @@ public class AttributeDef {
     // datatable, datalist
     public static final Attribute NUM_VISIBLE_ROWS = new Attribute("numVisibleRows", Integer.class);
 
+    // image gallery
+    public static final Attribute COLUMNS = new Attribute("columns", Integer.class);
+
     // card
     public static final Attribute TEMPLATE = new Attribute("template", true);
     public static final Attribute TITLE = new Attribute("title", true);

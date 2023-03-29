@@ -100,8 +100,8 @@ allprojects {
 //}
 
 ext {
-    versionCode = 56
-    versionName = '0.7.34'
+    versionCode = 58
+    versionName = '0.7.36'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 31
     targetSdkVersion = 31
@@ -113,7 +113,7 @@ ext {
     androidTestVersion= '1.2.0'
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.34'
+    version = '0.7.36'
     artifactId = 'Formic'
 
     sharedDeps = [
@@ -128,7 +128,7 @@ ext {
             "androidx.test.espresso:espresso-accessibility:${espressoVersion}",
             'org.robolectric:robolectric:4.2',
             'org.mini2Dx:android-beans:1.0.0',
-            'org.mockito:mockito-core:2.28.2',
+            'org.mockito:mockito-core:5.2.0',
             'org.hamcrest:hamcrest:2.2',
     ]
 }

@@ -40,6 +40,7 @@ proguard/
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/misc.xml
+/.idea/jarRepositories.xml
 
 .DS_Store
 /captures

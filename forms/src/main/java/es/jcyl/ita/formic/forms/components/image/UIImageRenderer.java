@@ -21,7 +21,10 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+
+import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -32,6 +35,8 @@ import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EntityMapping;
+import es.jcyl.ita.formic.repo.media.FileEntity;
+import es.jcyl.ita.formic.repo.media.FileRepository;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -104,7 +109,21 @@ public class UIImageRenderer extends InputRenderer<UIImage, ImageResourceView> {
         ImageResourceView inputView = widget.getInputView();
         UIImage component = widget.getComponent();
         Object value = getComponentValue(env, component, null);
+
         widget.getConverter().setViewValue(inputView, value);
+    }
+
+    @Override
+    protected <T> T getComponentValue(RenderingEnv env, UIImage component, @Nullable Class<T> clazz) {
+        Object value = component.getValue(env.getWidgetContext());
+        if (value == null) {
+            value = handleNullValue(component);
+        }
+        if (clazz == null) {
+            return (T) value;
+        } else {
+            return (T) ConvertUtils.convert(value, clazz);
+        }
     }
 
     @Override
