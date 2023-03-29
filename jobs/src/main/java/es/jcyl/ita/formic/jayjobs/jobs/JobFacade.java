@@ -25,6 +25,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.formic.core.jexl.JexlUtils;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
@@ -136,7 +137,10 @@ public class JobFacade {
         Map<String, Object> globalParams = jobConfig.getGlobalParams();
         BasicContext bc = new BasicContext("gparams");
         if (globalParams != null) {
-            bc.putAll(globalParams);
+            // evaluar expressiones
+            for(Map.Entry<String, Object> entry: globalParams.entrySet()){
+                bc.put(entry.getKey(), JexlUtils.eval(ctx, (String) entry.getValue()));
+            }
         }
         ctx.addContext(bc);
         // Add job context if it doesn't exists and register job execution id

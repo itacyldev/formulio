@@ -13,7 +13,7 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.ContextException;
 
 /**
- * Context Wrapper to give access to date and time basic funcions using context notation (date.now,
+ * Context Wrapper to give access to date and time basic functions using context notation (date.now,
  * date.now.1d, etc).
  *
  * @author Gustavo Rio (gustavo.rio@itacyl.es)

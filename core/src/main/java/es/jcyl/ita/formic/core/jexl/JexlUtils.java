@@ -26,6 +26,7 @@ import org.mini2Dx.beanutils.ConvertUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.jexl.JexlContextWrapper;
@@ -39,6 +40,7 @@ public class JexlUtils {
     static {
         Map<String, Object> aMap = new HashMap<String, Object>();
         aMap.put("math", Math.class);
+        aMap.put("random", RandomHelper.class);
         funcs = Collections.unmodifiableMap(aMap);
     }
 
