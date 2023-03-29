@@ -172,6 +172,7 @@ public class JobResultDialog extends Dialog{
         setText(activity.getString(R.string.process_finish));
         mProgressBar.setVisibility(View.GONE);
         progressConsole.setText(builder, TextView.BufferType.SPANNABLE);
+        closeButton.setVisibility(View.VISIBLE);
         showListResources();
 
     }
