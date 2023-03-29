@@ -367,7 +367,6 @@ public class DevConsoleActivity extends BaseActivity {
                 UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
             }
             jobResultDialog.endJob();
-            jobResultDialog.getCloseButton().setVisibility(View.VISIBLE);
         }
 
         @Override
