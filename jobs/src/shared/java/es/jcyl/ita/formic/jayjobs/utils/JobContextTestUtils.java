@@ -59,7 +59,7 @@ public class JobContextTestUtils {
         Context appContext = new BasicContext("app");
 
         // Create temporary folder under SO tmp
-        File tmpDir = TestUtils.createTempDirectory();
+        File tmpDir = new File(TestFileUtils.createTmpFolder());
         appContext.put("workingFolder", tmpDir.getAbsolutePath().replace("\\","/"));
         ctx.addContext(appContext);
 

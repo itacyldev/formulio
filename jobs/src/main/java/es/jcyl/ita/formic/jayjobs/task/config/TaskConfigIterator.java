@@ -94,7 +94,7 @@ public class TaskConfigIterator implements Iterator<Task> {
         String replaced;
 
         replaced = VarSubstitutor.replace(jsonStr, context);
-        if (Log.isDebugEnabled()) {
+        if (Log.isTraceEnabled()) {
             debugTaskInfo(jsonStr, replaced);
         }
         JsonNode jsonNode;
@@ -143,13 +143,13 @@ public class TaskConfigIterator implements Iterator<Task> {
 
 
     private void debugTaskInfo(String originalJson, String effectiveJson) {
-        Log.debug(String.format("=================== Task %s ===================\n", taskNum));
-        Log.debug(JsonUtils.pretty(originalJson));
-        Log.debug("------------------ Effective task ------------------");
-        Log.debug(JsonUtils.pretty(effectiveJson));
-        Log.debug("------------------ Context ------------------");
-        Log.debug("Context:\n" + ContextDebugger.getPrintableStr(context));
-        Log.debug(String.format("======================================\n", taskNum));
+        Log.trace(String.format("=================== Task %s ===================\n", taskNum));
+        Log.trace(JsonUtils.pretty(originalJson));
+        Log.trace("------------------ Effective task ------------------");
+        Log.trace(JsonUtils.pretty(effectiveJson));
+        Log.trace("------------------ Context ------------------");
+        Log.trace("Context:\n" + ContextDebugger.getPrintableStr(context));
+        Log.trace(String.format("======================================\n", taskNum));
     }
 
 }

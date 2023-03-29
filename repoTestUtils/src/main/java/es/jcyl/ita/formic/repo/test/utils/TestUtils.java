@@ -150,11 +150,6 @@ public class TestUtils {
             File resourceFile = getResourceAsFile(resourceName);
             File destFile = new File(folder, FilenameUtils.getName(resourceName));
             FileUtils.copyFile(resourceFile, destFile);
-//            FileUtils.copyFileToDirectory(resourceFile, folder);
-//            // rename the file to keep the original fileName
-//            String fileName = FilenameUtils.getName(resourceName);
-//            File newFile = new File(folder, resourceFile.getName());
-//            newFile.renameTo(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

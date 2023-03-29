@@ -46,6 +46,10 @@ public class Log {
         level = l;
     }
 
+    public static boolean isTraceEnabled() {
+        return level >= android.util.Log.VERBOSE;
+    }
+
     public static boolean isDebugEnabled() {
         return level >= android.util.Log.DEBUG;
     }
@@ -58,7 +62,11 @@ public class Log {
         return level >= android.util.Log.WARN;
     }
 
-
+    public static void trace(String msg) {
+        if (level <= android.util.Log.VERBOSE) {
+            logger.trace(msg);
+        }
+    }
     public static void debug(String msg) {
         if (level <= android.util.Log.DEBUG) {
             logger.debug(msg);
