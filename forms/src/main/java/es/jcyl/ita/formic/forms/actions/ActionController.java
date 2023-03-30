@@ -54,6 +54,8 @@ public class ActionController {
     private final Router router;
     private UserAction currentAction;
 
+    private ActionResume resumableAction;
+
     public ActionController(MainController mc, Router router) {
         this.mc = mc;
         this.router = router;
@@ -89,7 +91,7 @@ public class ActionController {
             ActionContext actionContext = new ActionContext(mc.getViewController(),
                     mc.getRenderingEnv().getAndroidContext());
             if (action instanceof UserCompositeAction) {
-                doExecAction(actionContext, (UserCompositeAction) action);
+                doExecAction(actionContext, (UserCompositeAction) action, 0);
             } else {
                 doExecAction(actionContext, action);
             }
@@ -109,19 +111,52 @@ public class ActionController {
      * @param actionContext
      * @param action
      */
-    private void doExecAction(ActionContext actionContext, UserCompositeAction action) {
+    private void doExecAction(ActionContext actionContext, UserCompositeAction action, int starting) {
         UserAction[] subActions = action.getActions();
         int i = 0;
         for (UserAction sbAction : subActions) {
+            if (i < starting) {
+                i++;
+                continue;
+            }
             // navigate just in last action
             boolean doNavigate = i == subActions.length - 1;
             try {
                 doExecAction(actionContext, sbAction, doNavigate, true);
-            } catch (StopCompositeActionException e){
+                if (sbAction.isStopFlowControl()) {
+                    // the actions needs user interaction or runs in a separate process, set as
+                    // resumable and end current execution
+                    registerResumableAction(actionContext, action, i + 1);
+                    break;
+                }
+            } catch (StopCompositeActionException e) {
                 break;
             }
             i++;
         }
+    }
+
+    private void registerResumableAction(ActionContext actionContext, UserCompositeAction action, int i) {
+        this.resumableAction = new ActionResume(actionContext, action, i);
+    }
+
+    /**
+     * Resumes current action
+     */
+    public void resumeAction() {
+        if (this.resumableAction == null) {
+            return;
+        }
+        try {
+            doExecAction(resumableAction.actionContext, resumableAction.action, resumableAction.pos);
+        } catch (Throwable e) {
+            String msg = App.getInstance().getStringResource(R.string.action_generic_error);
+            error(msg, e);
+            mc.renderBack();
+            // show error message
+            UserMessagesHelper.toast(mc.getRenderingEnv().getAndroidContext(), msg);
+        }
+        this.resumableAction = null;
     }
 
     private void doExecAction(ActionContext actionContext, UserAction action) {
@@ -162,7 +197,7 @@ public class ActionController {
         } catch (UserActionException | ValidatorException e) {
             mc.renderBack();
             handler.onError(actionContext, action, e);
-            if(rethrow){
+            if (rethrow) {
                 throw new StopCompositeActionException(e);
             }
         }
@@ -231,6 +266,18 @@ public class ActionController {
 
     public void clear() {
         this.currentAction = null;
+    }
+
+    public class ActionResume {
+        int pos;
+        UserCompositeAction action;
+        ActionContext actionContext;
+
+        public ActionResume(ActionContext actionContext, UserCompositeAction action, int pos) {
+            this.actionContext = actionContext;
+            this.action = action;
+            this.pos = pos;
+        }
     }
 }
 

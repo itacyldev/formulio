@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,6 @@ import java.util.concurrent.Executors;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.formic.core.jexl.JexlUtils;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
@@ -53,7 +54,7 @@ public class JobFacade {
 
     private JobConfigRepo jobConfigRepo;
     private JobExecRepo jobExecRepo = JobExecInMemo.getInstance(); // Noop
-    private JobExecListener listener = new NopJobListener();
+    private List<JobExecListener> listeners;
 
     // static resources
     private static String cacheFolder;
@@ -65,6 +66,7 @@ public class JobFacade {
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         runners.put(JobExecutionMode.FG_ASYNC, new ConcurrentJobRunner(executorService));
         jobConfigRepo = new JobConfigRepo();
+        this.setListener(new NopJobListener());
     }
 
     public JobConfig getJobConfig(CompositeContext ctx, String jobType) throws JobConfigException {
@@ -107,8 +109,8 @@ public class JobFacade {
         // configure listener
         AggregatedJobListener jobListener = new AggregatedJobListener();
         jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo()));
-        if (this.listener != null) {
-            jobListener.addListener(this.listener);
+        if (this.listeners != null) {
+            jobListener.addListeners(this.listeners);
         }
         runner.setListener(jobListener);
 
@@ -138,7 +140,7 @@ public class JobFacade {
         BasicContext bc = new BasicContext("gparams");
         if (globalParams != null) {
             // evaluar expressiones
-            for(Map.Entry<String, Object> entry: globalParams.entrySet()){
+            for (Map.Entry<String, Object> entry : globalParams.entrySet()) {
                 bc.put(entry.getKey(), JexlUtils.eval(ctx, (String) entry.getValue()));
             }
         }
@@ -186,9 +188,18 @@ public class JobFacade {
         return jobExecRepo.getResources(jobExecId);
     }
 
-    public void setListener(JobExecListener listener) {
-        if (listener != null) {
-            this.listener = listener;
+    public void addListener(JobExecListener listener){
+        if(!this.listeners.contains(listener)){
+            this.listeners.add(listener);
         }
+    }
+
+    public void removeListener(JobExecListener listener){
+        this.listeners.remove(listener);
+    }
+
+    public void setListener(JobExecListener listener) {
+        this.listeners = new ArrayList<>();
+        this.listeners.add(listener);
     }
 }

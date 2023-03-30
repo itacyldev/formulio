@@ -19,7 +19,8 @@ package es.jcyl.ita.formic.forms.actions.handlers;
 
 import static es.jcyl.ita.formic.forms.config.DevConsole.error;
 
-import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.Map;
 
@@ -29,12 +30,17 @@ import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
 import es.jcyl.ita.formic.forms.actions.ActionContext;
+import es.jcyl.ita.formic.forms.actions.ActionController;
 import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionException;
-import es.jcyl.ita.formic.forms.actions.handlers.AbstractActionHandler;
 import es.jcyl.ita.formic.forms.router.Router;
+import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
+import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
+import es.jcyl.ita.formic.jayjobs.task.models.Task;
 
 /**
  * Action handler to execute jobs.
@@ -59,14 +65,18 @@ public class JobActionHandler extends AbstractActionHandler {
 
         // clone context and add parameter context
         CompositeContext ctx = prepareContext(action.getParams());
+        JobFacade jobFacade = App.getInstance().getJobFacade();
+        JobActionResumeListener actionListener = new JobActionResumeListener(mc.getActionController(),
+                actionContext, action);
         try {
-            JobFacade jobFacade = App.getInstance().getJobFacade();
-            Long jobExecId = jobFacade.executeJob(ctx, jobId);
-//            List<String> resources = jobFacade.getResources(jobExecId);
-//            Log.info("Received: " + resources);
+            action.setStopFlowControl(true);
+            jobFacade.addListener(actionListener);
+            jobFacade.executeJob(ctx, jobId);
         } catch (JobException e) {
             throw new UserActionException(error(String.format("An error occurred while executing " +
                     "the job [%s].", jobId), e));
+        } finally {
+            jobFacade.removeListener(actionListener);
         }
     }
 
@@ -79,13 +89,65 @@ public class JobActionHandler extends AbstractActionHandler {
         }
         // create execution context linking params and globalContext
         CompositeContext execContext = new UnPrefixedCompositeContext();
-        CompositeContext globalCtx= App.getInstance().getGlobalContext();
-        if(globalCtx.hasContext("params")){
+        CompositeContext globalCtx = App.getInstance().getGlobalContext();
+        if (globalCtx.hasContext("params")) {
             globalCtx.getContext("params").putAll(paramContext);
-        }else{
+        } else {
             execContext.addContext(paramContext);
         }
         execContext.addContext(App.getInstance().getGlobalContext());
         return execContext;
+    }
+
+    public class JobActionResumeListener implements JobExecListener {
+        private final ActionController actionController;
+        private final UserAction action;
+        private final Handler handler;
+        private final ActionContext actionContext;
+
+        public JobActionResumeListener(ActionController actionController, ActionContext actionContext, UserAction action) {
+            this.actionController = actionController;
+            this.actionContext = actionContext;
+            this.action = action;
+            this.handler = new Handler(Looper.getMainLooper());
+        }
+
+        @Override
+        public void onJobStart(CompositeContext ctx, JobConfig job, long jobId, JobExecRepo jobExecRepo) {
+        }
+
+        @Override
+        public void onJobEnd(JobConfig job, long jobId, JobExecRepo jobExecRepo) {
+            handler.post(() -> {
+                actionController.resumeAction();
+            });
+        }
+
+        @Override
+        public void onJobError(JobConfig job, long jobId, JobExecRepo jobExecRepo) {
+            handler.post(() -> {
+                UserMessagesHelper.toast(actionContext.getViewContext(), "An error occurred during job execution");
+            });
+        }
+
+        @Override
+        public void onTaskStart(Task task) {
+        }
+
+        @Override
+        public void onTaskError(Task task, String message, Throwable t) {
+        }
+
+        @Override
+        public void onTaskEnd(Task task) {
+        }
+
+        @Override
+        public void onProgressUpdate(Task task, int total, float progress, String units) {
+        }
+
+        @Override
+        public void onMessage(Task task, String message) {
+        }
     }
 }

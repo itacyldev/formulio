@@ -42,6 +42,8 @@ public class UserAction {
     private UIComponent component;
     private Widget widget;
 
+    private boolean stopFlowControl = false;
+
     private ViewController origin;
 
     UserAction(String actionType) {
@@ -199,5 +201,13 @@ public class UserAction {
      */
     public boolean isRefreshSet() {
         return StringUtils.isNotBlank(this.refresh);
+    }
+
+    public boolean isStopFlowControl() {
+        return stopFlowControl;
+    }
+
+    public void setStopFlowControl(boolean stopFlowControl) {
+        this.stopFlowControl = stopFlowControl;
     }
 }

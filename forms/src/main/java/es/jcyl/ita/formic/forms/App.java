@@ -18,23 +18,16 @@ package es.jcyl.ita.formic.forms;
 import android.content.Context;
 import android.content.res.Resources;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
 import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.ConfigurationException;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.context.ContextProvider;
-import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
-import es.jcyl.ita.formic.forms.context.impl.RepoAccessContext;
 import es.jcyl.ita.formic.forms.controllers.ViewControllerFactory;
 import es.jcyl.ita.formic.forms.deploy.HotDeployer;
 import es.jcyl.ita.formic.forms.jobs.reader.RepoReader;
-import es.jcyl.ita.formic.forms.location.LocationService;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectManager;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;

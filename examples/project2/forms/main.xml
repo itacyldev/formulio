@@ -9,7 +9,7 @@
                 <action registerInHistory="false" type="job">
                     <param name="jobId" value="cartodruid_sync_job_cmd" />
                 </action>
-                <nav route="form7-list"/>
+                <nav route="form7-list1"/>
             </action>
         </button>
         <input id="myInput" value="you are in view 1" />
