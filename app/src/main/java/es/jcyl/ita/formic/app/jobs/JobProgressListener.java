@@ -18,6 +18,8 @@ package es.jcyl.ita.formic.app.jobs;
 import android.content.Context;
 import android.content.Intent;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
@@ -59,16 +61,11 @@ public class JobProgressListener implements JobExecListener, Serializable {
 
         // open activity
         if (showProgress) {
-            es.jcyl.ita.formic.core.context.Context paramsContext =  ctx.getContext("params");
-            Context  parentContext = (Context) paramsContext.get("parentContext");
+            es.jcyl.ita.formic.core.context.Context paramsContext = ctx.getContext("params");
+            Context parentContext = (Context) paramsContext.get("parentContext");
             launchProgressActivity(parentContext);
         }
-
-        try {
-            jobExecRepo.registerExecInit(job, JobExecutionMode.FG);
-        } catch (JobException ex) {
-            Log.error(String.format("An error occurred during execution of job [%s]", job.getId()));
-        }
+        jobExecRepo.registerExecInit(job, JobExecutionMode.FG);
     }
 
     private void launchProgressActivity(Context andContext) {
@@ -83,41 +80,32 @@ public class JobProgressListener implements JobExecListener, Serializable {
 
     @Override
     public void onJobEnd(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
-        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
-        status.setState(JobExecutionState.FINISHED);
-        status.setMessage(String.format("Job %s has finished!", job.getId()));
-        jobExecRepo.updateJobStatus(status);
+        jobExecRepo.updateState(jobExecId, JobExecutionState.FINISHED,
+                String.format("Job %s has finished!", job.getId()));
     }
 
     @Override
     public void onJobError(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
-        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
-        status.setState(JobExecutionState.FINISHED);
-        status.setMessage(String.format("An error occurred on Job  %s execution!", job.getId()));
-        jobExecRepo.updateJobStatus(status);
+        jobExecRepo.updateState(jobExecId, JobExecutionState.ERROR,
+                String.format("An error occurred on Job  %s execution!", job.getId()));
     }
 
     @Override
     public void onTaskStart(Task task) {
-        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
-        status.setState(JobExecutionState.EXECUTING);
-        status.setMessage(String.format("Task %s has started", task.getName()));
-        jobExecRepo.updateJobStatus(status);
+        jobExecRepo.updateState(jobExecId, JobExecutionState.EXECUTING);
     }
 
     @Override
     public void onTaskError(Task task, String message, Throwable t) {
-        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
-        status.setMessage(String.format("Task %s has an error", task.getName()));
-        status.setState(JobExecutionState.ERROR);
-        jobExecRepo.updateJobStatus(status);
+        jobExecRepo.updateState(jobExecId, JobExecutionState.ERROR,
+                String.format("Task %s has an error", task.getName()));
     }
 
     @Override
     public void onTaskEnd(Task task) {
-        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
-        status.setMessage(String.format("Task %s has finished", task.getName()));
-        jobExecRepo.updateJobStatus(status);
+        String msg = (task.getDescription() != null) ? task.getDescription() :
+                String.format("Task %s has finished", task.getName());
+        jobExecRepo.addMessage(jobExecId, msg);
     }
 
     @Override
@@ -126,10 +114,6 @@ public class JobProgressListener implements JobExecListener, Serializable {
 
     @Override
     public void onMessage(Task task, String message) {
-        JobExecStatus status = jobExecRepo.getJobStatus(jobExecId);
-        status.setMessage(message);
-        jobExecRepo.updateJobStatus(status);
+        jobExecRepo.addMessage(jobExecId, message);
     }
-
-
 }

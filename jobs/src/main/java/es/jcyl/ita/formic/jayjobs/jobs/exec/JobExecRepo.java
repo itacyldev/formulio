@@ -34,9 +34,7 @@ public interface JobExecRepo {
      * @param execMode
      * @return
      */
-    JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode) throws JobException;
-
-    void updateState(Long jobExecId, JobExecutionState state, String message) throws JobException;
+    JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode);
 
     /**
      * Publishes a list of resources related to the referenced jobExecId.
@@ -44,7 +42,7 @@ public interface JobExecRepo {
      * @param jobExecId
      * @param resources
      */
-    void publishResources(Long jobExecId, List<JobResource> resources) throws JobException;
+    void publishResources(Long jobExecId, List<JobResource> resources);
 
     /**
      * Adds a resources to the list of published resources of the job execution.
@@ -52,13 +50,17 @@ public interface JobExecRepo {
      * @param jobExecId
      * @param resource
      */
-    void publishResource(Long jobExecId, JobResource resource) throws JobException;
+    void publishResource(Long jobExecId, JobResource resource);
 
-    List<JobResource> getResources(Long jobExecId) throws JobException;
+    List<JobResource> getResources(Long jobExecId);
 
     JobExecStatus getJobStatus(Long jobExecId);
 
-    void updateJobStatus(JobExecStatus jobStatus);
+    void updateState(Long jobExecId, JobExecutionState state);
+
+    void updateState(Long jobExecId, JobExecutionState state, String message);
+
+    void addMessage(Long jobExecId, String message);
 
     List<String> getMessages(Long jobExecId);
 }

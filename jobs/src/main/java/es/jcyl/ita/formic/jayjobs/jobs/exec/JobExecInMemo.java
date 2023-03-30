@@ -15,6 +15,9 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
+import org.mini2Dx.collections.CollectionUtils;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,8 +57,7 @@ public class JobExecInMemo extends AbstractJobExecRepo {
     }
 
     @Override
-    public JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode)
-            throws JobException {
+    public JobExecStatus registerExecInit(JobConfig job, JobExecutionMode execMode) {
         // create execution record using job config
         JobExecStatus execution = new JobExecStatus();
         execution.setJobId(job.getId());
@@ -74,28 +76,34 @@ public class JobExecInMemo extends AbstractJobExecRepo {
     }
 
     @Override
-    public void updateState(Long jobExecId, JobExecutionState state, String message) throws JobException {
-        JobExecStatus jobExec = executions.get(jobExecId);
-        if (jobExec == null) {
-            throw new JobException("Job execution id not found: " + jobExecId);
-        }
-        jobExec.setState(state);
-        jobExec.setMessage(message);
-        addMessage(jobExecId, message);
-        jobExec.setLastTimeUpdated(new Date());
+    public void updateState(Long jobExecId, JobExecutionState state) {
+        updateState(jobExecId, state, null);
     }
 
     @Override
-    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException {
+    public void updateState(Long jobExecId, JobExecutionState state, String message)  {
         JobExecStatus jobExec = executions.get(jobExecId);
         if (jobExec == null) {
-            throw new JobException("Job execution id not found: " + jobExecId);
+            throw new IllegalArgumentException("Job execution id not found: " + jobExecId);
+        }
+        jobExec.setState(state);
+        jobExec.setLastTimeUpdated(new Date());
+        if (message != null) {
+            addMessage(jobExecId, message);
+        }
+    }
+
+    @Override
+    public void publishResources(Long jobExecId, List<JobResource> resources)  {
+        JobExecStatus jobExec = executions.get(jobExecId);
+        if (jobExec == null) {
+            throw new IllegalArgumentException("Job execution id not found: " + jobExecId);
         }
         jobExec.setResources(resources);
     }
 
     @Override
-    public void publishResource(Long jobExecId, JobResource resource) throws JobException {
+    public void publishResource(Long jobExecId, JobResource resource) {
         publishResources(jobExecId, Collections.singletonList(resource));
     }
 
@@ -114,14 +122,12 @@ public class JobExecInMemo extends AbstractJobExecRepo {
             status = new JobExecStatus();
             status.setState(JobExecutionState.NOT_INITIALIZED);
         }
+        // set last message in job state
+        List<String> messages = this.getMessages(jobExecId);
+        if (CollectionUtils.isNotEmpty(messages)) {
+            status.setMessage(messages.get(messages.size() - 1));
+        }
         return status;
-    }
-
-    @Override
-    public void updateJobStatus(JobExecStatus jobStatus) {
-        jobStatus.setLastTimeUpdated(new Date());
-        executions.put(jobStatus.getId(), jobStatus);
-        addMessage(jobStatus.getId(), jobStatus.getMessage());
     }
 
     public CompositeContext getCtx() {

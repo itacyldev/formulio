@@ -1,5 +1,5 @@
 {
-  "description": "crtdrd syncronization",
+  "description": "Sincronización de tareas",
   "globalParams": {
     "endpoint": "https://serviciosprex.itacyl.es/crtchk10/cnt/rest/syncro/",
     "wksId": "testsyn",
@@ -45,6 +45,7 @@
       "tasks": [
         {
           "name": "t2",
+          "description": "Checking synchronization state",
           "processor": {
             "type": "httpRequestProcessor",
             "method": "get",
@@ -98,16 +99,6 @@
           "password": "${gparams.wksPwd}"
         },
         "body": "{}"
-      }
-    },
-    {
-      "name": "t6",
-      "description": "Unzipping downloaded database file",
-      "processor": {
-        "type": "unzipProcessor",
-        "inputFile": "${t4.outputFile}",
-        "mkdir": true,
-        "outputFolder": "${project.dataFolder}"
       }
     },
     {

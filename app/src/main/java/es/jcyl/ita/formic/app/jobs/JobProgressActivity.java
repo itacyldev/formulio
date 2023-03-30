@@ -93,17 +93,12 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     private void publishResources() {
-        try {
-            List<JobResource> resources = jobExecRepo.getResources(jobId);
-            if (resources != null) {
-                for (JobResource resource : resources) {
-                    String resourcePath = resource.getResourcePath();
-                    addResource(resourcePath);
-                }
+        List<JobResource> resources = jobExecRepo.getResources(jobId);
+        if (resources != null) {
+            for (JobResource resource : resources) {
+                String resourcePath = resource.getResourcePath();
+                addResource(resourcePath);
             }
-        } catch (JobException e) {
-            UserMessagesHelper.toast(this,
-                    DevConsole.error(this.getString(R.string.job_error_publishing),e), Toast.LENGTH_LONG);
         }
     }
 

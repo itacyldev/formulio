@@ -32,6 +32,8 @@ public interface Task {
 
     String getName();
 
+    String getDescription();
+
     void setName(String name);
 
     void setGlobalContext(CompositeContext ctx);

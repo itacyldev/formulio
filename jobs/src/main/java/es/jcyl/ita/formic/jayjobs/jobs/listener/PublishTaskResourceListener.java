@@ -52,16 +52,11 @@ public class PublishTaskResourceListener implements JobExecListener {
     @Override
     public void onTaskEnd(Task task) {
         Long jobExecId = ContextAccessor.jobExecId(task.getGlobalContext());
-        try {
-            // publish task outputFiles and add to the job execution published resources
-            if (task.getTaskContext().containsKey("outputFile")) {
-                JobResource resource = new JobResource();
-                resource.setResourcePath(task.getTaskContext().getString("outputFile"));
-                repo.publishResource(jobExecId, resource);
-            }
-        } catch (JobException e) {
-            throw new JobRuntimeException("There was an error while trying to publish the resources for " +
-                    "job execution " + jobExecId);
+        // publish task outputFiles and add to the job execution published resources
+        if (task.getTaskContext().containsKey("outputFile")) {
+            JobResource resource = new JobResource();
+            resource.setResourcePath(task.getTaskContext().getString("outputFile"));
+            repo.publishResource(jobExecId, resource);
         }
     }
 
@@ -75,32 +70,17 @@ public class PublishTaskResourceListener implements JobExecListener {
 
     @Override
     public void onJobStart(CompositeContext ctx, JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
-        try {
-            repo.updateState(jobExecId, JobExecutionState.EXECUTING, "Job Started");
-        } catch (JobException e) {
-            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + job.getId(),
-                    JobExecutionState.EXECUTING), e);
-        }
+        repo.updateState(jobExecId, JobExecutionState.EXECUTING, "Job Started");
     }
 
     @Override
     public void onJobEnd(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
-        try {
-            repo.updateState(jobExecId, JobExecutionState.FINISHED, "Job Finished");
-        } catch (JobException e) {
-            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + job.getId(),
-                    JobExecutionState.FINISHED), e);
-        }
+        repo.updateState(jobExecId, JobExecutionState.FINISHED, "Job Finished");
     }
 
     @Override
     public void onJobError(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
-        try {
-            repo.updateState(jobExecId, JobExecutionState.ERROR, "Job Error");
-        } catch (JobException e) {
-            Log.error(String.format("Error while trying to update job state: [%s] to [%s]" + job.getId(),
-                    JobExecutionState.ERROR), e);
-        }
+        repo.updateState(jobExecId, JobExecutionState.ERROR, "Job Error");
     }
 
 }

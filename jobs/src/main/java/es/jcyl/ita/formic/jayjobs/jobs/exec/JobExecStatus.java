@@ -54,6 +54,12 @@ public class JobExecStatus {
      */
     private String context;
 
+    public JobExecStatus(){}
+    public JobExecStatus(Long execId, JobExecutionState state){
+        this.id = execId;
+        this.state = state;
+    }
+
     public Long getId() {
         return id;
     }

@@ -153,7 +153,7 @@ public class JobResultDialog extends Dialog{
     }
 
     public void setProgressTitle(String title){
-        progressTitle.setText(StringUtils.upperCase(title));
+        progressTitle.setText(title);
     }
 
     public void setConsoleText(String message){

@@ -1,11 +1,15 @@
 <main>
     <view name="My">
         <button label="jsAction">
-            <action type="js" method="vh.setWidgetValue('myInput',123.5);console.log(vh.widget('myInput'))"/>
+            <action method="vh.setWidgetValue('myInput',123.5);console.log(vh.widget('myInput'))"
+                type="js" />
         </button>
         <button label="run Job">
-            <action registerInHistory="false" type="job">
-                <param name="jobId" value="cartodruid_sync_job_cmd" />
+            <action>
+                <action registerInHistory="false" type="job">
+                    <param name="jobId" value="cartodruid_sync_job_cmd" />
+                </action>
+                <nav route="form7-list"/>
             </action>
         </button>
         <input id="myInput" value="you are in view 1" />

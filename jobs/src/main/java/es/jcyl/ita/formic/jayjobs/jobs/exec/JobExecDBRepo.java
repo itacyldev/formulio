@@ -58,22 +58,17 @@ public class JobExecDBRepo extends AbstractJobExecRepo {
     }
 
     @Override
-    public void updateState(Long jobExecId, JobExecutionState state, String message) throws JobException {
+    public void publishResources(Long jobExecId, List<JobResource> resources) {
 
     }
 
     @Override
-    public void publishResources(Long jobExecId, List<JobResource> resources) throws JobException {
+    public void publishResource(Long jobExecId, JobResource resource) {
 
     }
 
     @Override
-    public void publishResource(Long jobExecId, JobResource resource) throws JobException {
-
-    }
-
-    @Override
-    public List<JobResource> getResources(Long jobExecId) throws JobException {
+    public List<JobResource> getResources(Long jobExecId) {
         return null;
     }
 
@@ -83,7 +78,14 @@ public class JobExecDBRepo extends AbstractJobExecRepo {
     }
 
     @Override
-    public void updateJobStatus(JobExecStatus jobStatus) {
+    public void updateState(Long jobExecId, JobExecutionState state) {
 
     }
+
+    @Override
+    public void updateState(Long jobExecId, JobExecutionState state, String message) {
+
+    }
+
+
 }
