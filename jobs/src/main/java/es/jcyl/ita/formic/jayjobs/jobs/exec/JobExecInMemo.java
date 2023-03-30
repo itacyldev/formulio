@@ -15,7 +15,6 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.collections.CollectionUtils;
 
 import java.util.Collections;
@@ -26,7 +25,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 

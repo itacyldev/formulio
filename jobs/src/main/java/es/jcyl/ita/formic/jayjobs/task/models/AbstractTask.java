@@ -120,4 +120,8 @@ public class AbstractTask implements Task {
         this.listener = listener;
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "id=" + id + ", name='" + name;
+    }
 }

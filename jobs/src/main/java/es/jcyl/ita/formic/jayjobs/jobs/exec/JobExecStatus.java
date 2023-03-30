@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
 import java.util.Date;
 import java.util.List;
 
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 

@@ -114,6 +114,15 @@
       }
     },
     {
+      "name": "t7",
+      "description": "Publishing database file",
+      "processor": {
+        "type": "ContextPopulateProcessor",
+        "name": "outputFile",
+        "value": "${project.dataFolder}/testsyn.sqlite"
+      }
+    },
+    {
       "name": "t99",
       "processor": {
         "type": "ContextDebugProcessor",

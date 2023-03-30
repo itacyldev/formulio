@@ -1,7 +1,6 @@
-package es.jcyl.ita.formic.jayjobs.jobs.exec;
-
+package es.jcyl.ita.formic.jayjobs.jobs.config;
 /*
- * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +14,10 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class JobResource {
 
-    private long jobId;
-    private String resourcePath;
-
-    public long getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(long jobId) {
-        this.jobId = jobId;
-    }
-
-    public String getResourcePath() {
-        return resourcePath;
-    }
-
-    public void setResourcePath(String resourcePath) {
-        this.resourcePath = resourcePath;
-    }
+/**
+ * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
+ */
+public interface JobResourceFilter {
+  boolean accept(String resourceId, String path);
 }

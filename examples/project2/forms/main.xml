@@ -8,8 +8,12 @@
             <action>
                 <action registerInHistory="false" type="job">
                     <param name="jobId" value="cartodruid_sync_job_cmd" />
+                    <param name="resourceFilter" value="none"/>
+                    <!--
+                    <param name="resourceFilter" value="t7.outputFile"/>
+                    -->
                 </action>
-                <nav route="form7-list1"/>
+                <nav refresh="all"/>
             </action>
         </button>
         <input id="myInput" value="you are in view 1" />

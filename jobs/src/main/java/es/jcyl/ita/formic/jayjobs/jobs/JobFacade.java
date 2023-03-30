@@ -16,7 +16,6 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  */
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.exec.ConcurrentJobRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.MainThreadRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener;
@@ -105,10 +104,9 @@ public class JobFacade {
         checkContexts(ctx, job, jobExecutionInfo);
 
         JobRunner runner = getJobRunner(job, execMode);
-
         // configure listener
         AggregatedJobListener jobListener = new AggregatedJobListener();
-        jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo()));
+        jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo(), job.getFilter()));
         if (this.listeners != null) {
             jobListener.addListeners(this.listeners);
         }
@@ -188,13 +186,13 @@ public class JobFacade {
         return jobExecRepo.getResources(jobExecId);
     }
 
-    public void addListener(JobExecListener listener){
-        if(!this.listeners.contains(listener)){
+    public void addListener(JobExecListener listener) {
+        if (!this.listeners.contains(listener)) {
             this.listeners.add(listener);
         }
     }
 
-    public void removeListener(JobExecListener listener){
+    public void removeListener(JobExecListener listener) {
         this.listeners.remove(listener);
     }
 

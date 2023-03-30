@@ -19,14 +19,12 @@ package es.jcyl.ita.formic.jayjobs.jobs.listener;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResourceFilter;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
-import util.Log;
 
 /**
  * Task listener that uses a JobExecution repositorio to persist task execution
@@ -35,10 +33,12 @@ import util.Log;
  */
 public class PublishTaskResourceListener implements JobExecListener {
 
+    private final JobResourceFilter filter;
     private JobExecRepo repo;
 
-    public PublishTaskResourceListener(JobExecRepo execRepo) {
+    public PublishTaskResourceListener(JobExecRepo execRepo, JobResourceFilter filter) {
         this.repo = execRepo;
+        this.filter = filter;
     }
 
     @Override
@@ -54,9 +54,14 @@ public class PublishTaskResourceListener implements JobExecListener {
         Long jobExecId = ContextAccessor.jobExecId(task.getGlobalContext());
         // publish task outputFiles and add to the job execution published resources
         if (task.getTaskContext().containsKey("outputFile")) {
-            JobResource resource = new JobResource();
-            resource.setResourcePath(task.getTaskContext().getString("outputFile"));
-            repo.publishResource(jobExecId, resource);
+            String resourceId = String.format("%s.outputFile", task.getTaskContext().getPrefix());
+            String path = task.getTaskContext().getString("outputFile");
+            JobResource resource = new JobResource(jobExecId, resourceId, path);
+            // check if the task result has to be published. By default all resources al published
+            boolean publish = (this.filter == null || this.filter.accept(resourceId, path));
+            if (publish) {
+                repo.publishResource(jobExecId, resource);
+            }
         }
     }
 
@@ -82,5 +87,4 @@ public class PublishTaskResourceListener implements JobExecListener {
     public void onJobError(JobConfig job, long jobExecId, JobExecRepo jobExecRepo) {
         repo.updateState(jobExecId, JobExecutionState.ERROR, "Job Error");
     }
-
 }
