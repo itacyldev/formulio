@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
 
 def globalConf = rootProject.ext
 
@@ -36,7 +37,7 @@ android {
     sourceSets {
         String sharedTestJavaDir = 'src/shared/java'
         androidTest {
-            java.srcDirs += [sharedTestJavaDir]
+            //java.srcDirs += [sharedTestJavaDir]
             resources.srcDirs += ['src/test/resources']
         }
         test {
@@ -68,10 +69,10 @@ dependencies {
     api project(':core')
     api project(':repo')
 
-    api 'org.mini2Dx:android-beans:1.0.0'
     api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     api 'commons-io:commons-io:2.6'
     api('com.opencsv:opencsv:5.2') {
+        //noinspection DuplicatePlatformClasses
         exclude group: 'commons-logging', module: '*'
     }
 
@@ -133,8 +134,8 @@ dependencies {
 publishing {
     repositories {
         maven {
-            def releasesRepoUrl = "http://servicios.itacyl.es/nexus/repository/internal/"
-            def snapshotsRepoUrl = "http://servicios.itacyl.es/nexus/repository/snapshots/"
+            def releasesRepoUrl = "https://servicios.itacyl.es/nexus/repository/internal/"
+            def snapshotsRepoUrl = "https://servicios.itacyl.es/nexus/repository/snapshots/"
             url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
                 username = mavenUser

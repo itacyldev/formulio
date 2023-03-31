@@ -20,14 +20,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
-import util.Log;
 
 /**
  * Listener to collect Job execution status updates
@@ -35,6 +38,8 @@ import util.Log;
  * @autor Javier Ramos (javier.ramos@itacyl.es)
  */
 public class JobExecStatusListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DevConsole.class);
+
     private JobProgressActivity activity;
     private JobExecRepo jobExecRepo;
     private final long jobExecId;
@@ -64,7 +69,7 @@ public class JobExecStatusListener {
                 publishMessages(status);
 
                 try {
-                    Log.debug("Waiting...");
+                    LOGGER.debug("Waiting...");
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -89,7 +94,7 @@ public class JobExecStatusListener {
 
         while (messages.size() > 0) {
             String msg = messages.remove(0);
-            Log.debug("Updating Message to: " + status.getMessage());
+            LOGGER.debug("Updating Message to: " + status.getMessage());
             Message childThreadMessage = new Message();
             childThreadMessage.what = MSG_CODE;
             Bundle msgData = new Bundle();

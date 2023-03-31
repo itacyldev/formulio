@@ -10,7 +10,7 @@
                     <param name="jobId" value="cartodruid_sync_job_cmd" />
                     <param name="resourceFilter" value="none"/>
                     <!--
-                    <param name="resourceFilter" value="t7.outputFile"/>
+                    <param name="resourceFilter" value="${t7.outputFile"/>
                     -->
                 </action>
                 <nav refresh="all"/>

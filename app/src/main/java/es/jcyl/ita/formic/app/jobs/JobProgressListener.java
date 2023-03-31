@@ -18,21 +18,16 @@ package es.jcyl.ita.formic.app.jobs;
 import android.content.Context;
 import android.content.Intent;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import util.Log;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)

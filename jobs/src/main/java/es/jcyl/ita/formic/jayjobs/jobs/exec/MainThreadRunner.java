@@ -15,11 +15,13 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * limitations under the License.
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
-import util.Log;
 
 /**
  * Basic implementation of job executor that uses main thread to run job tasks.
@@ -27,6 +29,7 @@ import util.Log;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class MainThreadRunner extends AbstractJobRunner implements JobRunner {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainThreadRunner.class);
 
     private TaskExecutor taskExecutor = new TaskExecutor();
 
@@ -41,7 +44,7 @@ public class MainThreadRunner extends AbstractJobRunner implements JobRunner {
             String msg = String.format(
                     "An error occurred during the execution id [%s] of the job [%s].",
                     jobExecId, job.getId());
-            Log.error(msg, e);
+            LOGGER.error(msg, e);
             throw new JobException(msg, e);
         }
         notifyEnd(job, jobExecId,jobExecRepo);

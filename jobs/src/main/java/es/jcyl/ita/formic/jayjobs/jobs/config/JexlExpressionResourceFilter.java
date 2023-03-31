@@ -16,12 +16,13 @@ package es.jcyl.ita.formic.jayjobs.jobs.config;
  */
 
 import org.mini2Dx.beanutils.ConvertUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.jexl.JexlContextWrapper;
 import es.jcyl.ita.formic.core.jexl.JexlUtils;
 import es.jcyl.ita.formic.jayjobs.jobs.exception.JobRuntimeException;
-import util.Log;
 
 /**
  * Filtering object that evaluates a jexl expression to decide if the job resource is presented to the user.
@@ -29,6 +30,8 @@ import util.Log;
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
 public class JexlExpressionResourceFilter implements JobResourceFilter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JexlExpressionResourceFilter.class);
+
     private final String expression;
     private final CompositeContext ctx;
 
@@ -46,7 +49,7 @@ public class JexlExpressionResourceFilter implements JobResourceFilter {
             return (value == null) ? false : (boolean) ConvertUtils.convert(JexlUtils.eval(jxCtx, expression), Boolean.class);
         } catch (Exception e) {
             String msg = String.format("An error occurred while trying to evaluate this expression as boolean: [%s]", expression);
-            Log.error(msg, e);
+            LOGGER.error(msg, e);
             throw new JobRuntimeException(msg, e);
         }
     }

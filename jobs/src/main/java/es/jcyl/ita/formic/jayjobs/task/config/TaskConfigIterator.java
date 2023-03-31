@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.mini2Dx.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -39,7 +41,6 @@ import es.jcyl.ita.formic.jayjobs.task.config.readers.DynamicExpression;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.utils.JsonUtils;
-import util.Log;
 
 /**
  * Reads the task configuration json and iterates over each task element evaluating the
@@ -49,6 +50,8 @@ import util.Log;
  */
 
 public class TaskConfigIterator implements Iterator<Task> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskConfigIterator.class);
+
     private static final Map<Class, List> dynamicFieldsCache = new HashMap<>();
 
     private int taskNum = 0;
@@ -94,7 +97,7 @@ public class TaskConfigIterator implements Iterator<Task> {
         String replaced;
 
         replaced = VarSubstitutor.replace(jsonStr, context);
-        if (Log.isTraceEnabled()) {
+        if (LOGGER.isTraceEnabled()) {
             debugTaskInfo(jsonStr, replaced);
         }
         JsonNode jsonNode;
@@ -143,13 +146,13 @@ public class TaskConfigIterator implements Iterator<Task> {
 
 
     private void debugTaskInfo(String originalJson, String effectiveJson) {
-        Log.trace(String.format("=================== Task %s ===================\n", taskNum));
-        Log.trace(JsonUtils.pretty(originalJson));
-        Log.trace("------------------ Effective task ------------------");
-        Log.trace(JsonUtils.pretty(effectiveJson));
-        Log.trace("------------------ Context ------------------");
-        Log.trace("Context:\n" + ContextDebugger.getPrintableStr(context));
-        Log.trace(String.format("======================================\n", taskNum));
+        LOGGER.trace(String.format("=================== Task %s ===================\n", taskNum));
+        LOGGER.trace(JsonUtils.pretty(originalJson));
+        LOGGER.trace("------------------ Effective task ------------------");
+        LOGGER.trace(JsonUtils.pretty(effectiveJson));
+        LOGGER.trace("------------------ Context ------------------");
+        LOGGER.trace("Context:\n" + ContextDebugger.getPrintableStr(context));
+        LOGGER.trace(String.format("======================================\n", taskNum));
     }
 
 }

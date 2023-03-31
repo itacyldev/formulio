@@ -15,23 +15,20 @@ package es.jcyl.ita.formic.jayjobs.task.writer;
  * limitations under the License.
  */
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
-import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
-import util.Log;
+import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
 
 /**
  * Writer implementation to output reader resultSet as delimited text files.
@@ -40,6 +37,8 @@ import util.Log;
  */
 
 public class CSVWriter extends AbstractWriter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CSVWriter.class);
+
     private static final Object DEFAULT_EXTENSION = "csv";
     /**
      * ************************************
@@ -211,7 +210,7 @@ public class CSVWriter extends AbstractWriter {
                     "An error occurred while trying to close the output stream on file "
                             + this.outputFile, e);
         }
-        Log.info("CSV file successfully written.");
+        LOGGER.info("CSV file successfully written.");
     }
 
     public boolean isWriteHeader() {

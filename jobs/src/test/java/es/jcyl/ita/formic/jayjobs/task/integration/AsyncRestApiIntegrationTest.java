@@ -33,7 +33,6 @@ import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.HttpRequestProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
 import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
 import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
-import util.Log;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -56,7 +55,6 @@ public class AsyncRestApiIntegrationTest {
         CompositeContext context = JobContextTestUtils.createJobExecContext();
         JobConfigRepo repo = new JobConfigRepo();
         JobConfig jobConfig = repo.get(context, "async_rest_api");
-        Log.setLevel(android.util.Log.DEBUG);
 
         List<HttpResponse> lst = new ArrayList<>();
         // First url invocation to init async job
