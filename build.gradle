@@ -136,6 +136,8 @@ ext {
             'org.mini2Dx:android-beans:1.0.0',
             'org.mockito:mockito-core:5.2.0',
             'org.hamcrest:hamcrest:2.2',
+            // en los tests excluimos logback-android y añadimos esta
+            'org.slf4j:slf4j-simple:2.0.7'
     ]
 }
 

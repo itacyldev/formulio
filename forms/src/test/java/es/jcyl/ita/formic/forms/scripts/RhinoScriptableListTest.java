@@ -25,6 +25,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mozilla.javascript.NativeJavaObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,12 +46,14 @@ import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.forms.view.widget.StatefulWidget;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
 import es.jcyl.ita.formic.forms.view.widget.WidgetContextHolder;
+import es.jcyl.ita.formic.jayjobs.jobs.exec.ConcurrentJobRunner;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class RhinoScriptableListTest {
+
     private static final String RHINO_LOG = "var log = Packages.io.vec.ScriptAPI.log;";
 
     private String applyLambdaSource = "obj => obj.size()";

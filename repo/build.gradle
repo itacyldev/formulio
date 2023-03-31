@@ -56,7 +56,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':core')
-    compileOnly 'com.google.android:android:4.1.1.4'
     api 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
     api 'commons-io:commons-io:2.6'
 }

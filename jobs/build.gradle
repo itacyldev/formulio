@@ -76,17 +76,6 @@ dependencies {
         exclude group: 'commons-logging', module: '*'
     }
 
-/*
-    implementation('es.jcyl.ita.crtdrd:crtsyn:0.4.3') {
-        exclude group: 'xpp3', module: 'xpp3'
-    }
-    implementation('es.jcyl.ita.crtcyl:crtcyl-generic:2.36.3') {
-        exclude group: 'xpp3', module: 'xpp3'
-    }
-    implementation('es.jcyl.ita.crtcyl:crtcyl-core:2.36.5') {
-        exclude group: 'xpp3', module: 'xpp3'
-    }
-*/
     implementation(group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17') {
         exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
     }
@@ -126,9 +115,11 @@ dependencies {
     /////////////////////////////////////
     testImplementation project(':repoTestUtils')
     testImplementation unitTestDeps
-
     testImplementation "org.apache.httpcomponents:httpclient:4.5.5"
-
+}
+// Excluir logback en los test unitarios
+configurations.testImplementation {
+    exclude module: 'logback-android'
 }
 
 publishing {
