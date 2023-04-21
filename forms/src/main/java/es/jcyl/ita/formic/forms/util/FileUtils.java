@@ -16,6 +16,9 @@ import android.util.Log;
 import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,12 +42,12 @@ public class FileUtils {
      * @param uri
      * @return
      */
-     public static String getPath(final Context context, final Uri uri) {
+    public static String getPath(final Context context, final Uri uri) {
         String output = null;
 
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             final String[] projection
-                    = new String[] {MediaStore.Images.ImageColumns.DATA};
+                    = new String[]{MediaStore.Images.ImageColumns.DATA};
             Cursor cursor = null;
 
             try {
@@ -76,16 +79,16 @@ public class FileUtils {
         final boolean isNougat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
 
         // DocumentProvider
-        if("com.android.externalstorage.documents".equals(uri.getAuthority())
+        if ("com.android.externalstorage.documents".equals(uri.getAuthority())
                 || "com.android.providers.downloads.documents".equals(uri.getAuthority())
-                || "com.android.providers.media.documents".equals(uri.getAuthority())){
+                || "com.android.providers.media.documents".equals(uri.getAuthority())) {
             String docId = null;
-            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)){
+            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
                 docId = DocumentsContract.getDocumentId(uri);
-            }else if (isNougat && DocumentsContract.isTreeUri(uri)){
+            } else if (isNougat && DocumentsContract.isTreeUri(uri)) {
                 docId = DocumentsContract.getTreeDocumentId(uri);
             }
-            if (docId == null){
+            if (docId == null) {
                 return null;
             }
             final String[] split = docId.split(":");
@@ -98,14 +101,14 @@ public class FileUtils {
                 } else {
                     return external_storage_path;
                 }
-            } else if ("raw".equalsIgnoreCase(type)){
+            } else if ("raw".equalsIgnoreCase(type)) {
                 return split[1];
-            } else if ("image".equalsIgnoreCase(type)){
-                String[] column = { MediaStore.Images.Media.DATA };
+            } else if ("image".equalsIgnoreCase(type)) {
+                String[] column = {MediaStore.Images.Media.DATA};
                 String sel = MediaStore.Images.Media._ID + "=?";
                 Cursor cursor = context.getContentResolver().
                         query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                column, sel, new String[]{ split[1] }, null);
+                                column, sel, new String[]{split[1]}, null);
                 String filePath = "";
                 int columnIndex = cursor.getColumnIndex(column[0]);
                 if (cursor.moveToFirst()) {
@@ -113,54 +116,35 @@ public class FileUtils {
                 }
                 cursor.close();
                 return filePath;
-            }else if ("video".equalsIgnoreCase(type)){
+            } else if ("video".equalsIgnoreCase(type)) {
                 //todo
-            }else if ("audio".equalsIgnoreCase(type)){
+            } else if ("audio".equalsIgnoreCase(type)) {
                 //todo
-            }else {
+            } else {
                 return "storage" + "/" + docId.replace(":", "/");
             }
         }
         return null;
     }
 
-    /**
-     * Devuelve la extensi�n de un fichero.
-     *
-     * @param file
-     * @return
-     */
-    public static String getFileExtension(final File file) {
-        String output = null;
-
-        if (file == null) {
-            return output;
-        }
-
-        final int i = file.getName().lastIndexOf('.');
-        if (i > 0) {
-            output = file.getName().substring(i + 1);
-        }
-
-        return output;
-    }
 
     public static String getFileType(final File file) {
         String output = null;
-
         if (file == null) {
             return output;
         }
 
-        final String extension = getFileExtension(file);
-        if (extension.equalsIgnoreCase(PROJECT_EXTENSION)){
+        String extension = FilenameUtils.getExtension(file.getName());
+        if (StringUtils.isEmpty(extension)) {
+            return null;
+        }
+        extension = extension.toLowerCase();
+        if (extension.equals(PROJECT_EXTENSION) || extension.equals("zip")) {
             output = "application/zip";
-        }else{
+        } else {
             output = URLConnection.guessContentTypeFromName(file.getName());
         }
-
         return output;
-
     }
 
     /**
@@ -246,6 +230,7 @@ public class FileUtils {
 
     /**
      * Copy a directory and all its contents recursively
+     *
      * @param context
      * @param origin
      * @param destination
@@ -256,11 +241,11 @@ public class FileUtils {
         File f;
         if (directory.isDirectory()) {
             checkCreateDirectory(destination);
-            String [] files = directory.list();
+            String[] files = directory.list();
             if (files.length > 0) {
                 for (String archivo : files) {
-                    f = new File (origin + File.separator + archivo);
-                    if(f.isDirectory()) {
+                    f = new File(origin + File.separator + archivo);
+                    if (f.isDirectory()) {
 
                         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/projects");
 
@@ -279,10 +264,10 @@ public class FileUtils {
                         //DocumentFile documentFile = DocumentFile.fromTreeUri(context, contentUri);
 
 
-                        checkCreateDirectory(destination+File.separator+archivo+File.separator);
-                        copyDirectory(context, origin+File.separator+archivo+File.separator, destination+File.separator+archivo+File.separator);
+                        checkCreateDirectory(destination + File.separator + archivo + File.separator);
+                        copyDirectory(context, origin + File.separator + archivo + File.separator, destination + File.separator + archivo + File.separator);
                     } else { //Es un archivo
-                        copyFile(context, new File(origin+File.separator+archivo), new File(destination+File.separator+archivo));
+                        copyFile(context, new File(origin + File.separator + archivo), new File(destination + File.separator + archivo));
                     }
                 }
             }
@@ -291,6 +276,7 @@ public class FileUtils {
 
     /**
      * Check if a directory exists, and if not, create all the necessary path for it to exist
+     *
      * @param path
      */
     public static void checkCreateDirectory(String path) {
@@ -300,7 +286,7 @@ public class FileUtils {
         }
     }
 
-    public static File getLatestFilefromDir(String dirPath){
+    public static File getLatestFilefromDir(String dirPath) {
         File dir = new File(dirPath);
         File[] files = dir.listFiles();
         if (files == null || files.length == 0) {
@@ -324,8 +310,8 @@ public class FileUtils {
 
         Cursor c = null;
         try {
-            c = resolver.query(childrenUri, new String[] {
-                    DocumentsContract.Document.COLUMN_DOCUMENT_ID }, null, null, null);
+            c = resolver.query(childrenUri, new String[]{
+                    DocumentsContract.Document.COLUMN_DOCUMENT_ID}, null, null, null);
             while (c.moveToNext()) {
                 final String documentId = c.getString(0);
                 final Uri documentUri = DocumentsContract.buildDocumentUriUsingTree(self,
@@ -333,7 +319,7 @@ public class FileUtils {
                 results.add(documentUri);
             }
         } catch (Exception e) {
-            Log.w("Failed query: ",e);
+            Log.w("Failed query: ", e);
         } finally {
             closeQuietly(c);
         }

@@ -27,6 +27,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BOLD;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.BORDER;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLOR;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLSPANS;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMNS;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.COLUMN_NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONFIRMATION;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.CONTROLLER;
@@ -117,7 +118,7 @@ public class TagDef {
         initialize();
     }
 
-    private static String ACTION_TAGS[] = {"action", "add", "create", "update", "save", "cancel", "delete", "nav", "js"};
+    private static String ACTION_TAGS[] = {"action", "add", "create", "update", "save", "cancel", "delete", "nav"};
 
     private static String BASE_TAGS[] = {"main", "list", "edit", "view", "form"};
 
@@ -209,6 +210,9 @@ public class TagDef {
         register("p", define(base, text, scriptHooks, new Attribute[]{ID, NAME, VALUE}));
         register("divisor", define(base, new Attribute[]{COLOR, STROKE_WIDTH}));
 
+
+        register("imagegallery", define(baseRepoAccessor, new Attribute[]{ROUTE, COLUMNS}));
+        register("imagegalleryitem", define(new Attribute[]{ID,VALUE, CONVERTER, LABEL }));
     }
 
     private static Map<String, Attribute> define(Attribute[]... attributeSets) {

@@ -26,6 +26,8 @@ import android.content.Context;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.forms.MainController;
@@ -45,7 +47,7 @@ import es.jcyl.ita.formic.forms.validation.ValidatorException;
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
  */
-@Ignore
+@RunWith(RobolectricTestRunner.class)
 public class ActionControllerTest {
 
     @BeforeClass

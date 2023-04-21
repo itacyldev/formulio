@@ -54,6 +54,9 @@ public class DevConsoleActivity extends BaseActivity {
     public static final int COLOR_WARN = Color.YELLOW;
     public static final int COLOR_DEBUG = Color.BLUE;
 
+    public static final String PROJECT_EXTENSION = "fml";
+    public static final String ZIP_EXTENSION = "zip";
+
     private static Context context;
 
     @Override
@@ -338,7 +341,7 @@ public class DevConsoleActivity extends BaseActivity {
 
             String dest = ContextAccessor.workingFolder(App.getInstance().getGlobalContext());
             new File(dest).mkdirs();
-            projectImporter.zipFolder(new File(projectsFolder), projectName, projectName, new File(dest), null);
+            projectImporter.zipFolder(new File(projectsFolder), projectName, projectName, PROJECT_EXTENSION, new File(dest), null);
 
             dest = currentContext.getCacheDir().getAbsolutePath()+File.separator+currentContext.getString(R.string.export);
             new File(dest).mkdirs();
@@ -346,7 +349,7 @@ public class DevConsoleActivity extends BaseActivity {
             Calendar date = Calendar.getInstance();
             date.add(Calendar.MINUTE, -15);
 
-            File file = projectImporter.zipFolder(currentContext.getCacheDir(), "tmp", currentContext.getString(R.string.export), new File(dest), date);
+            File file = projectImporter.zipFolder(currentContext.getCacheDir(), "tmp", currentContext.getString(R.string.export), ZIP_EXTENSION, new File(dest), date);
             
             jobResultDialog.addResource(file.getPath());
 
@@ -364,7 +367,6 @@ public class DevConsoleActivity extends BaseActivity {
                 UserMessagesHelper.toast(context, "Export failed!", Toast.LENGTH_SHORT);
             }
             jobResultDialog.endJob();
-            jobResultDialog.getAcceptButton().setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -373,7 +375,6 @@ public class DevConsoleActivity extends BaseActivity {
             jobResultDialog.show();
             jobResultDialog.setProgressTitle(context.getString(R.string.export));
             jobResultDialog.setText(context.getString(R.string.exporting));
-            jobResultDialog.getBackButton().setVisibility(View.GONE);
 
             jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
                 @Override

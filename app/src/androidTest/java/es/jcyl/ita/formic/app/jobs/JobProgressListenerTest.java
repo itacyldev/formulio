@@ -34,6 +34,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.forms.App;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
@@ -82,6 +83,11 @@ public class JobProgressListenerTest {
         Resources res = getInstrumentation().getTargetContext().getResources();
         File jobDir = JobContextTestUtils.createJobFolderInstrTest();
         CompositeContext ctx = JobContextTestUtils.createJobExecContext(jobDir.getParent());
+
+        // Add Android context
+        BasicContext paramsCtx = new BasicContext("params");
+        paramsCtx.put("parentContext",  ApplicationProvider.getApplicationContext());
+        ctx.addContext(paramsCtx);
 
         JobConfigRepo repo = new JobConfigRepo();
         JobExecInMemo jobExecRepo = JobExecInMemo.getInstance();

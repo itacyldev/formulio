@@ -27,10 +27,9 @@ import java.util.List;
 import es.jcyl.ita.formic.R;
 import es.jcyl.ita.formic.app.dialog.JobResultDialog;
 import es.jcyl.ita.formic.forms.view.activities.BaseActivity;
-import es.jcyl.ita.formic.jayjobs.jobs.exception.JobException;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResource;
 
 /**
  * Activity to show the execution of a job and its results
@@ -67,7 +66,7 @@ public class JobProgressActivity extends BaseActivity {
 
         jobResultDialog = new JobResultDialog(activity, true);
         jobResultDialog.show();
-        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription)?jobDescription:activity.getString(R.string.job_result));
+        jobResultDialog.setProgressTitle(StringUtils.isNotEmpty(jobDescription) ? jobDescription : activity.getString(R.string.job_result));
 
         mainThreadHandler = new JobProgressHandler();
 
@@ -90,18 +89,14 @@ public class JobProgressActivity extends BaseActivity {
     }
 
     private void publishResources() {
-        try {
-            List<JobResource> resources = jobExecRepo.getResources(jobId);
+        List<JobResource> resources = jobExecRepo.getResources(jobId);
+        if (resources != null) {
             for (JobResource resource : resources) {
                 String resourcePath = resource.getResourcePath();
                 addResource(resourcePath);
             }
-        } catch (JobException e) {
-
         }
     }
-
-
 
 
     public void addResource(String resourcePath) {

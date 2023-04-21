@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.Paths;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -38,15 +37,16 @@ public class TestUtils {
             throw new RuntimeException(String.format("Destination file object must be a " +
                     "directory.", destFolder.getAbsolutePath()));
         }
-        if(!destFolder.exists()){
+        if (!destFolder.exists()) {
             destFolder.mkdirs();
         }
-        File destFileObject = new File (destFolder, FilenameUtils.getName(fileName));
+        File destFileObject = new File(destFolder, FilenameUtils.getName(fileName));
         return copyTestResource(fileName, destFileObject.getAbsoluteFile());
     }
 
     /**
      * Copies a file from the test resource directory to the device destination file path
+     *
      * @param fileName
      * @param destFile
      * @return
@@ -78,6 +78,10 @@ public class TestUtils {
         }
         File file = new File(resource.getFile());
         return file;
+    }
+
+    public static String findFileName(String fileName) {
+        return findFile(fileName).getAbsolutePath().replace("\\", "/");
     }
 
     public static String readAsString(final String file) {
@@ -148,11 +152,6 @@ public class TestUtils {
             File resourceFile = getResourceAsFile(resourceName);
             File destFile = new File(folder, FilenameUtils.getName(resourceName));
             FileUtils.copyFile(resourceFile, destFile);
-//            FileUtils.copyFileToDirectory(resourceFile, folder);
-//            // rename the file to keep the original fileName
-//            String fileName = FilenameUtils.getName(resourceName);
-//            File newFile = new File(folder, resourceFile.getName());
-//            newFile.renameTo(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

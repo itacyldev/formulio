@@ -425,6 +425,8 @@ public class MainController implements ContextAwareComponent {
             contentView.addView(newRootWidget);
             getViewController().setRootWidget((ViewWidget) newRootWidget);
 //            viewController.restoreViewState();
+        } catch (Exception e) {
+            DevConsole.error("Couldn't restore last view", e);
         } finally {
             renderingEnv.enableInterceptors();
         }

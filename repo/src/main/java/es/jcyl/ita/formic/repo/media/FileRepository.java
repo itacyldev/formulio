@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.jcyl.ita.formic.repo.AbstractEditableRepository;
-import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.RepositoryException;
 import es.jcyl.ita.formic.repo.media.meta.FileMeta;
 import es.jcyl.ita.formic.repo.media.query.FileEntityExpression;
@@ -124,7 +123,7 @@ public class FileRepository extends AbstractEditableRepository<FileEntity, Strin
 
     @Override
     public Class getFilterClass() {
-        return null;
+        return BaseFilter.class;
     }
 
     @Override

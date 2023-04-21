@@ -25,6 +25,8 @@ import es.jcyl.ita.formic.forms.components.card.UICardRenderer;
 import es.jcyl.ita.formic.forms.components.datalist.UIDatalistRenderer;
 import es.jcyl.ita.formic.forms.components.datatable.UIDatatableRenderer;
 import es.jcyl.ita.formic.forms.components.form.UIFormRender;
+import es.jcyl.ita.formic.forms.components.image.UIImageGalleryItemRenderer;
+import es.jcyl.ita.formic.forms.components.image.UIImageGalleryRenderer;
 import es.jcyl.ita.formic.forms.components.image.UIImageRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.CheckBoxFieldRenderer;
 import es.jcyl.ita.formic.forms.components.inputfield.DateFieldRenderer;
@@ -77,6 +79,8 @@ public class RendererFactory {
         renderInstances.put("divisor", new UIDivisorRenderer());
         renderInstances.put("button", new UIButtonRenderer());
         renderInstances.put("buttonbar", new UIGroupBaseRenderer(R.layout.widget_buttonbar));
+        renderInstances.put("imagegallery", new UIImageGalleryRenderer());
+        renderInstances.put("imagegalleryitem", new UIImageGalleryItemRenderer());
     }
 
     public static RendererFactory getInstance() {

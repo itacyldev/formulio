@@ -1,4 +1,8 @@
-
+node(){
+    configFileProvider([configFile(fileId: '0448eca8-c7dd-461c-8ec0-449f0706456e', variable: 'itConfig')]) {
+        itCredentials = readJSON file: itConfig
+    }       
+}
 pipeline {
     agent any
 
@@ -31,13 +35,12 @@ pipeline {
         }
         stage('Build & Unit test') {
             steps {
-                script {
-                    sh '''
-                        chmod +x gradlew
-                        ./gradlew clean
-                        ./gradlew test build
-                    '''
-                }
+                sh """
+                    export CRTSYN_CRED_TESTSYN=${itCredentials['CRTSYN_CRED_TESTSYN']}
+                    chmod +x gradlew
+                    ./gradlew clean
+                    ./gradlew test build
+                """
             }
             post {
                 always {

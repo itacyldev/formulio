@@ -46,7 +46,7 @@ import static es.jcyl.ita.formic.forms.config.DevConsole.error;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class UIViewBuilder extends AbstractComponentBuilder<UIView> {
-    public static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable", "datalist"));
+    public static final Set<String> ENTITY_SELECTOR_SET = new HashSet<String>(Arrays.asList("datatable", "datalist", "imagegallery"));
 
 
     public UIViewBuilder() {

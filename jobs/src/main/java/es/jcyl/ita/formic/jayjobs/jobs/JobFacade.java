@@ -15,6 +15,7 @@ package es.jcyl.ita.formic.jayjobs.jobs;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import java.util.concurrent.Executors;
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
+import es.jcyl.ita.formic.core.jexl.JexlUtils;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigException;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
@@ -33,7 +34,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.exec.ConcurrentJobRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecStatus;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecInMemo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobResource;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.MainThreadRunner;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener;
@@ -52,7 +53,7 @@ public class JobFacade {
 
     private JobConfigRepo jobConfigRepo;
     private JobExecRepo jobExecRepo = JobExecInMemo.getInstance(); // Noop
-    private JobExecListener listener = new NopJobListener();
+    private List<JobExecListener> listeners;
 
     // static resources
     private static String cacheFolder;
@@ -64,6 +65,7 @@ public class JobFacade {
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         runners.put(JobExecutionMode.FG_ASYNC, new ConcurrentJobRunner(executorService));
         jobConfigRepo = new JobConfigRepo();
+        this.setListener(new NopJobListener());
     }
 
     public JobConfig getJobConfig(CompositeContext ctx, String jobType) throws JobConfigException {
@@ -72,8 +74,8 @@ public class JobFacade {
 
     public Long executeJob(CompositeContext ctx, String jobType) throws JobException {
         JobConfig job = jobConfigRepo.get(ctx, jobType);
-        JobExecutionMode exedMode = (job.getExecMode() == null) ? JobExecutionMode.FG_ASYNC : job.getExecMode();
-        return doExecuteJob(ctx, job, exedMode);
+        JobExecutionMode execMode = (job.getExecMode() == null) ? JobExecutionMode.FG_ASYNC : job.getExecMode();
+        return doExecuteJob(ctx, job, execMode);
     }
 
     public Long executeJob(CompositeContext ctx, String jobType, JobExecutionMode execMode) throws JobException {
@@ -102,14 +104,11 @@ public class JobFacade {
         checkContexts(ctx, job, jobExecutionInfo);
 
         JobRunner runner = getJobRunner(job, execMode);
-
         // configure listener
         AggregatedJobListener jobListener = new AggregatedJobListener();
-        jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo()));
-        if (this.listener != null) {
-
-            
-            jobListener.addListener(this.listener);
+        jobListener.addListener(new PublishTaskResourceListener(this.getJobExecRepo(), job.getFilter()));
+        if (this.listeners != null) {
+            jobListener.addListeners(this.listeners);
         }
         runner.setListener(jobListener);
 
@@ -138,7 +137,10 @@ public class JobFacade {
         Map<String, Object> globalParams = jobConfig.getGlobalParams();
         BasicContext bc = new BasicContext("gparams");
         if (globalParams != null) {
-            bc.putAll(globalParams);
+            // evaluar expressiones
+            for (Map.Entry<String, Object> entry : globalParams.entrySet()) {
+                bc.put(entry.getKey(), JexlUtils.eval(ctx, (String) entry.getValue()));
+            }
         }
         ctx.addContext(bc);
         // Add job context if it doesn't exists and register job execution id
@@ -184,9 +186,18 @@ public class JobFacade {
         return jobExecRepo.getResources(jobExecId);
     }
 
-    public void setListener(JobExecListener listener) {
-        if (listener != null) {
-            this.listener = listener;
+    public void addListener(JobExecListener listener) {
+        if (!this.listeners.contains(listener)) {
+            this.listeners.add(listener);
         }
+    }
+
+    public void removeListener(JobExecListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    public void setListener(JobExecListener listener) {
+        this.listeners = new ArrayList<>();
+        this.listeners.add(listener);
     }
 }

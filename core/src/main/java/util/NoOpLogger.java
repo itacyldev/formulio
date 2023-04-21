@@ -107,6 +107,7 @@ public class NoOpLogger implements Logger {
     @Override
     public void debug(String format, Object arg1, Object arg2) {
         System.out.println(String.format(format, arg1, arg2));
+        android.util.Log.d("jobs", String.format(format, arg1, arg2));
     }
 
     @Override
@@ -156,27 +157,26 @@ public class NoOpLogger implements Logger {
 
     @Override
     public void info(String msg) {
-
+        android.util.Log.i("jobs", msg);
     }
 
     @Override
     public void info(String format, Object arg) {
-
+        android.util.Log.i("jobs", String.format(format, arg));
     }
 
     @Override
     public void info(String format, Object arg1, Object arg2) {
-
+        android.util.Log.i("jobs", String.format(format, arg1, arg2));
     }
 
     @Override
     public void info(String format, Object... arguments) {
-
+        android.util.Log.i("jobs", String.format(format, arguments));
     }
 
     @Override
     public void info(String msg, Throwable t) {
-
     }
 
     @Override
@@ -271,32 +271,32 @@ public class NoOpLogger implements Logger {
 
     @Override
     public boolean isErrorEnabled() {
-        return false;
+        return true;
     }
 
     @Override
     public void error(String msg) {
-
+        android.util.Log.e("jobs",msg);
     }
 
     @Override
     public void error(String format, Object arg) {
-
+        android.util.Log.e("jobs",String.format(format, arg));
     }
 
     @Override
     public void error(String format, Object arg1, Object arg2) {
-
+        android.util.Log.e("jobs",String.format(format, arg1, arg2));
     }
 
     @Override
     public void error(String format, Object... arguments) {
-
+        android.util.Log.e("jobs", String.format(format, arguments));
     }
 
     @Override
     public void error(String msg, Throwable t) {
-
+        android.util.Log.e("jobs", msg, t);
     }
 
     @Override

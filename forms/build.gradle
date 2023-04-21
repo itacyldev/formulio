@@ -95,11 +95,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'com.github.tony19:logback-android:2.0.0'
-
-    //implementation 'com.opencsv:opencsv:5.2'
-
     implementation  "net.bytebuddy:byte-buddy:1.11.2"
     implementation  "net.bytebuddy:byte-buddy-android:1.11.2"
 //    implementation 'com.airbnb.android:paris:1.7.3'
@@ -150,7 +145,10 @@ dependencies {
         exclude group: 'androidx.test', module: ''
     }
 }
-
+// Excluir logback en los test unitarios
+configurations.testImplementation {
+    exclude module: 'logback-android'
+}
 
 task sourceJar(type: Jar) {
     classifier "source"

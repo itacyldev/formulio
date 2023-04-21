@@ -1,5 +1,6 @@
-apply plugin: 'java-library'
+apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
 
 def globalConf = rootProject.ext
 
@@ -7,20 +8,61 @@ archivesBaseName = 'core'
 group = globalConf.group
 version = globalConf.version
 
+
+android {
+    compileSdkVersion = rootProject.compileSdkVersion
+
+    defaultConfig {
+        targetSdkVersion globalConf.targetSdkVersion
+        minSdkVersion globalConf.minSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.txt'
+        }
+    }
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST']
+        }
+    }
+    namespace 'es.jcyl.ita.formic.core'
+}
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api sharedDeps
-
-    compileOnly 'com.google.android:android:4.1.1.4'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'com.github.tony19:logback-android:2.0.0'
-    implementation 'org.mini2Dx:android-beans:1.0.0'
 }
 
 publishing {
     repositories {
         maven {
-            def releasesRepoUrl = "https://servicios.itacyl.es.es/nexus/repository/internal/"
+            def releasesRepoUrl = "https://servicios.itacyl.es/nexus/repository/internal/"
             def snapshotsRepoUrl = "https://servicios.itacyl.es/nexus/repository/snapshots/"
             url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
@@ -31,16 +73,11 @@ publishing {
     }
     publications {
         mavenPublish(MavenPublication) {
-            from components.java
-            artifactId archivesBaseName
-            pom.withXml {
-                asNode().dependencies.'*'.findAll() {
-                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-                        dep.name == it.artifactId.text()
-                    }
-                }.each() {
-                    it.scope*.value = 'compile'
-                }
+            artifacts {
+                groupId group
+                artifactId archivesBaseName
+                version version
+                artifact 'build/outputs/aar/' + archivesBaseName + (version.endsWith("SNAPSHOT") ? '-debug.aar' : '-release.aar')
             }
         }
     }

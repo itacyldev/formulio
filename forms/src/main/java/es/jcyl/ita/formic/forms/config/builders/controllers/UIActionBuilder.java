@@ -87,16 +87,18 @@ public class UIActionBuilder extends AbstractComponentBuilder<UIAction> {
         String method = node.getAttribute("method");
         boolean hasMethodParam = false;
         // Check if method has been set as parameter
-        if(StringUtils.isBlank(method)){
+        if (StringUtils.isBlank(method)) {
             ConfigNode methodParamNode = ConfigNodeHelper.findNodeByAttValue(paramNodes, "name", "method");
-            method = methodParamNode.getAttribute("value");
-            hasMethodParam = true;
+            if (methodParamNode != null) {
+                method = methodParamNode.getAttribute("value");
+                hasMethodParam = true;
+            }
         }
         if (StringUtils.isEmpty(method)) {
             throw new ConfigurationException(error(String.format("Attribute 'method' is mandatory in js actions. " +
                     "Check action [%s] if file ${file}.", node.getId())));
         }
-        if (!hasMethodParam){
+        if (!hasMethodParam) {
             // add method as a parameter node
             ConfigNode methodNode = new ConfigNode("param");
             methodNode.setAttribute("name", "method");

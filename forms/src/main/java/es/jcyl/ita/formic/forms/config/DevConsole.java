@@ -20,7 +20,6 @@ import android.util.Log;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +31,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.util.ContextInitializer;
+import es.jcyl.ita.formic.core.jexl.JexlUtils;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.config.reader.ConfigReadingInfo;
-import es.jcyl.ita.formic.forms.el.JexlFormUtils;
+import util.LogInitializer;
 
 
 /**
@@ -45,6 +43,7 @@ import es.jcyl.ita.formic.forms.el.JexlFormUtils;
  * with context information ${tag}, ${file} and ${line}
  */
 public class DevConsole {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DevConsole.class);
 
     private static final String DEV_CONSOLE = "devconsole";
     private static final String EMPTY_STRING = "";
@@ -60,7 +59,6 @@ public class DevConsole {
     private static Queue<String> consoleWarn = new LinkedList<String>();
     private static Queue<String> consoleError = new LinkedList<String>();
 
-    private static final Logger logger = LoggerFactory.getLogger(DevConsole.class);
 
     public static void clear() {
         clearDebug();
@@ -152,7 +150,7 @@ public class DevConsole {
         if (level <= Log.ERROR) {
             effMsg = getMsg(msg, null);
             addError(addTimeStamp(effMsg, Log.ERROR));
-            logger.error(effMsg);
+            LOGGER.error(effMsg);
         }
         return effMsg;
     }
@@ -162,7 +160,7 @@ public class DevConsole {
         if (level <= Log.INFO) {
             effMsg = getMsg(s, null);
             addInfo(addTimeStamp(effMsg, Log.INFO));
-            logger.info(effMsg);
+            LOGGER.info(effMsg);
         }
         return effMsg;
     }
@@ -172,7 +170,7 @@ public class DevConsole {
         String effMsg = EMPTY_STRING;
         if (level <= Log.ERROR) {
             effMsg = getMsg(msg, t);
-            logger.error(msg, t);
+            LOGGER.error(msg, t);
         }
         return effMsg;
     }
@@ -184,7 +182,7 @@ public class DevConsole {
         if (level >= Log.WARN) {
             effMsg = getMsg(msg, null);
             addWarn(addTimeStamp(effMsg, Log.WARN));
-            logger.warn(msg);
+            LOGGER.warn(msg);
         }
         return effMsg;
     }
@@ -194,7 +192,7 @@ public class DevConsole {
         if (level <= Log.DEBUG) {
             effMsg = getMsg(msg, null);
             addDebug(addTimeStamp(effMsg, Log.DEBUG));
-            logger.debug(msg);
+            LOGGER.debug(msg);
         }
         return effMsg;
     }
@@ -203,17 +201,13 @@ public class DevConsole {
         String effMsg = EMPTY_STRING;
         if (level <= Log.VERBOSE) {
             effMsg = getMsg(msg, null);
-            logger.trace(msg);
+            LOGGER.trace(msg);
         }
         return effMsg;
     }
 
     private static String getMsg(String msg, Throwable t) {
-        if (StringUtils.isBlank(msg)) {
-            return "";
-        }
-        String effMsg = String.valueOf(JexlFormUtils.eval(devContext, msg));
-        return effMsg;
+        return (StringUtils.isBlank(msg)) ? "" : String.valueOf(JexlUtils.eval(devContext, msg));
     }
 
 
@@ -291,23 +285,7 @@ public class DevConsole {
     }
 
     public static void setLogFileName(String projectsFolder, String fileName) {
-        String logFolder = projectsFolder + "/" + fileName + "/logs";
-        System.setProperty("FILE_NAME", fileName);
-        System.setProperty("HOME_LOG", logFolder);
-        ILoggerFactory fac = LoggerFactory.getILoggerFactory();
-        if (fac != null && fac instanceof LoggerContext) {
-            LoggerContext lc = (LoggerContext) fac;
-            lc.getStatusManager().clear();
-            lc.reset();
-            lc.putProperty("FILE_NAME", fileName);
-            lc.putProperty("HOME_LOG", logFolder);
-            ContextInitializer ci = new ContextInitializer(lc);
-            try {
-                ci.autoConfig();
-            } catch (Exception e) {
-                Log.e("Error", "Error while setting log file", e);
-            }
-        }
+        LogInitializer.setLogFileName(projectsFolder, fileName);
     }
 
     public static void debug(ConfigNode root) {
@@ -346,4 +324,5 @@ public class DevConsole {
     public void err(String msg) {
         DevConsole.error(msg);
     }
+
 }

@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 
 import es.jcyl.ita.formic.forms.components.UIComponent;
-import es.jcyl.ita.formic.forms.components.datatable.UIDatatable;
 import es.jcyl.ita.formic.forms.config.reader.ConfigNode;
 import es.jcyl.ita.formic.forms.validation.Validator;
 
@@ -288,7 +287,7 @@ public class ConfigNodeHelper {
      */
     public static ConfigNode findNodeByAttValue(List<ConfigNode> nodes, String attName, String expectedValue) {
         for(ConfigNode n: nodes){
-            if(n.getAttribute(attName).equalsIgnoreCase(expectedValue)){
+            if(n.getAttribute(attName)!=null && n.getAttribute(attName).equalsIgnoreCase(expectedValue)){
                 return n;
             }
         }

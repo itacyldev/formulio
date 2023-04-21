@@ -15,11 +15,14 @@ package es.jcyl.ita.formic.jayjobs.task.executor;
  * limitations under the License.
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigIterator;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.iteration.TaskContextIterator;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
-import util.Log;
 
 /**
  * Class that handlers the execution of group tasks
@@ -27,6 +30,7 @@ import util.Log;
  * @author: gustavo.rio@itacyl.es
  */
 public class GroupTaskHandler implements TaskHandler<GroupTask> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskConfigIterator.class);
 
     private TaskExecutor executor;
 
@@ -57,7 +61,7 @@ public class GroupTaskHandler implements TaskHandler<GroupTask> {
                 if (task.getListener() != null) {
                     task.getListener().onTaskError(task, errorMsg, e);
                 }
-                Log.error(errorMsg);
+                LOGGER.error(errorMsg);
                 // check if we have to go on with the execution of other iterations
                 if (task.isStopOnError()) {
                     throw e;

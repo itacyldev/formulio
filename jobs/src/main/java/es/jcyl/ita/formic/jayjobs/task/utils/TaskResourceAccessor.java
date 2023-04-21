@@ -1,8 +1,11 @@
 package es.jcyl.ita.formic.jayjobs.task.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
@@ -23,6 +26,28 @@ public class TaskResourceAccessor {
         }
     }
 
+    public static List<String> getWorkingFile(CompositeContext ctx, List<String> paths) {
+        List<String> files = new ArrayList<>();
+        for(String path: paths){
+            files.add(getWorkingFile(ctx, path));
+        }
+        return files;
+    }
+
+    public static String getWorkingTempFile(CompositeContext ctx, String infix, String extension) {
+        // si no se proporciona fichero de entrada, generar un nombre aleatorio
+        if (StringUtils.isNoneBlank(extension)) {
+            extension = "." + extension;
+        }
+        if (StringUtils.isNoneBlank(infix)) {
+            infix = infix + "_";
+        }
+        String outputFile = String.format("%s_%s_%s%s%s", ctx.get("job.jobExecId"),
+                RandomStringUtils.randomAlphanumeric(10), infix, System.currentTimeMillis(),
+                extension);
+        return getWorkingFile(ctx, outputFile);
+    }
+
 
     /**
      * Converts relative file references to absolute file paths using project base folder.
@@ -39,7 +64,7 @@ public class TaskResourceAccessor {
             String appWorkingFolder = ContextAccessor.workingFolder(ctx);
             // create absolute path to working folder
             File f = new File(appWorkingFolder, filePath);
-            return f.getAbsolutePath();
+            return f.getAbsolutePath().replace("\\","/");
         }
     }
 
@@ -52,8 +77,35 @@ public class TaskResourceAccessor {
             String projectBaseFolder = ContextAccessor.projectFolder(ctx);
             // create absolute path to project base folder
             File f = new File(projectBaseFolder, filePath);
-            return f.getAbsolutePath();
+            return f.getAbsolutePath().replace("\\","/");
         }
+    }
+
+
+    public static List<File> locateInputFiles(CompositeContext ctx, List<String> paths) throws TaskException {
+        List<File> files = new ArrayList<>();
+        for(String path: paths){
+            files.add(locateInputFile(ctx, path));
+        }
+        return files;
+    }
+
+
+    /**
+     * Calculates final output file name
+     */
+    public static String locateOutputFile(CompositeContext context, String outputFile) {
+        return locateOutputFile(context, outputFile, "", ".out");
+    }
+    public static String locateOutputFile(CompositeContext context, String outputFile, String extension) {
+        return locateOutputFile(context, outputFile, "", extension);
+    }
+
+    public static String locateOutputFile(CompositeContext context, String outputFile, String infix, String extension) {
+        outputFile = StringUtils.isBlank(outputFile)
+                ? TaskResourceAccessor.getWorkingTempFile(context, infix, extension)
+                : TaskResourceAccessor.getWorkingFile(context, outputFile);
+        return outputFile.replace("\\","/");
     }
 
     /**
@@ -62,12 +114,12 @@ public class TaskResourceAccessor {
      *
      * @throws TaskException
      */
-    public static File locateInputFile(String inputFile, CompositeContext gContxt)
+    public static File locateInputFile(CompositeContext gContxt, String inputFile)
             throws TaskException {
         File file = null;
         if (StringUtils.isBlank(inputFile)) {
             throw new TaskException(
-                    "El parámetro inputFile es nulo o vacío, revisa la configuración json del job.");
+                    "The 'inputFile' parameter is null or empty, check the job's json configuration.");
         }
         String fName = inputFile;
         // buscar fichero en el directorio de trabajo
@@ -80,7 +132,7 @@ public class TaskResourceAccessor {
         // si no se encunt
         if (!file.exists()) {
             throw new TaskException(String.format(
-                    "El fichero [%s] no se ha encontrado ni en el directorio de trabajo [%s] "
+                    "The file [%s] is not found no se ha encontrado ni en el directorio de trabajo [%s] "
                             + "ni en la carpeta de recursos de la Aplicación [%s]",
                     fName, TaskResourceAccessor.getWorkingFile(gContxt, fName),
                     TaskResourceAccessor.getWorkingFile(gContxt, fName)));

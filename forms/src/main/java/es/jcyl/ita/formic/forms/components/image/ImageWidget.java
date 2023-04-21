@@ -80,10 +80,10 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     private void setCameraButton(RenderingEnv env) {
         Button cameraButton = this.findViewById(R.id.btn_camera);
-        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
-            cameraButton.setEnabled(false);
-        } else if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
+        if (!component.isCameraActive()) {// TODO: or device has no camera (check throw context.device)
             cameraButton.setVisibility(View.INVISIBLE);
+        }else if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
+            cameraButton.setEnabled(false);
         } else {
             cameraButton.setOnClickListener(v -> launcher.launch(null));
         }
@@ -92,10 +92,10 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
     private void setSketchButton(RenderingEnv env) {
         Button sketchButton = this.findViewById(R.id.btn_sketch);
         ImageResourceView inputView = this.getInputView();
-        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
-            sketchButton.setEnabled(false);
-        } else if (!component.isSketchActive()) {
+        if (!component.isSketchActive()) {
             sketchButton.setVisibility(View.INVISIBLE);
+        }else if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
+            sketchButton.setEnabled(false);
         } else {
             sketchButton.setOnClickListener((View v) -> {
                 SketchDialog sketchDialog = new
@@ -116,13 +116,11 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
 
     private void setGalleryButton(RenderingEnv env) {
         Button galleryButton = this.findViewById(R.id.btn_gallery);
-        galleryButton.setEnabled(false);
         // TODO::
-
-        if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
-            galleryButton.setEnabled(false);
-        } else if (!component.isGalleryActive()) {
+        if (!component.isGalleryActive()) {
             galleryButton.setVisibility(View.INVISIBLE);
+        }else if (Boolean.TRUE.equals(ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class))) {
+            galleryButton.setEnabled(false);
         } else {
             galleryButton.setOnClickListener((View v) -> gallerySelector.launch());
         }

@@ -29,7 +29,7 @@ import java.util.Map;
 public abstract class AbstractJobExecRepo implements Serializable, JobExecRepo {
     protected static final Map<Long, List<String>> messages = new HashMap<>();
 
-    protected void addMessage(Long execId, String msg) {
+    public void addMessage(Long execId, String msg) {
         List<String> msgList;
         if (messages.containsKey(execId)) {
             msgList = messages.get(execId);

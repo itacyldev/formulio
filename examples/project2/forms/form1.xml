@@ -16,7 +16,6 @@
                 </datalist>
             </tabitem>
         </tab>
-        ​
         <buttonbar type="bottom">
             <button label="save">
                 <action controller="contactList" type="save" />

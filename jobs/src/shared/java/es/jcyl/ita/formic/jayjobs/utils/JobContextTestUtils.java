@@ -54,17 +54,23 @@ public class JobContextTestUtils {
     }
 
     public static CompositeContext createJobExecContext(String projectBaseFolder) {
+        projectBaseFolder = projectBaseFolder.replace("\\","/");
         CompositeContext ctx = new UnPrefixedCompositeContext();
         Context appContext = new BasicContext("app");
 
         // Create temporary folder under SO tmp
-        File tmpDir = TestUtils.createTempDirectory();
-        appContext.put("workingFolder", tmpDir.getAbsolutePath());
+        File tmpDir = new File(TestFileUtils.createTmpFolder());
+        appContext.put("workingFolder", tmpDir.getAbsolutePath().replace("\\","/"));
         ctx.addContext(appContext);
+
+        Context globalContext = new BasicContext("gParams");
+        ctx.addContext(globalContext);
 
         // create job context and set the folder of job definition files
         Context projectCtx = new BasicContext("project");
         projectCtx.put("folder", projectBaseFolder);//resources folder
+        projectCtx.put("dataFolder", projectBaseFolder + "/data");//resources folder
+        projectCtx.put("formFolder", projectBaseFolder + "/forms");//resources folder
         ctx.addContext(projectCtx);
         return ctx;
     }

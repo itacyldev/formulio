@@ -1,7 +1,6 @@
-package es.jcyl.ita.formic.jayjobs.jobs.exec;
-
+package es.jcyl.ita.formic.jayjobs.task.processor.file;
 /*
- * Copyright 2022 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
+ * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +14,24 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class JobResource {
 
-    private long jobId;
-    private String resourcePath;
+import java.util.Arrays;
 
-    public long getJobId() {
-        return jobId;
+/**
+ * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)
+ */
+public class CmdParsed {
+
+    String command;
+    String[] args;
+
+    public CmdParsed(String command, String[] args){
+        this.command = command;
+        this.args = args;
     }
 
-    public void setJobId(long jobId) {
-        this.jobId = jobId;
-    }
-
-    public String getResourcePath() {
-        return resourcePath;
-    }
-
-    public void setResourcePath(String resourcePath) {
-        this.resourcePath = resourcePath;
+    @Override
+    public String toString() {
+        return command + Arrays.toString(args) ;
     }
 }
