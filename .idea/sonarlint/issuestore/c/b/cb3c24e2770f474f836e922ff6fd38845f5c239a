@@ -36,9 +36,9 @@ java:S1874Ó"9Remove this use of "PreferenceManager"; it is deprecated.(Òş£Â
 Z
 java:S1874Ó"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òş£Â
 f
-java:S1874ß"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(›äÊùÿÿÿÿ
-a
-java:S1874ì"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ
+java:S1874â"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(›äÊùÿÿÿÿ
+h
+java:S1874î"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ8Í­˜Ãğ0
 =
 java:S10686"'Remove this unused "TAG" private field.(Ç˜Éë
 h
@@ -51,4 +51,4 @@ java:S1604¸"(Make this anonymous inner class a lambda(îë Ì
 D
 java:S1604®"(Make this anonymous inner class a lambda(ÇÈ£ãıÿÿÿÿ
 F
-java:S1604ó"(Make this anonymous inner class a lambda(çºŠ„8 à ô·0
+java:S1604ô"(Make this anonymous inner class a lambda(çºŠ„8Õ­˜Ãğ0

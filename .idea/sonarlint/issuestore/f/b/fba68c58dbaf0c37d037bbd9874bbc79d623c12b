@@ -1,0 +1,34 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+r
+java:S1450H"]Remove the "fileOutputfile" field and declare it as a local variable in the relevant methods.(çò¹
+b
+java:S32525"GUse static access with "com.opencsv.ICSVWriter" for "DEFAULT_LINE_END".(œ†æïûÿÿÿÿ
+_
+java:S3252]"IUse static access with "com.opencsv.ICSVWriter" for "NO_QUOTE_CHARACTER".(Ş¶şÇ
+`
+java:S3252d"JUse static access with "com.opencsv.ICSVWriter" for "NO_ESCAPE_CHARACTER".(¯Í˜ˆ
+A
+java:S1172”"*Remove this unused method parameter "row".(Ë°”Ğ
+n
+java:S3776¢"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ŠÇä²øÿÿÿÿ
+p
+java:S2293ª"YReplace the type specification in this constructor call with the diamond operator ("<>").(‰·Ó
+p
+java:S2293«"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô­ µ
+b
+java:S1128"GRemove this unused import 'org.apache.commons.lang3.RandomStringUtils'.(Í¦ª¤ÿÿÿÿÿ
+G
+java:S1128"1Remove this unused import 'java.text.DateFormat'.(÷Œá¼
+M
+java:S1128"7Remove this unused import 'java.text.SimpleDateFormat'.(ú¡ÙÛ
+A
+java:S1128"+Remove this unused import 'java.util.Date'.(¸…¼ü
+r
+java:S1128!"WRemove this unused import 'es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor'.(¶«‰Ğûÿÿÿÿ
+k	java:S117["QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»Øòìşÿÿÿÿ
+k	java:S117b"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(úçÈşıÿÿÿÿ
+U
+java:S1155»">Use isEmpty() to check whether the collection is empty or not.(çåù®
+.
+java:S1700I"Rename field "csvWriter"(°ñ—Â
