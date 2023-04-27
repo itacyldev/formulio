@@ -1,85 +1,84 @@
 
 ¤
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(²™©«şÿÿÿÿ8ÎÔòâÃ0
-L
-java:S1874R"6Remove this use of "ProgressDialog"; it is deprecated.(‰¿öÊ
-P	java:S125Y"<This block of commented-out lines of code should be removed.(÷‘ª]
-Y	java:S125Á"<This block of commented-out lines of code should be removed.(¹Õ¨8’ÕòâÃ0
-U
-java:S1874Å"9Remove this use of "PreferenceManager"; it is deprecated.(´÷ø‘ûÿÿÿÿ
+java:S1186“"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(²™©«şÿÿÿÿ8Ü•èò0
+S
+java:S1874S"6Remove this use of "ProgressDialog"; it is deprecated.(‰¿öÊ8ë•èò0
+W	java:S125Z"<This block of commented-out lines of code should be removed.(÷‘ª]8ï•èò0
+Y	java:S125Â"<This block of commented-out lines of code should be removed.(¹Õ¨8„•èò0
+\
+java:S1874Æ"9Remove this use of "PreferenceManager"; it is deprecated.(´÷ø‘ûÿÿÿÿ8…•èò0
 a
-java:S1874Æ"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(‰®óÇ8•ÕòâÃ0
-^	java:S125ÿ"<This block of commented-out lines of code should be removed.(—´¡Íüÿÿÿÿ8˜ïßÓÚ0
-Y	java:S125°"<This block of commented-out lines of code should be removed.(ß‹ñ¼8¬ÕòâÃ0
+java:S1874Ç"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(‰®óÇ8…•èò0
+^	java:S125€"<This block of commented-out lines of code should be removed.(—´¡Íüÿÿÿÿ8’•èò0
 a
-java:S1874Ê">Remove this use of "startActivityForResult"; it is deprecated.(ÌÏÏÁùÿÿÿÿ8·ÕòâÃ0
+java:S1874Ï">Remove this use of "startActivityForResult"; it is deprecated.(ÌÏÏÁùÿÿÿÿ8œ•èò0
 m
-java:S1874ß"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(şèçúÿÿÿÿ8½ÕòâÃ0
+java:S1874ä"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(şèçúÿÿÿÿ8•èò0
 u
-java:S3776ß"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(şèçúÿÿÿÿ8¾ÕòâÃ0
-Y	java:S125î"<This block of commented-out lines of code should be removed.(ß‹ñ¼8ÂÕòâÃ0
+java:S3776ä"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(şèçúÿÿÿÿ8Ÿ•èò0
+Y	java:S125ó"<This block of commented-out lines of code should be removed.(ß‹ñ¼8 •èò0
 h
-java:S1874”"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ŸŒ¹Ñ8ÊÕòâÃ0
-p
-java:S3776”"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ŸŒ¹Ñ8ËÕòâÃ0
-i	java:S128—"LEnd this switch case with an unconditional break, return or throw statement.(Î²àÿ8ÏÕòâÃ0
-D	java:S131–""Add a default case to this switch.(×ö³–úÿÿÿÿ8ĞÕòâÃ0
-R
-java:S1874¶"/Remove this use of "execute"; it is deprecated.(‚ÀÛşÿÿÿÿ8²ÖòâÃ0
+java:S1874™"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ŸŒ¹Ñ8¤•èò0
+i	java:S128œ"LEnd this switch case with an unconditional break, return or throw statement.(Î²àÿ8¦•èò0
+D	java:S131›""Add a default case to this switch.(×ö³–úÿÿÿÿ8¦•èò0
+^	java:S125¾"<This block of commented-out lines of code should be removed.(ØşÕúÿÿÿÿÿ8ª•èò0
+Y	java:S125Ã"<This block of commented-out lines of code should be removed.(¬×¿ı8ª•èò0
 T
-java:S1874ï"1Remove this use of "AsyncTask"; it is deprecated.(áÓ¿İüÿÿÿÿ8ÅÖòâÃ0
-^	java:S125”"<This block of commented-out lines of code should be removed.(şÄôŒıÿÿÿÿ8ÏÖòâÃ0
-^	java:S125˜"<This block of commented-out lines of code should be removed.(şÄôŒıÿÿÿÿ8ÑÖòâÃ0
+java:S1874à"1Remove this use of "AsyncTask"; it is deprecated.(áÓ¿İüÿÿÿÿ8®•èò0
+^	java:S125…"<This block of commented-out lines of code should be removed.(şÄôŒıÿÿÿÿ8³•èò0
+^	java:S125‰"<This block of commented-out lines of code should be removed.(şÄôŒıÿÿÿÿ8³•èò0
 h
-java:S1874¤"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ê”ş¬8ÒÖòâÃ0
+java:S1874•"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ê”ş¬8´•èò0
 h
-java:S1874«"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ8×ÖòâÃ0
+java:S1874œ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ8µ•èò0
 T
-java:S1874»"1Remove this use of "AsyncTask"; it is deprecated.(”·Ô¤üÿÿÿÿ8àÖòâÃ0
+java:S1874¬"1Remove this use of "AsyncTask"; it is deprecated.(”·Ô¤üÿÿÿÿ8½•èò0
 m
-java:S1874É"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(Ü ú“üÿÿÿÿ8ãÖòâÃ0
+java:S1874º"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(Ü ú“üÿÿÿÿ8¾•èò0
 h
-java:S1874Õ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ8çÖòâÃ0
-X	java:S125ş"<This block of commented-out lines of code should be removed.(óß8€×òâÃ0
+java:S1874Å"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËĞƒ8¿•èò0
+X	java:S125í"<This block of commented-out lines of code should be removed.(óß8Ç•èò0
 P
-java:S1135€"2Complete the task associated to this TODO comment.(ş•ÚÊ8õÖòâÃ0
+java:S1135ï"2Complete the task associated to this TODO comment.(ş•ÚÊ8Ç•èò0
 \
-java:S1874"9Remove this use of "PreferenceManager"; it is deprecated.(åÅö§øÿÿÿÿ8øÖòâÃ0
+java:S1874ğ"9Remove this use of "PreferenceManager"; it is deprecated.(åÅö§øÿÿÿÿ8È•èò0
 f
-java:S1874"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(åÅö§øÿÿÿÿ8úÖòâÃ0
-F
-java:S3398Ë"#Move this method into "ImportTask".(´£„¢ùÿÿÿÿ8­×òâÃ0
-Y
-java:S1068M">Remove this unused "PERMISSION_STORAGE_REQUEST" private field.(·›ğûÿÿÿÿ
-Y
-java:S1144ú";Remove this unused private "checkStoragePermission" method.(Ø¨Í8®×òâÃ0
+java:S1874ğ"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(åÅö§øÿÿÿÿ8È•èò0
 R
-java:S1066"/Merge this if statement with the enclosing one.(ÎóÙôøÿÿÿÿ8°×òâÃ0
-g	java:S117¢"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹£Ğ
-n	java:S117â"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹£Ğ8ïïßÓÚ0
-g	java:S117‚"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(éÄ„
-s	java:S117ƒ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ûœ”õøÿÿÿÿ8²×òâÃ0
-D
-java:S1604£"(Make this anonymous inner class a lambda(õßØµüÿÿÿÿ
+java:S1874"/Remove this use of "execute"; it is deprecated.(‚ÀÛşÿÿÿÿ8å•èò0
 F
-java:S1604»"(Make this anonymous inner class a lambda(·ÍÖÈ8²×òâÃ0
-F
-java:S1604·"(Make this anonymous inner class a lambda(¯«ÈÁ8³×òâÃ0
+java:S3398¼"#Move this method into "ImportTask".(´£„¢ùÿÿÿÿ8æ•èò0
+`
+java:S1068N">Remove this unused "PERMISSION_STORAGE_REQUEST" private field.(·›ğûÿÿÿÿ8æ•èò0
+Y
+java:S1144û";Remove this unused private "checkStoragePermission" method.(Ø¨Í8æ•èò0
+R
+java:S1066†"/Merge this if statement with the enclosing one.(ÎóÙôøÿÿÿÿ8è•èò0
+n	java:S117£"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹£Ğ8è•èò0
+n	java:S117ã"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹£Ğ8è•èò0
+n	java:S117‡"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(éÄ„8é•èò0
+s	java:S117ˆ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ûœ”õøÿÿÿÿ8é•èò0
 K
-java:S1604½"(Make this anonymous inner class a lambda(¦Ï©Éùÿÿÿÿ8³×òâÃ0
+java:S1604¤"(Make this anonymous inner class a lambda(õßØµüÿÿÿÿ8é•èò0
 F
-java:S1604õ"(Make this anonymous inner class a lambda(¯«ÈÁ8´×òâÃ0
+java:S1604¼"(Make this anonymous inner class a lambda(·ÍÖÈ8é•èò0
 F
-java:S1604±"(Make this anonymous inner class a lambda(çºŠ„8´×òâÃ0
+java:S1604¼"(Make this anonymous inner class a lambda(¯«ÈÁ8é•èò0
+K
+java:S1604Â"(Make this anonymous inner class a lambda(¦Ï©Éùÿÿÿÿ8é•èò0
 F
-java:S1604İ"(Make this anonymous inner class a lambda(çºŠ„8´×òâÃ0
+java:S1604ú"(Make this anonymous inner class a lambda(¯«ÈÁ8ê•èò0
+F
+java:S1604¢"(Make this anonymous inner class a lambda(çºŠ„8ê•èò0
+F
+java:S1604Ì"(Make this anonymous inner class a lambda(çºŠ„8ê•èò0
 n
-java:S1301–"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ8µ×òâÃ0
+java:S1301›"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ8ê•èò0
 a
-java:S1155Ğ">Use isEmpty() to check whether the collection is empty or not.(¨ßÿ†ùÿÿÿÿ8¶×òâÃ0
+java:S1155Ñ">Use isEmpty() to check whether the collection is empty or not.(¨ßÿ†ùÿÿÿÿ8ë•èò0
 \
-java:S1155ª">Use isEmpty() to check whether the collection is empty or not.(Ë²‹8¶×òâÃ0
+java:S1155«">Use isEmpty() to check whether the collection is empty or not.(Ë²‹8ë•èò0
 :
-java:S1643"Use a StringBuilder instead.(‹Œ¡Ï8·×òâÃ0
+java:S1643ÿ"Use a StringBuilder instead.(‹Œ¡Ï8ë•èò0
 a
-java:S2583"CChange this condition so that it does not always evaluate to "true"(¥ ìú8ÇŞòâÃ0
+java:S2583¢"CChange this condition so that it does not always evaluate to "true"(¥ ìú8 ¤•èò0

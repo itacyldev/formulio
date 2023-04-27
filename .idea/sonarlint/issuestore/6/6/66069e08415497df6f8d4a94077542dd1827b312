@@ -1,32 +1,4 @@
 
 V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
-o
-java:S3008E"TRename this field "_instance" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(åìÿ·şÿÿÿÿ
-o
-java:S3008F"TRename this field "_handlers" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾µŠæùÿÿÿÿ
-t
-java:S2293F"YReplace the type specification in this constructor call with the diamond operator ("<>").(¾µŠæùÿÿÿÿ
-M
-java:S1135~"2Complete the task associated to this TODO comment.(Ñ—İ›şÿÿÿÿ
-L
-java:S2209˜"5Change this instance-reference to a static reference.(µ¸ğÄ
-N
-java:S1135"2Complete the task associated to this TODO comment.(‹¨Ø¥øÿÿÿÿ
-I
-java:S1135¢"2Complete the task associated to this TODO comment.(ÆÙÌ
-F
-java:S1172®"*Remove this unused method parameter "ctx".(µì¹§úÿÿÿÿ
-N
-java:S1135Ğ"2Complete the task associated to this TODO comment.(êÊøıÿÿÿÿ
-I
-java:S1135‰"2Complete the task associated to this TODO comment.(ˆêò‡
-I
-java:S1135¨"2Complete the task associated to this TODO comment.(ŸÙÖû
-I
-java:S1135©"2Complete the task associated to this TODO comment.(Ï÷õı
-q
-java:S11288"[Remove this unused import 'es.jcyl.ita.formic.jayjobs.jobs.listener.AggregatedJobListener'.(“„
-s
-java:S11289"XRemove this unused import 'es.jcyl.ita.formic.jayjobs.jobs.listener.LogJobExecListener'.(…ïåïşÿÿÿÿ
-:
-java:S1640F"Convert this Map to an EnumMap.(¾µŠæùÿÿÿÿ
+Y	java:S125£"<This block of commented-out lines of code should be removed.(Ä¤Øñ8½ ›˜ò0
+^	java:S125ò"<This block of commented-out lines of code should be removed.(ƒÙÍæÿÿÿÿÿ8É ›˜ò0
