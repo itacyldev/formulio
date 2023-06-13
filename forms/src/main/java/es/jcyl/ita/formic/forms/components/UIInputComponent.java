@@ -32,7 +32,7 @@ import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 public class UIInputComponent extends AbstractUIComponent {
     private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
-    private String valueConverter;
+    protected String valueConverter;
     private Integer inputType = null;
     protected boolean hasDeleteButton = true;
     protected boolean hasTodayButton = true;

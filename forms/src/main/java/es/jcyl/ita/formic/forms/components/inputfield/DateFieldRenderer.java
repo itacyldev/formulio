@@ -131,7 +131,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             @Override
             public void onClick(final View arg0) {
                 // set now
-                String strValue = (String) ConvertUtils.convert(new Date(), String.class);
+                String strValue = (String) ConvertUtils.convert(new java.util.Date(), String.class);
                 input.setText(formatDate(strValue, widget));
             }
         });
@@ -157,13 +157,30 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     private String formatDate(String value, InputWidget<UIField, Button> widget) {
         String formattedDate = "";
+        Date date;
+
+        if (isTimestamp(value)){
+            date = new Date(value.length() == 10? Long.parseLong(value.concat("000")):Long.parseLong(value));
+        }else{
+            date = (Date) ConvertUtils.convert(value, Date.class);
+        }
+
         try {
-            formattedDate = new SimpleDateFormat(widget.getComponent().getPattern()).format(((Date) ConvertUtils.convert(value, Date.class)));
+            formattedDate = new SimpleDateFormat(widget.getComponent().getPattern()).format(date);
         } catch (Exception e) {
             DevConsole.error(String.format("An error occurred while trying to format the date [%s].", value));
             return value;
         }
         return formattedDate;
+    }
+
+    private static boolean isTimestamp(String input) {
+        try {
+            long timestamp = Long.parseLong(input);
+            return String.valueOf(timestamp).length() == input.length();
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private String formatDate(Date date, String pattern) {

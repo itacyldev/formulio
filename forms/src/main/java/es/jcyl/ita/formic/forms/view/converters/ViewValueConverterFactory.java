@@ -40,6 +40,7 @@ public class ViewValueConverterFactory {
         map.put("urlImage", new ImageViewUrlConverter());
         map.put("b64Image", new ImageView64Converter());
         map.put("byteArrayImage", new ImageViewByteArrayConverter());
+        map.put("integer", new TextViewIntegerConverter());
     }
 
     public static ViewValueConverterFactory getInstance() {

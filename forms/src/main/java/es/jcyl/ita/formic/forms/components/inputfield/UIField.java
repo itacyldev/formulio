@@ -1,15 +1,11 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
 import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
 
-import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.el.JexlFormUtils;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATE;
+import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATETIME;
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXT;
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXTAREA;
 
@@ -34,7 +30,10 @@ public class UIField extends UIInputComponent {
     public String getValueConverter() {
         if (type == TEXT || type == TEXTAREA) {
             return "text";
-        } else {
+        }
+        else if ((type ==  DATE || type == DATETIME) && StringUtils.isNotEmpty(this.valueConverter) && this.valueConverter.equalsIgnoreCase("integer")) {
+            return this.valueConverter;
+        }else {
             return type.name().toLowerCase();
         }
     }
