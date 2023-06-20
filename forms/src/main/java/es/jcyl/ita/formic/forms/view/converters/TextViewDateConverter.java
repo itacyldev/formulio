@@ -31,7 +31,7 @@ import es.jcyl.ita.formic.core.context.ContextException;
  * <p>
  * Class to
  */
-public class TextViewIntegerConverter implements ViewValueConverter<TextView> {
+public class TextViewDateConverter implements ViewValueConverter<TextView> {
 
     private String pattern;
 

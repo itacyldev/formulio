@@ -25,11 +25,6 @@ import es.jcyl.ita.formic.forms.components.option.UIOptionsAdapterHelper;
  */
 public class AutoCompleteStaticValueConverter implements ViewValueConverter<AutoCompleteView> {
 
-//    @Override
-//    public String getValueFromViewAsString(AutoCompleteView view) {
-//        return getValueFromView(view, String.class);
-//    }
-
     @Override
     public Object getValueFromView(AutoCompleteView view) {
         return view.getValue();

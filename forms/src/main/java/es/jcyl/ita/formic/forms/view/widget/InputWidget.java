@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
-import es.jcyl.ita.formic.forms.view.converters.TextViewIntegerConverter;
+import es.jcyl.ita.formic.forms.view.converters.TextViewDateConverter;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 
 /**
@@ -70,8 +70,8 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
     }
 
     public Object getValue() {
-        if (converter instanceof TextViewIntegerConverter){
-            ((TextViewIntegerConverter)converter).setPattern(((UIField) this.getComponent()).getPattern());
+        if (converter instanceof TextViewDateConverter){
+            ((TextViewDateConverter)converter).setPattern(((UIField) this.getComponent()).getPattern());
         }
         return (inputView == null) ? null : converter.getValueFromView(inputView);
     }

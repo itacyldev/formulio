@@ -30,10 +30,7 @@ public class UIField extends UIInputComponent {
     public String getValueConverter() {
         if (type == TEXT || type == TEXTAREA) {
             return "text";
-        }
-        else if ((type ==  DATE || type == DATETIME) && StringUtils.isNotEmpty(this.valueConverter) && this.valueConverter.equalsIgnoreCase("integer")) {
-            return this.valueConverter;
-        }else {
+        } else {
             return type.name().toLowerCase();
         }
     }
@@ -58,21 +55,6 @@ public class UIField extends UIInputComponent {
         this.lines = lines;
     }
 
-    public String getPattern() {
-        if (pattern == null) {
-            if (getType().equals(DATE.name())) {
-                setPattern(getDatePattern());
-            } else {
-                setPattern(getDatetimePattern());
-            }
-        }
-        return pattern;
-    }
-
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
-
     public String getDatePattern() {
         return datePattern;
     }
@@ -87,5 +69,16 @@ public class UIField extends UIInputComponent {
 
     public void setDatetimePattern(String datetimePattern) {
         this.datetimePattern = datetimePattern;
+    }
+
+    public String getPattern() {
+        if (pattern == null) {
+            if (getType().equals(DATE.name())) {
+                setPattern(getDatePattern());
+            } else {
+                setPattern(getDatetimePattern());
+            }
+        }
+        return pattern;
     }
 }

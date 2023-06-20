@@ -33,7 +33,6 @@ public class TextViewConverter implements ViewValueConverter<TextView> {
         return (StringUtils.isEmpty(value)) ? null : value.toString();
     }
 
-
     @Override
     public void setViewValue(TextView view, Object value) {
         String textValue = (String) ConvertUtils.convert(value, String.class);
