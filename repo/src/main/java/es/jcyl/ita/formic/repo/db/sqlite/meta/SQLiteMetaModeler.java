@@ -134,7 +134,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
         DBPropertyType.DBPropertyTypeBuilder builder = new DBPropertyType.DBPropertyTypeBuilder(name, clazz, dbType.name(), false)
                 .withConverter(converter)
                 .withColumnName(columnName)
-                .withFormat(format!=null?DBPropertyType.FORMAT.valueOf(format.toUpperCase()):null);
+                .withFormat(format);
 
         // Is it and expression based property?
         if (StringUtils.isNotBlank(expression)) {

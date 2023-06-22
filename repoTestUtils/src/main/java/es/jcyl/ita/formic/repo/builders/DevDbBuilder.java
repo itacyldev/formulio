@@ -115,7 +115,7 @@ public class DevDbBuilder {
      *
      * @param db
      */
-    public void build(SQLiteDatabase db ) {
+    public void build(SQLiteDatabase db) {
         build(new StandardDatabase(db));
     }
 
@@ -123,7 +123,8 @@ public class DevDbBuilder {
         this.db = db;
         this.daoMaster = new DaoMaster(db);
         if (this.meta == null) {
-            this.meta = buildRandomMeta(RandomUtils.randomString(10), this.limitedValues);
+            Map<String, Class> propTypes = getFirstObjectTypes(this.limitedValues);
+            this.meta = buildRandomMeta(RandomUtils.randomString(10), propTypes);
         }
         // create table using meta information
         DevDbBuilder.createTable(this.getDb(), this.meta);
@@ -210,13 +211,13 @@ public class DevDbBuilder {
         return buildRandomMeta(name, null);
     }
 
-    public static EntityMeta buildRandomMeta(String name, Map<String, Object[]> limitedValues) {
+    public static EntityMeta buildRandomMeta(String name, Map<String, Class> propertyTypes) {
         EntityMetaDataBuilder metaBuilder = new EntityMetaDataBuilder();
         metaBuilder.withBasicTypes(true).withRandomData().withEntityName(name);
-        if (limitedValues != null) {
-            // add properties with expected data types
-            for (Map.Entry<String, Object[]> entry : limitedValues.entrySet()) {
-                metaBuilder.addProperty(entry.getKey(), entry.getValue()[0].getClass());
+        // add properties with expected data types
+        if (propertyTypes != null) {
+            for (Map.Entry<String, Class> entry : propertyTypes.entrySet()) {
+                metaBuilder.addProperty(entry.getKey(), entry.getValue());
             }
         }
         return metaBuilder.build();
@@ -296,6 +297,7 @@ public class DevDbBuilder {
     public static List<Entity> buildEntities(EntityMeta meta, int numEntities) {
         return buildEntities(meta, numEntities, null);
     }
+
     public static List<Entity> buildEntitiesRandomMeta(int numEntities) {
         EntityMeta meta = buildRandomMeta();
         return buildEntities(meta, numEntities, null);
@@ -354,4 +356,17 @@ public class DevDbBuilder {
         return count;
     }
 
+    public Map<String, Class> getFirstObjectTypes(Map<String, Object[]> limitedValues) {
+        Map<String, Class> typesMap = new HashMap<>();
+        if (limitedValues != null) {
+            for (Map.Entry<String, Object[]> entry : limitedValues.entrySet()) {
+                Object[] values = entry.getValue();
+                if (values.length > 0) {
+                    Class<?> type = values[0].getClass();
+                    typesMap.put(entry.getKey(), type);
+                }
+            }
+        }
+        return typesMap;
+    }
 }
