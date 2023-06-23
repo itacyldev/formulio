@@ -1,11 +1,7 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
-import org.apache.commons.lang3.StringUtils;
-
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
 
-import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATE;
-import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATETIME;
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXT;
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXTAREA;
 
@@ -71,7 +67,7 @@ public class UIField extends UIInputComponent {
         this.datetimePattern = datetimePattern;
     }
 
-    public String getPattern() {
+   /*public String getPattern() {
         if (pattern == null) {
             if (getType().equals(DATE.name())) {
                 setPattern(getDatePattern());
@@ -80,5 +76,5 @@ public class UIField extends UIInputComponent {
             }
         }
         return pattern;
-    }
+    }*/
 }

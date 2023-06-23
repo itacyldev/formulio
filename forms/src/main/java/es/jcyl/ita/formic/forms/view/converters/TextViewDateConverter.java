@@ -26,6 +26,8 @@ import java.util.Date;
 
 import es.jcyl.ita.formic.core.context.ContextException;
 
+import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATE;
+
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  * <p>
@@ -34,17 +36,27 @@ import es.jcyl.ita.formic.core.context.ContextException;
 public class TextViewDateConverter implements ViewValueConverter<TextView> {
 
     private String pattern;
+    private String type;
+    private String datePattern = "yyyy-MM-dd";
+    private String datetimePattern = "yyyy-MM-dd HH:mm:ss";
 
     @Override
     public Object getValueFromView(TextView view) {
         CharSequence value = view.getText();
         Object valueFromView = null;
         if (!StringUtils.isEmpty(value)) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(getPattern());
+            // Convertir la cadena a un objeto Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat(type.equals(DATE.name()) ? datePattern : datetimePattern);
             Date parsedDate = null;
             try {
-                parsedDate = dateFormat.parse(value.toString());
-                valueFromView = parsedDate.getTime() / 1000;
+                valueFromView = dateFormat.parse(value.toString());
+                if (pattern.equals("unixepoch_s")) {
+                    valueFromView = ((Date) valueFromView).getTime() / 1000;
+                } else if (pattern.equals("unixepoch_m")) {
+                    valueFromView = ((Date) valueFromView).getTime();
+                } else{
+                    valueFromView = dateFormat.format(valueFromView);
+                }
             } catch (ParseException e) {
                 throw new ContextException(String.format(
                         "There was and error while trying "
@@ -52,7 +64,9 @@ public class TextViewDateConverter implements ViewValueConverter<TextView> {
                         pattern));
             }
         }
-       return valueFromView;
+        return valueFromView;
+      /*  CharSequence value = view.getText();
+        return (StringUtils.isEmpty(value)) ? null : value.toString();*/
     }
 
 
@@ -68,5 +82,13 @@ public class TextViewDateConverter implements ViewValueConverter<TextView> {
 
     public void setPattern(String pattern) {
         this.pattern = pattern;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

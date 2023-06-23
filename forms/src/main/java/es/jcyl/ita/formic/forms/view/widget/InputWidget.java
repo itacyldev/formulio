@@ -71,7 +71,12 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
 
     public Object getValue() {
         if (converter instanceof TextViewDateConverter){
-            ((TextViewDateConverter)converter).setPattern(((UIField) this.getComponent()).getPattern());
+            String type = ((UIField)this.getComponent()).getType();
+            String pattern = ((UIField)this.getComponent()).getPattern();
+            //String pattern = type.equals(DATE.name())?((UIField)this.getComponent()).getDatePattern():((UIField)this.getComponent()).getDatetimePattern();
+
+            ((TextViewDateConverter)converter).setPattern(pattern);
+            ((TextViewDateConverter)converter).setType(type);
         }
         return (inputView == null) ? null : converter.getValueFromView(inputView);
     }

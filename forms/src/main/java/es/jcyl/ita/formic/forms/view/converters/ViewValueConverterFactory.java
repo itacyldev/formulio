@@ -57,4 +57,8 @@ public class ViewValueConverterFactory {
             return map.get(type);
         }
     }
+
+    public ViewValueConverter get(String type) {
+        return map.get(type);
+    }
 }
