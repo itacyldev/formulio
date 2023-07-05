@@ -14,19 +14,19 @@ import org.mini2Dx.beanutils.ConvertUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.components.StyleHolder;
-import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.converters.CustomDateConverter;
 import es.jcyl.ita.formic.forms.view.helpers.ViewHelper;
 import es.jcyl.ita.formic.forms.view.render.InputTextRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
+
+import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATE;
 
 /*
  * Copyright 2020 Javier Ramos (javier.ramos@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -87,15 +87,20 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
                                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                     c.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                     c.set(Calendar.MINUTE, minute);
-                                    String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
-                                    input.setText(formatDate(strValue, widget));
+                                    //String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
+                                    //input.setText(formatDate(strValue, widget.getComponent().getDatetimePattern(), widget));
+                                    String strValue = (String) ConvertUtils.convert(new SimpleDateFormat(widget.getComponent().getDatetimePattern()).format(c.getTime()), String.class);
+                                    input.setText(strValue);
                                 }
                             }, hour, minute, false);
                             timePickerDialog.show();
                         }
 
-                        String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
-                        input.setText(formatDate(strValue, widget));
+
+                        //String strValue = (String) ConvertUtils.convert(c.getTime(), String.class);
+                        //input.setText(formatDate(strValue, widget.getComponent().getType().equals(DATE.name()) ? widget.getComponent().getDatePattern() : widget.getComponent().getDatetimePattern(), widget));
+                        String strValue = (String) ConvertUtils.convert(new SimpleDateFormat(widget.getComponent().getType().equals(DATE.name()) ? widget.getComponent().getDatePattern() : widget.getComponent().getDatetimePattern()).format(c.getTime()), String.class);
+                        input.setText(strValue);
 
                         UserEventInterceptor interceptor = env.getUserActionInterceptor();
                         if (interceptor != null) {
@@ -112,7 +117,7 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
                 Calendar c = new GregorianCalendar();
                 if (input.getText() != null && StringUtils.isNotEmpty(input.getText())) {
                     CustomDateConverter cdc = new CustomDateConverter();
-                    cdc.setPatterns(new String[]{widget.getComponent().getPattern()});
+                    cdc.setPatterns(new String[]{widget.getComponent().getType().equals(DATE.name())?widget.getComponent().getDatePattern():widget.getComponent().getDatetimePattern()});
                     ConvertUtils.register(cdc, Calendar.class);
 
                     c = (Calendar) ConvertUtils.convert(input.getText(), Calendar.class);
@@ -131,8 +136,10 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
             @Override
             public void onClick(final View arg0) {
                 // set now
-                String strValue = (String) ConvertUtils.convert(new Date(), String.class);
-                input.setText(formatDate(strValue, widget));
+                //String strValue = (String) ConvertUtils.convert(new java.util.Date(), String.class);
+                //input.setText(formatDate(strValue, widget.getComponent().getType().equals(DATE.name()) ? widget.getComponent().getDatePattern() : widget.getComponent().getDatetimePattern(), widget));
+                String strValue = (String) ConvertUtils.convert(new SimpleDateFormat(widget.getComponent().getType().equals(DATE.name())?widget.getComponent().getDatePattern():widget.getComponent().getDatetimePattern()).format(new java.util.Date()), String.class);
+                input.setText(strValue);
             }
         });
 
@@ -152,23 +159,41 @@ public class DateFieldRenderer extends InputTextRenderer<UIField, Button> {
 
     protected void setValueInView(RenderingEnv env, InputWidget<UIField, Button> widget) {
         String value = getComponentValue(env, widget.getComponent(), String.class);
-        widget.getConverter().setViewValue(widget.getInputView(), StringUtils.isNotEmpty(value) ? formatDate(value, widget) : value);
+        widget.getConverter().setPattern(widget.getComponent().getPattern());
+        widget.getConverter().setType(widget.getComponent().getType());
+        widget.getConverter().setViewValue(widget.getInputView(), value);
+        //widget.getConverter().setViewValue(widget.getInputView(), StringUtils.isNotEmpty(value) ? formatDate(value, null, widget) : value);
     }
 
-    private String formatDate(String value, InputWidget<UIField, Button> widget) {
+    /*private String formatDate(String value, String pattern, InputWidget<UIField, Button> widget) {
         String formattedDate = "";
+        Date date;
+
+        if (StringUtils.isEmpty(pattern)) {
+            pattern = widget.getComponent().getPattern();
+            if (StringUtils.isEmpty(pattern)) {
+                pattern = widget.getComponent().getType().equals(DATE.name()) ? widget.getComponent().getDatePattern() : widget.getComponent().getDatetimePattern();
+            }
+        }
+
+
+        if (pattern.equals("unixepoch_s")){
+            date = new Date(Long.parseLong(value.concat("000")));
+        }else if (pattern.equals("unixepoch_m")){
+            date = new Date(Long.parseLong(value));
+        }else{
+            date = (Date) ConvertUtils.convert(value, Date.class);
+        }
+
         try {
-            formattedDate = new SimpleDateFormat(widget.getComponent().getPattern()).format(((Date) ConvertUtils.convert(value, Date.class)));
+            formattedDate = new SimpleDateFormat(widget.getComponent().getType().equals(DATE.name())?widget.getComponent().getDatePattern():widget.getComponent().getDatetimePattern()).format(date);
         } catch (Exception e) {
             DevConsole.error(String.format("An error occurred while trying to format the date [%s].", value));
             return value;
         }
-        return formattedDate;
-    }
 
-    private String formatDate(Date date, String pattern) {
-        return new SimpleDateFormat(pattern).format(date);
-    }
+        return formattedDate;
+    }*/
 
     @Override
     protected <T> T handleNullValue(UIField component) {

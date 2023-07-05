@@ -15,6 +15,8 @@ package es.jcyl.ita.formic.forms.components;
  * limitations under the License.
  */
 
+import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATE;
+
 import android.widget.ImageView;
 
 import java.util.Arrays;
@@ -32,11 +34,12 @@ import es.jcyl.ita.formic.forms.view.converters.ViewValueConverterFactory;
 public class UIInputComponent extends AbstractUIComponent {
     private static final ViewValueConverterFactory viewConverterFactory = ViewValueConverterFactory.getInstance();
 
-    private String valueConverter;
+    protected String valueConverter;
     private Integer inputType = null;
     protected boolean hasDeleteButton = true;
     protected boolean hasTodayButton = true;
     protected String hint;
+    protected String pattern;
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
     private Validator[] validators = EMPTY_VALIDATOR;
@@ -104,7 +107,7 @@ public class UIInputComponent extends AbstractUIComponent {
     }
 
     public ViewValueConverter getConverter() {
-        return viewConverterFactory.get(this.getValueConverter());
+        return viewConverterFactory.get(this.getValueConverter(), this.getPattern());
     }
 
     public void setValueConverter(String valueConverter) {
@@ -170,5 +173,13 @@ public class UIInputComponent extends AbstractUIComponent {
 
     public void setInfoButton(ImageView infoButton) {
         this.infoButton = infoButton;
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
     }
 }

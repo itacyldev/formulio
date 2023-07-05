@@ -1,15 +1,7 @@
 package es.jcyl.ita.formic.forms.components.inputfield;
 
-import org.apache.commons.lang3.StringUtils;
-import org.mini2Dx.beanutils.ConvertUtils;
-
-import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
-import es.jcyl.ita.formic.forms.el.JexlFormUtils;
-import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
-import es.jcyl.ita.formic.forms.view.ViewConfigException;
 
-import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATE;
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXT;
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.TEXTAREA;
 
@@ -59,21 +51,6 @@ public class UIField extends UIInputComponent {
         this.lines = lines;
     }
 
-    public String getPattern() {
-        if (pattern == null) {
-            if (getType().equals(DATE.name())) {
-                setPattern(getDatePattern());
-            } else {
-                setPattern(getDatetimePattern());
-            }
-        }
-        return pattern;
-    }
-
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
-
     public String getDatePattern() {
         return datePattern;
     }
@@ -89,4 +66,15 @@ public class UIField extends UIInputComponent {
     public void setDatetimePattern(String datetimePattern) {
         this.datetimePattern = datetimePattern;
     }
+
+   /*public String getPattern() {
+        if (pattern == null) {
+            if (getType().equals(DATE.name())) {
+                setPattern(getDatePattern());
+            } else {
+                setPattern(getDatetimePattern());
+            }
+        }
+        return pattern;
+    }*/
 }

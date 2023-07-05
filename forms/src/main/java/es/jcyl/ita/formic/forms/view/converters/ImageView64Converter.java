@@ -54,4 +54,14 @@ public class ImageView64Converter extends AbstractImageViewValueConverter<String
     protected String readObjectFromImageResourceAsString(MediaResource resource) throws IOException {
         return readObjectFromImageResource(resource);
     }
+
+    @Override
+    public void setPattern(String pattern) {
+
+    }
+
+    @Override
+    public void setType(String type) {
+
+    }
 }
