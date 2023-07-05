@@ -39,4 +39,14 @@ class SwitcherFieldViewConverter implements ViewValueConverter<Switch> {
             view.setChecked(boolValue);
         }
     }
+
+    @Override
+    public void setPattern(String pattern) {
+
+    }
+
+    @Override
+    public void setType(String type) {
+
+    }
 }

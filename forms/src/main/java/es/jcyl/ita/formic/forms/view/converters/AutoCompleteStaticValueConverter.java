@@ -38,4 +38,14 @@ public class AutoCompleteStaticValueConverter implements ViewValueConverter<Auto
         view.setSelection(pos);
     }
 
+    @Override
+    public void setPattern(String pattern) {
+
+    }
+
+    @Override
+    public void setType(String type) {
+
+    }
+
 }

@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import es.jcyl.ita.formic.core.context.ContextException;
+import es.jcyl.ita.formic.forms.config.DevConsole;
 
 import static es.jcyl.ita.formic.forms.components.inputfield.UIField.TYPE.DATE;
 
@@ -44,12 +45,15 @@ public class TextViewDateConverter implements ViewValueConverter<TextView> {
     public Object getValueFromView(TextView view) {
         CharSequence value = view.getText();
         Object valueFromView = null;
-        if (!StringUtils.isEmpty(value)) {
+       if (!StringUtils.isEmpty(value)) {
             // Convertir la cadena a un objeto Date
             SimpleDateFormat dateFormat = new SimpleDateFormat(type.equals(DATE.name()) ? datePattern : datetimePattern);
             Date parsedDate = null;
             try {
                 valueFromView = dateFormat.parse(value.toString());
+                if (StringUtils.isEmpty(pattern)){
+                    pattern = type.equals(DATE.name()) ? datePattern :datetimePattern;
+                }
                 if (pattern.equals("unixepoch_s")) {
                     valueFromView = ((Date) valueFromView).getTime() / 1000;
                 } else if (pattern.equals("unixepoch_m")) {
@@ -65,15 +69,37 @@ public class TextViewDateConverter implements ViewValueConverter<TextView> {
             }
         }
         return valueFromView;
-      /*  CharSequence value = view.getText();
-        return (StringUtils.isEmpty(value)) ? null : value.toString();*/
     }
-
 
     @Override
     public void setViewValue(TextView view, Object value) {
-        String textValue = (String) ConvertUtils.convert(value, String.class);
+        String textValue = (String) ConvertUtils.convert(StringUtils.isNotEmpty((CharSequence) value) ? formatDate((String) value):value, String.class);
         view.setText(textValue);
+    }
+
+    private String formatDate(String value) {
+        String formattedDate = "";
+        Date date;
+
+        if (StringUtils.isEmpty(pattern)){
+            pattern = type.equals(DATE.name()) ? datePattern :datetimePattern;
+        }
+        if (pattern.equals("unixepoch_s")){
+            date = new Date(Long.parseLong(value.concat("000")));
+        }else if (pattern.equals("unixepoch_m")){
+            date = new Date(Long.parseLong(value));
+        }else{
+            date = (Date) ConvertUtils.convert(value, Date.class);
+        }
+
+        try {
+            formattedDate = new SimpleDateFormat(type.equals(DATE.name()) ? datePattern :datetimePattern).format(date);
+        } catch (Exception e) {
+            DevConsole.error(String.format("An error occurred while trying to format the date [%s].", value));
+            return value;
+        }
+
+        return formattedDate;
     }
 
     public String getPattern() {
@@ -91,4 +117,5 @@ public class TextViewDateConverter implements ViewValueConverter<TextView> {
     public void setType(String type) {
         this.type = type;
     }
+
 }

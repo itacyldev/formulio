@@ -44,4 +44,7 @@ public interface ViewValueConverter<T extends View> {
      */
     void setViewValue(T view, Object value);
 
+    void setPattern(String pattern);
+
+    void setType(String type);
 }

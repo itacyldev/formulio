@@ -49,4 +49,14 @@ class RadioValueConverter implements ViewValueConverter<RadioGroup> {
         }
     }
 
+    @Override
+    public void setPattern(String pattern) {
+
+    }
+
+    @Override
+    public void setType(String type) {
+
+    }
+
 }

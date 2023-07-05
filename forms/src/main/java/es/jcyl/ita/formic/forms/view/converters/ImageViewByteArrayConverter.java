@@ -50,4 +50,14 @@ public class ImageViewByteArrayConverter extends AbstractImageViewValueConverter
     protected String readObjectFromImageResourceAsString(MediaResource resource) throws IOException {
         return new String(resource.getContent());
     }
+
+    @Override
+    public void setPattern(String pattern) {
+
+    }
+
+    @Override
+    public void setType(String type) {
+
+    }
 }
