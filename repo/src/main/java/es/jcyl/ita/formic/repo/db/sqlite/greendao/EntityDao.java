@@ -214,7 +214,12 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
             value = entity.get(p.getName());
             if (hasToBeCalculated(dp, value)) {
                 value = calculateProperty(dp);
+                // the calculated property might change not just the format but the type of the object.
+                // The value will be converted before inserting in the bindValue method, but here with temporarily
+                // disable the constraint to set the calculated value to the entity.
+                entity.enablePropertyValidation(false);
                 entity.set(p.getName(), value);
+                entity.enablePropertyValidation(true);
             }
             propertyBinder.bindValue(stmt, dp, i, value);
             i++;
