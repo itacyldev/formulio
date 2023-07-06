@@ -122,7 +122,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
                                                       String javaType, String persistenceType,
                                                       String expression, String expressionType,
                                                       String evaluateOn,
-                                                      String format) {
+                                                      String pattern) {
         // find proper converter for javaType<-> dbType transformation
         SQLitePropertyConverter converter;
         Class clazz = TypeUtils.getType(javaType);
@@ -134,7 +134,7 @@ public class SQLiteMetaModeler implements MetaModeler<DBTableEntitySource> {
         DBPropertyType.DBPropertyTypeBuilder builder = new DBPropertyType.DBPropertyTypeBuilder(name, clazz, dbType.name(), false)
                 .withConverter(converter)
                 .withColumnName(columnName)
-                .withFormat(format);
+                .withPattern(pattern);
 
         // Is it and expression based property?
         if (StringUtils.isNotBlank(expression)) {

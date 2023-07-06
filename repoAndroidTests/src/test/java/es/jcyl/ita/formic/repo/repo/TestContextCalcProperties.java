@@ -15,10 +15,9 @@ package es.jcyl.ita.formic.repo.repo;
  * limitations under the License.
  */
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import android.content.Context;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -31,16 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
+import es.jcyl.ita.formic.core.context.CompositeContext;
+import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.core.context.impl.DateTimeContext;
+import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.formic.core.format.DateValueFormatter;
 import es.jcyl.ita.formic.repo.EditableRepository;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.builders.DevDbBuilder;
-import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.core.context.impl.OrderedCompositeContext;
 import es.jcyl.ita.formic.repo.db.meta.DBPropertyType;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
@@ -53,6 +50,8 @@ import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.INSERT;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.SELECT;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.CALC_MOMENT.UPDATE;
 import static es.jcyl.ita.formic.repo.db.meta.DBPropertyType.DBPropertyTypeBuilder;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -250,7 +249,7 @@ public class TestContextCalcProperties {
         return globalCxt;
     }
 
-    private DBPropertyType setPropertyAsCalculated(DBPropertyType property, CALC_MOMENT when, CALC_METHOD how, String expression, String format) {
+    private DBPropertyType setPropertyAsCalculated(DBPropertyType property, CALC_MOMENT when, CALC_METHOD how, String expression, String pattern) {
         DBPropertyTypeBuilder builder = new DBPropertyTypeBuilder(property);
         switch (how) {
             case JEXL:
@@ -259,8 +258,8 @@ public class TestContextCalcProperties {
             case SQL:
                 builder.withSQLExpression(expression, when);
         }
-        if (StringUtils.isNotBlank(format)) {
-            builder.withFormat(format);
+        if (StringUtils.isNotBlank(pattern)) {
+            builder.withPattern(pattern);
         }
         return builder.build();
     }

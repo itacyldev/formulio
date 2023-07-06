@@ -176,10 +176,10 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
                         " to se on repos during initialization.");
             }
             Object value = JexlEntityUtils.eval(context, p.getExpression());
-            if (StringUtils.isNotBlank(p.getFormat())) {
+            if (StringUtils.isNotBlank(p.getPattern())) {
                 Class objectType = (value == null) ? Void.class : value.getClass();
-                ValueFormatter formatter = ValueFormatterFactory.getInstance().getFormatter(objectType, p.getFormat(), p.getType());
-                value = formatter.format(value, p.getFormat());
+                ValueFormatter formatter = ValueFormatterFactory.getInstance().getFormatter(objectType, p.getPattern(), p.getType());
+                value = formatter.format(value, p.getPattern());
             }
             return value;
         } else {
