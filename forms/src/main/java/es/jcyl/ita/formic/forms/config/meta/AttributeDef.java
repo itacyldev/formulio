@@ -72,7 +72,6 @@ public class AttributeDef {
     public static final Attribute PROPERTY = new Attribute("property", true);
     public static final Attribute REPO_PROPERTY = new Attribute("repoProperty", true);
     public static final Attribute KEYGENERATOR = new Attribute("keyGenerator", true);
-    public static final Attribute FORMAT = new Attribute("format", true);
 
     // autocomplete
     public static final Attribute VALUE_PROPERTY = new Attribute("valueProperty");

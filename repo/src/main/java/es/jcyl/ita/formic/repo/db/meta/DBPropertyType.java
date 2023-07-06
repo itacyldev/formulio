@@ -38,7 +38,7 @@ public class DBPropertyType extends PropertyType {
     protected String expression;
     protected SQLitePropertyConverter converter;
     protected KeyGeneratorStrategy keyGenerator;
-    protected String format;
+    protected String pattern;
 
     public DBPropertyType(String name, Class<?> type, String persistenceType, boolean primaryKey) {
         super(name, type, persistenceType, primaryKey);
@@ -99,8 +99,8 @@ public class DBPropertyType extends PropertyType {
         return converter;
     }
 
-    public String getFormat() {
-        return format;
+    public String getPattern() {
+        return pattern;
     }
 
     // TODO PropertyType is supposed to be persistence independent, here some specific SQL features are
@@ -119,7 +119,7 @@ public class DBPropertyType extends PropertyType {
             property.calculateBy = prop.calculateBy;
             property.calculateOn = prop.calculateOn;
             property.expression = prop.expression;
-            property.format = prop.format;
+            property.pattern = prop.pattern;
         }
 
         public DBPropertyTypeBuilder(String name, Class<?> type, String persistenceType, boolean primaryKey) {
@@ -152,8 +152,8 @@ public class DBPropertyType extends PropertyType {
             return this;
         }
 
-        public DBPropertyTypeBuilder withFormat(String format) {
-            this.property.format = format;
+        public DBPropertyTypeBuilder withPattern(String pattern) {
+            this.property.pattern = pattern;
             return this;
         }
 
