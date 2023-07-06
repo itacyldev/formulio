@@ -28,7 +28,7 @@ import es.jcyl.ita.formic.forms.components.UIInputComponent;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.inputfield.UIField;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
+import es.jcyl.ita.formic.core.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;

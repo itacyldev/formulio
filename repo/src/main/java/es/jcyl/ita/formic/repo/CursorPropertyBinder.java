@@ -36,7 +36,7 @@ public class CursorPropertyBinder {
         } else {
             switch (dbValue.dbType) {
                 case INTEGER:
-                    stmt.bindLong(columnIndex, property.isSeconds()?(long)dbValue.value/1000:(long)dbValue.value);
+                    stmt.bindLong(columnIndex, (long) dbValue.value);
                     break;
                 case TEXT:
                     stmt.bindString(columnIndex, (String) dbValue.value);
@@ -58,7 +58,7 @@ public class CursorPropertyBinder {
         } else {
             switch (dbValue.dbType) {
                 case INTEGER:
-                    stmt.bindLong(columnIndex, property.isSeconds()?(long)dbValue.value/1000:(long)dbValue.value);
+                    stmt.bindLong(columnIndex, (long) dbValue.value);
                     break;
                 case TEXT:
                     stmt.bindString(columnIndex, (String) dbValue.value);

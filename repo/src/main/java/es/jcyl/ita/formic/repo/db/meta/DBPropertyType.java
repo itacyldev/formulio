@@ -32,16 +32,13 @@ public class DBPropertyType extends PropertyType {
 
     public enum CALC_MOMENT {SELECT, INSERT, UPDATE}
 
-    public enum FORMAT {SECONDS, MILLISECONDS}
-
     protected String columnName;
     protected CALC_METHOD calculateBy;
     protected CALC_MOMENT calculateOn;
     protected String expression;
     protected SQLitePropertyConverter converter;
     protected KeyGeneratorStrategy keyGenerator;
-    protected FORMAT format;
-
+    protected String format;
 
     public DBPropertyType(String name, Class<?> type, String persistenceType, boolean primaryKey) {
         super(name, type, persistenceType, primaryKey);
@@ -54,9 +51,6 @@ public class DBPropertyType extends PropertyType {
     public boolean isCalculatedOnSelect() {
         return this.calculateOn == CALC_MOMENT.SELECT;
     }
-
-    public boolean isSeconds(){
-        return this.format == FORMAT.SECONDS;}
 
     public boolean isCalculatedOnInsert() {
         return this.calculateOn == CALC_MOMENT.INSERT;
@@ -98,13 +92,15 @@ public class DBPropertyType extends PropertyType {
         this.keyGenerator = keyGenerator;
     }
 
-
-
     public SQLitePropertyConverter getConverter() {
         if (converter == null) {
             throw new RuntimeException(String.format("No converter defined for property [%s].", this.getName()));
         }
         return converter;
+    }
+
+    public String getFormat() {
+        return format;
     }
 
     // TODO PropertyType is supposed to be persistence independent, here some specific SQL features are
@@ -156,7 +152,7 @@ public class DBPropertyType extends PropertyType {
             return this;
         }
 
-        public DBPropertyTypeBuilder withFormat(FORMAT format) {
+        public DBPropertyTypeBuilder withFormat(String format) {
             this.property.format = format;
             return this;
         }
