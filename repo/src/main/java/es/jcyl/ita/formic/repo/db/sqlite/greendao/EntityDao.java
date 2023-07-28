@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.repo.db.sqlite.greendao;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.Property;
@@ -27,6 +28,8 @@ import org.greenrobot.greendao.internal.SqlUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
 
 import es.jcyl.ita.formic.core.context.Context;
+import es.jcyl.ita.formic.core.format.ValueFormatter;
+import es.jcyl.ita.formic.core.format.ValueFormatterFactory;
 import es.jcyl.ita.formic.repo.CursorPropertyBinder;
 import es.jcyl.ita.formic.repo.CursorPropertyReader;
 import es.jcyl.ita.formic.repo.Entity;
@@ -172,7 +175,13 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
                         "The context is null, make sure the RepositoryFactory has a context instance" +
                         " to se on repos during initialization.");
             }
-            return JexlEntityUtils.eval(context, p.getExpression());
+            Object value = JexlEntityUtils.eval(context, p.getExpression());
+            if (StringUtils.isNotBlank(p.getPattern())) {
+                Class objectType = (value == null) ? Void.class : value.getClass();
+                ValueFormatter formatter = ValueFormatterFactory.getInstance().getFormatter(objectType, p.getPattern(), p.getType());
+                value = formatter.format(value, p.getPattern());
+            }
+            return value;
         } else {
             throw new UnsupportedOperationException("Not implemented yet!!");
         }
@@ -205,7 +214,12 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
             value = entity.get(p.getName());
             if (hasToBeCalculated(dp, value)) {
                 value = calculateProperty(dp);
+                // the calculated property might change not just the format but the type of the object.
+                // The value will be converted before inserting in the bindValue method, but here with temporarily
+                // disable the constraint to set the calculated value to the entity.
+                entity.enablePropertyValidation(false);
                 entity.set(p.getName(), value);
+                entity.enablePropertyValidation(true);
             }
             propertyBinder.bindValue(stmt, dp, i, value);
             i++;
@@ -242,7 +256,7 @@ public class EntityDao extends AbstractDao<Entity, Object> implements TableScrip
                     pkValue = rowIdKeyGenerator.getKey(this, entity, pkType);
                 }
             } else {
-                if (rowId != -1 && keyGenerator.getType() == KeyGeneratorStrategy.TYPE.MAXROWID){
+                if (rowId != -1 && keyGenerator.getType() == KeyGeneratorStrategy.TYPE.MAXROWID) {
                     // used the already obtained key
                     pkValue = ConvertUtils.convert(rowId, pkType);
                 } else {

@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -116,6 +117,25 @@ public class RepoAccessContext implements Map<String, Repository> {
 
     @Override
     public Set<Entry<String, Repository>> entrySet() {
-        throw new UnsupportedOperationException("Not implemented!");
+        Set<Entry<String, Repository>> s = new HashSet();
+        for(String id: repoFactory.getRepoIds()){
+            s.add(new Entry<String, Repository>() {
+                @Override
+                public String getKey() {
+                    return id;
+                }
+
+                @Override
+                public Repository getValue() {
+                    return repoFactory.getRepo(id);
+                }
+
+                @Override
+                public Repository setValue(Repository value) {
+                    throw new UnsupportedOperationException("Not implemented!");
+                }
+            });
+        }
+        return s;
     }
 }

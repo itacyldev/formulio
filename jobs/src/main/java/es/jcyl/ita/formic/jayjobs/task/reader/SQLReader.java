@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.greendao.database.StandardDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigException;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
+import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
@@ -20,9 +23,9 @@ import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
 import es.jcyl.ita.formic.repo.db.source.NativeSQLEntitySource;
 import es.jcyl.ita.formic.repo.db.sqlite.RawSQLiteRepository;
-import util.Log;
 
 public class SQLReader extends AbstractReader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SQLReader.class);
 
     private String dbFile;
     private String sqlQuery;
@@ -80,7 +83,7 @@ public class SQLReader extends AbstractReader {
                     ContextAccessor.projectFolder(this.getGlobalContext()),
                     ContextAccessor.workingFolder(this.getGlobalContext())));
         }
-        Log.info("SqlReader configured to access data in dbFile: " + this.dbFile);
+        LOGGER.info("SqlReader configured to access data in dbFile: " + this.dbFile);
     }
 
     @Override

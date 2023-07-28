@@ -21,7 +21,11 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import org.mini2Dx.beanutils.ConvertUtils;
+
 import es.jcyl.ita.formic.forms.components.UIInputComponent;
+import es.jcyl.ita.formic.forms.components.inputfield.UIField;
+import es.jcyl.ita.formic.forms.view.converters.TextViewDateConverter;
 import es.jcyl.ita.formic.forms.view.converters.ViewValueConverter;
 
 /**
@@ -64,14 +68,31 @@ public class InputWidget<C extends UIInputComponent, V extends View> extends Wid
 
     public void setValue(Object value) {
         if (inputView == null) return; // view hasn't been rendered
-        converter.setViewValue(inputView, value);
+        if (converter instanceof TextViewDateConverter){
+            String type = ((UIField) this.getComponent()).getType();
+            String pattern = ((UIField) this.getComponent()).getPattern();
+
+            ((TextViewDateConverter) converter).setPattern(pattern);
+            ((TextViewDateConverter) converter).setType(type);
+            //value = converter.getValueFromView(inputView);
+        }
+
+        converter.setViewValue(inputView,ConvertUtils.convert(value, String.class));
+
     }
 
     public Object getValue() {
+        if (converter instanceof TextViewDateConverter){
+            String type = ((UIField) this.getComponent()).getType();
+            String pattern = ((UIField) this.getComponent()).getPattern();
+
+            ((TextViewDateConverter) converter).setPattern(pattern);
+            ((TextViewDateConverter) converter).setType(type);
+        }
         return (inputView == null) ? null : converter.getValueFromView(inputView);
     }
 
-    /**
+/**
      * get/setState are used during saving process to store component state before the validation
      * takes places, so the view state (user most recent input) can be restored in case one of the
      * field validation rules is not met.

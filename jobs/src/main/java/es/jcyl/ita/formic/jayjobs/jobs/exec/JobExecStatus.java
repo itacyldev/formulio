@@ -18,6 +18,7 @@ package es.jcyl.ita.formic.jayjobs.jobs.exec;
 import java.util.Date;
 import java.util.List;
 
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobResource;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionState;
 
@@ -53,6 +54,12 @@ public class JobExecStatus {
      * Context used to launch the job execution serialized as json
      */
     private String context;
+
+    public JobExecStatus(){}
+    public JobExecStatus(Long execId, JobExecutionState state){
+        this.id = execId;
+        this.state = state;
+    }
 
     public Long getId() {
         return id;

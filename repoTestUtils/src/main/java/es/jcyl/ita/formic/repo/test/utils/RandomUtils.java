@@ -15,10 +15,14 @@ package es.jcyl.ita.formic.repo.test.utils;
  * limitations under the License.
  */
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Date;
@@ -27,8 +31,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-
-import javax.imageio.ImageIO;
 
 import es.jcyl.ita.formic.repo.db.meta.GeometryType;
 import es.jcyl.ita.formic.repo.db.sqlite.meta.types.SQLiteType;
@@ -218,6 +220,26 @@ public class RandomUtils {
         return createRandomImageFile(baseFolder, name, width, height);
     }
 
+    public static Bitmap createRandomImage(int width, int height) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Random random = new Random();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
+                bitmap.setPixel(x, y, color);
+            }
+        }
+        return bitmap;
+    }
+    public static void writeBitmapToFile(Bitmap bitmap, File file) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Creates a random pixel image in the given folder
      *
@@ -228,33 +250,10 @@ public class RandomUtils {
      * @throws IOException
      */
     public static File createRandomImageFile(File baseFolder, String name, int width, int height) {
-        //https://www.geeksforgeeks.org/image-processing-java-set-7-creating-random-pixel-image/
-        // Create buffered image object
-        BufferedImage img = null;
-        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        // file object
-        File f = null;
-
-        // create random values pixel by pixel
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int a = (int) (Math.random() * 256); //generating
-                int r = (int) (Math.random() * 256); //values
-                int g = (int) (Math.random() * 256); //less than
-                int b = (int) (Math.random() * 256); //256
-                int p = (a << 24) | (r << 16) | (g << 8) | b; //pixel
-                img.setRGB(x, y, p);
-            }
-        }
-        File outputFile = new File(baseFolder, name + ".png");
-        // write image
-        try {
-            ImageIO.write(img, "png", outputFile);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while trying to write the random image", e);
-        }
-        return outputFile;
+        Bitmap image = createRandomImage(width, height);
+        File f = new File(baseFolder, name);
+        writeBitmapToFile(image, f);
+        return f;
     }
 
 }

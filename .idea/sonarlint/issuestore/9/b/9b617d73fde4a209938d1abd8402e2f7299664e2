@@ -6,7 +6,7 @@ V	java:S125"<This block of commented-out lines of code should be removed.(Í›
 java:S11928"JDefine a constant instead of duplicating this literal "validator" 3 times.(õ×¾ì
 ^
 java:S1192"HDefine a constant instead of duplicating this literal "binding" 7 times.(¶¹Ç
-]
-java:S1192}"GDefine a constant instead of duplicating this literal "action" 3 times.(º¡Şç
+^
+java:S1192"GDefine a constant instead of duplicating this literal "action" 3 times.(º¡Şç
 \
-java:S1192r"FDefine a constant instead of duplicating this literal "color" 5 times.(‹õŞË
+java:S1192v"FDefine a constant instead of duplicating this literal "color" 5 times.(‹õŞË

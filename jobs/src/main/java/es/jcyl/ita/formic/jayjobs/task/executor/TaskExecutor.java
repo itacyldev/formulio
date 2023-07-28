@@ -16,6 +16,8 @@ package es.jcyl.ita.formic.jayjobs.task.executor;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,19 +27,16 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
-import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.NopJobListener;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigFactory;
+import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigIterator;
 import es.jcyl.ita.formic.jayjobs.task.exception.StopTaskExecutionSignal;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
-import es.jcyl.ita.formic.jayjobs.task.listener.NopTaskListener;
 import es.jcyl.ita.formic.jayjobs.task.listener.TaskExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.GroupTask;
 import es.jcyl.ita.formic.jayjobs.task.models.IterativeTask;
 import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import util.Log;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *
@@ -60,6 +59,7 @@ import util.Log;
  * @author Gustavo Río (gustavo.rio@itacyl.es)
  */
 public class TaskExecutor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskExecutor.class);
 
     private Map<Class, TaskHandler> handlers = new HashMap<>();
 
@@ -118,11 +118,11 @@ public class TaskExecutor {
             handler = getHandler(task);
             try {
                 listener.onTaskStart(task);
-                Log.info(String.format(">>>> Starting task execution [%s]. >>>", task.getName()));
+                LOGGER.info(String.format(">>>> Starting task execution [%s]. >>>", task.getName()));
 
                 handler.handle(context, task);
 
-                Log.info(String.format("<<<< Task [%s] successfully finished.<<<", task.getName()));
+                LOGGER.info(String.format("<<<< Task [%s] successfully finished.<<<", task.getName()));
                 listener.onTaskEnd(task);
             } catch (StopTaskExecutionSignal e) {
                 stopTasks = true;
@@ -132,10 +132,10 @@ public class TaskExecutor {
                     String msg = String.format(
                             "An error occurred during execution of task [%s]. Job is stopped.",
                             task.getName());
-                    Log.error(msg, e);
+                    LOGGER.error(msg, e);
                     throw new TaskException(msg, e);
                 }
-                Log.error(String.format(
+                LOGGER.error(String.format(
                         "<<<< An error occurred during execution of task [%s]. Job execution continues.<<<",
                         task.getName()), e);
             }

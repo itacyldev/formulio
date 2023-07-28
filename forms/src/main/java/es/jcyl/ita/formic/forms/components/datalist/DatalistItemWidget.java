@@ -1,3 +1,4 @@
+
 package es.jcyl.ita.formic.forms.components.datalist;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
@@ -47,6 +48,7 @@ public class DatalistItemWidget extends Widget<UIDatalistItem> implements Widget
 
     @Override
     public String getHolderId() {
+
         return this.getComponentId();
     }
 

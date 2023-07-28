@@ -184,4 +184,8 @@ public class Entity<S extends EntitySource, M extends EntityMeta> {
         this.transientProps.clear();
     }
 
+    public void enablePropertyValidation(boolean value){
+        this.validateProperties = value;
+    }
+
 }

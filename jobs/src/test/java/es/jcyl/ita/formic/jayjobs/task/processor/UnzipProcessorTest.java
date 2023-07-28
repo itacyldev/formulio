@@ -25,7 +25,7 @@ public class UnzipProcessorTest {
     @Test
     public void testProcess() throws IOException, TaskException {
         // prepare files
-        String zipFile = createZip();
+        String zipFile = createTmpZip();
         String outputFolder = TestFileUtils.createTmpFolder();
 
         // prepare task and processor
@@ -48,7 +48,7 @@ public class UnzipProcessorTest {
         processor.getOutputFolder();
     }
 
-    private Task createTask() {
+    private static Task createTask() {
         Context taskContext = new BasicContext("t1");
         // create task mock and set contexts
         Task taskMock = mock(Task.class);
@@ -59,7 +59,7 @@ public class UnzipProcessorTest {
 
     @Test(expected = TaskException.class)
     public void testNotExistingFolderNoMkdir() throws IOException, TaskException {
-        String zipFile = createZip();
+        String zipFile = createTmpZip();
         String outputFolder = "not_existing_folder_" + RandomStringUtils.randomAlphanumeric(5);
 
         Task task = createTask();
@@ -73,7 +73,7 @@ public class UnzipProcessorTest {
 
     @Test
     public void testNotExistingFolderMkdir() throws IOException, TaskException {
-        String zipFile = createZip();
+        String zipFile = createTmpZip();
         String outputFolder = "not_existing_folder" + RandomStringUtils.randomAlphanumeric(5);
 
         Task task = createTask();
@@ -98,7 +98,7 @@ public class UnzipProcessorTest {
         processor.process();
     }
 
-    private String createZip() throws TaskException {
+    public static String createTmpZip() throws TaskException {
         Task taskMock = createTask();
 
         ZipProcessor processor = new ZipProcessor();

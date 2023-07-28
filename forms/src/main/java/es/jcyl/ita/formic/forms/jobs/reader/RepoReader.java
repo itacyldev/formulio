@@ -15,12 +15,15 @@ package es.jcyl.ita.formic.forms.jobs.reader;/*
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.builders.ComponentBuilderFactory;
 import es.jcyl.ita.formic.forms.config.builders.repo.RepoConfigBuilder;
 import es.jcyl.ita.formic.jayjobs.task.config.TaskConfigException;
@@ -32,12 +35,12 @@ import es.jcyl.ita.formic.jayjobs.task.utils.TaskResourceAccessor;
 import es.jcyl.ita.formic.repo.Entity;
 import es.jcyl.ita.formic.repo.Repository;
 import es.jcyl.ita.formic.repo.db.SQLQueryFilter;
-import util.Log;
 
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)
  */
 public class RepoReader extends AbstractReader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DevConsole.class);
 
     private String dbFile;
     private String dbTable;
@@ -107,7 +110,7 @@ public class RepoReader extends AbstractReader {
                     ContextAccessor.projectFolder(this.getGlobalContext()),
                     ContextAccessor.workingFolder(this.getGlobalContext())));
         }
-        Log.info("SqlReader configured to access data in dbFile: " + this.dbFile);
+        LOGGER.info("SqlReader configured to access data in dbFile: " + this.dbFile);
     }
 
     public String getDbFile() {

@@ -11,6 +11,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
+import es.jcyl.ita.formic.jayjobs.task.models.Task;
+import es.jcyl.ita.formic.jayjobs.task.processor.ZipProcessor;
 
 public class TestFileUtils {
 
@@ -50,11 +56,15 @@ public class TestFileUtils {
         return path.toString();
     }
 
-    public static String createTmpFolder() throws IOException {
+    public static String createTmpFolder()  {
         File tempDirectory = new File(getBuildFolder());
         String randomFolderName = RandomStringUtils.randomAlphanumeric(6);
         Path path = Paths.get(tempDirectory.toString(), randomFolderName);
-        Files.createDirectories(path);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
         return path.toString();
     }
 

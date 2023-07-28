@@ -68,7 +68,7 @@ public class UnzipProcessor extends AbstractProcessor implements NonIterProcesso
         LOGGER.info("inputFile:" + file);
     }
 
-    private void extractFiles() throws TaskException {
+    public void extractFiles() throws TaskException {
         FileInputStream fis;
         // buffer for read and write data to file
         byte[] buffer = new byte[1024];
@@ -137,4 +137,11 @@ public class UnzipProcessor extends AbstractProcessor implements NonIterProcesso
         this.mkdir = mkdir;
     }
 
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
 }

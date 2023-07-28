@@ -25,6 +25,7 @@ public class PropertyConfig {
     private String columnName;
     private String valueConverter;
     private String expression;
+    private String pattern; //seconds/milliseconds
     private String expressionType; // jexl/sql
     private String evalOn;//insert/update/select
     private String keyGenerator;
@@ -88,5 +89,13 @@ public class PropertyConfig {
 
     public void setKeyGenerator(String keyGenerator) {
         this.keyGenerator = keyGenerator;
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
     }
 }

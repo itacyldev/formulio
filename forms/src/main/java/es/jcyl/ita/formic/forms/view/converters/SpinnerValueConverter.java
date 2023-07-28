@@ -46,6 +46,16 @@ class SpinnerValueConverter implements ViewValueConverter<Spinner> {
         view.setSelection(pos);
     }
 
+    @Override
+    public void setPattern(String pattern) {
+
+    }
+
+    @Override
+    public void setType(String type) {
+
+    }
+
     /**
      * Android spinners don't have an empyt value, there's and additional option to give this
      * possibility. This methods checks if selected option is the emtpy-value one.

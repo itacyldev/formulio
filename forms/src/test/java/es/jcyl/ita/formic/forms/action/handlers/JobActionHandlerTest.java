@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
@@ -39,6 +40,8 @@ import es.jcyl.ita.formic.forms.actions.UserAction;
 import es.jcyl.ita.formic.forms.actions.UserActionHelper;
 import es.jcyl.ita.formic.forms.utils.MockingUtils;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
+import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
+import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 
 import static org.mockito.Mockito.*;
 
@@ -73,6 +76,8 @@ public class JobActionHandlerTest {
 
         // mock facade
         JobFacade facadeMock = mock(JobFacade.class);
+        JobConfig jobConf = new JobConfig();
+        when(facadeMock.getJobConfig(Mockito.any(), Mockito.any())).thenReturn(jobConf);
         App.getInstance().setJobFacade(facadeMock);
 
         // act - execute action
@@ -81,7 +86,7 @@ public class JobActionHandlerTest {
 
         // check the parameters passed to the facade
         ArgumentCaptor<CompositeContext> argument = ArgumentCaptor.forClass(CompositeContext.class);
-        verify(facadeMock).executeJob(argument.capture(), eq(JOB_ID));
+        verify(facadeMock).executeJob(argument.capture(), Mockito.any(JobConfig.class), eq(JobExecutionMode.FG_ASYNC));
 
         CompositeContext execContext = argument.getValue();
         Assert.assertTrue(execContext.containsKey("params.param1"));

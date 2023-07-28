@@ -41,6 +41,8 @@ public class JobConfig {
     // part of the job json config that defines the tasks
     @JsonIgnore
     private String taskConfig;
+    @JsonIgnore
+    private JobResourceFilter filter;
 
     public String getId() {
         return id;
@@ -124,5 +126,13 @@ public class JobConfig {
 
     public void setDebug(boolean debug) {
         this.debug = debug;
+    }
+
+    public JobResourceFilter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(JobResourceFilter filter) {
+        this.filter = filter;
     }
 }

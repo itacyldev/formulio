@@ -14,6 +14,8 @@ package es.jcyl.ita.formic.jayjobs.jobs;/*
  * limitations under the License.
  */
 
+import static org.junit.Assert.assertTrue;
+
 import androidx.annotation.NonNull;
 
 import com.android.volley.RequestQueue;
@@ -35,6 +37,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
 import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
+import es.jcyl.ita.formic.jayjobs.utils.TestFileUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
@@ -58,7 +61,7 @@ public class CrtdrdSynchroIntTest {
         String fileName = TestUtils.findFileName("jobs/testsyn.sqlite");
         gParams.put("dbFile", fileName);
 
-        JobConfig jobConfig = repo.get(context, "cartodruid_sync_job");
+        JobConfig jobConfig = repo.get(context, "cartodruid_sync_job_cmds");
         jobConfig.setGlobalParams(gParams);
 
         RequestQueue queue = VolleyMocks.createMockRQRealNetwork();
@@ -68,6 +71,9 @@ public class CrtdrdSynchroIntTest {
         } finally {
             RQProvider.clearRQ();
         }
+        // look for final database
+        String folder = context.getString("app.workingFolder");
+        assertTrue(new File(folder,"mydatabase.sqlite").exists());
     }
 
     private Map<String, Object> getCredentials() {

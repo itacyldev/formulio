@@ -15,6 +15,12 @@ package es.jcyl.ita.formic.forms.repo.el;
  * limitations under the License.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
@@ -33,23 +39,20 @@ import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
-import es.jcyl.ita.formic.repo.memo.MemoEntity;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
-import es.jcyl.ita.formic.forms.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.core.context.impl.UnPrefixedCompositeContext;
+import es.jcyl.ita.formic.forms.config.ConfigConverters;
+import es.jcyl.ita.formic.core.context.impl.DateTimeContext;
 import es.jcyl.ita.formic.forms.el.JexlFormUtils;
 import es.jcyl.ita.formic.forms.el.LiteralBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueBindingExpression;
 import es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
 import es.jcyl.ita.formic.repo.Entity;
+import es.jcyl.ita.formic.repo.memo.MemoEntity;
 import es.jcyl.ita.formic.repo.meta.EntityMeta;
 import es.jcyl.ita.formic.repo.meta.PropertyType;
 import es.jcyl.ita.formic.repo.meta.types.ByteArray;
 import es.jcyl.ita.formic.repo.test.utils.AssertUtils;
 import es.jcyl.ita.formic.repo.test.utils.RandomUtils;
-
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -80,11 +83,9 @@ public class JexlExpressionsTest {
         entity.set("value2", expectedDate);
 
         Object value = JexlFormUtils.eval(entity, "${entity.value1}");
-        Assert.assertEquals(expected, value);
+        assertEquals(expected, value);
         value = JexlFormUtils.eval(entity, "${entity.value2}");
-        Assert.assertEquals(expectedDate, value);
-
-
+        assertEquals(expectedDate, value);
     }
 
     @Test
@@ -121,7 +122,7 @@ public class JexlExpressionsTest {
             String strValue = (String) ConvertUtils.convert(value, String.class);
             ValueBindingExpression ve = factory.create(strValue, c);
             Assert.assertNotNull(ve);
-            Assert.assertEquals(ve.getClass(), LiteralBindingExpression.class);
+            assertEquals(ve.getClass(), LiteralBindingExpression.class);
             AssertUtils.assertEquals(value, JexlFormUtils.eval(new BasicContext("t"), ve));
         }
     }
@@ -151,7 +152,7 @@ public class JexlExpressionsTest {
         for (String expr : expressions) {
             System.out.println("Tested expression: " + expr);
             ValueBindingExpression vbExpression = expressionFactory.create(expr);
-            Assert.assertEquals(expr, expected[i], vbExpression.isReadonly());
+            assertEquals(expr, expected[i], vbExpression.isReadonly());
             i++;
         }
     }
@@ -198,12 +199,24 @@ public class JexlExpressionsTest {
     }
 
     @Test
+    public void testAccessHelperFunctions() {
+        JexlContext context = new MapContext();
+
+        JxltEngine.Expression e = JexlFormUtils.createExpression("${math:cos(23.0)}");
+        assertEquals(Math.cos(23), e.evaluate(context));
+
+        String str = (String) JexlFormUtils.createExpression("${random:string(30)}").evaluate(context);
+        assertEquals(30, str.length());
+
+        int value = (int) JexlFormUtils.createExpression("${random:integer(5,15)}").evaluate(context);
+        assertTrue(value >=5 && value <=15);
+
+        float floatValue = (float) JexlFormUtils.createExpression("${random:decimal()}").evaluate(context);
+        assertTrue(floatValue >=0 && floatValue <=1);
+    }
+
+    @Test
     public void testBasicScripting1() {
-
-        String[] funcExpression = new String[]{
-                "var t = 20; var s = function(x, y) {x + y + t}; t = 54; s(#{form1.view.%s}, 7) "
-        };
-
         JexlContext context = new MapContext();
         Map<String, Object> params = new HashMap<>();
         params.put("entityId", 123);
@@ -227,7 +240,7 @@ public class JexlExpressionsTest {
         for (Fixture fixture : fxts) {
             JxltEngine.Expression e = JexlFormUtils.createExpression(fixture.expression);
             Object value = e.evaluate(context);
-            Assert.assertEquals("Error evaluating expression: " + fixture.expression, fixture.expected, value);
+            assertEquals("Error evaluating expression: " + fixture.expression, fixture.expected, value);
         }
     }
 

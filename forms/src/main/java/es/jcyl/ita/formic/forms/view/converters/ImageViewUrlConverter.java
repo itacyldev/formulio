@@ -90,4 +90,14 @@ public class ImageViewUrlConverter extends AbstractImageViewValueConverter<Strin
     protected String readObjectFromImageResourceAsString(MediaResource resource) throws IOException {
         return null;
     }
+
+    @Override
+    public void setPattern(String pattern) {
+
+    }
+
+    @Override
+    public void setType(String type) {
+
+    }
 }

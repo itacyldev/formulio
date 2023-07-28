@@ -54,6 +54,11 @@ public class AggregatedJobListener implements JobExecListener {
     public void addListener(JobExecListener listener) {
         listeners.add(listener);
     }
+    public void addListeners(List<JobExecListener> listeners) {
+        for(JobExecListener listener: listeners){
+            addListener(listener);
+        }
+    }
 
     @Override
     public void onTaskStart(Task task) {

@@ -22,7 +22,7 @@ out/
 .gradle/
 build/
 # Maven files
-target
+target/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -48,3 +48,8 @@ proguard/
 /captures
 .externalNativeBuild
 .cxx
+
+
+# backup
+*.bak
+*.back

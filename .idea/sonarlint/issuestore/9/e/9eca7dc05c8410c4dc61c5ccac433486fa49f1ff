@@ -1,0 +1,20 @@
+
+J
+java:S3740Z"/Provide the parametrized type for this generic.(¦Š©ˆþÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+t	java:S115("ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(÷òÌúÿÿÿÿ
+t	java:S115*"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Ð¾èõÿÿÿÿÿ
+P
+java:S1161O":Add the "@Override" annotation above this method signature(‚Ÿ·ã
+D
+java:S1481o".Remove this unused "available" local variable.(ÞÈ…Ô
+H
+java:S1135y"2Complete the task associated to this TODO comment.(êˆú¸
+r
+java:S1488x"\Immediately return this expression instead of assigning it to the temporary variable "data".(·ßÎú
+r
+java:S1104‚"VMake columnName a static final constant or non-public and provide accessors if needed.(’Òà×ýÿÿÿÿ
+j
+java:S1104ƒ"SMake geoType a static final constant or non-public and provide accessors if needed.(ã¯‰’
+g
+java:S1104„"PMake srid a static final constant or non-public and provide accessors if needed.(¸Ÿ Ç
