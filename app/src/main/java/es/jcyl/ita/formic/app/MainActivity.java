@@ -500,7 +500,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             Map<String, String> existingFiles = null;
             try {
                 existingFiles = projectImporter.getExistingFiles(origin, destination);
-                projectName = projectImporter.getProjectName(currenContext, params[0].getLastPathSegment());
+                projectName = projectImporter.getProjectName(currenContext, origin);
 
                 if ("".equals(origin)) {
                     text = currenContext.getString(R.string.projectimportfail);
