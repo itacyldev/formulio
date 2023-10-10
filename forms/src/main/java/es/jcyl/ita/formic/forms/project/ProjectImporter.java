@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -165,12 +164,15 @@ public class ProjectImporter {
 
     }
 
-    public String getProjectName(Context context, String lastPathSegment) {
-        String projectName = lastPathSegment.split(PROJECT_EXTENSION_FML)[0];
-        Matcher matcher = projectNamePattern.matcher(projectName);
-        if (matcher.find()) {
-            projectName = matcher.group(1);
+    public String getProjectName(Context context, String path) throws IOException{
+        String projectName = "";
+        ZipFile zipFile = new ZipFile(path);
+        Enumeration entries = zipFile.entries();
+        ZipEntry ze = null;
+        if (entries.hasMoreElements()){
+            ze = (ZipEntry) entries.nextElement();
         }
+        projectName = ze.getName().replace(File.separator, "");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit().putString("projectName", projectName).apply();

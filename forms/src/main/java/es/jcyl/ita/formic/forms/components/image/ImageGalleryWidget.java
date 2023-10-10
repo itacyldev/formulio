@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -69,6 +70,14 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 showImage((ImageGalleryItemWidget) v);
+            }
+        });
+
+        gridView.setOnTouchListener(new AdapterView.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
             }
         });
     }
