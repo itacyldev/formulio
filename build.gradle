@@ -100,8 +100,8 @@ allprojects {
 //}
 
 ext {
-    versionCode = 61
-    versionName = '0.7.39'
+    versionCode = 62
+    versionName = '0.7.40'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 31
     targetSdkVersion = 31
@@ -113,7 +113,7 @@ ext {
     androidTestVersion= '1.2.0'
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.39'
+    version = '0.7.40'
     artifactId = 'Formic'
 
     sharedDeps = [
