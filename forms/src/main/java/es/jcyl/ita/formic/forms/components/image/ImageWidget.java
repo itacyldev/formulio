@@ -16,14 +16,17 @@ package es.jcyl.ita.formic.forms.components.image;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -76,6 +79,29 @@ public class ImageWidget extends InputWidget<UIImage, ImageResourceView>
         setSketchButton(env);
 
         this.mainEntity = env.getWidgetContext().getEntity();
+
+        ImageView imgView = (ImageView) this.getInputView();
+
+        imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImage(v);
+            }
+        });
+      }
+
+    public void showImage(View view){
+        ImageView imageView = (ImageView) view;
+        Drawable drawable = imageView.getDrawable();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+
+        ImageView alertImageView = new ImageView(this.getContext());
+        alertImageView.setImageDrawable(drawable);
+        builder.setView(alertImageView);
+        builder.create().show();
+
+
+
     }
 
     private void setCameraButton(RenderingEnv env) {
