@@ -43,6 +43,10 @@ public class UIDivisorRenderer implements Renderer<UIDivisor> {
             divisorView.getLayoutParams().height = component.getStrokeWidth();
         }
 
+        // check render condition
+        boolean isRendered = component.isRendered(env.getWidgetContext());
+        divisorWidget.setVisibility(isRendered ? View.VISIBLE : View.GONE);
+
         return divisorWidget;
     }
 }
