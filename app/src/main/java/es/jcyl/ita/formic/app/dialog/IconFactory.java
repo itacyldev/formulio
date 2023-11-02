@@ -236,7 +236,7 @@ public class IconFactory {
   iconInstances.put("pdf", es.jcyl.ita.formic.forms.R.drawable.ic_pdf);
   iconInstances.put("zip", es.jcyl.ita.formic.forms.R.drawable.ic_zip);
   iconInstances.put("frmd", es.jcyl.ita.formic.forms.R.drawable.ic_zip);
-  iconInstances.put("fml", es.jcyl.ita.formic.forms.R.drawable.ic_zip);
+  iconInstances.put("fml", es.jcyl.ita.formic.forms.R.drawable.ic_launcher);
  }
 
  public static IconFactory getInstance() {
