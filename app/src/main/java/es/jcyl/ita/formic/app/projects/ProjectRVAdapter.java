@@ -107,6 +107,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 String projectsFolder = sharedPreferences.getString("current_workspace", currentContext.getExternalFilesDir(null).getAbsolutePath() + "/projects");
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
                 try {
+                    sharedPreferences.edit().putString("projectName", prj.getName()).apply();
                     App.getInstance().openProject(prj);
                 } catch (Exception e) {
                     DevConsole.error("Error while trying to open project " + prj.getName(), e);
