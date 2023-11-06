@@ -301,10 +301,10 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
             Uri uri = this.getIntent().getData();
+            doInitConfiguration(this);
             if (uri != null) {
                 importFromUri(FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", new File(FileUtils.getPath(this, uri))));
             } else {
-                doInitConfiguration(this);
                 loadImageNoProjects();
             }
         }
