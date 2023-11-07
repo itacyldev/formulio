@@ -237,6 +237,9 @@ public class IconFactory {
   iconInstances.put("zip", es.jcyl.ita.formic.forms.R.drawable.ic_zip);
   iconInstances.put("frmd", es.jcyl.ita.formic.forms.R.drawable.ic_zip);
   iconInstances.put("fml", es.jcyl.ita.formic.forms.R.drawable.ic_launcher);
+  iconInstances.put("sqlite", es.jcyl.ita.formic.forms.R.drawable.ic_bbdd);
+  iconInstances.put("db", es.jcyl.ita.formic.forms.R.drawable.ic_bbdd);
+  iconInstances.put("default", es.jcyl.ita.formic.forms.R.drawable.ic_file);
  }
 
  public static IconFactory getInstance() {
@@ -247,6 +250,10 @@ public class IconFactory {
  }
 
  public Integer getIcon(String extension) {
-  return iconInstances.get(extension);
+  Integer icon = iconInstances.get("default");
+  if (iconInstances.containsKey(extension)){
+   icon = iconInstances.get(extension);
+  }
+  return icon;
  }
 }
