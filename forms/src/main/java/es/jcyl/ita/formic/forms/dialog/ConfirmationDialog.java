@@ -64,7 +64,7 @@ public class ConfirmationDialog extends Dialog{
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        setContentView(R.layout.confirmation_dialog);
+        setContentView(R.layout.dialog_confirmation);
         
 
         setWidthAndHeight();

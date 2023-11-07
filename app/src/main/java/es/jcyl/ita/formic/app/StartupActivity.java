@@ -33,7 +33,7 @@ public class StartupActivity extends Activity implements DialogInterface.OnShowL
     private void showAlertDialog(){
         final Context context = this;
         AlertDialog.Builder builder = new AlertDialog.Builder(this, es.jcyl.ita.formic.forms.R.style.DialogStyle);
-        builder.setView(R.layout.layout_loading_dialog);
+        builder.setView(R.layout.dialog_layout_loading);
         alertDialog = builder.create();
         alertDialog.setOnShowListener(this);
         alertDialog.show();

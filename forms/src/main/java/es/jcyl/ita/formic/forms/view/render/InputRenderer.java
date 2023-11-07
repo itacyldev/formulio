@@ -122,7 +122,7 @@ public abstract class InputRenderer<C extends UIInputComponent, I extends View>
 
         infoButton.setOnClickListener(arg0 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(env.getAndroidContext(), R.style.DialogStyle);
-            final View view = inflate(env.getAndroidContext(), R.layout.info_dialog, null);
+            final View view = inflate(env.getAndroidContext(), R.layout.dialog_info, null);
             TextView titleView = view.findViewById(R.id.info);
 
             titleView.setText(Html.fromHtml(hint, source -> {

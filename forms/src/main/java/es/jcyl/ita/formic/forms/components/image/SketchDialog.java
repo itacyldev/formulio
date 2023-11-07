@@ -56,7 +56,7 @@ public class SketchDialog extends Dialog {
 
         DisplayMetrics dm = activity.getApplicationContext().getResources()
                 .getDisplayMetrics();
-        this.setContentView(R.layout.sketch_dialog);
+        this.setContentView(R.layout.dialog_sketch);
 
         mContent = (LinearLayout) findViewById(R.id.canvasLayout);
         mDialog = (LinearLayout) findViewById(R.id.field_layout_layout);

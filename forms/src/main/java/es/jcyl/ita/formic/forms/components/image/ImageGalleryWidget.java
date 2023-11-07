@@ -93,7 +93,7 @@ public class ImageGalleryWidget extends Widget<UIImageGallery> implements Entity
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
 
         LayoutInflater factory = LayoutInflater.from(getContext());
-        final View view = factory.inflate(R.layout.imagegalleryitem_dialog, null);
+        final View view = factory.inflate(R.layout.dialog_imagegalleryitem, null);
         ImageView imageView = view.findViewById(R.id.imagegalleryitem_view);
         imageView.setImageDrawable(itemImageView.getDrawable());
         builder.setView(view);
