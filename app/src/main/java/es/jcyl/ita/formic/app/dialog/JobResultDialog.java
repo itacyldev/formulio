@@ -41,7 +41,6 @@ import androidx.core.content.FileProvider;
 import com.google.android.material.button.MaterialButton;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -100,7 +99,7 @@ public class JobResultDialog extends Dialog{
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        setContentView(R.layout.job_progress_dialog);
+        setContentView(R.layout.dialog_job_progress);
         
 
         setWidthAndHeight();
@@ -226,7 +225,7 @@ public class JobResultDialog extends Dialog{
 
             if (null == convertView) {
                 convertView = inflater.inflate(
-                        R.layout.job_progress_dialog_item,
+                        R.layout.dialog_job_progress_item,
                         parent,
                         false);
 
