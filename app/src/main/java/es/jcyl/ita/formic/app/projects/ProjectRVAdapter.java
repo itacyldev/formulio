@@ -227,6 +227,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
         protected void onPostExecute(final String success) {
             if (success.isEmpty()) {
                 jobResultDialog.setText("Export successful!");
+                jobResultDialog.getShareButton().setVisibility(View.VISIBLE);
                 UserMessagesHelper.toast(context, "Export successful!", Toast.LENGTH_SHORT);
             } else {
                 jobResultDialog.setText("Export failed!");

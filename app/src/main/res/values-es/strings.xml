@@ -16,6 +16,7 @@
     <string name="export">Exportar</string>
     <string name="log">Log</string>
     <string name="detail">Detalle</string>
+    <string name="share">Compartir</string>
     <string name="synchro">Sincronización</string>
     <string name="action_delete_success">Entidad eliminada con éxito.</string>
     <string name="action_delete_error">Ocurrió un error al intentar eliminar la entidad. Compruebe la consola de desarrollador.</string>

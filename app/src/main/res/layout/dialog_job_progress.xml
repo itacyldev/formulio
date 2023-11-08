@@ -81,6 +81,17 @@
             android:gravity="right"
             android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/share_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/primaryColor"
+                android:text="@string/share"
+                android:textColor="?attr/onPrimaryColor"
+                android:drawablePadding="4dp"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                />
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/show_console_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
