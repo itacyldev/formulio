@@ -60,6 +60,8 @@ public class JobResultDialog extends Dialog{
     private MaterialButton acceptButton;
     private MaterialButton showConsoleButton;
 
+    private MaterialButton shareButton;
+
     private ImageView closeButton;
 
     private TextView progressText;
@@ -90,6 +92,10 @@ public class JobResultDialog extends Dialog{
         return showConsoleButton;
     }
 
+    public MaterialButton getShareButton() {
+        return shareButton;
+    }
+
     public ImageView getCloseButton() {
         return closeButton;
     }
@@ -108,6 +114,7 @@ public class JobResultDialog extends Dialog{
 
         mProgressBar = findViewById(R.id.progress_bar);
         acceptButton = findViewById(R.id.accept_button);
+        shareButton = findViewById(R.id.share_button);
         showConsoleButton = findViewById(R.id.show_console_button);
 
         closeButton = findViewById(R.id.close_button);
@@ -133,6 +140,22 @@ public class JobResultDialog extends Dialog{
                 if (finishActivity) {
                     activity.finish();
                 }
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final File file = new File(listItems.get(0));
+
+                final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+
+                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                final String fileType = FileUtils
+                        .getFileType(file);
+                intentShareFile.setType(fileType);
+                intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
+                activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));
             }
         });
 
@@ -194,12 +217,18 @@ public class JobResultDialog extends Dialog{
 
                 final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
 
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                /*Intent intentShareFile = new Intent(Intent.ACTION_SEND);
                 final String fileType = FileUtils
                         .getFileType(file);
                 intentShareFile.setType(fileType);
                 intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
-                activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));
+                activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));*/
+
+                Intent intentOpenFile = new Intent(Intent.ACTION_VIEW);
+                final String fileType = FileUtils
+                        .getFileType(file);
+                intentOpenFile.setDataAndType(uri, fileType);
+                activity.startActivity(intentOpenFile);
             }
         });
     }

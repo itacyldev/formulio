@@ -541,6 +541,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             jobResultDialog = new JobResultDialog(activity, false);
             jobResultDialog.show();
             jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
+            jobResultDialog.getShareButton().setVisibility(View.GONE);
             jobResultDialog.setProgressTitle(activity.getString(R.string.action_import_project));
 
             jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
@@ -583,6 +584,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             jobResultDialog.show();
             jobResultDialog.setProgressTitle(activity.getString(R.string.project_opening));
             jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
+            jobResultDialog.getShareButton().setVisibility(View.GONE);
             jobResultDialog.setText(currentContext.getString(R.string.project_opening));
 
             jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
