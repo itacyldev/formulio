@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.MainActivity;
 import es.jcyl.ita.formic.forms.util.FileUtils;
 
 /**
@@ -207,6 +208,9 @@ public class JobResultDialog extends Dialog{
     private void showListResources() {
 
         listView.setVisibility(View.VISIBLE);
+        if (listStrItems != null && listStrItems.size() > 0){
+            shareButton.setVisibility(View.VISIBLE);
+        }
         listView.setAdapter(new ResourceAdapter(activity, listStrItems));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -216,19 +220,18 @@ public class JobResultDialog extends Dialog{
                 final File file = new File(listItems.get(position));
 
                 final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+                String extension = FilenameUtils.getExtension(file.getName());
 
-                /*Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                final String fileType = FileUtils
-                        .getFileType(file);
-                intentShareFile.setType(fileType);
-                intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
-                activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));*/
-
-                Intent intentOpenFile = new Intent(Intent.ACTION_VIEW);
-                final String fileType = FileUtils
-                        .getFileType(file);
-                intentOpenFile.setDataAndType(uri, fileType);
-                activity.startActivity(intentOpenFile);
+                if (extension.equals("fml")){
+                    ((MainActivity)activity).importFromUri(uri);
+                }else{
+                    Intent intentOpenFile = new Intent(Intent.ACTION_VIEW);
+                    intentOpenFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    final String fileType = FileUtils
+                            .getFileType(file);
+                    intentOpenFile.setDataAndType(uri, fileType);
+                    activity.startActivity(intentOpenFile);
+                }
             }
         });
     }

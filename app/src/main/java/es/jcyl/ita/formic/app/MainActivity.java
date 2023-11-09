@@ -660,7 +660,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
     }
 
-    private void importFromUri(Uri uri) {
+    public void importFromUri(Uri uri) {
         if (uri != null) {
             final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
             if (path != null) {
