@@ -196,7 +196,7 @@ public class JobResultDialog extends Dialog{
         mProgressBar.setVisibility(View.GONE);
         progressConsole.setText(builder, TextView.BufferType.SPANNABLE);
         closeButton.setVisibility(View.VISIBLE);
-        showListResources();
+        showListResources(this);
 
     }
 
@@ -205,7 +205,7 @@ public class JobResultDialog extends Dialog{
         listStrItems.add(new File(resourcePath).getName());
     }
 
-    private void showListResources() {
+    private void showListResources(JobResultDialog jrd) {
 
         listView.setVisibility(View.VISIBLE);
         if (listStrItems != null && listStrItems.size() > 0){
@@ -222,6 +222,7 @@ public class JobResultDialog extends Dialog{
                 final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
                 String extension = FilenameUtils.getExtension(file.getName());
 
+                jrd.dismiss();
                 if (extension.equals("fml")){
                     ((MainActivity)activity).importFromUri(uri);
                 }else{

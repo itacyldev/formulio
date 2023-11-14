@@ -68,7 +68,13 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 @Override
                 public void onClick(View v) {
                     context = project_nameTextView.getContext();
-                    new MyTask(context).execute(10);
+                    Project prj = projectList.get(getAdapterPosition());
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+                    DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
+                    sharedPreferences.edit().putString("projectName", prj.getName()).apply();
+                    ProjectHelper.openProject(context, prj);
+                    //new MyTask(context).execute(10);
                 }
             });
             project_nameTextView = (TextView) itemView.findViewById(R.id.projectName);
