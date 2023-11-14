@@ -222,8 +222,8 @@ public class JobResultDialog extends Dialog{
                 final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
                 String extension = FilenameUtils.getExtension(file.getName());
 
-                jrd.dismiss();
                 if (extension.equals("fml")){
+                    jrd.dismiss();
                     ((MainActivity)activity).importFromUri(uri);
                 }else{
                     Intent intentOpenFile = new Intent(Intent.ACTION_VIEW);
