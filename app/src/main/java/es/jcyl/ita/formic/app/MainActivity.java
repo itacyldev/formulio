@@ -46,6 +46,7 @@ import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.dialog.JobResultDialog;
 import es.jcyl.ita.formic.app.dialog.ProjectDialog;
 import es.jcyl.ita.formic.app.jobs.JobProgressListener;
+import es.jcyl.ita.formic.app.projects.ProjectHelper;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
@@ -199,7 +200,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 .getDefaultSharedPreferences(this);
 
 
-        loadFragment();
+        //loadFragment();
 
 
     }
@@ -239,7 +240,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             import_project.setVisibility(View.GONE);
         }
 
-        loadImageNoProjects();
+        //loadImageNoProjects();
     }
 
     @Override
@@ -635,7 +636,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
             try {
-                App.getInstance().openProject(prj);
+                ProjectHelper.openProject(ctx, prj);
                 DevConsole.info(ctx.getString(R.string.project_opening_finish, prj.getId()));
             } catch (Exception e) {
                 text = ctx.getString(R.string.project_opening_error, prj.getId());
