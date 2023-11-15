@@ -48,6 +48,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Report Jacoco') {
+            steps {
+                 sh './gradlew jacocoTestReport'
+            }
+            post {
+                success {
+                    jacoco(execPattern: '**/build/jacoco/*.exec')
+                }
+            }
+        }
         //stage('Integration Test') {
         //    when {
         //        expression { BRANCH_NAME == 'develop' }
