@@ -41,7 +41,6 @@ import androidx.core.content.FileProvider;
 import com.google.android.material.button.MaterialButton;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.jcyl.ita.formic.R;
+import es.jcyl.ita.formic.app.MainActivity;
 import es.jcyl.ita.formic.forms.util.FileUtils;
 
 /**
@@ -60,6 +60,8 @@ public class JobResultDialog extends Dialog{
     private ProgressBar mProgressBar;
     private MaterialButton acceptButton;
     private MaterialButton showConsoleButton;
+
+    private MaterialButton shareButton;
 
     private ImageView closeButton;
 
@@ -91,6 +93,10 @@ public class JobResultDialog extends Dialog{
         return showConsoleButton;
     }
 
+    public MaterialButton getShareButton() {
+        return shareButton;
+    }
+
     public ImageView getCloseButton() {
         return closeButton;
     }
@@ -100,7 +106,7 @@ public class JobResultDialog extends Dialog{
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        setContentView(R.layout.job_progress_dialog);
+        setContentView(R.layout.dialog_job_progress);
         
 
         setWidthAndHeight();
@@ -109,6 +115,7 @@ public class JobResultDialog extends Dialog{
 
         mProgressBar = findViewById(R.id.progress_bar);
         acceptButton = findViewById(R.id.accept_button);
+        shareButton = findViewById(R.id.share_button);
         showConsoleButton = findViewById(R.id.show_console_button);
 
         closeButton = findViewById(R.id.close_button);
@@ -134,6 +141,22 @@ public class JobResultDialog extends Dialog{
                 if (finishActivity) {
                     activity.finish();
                 }
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final File file = new File(listItems.get(0));
+
+                final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+
+                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                final String fileType = FileUtils
+                        .getFileType(file);
+                intentShareFile.setType(fileType);
+                intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
+                activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));
             }
         });
 
@@ -173,7 +196,7 @@ public class JobResultDialog extends Dialog{
         mProgressBar.setVisibility(View.GONE);
         progressConsole.setText(builder, TextView.BufferType.SPANNABLE);
         closeButton.setVisibility(View.VISIBLE);
-        showListResources();
+        showListResources(this);
 
     }
 
@@ -182,9 +205,12 @@ public class JobResultDialog extends Dialog{
         listStrItems.add(new File(resourcePath).getName());
     }
 
-    private void showListResources() {
+    private void showListResources(JobResultDialog jrd) {
 
         listView.setVisibility(View.VISIBLE);
+        if (listStrItems != null && listStrItems.size() > 0){
+            shareButton.setVisibility(View.VISIBLE);
+        }
         listView.setAdapter(new ResourceAdapter(activity, listStrItems));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -194,13 +220,19 @@ public class JobResultDialog extends Dialog{
                 final File file = new File(listItems.get(position));
 
                 final Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+                String extension = FilenameUtils.getExtension(file.getName());
 
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                final String fileType = FileUtils
-                        .getFileType(file);
-                intentShareFile.setType(fileType);
-                intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
-                activity.startActivity(Intent.createChooser(intentShareFile, "Share File"));
+                if (extension.equals("fml")){
+                    jrd.dismiss();
+                    ((MainActivity)activity).importFromUri(uri);
+                }else{
+                    Intent intentOpenFile = new Intent(Intent.ACTION_VIEW);
+                    intentOpenFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    final String fileType = FileUtils
+                            .getFileType(file);
+                    intentOpenFile.setDataAndType(uri, fileType);
+                    activity.startActivity(intentOpenFile);
+                }
             }
         });
     }
@@ -226,7 +258,7 @@ public class JobResultDialog extends Dialog{
 
             if (null == convertView) {
                 convertView = inflater.inflate(
-                        R.layout.job_progress_dialog_item,
+                        R.layout.dialog_job_progress_item,
                         parent,
                         false);
 

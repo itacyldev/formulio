@@ -170,10 +170,19 @@ public class ProjectImporter {
         Enumeration entries = zipFile.entries();
         ZipEntry ze = null;
         if (entries.hasMoreElements()){
-            ze = (ZipEntry) entries.nextElement();
-        }
-        projectName = ze.getName().replace(File.separator, "");
+            ZipEntry firstEntry = (ZipEntry) entries.nextElement();
+            String entryName = firstEntry.getName();
 
+            // Extract the root folder name
+            int slashIndex = entryName.indexOf('/');
+            if (slashIndex != -1) {
+                projectName = entryName.substring(0, slashIndex);
+            } else {
+                // If there are no subfolders, the root folder is the file itself
+                projectName = entryName;
+            }
+        }
+    
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit().putString("projectName", projectName).apply();
 

@@ -46,6 +46,7 @@ import es.jcyl.ita.formic.app.dev.DevConsoleActivity;
 import es.jcyl.ita.formic.app.dialog.JobResultDialog;
 import es.jcyl.ita.formic.app.dialog.ProjectDialog;
 import es.jcyl.ita.formic.app.jobs.JobProgressListener;
+import es.jcyl.ita.formic.app.projects.ProjectHelper;
 import es.jcyl.ita.formic.app.projects.ProjectListFragment;
 import es.jcyl.ita.formic.app.settings.SettingsActivity;
 import es.jcyl.ita.formic.forms.App;
@@ -199,7 +200,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                 .getDefaultSharedPreferences(this);
 
 
-        loadFragment();
+        //loadFragment();
 
 
     }
@@ -239,7 +240,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             import_project.setVisibility(View.GONE);
         }
 
-        loadImageNoProjects();
+        //loadImageNoProjects();
     }
 
     @Override
@@ -301,10 +302,10 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
                     .toArray(new String[]{}), PERMISSION_REQUEST);
         } else {
             Uri uri = this.getIntent().getData();
+            doInitConfiguration(this);
             if (uri != null) {
                 importFromUri(FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", new File(FileUtils.getPath(this, uri))));
             } else {
-                doInitConfiguration(this);
                 loadImageNoProjects();
             }
         }
@@ -541,6 +542,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             jobResultDialog = new JobResultDialog(activity, false);
             jobResultDialog.show();
             jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
+            jobResultDialog.getShareButton().setVisibility(View.GONE);
             jobResultDialog.setProgressTitle(activity.getString(R.string.action_import_project));
 
             jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
@@ -583,6 +585,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             jobResultDialog.show();
             jobResultDialog.setProgressTitle(activity.getString(R.string.project_opening));
             jobResultDialog.getShowConsoleButton().setVisibility(View.GONE);
+            jobResultDialog.getShareButton().setVisibility(View.GONE);
             jobResultDialog.setText(currentContext.getString(R.string.project_opening));
 
             jobResultDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
@@ -633,7 +636,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
             }
             DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
             try {
-                App.getInstance().openProject(prj);
+                ProjectHelper.openProject(ctx, prj);
                 DevConsole.info(ctx.getString(R.string.project_opening_finish, prj.getId()));
             } catch (Exception e) {
                 text = ctx.getString(R.string.project_opening_error, prj.getId());
@@ -658,7 +661,7 @@ public class MainActivity extends BaseActivity implements FormListFragment.OnLis
         bottomNavigationView.getMenu().findItem(id).setChecked(true);
     }
 
-    private void importFromUri(Uri uri) {
+    public void importFromUri(Uri uri) {
         if (uri != null) {
             final String path = FileUtils.copyFileToInternalStorage(this, uri, this.getString(R.string.app_name));
             if (path != null) {

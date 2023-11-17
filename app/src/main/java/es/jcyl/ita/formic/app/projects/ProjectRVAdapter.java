@@ -68,7 +68,13 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 @Override
                 public void onClick(View v) {
                     context = project_nameTextView.getContext();
-                    new MyTask(context).execute(10);
+                    Project prj = projectList.get(getAdapterPosition());
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    String projectsFolder = sharedPreferences.getString("current_workspace", context.getExternalFilesDir(null).getAbsolutePath() + "/projects");
+                    DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
+                    sharedPreferences.edit().putString("projectName", prj.getName()).apply();
+                    ProjectHelper.openProject(context, prj);
+                    //new MyTask(context).execute(10);
                 }
             });
             project_nameTextView = (TextView) itemView.findViewById(R.id.projectName);
@@ -107,6 +113,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
                 String projectsFolder = sharedPreferences.getString("current_workspace", currentContext.getExternalFilesDir(null).getAbsolutePath() + "/projects");
                 DevConsole.setLogFileName(projectsFolder, (String) prj.getId());
                 try {
+                    sharedPreferences.edit().putString("projectName", prj.getName()).apply();
                     App.getInstance().openProject(prj);
                 } catch (Exception e) {
                     DevConsole.error("Error while trying to open project " + prj.getName(), e);
@@ -141,7 +148,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
             protected void onPreExecute() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context, es.jcyl.ita.formic.forms.R.style.DialogStyle);
                 builder.setCancelable(false); // if you want user to wait for some process to finish,
-                builder.setView(R.layout.layout_loading_dialog);
+                builder.setView(R.layout.dialog_layout_loading);
                 dialog = builder.create();
                 dialog.show(); // to show this dialog
             }
@@ -217,7 +224,7 @@ public class ProjectRVAdapter extends RecyclerView.Adapter<ProjectRVAdapter.View
 
             File file = projectImporter.zipFolder(new File(projectsFolder), params[0], params[0], projectExtension, new File(dest), null);
             jobResultDialog.addResource(file.getPath());
-
+           
             return "";
         }
 

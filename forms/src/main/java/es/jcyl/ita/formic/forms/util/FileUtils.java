@@ -141,6 +141,8 @@ public class FileUtils {
         extension = extension.toLowerCase();
         if (extension.equals(PROJECT_EXTENSION) || extension.equals("zip")) {
             output = "application/zip";
+        } else if (extension.equals("sqlite") || extension.equals("db")) {
+            output = "application/x-sqlite3";
         } else {
             output = URLConnection.guessContentTypeFromName(file.getName());
         }
