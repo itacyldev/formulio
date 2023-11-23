@@ -9,7 +9,7 @@ def fileFilter = ['**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*']
 
 task jacocoTestReport(type: JacocoReport) {
 //    dependsOn ':compileDebugAndroidTestSources'
-    dependsOn 'testDebugUnitTest'
+    dependsOn tasks.named('testDebugUnitTest')
 
 
     doFirst {
