@@ -7,7 +7,7 @@
 
 def fileFilter = ['**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*']
 
-task coverageReport(type: JacocoReport) {
+task jacocoTestReport(type: JacocoReport) {
 //    dependsOn ':compileDebugAndroidTestSources'
     dependsOn 'testDebugUnitTest'
 
