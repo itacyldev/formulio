@@ -120,7 +120,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('SonarQube analysis') {
             when {
                 expression { BRANCH_NAME == 'develop' }
@@ -143,7 +142,6 @@ pipeline {
                 }
             }
         }
-        */
     }
     post {
         failure {
