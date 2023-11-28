@@ -1,0 +1,10 @@
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "https://servicios.itacyl.es/sonarqube"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectName", "Formic"
+        property "sonar.projectKey", "d247ac449f25eb8e8852380dabf101956f1d1a1b"
+    }
+}

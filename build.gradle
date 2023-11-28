@@ -40,6 +40,7 @@ plugins {
 allprojects {
     apply plugin: 'jacoco'
     apply from: "$project.rootDir/gradle/jacoco.gradle"
+    apply from: "$project.rootDir/gradle/sonar.gradle"
 
     repositories {
         mavenLocal()
