@@ -36,14 +36,18 @@ android {
     }
     sourceSets {
         String sharedTestJavaDir = 'src/shared/java'
+
         androidTest {
-            //java.srcDirs += [sharedTestJavaDir]
+            java.srcDirs += [sharedTestJavaDir]
             resources.srcDirs += ['src/test/resources']
         }
         test {
             java.srcDirs += [sharedTestJavaDir]
         }
     }
+
+
+
     testOptions {
         unitTests {
             includeAndroidResources = true
