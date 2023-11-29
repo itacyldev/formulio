@@ -89,6 +89,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
 
     implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation project(':sharedTest')
 
     /////////////////////////////////////
     // Instrumentation test dependencies
