@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
-import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
+import es.jcyl.ita.formic.sharedTest.utils.DevJobsBuilder;
 
 import static org.mockito.Mockito.*;
 

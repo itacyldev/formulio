@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.reader.RandomDataReader;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.mock;

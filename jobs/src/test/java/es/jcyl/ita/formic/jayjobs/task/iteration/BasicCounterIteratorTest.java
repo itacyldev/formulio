@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.jayjobs.task.models.NonIterTask;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.processor.AbstractProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.NonIterProcessor;
-import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
+import es.jcyl.ita.formic.sharedTest.utils.TestContextUtils;
 
 /**
  * @autor Gustavo Río Briones (gustavo.rio@itacyl.es)

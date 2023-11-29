@@ -17,8 +17,8 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
-import es.jcyl.ita.formic.jayjobs.utils.TestFileUtils;
+import es.jcyl.ita.formic.sharedTest.utils.TestContextUtils;
+import es.jcyl.ita.formic.sharedTest.utils.TestFileUtils;
 
 public class FileCmdProcessorTest {
 

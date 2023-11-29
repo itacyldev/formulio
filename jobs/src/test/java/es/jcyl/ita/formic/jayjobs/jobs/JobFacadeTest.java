@@ -23,7 +23,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
-import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
+import es.jcyl.ita.formic.sharedTest.utils.DevJobsBuilder;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

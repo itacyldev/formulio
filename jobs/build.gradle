@@ -94,6 +94,7 @@ dependencies {
     // Instrumentation test dependencies
     /////////////////////////////////////
     androidTestImplementation project(':repoTestUtils')
+    androidTestImplementation project(':sharedTest')
     // Core library
     androidTestImplementation "androidx.test:core:${androidTestVersion}"
     // AndroidJUnitRunner and JUnit Rules
@@ -118,6 +119,7 @@ dependencies {
     // JUnit test dependencies
     /////////////////////////////////////
     testImplementation project(':repoTestUtils')
+    testImplementation project(':sharedTest')
     testImplementation unitTestDeps
     testImplementation "org.apache.httpcomponents:httpclient:4.5.5"
 }

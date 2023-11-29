@@ -15,12 +15,14 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.exec.JobExecRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
-import es.jcyl.ita.formic.jayjobs.utils.DbTestUtils;
-import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.DbTestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.DevJobsBuilder;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Instrumented test to check reader/writer job execution in device

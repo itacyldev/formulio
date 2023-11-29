@@ -12,9 +12,9 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.JobFacade;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
-import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.DevJobsBuilder;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 
 /**
  * Instrumented test to check facade execution on android device
