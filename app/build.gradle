@@ -96,9 +96,9 @@ dependencies {
         exclude group: 'commons-logging'
     }
 
-    implementation(project(':sharedTest')) {
+    /*implementation(project(':sharedTest')) {
         exclude group: 'commons-logging'
-    }
+    }*/
 
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
