@@ -35,6 +35,7 @@ plugins {
     id 'base'
     id 'jacoco'
     id 'jacoco-report-aggregation'
+    id "org.owasp.dependencycheck" version "7.1.2"
 }
 
 allprojects {

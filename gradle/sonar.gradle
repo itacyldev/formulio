@@ -26,5 +26,22 @@ sonarqube {
         property "sonar.exclusions", "recursos/**,*.css,etc/**,doc/**,build/**"
         properties["sonar.dependencyCheck.htmlReportPath"] = "${rootDir}/build/reports/dependency-check-report.html"
         properties["sonar.dependencyCheck.xmlReportPath"] = "${rootDir}/build/reports/dependency-check-report.xml"
+
+    }
+///////////////////////////////////
+// DEPENDENCY CHECK
+///////////////////////////////////
+    //configuracion report OWASP check-deps
+    dependencyCheck {
+        formats = ["html", "xml"]
+        suppressionFile "${rootDir}/recursos/dcheck-suppress.xml"
+        analyzers {
+            retirejs {
+                enabled = false
+            }
+            assemblyEnabled = false
+            nodeEnabled = false
+            msbuildEnabled = false
+        }
     }
 }
