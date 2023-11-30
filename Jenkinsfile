@@ -121,9 +121,9 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-            when {
-                expression { BRANCH_NAME == 'develop' }
-            }
+            //when {
+            //    expression { BRANCH_NAME == 'develop' }
+            //}
             steps {
                 withSonarQubeEnv('SonarQube-ITA') {
                     sh './gradlew sonarqube'
@@ -131,9 +131,9 @@ pipeline {
             }
         }
         stage('Quality Gate') {
-            when {
-                expression { BRANCH_NAME == 'develop' }
-            }
+            //when {
+            //    expression { BRANCH_NAME == 'develop' }
+            //}
             steps {
                 timeout(time: 20, unit: 'MINUTES') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
