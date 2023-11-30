@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
+import es.jcyl.ita.formic.sharedTest.utils.TestContextUtils;
 
 /*
  *

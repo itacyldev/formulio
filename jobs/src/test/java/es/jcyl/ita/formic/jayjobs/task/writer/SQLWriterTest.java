@@ -26,8 +26,8 @@ import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.RecordPage;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.reader.SQLReader;
-import es.jcyl.ita.formic.jayjobs.utils.DbTestUtils;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.DbTestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

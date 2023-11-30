@@ -26,7 +26,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.listener.JobExecListener;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
-import es.jcyl.ita.formic.jayjobs.utils.DevJobsBuilder;
+import es.jcyl.ita.formic.sharedTest.utils.DevJobsBuilder;
 
 public class ConcurrentJobRunnerTest {
 

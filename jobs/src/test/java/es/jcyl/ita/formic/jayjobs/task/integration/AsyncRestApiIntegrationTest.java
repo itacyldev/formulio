@@ -31,8 +31,8 @@ import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
 import es.jcyl.ita.formic.jayjobs.task.models.Task;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.HttpRequestProcessor;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
-import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.TestContextUtils;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

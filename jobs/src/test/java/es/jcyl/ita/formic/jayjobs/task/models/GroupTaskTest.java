@@ -10,7 +10,7 @@ import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
 import es.jcyl.ita.formic.jayjobs.task.iteration.BasicCounterIterator;
-import es.jcyl.ita.formic.jayjobs.utils.TestContextUtils;
+import es.jcyl.ita.formic.sharedTest.utils.TestContextUtils;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

@@ -16,12 +16,9 @@ package es.jcyl.ita.formic.jayjobs.jobs;/*
 
 import static org.junit.Assert.assertTrue;
 
-import androidx.annotation.NonNull;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.mock.VolleyMocks;
 
-import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.junit.Test;
 
@@ -30,14 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
-import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
-import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
-import es.jcyl.ita.formic.jayjobs.utils.TestFileUtils;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**
