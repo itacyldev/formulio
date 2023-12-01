@@ -35,11 +35,13 @@ plugins {
     id 'base'
     id 'jacoco'
     id 'jacoco-report-aggregation'
+    id "org.sonarqube" version "3.5.0.2730"
     id "org.owasp.dependencycheck" version "7.1.2"
 }
 
 allprojects {
     apply plugin: 'jacoco'
+    apply plugin: "org.sonarqube"
     apply from: "$project.rootDir/gradle/jacoco.gradle"
     apply from: "$project.rootDir/gradle/sonar.gradle"
 
