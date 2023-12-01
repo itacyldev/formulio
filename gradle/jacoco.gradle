@@ -18,7 +18,7 @@ subprojects { project ->
     if (!ignoredByJacoco.contains(projectName)) {
         apply plugin: 'jacoco'
         jacoco {
-            version '0.7.2.201409121644'
+            version '0.8.7'
         }
 
         task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
