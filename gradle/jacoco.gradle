@@ -1,34 +1,105 @@
-apply plugin: 'jacoco'
+/**
+ *  List of modules that don't require Jacoco
+ */
+def ignoredByJacoco = []
+def fileFilter = ['**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*']
 
-tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
+def buildJavaClasses = "/intermediates/javac/debug/classes"
+def testExecutionFile = "/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+/**
+ *  Apply additional build steps to sub-projects
+ */
+subprojects { project ->
+    def projectName = project.name
+    def projectBuildFolder = project.buildDir
+    def projectFolder = project.projectDir
+
+    // Apply Jacoco only if the project is not in the ignore list
+    if (!ignoredByJacoco.contains(projectName)) {
+        apply plugin: 'jacoco'
+        jacoco {
+            version '0.8.7'
+        }
+
+        task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+            group = 'Reporting'
+            description = 'Generate Jacoco coverage reports after running tests.'
+
+            reports {
+                xml {
+                    enabled true
+                }
+                html {
+                    enabled true
+                }
+            }
+
+
+            def debugTree = fileTree('directory does not exists') // I know it's ugly :)
+
+            def buildDebug = [
+                    "$projectBuildFolder" + "$buildJavaClasses",
+            ]
+
+            buildDebug.each { classPath ->
+                debugTree += fileTree(dir: classPath, includes: fileFilter)
+            }
+
+            def mainSrc = "$projectFolder/src/main/java"
+            sourceDirectories.from = files([mainSrc])
+            classDirectories.from = files([debugTree])
+            executionData.from = files("$projectBuildFolder" + "$testExecutionFile")
+
+
+        }
+    }
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
-    reports {
-        csv.enabled false
-        xml.enabled true
-        html.enabled true
-        xml.destination file("${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
-        html.destination file("${buildDir}/reports/jacoco/html")
+
+/**
+ *  Root task that generates an aggregated Jacoco test coverage report for all sub-projects
+ */
+task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Coverage reports') {
+    group = 'Reporting'
+    description = 'Generates an aggregate report from all subprojects'
+
+    // Get list of projects which should be included in the report
+    def projects = new ArrayList()
+    subprojects.each { prj ->
+        if (!ignoredByJacoco.contains(prj.name)) {
+            projects.add(prj)
+        }
     }
-    // Change as needed
-    def fileFilter = ['**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*']
+
+    //noinspection GrUnresolvedAccess
+    dependsOn(projects.jacocoReport)
+
+    def dirs = []
+    def tree = fileTree('directory does not exists') // I know it's ugly :)
+
+    projects.each { prj ->
+        dirs.add("${prj.name}/src/main/java")
 
 
-    def coverageMainSrc = [
-            "${rootDir}/src/main/java",
-    ]
+        def buildDebug = ["$prj.buildDir" + "$buildJavaClasses",
+        ]
 
-    def coverageDebugTree = [
-            fileTree(dir: "${rootDir}/build/classes", excludes: fileFilter),
-    ]
-    getSourceDirectories().setFrom(files(coverageMainSrc))
-    getClassDirectories().setFrom(files(coverageDebugTree))
-    executionData.from(fileTree(
-            dir: "$buildDir",
-            includes: [
-                    "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
-            ]))
+        buildDebug.each { classPath ->
+            tree += fileTree(dir: classPath, includes: fileFilter)
+        }
+    }
+
+    additionalSourceDirs.setFrom(files(dirs))
+    sourceDirectories.from = files(dirs)
+    classDirectories.from = tree
+    executionData.from = files(projects.jacocoReport.executionData)
+
+    reports {
+        html {
+            enabled true
+        }
+        xml {
+            enabled true
+        }
+    }
 }
