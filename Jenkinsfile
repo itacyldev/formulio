@@ -120,16 +120,31 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube analysis') {
-            /*when {
+        /*stage('SonarQube analysis') {
+            when {
                 expression { BRANCH_NAME == 'develop' }
-            }*/
+            }
             steps {
                 withSonarQubeEnv('SonarQube-ITA') {
                     sh './gradlew sonarqube'
                 }
             }
+        }*/
+
+        stage('SonarQube analysis') {
+            steps {
+                script {
+                    def coverageReportPath = "${projectDir}/build/reports/jacoco/jacocoFullReport/jacocoFullReport.xml"
+                    echo "Coverage Report Path: ${coverageReportPath}"
+
+                    withSonarQubeEnv('SonarQube-ITA') {
+                        sh "./gradlew sonarqube -Dsonar.coverage.jacoco.xmlReportPaths=${coverageReportPath}"
+                    }
+                }
+            }
         }
+
+
         stage('Quality Gate') {
             /*when {
                 expression { BRANCH_NAME == 'develop' }
