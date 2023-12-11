@@ -1,105 +1,73 @@
-/**
- *  List of modules that don't require Jacoco
- */
-def ignoredByJacoco = []
-def fileFilter = ['**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*']
+// ignore any subproject, if required `subprojects.findAll{ it.name != 'customSubProject' }`
+def coveredProjects = subprojects
 
-def buildJavaClasses = "/intermediates/javac/debug/classes"
-def testExecutionFile = "/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
-/**
- *  Apply additional build steps to sub-projects
- */
-subprojects { project ->
-    def projectName = project.name
-    def projectBuildFolder = project.buildDir
-    def projectFolder = project.projectDir
+// configure() method takes a list as an argument and applies the configuration to the projects in this list.
+subprojects { p ->
 
-    // Apply Jacoco only if the project is not in the ignore list
-    if (!ignoredByJacoco.contains(projectName)) {
-        apply plugin: 'jacoco'
-        jacoco {
-            version '0.8.7'
+    // Here we apply jacoco plugin to every project
+    apply plugin: 'jacoco'
+    // Set Jacoco version
+    jacoco {
+        toolVersion = "0.8.7"
+    }
+
+    // Here we create the task to generate Jacoco report
+    // It depends to unit test task we don't have to manually running unit test before the task
+    task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+
+        // Define what type of report we should generate
+        // If we don't want to process the data further, html should be enough
+        reports {
+            xml {
+                enabled true
+            }
+            html {
+                enabled true
+            }
         }
 
-        task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
-            group = 'Reporting'
-            description = 'Generate Jacoco coverage reports after running tests.'
+        // Setup the .class, source, and execution directories
+        final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*']
 
-            reports {
-                xml {
-                    enabled true
-                }
-                html {
-                    enabled true
-                }
-            }
-
-
-            def debugTree = fileTree('directory does not exists') // I know it's ugly :)
-
-            def buildDebug = [
-                    "$projectBuildFolder" + "$buildJavaClasses",
-            ]
-
-            buildDebug.each { classPath ->
-                debugTree += fileTree(dir: classPath, includes: fileFilter)
-            }
-
-            def mainSrc = "$projectFolder/src/main/java"
-            sourceDirectories.from = files([mainSrc])
-            classDirectories.from = files([debugTree])
-            executionData.from = files("$projectBuildFolder" + "$testExecutionFile")
-
-
-        }
+        sourceDirectories.setFrom files(["${p.projectDir}/src/main/java"])
+        classDirectories.setFrom files([
+                fileTree(dir: "${p.buildDir}/classes", excludes: fileFilter),
+                fileTree(dir: "${p.buildDir}/intermediates/javac/debug", excludes: fileFilter),
+        ])
+        executionData.setFrom fileTree(dir: p.buildDir, includes: [
+                'jacoco/*.exec', 'outputs/unit_test_code_coverage/debugUnitTest/*.exec'
+        ])
     }
 }
 
+apply plugin: 'jacoco'
 
-/**
- *  Root task that generates an aggregated Jacoco test coverage report for all sub-projects
- */
 task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Coverage reports') {
     group = 'Reporting'
     description = 'Generates an aggregate report from all subprojects'
 
-    // Get list of projects which should be included in the report
-    def projects = new ArrayList()
-    subprojects.each { prj ->
-        if (!ignoredByJacoco.contains(prj.name)) {
-            projects.add(prj)
-        }
-    }
+    def projects = coveredProjects
 
-    //noinspection GrUnresolvedAccess
+    // Here we depend on the jacocoReport task that we created before
     dependsOn(projects.jacocoReport)
 
-    def dirs = []
-    def tree = fileTree('directory does not exists') // I know it's ugly :)
+    final source = files(projects.jacocoReport.sourceDirectories)
 
-    projects.each { prj ->
-        dirs.add("${prj.name}/src/main/java")
+    additionalSourceDirs.setFrom source
+    sourceDirectories.setFrom source
 
-
-        def buildDebug = ["$prj.buildDir" + "$buildJavaClasses",
-        ]
-
-        buildDebug.each { classPath ->
-            tree += fileTree(dir: classPath, includes: fileFilter)
-        }
-    }
-
-    additionalSourceDirs.setFrom(files(dirs))
-    sourceDirectories.from = files(dirs)
-    classDirectories.from = tree
-    executionData.from = files(projects.jacocoReport.executionData)
+    classDirectories.setFrom files(projects.jacocoReport.classDirectories)
+    executionData.setFrom files(projects.jacocoReport.executionData)
 
     reports {
         html {
             enabled true
+            destination file("$buildDir/reports/jacoco/jacocoReport/html")
         }
         xml {
             enabled true
+            destination file("$buildDir/reports/jacoco/jacocoReport/jacocoFullReport.xml")
         }
     }
+
 }
