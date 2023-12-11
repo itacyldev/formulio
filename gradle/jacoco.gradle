@@ -42,7 +42,7 @@ subprojects { p ->
 
 apply plugin: 'jacoco'
 
-task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Coverage reports') {
+task jacocoTestReport(name: 'jacocoTestReport', type: JacocoReport, group: 'Coverage reports') {
     group = 'Reporting'
     description = 'Generates an aggregate report from all subprojects'
 
@@ -66,7 +66,7 @@ task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Cove
         }
         xml {
             enabled true
-            destination file("$buildDir/reports/jacoco/test/jacocoFullReport.xml")
+            destination file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
         }
     }
 
