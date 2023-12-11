@@ -62,7 +62,7 @@ task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Cove
     reports {
         html {
             enabled true
-            destination file("$buildDir/reports/jacoco/jacocoReport/html")
+            destination file("$buildDir/reports/jacoco/test/html")
         }
         xml {
             enabled true
