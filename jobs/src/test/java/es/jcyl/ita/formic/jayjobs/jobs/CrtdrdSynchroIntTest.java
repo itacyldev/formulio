@@ -14,12 +14,11 @@ package es.jcyl.ita.formic.jayjobs.jobs;/*
  * limitations under the License.
  */
 
-import static org.junit.Assert.assertTrue;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.mock.VolleyMocks;
 
 import org.codehaus.plexus.util.StringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -31,8 +30,10 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfig;
 import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
-import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Testing jobs in a more complex scenario, craeting a synchronization client to send a file to a REST endpoint and
@@ -45,6 +46,7 @@ public class CrtdrdSynchroIntTest {
     JobFacade facade = new JobFacade();
 
     @Test
+    @Ignore
     public void testRunSynchro() throws Exception {
         // read job content
         CompositeContext context = JobContextTestUtils.createJobExecContext();

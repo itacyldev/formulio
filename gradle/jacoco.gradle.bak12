@@ -27,7 +27,7 @@ subprojects { p ->
         }
 
         // Setup the .class, source, and execution directories
-        final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/jsqlite/**/*.*']
+        final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*']
 
         sourceDirectories.setFrom files(["${p.projectDir}/src/main/java"])
         classDirectories.setFrom files([
@@ -42,7 +42,7 @@ subprojects { p ->
 
 apply plugin: 'jacoco'
 
-task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Coverage reports') {
+task jacocoTestReport(name: 'jacocoTestReport', type: JacocoReport, group: 'Coverage reports') {
     group = 'Reporting'
     description = 'Generates an aggregate report from all subprojects'
 
@@ -62,11 +62,11 @@ task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Cove
     reports {
         html {
             enabled true
-            destination file("$buildDir/reports/jacoco/jacocoFullReport/html")
+            destination file("$buildDir/reports/jacoco/test/html")
         }
         xml {
             enabled true
-            destination file("$buildDir/reports/jacoco/jacocoFullReport/jacocoTestReport.xml")
+            destination file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
         }
     }
 
