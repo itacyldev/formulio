@@ -51,7 +51,7 @@ pipeline {
 
         stage('Report Jacoco') {
             steps {
-                 sh './gradlew jacocoTestReport'
+                 sh './gradlew jacocoFullReport'
             }
             post {
                 success {

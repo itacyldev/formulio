@@ -1,12 +1,11 @@
-// In here we can filter out what modules that we want to cover
-def coveredProject = subprojects
+// ignore any subproject, if required `subprojects.findAll{ it.name != 'customSubProject' }`
+def coveredProjects = subprojects
 
 // configure() method takes a list as an argument and applies the configuration to the projects in this list.
-configure(coveredProject) { prj ->
+subprojects { p ->
 
     // Here we apply jacoco plugin to every project
     apply plugin: 'jacoco'
-
     // Set Jacoco version
     jacoco {
         toolVersion = "0.8.7"
@@ -18,10 +17,7 @@ configure(coveredProject) { prj ->
 
         // Define what type of report we should generate
         // If we don't want to process the data further, html should be enough
-      reports {
-            csv {
-                enabled false
-            }
+        reports {
             xml {
                 enabled true
             }
@@ -33,20 +29,24 @@ configure(coveredProject) { prj ->
         // Setup the .class, source, and execution directories
         final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*']
 
-        // Include this if you use Kotlin
-        final javacTree = fileTree(dir: "${prj.buildDir}/intermediates/javac/debug", excludes: fileFilter)
-        final mainSrc = "${prj.projectDir}/src/main/java"
-
-        sourceDirectories.setFrom files([mainSrc])
-        classDirectories.setFrom files([javacTree])
-        executionData.setFrom fileTree(dir: prj.buildDir, includes: [
-                'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+        sourceDirectories.setFrom files(["${p.projectDir}/src/main/java"])
+        classDirectories.setFrom files([
+                fileTree(dir: "${p.buildDir}/classes", excludes: fileFilter),
+                fileTree(dir: "${p.buildDir}/intermediates/javac/debug", excludes: fileFilter),
+        ])
+        executionData.setFrom fileTree(dir: p.buildDir, includes: [
+                'jacoco/*.exec', 'outputs/unit_test_code_coverage/debugUnitTest/*.exec'
         ])
     }
 }
 
-task jacocoTestReport(type: JacocoReport, group: 'Coverage reports') {
-    def projects = coveredProject
+apply plugin: 'jacoco'
+
+task jacocoFullReport(name: 'jacocoFullReport', type: JacocoReport, group: 'Coverage reports') {
+    group = 'Reporting'
+    description = 'Generates an aggregate report from all subprojects'
+
+    def projects = coveredProjects
 
     // Here we depend on the jacocoReport task that we created before
     dependsOn(projects.jacocoReport)
@@ -62,16 +62,13 @@ task jacocoTestReport(type: JacocoReport, group: 'Coverage reports') {
     reports {
         html {
             enabled true
-            destination file("$buildDir/reports/jacoco/test/html")
+            destination file("$buildDir/reports/jacoco/jacocoFullReport/html")
         }
         xml {
             enabled true
-            destination file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
+            destination file("$buildDir/reports/jacoco/jacocoFullReport/jacocoTestReport.xml")
         }
     }
 
-    doFirst {
-        //noinspection GroovyAssignabilityCheck
-        executionData.setFrom files(executionData.findAll { it.exists() })
-    }
 }
+
