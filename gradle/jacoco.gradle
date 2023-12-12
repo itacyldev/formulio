@@ -27,7 +27,7 @@ subprojects { p ->
         }
 
         // Setup the .class, source, and execution directories
-        final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*']
+        final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/jsqlite/**/*.*']
 
         sourceDirectories.setFrom files(["${p.projectDir}/src/main/java"])
         classDirectories.setFrom files([
