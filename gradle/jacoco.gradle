@@ -45,7 +45,7 @@ configure(coveredProject) { prj ->
     }
 }
 
-task jacocoFullReport(type: JacocoReport, group: 'Coverage reports') {
+task jacocoTestReport(type: JacocoReport, group: 'Coverage reports') {
     def projects = coveredProject
 
     // Here we depend on the jacocoReport task that we created before
