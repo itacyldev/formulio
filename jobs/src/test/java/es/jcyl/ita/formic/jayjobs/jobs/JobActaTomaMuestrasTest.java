@@ -30,7 +30,7 @@ import es.jcyl.ita.formic.jayjobs.jobs.config.JobConfigRepo;
 import es.jcyl.ita.formic.jayjobs.jobs.models.JobExecutionMode;
 import es.jcyl.ita.formic.jayjobs.task.processor.httpreq.RQProvider;
 import es.jcyl.ita.formic.jayjobs.task.utils.ContextAccessor;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 
 /**
  * @autor Rosa María Muñiz (mungarro@itacyl.es)

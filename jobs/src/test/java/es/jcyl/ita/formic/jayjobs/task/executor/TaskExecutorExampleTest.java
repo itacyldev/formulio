@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import es.jcyl.ita.formic.core.context.CompositeContext;
 import es.jcyl.ita.formic.jayjobs.task.exception.TaskException;
-import es.jcyl.ita.formic.jayjobs.utils.JobContextTestUtils;
+import es.jcyl.ita.formic.sharedTest.utils.JobContextTestUtils;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
 
 /**

@@ -1,7 +1,7 @@
 node(){
     configFileProvider([configFile(fileId: '0448eca8-c7dd-461c-8ec0-449f0706456e', variable: 'itConfig')]) {
         itCredentials = readJSON file: itConfig
-    }       
+    }
 }
 pipeline {
     agent any
@@ -51,7 +51,7 @@ pipeline {
 
         stage('Report Jacoco') {
             steps {
-                 sh './gradlew jacocoTestReport'
+                 sh './gradlew jacocoFullReport'
             }
             post {
                 success {
@@ -120,11 +120,10 @@ pipeline {
                 }
             }
         }
-        /*
         stage('SonarQube analysis') {
-            when {
+            /*when {
                 expression { BRANCH_NAME == 'develop' }
-            }
+            }*/
             steps {
                 withSonarQubeEnv('SonarQube-ITA') {
                     sh './gradlew sonarqube'
@@ -132,9 +131,9 @@ pipeline {
             }
         }
         stage('Quality Gate') {
-            when {
+            /*when {
                 expression { BRANCH_NAME == 'develop' }
-            }
+            }*/
             steps {
                 timeout(time: 20, unit: 'MINUTES') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
@@ -143,7 +142,6 @@ pipeline {
                 }
             }
         }
-        */
     }
     post {
         failure {

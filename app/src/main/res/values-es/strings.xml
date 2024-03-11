@@ -43,5 +43,6 @@
     <string name="exporting">Exportando...</string>
     <string name="project_import_continue">Se va a importar el proyecto. ¿Desea continuar?</string>
     <string name="confirmation">Confirmación</string>
+    <string name="information">Información</string>
     <string name="job_error_publishing">Se ha producido un error al intentar publicar los recursos del job</string>
 </resources>

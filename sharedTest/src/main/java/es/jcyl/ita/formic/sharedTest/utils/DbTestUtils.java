@@ -1,4 +1,4 @@
-package es.jcyl.ita.formic.jayjobs.utils;
+package es.jcyl.ita.formic.sharedTest.utils;
 /*
  * Copyright 2020 Gustavo Río (gustavo.rio@itacyl.es), ITACyL (http://www.itacyl.es).
  *

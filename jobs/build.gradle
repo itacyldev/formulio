@@ -8,7 +8,6 @@ archivesBaseName = 'jobs'
 group = globalConf.group
 version = globalConf.version
 
-
 android {
     compileSdkVersion = rootProject.compileSdkVersion
 
@@ -36,14 +35,18 @@ android {
     }
     sourceSets {
         String sharedTestJavaDir = 'src/shared/java'
+
         androidTest {
-            //java.srcDirs += [sharedTestJavaDir]
+            java.srcDirs += [sharedTestJavaDir]
             resources.srcDirs += ['src/test/resources']
         }
         test {
             java.srcDirs += [sharedTestJavaDir]
         }
     }
+
+
+
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -85,11 +88,13 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
 
     implementation 'org.slf4j:slf4j-api:1.7.30'
+    //implementation project(':sharedTest')
 
     /////////////////////////////////////
     // Instrumentation test dependencies
     /////////////////////////////////////
     androidTestImplementation project(':repoTestUtils')
+    androidTestImplementation project(':sharedTest')
     // Core library
     androidTestImplementation "androidx.test:core:${androidTestVersion}"
     // AndroidJUnitRunner and JUnit Rules
@@ -114,6 +119,7 @@ dependencies {
     // JUnit test dependencies
     /////////////////////////////////////
     testImplementation project(':repoTestUtils')
+    testImplementation project(':sharedTest')
     testImplementation unitTestDeps
     testImplementation "org.apache.httpcomponents:httpclient:4.5.5"
 }

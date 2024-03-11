@@ -23,7 +23,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:7.3.1'
         classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
-        classpath 'org.jacoco:org.jacoco.core:0.8.6'
+        classpath 'org.jacoco:org.jacoco.core:0.8.7'
     }
 }
 
@@ -35,11 +35,13 @@ plugins {
     id 'base'
     id 'jacoco'
     id 'jacoco-report-aggregation'
+    id "org.sonarqube" version "3.5.0.2730"
+    id "org.owasp.dependencycheck" version "7.1.2"
 }
 
 allprojects {
-    apply plugin: 'jacoco'
     apply from: "$project.rootDir/gradle/jacoco.gradle"
+    apply from: "$project.rootDir/gradle/sonar.gradle"
 
     repositories {
         mavenLocal()
@@ -100,8 +102,8 @@ allprojects {
 //}
 
 ext {
-    versionCode = 64
-    versionName = '0.7.42'
+    versionCode = 65
+    versionName = '0.7.43'
     applicationId = "es.jcyl.ita.formic"
     compileSdkVersion = 33
     targetSdkVersion = 33
@@ -113,7 +115,7 @@ ext {
     androidTestVersion= '1.2.0'
 
     group = 'es.jcyl.ita.formic'
-    version = '0.7.42'
+    version = '0.7.43'
     artifactId = 'Formic'
 
     sharedDeps = [

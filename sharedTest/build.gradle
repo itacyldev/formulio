@@ -4,7 +4,7 @@ apply plugin: 'jacoco'
 
 def globalConf = rootProject.ext
 
-archivesBaseName = 'repo'
+archivesBaseName = 'sharedTest'
 group = globalConf.group
 version = globalConf.version
 
@@ -36,6 +36,11 @@ android {
     }
     testOptions {
         unitTests {
+            all {
+                jacoco {
+                    enabled = false
+                }
+            }
             includeAndroidResources = true
             returnDefaultValues = true
         }
@@ -50,20 +55,15 @@ android {
             excludes += ['META-INF/INDEX.LIST']
         }
     }
-    namespace 'es.jcyl.ita.formic.repo'
-
-    /*sonarqube {
-        properties {
-            property "sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/build/reports/jacoco/jacocoFullReport/jacocoFullReport.xml"
-        }
-    }*/
+    namespace 'es.jcyl.ita.formic.sharedTest'
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':core')
-    api 'org.greenrobot:greendao:3.2.3-patched-SNAPSHOT'
-    api 'commons-io:commons-io:2.6'
+    api project(':jobs')
+    api project(':repo')
+    api project(':repoTestUtils')
 }
 
 publishing {
@@ -88,20 +88,4 @@ publishing {
             }
         }
     }
-    /*
-    publications {
-        mavenPublish(MavenPublication) {
-            from components.java
-            artifactId archivesBaseName
-            pom.withXml {
-                asNode().dependencies.'*'.findAll() {
-                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-                        dep.name == it.artifactId.text()
-                    }
-                }.each() {
-                    it.scope*.value = 'compile'
-                }
-            }
-        }
-    }*/
 }

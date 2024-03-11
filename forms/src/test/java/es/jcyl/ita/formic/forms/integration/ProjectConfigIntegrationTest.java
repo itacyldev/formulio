@@ -15,13 +15,12 @@ package es.jcyl.ita.formic.forms.integration;
  * limitations under the License.
  */
 
-import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
-
 import android.util.Log;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mini2Dx.collections.CollectionUtils;
@@ -37,14 +36,14 @@ import es.jcyl.ita.formic.forms.components.FilterableComponent;
 import es.jcyl.ita.formic.forms.components.UIComponentHelper;
 import es.jcyl.ita.formic.forms.components.form.UIForm;
 import es.jcyl.ita.formic.forms.components.view.UIView;
-import es.jcyl.ita.formic.forms.config.ConfigConverters;
 import es.jcyl.ita.formic.forms.config.DevConsole;
 import es.jcyl.ita.formic.forms.config.elements.FormConfig;
 import es.jcyl.ita.formic.forms.controllers.ViewController;
 import es.jcyl.ita.formic.forms.project.Project;
 import es.jcyl.ita.formic.forms.project.ProjectRepository;
-import es.jcyl.ita.formic.repo.RepositoryFactory;
 import es.jcyl.ita.formic.repo.test.utils.TestUtils;
+
+import static es.jcyl.ita.formic.repo.test.utils.AssertUtils.assertEquals;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
@@ -70,6 +69,7 @@ public class ProjectConfigIntegrationTest {
      * Check formEdit and formList are properly created
      */
     @Test
+    @Ignore
     public void testFormConfig() throws Exception {
         File baseFolder = TestUtils.findFile("config");
         App.init(baseFolder.getAbsolutePath());

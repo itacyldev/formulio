@@ -9,7 +9,7 @@ import java.io.File;
 
 import es.jcyl.ita.formic.core.context.impl.BasicContext;
 import es.jcyl.ita.formic.jayjobs.task.processor.UnzipProcessorTest;
-import es.jcyl.ita.formic.jayjobs.utils.TestFileUtils;
+import es.jcyl.ita.formic.sharedTest.utils.TestFileUtils;
 
 public class UnzipFilesCmdTest {
 
