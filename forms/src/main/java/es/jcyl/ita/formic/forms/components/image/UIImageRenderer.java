@@ -35,8 +35,6 @@ import es.jcyl.ita.formic.forms.view.render.InputRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.InputWidget;
 import es.jcyl.ita.formic.repo.EntityMapping;
-import es.jcyl.ita.formic.repo.media.FileEntity;
-import es.jcyl.ita.formic.repo.media.FileRepository;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)

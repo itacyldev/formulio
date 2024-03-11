@@ -17,7 +17,6 @@ package es.jcyl.ita.formic.forms.components.link;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mini2Dx.beanutils.ConvertUtils;
@@ -26,7 +25,6 @@ import es.jcyl.ita.formic.forms.R;
 import es.jcyl.ita.formic.forms.actions.events.Event;
 import es.jcyl.ita.formic.forms.actions.events.UserEventInterceptor;
 import es.jcyl.ita.formic.forms.dialog.ConfirmationDialog;
-import es.jcyl.ita.formic.forms.view.UserMessagesHelper;
 import es.jcyl.ita.formic.forms.view.render.AbstractRenderer;
 import es.jcyl.ita.formic.forms.view.render.renderer.RenderingEnv;
 import es.jcyl.ita.formic.forms.view.widget.Widget;
@@ -69,8 +67,20 @@ public class UIButtonRenderer extends AbstractRenderer<UIButton, Widget<UIButton
         public void onClick(View v) {
             UIButton component = (UIButton) widget.getComponent();
             if ((Boolean) ConvertUtils.convert(component.isReadonly(env.getWidgetContext()), Boolean.class)) {
-                UserMessagesHelper.toast(env.getAndroidContext(), component.getReadonlyMessage(),
-                        Toast.LENGTH_LONG);
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog(env.getAndroidContext());
+                confirmationDialog.show();
+
+                confirmationDialog.getConfirmationDialogText().setText(component.getReadonlyMessage());
+                confirmationDialog.getConfirmationDialogTitle().setText(StringUtils.upperCase(env.getAndroidContext().getString(R.string.information)));
+
+                confirmationDialog.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        confirmationDialog.cancel();
+                    }
+                });
+                confirmationDialog.getCancelButton().setVisibility(View.GONE);
+
             } else {
                 if (component.isConfirmation(env.getWidgetContext())) {
                     ConfirmationDialog confirmationDialog = new ConfirmationDialog(env.getAndroidContext());
