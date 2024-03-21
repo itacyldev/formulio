@@ -39,6 +39,12 @@ public class UILinkBase extends AbstractUIComponent {
 
     private TYPE type = LINK;
 
+    public enum MESSAGETYPE {
+        TOAST, MODAL
+    }
+
+    private MESSAGETYPE messageType = MESSAGETYPE.TOAST;
+
     private String route;
 
     protected ValueBindingExpression confirmation;
