@@ -26,6 +26,8 @@ public class AttributeDef {
     public static final Attribute VALUE = new Attribute("value", "valueExpression", "binding");
     public static final Attribute RENDER = new Attribute("render", "renderExpression", "binding");
     public static final Attribute READONLY = new Attribute("readonly", "readonly", "binding");
+
+    public static final Attribute MESSAGE_TYPE = new Attribute("messageType", "messageType", String.class);
     public static final Attribute READONLY_MESSAGE = new Attribute("readonlyMessage", "readonlyMessage", String.class);
     public static final Attribute ALLOWS_PARTIAL_RESTORE = new Attribute("allowsPartialRestore", Boolean.class);
 
