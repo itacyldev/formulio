@@ -68,6 +68,7 @@ import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.LINES;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAINFORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MAIN_FORM;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE;
+import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.MESSAGE_TYPE;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.METHOD;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NAME;
 import static es.jcyl.ita.formic.forms.config.meta.AttributeDef.NUM_VISIBLE_ROWS;
@@ -155,7 +156,7 @@ public class TagDef {
                 new Attribute("retrieveMeta", Boolean.class)
         }));
 
-        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, READONLY_MESSAGE, ON_BEFORE_RENDER,
+        Attribute[] base = new Attribute[]{ID, VALUE, RENDER, READONLY, MESSAGE_TYPE, READONLY_MESSAGE, ON_BEFORE_RENDER,
                 ON_AFTER_RENDER, ACTION, ALLOWS_PARTIAL_RESTORE};
         Attribute[] input = new Attribute[]{LABEL, CONVERTER, TYPE_STR, INPUT_TYPE, VALIDATOR, HAS_DELETE_BUTTON,
                 HAS_TODAY_BUTTON, PLACEHOLDER, PATTERN, HINT};

@@ -42,6 +42,7 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     protected ValueBindingExpression readonly;
     protected String readonlyMessage;
+    protected String messageType = "toast";
 
     protected ValueBindingExpression placeHolder;
     /**
@@ -147,6 +148,14 @@ public abstract class AbstractUIComponent implements Identificable, UIComponent 
 
     public void setRendererType(String rendererType) {
         this.rendererType = rendererType;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
     }
 
     public UIView getRoot() {
