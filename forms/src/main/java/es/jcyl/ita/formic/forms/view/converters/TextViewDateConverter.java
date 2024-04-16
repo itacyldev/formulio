@@ -38,8 +38,8 @@ public class TextViewDateConverter implements ViewValueConverter<TextView> {
 
     private String pattern;
     private String type;
-    private String datePattern = "yyyy-MM-dd";
-    private String datetimePattern = "yyyy-MM-dd HH:mm:ss";
+    private String datePattern = "dd-MM-yyyy";
+    private String datetimePattern = "dd-MM-yyyy HH:mm:ss";
 
     @Override
     public Object getValueFromView(TextView view) {
