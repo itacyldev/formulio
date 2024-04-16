@@ -14,8 +14,8 @@ public class UIField extends UIInputComponent {
     private Integer lines;
 
     private String pattern;
-    private String datePattern = "yyyy-MM-dd";
-    private String datetimePattern = "yyyy-MM-dd HH:mm:ss";
+    private String datePattern = "dd-MM-yyyy";
+    private String datetimePattern = "dd-MM-yyyy HH:mm:ss";
 
     @Override
     public String getRendererType() {
