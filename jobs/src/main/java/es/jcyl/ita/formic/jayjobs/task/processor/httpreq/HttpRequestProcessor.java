@@ -74,7 +74,7 @@ public class HttpRequestProcessor extends AbstractProcessor implements NonIterPr
     private String contentCharset;
     private Map<String, String> headers;
     private Map<String, String> params;
-    private Integer timeout = 30; // seconds
+    private Integer timeout = 100; // seconds
 
     // internal objects
     private RequestQueue requestQueue;
