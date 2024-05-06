@@ -53,4 +53,5 @@
             android:weightSum="1">
         </RadioGroup>
     </LinearLayout>
+    
 </es.jcyl.ita.formic.forms.view.widget.InputWidget>
