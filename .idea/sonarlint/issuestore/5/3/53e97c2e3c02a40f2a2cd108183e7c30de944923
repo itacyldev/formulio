@@ -1,0 +1,12 @@
+
+E
+java:S3740!"/Provide the parametrized type for this generic.(ñ®©‹
+Q	java:S1251"<This block of commented-out lines of code should be removed.(—´þˆ
+\
+java:S3457N"AFormat specifiers should be used instead of string concatenation.(â´Áˆÿÿÿÿÿ
+F
+java:S1068#"+Remove this unused "qEngine" private field.(›†Ä¯úÿÿÿÿ
+R
+java:S2629N"7Use the built-in formatting to construct this argument.(â´Áˆÿÿÿÿÿ
+g
+java:S2095/"LUse try-with-resources or close this "SQLiteDatabase" in a "finally" clause.(ì¥òÌþÿÿÿÿ

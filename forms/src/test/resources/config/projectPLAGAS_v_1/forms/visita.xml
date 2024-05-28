@@ -1,0 +1,142 @@
+<main name="visita" description="Visitas" id="idVisita" repo="visitaRepo">
+    <list id="listVisita" name="LISTADO DE VISITAS" description="LISTADO DE VISITAS">
+        <datatable>
+            <column id="column_visita_id" headerText="Id. Visita" filtering="true" ordering="true" value="${entity.visita_id}">
+                <filter property="visita_id" matching="contains" valueExpression="${this.column_visita_id}"/>
+                <order property="visita_id"/>
+            </column>
+            <column id="column_visita" headerText="Visita" filtering="true" ordering="true" value="${entity.visita}">
+                <filter property="visita" matching="contains" valueExpression="${this.column_visita}"/>
+                <order property="visita"/>
+            </column>
+            <column id="recinto" headerText="Recinto" filtering="false" ordering="false" value="${entity.recinto.recinto}"/>
+            <column id="tipo_linde" headerText="Tipo linde" filtering="false" ordering="false" value="${entity.linde.tipo}"/>
+            <column id="actuacion_linde" headerText="Actuación linde" filtering="false" ordering="false" value="${entity.linde.actuacion}"/>
+            <action type="nav" route="idVisita-editVisita"/>
+        </datatable>
+
+        <buttonbar type="fab">
+            <button id="createButton">
+                <action id="createVisita" type="create" route="idVisita-editVisita" >
+                    <param name="repo" value="visitaRepo"/>
+                    <param name="fecha_evaluacion" value="${date.now}"/>
+                </action>
+            </button>
+        </buttonbar>
+
+    </list>
+
+    <edit id="editVisita">
+        <script src="scripts/control.js"/>
+        <form >
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="VISITA"/>
+            <p value=""/>
+
+            <table>
+                <row colspan="2">
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Visita"/>
+                </row>
+                <row weights="25, 75">
+                    <input id="visita_id" label="Id. visita: " readonly="true" placeHolder="${params.entityId}" value="${entity.visita_id}" />
+                    <input label="Visita: " value="${entity.visita}" validator="required"/>
+                </row>
+                <row>
+                    <date label="Fecha evaluación: " value="${entity.fecha_evaluacion}"/>
+                    <input label="Evaluador: " value="${entity.evaluador}"/>
+                </row>
+            </table>
+
+            <table>
+                <row colspan="4">
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Recinto"/>
+                </row>
+                <row colspan="4">
+                    <autocomplete label="Recinto: " forceSelection="true" id="recinto_id" repo="recintoRepo" value="${entity.recinto_id}" validator="required">
+                        <options labelExpression="${entity.recinto}" labelFilteringProperty="recinto" valueProperty="recinto_id" />
+                        <repofilter>
+                            <contains property="recinto" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                </row>
+                <row>
+                    <input label="Habitat: " value="${view.recinto_id}" onBeforeRender="updateHabitat" readonly="true"/>
+                    <input label="Grupo: " value="${view.recinto_id}" onBeforeRender="updateGrupo" readonly="true"/>
+                    <input label="Utilización: " value="${view.recinto_id}" onBeforeRender="updateUtilizacion" readonly="true"/>
+                    <input label="Sist. explotación: " value="${view.recinto_id}" onBeforeRender="updateSistExplotacion" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Actuación parcela: " value="${view.recinto_id}" onBeforeRender="updateActuacionParcela" readonly="true"/>
+                    <input label="Tipo laboreo: " value="${view.recinto_id}" onBeforeRender="updateTipoLaboreo" readonly="true"/>
+                    <input label="Altura: " value="${view.recinto_id}" onBeforeRender="updateAltura" readonly="true"/>
+                    <input label="Densidad: " value="${view.recinto_id}" onBeforeRender="updateDensidad" readonly="true"/>
+                </row>
+            </table>
+
+            <table>
+                <row colspan="4">
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Linde"/>
+                </row>
+                <row weights="25, 75">
+                    <input label="Linde: " value="${entity.linde.tipo}" />
+                    <input label="Actuación linde: " value="${entity.linde.actuacion}" />
+                </row>
+            </table>
+            <table>
+                <row>
+                    <textarea label="Observaciones: " value="${entity.observaciones}" lines="3"/>
+                </row>
+            </table>
+            <p value=""/>
+            <table>
+                <row>
+                    <p backgroundColor="#26a69a" fontSize="18" fontColor="#FFFFFF" bold="true" value=" Transecto"/>
+                </row>
+                <row>
+                    <table border="false">
+                        <row>
+                            <autocomplete label="Tipo transecto: " forceSelection="true" id="tipo_transector_id" repo="tipoTransectorRepo" validator="required">
+                                <options labelExpression="${entity.tipo_transector}" labelFilteringProperty="tipo_transector" valueProperty="tipo_transector_id" />
+                                <repofilter>
+                                    <contains property="tipo_transector" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+                           <button label="AÑADIR TRANSECTO">
+                                    <action id="compositeAction">
+                                        <action id="saveVisita" type="save">
+                                            <param name="visita_id" value="${view.visita_id}" />
+                                        </action>
+                                        <action id="createTransector" type="create" route="idTransector-editTransector" >
+                                            <param name="repo" value="transectorRepo"/>
+                                            <param name="visita_id" value="${view.visita_id}" />
+                                            <param name="tipo_transector_id" value="${view.tipo_transector_id}" />
+                                        </action>
+                                    </action>
+                                </button>
+                        </row>
+                        <row>
+                            <datatable
+                                numVisibleRows="3"
+                                repo="transectorRepo"
+                                route="idTransector-editTransector">
+                                <column id="column_transector" headerText="Transecto" filtering="false" ordering="false" value="${entity.tipoTransector.tipo_transector}">
+                                </column>
+                                 <repofilter>
+                                    <eq property="visita_id" value="${empty(entity.visita_id) ? '-1' : entity.visita_id}" />
+                                </repofilter>
+                            </datatable>
+                        </row>
+                    </table>
+                </row>
+            </table>
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="idVisita-listVisita" type="save" registerInHistory="false" popHistory="1"/>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

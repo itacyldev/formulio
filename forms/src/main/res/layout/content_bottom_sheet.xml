@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheetLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:indeterminateTint="?attr/primaryColorVariant"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_margin="10dp"
+            android:minHeight="24dp"
+            android:layout_weight="9.6"
+            android:layout_marginRight="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+        </ProgressBar>
+        <ImageView
+            android:id="@+id/field_layout_x"
+            android:layout_weight="0.4"
+            style="@style/Textfield_cancel_button"
+            android:layout_marginRight="2dp" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/text_view_bottom_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+    <es.jcyl.ita.formic.forms.components.dialog.BottomSheetListView
+        android:id="@+id/lsViewBtmSheet"
+        android:divider="?attr/onSurface4Color"
+        android:dividerHeight="1dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?attr/AppBackgroundColor"
+        />
+</LinearLayout>

@@ -1,0 +1,9 @@
+
+]	java:S125"<This block of commented-out lines of code should be removed.(ÑµŞöşÿÿÿÿ8„°ƒùÁ1
+V
+java:S1118":Add a private constructor to hide the implicit public one.(ËÏÄ8Š°ƒùÁ1
+{
+java:S2293!"YReplace the type specification in this constructor call with the diamond operator ("<>").(„¬¥áşÿÿÿÿ8°ƒùÁ1
+\
+java:S6213+":Rename this variable to not match a restricted identifier.(µÄ²æÿÿÿÿÿ8•°ƒùÁ1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‹Ä‰´8°ƒùÁ1

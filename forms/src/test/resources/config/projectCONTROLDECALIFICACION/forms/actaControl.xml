@@ -1,0 +1,402 @@
+<main name="actaControl" id="idActaControl" repo="actaRepo">
+    <list id="listActaControl" name="ACTA DE CONTROL">
+        <datatable>
+            <column id="column_acta_id" headerText="Acta" filtering="true" ordering="true" value="${entity.acta_id}">
+                <filter property="acta_id" matching="contains" valueExpression="${this.column_acta_id}"/>
+                <order property="acta_id"/>
+            </column>
+            <column id="column_numero_acta" headerText="Nº Acta" filtering="true" ordering="true" value="${entity.numero_acta}">
+                <filter property="numero_acta" matching="contains" valueExpression="${this.column_numero_acta}"/>
+                <order property="numero_acta"/>
+            </column>
+            <column id="column_fecha_acta" headerText="Fecha" filtering="true" ordering="true" value="${entity.fecha_acta}">
+                <filter property="fecha_acta" matching="contains" valueExpression="${this.column_fecha_acta}"/>
+                <order property="fecha_acta"/>
+            </column>
+            <column id="column_partida" headerText="Partida" filtering="false" ordering="false" value="${entity.partida.partida}"/>
+        </datatable>
+        <buttonbar type="fab">
+            <button id="createButton">
+                <action id="createActa" type="create" route="idActaControl-editActaControl" >
+                    <param name="repo" value="actaRepo"/>
+                </action>
+            </button>
+        </buttonbar>
+    </list>
+
+    <edit id="editActaControl">
+        <script src="scripts/actaControl.js">
+        </script>
+        <form id="formActaControl">
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="AUDITORÍA DE COMPROBACIÓN DOCUMENTAL"/>
+            <p value=""/>
+            <table>
+                <row>
+                    <input label="Id. Acta: " id="acta_id" value="${entity.acta_id}" readonly="true"/>
+                    <input label="Nº Acta: " id="numero_acta" value="${entity.numero_acta}" validator="required"/>
+                    <date label="Fecha: " id="fecha_acta" value="${entity.fecha_acta}" validator="required"/>
+                </row>
+            </table>
+            <table>
+                <row>
+                    <autocomplete id="partida_id" label="Identificación de la partada a certificar: " forceSelection="true" repo="partidaRepo" value="${entity.partida_id}" placeHolder="${not empty(params.partida_id)?params.partida_id:null}" validator="required" hasDeleteButton="false">
+                        <param name="entity" value="${entity}"/>
+                        <options labelExpression="${entity.partida}" labelFilteringProperty="partida" valueProperty="partida_id" />
+                    </autocomplete>
+                </row>
+            </table>
+            <table>
+                <row>
+                        <table border="false" headerText="Operador: ">
+                            <row>
+                                <input id="bodega" label="Bodega: " value="${view.partida_id}" onBeforeRender="updateBodega" readonly="true"/>
+                                <input id="representante" label="Representante: " value="${view.partida_id}" onBeforeRender="updateRepresentante" readonly="true"/>
+                            </row>
+                        </table>
+                </row>
+                <row colspan="2">
+                    <select id="auditor" label="Auditor: " value="${entity.auditor}">
+                        <options>
+                            <option value="Miquel Udina Argilaga" label="Miquel Udina Argilaga"/>
+                        </options>
+                    </select>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Datos de las partida/s a certificar:" fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <p bold="true" value=" Partida"/>
+                    <p bold="true" value=" Tipo de vino"/>
+                    <p bold="true" value=" Litros/envases a certificar"/>
+                    <p bold="true" value=" Identificación y capacidad de los depósitos/envases"/>
+                </row>
+                <row>
+                    <table border="false">
+                        <row>
+                            <input id="partida" value="${view.partida_id}" onBeforeRender="updatePartida" readonly="true"/>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <input id="tipoVino" value="${view.partida_id}" onBeforeRender="updateTipoVino" readonly="true"/>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <input value="${view.partida_id}" onBeforeRender="updateLitros" readonly="true" />
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <input value="${view.partida_id}" onBeforeRender="updateNumEnvasesYCapacidad" readonly="true"/>
+                        </row>
+                    </table>
+                </row>
+                <row colspan="4">
+                    <input label="Analítica" value="${entity.analitica}"/>
+                </row>
+                <row colspan="4">
+                    <textarea label="Observaciones" value="${entity.observaciones_partida}"/>
+                </row>
+            </table>
+
+            <p value=""/>
+
+            <table border="false">
+                <row>
+                    <p italic="true" value="Evidenciar documentalmente (adjuntar copia de registro de entradas, registro de movimiento de partidas, registro de salidas, etc.), el rastro de las partidas a transportar desde el origen de uva en parcela hasta la expedición de las mismas."/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Fecha/s de entrada de la uva" fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <textarea value="${entity.fecha_entrada_uva}"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Resumen de la Entrada de la uva: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <button label="Nueva Entrada de uva">
+                <action type="save" route="entradaUva-editEntradaUva">
+                    <param name="acta_id" value="${view.acta_id}" />
+                    <param name="numero_acta" value="${view.numero_acta}" />
+                </action>
+            </button>
+            <table border="false">
+                <row>
+                    <datatable onBeforeRender="setKilogramosTotales"
+                        numVisibleRows="3"
+                        route="entradaUva-editEntradaUva"
+                        repo="entradaUvaRepo">
+                        <column headerText="Fecha" filtering="false" ordering="false" value="${entity.fecha_entrada_uva}" />
+                        <column headerText="Variedad" filtering="false" ordering="false" value="${entity.variedad.variedad}"/>
+                        <column headerText="Cantidad (Kg)" filtering="false" ordering="false" value="${entity.cantidad_kg}"/>
+                        <column headerText="Depósito de destino" filtering="false" ordering="false" value="${entity.deposito_destino}"/>
+                        <repofilter>
+                            <eq property="acta_id" value="${empty(view.acta_id) ? '-1' : view.acta_id}" />
+                        </repofilter>
+                        <param name="acta_id" value="${entity.acta_id}" />
+                        <param name="numero_acta" value="${entity.acta.numero_acta}" />
+                    </datatable>
+                </row>
+            </table>
+
+            <table>
+                <row>
+                    <textarea label="Observaciones: " value="${entity.observaciones_entrada_uva}"/>
+                </row>
+            </table>
+
+            <radio label="Toda la uva utilizada para elaborar la partida proviene de parcelas correctamente inscritas en el Registro de Parcelas Vitícolas: " value="${entity.respuesta_1}" orientation="horizontal" weights="20, 20">
+                <options>
+                    <option label="SI" value="S" />
+                    <option label="NO" value="N" />
+                </options>
+            </radio>
+
+            <radio label="Se comprueba que en ningún caso se supera el rendimiento (kg/Ha) establecido en el Reglamento: " value="${entity.respuesta_2}" orientation="horizontal" weights="20, 20">
+                <options>
+                    <option label="SI" value="S" />
+                    <option label="NO" value="N" />
+                </options>
+            </radio>
+
+            <radio label="El GAP de todas las partidas está dentro del límite establecido en el Reglamento: " value="${entity.respuesta_3}" orientation="horizontal" weights="20, 20">
+                <options>
+                    <option label="SI" value="S" />
+                    <option label="NO" value="N" />
+                </options>
+            </radio>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Tratamientos enológicos realizados en la elaboración de la partida: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <textarea value="${entity.tratamientos_enologicos}"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Describir los movimientos de partidas realizado desde el encubado hasta la fecha: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <textarea value="${entity.descripcion_movimientos_partidas}"/>
+                </row>
+            </table>
+
+            <radio label="En la extracción de los mostos se han aplicado presiones adecuadas para la extracción del mosto y su separación de los orujos, de forma que el rendimiento no ha superado los 72 litros de vino por cada 100 kilogramos de uva: " value="${entity.respuesta_4}" orientation="horizontal" weights="20, 20">
+                <options>
+                    <option label="SI" value="S" />
+                    <option label="NO" value="N" />
+                </options>
+            </radio>
+
+            <table border="false" weights="30, 20, 50">
+                <row>
+                    <p value="Kilogramos de uva calificada: "/>
+                    <table>
+                        <row>
+                            <input id="kilogramos_totales" value="${entity.kilogramos_totales}" readonly="true"/>
+                        </row>
+                    </table>
+                    <p value="(Total)"/>
+                </row>
+                <row>
+                    <p value="Nº de litros de vino: "/>
+                    <table>
+                        <row>
+                            <input id="litros_totales" value="${entity.litros_totales}" hasDeleteButton="false" inputType="3"/>
+                        </row>
+                    </table>
+                    <p value="(Totales con posibilidad de calificación)"/>
+                </row>
+                <row>
+                    <p bold="true" value="Rendimiento vino/uva: "/>
+                    <table>
+                        <row>
+                            <input value="${view.kilogramos_totales gt 0? math:round(view.litros_totales*100*math:pow(10,2)/view.kilogramos_totales)/math:pow(10,2):null}"  readonly="true"/>
+                        </row>
+                    </table>
+                    <p value="%"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Fecha de entrada del vino en barricas: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <textarea value="${entity.fecha_entrada_vino_barricas}"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Fecha de salida del vino de barricas: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <textarea value="${entity.fecha_salida_vino_barricas}"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Mezcla de añadas: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <textarea value="${entity.mezcla_anadas}"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="Fecha y lote de embotellado: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table border="false" weights="30, 20, 50">
+                <row>
+                    <datatable
+                        numVisibleRows="1"
+                        repo="partidaRepo">
+                        <column headerText="Fecha" filtering="false" ordering="false" value="${entity.fecha_embotellado}" />
+                        <column headerText="Núm. Envases" filtering="false" ordering="false" value="${entity.numero_envases}"/>
+                        <column headerText="Cap. Envase" filtering="false" ordering="false" value="${entity.capacidad_envase}"/>
+                        <column headerText="Litros" filtering="false" ordering="false" value="${entity.litros}"/>
+                        <column headerText="Lote" filtering="false" ordering="false" value="${entity.lote_embotellado}"/>
+                        <repofilter>
+                            <eq property="partida_id" value="${empty(view.partida_id) ? '-1' : view.partida_id}" />
+                        </repofilter>
+                    </datatable>
+                </row>
+            </table>
+
+            <p value=""/>
+            <radio label="Mediante los registros de que se dispone es posible garantizar el origen de la uva utilizada en la obtención de las partidas a transportar: " value="${entity.respuesta_5}" orientation="horizontal" weights="20, 20">
+                <options>
+                    <option label="SI" value="S" />
+                    <option label="NO" value="N" />
+                </options>
+            </radio>
+
+            <table border="false" weights="30, 20, 50">
+                <row>
+                    <p value="Muestras de la partida: "/>
+                    <table>
+                        <row>
+                            <input id="muestras_partida" value="${entity.muestras_partida}" hasDeleteButton="false"/>
+                        </row>
+                    </table>
+                    <button label="Muestra en bodega">
+                        <action type="save" route="muestraBodega-editMuestraBodega">
+                            <param name="acta_id" value="${view.acta_id}" />
+                            <param name="numero_acta" value="${view.numero_acta}" />
+                        </action>
+                    </button>
+                </row>
+            </table>
+
+            <table border="false" render="${not empty(view.muestras_partida)}">
+                <row>
+                    <p value="El técnico recoge y precinta ${view.muestras_partida} muestras de la partida, de las cuales ${not empty(entity.muestras_bodega)?entity.muestras_bodega:'0'} se quedan en la bodega precintadas e identificadas. "/>
+                </row>
+            </table>
+            <table border="false">
+                <row>
+                    <datatable onBeforeRender="setMuestrasBodega"
+                        numVisibleRows="2"
+                        route="muestraBodega-editMuestraBodega"
+                        repo="muestraRepo">
+                        <column headerText="Número de muestra" filtering="false" ordering="false" value="${entity.numero_muestra}"/>
+                        <repofilter>
+                            <eq property="acta_id" value="${empty(view.acta_id) ? '-1' : view.acta_id}" />
+                        </repofilter>
+                        <param name="acta_id" value="${entity.acta_id}" />
+                        <param name="numero_acta" value="${entity.acta.numero_acta}" />
+                    </datatable>
+                </row>
+            </table>
+
+            <table border="false" render="${not empty(view.muestras_partida)}">
+                <row>
+                    <p value="El técnico de la Asociación se lleva las ${not empty(entity.muestras_bodega)?view.muestras_partida - entity.muestras_bodega:view.muestras_partida} muestras restantes para proseguir con el proceso de calificación de la partida."/>
+                </row>
+            </table>
+            <p value=""/>
+
+            <table>
+                <row colspan="2">
+                    <p bold="true" value="OBSERVACIONES: "/>
+                </row>
+                <row colspan="2">
+                    <textarea value="${entity.observaciones_acta}"/>
+                </row>
+                <row>
+                    <table border="false">
+                        <row>
+                            <p bold="true" value="Solicita: (Representante de la Bodega)"/>
+                        </row>
+                        <row>
+                            <image id="imageFirmaRepresentanteBodega" converter="b64Image" embedded="true" value="${entity.firma_representante_bodega}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <input value="Fdo. ${view.representante}" readonly="true"/>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <p bold="true" value="Conforme: (Servicios Técnicos de la Asociación)"/>
+                        </row>
+                        <row>
+                            <image id="imageFirmaServiciosTecnicosAsociacion" converter="b64Image" embedded="true" value="${entity.firma_servicios_tecnicos_asociacion}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <input value="Fdo. ${view.auditor}" readonly="true"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="idActaControl-listActaControl" type="save" registerInHistory="false" popHistory="1"/>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

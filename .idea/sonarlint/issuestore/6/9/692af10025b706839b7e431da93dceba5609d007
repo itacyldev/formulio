@@ -1,0 +1,9 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+V	java:S1250"<This block of commented-out lines of code should be removed.(šÁˆøÿÿÿÿ
+D
+java:S2140D")Use "java.util.Random.nextInt()" instead.(£Ì˜Àşÿÿÿÿ
+T
+java:S1144%">Remove this unused private "NumericUUIDGenerator" constructor.(÷ıç¨
+q
+java:S14884"[Immediately return this expression instead of assigning it to the temporary variable "key".(¶ÔËú

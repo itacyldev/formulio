@@ -1,0 +1,5194 @@
+[33mcommit 769eb42b57c8c1ddd1de59d4ae5bbf55331e45d9[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue May 4 09:58:08 2021 +0200
+
+    FORMIC-238 Publicar versión, etiquetar y desplegar google play v0.3.0
+
+[33mcommit 658071785386f0ee54ece7d4abde517201bd75d5[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Tue May 4 09:35:08 2021 +0200
+
+    Incidencias: FORMIC-268
+    Comentarios: Publicación versión 0.3.0
+
+[33mcommit 8fa8d5c54eb33c674a39a12292093f534dc84031[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon May 3 12:59:36 2021 +0200
+
+    FORMIC-238 Publicar versión, etiquetar y desplegar google play v0.3.0
+
+[33mcommit 6296d990d09ebcc4caf6027e8c6abd52fb9de060[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Fri Apr 30 12:31:29 2021 +0200
+
+    Incidencias: FORMIC-238
+    Comentarios: Impresión del DAG cuando se crea. Corrección de errores en creación de DAGs
+
+[33mcommit c4080e8f2556fa687528bcb07f25284a8355113c[m
+Merge: 4352904a f91fe1cc
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Fri Apr 30 12:16:57 2021 +0200
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 4352904a424291c3edb9a3e2bbedf533bffc1e3e[m
+Merge: a2af892a e3696831
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Fri Apr 30 12:16:30 2021 +0200
+
+    Merge branch 'FORMIC-238_Revisar_dependencias_dag' into develop
+    
+    # Conflicts:
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/view/dag/DAGManager.java
+
+[33mcommit e36968317c94c6a5de988a25821324a3a90a8988[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Fri Apr 30 12:02:51 2021 +0200
+
+    Incidencias: FORMIC-238
+    Comentarios: Impresión del DAG cuando se crea. Corrección de errores en creación de DAGs
+
+[33mcommit a2af892a95b8123dde811a00c4733f8f67347500[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Fri Apr 30 12:02:51 2021 +0200
+
+    Incidencias: FORMIC-238
+    Comentarios: Impresión del DAG cuando se crea. Corrección de errores en creación de DAGs
+
+[33mcommit f91fe1ccb6275143171fb2e8bd36b91f4157bfb0[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Apr 28 11:50:53 2021 +0200
+
+    FORMIC-175 Envío de parámetros en route
+
+[33mcommit 4296b3315c3d04b80d19df1318b8439b8aeb69cf[m
+Merge: b3219de6 3e2aa3a3
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Wed Apr 28 08:49:39 2021 +0200
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit b3219de6ae495f766c4672b553e2aa2e2b89f913[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Wed Apr 28 08:49:21 2021 +0200
+
+    Incidencias: FORMIC-251
+    Comentarios: Excluir de la creación del DAG las dependencias del contexto "param"
+
+[33mcommit 3e2aa3a370d89884f4ab933643c3bd3cdffaa3e1[m
+Merge: 27f2d751 0fb1f685
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 27 10:57:03 2021 +0200
+
+    Merge branch 'FORMIC-248_Filtro_datatable_dos_condiciones' into develop
+
+[33mcommit 0fb1f6859e5251c7caae3d08f8b4c82be380700b[m[33m ([m[1;31morigin/FORMIC-248_Filtro_datatable_dos_condiciones[m[33m, [m[1;32mFORMIC-248_Filtro_datatable_dos_condiciones[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 27 10:56:26 2021 +0200
+
+    FORMIC-248 Filtro datatable más de dos condiciones
+
+[33mcommit 27f2d751a9b92f2fc1fa2e701cb6b913cac00199[m
+Merge: 0ac92f78 4754b7a4
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 27 10:54:04 2021 +0200
+
+    Merge branch 'FORMIC-248_Filtro_datatable_dos_condiciones' into develop
+
+[33mcommit 4754b7a4f0d1d21233cadf5617cca107bde01e4e[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 27 10:53:47 2021 +0200
+
+    FORMIC-248 Filtro datatable más de dos condiciones
+
+[33mcommit 0ac92f786c424a491a8fb202add97ff148706d44[m
+Merge: 2878b161 3a956ca0
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Mon Apr 26 12:33:07 2021 +0200
+
+    Merge branch 'FORMIC-236_Guardado_entidades_relacionadas' into develop
+
+[33mcommit 2878b161131527f3f11eddabce7fb6e88cdf866c[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Mon Apr 26 12:29:28 2021 +0200
+
+    Incidencias: FORMIC-238
+    Comentarios: Añadir contenido placeHolder para calcular dependencias entre campos en la creación del DAG
+
+[33mcommit 8c1d4bb5baf56786b96b120728fd13656ca28d97[m
+Merge: 26498c14 81ba5324
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Apr 26 09:01:22 2021 +0200
+
+    Merge branch 'FORMIC-239_Mostar_desc_listado_formularios' into develop
+
+[33mcommit 81ba532471b1669632a486f668a976a3cd8648cd[m[33m ([m[1;31morigin/FORMIC-239_Mostar_desc_listado_formularios[m[33m, [m[1;32mFORMIC-239_Mostar_desc_listado_formularios[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Apr 26 09:01:05 2021 +0200
+
+    FORMIC-239 Mostar descripción listado formularios
+
+[33mcommit 26498c1424d13e35fccd41a10fcd398646fff9f7[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Apr 23 06:51:31 2021 +0200
+
+    FORMIC-234 cerrada refactroización inicial de componentes para tener interfaz UIComponent y ContxtHolder
+
+[33mcommit 3a956ca025fd635865c0ea0e8982ad48eb3d27fd[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Thu Apr 22 13:46:40 2021 +0200
+
+    Incidencias: FORMIC-236
+    Comentarios: Comprobamos en el guardado si la FK de la entidad principal se corresponde con el id de la entidad relacionada. Si no coinciden, actualizamos la entidad relacionada
+
+[33mcommit 057b57672c5aa182e6ba4c4adace1b1b812fbaf5[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Thu Apr 22 13:30:53 2021 +0200
+
+    Incidencias: FORMIC-236
+    Comentarios: Comprobamos en el guardado si la FK de la entidad principal se corresponde con el id de la entidad relacionada. Si no coinciden, actualizamos la entidad relacionada
+
+[33mcommit 214e02aacb2633d1092f2329d49985bdbb2ef8d0[m
+Merge: 471d38db bba72920
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Apr 21 14:14:07 2021 +0200
+
+    FORMIC-223 fixes conflicts
+
+[33mcommit bba72920b5a59c0a334172f88f7f7dd81c0abfbc[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Apr 21 13:55:51 2021 +0200
+
+    FORMIC-223 refactorización de acciones, modificados builders de acciones, creación de acciones js, pruebas de lanzamietno js
+
+[33mcommit 471d38dbe8a49c3d4b7c329108723ad8242ca920[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Apr 21 09:41:03 2021 +0200
+
+    FORMIC-203 Soporte para placeHolders
+
+[33mcommit 1fd1245570da27b16a90690b61c5c7e36ab5f017[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Tue Apr 20 19:42:29 2021 +0200
+
+    FORMIC-223 refactorizada creación de acciones con resolver, creados tests para comprobaciones positivas y negativas de conf. desde XML
+
+[33mcommit b4638523c040a7762489c2f8073edba7d3dd25b4[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 20 12:43:45 2021 +0200
+
+    FORMIC-191 Refactorizar devConsole
+
+[33mcommit ffa68d21749a5967ebc7e64d07bc150007bdad30[m
+Merge: 395e75d9 c8ab3bc5
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 20 12:42:30 2021 +0200
+
+    FORMIC-203 Soporte para placeHolders
+
+[33mcommit c8ab3bc55c38d8372234c0042c209fadf853e5a1[m[33m ([m[1;31morigin/FORMIC-203_Soporte_placeHolders[m[33m, [m[1;32mFORMIC-203_Soporte_placeHolders[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 20 12:35:47 2021 +0200
+
+    FORMIC-203 Soporte para placeHolders
+
+[33mcommit 50a163c9dd745d8019fb6f68c2ae2466bad48506[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 19 19:54:00 2021 +0200
+
+    FORMIC-223 refactorizadas acciones para utilizar interceptor para rebiri eventos y lanzar acciones
+
+[33mcommit 09453b710c5fc7daf2f8e6c62314702ef812d693[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 19 09:44:48 2021 +0200
+
+    FORMIC-223 cambios pendientes
+
+[33mcommit 395e75d9fd1ee4056dfbe2a967bfba74199f58b3[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 17 07:57:31 2021 +0200
+
+    FORMIC-206 accionesd de borrado y grabación refactorizadas
+
+[33mcommit 2ef348a485d773e40c7335793d49c8ff3f93041c[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 17 07:38:29 2021 +0200
+
+    FORMIC-206 fixes merge conflicts
+
+[33mcommit 809dc822015cf73c0d3a1272437d08895224d51b[m
+Merge: 2050de73 c686c656
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 17 07:38:11 2021 +0200
+
+    FORMIC-206 fixes merge conflicts
+
+[33mcommit c686c6561c129e86bc004edab0d317df1576f9f8[m
+Merge: 1dae8fa6 7944e8fa
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 17 07:34:50 2021 +0200
+
+    FORMIC-215 eliminar anotacion innecesaria
+
+[33mcommit 7944e8fabac628cd0b7409a75abd36bec408c6f4[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 17 07:34:02 2021 +0200
+
+    FORMIC-215 eliminar anotacion innecesaria
+
+[33mcommit 6cc2f32857d535b6d53acd35fb7c497218afcec4[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 17 07:29:51 2021 +0200
+
+    FORMIC-215 correcciones para lectura de CDATA
+
+[33mcommit 1dae8fa629b7dd76043d29591a05bca754eacfc9[m
+Merge: 744bbe7e b5280ac6
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Apr 16 11:55:11 2021 +0200
+
+    Merge branch 'feature/FORMIC-191_Refactorizar_DevConsole' into develop
+
+[33mcommit 744bbe7eea2dd98dde1588eee8cb728b20e2aab4[m
+Merge: 744b8806 80e00faf
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Apr 16 11:55:03 2021 +0200
+
+    Merge branch 'feature/FORMIC-171_Decimales_tipo_REAL' into develop
+
+[33mcommit 744b8806adefd170bf18cb15d8a91f44f4d8d350[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Apr 15 10:41:53 2021 +0200
+
+    Incidencias: FORMIC-136
+    Comentarios: Fondo del toast dependiente del tema de la aplicación
+
+[33mcommit b5280ac6520d46e3d671dcc9fa52cbc8f4cfff9a[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 14 12:16:22 2021 +0200
+
+    Incidencias: FORMIC-191
+    Comentarios: Refactorización
+
+[33mcommit 80e00faf2bf4a51632b558d042533879be7a284a[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 13 12:42:47 2021 +0200
+
+    Incidencias: FORMIC-171
+    Comentarios: Cuando el tipo de la bd es REAL devolvemos un Double en lugar de Float para evitar errores en los decimales
+
+[33mcommit 35d77b82d8d68db4f1e7d899c28130725b261939[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 12 23:22:05 2021 +0200
+
+    FORMIC-215 correcciones y pruebas en dispositivo
+
+[33mcommit 5267c07c447d301b90f83a7421b9235261b45eec[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 12 22:05:10 2021 +0200
+
+    FORMIC-215 memore with sourde, filtering and tests created
+
+[33mcommit ceb3fa083d4ff787c478b6123cf2b8360e70f49d[m
+Merge: 38bb35fd f54ac3f2
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 12 08:11:50 2021 +0200
+
+    FORMIC-208 fixes conflicts.
+
+[33mcommit f54ac3f256fc7f0f966717ac701590d6417a0ef6[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 12 08:02:22 2021 +0200
+
+    FORMIC-208 eventos en ViewRenderer para notificar al motor rhino de los cambios en el contexto
+
+[33mcommit b7b47918acd6223c8d3d56a0f222186af18a0112[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 10 20:26:02 2021 +0200
+
+     FORMIC-208 llamadas de before/after rendering para cada elemento del arbol
+
+[33mcommit d6359ea2c3c1edd26504765db4cc5180f5733264[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Apr 10 08:50:18 2021 +0200
+
+    FORMIC-208 ejecución de scripts desde hooks de formController
+
+[33mcommit 38bb35fd7805e276f6005f707aa4aec24ea53d5b[m
+Merge: 65d0681f 3b74c901
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Apr 9 09:20:11 2021 +0200
+
+    Merge branch 'FORMIC-203_Soporte_placeHolders' into develop
+
+[33mcommit 3b74c901041eac778d7b40593ed1b38bdaca4929[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Apr 9 09:19:20 2021 +0200
+
+    FORMIC-203 Soporte para placeHolders
+
+[33mcommit 2050de735a0961adadaa5927825454646cf2b3e4[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Apr 7 07:06:25 2021 +0200
+
+    FORMIC-206 reorgniazación de acciones de add/delete
+
+[33mcommit 521a16c2dd47ef8be01dd97f9170c60e1c1447e7[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 6 15:33:23 2021 +0200
+
+    FORMIC-203 Soporte para placeHolders
+
+[33mcommit 1676ac2cff8fa0160a01e5c2b5f0bc359c1ebd27[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 6 13:25:30 2021 +0200
+
+    FORMIC-203 Soporte para placeHolders
+
+[33mcommit 65d0681f7cd049e60c494663602f8b134459586e[m[33m ([m[1;32mFORMIC-191_Refactorizar_devConsole[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 6 11:15:10 2021 +0200
+
+    FORMIC-178 Deshabilitar botones/links de añadir entidades relacionadas hasta que la entidad no esté creada
+
+[33mcommit e2686dc0902437654789195fb50a5d2066dee1f9[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Apr 6 09:07:26 2021 +0200
+
+    FORMIC-178 Deshabilitar botones/links de añadir entidades relacionadas hasta que la entidad no esté creada
+
+[33mcommit f13715c1a16532ccedf65a8c9afe2fa68f0c7dc5[m
+Merge: 4f394d3b 0e6d15ec
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 5 18:43:41 2021 +0200
+
+    FORMIC-188 merge con rama de feature
+
+[33mcommit 4f394d3be1a00b3e2e31e8d95e02e893f7f5547c[m
+Merge: 47c90a1c c8273068
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 5 18:28:25 2021 +0200
+
+    FORMIC-193 merge con rama
+
+[33mcommit c8273068154a4f0d0230b5301561c00163815596[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 5 17:10:23 2021 +0200
+
+    FORMIC-193 fijado número por defecto de filas en datatable a 10
+
+[33mcommit 47c90a1ce31873b2d304cdc6d64510d64bfb4581[m
+Merge: 173c4e35 18e56d69
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Apr 5 13:35:33 2021 +0200
+
+    Merge branch 'FORMIC-178_Deshabilitar_hasta_entidad_no_creada' into develop
+
+[33mcommit 18e56d691f2aa9406b28546dfc00a6431b6c3376[m[33m ([m[1;31morigin/FORMIC-178_Deshabilitar_hasta_entidad_no_creada[m[33m, [m[1;32mFORMIC-178_Deshabilitar_hasta_entidad_no_creada[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Apr 5 13:35:19 2021 +0200
+
+    FORMIC-178 Deshabilitar botones/links de añadir entidades relacionadas hasta que la entidad no esté creada
+
+[33mcommit 173c4e35314ee825077b813eba600d8f19d23032[m
+Merge: 0ad1b9d3 d9bf5222
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Apr 5 13:14:22 2021 +0200
+
+    Merge branch 'FORMIC-178_Deshabilitar_hasta_entidad_no_creada' into develop
+
+[33mcommit d9bf5222ccc3d843d603d0ec13eb44c679181197[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Apr 5 13:13:40 2021 +0200
+
+    FORMIC-178 Deshabilitar botones/links de añadir entidades relacionadas hasta que la entidad no esté creada
+
+[33mcommit ba7983dc0e70ce381f5b13e4bc050c92ef98ab64[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Apr 5 09:11:32 2021 +0200
+
+    Cambios en ciclo de vida de acciones, gestión de contexto de acción separado del userAction
+
+[33mcommit 9189a44ff22084b8cfb5bcaae3f8c0c43a6001de[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Apr 1 19:48:48 2021 +0200
+
+    FORMIC-193 añadido interfaz para registro de estado de widgets, modificado renderer y registro de widgets
+
+[33mcommit 0ad1b9d30f73f3a7eff34bae5da29b88755bba3e[m
+Merge: a05b7b4b ef9c1a41
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 31 11:18:24 2021 +0200
+
+    Merge branch 'FORMIC-183_UIButton' into develop
+
+[33mcommit ef9c1a41185d9a9fe6f3ffaf524b8dec77f4341c[m[33m ([m[1;31morigin/FORMIC-183_UIButton[m[33m, [m[1;32mFORMIC-183_UIButton[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 31 11:16:29 2021 +0200
+
+    FORMIC-183 Crear uiButton heredando de UIInputComponent
+
+[33mcommit 712ba928642ab7ebeea4e84d893d99857ea951e7[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 30 13:58:22 2021 +0200
+
+    FORMIC-183 Crear uiButton heredando de UIInputComponent
+
+[33mcommit 0e6d15ec65e9906294eaf3544638b9565be15dff[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Mar 29 19:28:34 2021 +0200
+
+    FORMIC-188 esqueleto de implementación fase1
+
+[33mcommit a65c678ea1b1a418c27ca42dbe6e5e68946d6b69[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Mar 29 19:20:39 2021 +0200
+
+    FORMIC-188 esqueleto de implementación fase1
+
+[33mcommit 760ab673f405d44c138d0820a730a13502525ee0[m
+Merge: 0e53dde9 a05b7b4b
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Mar 29 16:34:15 2021 +0200
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into FORMIC-177_Permitir_rutas_dinámicas
+
+[33mcommit a05b7b4b1085d02cd3dea5e3d3efa57fb3e21daa[m
+Merge: 3df98f79 5b993adb
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Mar 26 10:54:36 2021 +0100
+
+    Merge branch 'FORMIC-177_Rutas_dinamicas' into develop
+
+[33mcommit 5b993adb19e912c2aecb3af2913030cbcc73f89b[m[33m ([m[1;31morigin/FORMIC-177_Rutas_dinamicas[m[33m, [m[1;32mFORMIC-177_Rutas_dinamicas[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Mar 26 10:52:57 2021 +0100
+
+    FORMIC-177 Permitir rutas dinámicas
+
+[33mcommit 3df98f79a1d3bdaead0f446fbbb79a98a391685b[m
+Merge: 6e894282 2376ed92
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 25 12:23:25 2021 +0100
+
+    Merge branch 'FORMIC-175_Param_en_route' into develop
+
+[33mcommit 2376ed9266dd86c47ef6bb929ee388a4a5ed8083[m[33m ([m[1;31morigin/FORMIC-175_Param_en_route[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 25 12:23:03 2021 +0100
+
+    FORMIC-175 Envío de parámetros en route
+
+[33mcommit 6e894282aa80f78d75b3e83dacb8bf29b1c91ea8[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 25 09:15:07 2021 +0100
+
+    FORMIC-172 UILinkBuilder
+
+[33mcommit d68c9163866963e95872a09331fdc17325c72a84[m
+Merge: b602329f 945ed60f
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 25 09:10:46 2021 +0100
+
+    Merge branch 'FORMIC-172_UILinkBuilder' into develop
+
+[33mcommit 945ed60f165bc6563346b9a43558bbe86f63a842[m[33m ([m[1;31morigin/FORMIC-172_UILinkBuilder[m[33m, [m[1;32mFORMIC-172_UILinkBuilder[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 25 09:10:23 2021 +0100
+
+    FORMIC-172 UILinkBuilder
+
+[33mcommit 0e53dde9754886ed0bf7389bffa6048fc231554c[m[33m ([m[1;31morigin/FORMIC-177_Permitir_rutas_dinámicas[m[33m, [m[1;32mFORMIC-177_Permitir_rutas_dinámicas[m[33m)[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Mar 24 18:15:07 2021 +0100
+
+    FORMIC-177 ejemplo de scripting con expressiones jexl
+
+[33mcommit b602329f09566f260938391c33ef33c39e44ff5d[m
+Merge: a81c7252 9d7a79b5
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Fri Mar 19 11:22:31 2021 +0100
+
+    Merge tag 'FORMIC_v0.1.6' into develop
+    
+    Versión v_0.1.6d
+
+[33mcommit 9d7a79b50694ad59b7a3d382b2cb883d6c9d1e38[m[33m ([m[1;33mtag: FORMIC_v0.1.6[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: ed874202 41e46b16
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Mar 19 11:20:08 2021 +0100
+
+    Merge branch 'release/FORMIC_v0.1.6'
+
+[33mcommit 41e46b164c26f7c20c4c86eb93982a79a0dda1b7[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Mar 19 11:00:40 2021 +0100
+
+    FORMIC-163 Nueva versión v0.1.6
+
+[33mcommit a81c725274c7fe9ce389e3f1ef95ac201cd698ea[m
+Merge: 15dc7694 782ee8e0
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 18 08:02:58 2021 +0100
+
+    Merge branch 'FORMIC-124_Mejorar_estilos_cards' into develop
+
+[33mcommit 782ee8e06cf740dcb77f052ea9dc513f9356f58b[m[33m ([m[1;31morigin/FORMIC-124_Mejorar_estilos_cards[m[33m, [m[1;32mFORMIC-124_Mejorar_estilos_cards[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 18 08:02:42 2021 +0100
+
+    FORMIC-124 Mejorar estilos cards
+
+[33mcommit 15dc769408428061c7c5c6c50c73b605b542e52d[m
+Merge: e31594b8 10c6785a
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 18 07:27:07 2021 +0100
+
+    Merge branch 'FORMIC-124_Mejorar_estilos_cards' into develop
+
+[33mcommit e31594b8ae90f046ae46e5ac621b9a11b63d5c60[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 17 14:58:45 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit c5aea75b12ff1b60b831f2e53c54b360b4010358[m
+Merge: 1085cd83 1f200609
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 17 14:28:53 2021 +0100
+
+    Merge branch 'FORMIC-159_Exportar_datos' into develop
+
+[33mcommit 1f2006096b72c29bc995623a18d91c3f19e4ef96[m[33m ([m[1;31morigin/FORMIC-159_Exportar_datos[m[33m, [m[1;32mFORMIC-159_Exportar_datos[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 17 13:21:59 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 5e1c40b5e079b67df1df8ccad662771a6a92db13[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 17 13:19:00 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 80c37f9b4fc5323ce7e62a322f728e03dfcbe34e[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 17 09:27:30 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 159636947371e41e10bcf97af8edc02086e753b9[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 16 17:53:32 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit c7b16270d5ce5395d06a7f331f965eaf5cc30e68[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 16 17:33:29 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 66759fdab8369489549e0f1ba349ec59a6ff6059[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 16 17:30:40 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit c90c62d62a6a419fceea944b9d34d1f0da697eee[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 16 17:22:58 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 65b88a8e816476be02db380804c79b7347bb4b7d[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 16 15:15:48 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 4934f3c45175703aecfcf06f9dcba0a0a481382d[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 16 12:28:58 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 8583e5d9199c3a48dc9263732455f877dde3d5c6[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 16 07:41:14 2021 +0100
+
+    FORMIC-159 Exportación de datos
+
+[33mcommit 10c6785ab75019b86f29b364eb90688c8859ab4a[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Fri Mar 12 11:34:06 2021 +0100
+
+    Incidencias: FORMIC-124
+    Comentarios: Cambiamos el onClick del botón de expandir/contraer para que no modifique la configuración que tenemos en UICard
+
+[33mcommit efb58c957251d6be82b56f9c21ab2dda589ea7bd[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Mar 12 09:56:23 2021 +0100
+
+    FORMIC-124 Mejorar estilos cards
+
+[33mcommit 1085cd83e4d766bcabb6687633cb63c1667bfbb5[m
+Merge: ffc2bcbd 9f455003
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Thu Mar 11 11:12:36 2021 +0100
+
+    Merge branch 'FORMIC-132_bloquear_giro_de_pantalla' into develop
+
+[33mcommit 9f4550033f83bd72d030d7e31bed1441234643c2[m[33m ([m[1;31morigin/FORMIC-132_bloquear_giro_de_pantalla[m[33m)[m
+Author: ita-ramvalja <javier.ramos@itacyl.es>
+Date:   Thu Mar 11 11:11:49 2021 +0100
+
+    Incidencias: FORMIC-132
+    Comentarios: Bloquear giro de pantalla
+
+[33mcommit ffc2bcbd999c09f1914529f23791cdc13717269c[m
+Merge: 85f75a56 af92547d
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 11 09:25:15 2021 +0100
+
+    Merge branch 'FORMIC-126_Mejorar_estilo_radioButton' into develop
+
+[33mcommit af92547dacad24483ce30feb80d591601f7d03f7[m[33m ([m[1;31morigin/FORMIC-126_Mejorar_estilo_radioButton[m[33m, [m[1;32mFORMIC-126_Mejorar_estilo_radioButton[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Mar 11 09:24:38 2021 +0100
+
+    FORMIC-126 Mejorar estilo radioButton
+
+[33mcommit 85f75a567f273b9cbdde43971a66e846d161613f[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 10 13:11:09 2021 +0100
+
+    FORMIC-129 Mejorar estilos textArea
+
+[33mcommit 991b00dbe032e3c1b4a57c768f36b943a0dceac0[m
+Merge: c621f2a3 854cf772
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 10 11:56:54 2021 +0100
+
+    Merge branch 'FORMIC-129_Mejorar_estilos_textArea' into develop
+
+[33mcommit 854cf772309ccf90f22462c9a9bc187362b2ccb6[m[33m ([m[1;31morigin/FORMIC-129_Mejorar_estilos_textArea[m[33m, [m[1;32mFORMIC-129_Mejorar_estilos_textArea[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 10 11:56:19 2021 +0100
+
+    FORMIC-129 Mejorar estilos textArea
+
+[33mcommit 3f14fddc57bb0a1099d7b10dcb53a2a0e5f4efda[m
+Merge: 6b541349 c621f2a3
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 9 12:21:08 2021 +0100
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into FORMIC-129_Mejorar_estilos_textArea
+
+[33mcommit c621f2a3fc18b590731898a1cb20e5b0836b1246[m
+Merge: 01981b17 07aec3b9
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 9 12:19:17 2021 +0100
+
+    Merge branch 'FORMIC-154_Configurar_log4j' into develop
+
+[33mcommit 07aec3b910c0015321c32afdae36fb23963a83cf[m[33m ([m[1;31morigin/FORMIC-154_Configurar_log4j[m[33m, [m[1;32mFORMIC-154_Configurar_log4j[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 9 12:18:51 2021 +0100
+
+    FORMIC-154 Configurar log4j
+
+[33mcommit 6b54134985dc7125d73bbdd1e1c5f9992777b25c[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Mar 9 10:31:35 2021 +0100
+
+    FORMIC-129 Mejorar estilos textArea
+
+[33mcommit 42409c17849191a2b49a37e4a52cccd83b1bbff9[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Mar 3 10:29:28 2021 +0100
+
+    FORMIC-154 Configurar log4j
+
+[33mcommit 01981b17755723b1d42d43eefb3bb2dbfe0671af[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Mar 1 08:02:47 2021 +0100
+
+    FORMIC-119 Mejorar consola de desarrollador
+
+[33mcommit 7f308edcdf9e065362a351ec6326e64b5eec6052[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Mar 1 07:31:39 2021 +0100
+
+    FORMIC-119 Mejorar consola de desarrollador
+
+[33mcommit ae5ac91f57f9ae5ed47789a49af682709a5174b0[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 26 13:31:01 2021 +0100
+
+    FORMIC-119 Mejorar consola de desarrollador
+
+[33mcommit ef0f9782bf5a5b27a345e60873cfbec9e0666d96[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 26 13:28:59 2021 +0100
+
+    FORMIC-119 Mejorar consola de desarrollador
+
+[33mcommit 4160ca28d025b26ac96fbc9c5fe83afdaab9a898[m
+Merge: 76524361 befb3c6d
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 26 13:28:09 2021 +0100
+
+    FORMIC-119 Mejorar consola de desarrollador
+
+[33mcommit befb3c6dc7e5ba8c656752bd01cf5413a249a296[m[33m ([m[1;31morigin/FORMIC-119_Mejorar_consola_desarrollador[m[33m, [m[1;32mFORMIC-119_Mejorar_consola_desarrollador[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 26 13:21:38 2021 +0100
+
+    FORMIC-119 Mejorar consola de desarrollador
+
+[33mcommit 76524361c42c4e2ca368a1c3ac37c1a520eee0c1[m
+Merge: dc105d20 8b5f052b
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 23 09:49:56 2021 +0100
+
+    Merge branch 'FORMIC-120_Mejorar_estilos_datatable' into develop
+
+[33mcommit 8b5f052b3a51e1c76401ca506f7e3d26d98e26a5[m[33m ([m[1;31morigin/FORMIC-120_Mejorar_estilos_datatable[m[33m, [m[1;32mFORMIC-120_Mejorar_estilos_datatable[m[33m)[m
+Merge: 3c42dfff dc105d20
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 23 09:49:21 2021 +0100
+
+    FORMIC-120 Mejorar estilos datatable
+
+[33mcommit 3c42dfffab1dc0a18a87449862c119b0fba87940[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 23 09:33:39 2021 +0100
+
+    FORMIC-120 Mejorar estilos datatable
+
+[33mcommit d33a5feca46c6c725e20507c9b4e190a1189cd7a[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Feb 22 09:33:39 2021 +0100
+
+    FORMIC-120 Mejorar estilos datatable
+
+[33mcommit a9824dbfed5ec3ee3dbc168a15247ebfbd416e2a[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Feb 22 09:17:44 2021 +0100
+
+    FORMIC-119 Mejorar consola de desarrollador
+
+[33mcommit dc105d208525299cdc40e6d9b08d0e4ac178f2f3[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Feb 21 22:29:26 2021 +0100
+
+    FORMIC-135 corrige problema de setState en imagen con bitmap null
+
+[33mcommit f8bcaf94782cd434a43dba450c31ff208d0e872d[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Feb 21 22:24:06 2021 +0100
+
+    Solucionado problema de renderizado en cadena
+
+[33mcommit 8dd41db05b6f5698b78e54081566f0e10b4bb57b[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Feb 21 10:31:37 2021 +0100
+
+    fixes imageWidget state restoring
+
+[33mcommit 8b4c84ade5031be1a9e7941ee618530003cb02c7[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Feb 21 09:27:47 2021 +0100
+
+    fixes imageWidget state restoring
+
+[33mcommit e022371cdfb2fbb0a66542552779ff01b0b6ac69[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Feb 21 08:55:53 2021 +0100
+
+    fixes imageWidget state restoring
+
+[33mcommit 30cc9fd923f5fbd72acd5f42081466d7ae53699d[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Feb 21 08:16:33 2021 +0100
+
+    image rendering reviewed
+
+[33mcommit d0df733795ddaaa163a49f7a926053859cb9b2e7[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Feb 21 07:06:31 2021 +0100
+
+    FORMIC-135 fixes problems with entity-mappings
+
+[33mcommit c31c836cf904021f17041e8f4a8f995b72892440[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Feb 20 09:03:34 2021 +0100
+
+    Revisión y mejoras en la carga de imágenes
+
+[33mcommit 0da75953f71d4f86a8653c9044f6676c5110c2e8[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Feb 20 08:55:39 2021 +0100
+
+    Revisión y mejoras en la carga de imágenes
+
+[33mcommit 404ad16ffe3a7f85201944316234ffb2e68e4a31[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 19 10:21:12 2021 +0100
+
+    FORMIC-120 Mejorar estilos datatable
+
+[33mcommit fad16a0737a1784921219756e3648c4768f404da[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Feb 18 14:53:55 2021 +0100
+
+    FORMIC-120 Mejorar estilos datatable
+
+[33mcommit 492638809ebc8f38547b8dfda958825d42cd42a7[m
+Merge: 164cd48b 15f8bd26
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Feb 18 07:52:14 2021 +0100
+
+    Merge branch 'FORMIC-118_listado_formularios_no_hace_slide' into develop
+
+[33mcommit 15f8bd26e619a400b038379f8f30f9b443c076dc[m[33m ([m[1;31morigin/FORMIC-118_listado_formularios_no_hace_slide[m[33m, [m[1;32mFORMIC-118_listado_formularios_no_hace_slide[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Feb 18 07:51:48 2021 +0100
+
+    FORMIC-118 El listado de formularios no hace slide
+
+[33mcommit 164cd48be29e6d8ee927cd502a8927b973a4c740[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 17 12:03:17 2021 +0100
+
+    FORMIC-122 Mejorar estilos de los input fileds
+
+[33mcommit c340ee7cf1b3be63d612cf1ca1813d2eaa361409[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 17 12:00:46 2021 +0100
+
+    FORMIC-122 Mejorar estilos de los input fileds
+
+[33mcommit 4c9b80fa67f6ebac34385e6698e127fc9bda8191[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 17 11:57:41 2021 +0100
+
+    FORMIC-122 Mejorar estilos de los input fileds
+
+[33mcommit 822ee9d5d535a9430c594ba42c5738000c069b2b[m
+Merge: ee06141d 034bc5f7
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 17 09:37:55 2021 +0100
+
+    Merge branch 'FORMIC-122_Mejorar_estilos_input_fileds' into develop
+
+[33mcommit 034bc5f7b631efc62d24027b8749c1bd7ce811f3[m[33m ([m[1;31morigin/FORMIC-122_Mejorar_estilos_input_fileds[m[33m, [m[1;32mFORMIC-122_Mejorar_estilos_input_fileds[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 17 09:37:42 2021 +0100
+
+    FORMIC-122 Mejorar estilos de los input fileds
+
+[33mcommit ee06141d88268ed714e68661aaeefa4ea06796ec[m
+Merge: c59a8b04 051046a7
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 17 08:35:32 2021 +0100
+
+    Merge branch 'FORMIC-122_Mejorar_estilos_input_fileds' into develop
+
+[33mcommit 051046a7e4e647c40ff31e393a0199ffc617969b[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 17 08:35:19 2021 +0100
+
+    FORMIC-122 Mejorar estilos de los input fileds
+
+[33mcommit c59a8b042bf1b452e7052b80e9771989a08546b5[m
+Merge: cadda382 eef0c8d7
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 16 12:32:16 2021 +0100
+
+    Merge branch 'FORMIC-122_Mejorar_estilos_input_fileds' into develop
+
+[33mcommit eef0c8d735cf632955f87f0f85d3260d0ab6e8cb[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 16 12:31:50 2021 +0100
+
+    FORMIC-122 Mejorar estilos de los input fileds
+
+[33mcommit cadda382b841198a180aa7792354c5add102863f[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 12:33:19 2021 +0100
+
+    fixes refactoring packages
+
+[33mcommit f2ef67f5502420a82076e9906133b1dd4109aa5d[m
+Merge: 61664b20 956cd4a6
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 12:20:44 2021 +0100
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into FORMIC-104_error_propagation_in_group_components
+
+[33mcommit 61664b20d2590e8d75a818f7bddda55c8d01954a[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 12:20:06 2021 +0100
+
+    FORMIC-104 improves user error messages adding in groupRenderers a method to check if nested elements area showing errors
+
+[33mcommit bf47ba23ab07bd8367f7790847efcc877cd6939e[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 12:19:48 2021 +0100
+
+    FORMIC-104 improves user error messages adding in groupRenderers a method to check if nested elements area showing errors
+
+[33mcommit 956cd4a63db0928357f5d4f7d44ecba9e6b8f32f[m
+Merge: a77eda7b f420e2f9
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 12 11:57:56 2021 +0100
+
+    Merge branch 'FORMIC-125_Revisar_formulario_superheroes' into develop
+
+[33mcommit f420e2f9a48e419aaf1c44a227bb08f3301d094e[m[33m ([m[1;31morigin/FORMIC-125_Revisar_formulario_superheroes[m[33m, [m[1;32mFORMIC-125_Revisar_formulario_superheroes[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 12 11:57:14 2021 +0100
+
+    FORMIC-125 Revisar formulario de superheroes
+
+[33mcommit 578a998719c75b4e9b990dcb2464ff3ee8e915a6[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 11:12:25 2021 +0100
+
+    solves
+
+[33mcommit a77eda7b3a8f2852c9a52ed9f455d8897b4ef81e[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 09:54:00 2021 +0100
+
+    FORMIC-111 solves problem with datatable filter evaluation during rendering process
+
+[33mcommit 311b03dbffbf9fa99f29e9c096c4dfeafa5777ec[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 09:27:24 2021 +0100
+
+    Avoid exception in FormViewContext when the component doesn't exists FORMIC-111
+
+[33mcommit bd94475508b71d69994ee2c54f20fb8b416c6de4[m[33m ([m[1;31morigin/FORMIC-111_error_guardar_DeferredView[m[33m)[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Feb 12 09:07:41 2021 +0100
+
+    Avoid exception in FormViewContext when the component doesn't exists FORMIC-111
+
+[33mcommit dc8d00f50779addc388f96d0681958ec8e2ce139[m
+Merge: a536a911 6c78f721
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Feb 11 16:22:49 2021 +0100
+
+    FORMIC-112 conflict solved
+
+[33mcommit 6c78f721c3d6019defaacccdf7c1b5f98fd0b6b3[m[33m ([m[1;31morigin/FORMIC-112_widget_deps[m[33m)[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Feb 11 16:14:15 2021 +0100
+
+    FORMIC-112 corregido problema de referencias absolutas en el DAG
+
+[33mcommit 40588befbb042d21b9b6cc2db30e769af9431af2[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Feb 11 13:27:50 2021 +0100
+
+    FORMIC-112 solves problema with dependency rendering when components are nested inside group elements
+
+[33mcommit 07327fc4c7f3ad1c413d9c173b93fe66b74ba99a[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Feb 11 13:27:00 2021 +0100
+
+    FORMIC-112 solves problema with dependency rendering when components are nested inside group elements
+
+[33mcommit a536a91133da9eaa89ec0f24e127b189d9f38391[m
+Merge: 8d4e32c6 a88f5289
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Thu Feb 11 13:00:27 2021 +0100
+
+    Merge branch 'FORMIC-113_Borde_peso_header_table' into develop
+
+[33mcommit a88f5289408842a85f0fc9c58e60b7b8ac8abdee[m[33m ([m[1;31morigin/FORMIC-113_Borde_peso_header_table[m[33m, [m[1;32mFORMIC-113_Borde_peso_header_table[m[33m)[m
+Merge: cd86434e 8d4e32c6
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Thu Feb 11 12:59:59 2021 +0100
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into FORMIC-113_Borde_peso_header_table
+
+[33mcommit cd86434ef6072a79c58e95f2bd6a6572de811e1d[m
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Thu Feb 11 12:59:47 2021 +0100
+
+    FORMIC-113 Borde y peso header table
+
+[33mcommit 8d4e32c614e3c63a900f316bec953237c2e38616[m
+Merge: 132247ca ed874202
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Wed Feb 10 10:41:00 2021 +0100
+
+    Merge tag 'FORMIC_v0.1.5' into develop
+    
+    v.0.1.5
+
+[33mcommit ed87420216bdc2b40e80c367a5f395291a31ad63[m[33m ([m[1;33mtag: FORMIC_v0.1.5[m[33m)[m
+Merge: b6fc5458 132247ca
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Wed Feb 10 10:40:41 2021 +0100
+
+    Merge branch 'FORMIC_v0.1.5'
+
+[33mcommit 132247ca8650670a601a1ab404699cac5adf27cf[m
+Merge: 7a9079b6 b6fc5458
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Wed Feb 10 10:37:49 2021 +0100
+
+    Merge tag 'FORMIC_v0.2.0' into develop
+    
+    Nueva versión '0.1.5'
+
+[33mcommit b6fc54584b156ee550827f73d0a7f30cd17f66a3[m[33m ([m[1;33mtag: FORMIC_v0.2.0[m[33m)[m
+Merge: de65522a b0fc4a9e
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Wed Feb 10 10:36:21 2021 +0100
+
+    Merge branch 'FORMIC_v0.2.0'
+
+[33mcommit b0fc4a9e777b22e4bd5b3666bfa2a07c10bb8435[m
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Wed Feb 10 10:14:12 2021 +0100
+
+    FORMIC-115 Nueva versión
+
+[33mcommit 4452d32d177cdef6d0e38de1b49189f933e07c28[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Feb 10 08:56:43 2021 +0100
+
+    FORMIC-112 registering view dag after xml reading
+
+[33mcommit 7a9079b62db3626242430d2cf98877ad7a796431[m
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Tue Feb 9 14:56:41 2021 +0100
+
+    FORMIC-113 Borde y peso header tabl
+
+[33mcommit 26ec34c6371ac6d8934fa06fe12767fe465a86a1[m
+Merge: c7143284 341e342e
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Tue Feb 9 14:52:37 2021 +0100
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into develop
+
+[33mcommit c7143284baf19e0ecce5760b200815f5391ec9e8[m
+Author: Rosa María Muñiz García <mungarro@itacyl.es>
+Date:   Tue Feb 9 14:35:16 2021 +0100
+
+    0.1.4
+
+[33mcommit 341e342e5c4017d379a4428deba6394cd5fe745b[m
+Merge: 582c41bc de65522a
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 9 13:07:32 2021 +0100
+
+    Merge tag 'v_0.1.3' into develop
+    
+    Correcciones tablas
+
+[33mcommit de65522a3948a7b38abad1705558b85e91fcb37e[m
+Merge: e5d0b75d 0341ec8b
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 9 13:06:07 2021 +0100
+
+    Merge branch 'release/0.1.3'
+
+[33mcommit 0341ec8be166d380cd28ff230ef7466e12475380[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 9 13:05:49 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 582c41bcd236057e3e765dc7ff3d1cd20b937e41[m
+Merge: 0f35842f 071f5656
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 9 09:33:13 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 071f5656ec522d9b4074e2ca0b3d2f3fc87c5612[m
+Merge: 8323cd4d c72139b0
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 9 08:17:49 2021 +0100
+
+    Merge branch 'FORMIC-113_Borde_peso_header_table' into develop
+
+[33mcommit c72139b032a700cb5798a9076d81172a12cf3efb[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 9 08:17:04 2021 +0100
+
+    FORMIC-113 Borde y peso header table
+
+[33mcommit 0f35842f797d4df25ea97dc3034335d34154f50b[m[33m ([m[1;31morigin/FORMIC-38_configurar_empaquetado[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Feb 8 11:39:27 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 40d363831f85da145bb91360a76240ea4ce40b59[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Feb 8 11:38:36 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 07f9d0678a9ee69432137b94d5c1e912aa918ae7[m
+Merge: a3f6255f 8323cd4d
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Feb 8 07:46:02 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 8323cd4daf296f8f2b2b06876992e47cb6f8a306[m[33m ([m[1;32mFORMIC-105_filtro_avanzado[m[33m)[m
+Merge: df72a01e b8a7a4fc
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 5 12:04:30 2021 +0100
+
+    Merge branch 'FORMIC-99_Pulsar_proyecto_mostrar_formulario' into develop
+
+[33mcommit df72a01e11c85018ef463bdccc04093e1bfab178[m
+Merge: 89498c7b b70b5927
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 5 11:59:11 2021 +0100
+
+    Merge branch 'FORMIC-100_Seleccion_Tab_Fila_Tabs_Desaparece' into develop
+
+[33mcommit 89498c7b1193a4ab743c6e22540e5f6cd55e0bb3[m[33m ([m[1;32mFORMIC-103_Ajustes_widget_table[m[33m)[m
+Merge: 0a076ace e4ef01f5
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 5 11:53:34 2021 +0100
+
+    Merge branch 'FORMIC-103_Ajustes_widget_table' into develop
+
+[33mcommit e4ef01f5b1af26567e6d0c02a0ca819c93e35380[m[33m ([m[1;31morigin/FORMIC-103_Ajustes_widget_table[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 5 11:53:13 2021 +0100
+
+    FORMIC-103 Ajustes widget table
+
+[33mcommit 0a076acee5b61b60d563f98edc49d6ecb4ca67bf[m
+Merge: 3616feff 1cb909d1
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 5 11:29:36 2021 +0100
+
+    Merge branch 'FORMIC-109_Reorganizar_formularios' into develop
+
+[33mcommit d8fb3a44f059dcc29bfcfb2ba3b18709a1e80741[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Feb 5 10:05:05 2021 +0100
+
+    FORMIC-103 Ajustes widget table
+
+[33mcommit a3f6255f5d75168582b7e0db71ec44d857e6e3af[m
+Merge: 37cce022 e5d0b75d
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 14:18:26 2021 +0100
+
+    Merge tag 'v_0.1.2' into develop
+    
+    Correcciones varias
+
+[33mcommit e5d0b75df727f1aed0367f8228138675574e91c1[m
+Merge: 2680b078 098029b7
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 14:17:55 2021 +0100
+
+    Merge branch 'release/0.1.2'
+
+[33mcommit 098029b78367a4dd6155babb495a9f74834cf54f[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 13:54:07 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 37cce02290d42164fada17e32744e76bb540927c[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 13:52:37 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 41b500ce497801c77077423e2fe7061b95d03c78[m
+Merge: 330d86fb 3616feff
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 13:51:21 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 3616feff1e0ca9208be3b5da9e2781ed07e3765a[m
+Merge: 92de0189 2182e038
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 13:45:29 2021 +0100
+
+    Merge branch 'FORMIC-38_configurar_empaquetado' into develop
+    
+    # Conflicts:
+    #       build.gradle
+
+[33mcommit 2182e03898b7c70ec3f8005451fb5408bda75da2[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 13:42:46 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar generación de APK
+
+[33mcommit 8da8054b698d53a0e3999e27f7b77c16b04134d0[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 09:30:46 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar generación de APK
+
+[33mcommit 6954e3bb41aae196ca9a020d25f21cafd95b7d3a[m
+Merge: 437e3479 2e05339b
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 09:29:26 2021 +0100
+
+    Merge remote-tracking branch 'origin/FORMIC-38_configurar_empaquetado' into FORMIC-38_configurar_empaquetado
+    
+    # Conflicts:
+    #       app/proguard-rules.txt
+
+[33mcommit 2e05339b7d481813e5a428d7b8096d31cab4725c[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 4 09:25:26 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 1cb909d1257efc2e748736e0425a11fb7ec5b92a[m[33m ([m[1;31morigin/FORMIC-109_Reorganizar_formularios[m[33m, [m[1;32mFORMIC-109_Reorganizar_formularios[m[33m)[m
+Merge: d99b4af2 92de0189
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 3 11:37:21 2021 +0100
+
+    FORMIC-109 Reorganizar formularios
+
+[33mcommit d99b4af25a6cef22f774f7d27882fff6678076d3[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Feb 3 11:22:41 2021 +0100
+
+    FORMIC-109 Reorganizar formularios
+
+[33mcommit 330d86fb11d4f8faf8c9671334a086260a36a342[m
+Merge: ba57f072 92de0189
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Feb 3 08:32:49 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 92de01894230fa94143cb4f736f4b76794c29f32[m
+Merge: 5367c8df 56afced3
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 2 11:53:30 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+    
+    # Conflicts:
+    #       build.gradle
+
+[33mcommit ba57f072cca544a53351051e4d43934cb94ed93a[m
+Merge: 56afced3 2680b078
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 2 09:59:47 2021 +0100
+
+    Merge tag 'v_0.1.1' into develop
+    
+    version inicial
+
+[33mcommit 2680b0782b08f4f0b010dc3ef59f09d469969cc5[m
+Merge: f31fa30b 56afced3
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 2 09:58:18 2021 +0100
+
+    Merge branch 'release/0.1.1'
+
+[33mcommit 56afced30d92a0e4cf2fb813901edfbc40250762[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 2 09:57:07 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit bedcad3ca6b3215052051d44cc89c722320b787e[m
+Merge: b74eacc9 85155e58
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 2 09:27:16 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 85155e5813a40b5050f64edca5c5fdd4e3ac720e[m
+Merge: 9544a663 3dce360e
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 2 09:23:14 2021 +0100
+
+    Merge branch 'FORMIC-107_Borrado_radio_requerido' into develop
+
+[33mcommit b74eacc97d7db4fcf166931f2371f17edefc6b6f[m
+Merge: 9544a663 f31fa30b
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 2 09:14:18 2021 +0100
+
+    Merge tag 'v_0.1.0' into develop
+    
+    versiÃn inicial
+
+[33mcommit f31fa30bee0554cc352939f1e17fd533bf78fc8f[m
+Merge: 0c8102af 9544a663
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 2 09:10:47 2021 +0100
+
+    Merge branch 'release/0.1.0'
+
+[33mcommit 3dce360ec584001dd7370eea2207d4121204715d[m[33m ([m[1;31morigin/FORMIC-107_Borrado_radio_requerido[m[33m, [m[1;32mFORMIC-107_Borrado_radio_requerido[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Feb 2 08:28:09 2021 +0100
+
+    FORMIC-107 Borrado del radio falla cuando es requerido
+
+[33mcommit b8a7a4fc47b9709f9919cf8613749a8afc0e9192[m[33m ([m[1;31morigin/FORMIC-99_Pulsar_proyecto_mostrar_formulario[m[33m, [m[1;32mFORMIC-99_Pulsar_proyecto_mostrar_formulario[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Feb 1 11:06:34 2021 +0100
+
+    FORMIC-99 Cuando el proyecto se abre mover a la vista de formularios
+
+[33mcommit b70b59272aa3aea0d4f3784603fbb19381dc2352[m[33m ([m[1;31morigin/FORMIC-100_Seleccion_Tab_Fila_Tabs_Desaparece[m[33m, [m[1;32mFORMIC-100_Seleccion_Tab_Fila_Tabs_Desaparece[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Jan 29 12:44:07 2021 +0100
+
+    FORMIC-100 Problemas de visualización cuando tenemos varios tabs
+
+[33mcommit 9fa6295a942b8be7371707ac4f1e1015fe9de204[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Jan 29 11:58:41 2021 +0100
+
+    FORMIC-99 Cuando el proyecto se abre mover a la vista de formularios
+
+[33mcommit 5367c8df3c75d5af8d71257e16b05fbb2b4e5630[m
+Merge: 7decb292 9544a663
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jan 27 16:16:35 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 9544a6637d02205c2382459a991a0fde96d3973c[m
+Merge: f6bae815 35456451
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Jan 27 09:55:23 2021 +0100
+
+    Merge branch 'FORMIC-102_Ajuste_componentes_formulario' into develop
+
+[33mcommit 35456451e07971d261157f585b89b366d69e24fd[m[33m ([m[1;31morigin/FORMIC-102_Ajuste_componentes_formulario[m[33m, [m[1;32mFORMIC-102_Ajuste_componentes_formulario[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Jan 27 09:54:39 2021 +0100
+
+    FORMIC-102 Ajustar componentes formulario
+
+[33mcommit 7decb292dc5fc353b3af84c819848d58c93aeb95[m
+Merge: 3f0b215c f6bae815
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Jan 26 08:41:38 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit f6bae81549ffee5fccc71e78121ce48431ef32ad[m
+Merge: c6a9d24e e72230ef
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Jan 26 08:35:02 2021 +0100
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into develop
+
+[33mcommit c6a9d24e4d4e7bf53a599cbefb9b2272324bfd9b[m
+Merge: 2f446b64 d0b27e75
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Jan 26 08:34:15 2021 +0100
+
+    Merge branch 'FORMIC-73_Ajuste_formularios' into develop
+
+[33mcommit d0b27e757a37027c7fd82aa80d9caab51b045e50[m[33m ([m[1;31morigin/FORMIC-73_Ajuste_formularios[m[33m, [m[1;32mFORMIC-73_Ajuste_formularios[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Jan 26 08:33:45 2021 +0100
+
+    FORMIC-73 Terminar configuración de formularios de ribera
+
+[33mcommit 3f0b215c470f03bb361ade7ee6417d330f74a5c6[m
+Merge: 437e3479 e72230ef
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Jan 26 08:25:36 2021 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit e72230ef072ef4c1ca2cde5b1654784be65b1441[m[33m ([m[1;31morigin/FORMIC-102_Correccion_error_android.view.InflateException_en_tests[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Jan 25 13:49:10 2021 +0100
+
+    Incidencias: FORMIC-101
+    Comentarios: Corregir android.view.InflateException en tests
+
+[33mcommit c86baf9ae7df03b961e855d13483bf81690a2973[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Jan 25 13:42:17 2021 +0100
+
+    Incidencias: FORMIC-102
+    Comentarios: Corregir android.view.InflateException en tests
+
+[33mcommit 2f446b6438664ca3cfaa27e45a08e87303c2ad9b[m
+Merge: 2035fb32 1280109e
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Jan 25 13:01:02 2021 +0100
+
+    Merge branch 'FORMIC-58_Ajustar_widget_imagenes' into develop
+
+[33mcommit 1280109ed342c7692a0f5b70810440b850fafc5e[m[33m ([m[1;31morigin/FORMIC-58_Ajustar_widget_imagenes[m[33m, [m[1;32mFORMIC-58_Ajustar_widget_imagenes[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Jan 25 13:00:41 2021 +0100
+
+    FORMIC-58 Ajsutar estilo widget de imágenes
+
+[33mcommit 2035fb32071ff0c95c8236fdebc306044f7882f6[m
+Merge: b1c6b6ab b2bdca57
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Jan 25 12:39:56 2021 +0100
+
+    Merge branch 'FORMIC-58_Ajustar_widget_imagenes' into develop
+
+[33mcommit b1c6b6ab7f5dbfbc2c05380cf55a809d845ec042[m
+Merge: 5de2f125 5de4ab41
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Jan 25 11:24:29 2021 +0100
+
+    Merge branch 'FORMIC-73_Ajuste_formularios' into develop
+
+[33mcommit 5de4ab41652fdf9f5133ffb3aad48b76ef73ad29[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Jan 25 11:23:28 2021 +0100
+
+    FORMIC-73 Terminar configuración de formularios de ribera
+
+[33mcommit b2bdca57498fb3bedb95a065ecc5d233a85e9a93[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Jan 21 11:51:58 2021 +0100
+
+    FORMIC-58 Ajsutar estilo widget de imágenes. Corrección en la creación de la expresoin JEXL cuando la imagen es una ruta
+
+[33mcommit 0c61d056dc9d586d593a6271856103b532827f4c[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Jan 21 11:25:03 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 437e3479e9da7b8dad912f412c369f2275171d01[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jan 21 08:12:23 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar generación de APK
+
+[33mcommit b2331b8d8c9b8a61ec8166e8cb70b8a82c83fbe7[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Jan 20 14:39:47 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 6e34c52ab64c589edef1d3d54aa6618ad45ec649[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Jan 19 11:14:16 2021 +0100
+
+    FORMIC-58_Ajustar_widget_imagenes
+
+[33mcommit 961b39ef3ab8698ed867ae7840f84505495a71e9[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Jan 18 09:27:56 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit bf4d41ad89d1c86a7512a7884d1cc4b507c8c15a[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Sun Jan 17 19:08:07 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar generación de APK
+
+[33mcommit 5623f36b41e8f2a31df55ffea1b693296fae96f2[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Jan 5 08:12:06 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar generación de APK
+
+[33mcommit 1bda8e0b507de87ff56f7751c0b19f0f4958e6d7[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Jan 4 10:08:28 2021 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 00af5126575c9dfb2bc56623dd5e04259b725ee8[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Dec 22 08:31:32 2020 +0100
+
+    FORMIC-73 Terminar configuración de formularios de ribera
+
+[33mcommit 66e6f9fad6a582647ca954a16b6d9010d9072cfa[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Dec 21 11:16:07 2020 +0100
+
+    FORMIC-73 Terminar configuración de formularios de ribera
+
+[33mcommit 72cf069b36682aebcbd889cc151ef55595d77870[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Sun Dec 20 21:22:45 2020 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar generación de APK
+
+[33mcommit ccf06d2417879e8dcfaabf85216a89f737b72458[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Dec 18 11:54:27 2020 +0100
+
+    Incidencias: FORMIC-38
+    Comentarios: Configurar empaquetado
+
+[33mcommit 5de2f125004e08b320c3c9373462e25b69174c4c[m
+Merge: b3e7644b 88bec754
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Dec 18 07:47:57 2020 +0100
+
+    Merge branch 'FORMIC-67' into develop
+
+[33mcommit 88bec754502d03ca5d6e4facf698d68a51cf8726[m[33m ([m[1;31morigin/FORMIC-67[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Dec 18 07:47:09 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit e66cb13b665436b5344f6e45cba8e868aa1e126d[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Dec 18 07:45:55 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit 707d424c330e7a5be8a044eaedb33f7b20dbc81f[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Dec 18 07:32:40 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit b3e7644b1d824b94251ac04effe2da9cac281c3d[m
+Merge: 506e2861 238bedd4
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Dec 16 13:03:09 2020 +0100
+
+    Merge branch 'FORMIC-87_Hint_text_textarea' into develop
+
+[33mcommit 238bedd48dffe4ece979b6af5bb537e10bc011a4[m[33m ([m[1;31morigin/FORMIC-87_Hint_text_textarea[m[33m, [m[1;32mFORMIC-87_Hint_text_textarea[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Dec 16 13:02:08 2020 +0100
+
+    FORMIC-87 Dar soporte a attributo hint en text y textArea
+
+[33mcommit 31884fbb8b1df31a7136361d1967162db134a73f[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Dec 16 13:00:54 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit b6fca9924f31d775adcb3a6b72c6a22da71cefe1[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Dec 16 13:00:36 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit ce15f01b7b553e62ffe55dc784e8b4723146c5db[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Dec 16 12:40:51 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit 9d7d9f80c3939892d84bf1418416d160beeb02e1[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Dec 16 12:39:51 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit 506e2861f0dc33d25125625436c63bcb973ca762[m
+Merge: 7a0ab691 736ecbff
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Dec 15 12:35:57 2020 +0100
+
+    Merge branch 'FORMIC-56_No_encuentra_carpeta_base_proyectos' into develop
+
+[33mcommit 736ecbffee0ba06bf9f99c8ac1e69c1d7fc1dd38[m[33m ([m[1;31morigin/FORMIC-56_No_encuentra_carpeta_base_proyectos[m[33m, [m[1;32mFORMIC-56_No_encuentra_carpeta_base_proyectos[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Dec 15 12:35:19 2020 +0100
+
+    FORMIC-56 No se encuentra la carpeta base de proyectos
+
+[33mcommit 7a0ab69104ea0c4b8fc947632c5480591132a366[m
+Merge: 10fb1436 6ccf1dee
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Dec 15 10:07:32 2020 +0100
+
+    Merge branch 'FORMIC-58_Ajustar_widget_imagenes' into develop
+
+[33mcommit 6ccf1deee472c07e9dccbe5b458d22245f3d66d1[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Dec 15 10:01:43 2020 +0100
+
+    FORMIC-58 Ajustar estilo widget de imágenes
+
+[33mcommit 10fb143642cc18c1da62f6b341ba430a762059f1[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Dec 4 14:42:40 2020 +0100
+
+    FORMIC-61_mejoras tests de instrumentacion
+
+[33mcommit 21546ed420f11aff4e8e238de5f2a95eebe89fe6[m
+Merge: 0bda7b51 249ad2d1
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Dec 4 14:27:43 2020 +0100
+
+    FORMIC-61_mejoras tests de instrumentacion
+
+[33mcommit 0bda7b51e862ccc084673922c722ffa6787e02af[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Dec 4 14:26:25 2020 +0100
+
+    FORMIC-61_mejoras tests de instrumentacion
+
+[33mcommit 249ad2d173e4d79b31cda4e352a4487003235709[m
+Merge: 3fd661ba d04631e4
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 10:45:07 2020 +0100
+
+    Merge branch 'FORMIC-64_Revisar_renderizado_tabs_color_pestanas' into develop
+
+[33mcommit d04631e400838e0feb0d4b5b7303c51d5bd91dc4[m[33m ([m[1;31morigin/FORMIC-64_Revisar_renderizado_tabs_color_pestanas[m[33m, [m[1;32mFORMIC-64_Revisar_renderizado_tabs_color_pestanas[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 10:44:42 2020 +0100
+
+    FORMIC-64 Revisar renderizado de tabs y color pestanas
+
+[33mcommit 3fd661bad3c592129aa4626cc35d0862e3e36e7d[m
+Merge: 3e9766ca 8bb4e3fc
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 10:32:18 2020 +0100
+
+    Merge branch 'FORMIC-64_Revisar_renderizado_tabs_color_pestanas' into develop
+
+[33mcommit 8bb4e3fc6ddd38d61bbe72aa2d57c43aae2f0231[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 10:31:32 2020 +0100
+
+    FORMIC-64 Revisar renderizado de tabs y color pestanas
+
+[33mcommit 3e9766ca9a36e1755b8f67d94fbe8bcf6105ea80[m
+Merge: ea9ac09c 787e49ef
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 10:26:21 2020 +0100
+
+    Merge branch 'FORMIC-64_Revisar_renderizado_tabs_color_pestanas' into develop
+
+[33mcommit 787e49eff74b561e407c76f3e0b07746fcf8964c[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 10:24:12 2020 +0100
+
+    FORMIC-64 Revisar renderizado de tabs y color pestanas
+
+[33mcommit ea9ac09c2e0ed46a08d34d361d226e5d0ed82d8a[m
+Merge: 4bb97d66 283ae7db
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 09:00:16 2020 +0100
+
+    Merge branch 'FORMIC-64_Revisar_renderizado_tabs_color_pestanas' into develop
+
+[33mcommit 283ae7dba80b4f37a551825fde3aec7a8bbfaff8[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 08:56:21 2020 +0100
+
+    FORMIC-64 Revisar renderizado de tabs y color pestanas
+
+[33mcommit 4bb97d6657cca93f08fff23ca33ff061f04e31ab[m
+Merge: 70e12177 4c683d0d
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 08:31:28 2020 +0100
+
+    Merge branch 'FORMIC-53' into develop
+
+[33mcommit 70e12177c74c4ffabf814c3cef38d9933d79d444[m
+Merge: 7abe4a98 f370d92b
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 08:29:56 2020 +0100
+
+    Merge branch 'FORMIC-37_Revisar_estilos' into develop
+
+[33mcommit 7abe4a98f670aa4973558fb010a3376947445fdf[m
+Merge: 99fad81d 936f3398
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Dec 4 08:19:51 2020 +0100
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into develop
+
+[33mcommit 936f3398bd4246a2ff7420bddead0d39b0ab7b0e[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Dec 3 11:12:01 2020 +0100
+
+    FORMIC-86 corregido error de tests de instrumentacion
+
+[33mcommit 72e1f198f8d24cd0b4946ff1bd00ffc2e95f0502[m
+Merge: 2cabf21f 721b3a60
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Dec 2 10:00:50 2020 +0100
+
+    Merge branch 'develop' into FORMIC-67
+
+[33mcommit 4c683d0da50b7ec742d51d9086467e7ea9481a70[m[33m ([m[1;31morigin/FORMIC-53[m[33m, [m[1;32mFORMIC-53[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Nov 30 10:43:36 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit f370d92bb53fa98ac2b4bdcbb2c2c20fe9938fe6[m[33m ([m[1;31morigin/FORMIC-37_Revisar_estilos[m[33m, [m[1;32mFORMIC-37_Revisar_estilos[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Nov 30 09:13:10 2020 +0100
+
+    FORMIC-37_Revisar_estilos Revisar estilos y organización de interfaz
+
+[33mcommit 2cabf21f6434a90bda87f63cdec5505b0adf6798[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 30 07:49:38 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit 721b3a6001d82b880af4ccd5371305e2397434e9[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Nov 27 18:20:36 2020 +0100
+
+    FORMIC-79 valores nulos en campos de texto, revisados también byteArray y tipo Geometry
+
+[33mcommit 99fad81dcebf8ec3b274bc7efc132216e47acbb5[m[33m ([m[1;31morigin/FORMIC-37[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Nov 27 11:54:04 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit cf26f7bef7be566788281085d7d1a07cb2f89f32[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Nov 27 11:53:04 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit f247007de61f67b1dd1261a4ebb73238797cb488[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Nov 26 11:52:29 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit cc179d226c22e010d775b40eabad7c762ade5661[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Nov 26 09:12:21 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit 793972a9eb3819df7abdcb572f2dbabbf6c34b25[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Nov 25 13:14:58 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit c574dc7544651e066c91cc3c622545ae7bdac633[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Tue Nov 24 14:26:23 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit e305e5f18b83c39c11ad4af2bf7550ea1e495dc9[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Mon Nov 23 10:46:11 2020 +0100
+
+    FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)
+
+[33mcommit 53f2dbdc5c3105df2b405bc3cd06f1c7b57abe24[m
+Merge: 2b3bbc87 766bc71d
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Fri Nov 20 10:19:30 2020 +0100
+
+    Merge branch 'FORMIC-65' into develop
+
+[33mcommit 766bc71d670888fd3ee6279f589c5deb6bfb7c98[m[33m ([m[1;31morigin/FORMIC-65[m[33m, [m[1;32mFORMIC-65[m[33m)[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Thu Nov 19 08:02:42 2020 +0100
+
+    FORMIC-65 Falla la consola de desarrollador
+
+[33mcommit 06fc3e3739084394e845ef02b160ba8dc8fd7772[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Nov 18 14:04:39 2020 +0100
+
+    Incidencias: FORMIC-67
+    Comentarios: rediseño de cards
+
+[33mcommit 08861311e15507ba4bf7e4b812771340bb75534f[m
+Author: Rosa María Muñiz Garcia <mungarro@itacyl.red>
+Date:   Wed Nov 18 13:26:38 2020 +0100
+
+    FORMIC-65 Falla la consola de desarrollador
+
+[33mcommit 2b3bbc875de036295be2469a802b67feef4b6e06[m[33m ([m[1;31morigin/FORMIC-68[m[33m)[m
+Merge: 8a4d67d3 f2946d67
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Nov 17 12:20:48 2020 +0100
+
+    Merge branch 'develop' into FORMIC-68
+
+[33mcommit f2946d67150fb30b1033d488e275a2911caf762f[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Nov 17 11:09:09 2020 +0100
+
+    Incidencias: FORMIC-49
+    Comentarios: Floating label en campos de texto
+
+[33mcommit 4dbe6f0a565cdc8e8193c80af6fa153dd69419b6[m
+Merge: 53acf37b 8b82b2e5
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Nov 17 11:08:48 2020 +0100
+
+    Merge branch 'feature/FORMIC-49' into develop
+    
+    # Conflicts:
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/components/InputFieldRendererTest.java
+
+[33mcommit 8b82b2e57e179e6b755c0101ff90262466f3c968[m[33m ([m[1;31morigin/feature/FORMIC-49[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Nov 17 11:07:05 2020 +0100
+
+    Incidencias: FORMIC-49
+    Comentarios: Floating label en campos de texto
+
+[33mcommit cf761a065f7b364651c2b15345f93575a5b12f26[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Nov 17 11:01:44 2020 +0100
+
+    Incidencias: FORMIC-49
+    Comentarios: Floating label en campos de texto
+
+[33mcommit 8a4d67d3d6cc052e3b38a396dd53ceda33b381ed[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Nov 17 10:17:39 2020 +0100
+
+    Incidencias: FORMIC-68
+    Comentarios: Widget de DataList y DataTable implementa EntityListProvider
+
+[33mcommit 53acf37b1e3307c904106fe8be9780532b61b69b[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Nov 16 18:58:10 2020 +0100
+
+    Fixes tests that started failing after removing label element on uiFields FORMIC-71
+
+[33mcommit 69406486c28af3bd271465ba2df8a5eb5a2ffe9b[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Nov 16 18:52:32 2020 +0100
+
+    Fixes tests that started failing after removing label element on uiFields FORMIC-71
+
+[33mcommit 1585f0435de14162958156efc022a53268f902e4[m
+Merge: 1388d25d b4245245
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Nov 16 18:31:13 2020 +0100
+
+    Merge branch 'develop' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into develop
+
+[33mcommit 1388d25d27f3ed72441683d1917e53815aaec86e[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Nov 16 18:30:44 2020 +0100
+
+    FORMIC-71 Fallan tests en jenkins
+
+[33mcommit b42452456c0d5bac580073bc558910ed84d467af[m
+Merge: c15437bf 03263b6c
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 16 11:00:52 2020 +0100
+
+    Merge branch 'feature/FORMIC-49' into develop
+
+[33mcommit c15437bf47f5bd5dc8a31c007bbf6e4488d92795[m
+Merge: 836e7254 c1e473f8
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 16 11:00:40 2020 +0100
+
+    Merge branch 'feature/FORMIC-32' into develop
+
+[33mcommit c1e473f8755f3792a711f89929a5ac8ad3cdb6a1[m[33m ([m[1;31morigin/feature/FORMIC-32[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 16 10:59:33 2020 +0100
+
+    Incidencias: FORMIC-32
+    Comentarios: Actualización de numero de entidades en onResume del listado
+
+[33mcommit 03263b6cc1f1617564ce021582b4fa831ae50190[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 16 10:58:16 2020 +0100
+
+    Incidencias: FORMIC-49
+    Comentarios: Floating label en campos de texto
+
+[33mcommit 21cd625dec8f3a2df5f74e55dbc2a26bb904f4f5[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 16 10:57:23 2020 +0100
+
+    Incidencias: FORMIC-49
+    Comentarios: Floating labels en campos de texto
+
+[33mcommit 836e7254c2cc22dd12df3f42f8737287d693d2d8[m
+Merge: 345babfd 9e5d86ac
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 15 17:38:48 2020 +0100
+
+    Merge branch 'FORMIC-62_recarga_entidades_relacionadas' into develop
+
+[33mcommit 9e5d86acd672358d9d95ee68ac5790b328e0f9f6[m[33m ([m[1;31morigin/FORMIC-62_recarga_entidades_relacionadas[m[33m)[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 15 17:29:23 2020 +0100
+
+    FORMIC-62 new AggregatedEntityMeta to implement access to related entity properties, new method isNestedProperty in UIInputComponent to prevent from taking values from UIInputs with nested property bindings
+
+[33mcommit 049c586e3c3851873a5f83d92090962bf8b61170[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 15 07:16:55 2020 +0100
+
+    FORMIC-62 entity-mapping working on images
+
+[33mcommit 87c4e5c66bd3ff529603943cc245c96e41ca7b89[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 15 05:27:32 2020 +0100
+
+    FORMIC-62 entity-mapping integration fineshed, also fixes problem with persistence of the pk's columns
+
+[33mcommit 8ca5ef7f70d60e618760355f6f15ce3efd7b89a4[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Nov 13 16:28:07 2020 +0100
+
+    FORMIC-62 putting final touches on the related entity loading/saving mechanism
+
+[33mcommit 345babfd4334b4e31b3fb8f2cfa303d9d4aca049[m
+Merge: 3b78eaab df862618
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Nov 13 08:10:03 2020 +0100
+
+    Merge remote-tracking branch 'origin/develop' into develop
+
+[33mcommit 3b78eaab302e41de38cacda04993a2e33fdfc734[m
+Merge: ba7710e8 d43947de
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Nov 13 08:09:47 2020 +0100
+
+    Merge branch 'feature/FORMIC-32' into develop
+
+[33mcommit d43947de55186868c8793c4b7b043d0b94ac3dff[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Nov 13 08:07:57 2020 +0100
+
+    Incidencias: FORMIC-32
+    Comentarios: Actualización de numero de entidades en onResume del listado
+
+[33mcommit df862618978e953f4c41ed6b0587c2844c265fb2[m
+Merge: ba7710e8 8b05ac9f
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Nov 12 09:36:02 2020 +0100
+
+    FORMIC-60 test de instrumentacion con espresso
+
+[33mcommit ba7710e81d2244e75cc9b07b761bba92ace008e2[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Nov 11 10:49:34 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Merge
+
+[33mcommit aa9804ab33e8168584c98d16e56f45f0fcd46517[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Nov 11 10:42:49 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Merge
+
+[33mcommit 189159c81c6922af233d8100d9a8f13e2e654e1e[m[33m ([m[1;31morigin/feature/FORMIC-61_Test_instrumentacion[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Nov 11 09:06:57 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Merge
+
+[33mcommit 402da481400059f18de2b96d3add1f6327fb4760[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Nov 11 09:06:26 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Merge
+
+[33mcommit 42976ec02f28aa3e1f87216e10d07b5bcd471688[m[33m ([m[1;31morigin/feature/FORMIC-10_widget_galeria_de_imagenes[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Nov 11 08:29:03 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Merge
+
+[33mcommit 8b05ac9f35f1c668e47da7a6f11dcb1aa9f7241e[m[33m ([m[1;31morigin/FORMIC-61_Test_instrumentacion[m[33m, [m[1;32mFORMIC-61_Test_instrumentacion[m[33m)[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Nov 11 08:09:59 2020 +0100
+
+    improves test to check first element in recyclerview FORMIC-60
+
+[33mcommit a059e2522ba69195985430f44b6cbcd04f4fb00d[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Tue Nov 10 18:09:54 2020 +0100
+
+    tests básico y lanzamiento
+
+[33mcommit a1fecc2e1fb83862b143873e5d523eb82a6c3019[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 9 14:43:45 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit e00a3fcb8e5627e7d4f2c23c6a7b55c8cc98a758[m
+Merge: 7bc8e474 cc3552b5
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Nov 5 12:10:26 2020 +0100
+
+    Merge branch 'develop' into feature/FORMIC-10
+    
+    # Conflicts:
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/app/Config.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/view/render/ViewRenderHelper.java
+    #       forms/src/test/java/es/jcyl/ita/formic/core/context/EnvExecutionContextTest.java
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/components/UILinkRendererTest.java
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/controllers/FormControllerTest.java
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/controllers/FormScriptingTest.java
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/location/LocationBuilder.java
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/view/converters/AutocompleteStaticViewConverterTest.java
+
+[33mcommit 7bc8e4742c11010f8c95b67f54db6d5e0762da52[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Nov 5 12:02:23 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit cc3552b52afa91a09f5c29acc3c464a8401207d2[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Wed Nov 4 09:03:35 2020 +0100
+
+    FORMIC-42 revisado test unitario de FileEntityRepository
+
+[33mcommit 4b6887afdedc457c74c0ffc1cdb582cb13284a6b[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Wed Nov 4 08:54:34 2020 +0100
+
+    FORMIC-52 revisada búsqueda de componentes inputField en el formulario, modificada búsqueda en árbol de vista por registro en el renderer
+
+[33mcommit 1c33051d67bb58d7fe45fb947e8215e4ba5f7340[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Nov 2 21:00:51 2020 +0100
+
+    FORMIC-48 component table y row para poder organizar los campos de una entidad con una android TableLayout
+
+[33mcommit 1132c955fcf3f4a470196c25cd188fd0fc12848a[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Nov 2 19:22:49 2020 +0100
+
+    FORMIC-48 component table y row para poder organizar los campos de una entidad con una android TableLayout
+
+[33mcommit 913acb71e89b760f3097c8148ee6e6f05a9f9715[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 1 17:34:20 2020 +0100
+
+    antes de merge de rama
+
+[33mcommit 5243c3b484924e5b66eae1f1b81c4a2b5500a028[m
+Merge: 2348348c afc111f3
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 1 17:26:40 2020 +0100
+
+    Merge branch 'FORMIC-42_componente_text_area' into develop
+
+[33mcommit 2348348c73aa02d4f5c7cc87b859c194389d2e0f[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 1 17:26:35 2020 +0100
+
+    antes de merge de rama
+
+[33mcommit afc111f3ad44c69c138d4c1ebf7dc2c2aecfe554[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 1 17:23:13 2020 +0100
+
+    FORMIC-42 versión inicial componentes text area completada
+
+[33mcommit 1a8deea4114e7d4b915a9738e4f5f7c0f22387f6[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Nov 1 17:05:28 2020 +0100
+
+    FORMIC-42 versión inicial componentes text area completada
+
+[33mcommit 564ab4d6c89b3bbf1447175d5dc8ad63c8e9ef6f[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 30 14:38:51 2020 +0100
+
+    textarea configured, reviewing rendering
+
+[33mcommit e8bd1e3d5aa0f5766a823bf6ec91cf53847f8133[m
+Merge: d56a6c12 888a60a4
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 30 12:01:23 2020 +0100
+
+    Merge branch 'develop' into feature/FORMIC-10
+    
+    # Conflicts:
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/components/inputfield/DateFieldRenderer.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/components/inputfield/TextFieldRenderer.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/components/select/UISelect.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/app/builders/ComponentBuilderFactory.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/app/builders/ui/UIMultiOptionBuilder.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/context/impl/FormViewContext.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/view/render/InputRenderer.java
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/view/render/ViewRenderHelper.java
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/components/InputFieldRendererTest.java
+    #       forms/src/test/java/es/jcyl/ita/formic/forms/components/UISelectRendererTest.java
+
+[33mcommit d56a6c1203d7d73f2bbf6c6cdf0556bef95b4ac1[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 30 11:53:08 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 888a60a47793ae3886c0f14e84036d0eff0db98c[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 30 11:03:14 2020 +0100
+
+    FORMIC-47, corregida lectura de atributo inputType y valor por defecto tanto en EditText como en ImageWidget, corregido rendering de botones
+
+[33mcommit 79fe0bab2d92aedad913553c6db04d8bfd847a41[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 30 10:34:51 2020 +0100
+
+    stop to check error in image renderer
+
+[33mcommit 76bca2f4531a663f411d3f04a6c021078178b88b[m
+Merge: 64a0b905 7d2fdcb9
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 30 09:20:05 2020 +0100
+
+    Merge branch 'develop' into feature/FORMIC-10
+    
+    # Conflicts:
+    #       forms/src/main/java/es/jcyl/ita/formic/forms/app/meta/TagDef.java
+
+[33mcommit 58131b6bf17c162fea0b9e21af5013f8826d1724[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 29 13:44:43 2020 +0100
+
+    ammends FORMIC-41, the reset button wasn't clearing the radioGroup properly
+
+[33mcommit 9d7626168f07813d4fcb478fa18c3f2d873e16ad[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 29 13:23:34 2020 +0100
+
+    FORMIC-46 fixes problema with validators, refactors the 'validator' attribute interpretation with a new AttResolver. Also adds a reset button to readioGroup
+
+[33mcommit 5007cc1a7e86e30551c9b2aaa4d4fe6b2f60f1ca[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 29 11:36:06 2020 +0100
+
+    FORMIC-43 creado component, builder, viewConverter y tests
+
+[33mcommit 64a0b9052d8fd646df75096f162c9fa271467ad4[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Tue Oct 27 11:29:07 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 4fbe101f9719f7932474a5ecd0d83b6f04abc12a[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 26 14:53:30 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 3dd65f76de46b6ef50501e66686cd6b0f05cda8f[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 26 14:39:36 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 7465a66e19b19e302c180cce8c483b4d27e7b156[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 26 08:33:45 2020 +0100
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 7d2fdcb9145a0b96502c97c014e69f835d071c2f[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Oct 25 14:42:09 2020 +0100
+
+    FORMIC-35 dar valor por defecto para converter de fecha
+
+[33mcommit b74459a9af9c16f2d3e0320b67f1d3dc2a0d30c8[m[33m ([m[1;31morigin/Refactorizando_contextos[m[33m)[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sun Oct 25 09:04:57 2020 +0100
+
+    FORMIC-35 repo configuration by xml finished and calculated propoerties evaluation reviews
+
+[33mcommit 2f4fbdf796d5bd16e6737ddd330dddd49ed4f1bc[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 19:31:09 2020 +0200
+
+    tests for entityMeta xml configuration
+
+[33mcommit 9bd981c98d7953eeb090c120d543f5f4f2825115[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 08:58:32 2020 +0200
+
+    FORMIC-35_configuracion_repo_xml merged
+
+[33mcommit 3c1876576f02396f1dbfb16310b5aed60feae82a[m
+Merge: 7c417be9 c5a2ba24
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 08:32:23 2020 +0200
+
+    Merge branch 'FORMIC-35_configuracion_repo_xml' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD into Refactorizando_contextos
+
+[33mcommit c5a2ba2453305a429080ea0141a3db69b5d3d477[m[33m ([m[1;31morigin/FORMIC-35_configuracion_repo_xml[m[33m)[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 08:29:39 2020 +0200
+
+    FORMIC-35_configuracion_repo_xml
+
+[33mcommit 7c417be9d6a3e5dd366226bc96d754108fb4ace7[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 08:23:52 2020 +0200
+
+    FORMIC-31 terminada revisión de contexto y reorganización de inicialización
+
+[33mcommit d414810ce4859e8c80f8d003f9aace41652469f7[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 08:18:00 2020 +0200
+
+    FORMIC-31 terminada revisión de contexto y reorganización de inicialización
+
+[33mcommit 162333dea4550a867223002b547ec3ff8ecbbf83[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 08:14:04 2020 +0200
+
+    FORMIC-31
+
+[33mcommit e8e5f1349abf4b69160a6302fb74c0789624b1f7[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Oct 24 08:10:51 2020 +0200
+
+    FORMIC-31
+
+[33mcommit d9ecaceed9bc1ab0b73601e6c0530c6d3549b280[m
+Merge: 8155d7dd 31d3a622
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 20:16:21 2020 +0200
+
+    Merge branch 'FORMIC-11_Refactorizar_proyecto' into develop
+
+[33mcommit 31d3a622d4877c95627e487a219f92fa01460db5[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 20:15:23 2020 +0200
+
+    un cambio mas
+
+[33mcommit 79a1faf1bcc403c7a71c8487ec0450d39589526c[m[33m ([m[1;31morigin/FORMIC-31_revisar_LocationContext[m[33m)[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 15:10:17 2020 +0200
+
+    FORMIC-31 testing entity meta builder
+
+[33mcommit 8155d7ddfc2b33c8427fcc73774f20691d818519[m
+Merge: 3eaf9f54 0c8102af
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 10:31:20 2020 +0200
+
+    FORMIC-2 solves problem with calculated proper
+
+[33mcommit 3eaf9f5466b876e42d5a6e178bce0e6fe4846ddb[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 10:30:27 2020 +0200
+
+    FORMIC-2 solves problem with calculated proper
+
+[33mcommit fb29dfdd2802a5718483fbf9ad5750248bf425e8[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 09:14:05 2020 +0200
+
+    FORMIC-2 solves problem with calculated proper
+
+[33mcommit b680e8d13c976aa3bd029417b03ae2b7d5c6b449[m
+Merge: 83e966fe 0d4fb375
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 07:57:16 2020 +0200
+
+    FORMIC-2 solves problem with calculated proper
+
+[33mcommit 83e966fe6aef10c8226055c81532db06a20a933c[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 07:55:04 2020 +0200
+
+    FORMIC-2 solves problem with calculated proper
+
+[33mcommit 2a3b35ce76b6e5e2cff88f7d78a215c9540f4ac7[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 23 07:53:30 2020 +0200
+
+    FORMIC-2 solves problem with calculated proper
+
+[33mcommit 0d4fb3750f00747272cf1fa1c704d5ad21a1d7b9[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 22 14:05:24 2020 +0200
+
+    FORMIC-2 solves problem with calculated properties tests
+    
+    FORMIC-2 solves problem with calculated properties tests
+
+[33mcommit 0c8102af0492009354e9183232c11a1bb76bd858[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 22 14:01:26 2020 +0200
+
+    FORMIC-2 activar repositorios del ITACyL
+    
+    FORMIC-2 activar repositorios del ITACyL
+
+[33mcommit ba78664e7b75d78829bbf0b952b2d96cf8137360[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 22 13:50:37 2020 +0200
+
+    FORMIC-2 solves problem with calculated properties tests
+
+[33mcommit 9a51106a35b1d00be779ef3cf756adba34ca78bb[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 22 13:45:02 2020 +0200
+
+    FORMIC-11 añadir ficheor robolectric como workaround api 29
+
+[33mcommit 5caad5bcc0518cfa09f48e5cefc2a2ef4561eccf[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 22 09:51:59 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 5e0ae3890ad31a6a91f0a81c549e331f01e90972[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 22 09:46:47 2020 +0200
+
+    FORMIC-11 corrección de ficheos de configuración
+
+[33mcommit 91703d6948c77c09b789c4631ef0720a09b296ee[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 22 09:44:35 2020 +0200
+
+    FORMIC-11 corrección de ficheos de configuración
+
+[33mcommit 3cdb8fbe9fc2ea881a4fbaaf559aa65129e1f1d1[m
+Merge: 602877c1 30e3e02c
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Oct 21 17:00:06 2020 +0200
+
+    Merge branch 'develop' into feature/FORMIC-10_widget_galeria_de_imagenes
+
+[33mcommit 4f14ba3a398dc22666e767d1e46a20ea5f763642[m[33m ([m[1;31morigin/FORMIC-11_Refactorizar_proyecto[m[33m)[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Oct 21 16:54:00 2020 +0200
+
+    FORMIC-31 merge
+
+[33mcommit 30e3e02ce71dbd5e2e49df418ce6a91d6d613be9[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Wed Oct 21 12:32:43 2020 +0200
+
+    FORMIC-2 correcciones ultima refactorización
+
+[33mcommit 602877c1fa7601d9d1b37d8b30d94b469fb32473[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Oct 21 12:14:20 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit d85008b882cda82aeaa89facb17c05169f735d14[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Wed Oct 21 10:38:48 2020 +0200
+
+    FORMIC-2 correcciones ultima refactorización
+
+[33mcommit dc35865b33826e7cb77513c28189fe5626ae1e6c[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Wed Oct 21 10:34:04 2020 +0200
+
+    FORMIC-2 correcciones ultima refactorización
+
+[33mcommit 4669e103fc57667b33f0d804845720b8af124823[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 19 18:24:04 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit d76867665c4a279a42f45d859796562973c6b172[m
+Merge: 944c9510 113ec319
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 19 11:28:32 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 944c95109b236735265777fc183e499293bce52d[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 19 07:31:55 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 113ec319d60074062196a1932dd983f9b1023e86[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 15 13:24:26 2020 +0200
+
+    forms module tests fixed
+    FORMIC-11
+
+[33mcommit 9eef01e9aa4ea223765c6a6d43b7969a1fbe9b94[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 15 13:12:19 2020 +0200
+
+    forms module tests fixed
+
+[33mcommit cb7e32deb9a71098e89139c909f681bf4d568bfc[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 15 13:05:55 2020 +0200
+
+    forms module tests fixed
+
+[33mcommit 370d17739350382c9a5f409066a9643aea9b7dc7[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 15 09:30:25 2020 +0200
+
+    refactoring dependencies between projects
+
+[33mcommit eed2933116e3bbe41ba275cb90189252df7e52c8[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 15 09:21:20 2020 +0200
+
+    Fixes repo, repoTestUtils and repoAndroidtest module dependecies
+
+[33mcommit 627a413409007c8b9d3101e1be4a62b887ce3bd0[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 15 09:10:21 2020 +0200
+
+    Fixes repo, repoTestUtils and repoAndroidtest module dependecies
+
+[33mcommit 1a662b923c0896e8a9e30865bdf9fa02be710ffd[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 15 08:18:44 2020 +0200
+
+    configurando ficheros gradle para
+
+[33mcommit 8d8a1c0b06427f380c3ba75f028529ec50522abf[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 15 07:36:58 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 1a85c7afee373e4ab1b86c50954e326f7bcedc07[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Tue Oct 13 08:06:35 2020 +0200
+
+    FORMIC-11 refactorizando modulos de proyecto
+
+[33mcommit b057f9b8fbec43d25e2bfcf1abdfaaa7d513ca91[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Oct 13 07:35:24 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 6373293ac2da34df634322edc70f4b2846cc17b0[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Oct 7 17:15:12 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 422d682d700efd8321b24c01221751a052b830b9[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 5 12:41:13 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit fd1b44d6866e3dfd906b56fac679ac86e5a0b908[m
+Merge: 25529cb5 6734104c
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Mon Sep 28 08:40:42 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 1d6fdea6693620a27662d0a17e9e5eb57b86e8cc[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Sep 25 15:26:26 2020 +0200
+
+    FORMIC-19 fixes problem with the calc of the form controller ids
+
+[33mcommit 3bbf22053d896de3871b03fe9fdd088f2ea59b7e[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Sep 25 15:15:42 2020 +0200
+
+    FORMIC-19 fixes problem with the calc of the form controller ids
+
+[33mcommit 25529cb5e4febf5ed8ee25acf34b2b1594473236[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Sep 24 13:17:04 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galeria de imÃ¡genes
+
+[33mcommit 6734104c4c15ecb967f9e8a38a011e8d41037311[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Sep 24 11:20:50 2020 +0200
+
+    removes urlConverter, no needed anymore FORMIC-19. Solves problem with embedded attribute
+
+[33mcommit 8a9c8aee0845ae6efab5884306c1e0ecbcea6878[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Sep 24 10:55:59 2020 +0200
+
+    FORMIC-19 adds additional check on image attribute values
+
+[33mcommit 75b3d4c0bc8f54d25eefb7c6ec13f644c068caa5[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Sep 24 10:34:21 2020 +0200
+
+    removes urlConverter, no needed anymore FORMIC-19
+
+[33mcommit 1c85cf30d8a177c422b9ec5bd3fe4620b961753d[m
+Merge: bbba08e5 667b030f
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Sep 24 09:06:14 2020 +0200
+
+    commit de merge ramas FORMIC-19
+
+[33mcommit bbba08e5be79d22748cddcb6d360b7f31f8cb2e6[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Thu Sep 24 09:04:25 2020 +0200
+
+    FORMIC-19 correcciones repositorio de imágenes y cáculo de propiedades en entidades asociadas
+
+[33mcommit 13f5708ee800bcd21634e1817d753554ecbc8c5c[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Wed Sep 23 15:00:08 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit cf1a0c7324b64fc130e63e84b7bbf959fd56a5aa[m[33m ([m[1;31morigin/feature/FORMIC-19_guardado_imagenes[m[33m)[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Wed Sep 23 13:41:20 2020 +0200
+
+    FORMIC-19 completada funcionalidad de grabación de imágenes
+
+[33mcommit 80cbfcafdd6aaf5ed94249f4270abf1f7a02c3c5[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Sep 23 08:37:49 2020 +0200
+
+    Incidencias: FORMIC-10
+    Comentarios: Galería de imágenes
+
+[33mcommit 37355cedb7568355655695ba4e6f3f2dbf5f4266[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Sep 18 07:44:18 2020 +0200
+
+    FORMIC-19 it fixes problems with access to file repo
+
+[33mcommit 667b030f1b30e67cb644516a5ab5b42f29a32ffb[m
+Merge: 070c04f2 df0090b3
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Sep 17 08:25:00 2020 +0200
+
+    Merge branch 'master' of https://servicios.itacyl.es/gitea/ITACyL/FRMDRD
+
+[33mcommit 070c04f2e4f0ea175fe1a93a6de9053ad06cd01d[m[33m ([m[1;31morigin/FORMIC-15[m[33m)[m
+Author: Javier Ramos <ita-ramvalja@itacyl.es>
+Date:   Thu Sep 17 08:21:59 2020 +0200
+
+    Incidencias: FORMIC-15
+    Comentarios: Prueba de guardado de ubicación al insertar una entidad cuyo repo tiene configurada una columna calculada con la ubicación a partir del contexto de ubicación
+
+[33mcommit 82c405ac485e28f714219c650bae407a5167793c[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Sep 16 08:03:59 2020 +0200
+
+    Incidencias: FORMIC-15
+    Comentarios: Prueba de uso del contexto de GPS
+
+[33mcommit f911ce39521e62842cbf2edd94e7a72533196ee6[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Sep 16 08:03:28 2020 +0200
+
+    Incidencias: FORMIC-15
+    Comentarios: Prueba de uso del contexto de GPS
+
+[33mcommit df0090b3e4ea519dcca4efd3631f42ce25bfe1ef[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Tue Sep 15 08:53:58 2020 +0200
+
+    FORMIC-8 corrección del renderizado de imagen
+
+[33mcommit b05863a0ad4ae2960458129d4f089ec75022849a[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Sep 11 14:06:00 2020 +0200
+
+    refactorización y cambio de nombres FORMIC-8
+
+[33mcommit 9ddc984ec41611ca0962f60841fba9c8ac5782c5[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Sep 11 14:05:53 2020 +0200
+
+    refactorización y cambio de nombres FORMIC-8
+
+[33mcommit 005f8acf564af204f391f5d3ea0f79a90394fa1a[m[33m ([m[1;31morigin/FORMIC_revisar_funcionamento_imagenes[m[33m)[m
+Merge: 9a57bfe6 3fbf75d6
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Aug 7 14:52:57 2020 +0200
+
+    merge
+
+[33mcommit 9a57bfe6d460c08c367ba60889838751edeeefff[m
+Author: Gustavo Río Briones <ita-riobrigu@itacyl.es>
+Date:   Fri Aug 7 14:48:23 2020 +0200
+
+    merge
+
+[33mcommit 3fbf75d6bde20112bfe8b7abe0fcaa8c47e266c9[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Jul 10 13:09:05 2020 +0200
+
+    Correción creación repofilter
+
+[33mcommit 51c5e2bf3c3dd1e974b469264c719840f5490398[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Jul 10 12:47:10 2020 +0200
+
+    Correción creación repofilter
+
+[33mcommit 05104fa3fd85c3a6f98a255749e19f0c0f3276ec[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Jul 10 11:48:19 2020 +0200
+
+    Correción creación repofilter
+
+[33mcommit 842424a0ad8024c26a33a6d3b19f917f660b6619[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jul 9 19:09:12 2020 +0200
+
+    Prueba funcionamiento DAG autocomplete
+
+[33mcommit 3c714dd1ad6353e18510c4cb69e1e6b4634a0299[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jul 8 08:55:52 2020 +0200
+
+    UIColumnBuilder creado
+
+[33mcommit 7a75385c34c93fed8fcb181c5d0e1693f4e00cbd[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Jul 7 14:35:23 2020 +0200
+
+    ColumnBuilder
+
+[33mcommit 3d9be3e65aaa9f0b12dd088de4fd7896e29b66f9[m
+Merge: 3e08d61d d2868120
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Sun Jul 5 22:24:47 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 3e08d61dfc950436efec04fc9f7e4c2bb9f4d983[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Sun Jul 5 22:23:53 2020 +0200
+
+    Creación columnbuilder
+
+[33mcommit d2868120c6d18abf27d3ce6213d3ec308359d35c[m
+Merge: f0326d66 87c02b0c
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Jul 3 15:05:11 2020 +0200
+
+    Merge branch 'master' of ssh://itaul4613/home/cvs/gitroot/FRMDRD
+
+[33mcommit f0326d6670e7f6e051529d810be3d9c4d6821070[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Jul 3 15:04:58 2020 +0200
+
+    ImageWidget skeleton
+
+[33mcommit 87c02b0ce037c1ae63cee8c27923aaae9b61a0bb[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Jul 3 12:30:12 2020 +0200
+
+    Cambios en la comprobación para no duplicar campos
+
+[33mcommit 0cf2a965662f65e3dfd57fe21b1db2cfabcd0d58[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jul 2 13:55:44 2020 +0200
+
+    Refactorización builders
+
+[33mcommit a466221883df77a334e74058cde3cfbde8f849fe[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jul 2 13:35:31 2020 +0200
+
+    Refactorización builders
+
+[33mcommit 819bc66a52a1a3e49d188b193a84a379d4f29662[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jul 2 12:43:50 2020 +0200
+
+    Corrección error guardado
+
+[33mcommit ceb4b0dcb38f0abf27c6992dc147caa59ce4c908[m
+Merge: a842835d 922bf225
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jul 2 12:17:25 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit a842835d91fbd2786afeebe89800f957988b3dee[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jul 2 12:16:56 2020 +0200
+
+    Corrección error guardado
+
+[33mcommit 922bf225a0f72980c5afb6178678ce374bdc7ec6[m
+Merge: a4c6fe52 de0a44f2
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Jul 2 10:01:21 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit a4c6fe52e3d3a118afc46145a91a37ad4d84257e[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Jul 2 07:03:07 2020 +0200
+
+    implementing image widget
+
+[33mcommit de0a44f26bfec248fe3f0496fd8bddce2b105742[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jul 1 12:03:59 2020 +0200
+
+    LocationContext
+
+[33mcommit 8c4cdf35566bb5642d5dd04a614fb62fc26a6db2[m
+Merge: 44676c97 633d3c11
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Jun 29 15:09:08 2020 +0200
+
+    Merge branch 'master' of ssh://itaul4613/home/cvs/gitroot/FRMDRD
+
+[33mcommit 44676c972b6bb36642a1bf48e94ed0fe938c0860[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Jun 29 15:08:51 2020 +0200
+
+    merge
+
+[33mcommit 633d3c117733d587f15b8b5d7da7234d3ea9cb38[m
+Merge: e06ba1c2 76fad6bc
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Jun 29 11:45:37 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit e06ba1c214e4d6c4524a74342fecfc41e59305c9[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Jun 29 11:44:51 2020 +0200
+
+    LocationContext
+
+[33mcommit 69c9ae605ec62bdd903090633d4896c35fc7da05[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Jun 29 09:59:13 2020 +0200
+
+    updating gradle building configuration
+
+[33mcommit 76fad6bc5915eb6a1008aa27cf393564a662782b[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun Jun 28 23:03:36 2020 +0200
+
+    refactoring to fit changes in crtrepo interface
+
+[33mcommit 0b4d5d39d5659c2383560973a323ac1a02336434[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Jun 24 11:38:21 2020 +0200
+
+    adds header to file
+
+[33mcommit 02a060a2ba36d0f7284804e21f08ad770de1328e[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 23 11:25:06 2020 +0200
+
+    type
+
+[33mcommit 582fff5722ecf2c7b2fa7aed712773df42925ad5[m
+Merge: a583632d bba41b7a
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 23 11:24:33 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit a583632db14dbdc1f50506147ac44b5549ee0374[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 23 11:24:09 2020 +0200
+
+    typo
+
+[33mcommit bba41b7a5321a9e2b95f2a153596d8ded1fc4f36[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Jun 23 10:46:27 2020 +0200
+
+    LocationContext
+
+[33mcommit 862e62bf92bd8028248e5ecd53f5cdb0e88dad7e[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Jun 19 14:01:41 2020 +0200
+
+    LocationContext
+
+[33mcommit 480333b23db5e5ec619d36d0ca4c932041ae2c35[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jun 18 20:10:02 2020 +0200
+
+    LocationContext
+
+[33mcommit 33e048664ca94fddec2c204531ac9cce76ee0bac[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Wed Jun 17 16:30:45 2020 +0200
+
+    Incidencias: 201740
+    Comentarios: Implementación de la propiedad numVisibleRows en el Datatable para indicar el número de lineas a visualizar en los editform.
+
+[33mcommit 165124cab461480326d7a63cdaeb8ad4e87c8fd7[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Wed Jun 17 16:25:55 2020 +0200
+
+    Incidencias: 204891
+    Comentarios: Style refactoring.
+
+[33mcommit 86479b357d4f277e5b0659e452f1ab99f0f5b2f2[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jun 17 11:42:05 2020 +0200
+
+    Test RepoFilterBuilder
+
+[33mcommit a0e8db38e153659e6109f317d9f426ffbbf16720[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Jun 16 14:47:47 2020 +0200
+
+    RepoFilterBuilder
+
+[33mcommit 5efad48abc4214f924d79540c0fefb21015f4184[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Mon Jun 15 17:26:57 2020 +0200
+
+    Incidencias: 204891
+    Comentarios: Fijado el color del título.
+
+[33mcommit e6dd75783e2cd8cb75f8a728cad1f76869de6573[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Mon Jun 15 11:11:08 2020 +0200
+
+    Incidencias: 204891
+    Comentarios: Cambio a los nuevos temas (FormudruidLight, FormudruidDark) en los test.
+
+[33mcommit f5bf77ffc0395e0db19b70f23909109b37d19baf[m
+Merge: c621fb84 18683e38
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Sun Jun 14 18:12:04 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit c621fb84167080f4a59343df4e89e11161a431de[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Sun Jun 14 18:10:15 2020 +0200
+
+    RefoFilter añadido
+
+[33mcommit 18683e3828cd9d344c1953e899cce9f944530118[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Sun Jun 14 13:24:30 2020 +0200
+
+    Incidencias: 204891
+    Comentarios: Refactorización de los estilos y homogeneización.
+
+[33mcommit b7aa50ab3ac67c3beb19751f6cd4bf2f7cea9a73[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jun 11 10:33:10 2020 +0200
+
+    Creación RepoFilterBuilder
+
+[33mcommit 5d8a62807536cfe7d303889737296d47189cf78e[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Jun 11 10:32:39 2020 +0200
+
+    Creación RepoFilterBuilder
+
+[33mcommit 62da1677739201822c095c51da4b2dbc0d77c143[m
+Merge: 52b326da 0a77941f
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jun 10 17:34:47 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 52b326da592f7b8531cd2c1f3928270551a6d4ce[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jun 10 17:34:19 2020 +0200
+
+    ValidatorBuilder
+
+[33mcommit 0a77941f4c6e956748002374d6dd07cdba90d9b1[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Tue Jun 9 14:11:01 2020 +0200
+
+    Incidencias: 204855
+    Comentarios: Implementacion del borrado del campo.
+
+[33mcommit b756f9ab0adf790c2ec66683a1b1b673600c4b65[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Tue Jun 9 08:57:12 2020 +0200
+
+    test
+
+[33mcommit 97499a928d9f63027753a382c5bf027d8d46c536[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Mon Jun 8 18:44:18 2020 +0200
+
+    Incidencias: 204933
+    Comentarios: Marcado con asterisco en la etiqueta, si el campo de entrada es obligatorio.
+
+[33mcommit 21fc7a3676e2d0fc223a4ad31359fcc2563bf63d[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Wed Jun 3 15:01:37 2020 +0200
+
+    Incidencias: 205216
+    Comentarios: Mejoras en la vista página de entrada.
+
+[33mcommit 51516d7bcf39a847d8f9d6a14e1dac8e4275bfed[m
+Merge: f454700e bd82207e
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jun 3 10:34:51 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       app/src/main/java/es/jcyl/ita/frmdrd/app/builders/UIGroupComponentBuilder.java
+    #       app/src/main/java/es/jcyl/ita/frmdrd/app/resolvers/BindingExpressionAttResolver.java
+
+[33mcommit f454700e6d846a0c7916d23f2c9cb16ded7134f0[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Jun 3 10:17:01 2020 +0200
+
+    Cambios en la generación automática de campos
+
+[33mcommit bd82207e41cd13d23903fffbb2bc1430a0e69668[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Jun 3 09:53:53 2020 +0200
+
+    solves navigation problem
+
+[33mcommit 33642a839e7451ac536ee5d732abe84cf75db591[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 2 20:17:00 2020 +0200
+
+    solves problems with gradle6 and Android studio 4 #205658
+
+[33mcommit 2034b2bce1d8ca5d2b8514ecbfa1d88d2c322383[m
+Merge: ae09f3dc 9251aa77
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 2 18:58:14 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit ae09f3dc712a9e7976874944126ca02210d423bf[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 2 18:57:50 2020 +0200
+
+    keeps gradle-tools to version 3.6.3 and gradle wraper to v5.1 after android studio update
+
+[33mcommit 9251aa775336464d00956aed7d5991fc25c4dd6a[m
+Merge: 5d948a3e ed126590
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Tue Jun 2 15:59:49 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 5d948a3e1fb1c52bf5e9843df1b1dd7798643cb3[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Tue Jun 2 15:59:28 2020 +0200
+
+    Incidencias: 205648
+    Comentarios: Implementación de las pruebas unitarias del fragment de listado de proyectos.
+
+[33mcommit ed126590edcf6d79e8fe78cbd8ce85081fa4a1b8[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 2 08:47:11 2020 +0200
+
+    test and desing scaffolding
+
+[33mcommit 6db23af0a65b1ba9099637bff91e5dcb6e0d3609[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Jun 2 08:01:31 2020 +0200
+
+    adds check in UIFormBuilderTest
+
+[33mcommit 4e9b0377fafbf26a0dcbfe9181f1090142733788[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Jun 1 13:50:53 2020 +0200
+
+    Cambios en la obtención del contexto
+
+[33mcommit 865405e67dfc5d52a83cd2c8a2508aa3db8a1586[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri May 29 20:13:43 2020 +0200
+
+    Cambios en la obtención del contexto
+
+[33mcommit 3bba6d01375d7caf6ce05678f5214ceed9838175[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri May 29 14:29:27 2020 +0200
+
+    Cambios en la obtención del contexto
+
+[33mcommit dc953e84540dd61ae05830c4b043ceb9aa16fedd[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri May 29 14:28:16 2020 +0200
+
+    Refactoring builders
+
+[33mcommit 3ffb219466a92a8143a540ccc92787bcc3290b1d[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Fri May 29 12:54:55 2020 +0200
+
+    Incidencias: 205314
+    Comentarios: Corregido flujo de petición de permisos durante el arranque de la aplicación.
+
+[33mcommit 8d1a3cac5b62063ba71d1839cab6a0a6d1184f70[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 29 08:02:13 2020 +0200
+
+    test to check Repo pk
+
+[33mcommit 0ac6f9e244acb0861c0612991227cb0bee6bf4ca[m
+Merge: 8bd9bdb0 61e5a2ab
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 29 07:46:56 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 8bd9bdb0816cd65efd6b27325b985d3b7b71f4ea[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 29 07:46:30 2020 +0200
+
+    checks repo pk during app loading
+
+[33mcommit 61e5a2abc93d23183d40fd983899209812a3342d[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Thu May 28 17:42:32 2020 +0200
+
+    Incidencias: 205226
+    Comentarios: Inicialización de la configuración si o si, incluso sin permisos aceptados para que los test que arrancan la MainActivity no fallen.
+
+[33mcommit c60366648a92ad8238eb6852883beeb0c84506a6[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 14:39:58 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 9beae8c653903fba456513c08452b8aa05f11252[m
+Merge: 04fbdb61 61d1bdd5
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu May 28 14:12:46 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 61d1bdd5055b8bbc63e99e96ce939e50d436b672[m
+Merge: 635962a3 d2f44ffb
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Thu May 28 14:04:47 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 635962a3b225f95678503d06e102df63b17584da[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Thu May 28 13:59:11 2020 +0200
+
+    Incidencias: 204936
+    Comentarios: Título de las activities actualizado en listado de formularios y listado de registros de un formulario.
+
+[33mcommit d2f44ffb9f7f5ed2c58d4eef86e4ed91598de3bd[m
+Merge: be697dcc 8ed041a7
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:37:08 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit be697dcc06d4e45f81abfc22d5d347a2b0d7ce84[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:35:33 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 371ac1db2f7aafd1c660c9d54fe3b5f2b662157a[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:35:25 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 4ff58f3d5cbfad7d88e8b3db74552f73260e08fd[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:35:16 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit f10fc7fa0ab397028dd205107f629d7ad172c0e4[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:34:28 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit a72e3bda94cc1ba2034e4325aa57daf17e941c69[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:28:02 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 9db8a507b8c4785cdb8f3d91bef91bd1ac1888d6[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:27:29 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit c9cf589aadfe2c3804043ee782175cbccc7bdc76[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:27:02 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit b3fecd3f7e2c27ddd9efdaf47b13eef96f8a21d7[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:26:00 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 5649205ef4b1c1d1389f24c62e69b1be4a56f08f[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:25:29 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 79429717720087316461a4a3dda45edeb65d90b7[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:25:14 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit fbec26c0b9e9c9a7288c1f766d7b6ba2148f5c86[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 28 13:24:51 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 8ed041a73ae4d21b0ce38654f7cb259d7dd29d6b[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Wed May 27 14:39:48 2020 +0200
+
+    Incidencias: 201216
+    Comentarios: Creada barra inferior de navegación de proyectos y formularios.
+
+[33mcommit 4a281331dd92842791d1d250adac6eac72502e0c[m
+Author: cuedieje <cuedieje@itacyl.es>
+Date:   Wed May 27 11:54:54 2020 +0200
+
+    Incidencias: 201216
+    Comentarios: Implementación del fragment de listado de proyectos.
+
+[33mcommit 04fbdb6166fbf1040db12397e3dad040b26f4c3c[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon May 25 14:55:47 2020 +0200
+
+     gives default name to project
+
+[33mcommit d935aae41bd3448c07d4e6bccfd9ad1bd80557ab[m
+Merge: 93e679a7 b4d6f3f7
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon May 25 07:52:28 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 93e679a7c96899e1801b04715ece3c5f7238cad2[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon May 25 07:52:09 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit b4d6f3f79b8e378701c79649f13cc954aed43db3[m
+Merge: 9274cb6a 2a48e7a5
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 24 07:38:48 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 9274cb6a09290d595fe3e817769678a6f824ca06[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 23 07:55:36 2020 +0200
+
+    improves error messsage
+
+[33mcommit 7370d75058bd577b34a6248dc379a19d76e9e92f[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 23 07:55:17 2020 +0200
+
+    improves error messsage
+
+[33mcommit 066fa918a6ef5817589dcead29d77bb1748c322f[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 23 07:31:33 2020 +0200
+
+    improves error messagse
+
+[33mcommit e33d589fd2f1fc7d4ca8aaa9ea50405332d0fc7d[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 23 07:23:51 2020 +0200
+
+    improves error messagse
+
+[33mcommit be186d3fc39deea4f283636441e5fe1a6e1b950c[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 23 07:18:57 2020 +0200
+
+    fixes error messagse
+
+[33mcommit 2a48e7a5efff260a149ae6b58b0d77c2eb061294[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed May 20 08:57:24 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 90c571fdaf7d0edf9844f541c738de7c9b29fe51[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue May 19 14:49:08 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit e5b7279dd1a22bf08f10d9e9730f484d3196213b[m
+Merge: 61b48496 866196bf
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue May 19 14:48:23 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 61b48496a5212c786884dbefff476324f085a9ed[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue May 19 14:47:51 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 866196bf4ad136943f000f96afff6d9ca794d2a0[m
+Merge: 93bd880c c9e6499c
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon May 18 15:01:31 2020 +0200
+
+    merge
+
+[33mcommit 93bd880c285d66febede00ec464d5d485ec6cbe4[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon May 18 14:59:33 2020 +0200
+
+    merg2
+
+[33mcommit c9e6499c1b08b73f44e67b0e4719de5044e8e018[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon May 18 13:01:18 2020 +0200
+
+    Añadido Tab Component
+
+[33mcommit 2b8b5ba6323be192927deea1973ffa02a9aef3cf[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 17 21:27:29 2020 +0200
+
+    merge
+
+[33mcommit d68b97c21f65f59cde32b5557c31a051d75bf8ea[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 17 21:21:28 2020 +0200
+
+    merge
+
+[33mcommit 18e4f935883fb4414528d999ef0ceb3905e3556d[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 17 15:04:36 2020 +0200
+
+    fixes test configuration
+
+[33mcommit 16dfabe3a2454c5be4bdff7e6e4ae576d523c747[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 17 14:52:28 2020 +0200
+
+    merge
+
+[33mcommit 13b8e5677be47a99aaa7b9bb5c8425a2ec21a5d5[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 17 09:10:13 2020 +0200
+
+    merge
+
+[33mcommit 002aa2d6e6af0f4ea79ab9ba0304484e9bfa90c5[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 16 09:28:53 2020 +0200
+
+    merge
+
+[33mcommit 3644c82d2462a993594f0a32a251780680e76f67[m
+Merge: a351d85f ba225ff0
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 16 09:27:13 2020 +0200
+
+    merge
+
+[33mcommit a351d85f74ad9c2010327d33d64fe4c7f314975e[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 16 09:26:26 2020 +0200
+
+    autocomplete configuration compelted
+
+[33mcommit ba225ff0c539293490e6b56db5bc4628a628743a[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 14 13:20:07 2020 +0200
+
+    Añadido tab
+
+[33mcommit 6b5ffb1a69a71356ebb12e8a66c2f6333755186a[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 14 09:59:49 2020 +0200
+
+    Añadido tab
+
+[33mcommit 6db806fa9706556ed7f611f952aa44344919189f[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 14 09:58:37 2020 +0200
+
+    Añadido tab
+
+[33mcommit 83f2ae57fa4da288000c3226cd079ae04182c2ca[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 14 09:27:39 2020 +0200
+
+    Añadido tab
+
+[33mcommit 8789542786d5c960ab6a59796a9ce512bbccba56[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 14 09:26:14 2020 +0200
+
+    Añadido tab
+
+[33mcommit d334532774e1ff16755feea4542a5e41c53a824f[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 14 09:23:26 2020 +0200
+
+    Añadido tab
+
+[33mcommit 0bae4b0fe1a66b184fe2a13ca2bcbfbae8a65155[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu May 14 09:22:28 2020 +0200
+
+    Añadido tab
+
+[33mcommit 43359147f99c652649eb70a6966f4c244e4c8096[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu May 14 09:01:28 2020 +0200
+
+    Merge
+
+[33mcommit f0f31bc0de1b55b7cb64869cf7404990ae8f32c5[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu May 14 08:51:42 2020 +0200
+
+    defined common flow for activities and handles error during rendering
+
+[33mcommit 55955dbb28e0b3d3cb1b9e9f28600e19e101cfdd[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu May 14 07:41:48 2020 +0200
+
+    fixes problem with automatic form generation
+
+[33mcommit ede42cba3c856028627b21f6e0c74b969758353d[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue May 12 19:54:52 2020 +0200
+
+    xml reading almost finished
+
+[33mcommit bed07349d1f12824daab2493fabeac54b72f94b4[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 10 20:08:51 2020 +0200
+
+    merge
+
+[33mcommit d03b15cf223d6fe53294f5964ca9b82274d46496[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun May 10 12:17:51 2020 +0200
+
+    fixes configuration reading and creates default form
+
+[33mcommit ad93c0a36b88b6105368eddff29d8a6da4c05ae5[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 8 21:36:38 2020 +0200
+
+    merge
+
+[33mcommit 306a8f6468c54329ce8069d4cfd08e15778930b0[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 8 06:31:56 2020 +0200
+
+    before changes
+
+[33mcommit 4580f273e78ce52b89c46e00d649758656bec8c9[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu May 7 18:35:39 2020 +0200
+
+    merge
+
+[33mcommit 1d7f14abc53d05e483d74c38cc36fb6b63be0ada[m
+Merge: e96ffc8f 57cd7796
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon May 4 19:02:41 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit e96ffc8f632b2d26c48212f1f280113d41eef40a[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon May 4 19:02:16 2020 +0200
+
+    preapring XML readers
+
+[33mcommit 19e6def8722a020347469568ecbc9ca8aeadb570[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon May 4 19:02:02 2020 +0200
+
+    preapring XML readers
+
+[33mcommit 57cd77968ba17793dbc9bddbb11136b9fa89baa1[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon May 4 11:15:26 2020 +0200
+
+    Corrección de errores en los test por el uso de temas
+
+[33mcommit a816e6a45be3fc085117de57aeca72ace4dad0a6[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon May 4 11:11:50 2020 +0200
+
+    Corrección de errores en los test por el uso de temas
+
+[33mcommit 6ccbc30f5f177321ea113de40bff15370e65fd0d[m
+Merge: 46b576d8 9160d101
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon May 4 11:08:02 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       app/src/test/java/es/jcyl/ita/frmdrd/validator/EmailValidatorTest.java
+    #       app/src/test/java/es/jcyl/ita/frmdrd/validator/InputRequiredValidatorTest.java
+
+[33mcommit 46b576d805396d403cfe078deb98f6d2f4793ec4[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon May 4 11:05:56 2020 +0200
+
+    Corrección de errores en los test por el uso de temas
+
+[33mcommit 9160d101e484ec8c3d319a45809b1301c4d269d7[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat May 2 09:50:59 2020 +0200
+
+    basic xml reading flow finished, next, attach validators
+
+[33mcommit 50ec1fda854375e936c7cdb0cacd8933532acdff[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 1 09:29:36 2020 +0200
+
+    merge
+
+[33mcommit 123c4795ffcd21e728cdc45765828ab772559212[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 1 09:23:35 2020 +0200
+
+    creating xml parsers
+
+[33mcommit 3164f149903d5fc8cb3ac9bac2c12a4d253c2d3e[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri May 1 07:41:01 2020 +0200
+
+    merge
+
+[33mcommit a60422d76a8cfb27eeb5c7a50ff3ea06f1cbc9ef[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 30 14:46:02 2020 +0200
+
+    merge
+
+[33mcommit 7040c5fbc3f34f2878dab4e9c73e063e63c84990[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 30 13:46:28 2020 +0200
+
+    merge
+
+[33mcommit 766d29ffe5402bb78579afa6e018a3ede304ce46[m
+Merge: 1b4ca1dd 516da831
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 30 13:41:03 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 1b4ca1dd5a6ea0b80a89f9afd84d42ca40296155[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 30 13:39:53 2020 +0200
+
+    merge
+
+[33mcommit 516da83175993bd4c2066f2123d661b3deccec5d[m
+Merge: 92053fa6 d6500b67
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Apr 30 13:34:30 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 92053fa60a64ce9c70fee2bb9a3eb13b1a45b8ff[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Apr 30 13:34:14 2020 +0200
+
+    Tema oscuro y tema claro
+
+[33mcommit d6500b671a43bc5363f9b25b2dd8c4336d8f177f[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 30 09:11:45 2020 +0200
+
+    fixed problema with text selection when the options has a label expression
+
+[33mcommit 9b434d6142f5527658a594ea5161e236e7037725[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 30 08:34:50 2020 +0200
+
+    fixed autocomplete example
+
+[33mcommit f175a65a8bc52973b635746297fcff027bd524e5[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 29 19:22:25 2020 +0200
+
+    Tema oscuro y tema claro
+
+[33mcommit 6d63797c354459c33419766ddedebe79e61b052c[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 27 09:40:02 2020 +0200
+
+    Modificado ancho de columnas en la tabla para que se ajusten al tamaño del contenido
+
+[33mcommit 08f06d5f1b74adae19e01bfaa5ec74df116bc6dc[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Apr 24 19:37:54 2020 +0200
+
+    Modificado ancho de columnas en la tabla para que se ajusten al tamaño del contenido
+
+[33mcommit 94b9c8a5f78b9d6991640ce9bb2d088eff71abcf[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 18:04:34 2020 +0200
+
+    implementing mandatory fields
+
+[33mcommit 26760fe47b9e59d80966ff95af96ad3954fa28ac[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 17:53:13 2020 +0200
+
+    fixes problem with ValueBindinExpressions interpretation to detect readonly binding2
+
+[33mcommit 696fde0fd7296437f30eb45350bc340662c17573[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 17:42:46 2020 +0200
+
+    fixes dynamic autocomplete rendering
+
+[33mcommit a36d80f9e92b31d22d4b5430e753838bde537b05[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 14:19:51 2020 +0200
+
+    merge
+
+[33mcommit a3dd3ddcbc6667dcfb3e63b2378f3d52e514398f[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 13:12:31 2020 +0200
+
+    removes db
+
+[33mcommit 3d05a4024e5b50c5b75c6ae67d7e704c55495023[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 13:01:47 2020 +0200
+
+    merge
+
+[33mcommit ecd32587cfa2de07cf2869502831a72294ea2983[m
+Merge: 3c6aeb9d f3f86654
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 13:00:40 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 3c6aeb9d256927c07ff9d69f4d9f0bdef47f53e3[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 13:00:11 2020 +0200
+
+    merge
+
+[33mcommit f3f86654b9c68407561df81d384ac7908404f9e3[m
+Merge: 783ecb8d b5c1ab84
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Apr 24 09:21:39 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 783ecb8ddb47ba0f6e0a430b7ea3eb15e7225b0c[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Apr 24 09:21:23 2020 +0200
+
+    Filtrado y ordenación en Datatable
+
+[33mcommit b5c1ab84aa1f0a3c80a5bdfccd7780ee7ff1656c[m
+Merge: ddbca500 21e41c9d
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 08:59:15 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit ddbca5000aa0ac57f85b969ac234751e06de83c5[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 24 08:58:46 2020 +0200
+
+    refactored method to extract expressions from components. UIComponent.children changed to use array instead of lists
+
+[33mcommit 21e41c9d81c20aacaf339034f6cb07c50de0d6ca[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 22 19:50:17 2020 +0200
+
+    Filtrado y ordenación en Datatable
+
+[33mcommit 068e937a084926e41109d94b530dc915bad1699e[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 21 20:33:20 2020 +0200
+
+    testing linked dropdowns
+
+[33mcommit f4a271c38ad45926ed75d271907632939386cd58[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 21 15:05:28 2020 +0200
+
+    type
+
+[33mcommit 35d221f1e914a3d0ff35b39b8f3bcb5b6886dce0[m
+Merge: 5fc441e6 7833cbcc
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 21 15:02:48 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 5fc441e6e6c3c2c64c6ec839c81f48df61d275d3[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 21 15:00:30 2020 +0200
+
+    autocomplete almos finishedç
+
+[33mcommit 7833cbccb75ea34efa4d63a3243d8b36b918d222[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 21 14:53:30 2020 +0200
+
+    Filtrado y ordenación en Datatable
+
+[33mcommit 1656354fafeb969489ab7166299bcc8ecc91b1b3[m
+Merge: 10da70b3 156ff933
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 21 12:14:15 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 10da70b37269e5d07e7222ffaba5cd7eb96cc436[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 21 12:13:37 2020 +0200
+
+    Filtrado y ordenación en Datatable
+
+[33mcommit bf1ece208b79991c95e6fd4989e0074fc5b7d25f[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 21 08:04:09 2020 +0200
+
+    user typing delay in autocomplete
+
+[33mcommit 156ff933ec81376d00f30dae3f4f7a3a825983f0[m
+Merge: 873a2afc e8668f03
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 21 07:55:40 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 873a2afc34e72eb0ba08da57b26a68084323082d[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 21 07:55:09 2020 +0200
+
+    user typing delay
+
+[33mcommit 7f5182a0048091447e858146860db5a3de1d1e91[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 20 18:03:26 2020 +0200
+
+    text change input delay
+
+[33mcommit e8668f03d2dfef71a5ff664698641bdb5ed6a2db[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 20 16:05:07 2020 +0200
+
+    Añadido método que devuelve un DAG con el nodo que buscamos como raíz
+
+[33mcommit cfbfb96d6ef6b6a18f35ec9aeb0e096676c3f901[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 20 13:32:16 2020 +0200
+
+    Filtrado y ordenación en Datatable
+
+[33mcommit abcc9270182e416846d04718d72c7de44cd4ff68[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 20 09:08:57 2020 +0200
+
+    Filtrado y ordenación en Datatable
+
+[33mcommit f35748209ded99208a4491ac8ae2f3a0f03ebcd4[m
+Merge: 362a9b3e 9c61679e
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 20 08:33:20 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 362a9b3e20316cedb43b149b1ce92e5a01182027[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 20 08:33:10 2020 +0200
+
+    Filtrado y ordenación en Datatable
+
+[33mcommit 9c61679e8dc3f65901488dacb9e11ee9e913717d[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 20 07:51:18 2020 +0200
+
+    autocomplete basic case
+
+[33mcommit 72b56afb7671daac8e83e5ae30ad3ac4617032e3[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun Apr 19 08:21:30 2020 +0200
+
+    fixes tests and autocomplete filtering
+
+[33mcommit fb3b7a66307dd4b2da550a1ff5a46f10d4d0537d[m
+Merge: 0b91b64c d8eaa7a6
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 17 15:04:15 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 0b91b64c28f44dd8edc81d0d259f789ee7f36166[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 17 15:03:45 2020 +0200
+
+    autocomplete filtering working, needs some tests
+
+[33mcommit d9a0a669eefe46d6ba791d3e6282786655bf3799[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 17 14:56:03 2020 +0200
+
+    autocomplete
+
+[33mcommit d8eaa7a650120ce927dd25b2bc9971c590d91ad2[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Apr 16 12:35:54 2020 +0200
+
+    Sacamos la creación del adapter fuera del método load
+
+[33mcommit 49910d74064bb698ae385a21a74385aebf4cf2e8[m
+Merge: 1b4878bf 261a2427
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 16 08:42:15 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 1b4878bf3084e4a582e50cafd5d1f0daad475826[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 16 08:42:03 2020 +0200
+
+    developping autocomplete
+
+[33mcommit 261a2427e7fdbf0a1c92b22b0aecfcea4e3341c8[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Apr 16 08:19:27 2020 +0200
+
+    Añadido método que devuelve un DAG con el nodo que buscamos como raíz
+
+[33mcommit 29db50caf0cf5633dc04305c82ecc5c548c38da1[m
+Merge: 6e521b46 f1e7a1ae
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 15 13:37:13 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 6e521b465df622f6799a95e7c9bcb6c9bc273072[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 15 13:36:48 2020 +0200
+
+    bds
+
+[33mcommit f1e7a1aeb3d9f15649d4cc17ca496273f9d8ff6d[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 15 13:14:34 2020 +0200
+
+    Añadido método que devuelve un DAG con el nodo que buscamos como raíz
+
+[33mcommit 48efb539467ea1f3eef095697965c8f200f6344c[m
+Merge: 5689c19f d87d1c6c
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 15 12:48:53 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 5689c19ff608aaf16cf1c98aa042dc45eb2b7697[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 15 12:48:38 2020 +0200
+
+    merge DAGs
+
+[33mcommit d87d1c6c0d35a8d0bf49a760042aa8d6c2f27f62[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 15 12:22:14 2020 +0200
+
+    Añadido método que devuelve un DAG con el nodo que buscamos como raíz
+
+[33mcommit 55632f3a0e7981d3e1ebb0058cc48501a4f5e611[m
+Merge: ba908a84 44a2f74a
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 15 11:37:37 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit ba908a84f73262940705d0deb9948fb7cf17c789[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 15 11:37:24 2020 +0200
+
+    local pending changes
+
+[33mcommit 44a2f74a31afc9461d152b27df8d542ed118e8c1[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 15 10:44:00 2020 +0200
+
+    Añadido método que devuelve un DAG con el nodo que buscamos como raíz
+
+[33mcommit 7fb9f0f0b424c13d2c14f36fbebf730a347ce1e8[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 15 10:42:51 2020 +0200
+
+    Añadido método que devuelve un DAG con el nodo que buscamos como raíz
+
+[33mcommit 0691c5e5bfa00b9bb07870b1852508b93523ce65[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 15 10:42:36 2020 +0200
+
+    Añadido método que devuelve un DAG con el nodo que buscamos como raíz
+
+[33mcommit 0b3ed9970db767a6625701ce52d03ac66cbddad5[m
+Merge: 5ae1e511 21cf4a17
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 14 14:47:17 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 5ae1e5110a0c0865eff59f64e5f945cbb281845e[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 14 14:46:44 2020 +0200
+
+    DAG example
+
+[33mcommit 21cf4a1778ad31468d88ece6ffdc75be0233a84f[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 14 14:12:03 2020 +0200
+
+    Visualización del dataTable
+
+[33mcommit 112fa0eca7290697c6800588b779fef12256145b[m
+Merge: 06849d48 1c290168
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 14 13:30:36 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 06849d48ea0a260362a3404b9e9987a3eb3dce6f[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 14 13:30:16 2020 +0200
+
+    basic autocomplete
+
+[33mcommit b5eb7444fa7f6bba6d4c27b1cf753a6c30e5dffe[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 14 13:30:09 2020 +0200
+
+    basic autocomplete
+
+[33mcommit 1c290168e96e50bb59892580143ede9a0253de07[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 14 11:08:52 2020 +0200
+
+    Creación del DAG - Downgrade de la librería jgrapht a la versión 1.1.0 para poder usar en versiones de Android anteriores a la 24
+
+[33mcommit 4ba0c6a52f9cf57d585851283e3234d0925d74a6[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 14 07:12:10 2020 +0200
+
+    error DAG
+
+[33mcommit fa4d9a81d550f915cb03bd2a5313a5872699b3ca[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 21:56:50 2020 +0200
+
+    fixes view restoring when threre's an error in navigation
+
+[33mcommit 5726b56cb53ec4bac8ee151c40530a10e47c5851[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 21:05:09 2020 +0200
+
+    partially fixes problem with no-found entity Error
+
+[33mcommit ae68480d710f08ebe43f97c106416c0f1345dab0[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 20:59:33 2020 +0200
+
+    fixes some bugs with the spinner and switcher converters
+
+[33mcommit 32648024dccbdec28b80fd8fdf9808c6d4fdf130[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 15:45:56 2020 +0200
+
+    merge
+
+[33mcommit 208b7827f3fed425fad2ff92b48ede107fc03ab1[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 15:42:42 2020 +0200
+
+    select component
+
+[33mcommit 68e6d09b5375cce91cc36c51cb00acb53b29de06[m
+Merge: 04ca91c7 05976d1b
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 11:33:10 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 04ca91c7c2566d517870fd8f2e023052fa454cd3[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 11:32:23 2020 +0200
+
+    fixes tests
+
+[33mcommit a3145001f8cb1e08b3c1afd81dd68fea187d84db[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 11:26:24 2020 +0200
+
+    fixes problems with components rendering
+
+[33mcommit 05976d1b6f78b77298abfffee276d0db77ae04b2[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 13 10:07:19 2020 +0200
+
+    Creación del DAG - Comprobación si un nodo ya ha sido añadido
+
+[33mcommit 11b326f227249b7f2986f2d4403bf7712fce87f2[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 09:08:15 2020 +0200
+
+    more refactoring
+
+[33mcommit 4963d42d92fc5362b0edfd9e10194fa5e76f1cf3[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 08:12:47 2020 +0200
+
+    changes resources names
+
+[33mcommit ad0789b0dee59efd9d47c67c9fead8aeb2f93d99[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 13 08:07:54 2020 +0200
+
+    refactos Renderers to provide a common creation flow
+
+[33mcommit 02f06852c50d5939ebde1c8d1da9db70a267cc61[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun Apr 12 18:48:07 2020 +0200
+
+    link renderer with parameters, the look&feel needs some fixing
+
+[33mcommit 87a59faf657aed0d2f4bc4be910724c11821fc01[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 10 23:34:04 2020 +0200
+
+     comments
+
+[33mcommit 51a84e6d67fa0af748ad70bfbc150219b9b5189a[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 10 23:28:55 2020 +0200
+
+    MainController refactoring to remove references to shared objects
+
+[33mcommit af529a869ed8c60da59ad4c369b23dd45dd6c247[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 10 21:28:15 2020 +0200
+
+    MainController refactoring
+
+[33mcommit 009fdce8861e86946282d1c88e6db2e52a8a5b22[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 10 19:38:34 2020 +0200
+
+    fixes controller builder
+
+[33mcommit 1a7f3ad026961a0821cc7d224e5110f076a5f3e6[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 9 21:14:44 2020 +0200
+
+    merge
+
+[33mcommit 1001b0c7a96ec3ec22711f6f1e0883652d9b98f2[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 9 19:47:03 2020 +0200
+
+    improves comments
+
+[33mcommit 4fcaedf5da97ace88fbaa24a8f30601ec5471729[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 9 19:45:18 2020 +0200
+
+    serious refactor of actions and formControllers
+
+[33mcommit 7bf8da3202173a0e1f97837ad6436dc924c37e55[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Thu Apr 9 10:56:13 2020 +0200
+
+    refactoring forms, actions and navigation
+
+[33mcommit af334114aabf6d24ec6674ea60da06f13ba73dc4[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 17:05:47 2020 +0200
+
+    adds basic readonly support for forms and inputfiedls
+
+[33mcommit b906f8283af79fd3b26532d7298714a42c6bd2ca[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 17:02:03 2020 +0200
+
+    adds basic readonly support for forms and inputfiedls
+
+[33mcommit 721f7f8418743204caae2ddf02ae1acfbc175c91[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 16:16:21 2020 +0200
+
+    examples
+
+[33mcommit 595ee1c5d652ad8f22fa5362293d904cfa831ce1[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 15:51:33 2020 +0200
+
+    example of dependencies
+
+[33mcommit 16ee53c7986283fadb0c2a0478aca737e095a015[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 15:46:38 2020 +0200
+
+    refactoring
+
+[33mcommit 0bde3d4ae4aab3fa44fc057cdfab7bd7a832ecc1[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 15:25:16 2020 +0200
+
+    fixes problems with table filtering
+
+[33mcommit fb5a7681b455f36a90a2b2c0003421c1ae8cd8b3[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 14:20:58 2020 +0200
+
+    merge
+
+[33mcommit efa1b854dd60130f3841c69f80371972466aabcf[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Wed Apr 8 14:12:18 2020 +0200
+
+    solves problema with filter interpreter in partial rendering
+
+[33mcommit ef69d74efd690bf07c5d9de6cde0d3e9c2f4d7c2[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 8 10:38:44 2020 +0200
+
+    Creación del DAG
+
+[33mcommit f801b5fba1ff8cc7c0e0361e7e86c3d507206f04[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 20:59:43 2020 +0200
+
+    avoid common validators to return error if the input is null, in this case, a required validator has to be used
+
+[33mcommit f1cd250b11998d97411c06913de4135dc7e4666b[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 19:24:16 2020 +0200
+
+    fixed field scroll and floating buttons but still needs some style fixing
+
+[33mcommit b69ae99f7bdfd341f672f7cb91c4d7005644c683[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 17:43:42 2020 +0200
+
+    merge
+
+[33mcommit 2e383cdd4d82036dc6e113c04472a7de8d4d640a[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 17:40:04 2020 +0200
+
+    add requiredValidator by default if the property is mandatory
+
+[33mcommit 52a271372b675ad09e352b8748a7098f8afd444a[m
+Merge: a06add8f 66c837f4
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 16:01:09 2020 +0200
+
+    merge
+
+[33mcommit a06add8fca4d9a283709b615ace94f50a5f37b03[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 15:58:48 2020 +0200
+
+    added configuratino to access a spatialite database
+
+[33mcommit f19640907de1171cb3780f4c957ee350f10b059c[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 15:58:18 2020 +0200
+
+    added configuratino to access a spatialite database
+
+[33mcommit 75e56214e1b7ee17dced54414898ee44e27a9fe1[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 15:09:33 2020 +0200
+
+    refactors package names to adjust to crtrepo refactoring
+
+[33mcommit 66c837f49ffcdc88542d6e152a15f09d4b660bad[m
+Merge: be6fb2f0 c279ffc8
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 7 14:40:40 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit be6fb2f08e4d1e0994aa7347f0aa5a4afa5955ef[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 7 14:40:13 2020 +0200
+
+    Creación del DAG
+
+[33mcommit 6d9960cb5cd623b070f5b6d52fcba17fc78b7ea8[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 7 14:35:00 2020 +0200
+
+    Creación del DAG
+
+[33mcommit c279ffc80d20d5ce1fa4dc376125738d0c6e7ed9[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 14:23:51 2020 +0200
+
+    fixes problem finding expressions
+
+[33mcommit 70fd1c987e1de815f2ea083f90e6bd7a8adba11c[m
+Merge: 88c6d3d2 b3bad028
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 12:58:38 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 88c6d3d25281b29e708a6d226ad90a8b3fcbd667[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 12:57:37 2020 +0200
+
+    use inputType from field in the renderer to modify the input pad
+
+[33mcommit b3bad0285eb07bf9ceafdaf7e1e69493259b6b6e[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 7 12:09:15 2020 +0200
+
+    Creación del DAG
+
+[33mcommit d6682e87556371b42e969f4403721e0644fcf946[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 10:59:43 2020 +0200
+
+    Form builder to create edit and lists views from a repository
+
+[33mcommit 7a72b5ed84567047293f9b72fb61ac0bed87b9d6[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 09:45:04 2020 +0200
+
+    adds form2 configuration
+
+[33mcommit 3ed9432ec0f1670df56eb16f2cc7ce74992cc663[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 09:34:45 2020 +0200
+
+    fixes problem with filter
+
+[33mcommit 4676110a222fe377764e0cfc722bc614ee237cbe[m
+Merge: 9e28ef06 033b5d66
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 09:16:39 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 9e28ef06001af0ede11d5e4ba210ee055a3dae88[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Tue Apr 7 09:16:03 2020 +0200
+
+    merge
+
+[33mcommit 033b5d66a836aa4ce8d76121514d3d82ee9d1163[m
+Merge: edff9013 1ae43f1a
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 7 07:43:51 2020 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       app/src/main/java/es/jcyl/ita/frmdrd/configuration/parser/DummyFormConfigParser.java
+
+[33mcommit edff9013234b71c5c588d2511df3586b40ee953b[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Apr 7 07:42:47 2020 +0200
+
+    Creación del DAG
+
+[33mcommit 1ae43f1a323e04c27163018c97dcc386edd9eb1e[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 6 21:27:04 2020 +0200
+
+    fixes some bugs
+
+[33mcommit c1b67b0436733b9ab0b6d36f190d2c6de2e5a5cd[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 6 20:32:02 2020 +0200
+
+    integrates view updates using DAG
+
+[33mcommit eacce679713b27a8bc3f2d5cb4075736a9b347dd[m
+Merge: ac726600 da7cd66b
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 14:20:51 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+    
+    # Conflicts:
+    #       app/src/test/java/es/jcyl/ita/frmdrd/render/DelegatedExpressionTest.java
+
+[33mcommit ac726600ce25e3c3bc30b95574ea101d125b8814[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 14:16:32 2020 +0200
+
+    Creación del DAG
+
+[33mcommit da7cd66b11d0624be834bdf6c93b3fa48290d5a7[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Mon Apr 6 14:07:33 2020 +0200
+
+    solves problems with form configuration
+
+[33mcommit 35ac42c559a858d0f0882604a93a8afea724b6e7[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 12:12:23 2020 +0200
+
+    Merge
+
+[33mcommit 820d1ee89745b77eee6b50f17dd148d8f71ce822[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 12:11:40 2020 +0200
+
+    Merge
+
+[33mcommit e8ac2b6b35b76e6bd5dde0d440b20021cec0c97b[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 12:10:25 2020 +0200
+
+    Merge
+
+[33mcommit 740bc1c41cbad17a02762251067667f6d11e2dea[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 11:37:44 2020 +0200
+
+    Creación del DAG
+
+[33mcommit 1812437a90c3782d9e7ab6a4301d110aab3a78e5[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 11:18:28 2020 +0200
+
+    Creación del DAG
+
+[33mcommit 6101372770e8449dc7b3c8223ac51b9867b8cf8a[m
+Merge: dc7dfe38 0d4ff89a
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 11:15:52 2020 +0200
+
+    Creación del DAG
+
+[33mcommit dc7dfe3839566736883fe46b1a28c071aede0686[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 07:54:58 2020 +0200
+
+    Creación del DAG
+
+[33mcommit e690539c940a4fe95955f213dcb38a525e197cf3[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Apr 6 07:53:04 2020 +0200
+
+    Creación del DAG
+
+[33mcommit 0d4ff89ad8846728ab58ae37854795515ee7a102[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun Apr 5 21:13:50 2020 +0200
+
+    integrates rhino as Script engine to execute js functions, just a prototype to check the viability, right now it only executes validation functions
+
+[33mcommit 326f23426ee0bba78cdedeb404432ccd323bd43c[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun Apr 5 14:29:24 2020 +0200
+
+    solves problema of absolute and relative access to entity and view contexts, avoids validation on hiddedn fields
+
+[33mcommit bbc53e50fa282adae127083176eedfdbf567a9dd[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sun Apr 5 13:04:30 2020 +0200
+
+    changes globalContext implementor to a simpler UnprefixCompositeContext
+
+[33mcommit 46dd00aec21153f5a2f749f35c4a7f18f4f0eec4[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat Apr 4 22:28:55 2020 +0200
+
+    deferred rendering almos finished
+
+[33mcommit a11553c7d6f57e1cea1b5f824bbbf2bc6d060fc0[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Sat Apr 4 13:01:04 2020 +0200
+
+    adds conditional rendering in uicomponents
+
+[33mcommit d34ddc533fab94d34d8750f202cd131bdd3ed9c5[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 3 21:40:52 2020 +0200
+
+    solves problems with entity creation
+
+[33mcommit 74059d403baa522380842494fa051ac9db138ccf[m
+Author: Gustavo <gusriobr@gmail.com>
+Date:   Fri Apr 3 20:25:41 2020 +0200
+
+    adds specific activity for the form entity-list interaction
+
+[33mcommit 11b240a2478cdb1e3cefe8b770696b400d7b22c7[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Fri Apr 3 09:01:44 2020 +0200
+
+    fixes router destroying current activity
+
+[33mcommit dee34fe6ae4a93fee7b133ff3a6c31d5a2241b8b[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Thu Apr 2 18:19:05 2020 +0200
+
+    literal expression to avoid jExl expression calc in literal values
+
+[33mcommit f654bedca9638c85e4a2495ae5f383c5f42bc394[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Thu Apr 2 14:19:25 2020 +0200
+
+    fixes bug in tests
+
+[33mcommit 10973f4da92970d9c8450c4d2b05a77a1aab96a0[m
+Merge: d4f14b55 d6779fea
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Thu Apr 2 14:17:58 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit d4f14b5598474e3382b7619e89bee409c29f9073[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Thu Apr 2 14:17:07 2020 +0200
+
+    datatable columns rendering with expressions
+
+[33mcommit d6779fea3c4a2f35b829d0e1d07850f6e8d1a345[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Apr 2 10:15:37 2020 +0200
+
+    Creación del DAG
+
+[33mcommit 4755b2543d15594da58e06c56307ecaede283aec[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Wed Apr 1 22:39:37 2020 +0200
+
+    adds absolute context referencing to the global context
+
+[33mcommit 25b433b33d80fb55a15425ef0e6b9ad2d73268f0[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Wed Apr 1 19:28:07 2020 +0200
+
+    fix navigation back bug
+
+[33mcommit ef37a57772d5d4578caf9a6f8f1c7f6f0a8391c7[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Wed Apr 1 18:38:03 2020 +0200
+
+    refactoring data builders recipes
+
+[33mcommit 27c1bdbc317c721e0983b477abad8e365abacfb7[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Wed Apr 1 17:59:51 2020 +0200
+
+    fixing bugs
+
+[33mcommit ae81d33955a0491fd90be4e0f80e568795a44d58[m
+Merge: 40a9d1b0 e7230023
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Wed Apr 1 17:31:47 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 40a9d1b03bb9c1facacb82e8b1587593d33b6a32[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Wed Apr 1 17:31:21 2020 +0200
+
+    refactoring user navitations to treat then as user actions
+
+[33mcommit e7230023d3355c7cd38d5182bbda14bc5045d329[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 1 17:11:26 2020 +0200
+
+    Creación del DAG
+
+[33mcommit 4858b2eadd71a28a758063cf5aba18be7e6249e8[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Apr 1 14:54:43 2020 +0200
+
+    Creación del flujo reactivo por componente
+
+[33mcommit 5c0eb2037d011f071e8995ab7788ed8040bd4ee6[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Tue Mar 31 21:15:45 2020 +0200
+
+    navigation among views with router and history to implement a navigation back
+
+[33mcommit 8c0e9e8b0fa2ff8e9d480b9294fa06d94bb62131[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Tue Mar 31 19:23:45 2020 +0200
+
+    moving test package
+
+[33mcommit 668d844970ddc6731e587e1fde984fe527e3665d[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Tue Mar 31 19:16:08 2020 +0200
+
+    merge
+
+[33mcommit 46b551465f8581ace12e31563beed71ad5c7e4f5[m
+Merge: 94a8f1d2 a09f4ea1
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Tue Mar 31 19:08:48 2020 +0200
+
+    Merge branch 'master' of ssh://10.47.1.121/home/cvs/gitroot/FRMDRD
+
+[33mcommit 94a8f1d22231dbc6273c6c7ffa0560056faaa1a7[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Tue Mar 31 19:08:11 2020 +0200
+
+    view saving/restoring perfomed on save actions and on input change
+
+[33mcommit a09f4ea117e3d5f13565b9cb8aaac6dfb302785e[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Mar 31 14:07:50 2020 +0200
+
+    Creación del flujo reactivo por componente
+
+[33mcommit cb18cfaaa5dcf91d57ee220d5e29938fdc6f45bc[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Mar 31 14:03:31 2020 +0200
+
+    Creación del flujo reactivo por componente
+
+[33mcommit 6453576a63cdce721a19d9fc02013f3219ac77c1[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Mar 31 12:53:52 2020 +0200
+
+    Creación del DAG
+
+[33mcommit a63ed30253951fb69926d243b5997aff17cad338[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Mon Mar 30 21:15:45 2020 +0200
+
+    reviews the validation cycle, a save/restore phase has to be included to recover user input data in a postback
+
+[33mcommit 551b43176d40577f1b30be2cafaaa75b1a674342[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Mon Mar 30 20:08:56 2020 +0200
+
+    testing apache commons-validator integration
+
+[33mcommit e3704493d90cd05c597fa8c6ec473e31d5a476e6[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Mon Mar 30 14:13:11 2020 +0200
+
+    merge
+
+[33mcommit 70b917c62f5d433cfdb6c9a3e590da7ebe1188a1[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Mon Mar 30 11:55:12 2020 +0200
+
+    adds validations
+
+[33mcommit e95923adc6915d2c83fa57ea9bbfa671776b41df[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Mon Mar 30 11:30:24 2020 +0200
+
+    merge
+
+[33mcommit 37f2625400e05ff878e7898d1da5fb68a7ace333[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Mon Mar 30 11:27:52 2020 +0200
+
+    merge
+
+[33mcommit a5246f7088f99305c3f62f97a3bc97bf12afb4d4[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Mar 30 09:35:13 2020 +0200
+
+    MErge
+
+[33mcommit 4047e0d4ed6213b16f7b89ccb0f7629feaf337de[m
+Merge: 967f8991 efb31a82
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Mar 30 09:31:53 2020 +0200
+
+    MErge
+
+[33mcommit 967f8991e25bc76d918d30c9d233a1ef285af239[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Mar 30 09:08:23 2020 +0200
+
+    Creación de los flujos de reactividad a partir del DAG
+
+[33mcommit efb31a82a0b89b4d953ddcb42aef775c8c4bda1a[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sun Mar 29 21:55:29 2020 +0200
+
+    merge
+
+[33mcommit 7850859511ca1716b5753f9ecf1ea5489211b497[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sun Mar 29 21:19:16 2020 +0200
+
+    FormController save operations tested and working
+
+[33mcommit a11f9e195f60f6b1cd82135a5e07c37f50ef28d7[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sun Mar 29 19:18:17 2020 +0200
+
+    adds formController to handle CRUD form operations using repositories
+
+[33mcommit a762e081a36cf74b083439e64da37d0bd00ab99b[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sun Mar 29 13:07:20 2020 +0200
+
+    merge
+
+[33mcommit f1216bed85d6072304889d2c548fd7ad6f88dd77[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sun Mar 29 12:49:10 2020 +0200
+
+    merge
+
+[33mcommit af609780407516e28a70ab82adfcf20d3e41ffea[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sat Mar 28 21:45:31 2020 +0100
+
+    FormViewContext and View renders tests finished
+
+[33mcommit c0e6c03cbe8f80c4d590968675501469f0b0d0a7[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sat Mar 28 10:02:11 2020 +0100
+
+    update dependences to repo artifacts
+
+[33mcommit d42886362be28e0c1e8fb8ecb69a22e6a768d1f5[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sat Mar 28 09:10:47 2020 +0100
+
+    adds test to check view through viewContext modification
+
+[33mcommit 6c301e57083ac5f10b10b3003294c9fce7eb09a5[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Sat Mar 28 09:07:54 2020 +0100
+
+    adds test to check view through viewContext modification
+
+[33mcommit 674aea904397cebfe915f2fa115abd5afbd7af3b[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Fri Mar 27 21:09:19 2020 +0100
+
+    test and implementation of viewContext completed
+
+[33mcommit ea5e0e1095bba8d4beac19ba6cba3eb933db969f[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Fri Mar 27 19:44:06 2020 +0100
+
+    adds more functionality to formBuilder and includes new tests form FormViewContext
+
+[33mcommit e26211dfcc5030fbe75c922eb99b5e93440cc744[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Fri Mar 27 17:58:58 2020 +0100
+
+    moves form app reading after permission checking
+
+[33mcommit 63eaa55ed679f8ba5a1120b49cfa98b1250663d7[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Fri Mar 27 17:37:05 2020 +0100
+
+    removes old activity
+
+[33mcommit e1357dd958cf9ebab7265efe68735693444a559f[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Fri Mar 27 14:49:26 2020 +0100
+
+    removing duplicate contexts classes
+
+[33mcommit 8d0b7e09655c13aabb89d4304bacd1fc4a5c807d[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Mar 27 11:07:08 2020 +0100
+
+    merge
+
+[33mcommit 953db60bd108959092e19107ef4b70a830cd9f62[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Mar 27 11:03:51 2020 +0100
+
+    merge
+
+[33mcommit 1c78ad0a891b27d3742235c6573c8ec11f0031ae[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Mar 27 10:59:37 2020 +0100
+
+    adding methods to find form and elemento in uiview
+
+[33mcommit 9479ef8dd91289b59b681cab76ea3efa3a4de6c0[m
+Author: gusriobr <gusriobr@gmail.com>
+Date:   Fri Mar 27 09:11:11 2020 +0100
+
+    merge
+
+[33mcommit bb3a048379c0266978f9e61dc930e4f9c55e56c1[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Mar 26 19:45:00 2020 +0100
+
+    added value binding to relate uicomponents with expressions
+
+[33mcommit 58ecaafc685f3309ca424863d26d28cb3cc5659f[m
+Merge: fcdcf781 34d55c4d
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Mar 26 19:35:45 2020 +0100
+
+    added value binding to relate uicomponents with expressions
+
+[33mcommit fcdcf781f8661f5d33cd17fea05938e775602a96[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Mar 26 19:35:05 2020 +0100
+
+    added value binding to relate uicomponents with expressions
+
+[33mcommit 34d55c4d08cb405483f13554391eee04925cdaf9[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Mar 26 14:39:52 2020 +0100
+
+    Creación de los flujos de reactividad a partir del DAG
+
+[33mcommit 40aaf81976693ee70471927998445d26dbd7226f[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Mar 26 12:37:06 2020 +0100
+
+    Añadidas librerías para testing
+
+[33mcommit aa5350434d6999d2c9f6143e54c71114bfc7b6a5[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Mar 26 12:29:29 2020 +0100
+
+    Generación del DAG
+
+[33mcommit c80f56202b2806428c0a098e99b9d4c9b0fa8f33[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Mar 26 12:14:07 2020 +0100
+
+    Generación del DAG
+
+[33mcommit 1f17ace3ef4cd6cda543ff15aba6710603c20e0e[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Mar 26 12:13:10 2020 +0100
+
+    Añadidas librerías para testing
+
+[33mcommit 4ff39c2df0c3b447f153d8a2c504c74a56fab733[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Mar 26 12:12:18 2020 +0100
+
+    Añadidas librerías para testing
+
+[33mcommit b7e5f4b13308fdd5d398f2d40cb085e002536171[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Mar 26 12:11:14 2020 +0100
+
+    Generación del DAG
+
+[33mcommit a1c8885c83e36baaae7d482552b42208e65022d1[m
+Merge: 10dd94a4 2139b85a
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Mar 25 14:53:55 2020 +0100
+
+    mergeW
+
+[33mcommit 10dd94a4fb053456ff040d05de30f0f0283a748f[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Mar 25 14:51:20 2020 +0100
+
+    refactorizing form and view lifecycle
+
+[33mcommit 2139b85a9f858a6d26d9d9524987f3ead610698e[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Mar 25 14:07:05 2020 +0100
+
+    Añadido un segundo formulario para pruebas
+
+[33mcommit 07e8df692ffa62d46fc6c0245d3ca8c427e7ba8e[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Mar 25 14:06:36 2020 +0100
+
+    Añadido un segundo formulario para pruebas
+
+[33mcommit 2773f55dca332493437df82d7ac1963d01ae9a75[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Mar 25 13:29:32 2020 +0100
+
+    Corregido problema en la carga de siguientes páginas de la tabla
+
+[33mcommit ca2b58e756741ac73e207b4a765a0f0a0c0f10ea[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Mar 25 07:46:38 2020 +0100
+
+    Generación del DAG
+
+[33mcommit a329131e6c6a23a5ba3f4d8c03afb77e4a0cb468[m
+Merge: 8aff875b 858c23ba
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Tue Mar 24 20:07:21 2020 +0100
+
+    mergeW
+
+[33mcommit 8aff875b15062a86c5d85ad6216d2285957b5f4c[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Tue Mar 24 20:03:42 2020 +0100
+
+    cleaning renderers to keep then stateless
+
+[33mcommit 858c23ba21805f7ff671ed133c733fe70e12e7b7[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Mar 23 15:06:06 2020 +0100
+
+    Creación del DAG a partir de la configuración del formulario
+
+[33mcommit dfe37a1dba83efcd30056ca918fc4503f291a122[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Mar 21 20:24:08 2020 +0100
+
+    removing trash from project
+
+[33mcommit 089e9b94a02747cd1dbed3ae125b7f8542f6cf4a[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Mar 21 20:20:45 2020 +0100
+
+    removing trash from project
+
+[33mcommit 8e5fa24f138d2fcaa565b00a5efb20d96e7771e0[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Sat Mar 21 20:08:14 2020 +0100
+
+    testing nativeSQL repo
+
+[33mcommit 150a22a91a93228237a76bdb89b85c599c8441f4[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Mar 19 21:00:40 2020 +0100
+
+    merge
+
+[33mcommit 3dfdfe7849399e2da516e59797ca5f8e01001c1d[m
+Merge: 24e14922 53d1470c
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Mar 19 20:58:48 2020 +0100
+
+    modified TableRenderer to use new repository configuration reader
+
+[33mcommit 24e149226b33f705de2c940666bf453eed1256e8[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Mar 19 20:56:23 2020 +0100
+
+    modified TableRenderer to use new repository configuration reader
+
+[33mcommit 53d1470c70d1ced73de37d24acc92483c84a4ca3[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Mar 18 14:00:37 2020 +0100
+
+    Versión inicial
+
+[33mcommit 6785d9d8d130856cc2c6d40359a6879b07a9515f[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Mar 16 21:29:46 2020 +0100
+
+    merge
+
+[33mcommit 9eb8bccf6e1e78df35d0a0410cbd396fb0e00fa4[m
+Merge: e0f968fb 298dc403
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Mar 11 14:49:25 2020 +0100
+
+    merge
+
+[33mcommit e0f968fbca74de6376873a74fdc7cbf19be0cf2b[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Mar 11 14:48:25 2020 +0100
+
+    merge
+
+[33mcommit 62e84d702e070d846c7d76c9a13c692ca5de8ab6[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Mar 11 14:39:43 2020 +0100
+
+    merge
+
+[33mcommit f538b96f5aa08f4411118ca25d4a181e3cb130aa[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Mar 11 14:39:18 2020 +0100
+
+    merge
+
+[33mcommit 298dc4030679ab7bdb9d6b19fdd519fc9778d0af[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Mar 2 13:27:16 2020 +0100
+
+    Pruebas Groovy y Jexl
+
+[33mcommit 4ed163defc47cfe1a390d7e686bf1d3d327ca16a[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Mar 2 13:18:36 2020 +0100
+
+    Pruebas Groovy y Jexl
+
+[33mcommit ba77d1a5ceaa759413e173157c8555ce9bc6bb62[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 25 17:08:08 2020 +0100
+
+    Versión inicial
+
+[33mcommit 57d6d32e4f6425344abdc734ea7af653676b36e1[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 20 14:45:32 2020 +0100
+
+    Versión inicial
+
+[33mcommit b7659fcc4f403901259b374db02918805bd01e4a[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Feb 20 14:44:25 2020 +0100
+
+    Versión inicial
+
+[33mcommit 46248fa5c9995b503b15486f679b66cd1492ef9b[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 18 10:24:22 2020 +0100
+
+    Versión inicial
+
+[33mcommit d69b62c7587c082a70e5020acd97199628940f71[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Feb 18 09:21:36 2020 +0100
+
+    Versión inicial
+
+[33mcommit ad89fcf5b115145ed2ab35153e47a9f30ff28e40[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Nov 4 12:12:03 2019 +0100
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 4b4d36b678e80fa1061ba03f28f8f67029fea3a7[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 31 14:41:22 2019 +0100
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit aa63572bdfa8fda6dadbd68a6b2957dc3916b47a[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Oct 29 10:25:17 2019 +0100
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit bc073bb9f564f5c5990073fde13ae22099e5a3b1[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 25 15:03:33 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit ccd24d27018f9dc615c8909358b2faa3ee3c1c89[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Oct 21 18:10:27 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 1500fa79aafd9adea62791fccd0e18575201cbf6[m
+Merge: b2a7adac 41dcbaad
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Mon Oct 21 08:56:54 2019 +0200
+
+    merge
+
+[33mcommit b2a7adacd07794b8cd2cf136393a55d367518792[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 18 15:01:18 2019 +0200
+
+    strings and configurations modified
+
+[33mcommit 41dcbaad348941ee0fd822142759c2d14ccbe42b[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 18 14:57:54 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 907e405123271d8ab5fc2cfef40b1b12910bd8f5[m
+Merge: beb8b656 8a38c833
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Fri Oct 18 10:19:54 2019 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 8a38c833640020844f446c50628654a7e9f5a426[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 18 09:37:30 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit beb8b656f9b282ad5dc4704e0689a19bd3827c55[m
+Merge: 27a7a86e 4890e74b
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 17 14:10:57 2019 +0200
+
+    Merge branch 'master' of ssh://itaul4613/home/cvs/gitroot/FRMDRD
+
+[33mcommit 27a7a86ef68622b9bd1fec5b8cd11e6853d5b9d3[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Thu Oct 17 14:10:36 2019 +0200
+
+    merge
+
+[33mcommit 4890e74becca085a4b0722337fe2a15c59f58b58[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 17 13:21:04 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit bf65b7d5a6232787c5dfa5fd774de3cb43e4f6db[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 17 09:27:28 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 12c9facca0b2beacf5f85f4791926513f50e1275[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 17 09:27:04 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 3be780fc9a32cbea8ffb2ba1034e990e0dc7c48a[m
+Merge: f426e49c 960e212c
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 17 09:26:32 2019 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit f426e49c7c19ed30b49bf05a5d3df18aa7eb3985[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 17 09:26:18 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 960e212c14650408978f8fb55bb21afa913f5b91[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Oct 16 15:02:42 2019 +0200
+
+    first db test
+
+[33mcommit 714fe6ce819065b50562a73c8bc1deb00b60bbcc[m
+Merge: 9f497a1f 55d2b66c
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Oct 16 14:29:02 2019 +0200
+
+    Merge branch 'master' of ssh://itaul4613/home/cvs/gitroot/FRMDRD
+
+[33mcommit 55d2b66cce556ab20fdec4b99d697abb95db3272[m
+Merge: 7d0151d3 472f0c9a
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Oct 16 14:19:25 2019 +0200
+
+    Merge branch 'master' of ssh://itaul4613/home/cvs/gitroot/FRMDRD
+    
+    # Conflicts:
+    #       gradle/wrapper/gradle-wrapper.properties
+
+[33mcommit 7d0151d36eb0c3a95deff076519cdd329b58b6bb[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Oct 16 14:15:38 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 4f7cadde22cd78445c283a76549fc8a3cf4aabb5[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Oct 16 14:12:26 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 9f497a1f03d4324715760dcb93a74eb5f02ea78a[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Wed Oct 16 14:09:19 2019 +0200
+
+    sketching entity persistence and loading
+
+[33mcommit 0f839a28771181dd0f87a0e0c98690a438f634ab[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Wed Oct 16 14:02:17 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 472f0c9a9c8842c4812137f5c2de70ef88672378[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Tue Oct 15 17:26:15 2019 +0200
+
+    added context implementation
+
+[33mcommit 49a6eb069ac755d0d9d692d904f22d92f783606a[m
+Author: ita-riobrigu <ita-riobrigu@itacyl.es>
+Date:   Tue Oct 15 17:16:19 2019 +0200
+
+    adding contexts imple
+
+[33mcommit 4f4d76bd711757d3a80a14c0cce86a409d25f00d[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Tue Oct 15 12:58:08 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit def0962767b3ee09f9c3feb7613fb9c66c63e867[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 11 09:56:41 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit b2a88f8f5e4d7ee7c9d3fce7baa1e59767756d66[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Fri Oct 11 09:50:42 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 85a9928a23c54cb5657f99f1938aa018c077feac[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Thu Oct 10 14:38:40 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit b607a4034583b0ac93ebc3c4eb50040be0a62d44[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Sep 23 10:33:45 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit 233aa4ec550e2e6d98a12de4c6521f9bfa4215cc[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Sep 23 10:33:00 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación
+
+[33mcommit cb00d61ea7019030300489a3d0ae1cb3059068b3[m
+Author: ita-ramvalja <ita-ramvalja@itacyl.es>
+Date:   Mon Sep 23 08:07:04 2019 +0200
+
+    Incidencias: 189770
+    Comentarios: Versión inicial de la aplicación

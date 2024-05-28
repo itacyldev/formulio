@@ -1,0 +1,100 @@
+<main id="numeracionContraetiquetadoLote" name="Existencia etiquetado" repo="numeracionContraEtiquetadoLoteRepo" mainForm="false">
+    <list id="listNumeracionContraetiquetadoLote" name="Numeracion contraetiquetado" description="Listado numeración contraetiquetado">
+       <!--<datatable properties="expediente.num_expediente, marca.nombre_marca, expediente.operador.razon_social, tipo, desde, hasta" />-->
+        <datatable>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.loteControlDocumental.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.loteControlDocumental.expediente.operador.razon_social}"/>
+            <column id="column_lote_control_documental" headerText="Número lote" filtering="false" ordering="false" value="${entity.loteControlDocumental.num_lote}"/>
+            <column id="column_serie" headerText="Serie" filtering="true" ordering="true" value="${entity.serie}">
+                <filter property="serie" matching="contains" valueExpression="${this.column_serie}"/>
+                <order property="serie"/>
+            </column>
+            <column id="column_desde" headerText="Desde" filtering="true" ordering="true" value="${entity.desde}">
+                <filter property="desde" matching="contains" valueExpression="${this.column_desde}"/>
+                <order property="desde"/>
+            </column>
+            <column id="column_hasta" headerText="Hasta" filtering="true" ordering="true" value="${entity.hasta}">
+                <filter property="hasta" matching="contains" valueExpression="${this.column_hasta}"/>
+                <order property="hasta"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editNumeracionContraetiquetadoLote">
+        <form id="formNumeracionContraetiquetadoLote">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="CONTROL LOTE. NUMERACIÓN CONTRAETIQUETADO"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Operador" weights="25, 35, 40" >
+                        <row>
+                            <input value="${entity.loteControlDocumental.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.loteControlDocumental.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <textarea value="${entity.loteControlDocumental.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="LOTE CONTROL DOCUMENTAL: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Lote., Nº Lote" weights="25, 75" >
+                        <row>
+                            <input value="${entity.lote_control_documental_id}" placeHolder="${not empty(params.lote_control_documental_id)?params.lote_control_documental_id:null}" readonly="true"/>
+                            <textarea value="${entity.loteControlDocumental.num_lote}" placeHolder="${not empty(params.num_lote_control_documental)?params.num_lote_control_documental:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="NUMERACIÓN CONTRAETIQUETADO: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Serie, Desde, Hasta, Unidades ">
+                        <row>
+                            <textarea value="${entity.serie}" hasDeleteButton="false" />
+                            <input id="desde" value="${entity.desde}" hasDeleteButton="false" inputType="3"/>
+                            <input id="hasta" value="${entity.hasta}" hasDeleteButton="false" inputType="3"/>
+                            <input id="unidades" value="${(view.desde gt 0 and view.hasta gt 0)?math:round(view.hasta - view.desde + 1):null}" readonly="true"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.lote_control_documental_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.lote_control_documental_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.existencia_etiquetado_id)}" readonlyMessage="No puede realizar esta acción: No existe existencia de material etiquetado">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.lote_control_documental_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

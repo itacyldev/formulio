@@ -1,0 +1,208 @@
+/**
+ *  List of modules that don't require Jacoco
+ */
+def ignoredByJacoco = [
+]
+
+/**
+ * module class dirs
+ * */
+def moduleClassDirs = [
+        'app': 'build/intermediates/javac/debug/classes',
+        'forms': 'build/intermediates/javac/debug/classes',
+        'core': 'build/intermediates/javac/debug/classes',
+        'jobs': 'build/intermediates/javac/debug/classes',
+        'repo': 'build/intermediates/javac/debug/classes',
+        'repoAndroidTest': 'build/intermediates/javac/debug/classes',
+        'repoTestUtils': 'build/intermediates/javac/debug/classes',
+        'sharedTest': 'build/intermediates/javac/debug/classes'
+]
+
+/**
+ * module jacoco exec
+ * */
+def moduleJacocoExec = [
+        'app'        : 'build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+        'forms': 'build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+        'core': 'build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+        'jobs': 'build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+        'repoAndroidTest': 'build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec'
+]
+
+def testExecutionFile = "build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+
+/**
+ * module excludes
+ * */
+def moduleExcludes = [
+        'app'        : [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ],
+        'forms': [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ],
+        'core'         : [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ],
+        'repoAndroidTest'  : [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ],
+        'jobs'  : [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ],
+        'repo'  : [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ],
+        'repoTestUtils'  : [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ],
+        'sharedTest'  : [
+                '**/R*.class',
+                '**/BuildConfig*'
+        ]
+]
+
+/**
+ *  Apply additional build steps to sub-projects
+ */
+subprojects { prj ->
+
+    // Apply Jacoco only if the project is not in the ignore list
+    if (!ignoredByJacoco.contains(prj.name)) {
+        apply plugin: 'jacoco'
+
+        jacoco {
+            version '0.8.7'
+        }
+
+        task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+            group = 'Reporting'
+            description = 'Generate Jacoco coverage reports after running tests.'
+
+            reports {
+                xml {
+                    enabled true
+                }
+                html {
+                    enabled true
+                }
+            }
+
+            classDirectories.from = fileTree(
+                    dir: moduleClassDirs[prj.name]
+            )
+
+            sourceDirectories.from = files('src/main/java')
+            executionData.from = files("${projectDir}" + "$testExecutionFile")
+            //executionData.from = files(moduleJacocoExec[prj.name])
+
+            doFirst {
+                renameClasses(prj.name + File.separator + moduleClassDirs[prj.name])
+            }
+        }
+    }
+}
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion '0.8.7'
+}
+
+/**
+ *  Root task that generates an aggregated Jacoco test coverage report for all sub-projects
+ */
+task jacocoFullReport(type: JacocoReport, group: 'Coverage reports') {
+    group = 'Reporting'
+    description = 'Generates an aggregate report from all subprojects'
+
+    // Get list of projects which should be included in the report
+    def projects = new ArrayList()
+    subprojects.each { prj ->
+        if (!ignoredByJacoco.contains(prj.name)) {
+            projects.add(prj)
+        }
+    }
+
+    //noinspection GrUnresolvedAccess
+    dependsOn(projects.jacocoReport)
+
+    additionalSourceDirs.from = generateSourceFiles(projects)
+    sourceDirectories.from = generateSourceFiles(projects)
+    classDirectories.from = generateClassDirs(projects, moduleClassDirs, moduleExcludes)
+    executionData.from = files(projects.jacocoReport.executionData)
+
+    reports {
+        html {
+            enabled true
+            destination 'build/reports/jacoco/jacocoFullReport'
+        }
+        xml {
+            enabled true
+            destination 'build/reports/jacoco/jacocoFullReport/jacocoFullReport.xml'
+        }
+    }
+
+    doFirst {
+        //noinspection GroovyAssignabilityCheck
+        executionData = files(executionData.findAll { it.exists() })
+    }
+}
+
+/**
+ *  Generate a FileCollection of all projects source files
+ */
+FileCollection generateSourceFiles(Collection projects) {
+    def dirs = []
+
+    projects.each { prj ->
+        dirs.add("${prj.name}/src/main/java")
+    }
+
+    return files(dirs)
+}
+
+/**
+ *  Generate a FileCollection of all projects class files
+ */
+FileCollection generateClassDirs(Collection projects, moduleClassDirs, moduleExcludes) {
+    def tree = fileTree('directory does not exists') // I know it's ugly :)
+
+    projects.each { prj ->
+        //noinspection GrReassignedInClosureLocalVar
+        tree += fileTree(
+                dir: "${prj.name}/${moduleClassDirs[prj.name]}"
+        )
+    }
+
+    return tree
+}
+
+List<File> listDirRecursive(File rootPath) {
+    List<File> result = new ArrayList<>()
+    List<File> children = rootPath.listFiles()
+    children.each { file ->
+        if (file.isFile()) {
+            result.add(file)
+        } else if (file.isDirectory()) {
+            result.addAll(listDirRecursive(file))
+        }
+    }
+    return result
+}
+
+void renameClasses(String rootPath) {
+    List<File> classes = listDirRecursive(file(rootPath))
+    classes.each { file ->
+        if (file.name.contains('$$')) {
+            file.renameTo(file.path.replace('$$', '$'))
+        }
+    }
+}

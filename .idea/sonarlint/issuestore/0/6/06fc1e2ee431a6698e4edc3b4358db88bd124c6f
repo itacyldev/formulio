@@ -1,0 +1,38 @@
+
+J
+java:S3740&"/Provide the parametrized type for this generic.(ãÄûıúÿÿÿÿ
+E
+java:S3740*"/Provide the parametrized type for this generic.(„ïÉÌ
+F
+java:S3740Â"/Provide the parametrized type for this generic.(Ñ…²ş
+K
+java:S3740Ì"/Provide the parametrized type for this generic.(™Òúòùÿÿÿÿ
+F
+java:S3740Ó"/Provide the parametrized type for this generic.(ÚÅŞ
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+œ
+java:S1186J"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÁÚûúÿÿÿÿ
+—
+java:S1186T"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(á¼ùŠ
+œ
+java:S1186^"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÖÇéªÿÿÿÿÿ
+œ
+java:S1186h"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ù¹š³ÿÿÿÿÿ
+
+java:S1186¤"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ö¸Ëšøÿÿÿÿ
+—
+java:S1186®"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(º÷İe
+A
+java:S1168}"+Return an empty collection instead of null.(¥¹ï
+B
+java:S1168Œ"+Return an empty collection instead of null.(¥¹ï
+B
+java:S1168ª"+Return an empty collection instead of null.(¥¹ï
+O
+java:S1117Ó"8Rename "meta" which hides the field declared at line 42.(ÚÅŞ
+]
+java:S1128"GRemove this unused import 'es.jcyl.ita.formic.repo.EditableRepository'.(€³Ü¸
+a
+java:S1192s"KDefine a constant instead of duplicating this literal "formConfig" 3 times.(¦şáµ
+s
+java:S1488Ó"\Immediately return this expression instead of assigning it to the temporary variable "meta".(ÚÅŞ

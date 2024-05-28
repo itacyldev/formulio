@@ -1,0 +1,14 @@
+<main id="formImagegallery" name="Imagegallery" repo="pruebaRepo">
+    <edit>
+        <form>
+            <imagegallery repo="pruebaRepo" allowsPartialRestore="false">
+                <repofilter>
+                    <and>
+                        <le property="prueba_id" value="4" />
+                    </and>
+                </repofilter>
+            <imagegalleryitem converter="b64Image" value="${entity.image2}" />
+        </imagegallery>
+        </form>
+    </edit>
+</main>

@@ -1,0 +1,136 @@
+<main id="envasado" name="Envasado" repo="envasadoRepo" mainForm="false">
+    <list id="listEnvasado" name="Envasado" description="Listado envasados">
+       <datatable>
+           <column headerText="Partida" filtering="false" ordering="false" value="${entity.partidaAforo.partida}"/>
+           <column headerText="Añada" filtering="false" ordering="false" value="${entity.partidaAforo.anada}"/>
+           <column id="column_numero_jaulones_envasado" headerText="Nº jaulones" filtering="true" ordering="true" value="${entity.numero_jaulones}">
+               <filter property="numero_jaulones" matching="contains" valueExpression="${this.column_numero_jaulones_envasado}"/>
+               <order property="numero_jaulones"/>
+           </column>
+           <column id="column_numero_botellas_jaulon_envasado" headerText="Nº botellas por jaulón" filtering="true" ordering="true" value="${entity.numero_botellas_jaulon}">
+               <filter property="numero_botellas_jaulon" matching="contains" valueExpression="${this.column_numero_botellas_jaulon_envasado}"/>
+               <order property="numero_botellas_jaulon"/>
+           </column>
+           <column id="column_numero_botellas_sueltas_envasado" headerText="Nº botellas sueltas" filtering="true" ordering="true" value="${entity.numero_botellas_sueltas}">
+               <filter property="numero_botellas_sueltas" matching="contains" valueExpression="${this.column_numero_botellas_sueltas_envasado}"/>
+               <order property="numero_botellas_sueltas"/>
+           </column>
+           <column headerText="Total de botellas" filtering="false" ordering="false" value="${(entity.numero_jaulones*entity.numero_botellas_jaulon) + entity.numero_botellas_sueltas}"/>
+           <column id="column_volumen_botella_envasado" headerText="Volumen botella" filtering="true" ordering="true" value="${entity.volumen_botella}">
+               <filter property="volumen_botella" matching="contains" valueExpression="${this.column_volumen_botella_envasado}"/>
+               <order property="volumen_botella"/>
+           </column>
+           <column headerText="Volumen total" filtering="false" ordering="false" value="${math:round(entity.volumen_botella*((entity.numero_jaulones*entity.numero_botellas_jaulon) + entity.numero_botellas_sueltas)*math:pow(10,2))/math:pow(10,2)}"/>
+           <column headerText="Tipo de vino" filtering="false" ordering="false" value="${entity.partidaAforo.vino.vino}"/>
+           <column headerText="Nivel de protección" filtering="false" ordering="false" value="${entity.partidaAforo.nivelProteccion.nivel_proteccion}"/>
+           <column id="column_observaciones_envasado" headerText="Observaciones" filtering="true" ordering="true" value="${entity.observaciones}">
+               <filter property="observaciones" matching="contains" valueExpression="${this.column_observaciones_envasado}"/>
+               <order property="observaciones"/>
+           </column>
+       </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editEnvasado">
+        <script src="scripts/control.js"/>
+        <form id="formEnvasado">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="ENVASADO"/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="20, 30, 10, 40">
+                <row>
+                    <input id="expediente_id" value="${entity.partidaAforo.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.partidaAforo.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="dop_id" value="${entity.partidaAforo.expediente.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                    <input id="dop" value="${entity.partidaAforo.expediente.dop.dop}" placeHolder="${params.dop}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="20, 80">
+                <row>
+                    <input id="operador_id" value="${entity.partidaAforo.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.partidaAforo.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+            <table headerText=" Id. partida, Partida, Añada" weights="20, 50, 30">
+                <row>
+                    <input id="partida_aforo_id" value="${entity.partida_aforo_id}" placeHolder="${params.partida_aforo_id}" readonly="true"/>
+                    <input id="partida" value="${entity.partidaAforo.partida}" placeHolder="${params.partida}" readonly="true"/>
+                    <input id="anada" value="${entity.partidaAforo.anada}" placeHolder="${params.anada}" readonly="true"/>
+                </row>
+            </table>
+
+            <table headerText=" Id. Nivel, Nivel de protección, Id Tipo, Tipo de vino" weights="20, 30, 20, 30">
+                <row>
+                    <input id="nivel_proteccion_id" value="${entity.partidaAforo.nivel_proteccion_id}" placeHolder="${params.nivel_proteccion_id}" readonly="true"/>
+                    <input id="nivel_proteccion" value="${entity.partidaAforo.nivelProteccion.nivel_proteccion}" onBeforeRender="updateNivelProteccion" readonly="true"/>
+                    <input id="vino_id" value="${entity.partidaAforo.vino_id}" placeHolder="${params.vino_id}" readonly="true"/>
+                    <input id="vino" value="${entity.partidaAforo.vino.vino}"  onBeforeRender="updateTipoVino" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="Envasado"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table>
+                <row weigths="33, 67">
+                    <input label="Id.: " id="envasado_id" value="${entity.envasado_id}" readonly="true"/>
+                    <input label="Envasado: " value="${entity.envasado}" validator="required"/>
+                </row>
+                <row>
+                    <input id="numero_jaulones" label="Nº jaulones: " value="${entity.numero_jaulones}" inputType="3"/>
+                    <input id="numero_botellas_jaulon" label="Nº botellas por jaulón: " value="${entity.numero_botellas_jaulon}" inputType="3"/>
+                    <input id="numero_botellas_sueltas" label="Nº botellas sueltas: " value="${entity.numero_botellas_sueltas}" inputType="3"/>
+                    <input label="Total de botellas: " value="${(view.numero_jaulones*view.numero_botellas_jaulon) + view.numero_botellas_sueltas}" readonly="true"/>
+                </row>
+                <row>
+                    <input id="volumen_botella" label="Volumen botella: " value="${entity.volumen_botella}" inputType="3"/>
+                    <input id="volumen_aforado" label="Volumen total: " value="${math:round(view.volumen_botella*((view.numero_jaulones*view.numero_botellas_jaulon) + view.numero_botellas_sueltas)*math:pow(10,2))/math:pow(10,2)}" readonly="true">
+                        <action type="js">
+                            <param name="method" value="updateCumpleVolumenLibros" />
+                            <param name="cumple_id" value="cumpleEnvasado" />
+                        </action>
+                    </input>
+                    <input id="volumen_libros" label="Volumen libros: " value="${entity.volumen_libros}" inputType="3">
+                        <action type="js">
+                            <param name="method" value="updateCumpleVolumenLibros" />
+                            <param name="cumple_id" value="cumpleEnvasado" />
+                        </action>
+                    </input>
+                    <radio id="cumpleEnvasado" label="Cumple: " value="${entity.cumple}" orientation="horizontal" readonly="true">
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                </row>
+                <row>
+                    <textarea label="Observaciones: " value="${entity.observaciones}" />
+                </row>
+            </table>
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.envasado_id)}" readonlyMessage="No puede realizar esta acción: No existe envasado" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

@@ -1,0 +1,23 @@
+<repos>
+    <repo dbFile="calificacion.sqlite" id="provRepo" dbTable="provincia" />
+    <repo dbFile="calificacion.sqlite" id="muniRepo" dbTable="municipio" />
+    <repo dbFile="calificacion.sqlite" id="operadorRepo" dbTable="operador"/>
+    <repo dbFile="calificacion.sqlite" id="solicitudRepo" dbTable="solicitud">
+        <mapping fk="operador_id" property="operador" repo="operadorRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="calificacion.sqlite" id="partidaRepo" dbTable="partida">
+        <mapping fk="solicitud_id" property="solicitud" repo="solicitudRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="calificacion.sqlite" id="actaRepo" dbTable="acta">
+        <mapping fk="partida_id" property="partida" repo="partidaRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="calificacion.sqlite" id="variedadRepo" dbTable="variedad"/>
+    <repo dbFile="calificacion.sqlite" id="entradaUvaRepo" dbTable="entrada_uva">
+        <mapping fk="acta_id" property="acta" repo="actaRepo" updatable="false"/>
+        <mapping fk="variedad_id" property="variedad" repo="variedadRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="calificacion.sqlite" id="muestraRepo" dbTable="muestra">
+        <mapping fk="acta_id" property="acta" repo="actaRepo" updatable="false"/>
+    </repo>
+</repos>
+

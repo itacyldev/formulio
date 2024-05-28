@@ -1,0 +1,195 @@
+<main name="actaTomaMuestra" description="Acta de toma de muetras" id="idActaTomaMuestra" repo="actaTomaMuestraRepo">
+    <list id="listActaTomaMuestra" name=" ACTA DE TOMA DE MUESTRAS">
+        <datatable  route="idActaTomaMuestra-editActaTomaMuestra">
+            <column id="column_expediente_id" headerText="Expediente" filtering="true" ordering="true" value="${entity.expediente_id}">
+                <filter property="expediente_id" matching="contains" valueExpression="${this.column_expediente_id}"/>
+                <order property="expediente_id"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Expediente" filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+
+    <edit id="editActaTomaMuestra">
+        <script src="scripts/controlLote.js"/>
+        <form>
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="ACTA TOMA DE MUESTRAS"/>
+
+            <table border="false">
+                <row>
+                    <button label="Generar Acta">
+                        <action id="compositeAction">
+                            <action type="save">
+                            </action>
+                            <action registerInHistory="false" type="job">
+                                <param name="jobId" value="job_generar_acta_toma_muestras" />
+                                <param name="expediente_id" value="${entity.expediente.id}" />
+                            </action>
+                        </action>
+                    </button>
+
+                </row>
+            </table>
+
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="1. IDENTIFICACIÓN DEL ACTA: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row weights="20, 50, 30">
+                    <input label="Id. acta: " id="acta_id" value="${entity.acta_id}" readonly="true"/>
+                    <input id="acta" label="Identificación del acta: " value="${entity.acta}" validator="required"/>
+                    <input label="Formato: " value="${entity.formato+' '+entity.revision}" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="2. DATOS DEL ESTABLECIMIENTO: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table weights="67, 33">
+                <row weights="33, 67">
+                    <input id="operador_id" label="Id. Operador: " value="${entity.expediente.operador_id}" readonly="true"/>
+                    <input label="Razón social: " value="${entity.expediente.operador.razon_social}" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Domicilio social: " value="${view.acta_id}" onBeforeRender="updateDireccionOperador" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Dirección de la instalación auditada: " value="${view.acta_id}" onBeforeRender="updateDireccionInstalacion" readonly="true"/>
+                    <input label="NIF Operador: " value="${entity.expediente.operador.cif}" readonly="true"/>
+
+                </row>
+                <row>
+                    <input label="Representante operador en la auditoria/Cargo: " placeHolder="${entity.expediente.operador.responsable}" value="${entity.representante}" validator="required"/>
+                    <input label="NIF Representante:" placeHolder="${entity.expediente.operador.nif_representante}" value="${entity.nif_representante}" validator="required"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="3. DATOS DEL TÉCNICO QUE REALIZA LA TOMA DE MUESTRA: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table weights="33, 34, 33">
+                <row>
+                    <input label="Nombre: " value="${entity.nombre_toma_muestra}" />
+                    <input label="Apelllidos: " value="${entity.apellidos_toma_muestra}" />
+                    <input label="DNI: " value="${entity.dni_toma_muestra}" />
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="4. DATOS DE LA MUESTRA: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <button label="Añadir muestra">
+                <action type="save" route="idMuestra-editMuestra">
+                    <param name="expediente_id" value="${entity.expediente_id}" />
+                    <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                    <param name="operador_id" value="${entity.expediente.operador.operador_id}" />
+                    <param name="razon_social" value="${entity.expediente.operador.razon_social}" />
+                    <param name="acta_id" value="${entity.acta_id}" />
+                    <param name="acta" value="${view.acta}" />
+                </action>
+            </button>
+
+            <datatable
+                allowsPartialRestore="false"
+                route="idMuestra-editMuestra"
+                numVisibleRows="2"
+                properties="muestra"
+                repo="muestraRepo">
+                <param name="expediente_id" value="${entity.acta.expediente.expediente_id}" />
+                <param name="num_expediente" value="${entity.acta.expediente.num_expediente}" />
+                <param name="operador_id" value="${entity.acta.expediente.operador.operador_id}" />
+                <param name="razon_social" value="${entity.acta.expediente.operador.razon_social}" />
+                <param name="acta_id" value="${entity.acta_id}" />
+                <param name="acta" value="${entity.acta.acta}" />
+                <repofilter>
+                    <eq property="acta_id" value="${empty(entity.acta_id) ? '-1' : entity.acta_id}" />
+                </repofilter>
+            </datatable>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="5. DATOS CUSTODIA MUESTRA: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table border="false">
+                <row>
+                    <p value="Indicar lo que corresponda: "/>
+                </row>
+                <row>
+                    <radio label="El operador renuncia a su derecho a realizar el análisis contradictorio y asume por válidos los resultados obtenidos en el análisis inicial" value="${entity.operador_renuncia}" orientation="horizontal" weights="20, 20">
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                </row>
+                <row>
+                    <radio label="Se hace entrega al inspeccionado del ejemplar de la muestra destinada a ser custodiada y conservada en perfecto estado, para su posible utilización en prueba contradictoria" value="${entity.entrega_inspeccionado}" orientation="horizontal" weights="20, 20">
+                        <options>
+                            <option label="SI" value="SI" />
+                            <option label="NO" value="NO" />
+                        </options>
+                    </radio>
+                </row>
+                <row>
+                    <textarea label="La muestra contradictoria debe conservarse junto con una copia del acta y en las siguientes condiciones: " value="${entity.observaciones_entrega_inspeccionado}"/>
+                </row>
+            </table>
+
+            <table>
+                <row weights="67, 33">
+                    <date label="A los efectos oportunos, subscriben el presente documento, por lo que firman: " value="${entity.fecha_firma}" hasButtonToday="true"/>
+                </row>
+                <row weights="33, 34, 33">
+                    <table border="false">
+                        <row>
+                            <p bold="true" value="Auditor"/>
+                        </row>
+                        <row>
+                            <image converter="b64Image" embedded="true" value="${entity.firma_auditor}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <input label="Fdo." value="${entity.auditor}"/>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <p bold="true" value="Auditor 2"/>
+                        </row>
+                        <row>
+                            <image converter="b64Image" embedded="true" value="${entity.firma_auditor2}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <input label="Fdo." value="${entity.auditor2}"/>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <p bold="true" value="Auditados"/>
+                        </row>
+                        <row>
+                            <image converter="b64Image" embedded="true" value="${entity.firma_auditado}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <input label="Fdo." value="${entity.auditado}"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+        </form>
+    </edit>
+</main>

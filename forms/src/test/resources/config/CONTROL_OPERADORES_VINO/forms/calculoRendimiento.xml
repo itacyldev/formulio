@@ -1,0 +1,40 @@
+<main id="idCalculoRendimiento" name="Cálculo rendimiento" repo="verificacionPliegoCondicionesRepo" mainForm="false">
+    <list id="listCalculoRendmiento" name="Cálculo rendimiento" description="Listado cálculo rendimiento"/>
+    <edit id="editCalculoRendimiento">
+        <form id="formCalculoRendimiento">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="Cálculo rendimiento"/>
+            <p value=""/>
+
+            <!--table headerText=" Id. Exp., Nº Exp., Id. Verificación, Punto normativo" weights="20, 30, 20, 30">
+                <row>
+                    <input id="expediente_id" value="${entity.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="verificacion_pliego_condiciones_id" value="${entity.verificacion_pliego_condiciones_id}" placeHolder="${params.verificacion_pliego_condiciones_id}" readonly="true"/>
+                    <input id="punto_normativo" value="${entity.punto_normativo}" placeHolder="${params.punto_normativo}" readonly="true"/>
+                 </row>
+            </table-->
+
+            <input label="Campaña: " value="${entity.campanha}" validator="required"/>
+            <input id="litros_producidos" label="Litros producidos: " value="${entity.litros_producidos}" validator="required"/>
+            <input id="kg_uva" label="KG uva: " value="${entity.kg_uva}" inputType="3" validator="required"/>
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params..expediente_id}"/>
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}"/>
+                </action>
+            </button>
+
+        </buttonbar>
+    </edit>
+</main>

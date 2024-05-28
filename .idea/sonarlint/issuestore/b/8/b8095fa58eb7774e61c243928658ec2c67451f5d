@@ -1,0 +1,46 @@
+
+E
+java:S3740$"/Provide the parametrized type for this generic.(Æ•”ƒ
+J
+java:S3740&"/Provide the parametrized type for this generic.(ÙðÐ­ýÿÿÿÿ
+J
+java:S3740D"/Provide the parametrized type for this generic.(ƒ‰‰„ùÿÿÿÿ
+E
+java:S3740²"/Provide the parametrized type for this generic.(“Ò†g
+K
+java:S3740¼"/Provide the parametrized type for this generic.(™Òúòùÿÿÿÿ
+F
+java:S3740Ã"/Provide the parametrized type for this generic.(«ñÔ¿
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+
+java:S1186™"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ö¸Ëšøÿÿÿÿ
+C
+java:S3010,"(Remove this assignment of "projectMeta".(¶à¤æÿÿÿÿÿ
+E
+java:S3010-"*Remove this assignment of "projectSource".(ýÏ¬ûÿÿÿÿ
+P
+java:S2209,"5Change this instance-reference to a static reference.(¶à¤æÿÿÿÿÿ
+P
+java:S2209-"5Change this instance-reference to a static reference.(ýÏ¬ûÿÿÿÿ
+H
+java:S1135A"2Complete the task associated to this TODO comment.(‡éÕ¯
+H
+java:S1135["2Complete the task associated to this TODO comment.(…ïœ†
+H
+java:S1135`"2Complete the task associated to this TODO comment.(…ïœ†
+H
+java:S1135e"2Complete the task associated to this TODO comment.(…ïœ†
+H
+java:S1135j"2Complete the task associated to this TODO comment.(…ïœ†
+Q
+java:S2209…"5Change this instance-reference to a static reference.(Ï•ñèøÿÿÿÿ
+Q
+java:S2209Š"5Change this instance-reference to a static reference.(¥üðˆùÿÿÿÿ
+B
+java:S1168Ÿ"+Return an empty collection instead of null.(¥¹ï
+=
+java:S1604z"(Make this anonymous inner class a lambda(ªÅ…N
+x
+java:S1488z"cImmediately return this expression instead of assigning it to the temporary variable "directories".(ªÅ…N
+s
+java:S1488Ã"\Immediately return this expression instead of assigning it to the temporary variable "meta".(«ñÔ¿
