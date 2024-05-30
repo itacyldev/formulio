@@ -91,7 +91,15 @@ pipeline {
                        '''
                        sh "git fetch github"
                        sh "git checkout master"
-                       sh "git rebase github/master"
+                       sh '''
+                       set +e
+                       git rebase github/master
+                       if [ $? -ne 0 ]; then
+                           git rebase --abort
+                           exit 1
+                       fi
+                       set -e
+                       '''
 
                        script {
                            def existsTag = sh(script: "git ls-remote --tags github | grep ${env.RELEASE_TAG} | wc -l", returnStdout: true).trim()
@@ -107,6 +115,7 @@ pipeline {
                    }
                }
            }
+
 
 
 
