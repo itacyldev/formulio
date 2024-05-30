@@ -82,7 +82,8 @@ pipeline {
               steps {
                   echo "Pushing to GitHub"
                   echo "Using RELEASE_TAG: ${env.RELEASE_TAG}"
-                   withCredentials([GITHUB_CREDENTIALS]) {
+                  withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                      echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
                       sh("git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git")
                       sh("git checkout master") // Asegúrate de estar en la rama master
                       script {
