@@ -79,26 +79,30 @@ pipeline {
             }
 
            stage("Push to GitHub") {
-              steps {
-                  echo "Pushing to GitHub"
-                  echo "Using RELEASE_TAG: ${env.RELEASE_TAG}"
-                  withCredentials([usernamePassword(credentialsId: 'github_credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                      echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
-                      sh("git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git")
-                      sh("git checkout master") // Asegúrate de estar en la rama master
-                      script {
-                          def existsTag = sh(script: "git ls-remote --tags github | grep ${env.RELEASE_TAG} | wc -l", returnStdout: true).trim()
-                          if ("${existsTag}" == "1") {
-                              echo "Eliminando etiqueta en GitHub: ${env.RELEASE_TAG}"
-                              sh("git tag -d ${env.RELEASE_TAG}")
-                              sh("git push --delete github ${env.RELEASE_TAG}")
-                          }
-                      }
-                      sh("git tag -fa ${env.RELEASE_TAG} -m '${params.RELEASE_DESCRIPTION}'")
-                      sh("git push github master --tags")
-                  }
-              }
-          }
+               steps {
+                   echo "Pushing to GitHub"
+                   echo "Using RELEASE_TAG: ${env.RELEASE_TAG}"
+                   withCredentials([usernamePassword(credentialsId: 'github_credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                       echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
+                       sh "git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git"
+                       sh "git fetch github"
+                       sh "git checkout master"
+                       sh "git rebase github/master"
+
+                       script {
+                           def existsTag = sh(script: "git ls-remote --tags github | grep ${env.RELEASE_TAG} | wc -l", returnStdout: true).trim()
+                           if ("${existsTag}" == "1") {
+                               echo "Eliminando etiqueta en GitHub: ${env.RELEASE_TAG}"
+                               sh "git tag -d ${env.RELEASE_TAG}"
+                               sh "git push --delete github ${env.RELEASE_TAG}"
+                           }
+                       }
+
+                       sh "git tag -fa ${env.RELEASE_TAG} -m '${params.RELEASE_DESCRIPTION}'"
+                       sh "git push github master --tags"
+                   }
+               }
+           }
 
 
          stage('Setup Tools') {
