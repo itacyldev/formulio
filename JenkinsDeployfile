@@ -13,6 +13,7 @@ pipeline {
         PROJECT_NAME = 'FRMDRD'
         //GIT_URL = "https://servicios.itacyl.es/gitea/ITACyL/${PROJECT_NAME}.git"
         GIT_URL = "git@itaul4622:ITACyL/${PROJECT_NAME}.git"
+        GITHUB_CREDENTIALS = credentials('github-credentials')
     }
 
     stages {
@@ -24,56 +25,80 @@ pipeline {
                     }
                 }
 
-            stage("Merge, tag and push to master") {
-                steps {
-                    echo " The environment is ${params.ENV_TYPE}"
-                    script {
-                        def now = new Date()
-                        def version_value = sh(returnStdout: true, script: "cat build.gradle | grep -o 'versionName = [^,]*'").trim()
-                        sh "echo Project in version value: $version_value"
-                        def VERSION = version_value.split(/=/)[1].trim().replaceAll("'","")
-                        sh "echo final version: VERSION"
-                        def TIMESTAMP = now.format("yyyyMMdd")
-                        def DESC = ""
-                        if(params.RELEASE_DESCRIPTION){
-                            DESC = "_${params.RELEASE_DESCRIPTION}".replaceAll(" ","_")
+                stage("Generate Release Tag") {
+                            steps {
+                                script {
+                                    def now = new Date()
+                                    def version_value = sh(returnStdout: true, script: "cat build.gradle | grep -o 'versionName = [^,]*'").trim()
+                                    sh "echo Project in version value: $version_value"
+                                    def VERSION = version_value.split(/=/)[1].trim().replaceAll("'", "")
+                                    sh "echo final version: VERSION"
+                                    def TIMESTAMP = now.format("yyyyMMdd")
+                                    def DESC = ""
+                                    if (params.RELEASE_DESCRIPTION) {
+                                        DESC = "_${params.RELEASE_DESCRIPTION}".replaceAll(" ", "_")
+                                    }
+                                    def ENV = ""
+                                    if (params.ENV_TYPE != 'production') {
+                                        ENV = "_${params.ENV_TYPE}"
+                                    }
+                                    env.RELEASE_TAG = "v${VERSION}_${TIMESTAMP}${DESC}${ENV}"
+                                    echo "Generated RELEASE_TAG: ${env.RELEASE_TAG}"
+                                }
+                            }
                         }
-                        def ENV = ""
-                        if(params.ENV_TYPE != 'production'){
-                            ENV = "_${params.ENV_TYPE}"
-                        }
-                        RELEASE_TAG = "v${VERSION}_${TIMESTAMP}${DESC}${ENV}"
-                    }
-                    echo "Etiquetando version ${RELEASE_TAG}"
-                    sshagent(['jenkins_ssh']) {
-                        // El plugin de jenkins no está fijando estas propiedades
-                        sh("git config user.name \"jenkins\" ")
-                        sh("git config user.email \"jenkins@itacyl.es\" ")
 
-                        // Drop local changes
+
+            stage("Merge, tag and push to master (Gitea)") {
+                steps {
+                    echo "The environment is ${params.ENV_TYPE}"
+                    echo "Using RELEASE_TAG: ${env.RELEASE_TAG}"
+                    sshagent(['jenkins_ssh']) {
+                        sh("git config user.name 'jenkins'")
+                        sh("git config user.email 'jenkins@itacyl.es'")
+
                         sh("git stash")
                         sh("git checkout master")
                         sh("git fetch")
                         sh("git reset --hard origin/master")
 
-                        // Check if tag already exists and if so, remove it
                         script {
-                            def existsTag = sh (script: "git ls-remote --tags  | grep ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
-                            // If tag exists delete
+                            def existsTag = sh(script: "git ls-remote --tags | grep ${env.RELEASE_TAG} | wc -l", returnStdout: true).trim()
                             if ("${existsTag}" == "1") {
-                                echo "Eliminando etiqueta ${RELEASE_TAG}"
-                                sh("git tag -d ${RELEASE_TAG}")
-                                sh("git push --delete origin ${RELEASE_TAG}")
+                                echo "Eliminando etiqueta ${env.RELEASE_TAG}"
+                                sh("git tag -d ${env.RELEASE_TAG}")
+                                sh("git push --delete origin ${env.RELEASE_TAG}")
                             }
                         }
 
-                        // Merge, create new tag and push
                         sh("git merge ${params.BRANCH_TO_DEPLOY}")
-                        sh("git tag -fa ${RELEASE_TAG} -m \"${params.RELEASE_DESCRIPTION}\" ")
+                        sh("git tag -fa ${env.RELEASE_TAG} -m '${params.RELEASE_DESCRIPTION}'")
                         sh("git push --tags origin master")
                     }
-               }
+                }
             }
+
+           stage("Push to GitHub") {
+              steps {
+                  echo "Pushing to GitHub"
+                  echo "Using RELEASE_TAG: ${env.RELEASE_TAG}"
+                  withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                      sh("git remote add github https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/itacyldev/formulio.git")
+                      sh("git checkout master") // Asegúrate de estar en la rama master
+                      script {
+                          def existsTag = sh(script: "git ls-remote --tags github | grep ${env.RELEASE_TAG} | wc -l", returnStdout: true).trim()
+                          if ("${existsTag}" == "1") {
+                              echo "Eliminando etiqueta en GitHub: ${env.RELEASE_TAG}"
+                              sh("git tag -d ${env.RELEASE_TAG}")
+                              sh("git push --delete github ${env.RELEASE_TAG}")
+                          }
+                      }
+                      sh("git tag -fa ${env.RELEASE_TAG} -m '${params.RELEASE_DESCRIPTION}'")
+                      sh("git push github master --tags")
+                  }
+              }
+          }
+
 
          stage('Setup Tools') {
             steps{
@@ -99,17 +124,17 @@ pipeline {
         }
 
 
-         stage('Upload to Play Store') {
-            steps{
+         //stage('Upload to Play Store') {
+         //   steps{
                 // Archive the AABs so that they can be downloaded from Jenkins
-                archiveArtifacts '**/build/outputs/**/*.aab'
+         //       archiveArtifacts '**/build/outputs/**/*.aab'
 
                 // Upload the AAB to Google Play
-                androidApkUpload googleCredentialsId: 'Google Play Key',
-                apkFilesPattern: '**/build/outputs/**/*.aab', trackName:
-                "${params.ENV_TYPE}",  rolloutPercentage: '100'
-            }
-        }
+         //       androidApkUpload googleCredentialsId: 'Google Play Key',
+         //       apkFilesPattern: '**/build/outputs/**/*.aab', trackName:
+         //       "${params.ENV_TYPE}",  rolloutPercentage: '100'
+         //   }
+        //}
 
    }
     //post {
