@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<es.jcyl.ita.formic.forms.components.datatable.DatatableWidget xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/field_layout_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    style="@style/Component_background">
+
+    <TextView
+        android:id="@+id/field_layout_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp" />
+
+
+    <HorizontalScrollView
+        android:id="@+id/aslist_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+
+        <LinearLayout
+            android:id="@+id/list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/list_layout_headers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="horizontal"
+                style="@style/Datatable_header_container"/>
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:nestedScrollingEnabled="true"
+                />
+
+            <TextView
+                android:id="@+id/list_no_results"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="15dp"
+                android:gravity="top"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:layout_marginLeft="10dp"
+                android:text="@string/no_results"/>
+        </LinearLayout>
+
+    </HorizontalScrollView>
+</es.jcyl.ita.formic.forms.components.datatable.DatatableWidget>

@@ -1,0 +1,31 @@
+
+J
+java:S3740("/Provide the parametrized type for this generic.(ÄŠş±üÿÿÿÿ
+F
+java:S3740ª"/Provide the parametrized type for this generic.(­Â¢
+A
+java:S2160'"+Override the "equals" method in this class.(—Éªí
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+P
+java:S11611":Add the "@Override" annotation above this method signature(š×Ëë
+B
+java:S1125Q"'Remove the unnecessary boolean literal.(áûëûÿÿÿÿ
+t
+java:S2293`"YReplace the type specification in this constructor call with the diamond operator ("<>").(„­»Øÿÿÿÿÿ
+t
+java:S2293d"YReplace the type specification in this constructor call with the diamond operator ("<>").(øª„Âşÿÿÿÿ
+o
+java:S2293q"YReplace the type specification in this constructor call with the diamond operator ("<>").(Êšî™
+p
+java:S2293™"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÉÓè¥
+p
+java:S2293¢"YReplace the type specification in this constructor call with the diamond operator ("<>").(á¶ú
+=
+java:S1168¶"&Return an empty array instead of null.(¥¹ï
+R	java:S125º"<This block of commented-out lines of code should be removed.(Í…¦¶
+Q
+java:S1161•":Add the "@Override" annotation above this method signature(ºÄİ
+P
+java:S1161™":Add the "@Override" annotation above this method signature(¾™Ù8
+N
+java:S25893"8Remove this expression which always evaluates to "false"(®à«ª

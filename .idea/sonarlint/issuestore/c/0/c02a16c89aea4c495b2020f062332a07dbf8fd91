@@ -1,0 +1,19 @@
+
+[
+java:S1874/"9Remove this use of "PreferenceManager"; it is deprecated.(©Ÿþáûÿÿÿÿ8Š› ¯Æ0
+e
+java:S1874/"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(©Ÿþáûÿÿÿÿ8Š› ¯Æ0
+X	java:S125;"<This block of commented-out lines of code should be removed.(‰½äü8Œ› ¯Æ0
+K
+java:S1185Š"(Remove this method to simply inherit it.(ƒåœùÿÿÿÿ8¦› ¯Æ0
+V
+java:S1874 "3Remove this use of "getDrawable"; it is deprecated.(âëð»üÿÿÿÿ8©› ¯Æ0
+p
+java:S11920"NDefine a constant instead of duplicating this literal "current_theme" 5 times.(Øá¡Ñùÿÿÿÿ8­› ¯Æ0
+h
+java:S11920"FDefine a constant instead of duplicating this literal "light" 5 times.(Øá¡Ñùÿÿÿÿ8¬› ¯Æ0
+m	java:S117k"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(´òÉ¤8­› ¯Æ0
+F
+java:S1604¢"(Make this anonymous inner class a lambda(°§ÎØ8®› ¯Æ0
+[
+java:S4973L"9Use the "equals" method if value comparison was intended.(¬©æÛþÿÿÿÿ8¯› ¯Æ0

@@ -1,0 +1,30 @@
+<repos>
+
+    <repo dbFile="dbTest.sqlite" dbTable="provincia" id="provRepo" />
+    <repo dbFile="dbTest.sqlite" dbTable="municipio" id="muniRepo" />
+    <repo dbFile="dbTest.sqlite" dbTable="contacts" id="contacts" />
+    <repo dbFile="dbTest.sqlite" dbTable="assigned_agents" id="agentsRepo">
+        <mapping fk="${entity.provmuni.substring(0,2)}" property="provincia" repo="provRepo" />
+        <mapping fk="provmuni" property="municipio" repo="muniRepo" />
+    </repo>
+    <repo dbFile="pruebas.sqlite" dbTable="pruebas" id="prue" />
+    <repo dbFile="pruebas.sqlite" dbTable="autocompletado" id="autocompletado" />
+
+    <!-- sups -->
+    <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHRepo">
+        <meta>
+            <property name="creation_date" converter="date" evalOn="insert"
+                expression="${date.now}" />
+            <property name="update_date" converter="date" evalOn="update"
+                expression="${date.now}" />
+            <property name="current_time" converter="date" evalOn="select"
+                expression="${date.now}" />
+        </meta>
+    </repo>
+    <repo dbFile="dbTest.sqlite" dbTable="super_relation" id="superRelRepo">
+        <mapping fk="other_id" property="other" repo="superHRepo" insertable="false" updatable="false" />
+    </repo>
+    <filerepo defaultExtension="jpg" folder="pictures/superheroes" id="superHImages" />
+    <repo dbFile="dbTest.sqlite" dbTable="superheroes" id="superHImagesDBRepo"/>
+    <memorepo id="resumenIncis" properties="f1,f2,f3"/>
+</repos>

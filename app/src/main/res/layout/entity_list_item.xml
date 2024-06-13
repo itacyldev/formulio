@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_item_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="6dp"
+    android:descendantFocusability="blocksDescendants"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/selectablebuttonbackground">
+
+</LinearLayout>

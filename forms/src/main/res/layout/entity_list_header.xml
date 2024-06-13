@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_header_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/list_header_name_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/list_header_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:autoSizeTextType="uniform"
+            style="@style/Datatable_header_title" />
+        <ImageView
+            android:id="@+id/list_header_img"
+            style="@style/Textfield_search_button"
+            android:layout_marginRight="2dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/list_header_filter_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/list_header_filter_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:inputType="text"
+            android:focusable="true"
+            style="@style/Datatable_header_filter" />
+
+        <ImageView
+            android:id="@+id/list_header_filter_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:clickable="true"
+            android:contentDescription="@string/layer_aslist"
+            android:src="@drawable/ic_tool_x"
+            android:visibility="gone"
+            android:focusable="true"
+            style="@style/Datatable_header_filter_cancel" />
+
+        <ImageView
+            android:id="@+id/list_header_filter_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:clickable="true"
+            android:src="?attr/iconNoorder"
+            android:focusable="true"
+            style="@style/Datatable_header_filter_order" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,20 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+o
+java:S3008,"TRename this field "_handlers" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾µŠæùÿÿÿÿ
+˜
+java:S1186Ş"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Îİ’¿
+t
+java:S2293,"YReplace the type specification in this constructor call with the diamond operator ("<>").(¾µŠæùÿÿÿÿ
+I
+java:S1135"2Complete the task associated to this TODO comment.(ŸÙÖû
+I
+java:S1135"2Complete the task associated to this TODO comment.(Ï÷õı
+N
+java:S1135Ã"2Complete the task associated to this TODO comment.(êÊøıÿÿÿÿ
+d
+java:S1128$"GRemove this unused import 'es.jcyl.ita.formic.repo.EditableRepository'.(€³Ü¸8¸•Œì0
+b
+java:S1128%"ERemove this unused import 'es.jcyl.ita.formic.repo.query.BaseFilter'.(ö³Á©8¸•Œì0
+:
+java:S1640,"Convert this Map to an EnumMap.(¾µŠæùÿÿÿÿ

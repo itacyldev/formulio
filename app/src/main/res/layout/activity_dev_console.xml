@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:gravity="left|center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="8"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/systemLogLevel"/>
+
+                <Button
+                    android:id="@+id/log"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:text="@string/log"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/roundbutton"/>
+                <Button
+                    android:id="@+id/export"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:text="@string/export"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/roundbutton"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:weightSum="1">
+                <Spinner
+                    android:id="@+id/dev_console_system_log_level"
+                    style="@style/Default_Label_font"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_spinner_dropdown"
+                    android:spinnerMode="dropdown"
+                    android:layout_weight="0.4"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divisor"
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="?attr/onSurface4Color" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:gravity="left|center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/filterBy"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/dev_console_log_level"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                </RadioGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayoutOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ic_action_search"
+                    app:endIconTint="?attr/onSurfaceColor"
+                    app:startIconTint="?attr/onSurfaceColor">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dev_console_filter_by"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/onSurfaceColor" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextInputLayoutOutlinedBox">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/console_body"
+                        style="@style/Default_TextView_font"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:inputType="textMultiLine|none"
+                        android:minLines="3"
+                        android:overScrollMode="always"
+                        android:scrollbars="vertical"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:cursorVisible="false"
+                        android:textSize="18dp"
+                        android:gravity="bottom"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

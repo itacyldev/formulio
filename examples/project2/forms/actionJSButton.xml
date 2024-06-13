@@ -1,0 +1,23 @@
+<main name="Form3" description="An example of short description" id="form3" repo="contacts">
+    <list name="Form3" />
+    <edit>
+        <script>
+            function myFunction(){
+                console.log("Hello world!");
+            }
+        </script>
+
+        <!-- executes myFunction in onchange event -->
+        <switcher action="myFunction" label="IT profile" value="${entity.it_profile}" />
+
+        <!-- this button will execute the functon and then navigate to form3-list1 view -->
+        <button action="myFunction" label="Execute" />
+
+        <!-- this button will execute the functon and then navigate to form3-list1 view -->
+        <button label="ExecuteAndNavigate">
+            <action registerInHistory="false" route="form3-list1" type="js">
+                <param name="method" value="myFunction" />
+            </action>
+        </button>
+    </edit>
+</main>

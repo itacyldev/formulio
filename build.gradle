@@ -1,0 +1,147 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+//apply plugin: "org.sonarqube:3.5.0.2730"
+
+//
+//plugins {
+//    id "jacoco"
+//    id "org.sonarqube" version "3.3"
+//    id "org.owasp.dependencycheck" version "7.1.2"
+//}
+buildscript {
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+        google()
+        jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.0'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
+        classpath 'org.jacoco:org.jacoco.core:0.8.7'
+    }
+}
+
+//plugins {
+//    id 'jacoco-report-aggregation'
+//    id "org.sonarqube" version "3.5.0.2730"
+//}
+plugins {
+    id 'base'
+    id 'jacoco'
+    id 'jacoco-report-aggregation'
+    id "org.sonarqube" version "3.5.0.2730"
+    id "org.owasp.dependencycheck" version "7.1.2"
+}
+
+allprojects {
+    apply from: "$project.rootDir/gradle/jacoco.gradle"
+    apply from: "$project.rootDir/gradle/sonar.gradle"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
+        gradle.projectsEvaluated {
+            tasks.withType(JavaCompile) {
+                //options.compilerArgs << "-Xlint:deprecation,unchecked"
+                sourceCompatibility = 1.8
+                targetCompatibility = 1.8
+            }
+        }
+        def androidHome = System.getenv("ANDROID_HOME")
+        maven {
+            name "sdk android extras"
+            url "$androidHome/extras/android/m2repository/"
+        }
+        maven {
+            name "sdk google extras"
+            url "$androidHome/extras/google/m2repository/"
+        }
+
+        maven {
+            name "ITACyL - snapshots"
+            url "https://servicios.itacyl.es/nexus/repository/snapshots/"
+        }
+        maven {
+            name "ITACyL - internal"
+            url "https://servicios.itacyl.es/nexus/repository/internal/"
+        }
+        maven {
+            name "ITACyL - thirdparty"
+            url "https://servicios.itacyl.es/nexus/repository/thirdparty/"
+        }
+    }
+
+    configurations.all {
+        exclude group: 'xpp3', module: 'xpp3'
+        resolutionStrategy.eachDependency { details ->
+
+            if (details.requested.group == "androidx") {
+                if (!details.requested.name.startsWith("multidex")) {
+                    details.useVersion "${ext.targetSdkVersion}.+"
+                }
+            }
+        }
+
+        resolutionStrategy { force 'androidx.core:core:1.6.0' }
+    }
+}
+
+//task clean(type: Delete) {
+//    delete rootProject.buildDir
+//}
+
+ext {
+    versionCode = 72
+    versionName = '0.7.50'
+    applicationId = "es.jcyl.ita.formic"
+    compileSdkVersion = 33
+    targetSdkVersion = 33
+    minSdkVersion = 21
+    buildToolsVersion = '33.0.0'
+    encoding = "UTF-8"
+
+    espressoVersion = '3.5.1'
+    androidTestVersion= '1.2.0'
+
+    group = 'es.jcyl.ita.formic'
+    version = '0.7.50'
+    artifactId = 'Formic'
+
+    sharedDeps = [
+            'org.apache.commons:commons-jexl3:3.1',
+            'org.apache.commons:commons-lang3:3.6',
+            'org.apache.commons:commons-text:1.8',
+            'org.mini2Dx:android-beans:1.0.0',
+//            'org.slf4j:slf4j-api:2.0.7',
+//            'com.github.tony19:logback-android:3.0.0'
+            'org.slf4j:slf4j-api:1.7.30',
+            'com.github.tony19:logback-android:2.0.0'
+
+    ]
+    unitTestDeps = [
+            'junit:junit:4.12',
+            "androidx.test.espresso:espresso-core:${espressoVersion}",
+            "androidx.test.espresso:espresso-contrib:${espressoVersion}",
+            "androidx.test.espresso:espresso-accessibility:${espressoVersion}",
+            'org.robolectric:robolectric:4.2',
+            'org.mini2Dx:android-beans:1.0.0',
+            'org.mockito:mockito-core:5.2.0',
+            'org.hamcrest:hamcrest:2.2',
+            // en los tests excluimos logback-android y añadimos esta
+            'org.slf4j:slf4j-simple:2.0.7'
+    ]
+}
+
+
+

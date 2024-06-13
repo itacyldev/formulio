@@ -1,0 +1,179 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
+
+def globalConf = rootProject.ext
+
+archivesBaseName = 'forms'
+group = globalConf.group
+version = globalConf.version
+
+android {
+    compileSdkVersion = rootProject.compileSdkVersion
+
+    signingConfigs {
+        release {
+            /*storeFile file(RELEASE_STORE_FILE)
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEYSTORE_ALIAS")
+            keyPassword System.getenv("KEYSTORE_PASSWORD")*/
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+
+    defaultConfig {
+        targetSdkVersion globalConf.targetSdkVersion
+        minSdkVersion globalConf.minSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            testCoverageEnabled true
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.txt'
+        }
+    }
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+            all {
+                jacoco{
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+        }
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST']
+        }
+    }
+//    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
+    namespace 'es.jcyl.ita.formic.forms'
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':core')
+    implementation project(':repo')
+    implementation project(':jobs')
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.activity:activity:1.2.0-alpha06"
+    implementation "androidx.fragment:fragment:1.3.0-alpha06"
+    implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation 'androidx.navigation:navigation-ui:2.2.2'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    implementation  "net.bytebuddy:byte-buddy:1.11.2"
+    implementation  "net.bytebuddy:byte-buddy-android:1.11.2"
+//    implementation 'com.airbnb.android:paris:1.7.3'
+
+    api 'commons-collections:commons-collections:20040616'
+    api "commons-validator:commons-validator:1.6"
+    api 'org.mozilla:rhino:1.7.12'
+    api 'org.jgrapht:jgrapht-core:1.1.0'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+
+
+    // rxAndroid
+//    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
+//    api 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+    /////////////////////////////////////
+    // Instrumentation test dependencies
+    /////////////////////////////////////
+    // Core library
+    androidTestImplementation "androidx.test:core:${androidTestVersion}"
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation("androidx.test:runner:${androidTestVersion}") {
+        exclude group: 'net.sf.kxml', module: ''
+    }
+    androidTestImplementation("androidx.test:rules:${androidTestVersion}") {
+        exclude group: 'androidx.test', module: ''
+    }
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "androidx.test.ext:truth:${androidTestVersion}"
+    androidTestImplementation 'com.google.truth:truth:0.46'
+    // Espresso dependencies
+    androidTestImplementation("androidx.test.espresso:espresso-core:${espressoVersion}") {
+        exclude group: 'androidx.test', module: 'runner'
+    }
+
+    androidTestImplementation 'org.mockito:mockito-android:4.1.0'
+
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
+    testImplementation project(':repoTestUtils')
+    testImplementation unitTestDeps
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
+    testImplementation "androidx.test:core:${androidTestVersion}"
+    testImplementation("androidx.test:rules:${androidTestVersion}") {
+        exclude group: 'androidx.test', module: ''
+    }
+}
+// Excluir logback en los test unitarios
+configurations.testImplementation {
+    exclude module: 'logback-android'
+}
+
+task sourceJar(type: Jar) {
+    classifier "source"
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "http://servicios.itacyl.es/nexus/repository/internal/"
+            def snapshotsRepoUrl = "http://servicios.itacyl.es/nexus/repository/snapshots/"
+            url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+        }
+    }
+    publications {
+        mavenPublish(MavenPublication) {
+            artifacts {
+                groupId group
+                artifactId archivesBaseName
+                version version
+                artifact 'build/outputs/aar/' + archivesBaseName + (version.endsWith("SNAPSHOT") ? '-debug.aar' : '-release.aar')
+            }
+        }
+    }
+}

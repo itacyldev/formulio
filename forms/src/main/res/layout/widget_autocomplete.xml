@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteWidget xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_view"
+    style="@style/Widget_padding"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/label_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <!-- Text Label -->
+        <TextView
+            android:id="@+id/label_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingTop="5dp"
+            android:layout_weight="9.6"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/layout_button"/>
+        <LinearLayout
+            android:id="@+id/layout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_weight="0.4">
+            <ImageView
+                android:id="@+id/field_layout_info"
+                style="@style/Textfield_info_button"
+                android:layout_marginRight="2dp" />
+            <ImageView
+                android:id="@+id/field_layout_x"
+                style="@style/Textfield_cancel_button"
+                android:layout_marginRight="2dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteView
+            android:id="@+id/input_view"
+            style="@style/Autocomplete_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dropDownWidth="wrap_content"/>
+        <!--android:drawableEnd="@drawable/bg_spinner_dropdown"-->
+        <ImageView
+            android:id="@+id/input_view_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="0dp"
+            android:layout_alignParentRight="true"
+            android:tint="?attr/onSurfaceColor"
+            android:src="@drawable/ic_action_expand"/>
+
+    </RelativeLayout>
+</es.jcyl.ita.formic.forms.components.autocomplete.AutoCompleteWidget>

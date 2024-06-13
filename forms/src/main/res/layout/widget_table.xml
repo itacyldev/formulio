@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<es.jcyl.ita.formic.forms.view.widget.Widget xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/Widget_padding">
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:shrinkColumns ="*"
+        android:stretchColumns="*"
+        >
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/header_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            />
+    </TableLayout>
+
+</es.jcyl.ita.formic.forms.view.widget.Widget>

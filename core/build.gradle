@@ -1,0 +1,88 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
+
+def globalConf = rootProject.ext
+
+archivesBaseName = 'core'
+group = globalConf.group
+version = globalConf.version
+
+
+android {
+    compileSdkVersion = rootProject.compileSdkVersion
+
+    defaultConfig {
+        targetSdkVersion globalConf.targetSdkVersion
+        minSdkVersion globalConf.minSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.txt'
+        }
+    }
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+    lint {
+        abortOnError false
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST']
+        }
+    }
+    namespace 'es.jcyl.ita.formic.core'
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api sharedDeps
+    /////////////////////////////////////
+    // JUnit test dependencies
+    /////////////////////////////////////
+    testImplementation unitTestDeps
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://servicios.itacyl.es/nexus/repository/internal/"
+            def snapshotsRepoUrl = "https://servicios.itacyl.es/nexus/repository/snapshots/"
+            url version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+        }
+    }
+    publications {
+        mavenPublish(MavenPublication) {
+            artifacts {
+                groupId group
+                artifactId archivesBaseName
+                version version
+                artifact 'build/outputs/aar/' + archivesBaseName + (version.endsWith("SNAPSHOT") ? '-debug.aar' : '-release.aar')
+            }
+        }
+    }
+}
