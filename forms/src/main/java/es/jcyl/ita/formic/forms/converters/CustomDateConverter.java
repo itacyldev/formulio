@@ -97,7 +97,7 @@ public class CustomDateConverter extends AbstractConverter {
     public CustomDateConverter() {
         super(null);
         // register patterns
-        String[] patterns = {"yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd", "yyyy-MM-dd"};
+        String[] patterns = {"dd-MM-yyyy HH:mm:ss", "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy", "dd-MM-yyyy"};
         setPatterns(patterns);
     }
 
