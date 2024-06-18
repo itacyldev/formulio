@@ -97,7 +97,8 @@ pipeline {
                        }
                    }
 
-                   sh "git push github master --tags"
+                   // Empujar la última etiqueta solamente
+                   sh "git push github ${RELEASE_TAG}"
                }
            }
        }
