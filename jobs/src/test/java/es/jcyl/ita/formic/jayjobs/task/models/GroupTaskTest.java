@@ -1,7 +1,5 @@
 package es.jcyl.ita.formic.jayjobs.task.models;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -11,6 +9,8 @@ import es.jcyl.ita.formic.core.context.Context;
 import es.jcyl.ita.formic.jayjobs.task.executor.TaskExecutor;
 import es.jcyl.ita.formic.jayjobs.task.iteration.BasicCounterIterator;
 import es.jcyl.ita.formic.sharedTest.utils.TestContextUtils;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Gustavo Río (gustavo.rio@itacyl.es)
