@@ -77,7 +77,7 @@ pipeline {
          stage("Push to GitHub") {
            steps {
                echo "Pushing to GitHub"
-               echo "Using RELEASE_TAG: ${env.RELEASE_TAG}"
+               echo "Using RELEASE_TAG: ${RELEASE_TAG}"
                withCredentials([usernamePassword(credentialsId: 'github_credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
                    echo "Using GitHub credentials with username ${GITHUB_USERNAME}"
                    sh '''
@@ -89,15 +89,15 @@ pipeline {
                    sh "git checkout master"
              
                    script {
-                       def existsTag = sh(script: "git ls-remote --tags github | grep ${env.RELEASE_TAG} | wc -l", returnStdout: true).trim()
+                       def existsTag = sh(script: "git ls-remote --tags github | grep ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
                        if ("${existsTag}" == "1") {
-                           echo "Eliminando etiqueta en GitHub: ${env.RELEASE_TAG}"
-                           sh "git tag -d ${env.RELEASE_TAG}"
-                           sh "git push --delete github ${env.RELEASE_TAG}"
+                           echo "Eliminando etiqueta en GitHub: ${RELEASE_TAG}"
+                           sh "git tag -d ${RELEASE_TAG}"
+                           sh "git push --delete github ${RELEASE_TAG}"
                        }
                    }
 
-                   sh "git tag -fa ${env.RELEASE_TAG} -m '${params.RELEASE_DESCRIPTION}'"
+                   sh "git tag -fa ${RELEASE_TAG} -m '${params.RELEASE_DESCRIPTION}'"
                    sh "git push github master --tags"
                }
            }
