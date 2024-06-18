@@ -97,7 +97,6 @@ pipeline {
                        }
                    }
 
-                   sh "git tag -fa ${RELEASE_TAG} -m '${params.RELEASE_DESCRIPTION}'"
                    sh "git push github master --tags"
                }
            }
