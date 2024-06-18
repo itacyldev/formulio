@@ -1,0 +1,106 @@
+<main id="productoNoConforme" name="Producto no conforme" repo="productoNoConformeRepo" mainForm="false">
+    <list id="listNoConforme" name="Producto no conforme" description="Listado productos no conforme">
+        <datatable>
+            <column id="column_num_lote" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote}"/>
+                <order property="num_lote"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+            <column id="column_fecha_elaboracion" headerText="Fecha elaboración" filtering="true" ordering="true" value="${entity.fecha_elaboracion}">
+                <filter property="fecha_elaboracion" matching="contains" valueExpression="${this.column_fecha_elaboracion}"/>
+                <order property="fecha_elaboracion"/>
+            </column>
+            <column id="column_sistema_identificacion_segregacion" headerText="Sistema identificación segregación" filtering="true" ordering="true" value="${entity.sistema_identificacion_segregacion}">
+                <filter property="sistema_identificacion_segregacion" matching="contains" valueExpression="${this.column_sistema_identificacion_segregacion}"/>
+                <order property="sistema_identificacion_segregacion"/>
+            </column>
+            <column id="column_cumple_producto_no_conforme" headerText="Cumple producto no conforme" filtering="true" ordering="true" value="${entity.cumple_producto_no_conforme}">
+                <filter property="cumple_producto_no_conforme" matching="contains" valueExpression="${this.column_cumple_producto_no_conforme}"/>
+                <order property="cumple_producto_no_conforme"/>
+            </column>
+            <column id="column_notas_aclaratorias" headerText="Notas aclaratorias" filtering="true" ordering="true" value="${entity.notas_aclaratorias}">
+                <filter property="notas_aclaratorias" matching="contains" valueExpression="${this.column_notas_aclaratorias}"/>
+                <order property="notas_aclaratorias"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editProductoNoConforme">
+        <form id="formProductoNoConforme">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="PRODUCTO NO CONFORME"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Operador" weights="25, 35, 40" >
+                        <row>
+                            <input value="${entity.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <textarea value="${entity.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="LOTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <input label="9.1 Nº Lote: " value="${entity.num_lote}" validator="required"/>
+
+            <date label="9.2 Fecha elaboración: " value="${entity.fecha_elaboracion}" />
+
+            <input label="9.3 Sistema de identificación y segregación: " value="${entity.sistema_identificacion_segregacion}" />
+
+            <radio label="9.4 Cumple: " value="${entity.cumple_producto_no_conforme}" orientation="horizontal" weights="15, 85">
+                <options>
+                    <option label="Sí" value="S" />
+                    <option label="No" value="N" />
+                </options>
+            </radio>
+
+            <textarea label="9.5 Notas aclaratorias: " value="${entity.notas_aclaratorias}" />
+
+            <table border="false" weights="20, 10, 70">
+                <row>
+                    <p bold="true" value="9.6 Foto: "/>
+                    <switcher id="switcherImagenProductoNoConforme" value="${not empty(entity.imagen_producto_no_conforme)?1:0}"/>
+                    <p value=""/>
+                </row>
+            </table>
+            <table border="false" weights="10, 90" render="${view.switcherImagenProductoNoConforme eq 'true'}">
+                <row>
+                    <p value=""/>
+                    <image converter="b64Image" embedded="true" value="${entity.imagen_producto_no_conforme}" render="${view.switcherImagenProductoNoConforme eq 'true'}" hasDeleteButton="false" inputType="5"/>
+                </row>
+            </table>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.producto_no_conforme_id)}" readonlyMessage="No puede realizar esta acción: No existe lote producto no conforme">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

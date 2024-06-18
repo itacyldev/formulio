@@ -1,0 +1,10 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+—
+java:S1186_"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µºÁ§
+œ
+java:S1186d"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ö¨³Ùşÿÿÿÿ
+~
+java:S1488:"cImmediately return this expression instead of assigning it to the temporary variable "imgResource".(¯¦İøÿÿÿÿ
+N
+java:S2589-"8Remove this expression which always evaluates to "false"(ĞÆ´ª

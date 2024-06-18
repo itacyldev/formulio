@@ -1,0 +1,17 @@
+<repos>
+    <repo dbFile="ribera.sqlite" id="provRepo" dbTable="provincia" />
+    <repo dbFile="ribera.sqlite" id="muniRepo" dbTable="municipio" />
+    <repo dbFile="ribera.sqlite" id="bodegaRepo" dbTable="bodega">
+        <mapping fk="prov_id" property="provincia" repo="provRepo" updatable="false"/>
+        <mapping fk="provmuni_id" property="municipio" repo="muniRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="ribera.sqlite" id="auditoriaRepo" dbTable="auditoria">
+        <mapping fk="bodega_id" property="bodega" repo="bodegaRepo" updatable="false"/>
+    </repo>
+    <repo dbFile="ribera.sqlite" id="preguntaRepo" dbTable="pregunta" />
+    <repo dbFile="ribera.sqlite" id="preguntaAuditoriaRepo" dbTable="pregunta_auditoria">
+        <mapping fk="auditoria_id" property="auditoria" repo="auditoriaRepo"/>
+        <mapping fk="pregunta_id" property="pregunta" repo="preguntaRepo"/>
+    </repo>
+</repos>
+

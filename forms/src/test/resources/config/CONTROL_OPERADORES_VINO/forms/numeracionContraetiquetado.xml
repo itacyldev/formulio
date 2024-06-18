@@ -1,0 +1,97 @@
+<main id="numeracionContraetiquetado" name="Numeración contraetiquetado" repo="numeracionContraetiquetadoRepo" mainForm="false">
+    <list id="listNumeracionContraetiquetado" name="Numeracion contraetiquetado" description="Listado numeración contraetiquetado">
+        <datatable>
+            <column id="column_etiquetado_desde" headerText="Etiqueta desde" filtering="true" ordering="true" value="${entity.etiqueta_desde}">
+                <filter property="etiqueta_desde" matching="contains" valueExpression="${this.column_etiquetado_desde}"/>
+                <order property="etiqueta_desde"/>
+            </column>
+            <column id="column_desde" headerText="Desde" filtering="true" ordering="true" value="${entity.desde}">
+                <filter property="desde" matching="contains" valueExpression="${this.column_desde}"/>
+                <order property="desde"/>
+            </column>
+            <column id="column_etiquetado_hasta" headerText="Etiqueta hasta" filtering="true" ordering="true" value="${entity.etiqueta_hasta}">
+                <filter property="etiqueta_hasta" matching="contains" valueExpression="${this.column_etiquetado_hasta}"/>
+                <order property="etiqueta_hasta"/>
+            </column>
+            <column id="column_hasta" headerText="Hasta" filtering="true" ordering="true" value="${entity.hasta}">
+                <filter property="hasta" matching="contains" valueExpression="${this.column_hasta}"/>
+                <order property="hasta"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editNumeracionContraetiquetado">
+        <form id="formNumeracionContraetiquetado">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="${params.asignada eq 'Y'?'NUMERACIÓN DE CONTRAETIQUETAS UTILIZADAS':'NUMERACIÓN DE CONTRAETIQUETAS SIN UTILIZAR'}"/>
+            <p value=""/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="15, 25, 15, 45">
+                <row>
+                    <input id="expediente_id" value="${entity.trazabilidad.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.trazabilidad.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="dop_id" value="${entity.trazabilidad.expediente.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                    <input id="dop" value="${entity.trazabilidad.expediente.dop.dop}" placeHolder="${params.dop}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Partida, Partida, Asignada" weights="15, 25, 60">
+                <row>
+                    <input id="trazabilidad_id" value="${entity.trazabilidad_id}" placeHolder="${params.trazabilidad_id}" readonly="true"/>
+                    <input id="partida" value="${entity.trazabilidad.trazabilidad.partida}" placeHolder="${params.partida}" readonly="true"/>
+                    <input value="${entity.asignada}" placeHolder="${params.asignada}" readonly="true" />
+                </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="15, 85">
+                <row>
+                    <input id="operador_id" value="${entity.trazabilidad.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.trazabilidad.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="Numeración contraetiquetado"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+           <table border="false">
+                <row>
+                    <table headerText=" , Nombre etiqueta, Número etiqueta " weights="20, 40, 40">
+                        <row>
+                            <p value=" Desde" bold="true"/>
+                            <input id="etiqueta_desde" value="${entity.etiqueta_desde}" hasDeleteButton="false"/>
+                            <input id="desde" value="${entity.desde}" hasDeleteButton="false" inputType="3"/>
+                        </row>
+                        <row>
+                            <p value=" Hasta" bold="true"/>
+                            <input id="etiqueta_hasta" value="${entity.etiqueta_hasta}" hasDeleteButton="false"/>
+                            <input id="hasta" value="${entity.hasta}" hasDeleteButton="false" inputType="3"/>
+                        </row>
+                        <row weights="60, 40">
+                            <p value=" TOTAL" bold="true"/>
+                            <input id="unidades" value="${(view.desde gt 0 and view.hasta gt 0)?math:round(view.hasta - view.desde + 1):null}" readonly="true"/>
+                        </row>
+                    </table>
+                </row>
+            </table>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.numeracion_contraetiquetado_id)}" readonlyMessage="No puede realizar esta acción: No existe numeración contraetiquetado" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.trazabilidad_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

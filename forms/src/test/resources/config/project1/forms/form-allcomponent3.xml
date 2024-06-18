@@ -1,0 +1,99 @@
+<main name="COMPONENTS 3" id="formComponents3"
+    repo="prue">
+    <edit>
+        <form>
+            <tab>
+                <tabitem label="User data">
+                    <p value=""/>
+                    <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Full Name"/>
+                    <table>
+                        <row>
+                            <input label="First name: " value=""/>
+                            <input label="Last name: " value="" />
+                        </row>
+                    </table>
+
+                    <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="E-mail                                   Country"/>
+                    <table>
+                       <row>
+                            <input label="Email: " value="" />
+                           <select label="Country: " >
+                               <options>
+                                   <option value="usa" label="United States"/>
+                                   <option value="canada" label="Canada"/>
+                               </options>
+                           </select>
+                       </row>
+                    </table>
+
+                    <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Gender                                  Birth date"/>
+                    <table>
+                        <row>
+                            <radio label="Gender:" orientation="horizontal" value="" >
+                                <options>
+                                    <option label="M" value="Male" />
+                                    <option label="F" value="Female" />
+                                </options>
+                            </radio>
+                            <date converter="string" label="Birth date: "
+                                value="${entity.fecha}" hasTodayButton="false" />
+                        </row>
+                    </table>
+
+                    <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Photograph"/>
+                    <table border="false">
+                        <row>
+                            <image converter="b64Image" embedded="true"
+                                value="${entity.image_thumb}" inputType="1" hasDeleteButton="false"/>
+                        </row>
+                    </table>
+
+                    <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Marital status"/>
+                    <table>
+                        <row>
+                             <switcher label="Married" value="${entity.switcher}"/>
+                        </row>
+                    </table>
+                    <p value=""/>
+                    <p value=""/>
+                    <p value=""/>
+                    <p value=""/>
+                </tabitem>
+                 <tabitem label="Additional information">
+                     <card label="Address" expandable="true" expanded="true" imagePosition="left">
+                         <p name="title" value="123 Main Street, Anytown"/>
+                         <p name="subtitle" value="United States"/>
+                     </card>
+
+                     <p value=""/>
+                     <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Employment history"/>
+                     <datatable id="datatableTrabajo" repo="trabajoRepo" numVisibleRows="3">
+                         <column id="column_emplyer" headerText="Employer" filtering="true" ordering="true" value="${entity.emplyer}">
+                             <filter property="emplyer" matching="contains" valueExpression="${this.column_emplyer}"/>
+                             <order property="emplyer"/>
+                         </column>
+                         <column id="column_job" headerText="Job Title" filtering="true" ordering="true" value="${entity.job_title}">
+                             <filter property="job_title" matching="contains" valueExpression="${this.column_job}"/>
+                             <order property="job_title"/>
+                         </column>
+                         <column id="column_date" headerText="Start-End Date" filtering="true" ordering="true" value="${entity.start_date}-${entity.end_date}">
+                             <filter property="start_date" matching="contains" valueExpression="${this.column_date}"/>
+                             <order property="start_date"/>
+                         </column>
+                     </datatable>
+
+                     <p value=""/>
+                     <p backgroundColor="#26a69a" fontSize="16" fontColor="#FFFFFF" bold="true" value="Sign"/>
+                     <image label="Sign: " converter="b64Image" embedded="true" value="${entity.image}" hasDeleteButton="false" inputType="4" />
+
+                     <button label="Submit"/>
+
+                 </tabitem>
+            </tab>
+
+        </form>
+    </edit>
+    <list name="COMPONENTS 3">
+        <datatable properties="input, radio, textarea, switcher, fecha, combo, autocompletado_id" />
+    </list>
+</main>

@@ -1,0 +1,856 @@
+<main id="controlDocumental" name="Control Documental" repo="procedimientoAutocontrolRepo">
+    <list id="listDocumental" name=" CONTROL DOCUMENTAL">
+        <datatable route="controlDocumental-editDocumental">
+            <column id="column_procedimiento_autocontrol_id" headerText="Id Procedimiento." filtering="true" ordering="true" value="${entity.procedimiento_autocontrol_id}">
+                <filter property="procedimiento_autocontrol_id" matching="contains" valueExpression="${this.column_procedimiento_autocontrol_id}"/>
+                <order property="procedimiento_autocontrol_id"/>
+            </column>
+            <column id="column_expediente_id" headerText="Id Exp." filtering="true" ordering="true" value="${entity.expediente_id}">
+                <filter property="expediente_id" matching="contains" valueExpression="${this.column_expediente_id}"/>
+                <order property="expediente_id"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+            <column id="column_fecha" headerText="Fecha" filtering="false" ordering="false" value="${entity.expediente.fecha}"/>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editDocumental">
+        <script src="scripts/controlLote.js"/>
+        <form id="formControlDocumental">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="CONTROL DOCUMENTAL"/>
+            <p value=""/>
+
+            <tab allowsPartialRestore="true">
+                <tabitem id="datosGenerales" label="Datos generales">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="EXPEDIENTE"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table border="false">
+                        <row>
+                            <input label="Id. procedimiento autocontrol: " value="${entity.procedimiento_autocontrol_id}" readonly="true" render="${not empty(entity.procedimiento_autocontrol_id)}"/>
+                            <input id="expediente_id" label="Id. Expediente: " value="${entity.expediente.id}" readonly="true" render="${not empty(entity.id)}"/>
+                            <input id="num_expediente" label="Nº Expediente: " value="${entity.expediente.num_expediente}" readonly="true"/>
+                            <input label="Fecha: " value="${entity.expediente.fecha}" readonly="true" />
+                        </row>
+                    </table>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="AUDITORES"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table border="false">
+                        <row>
+                            <input label="Equipo auditor: " value="${entity.expediente.equipo_auditor_id}" readonly="true" />
+                            <textarea label="Otros auditores: " value="${entity.expediente.otros_auditores}" readonly="true"/>
+                        </row>
+                    </table>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="DATOS DEL OPERADOR"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table border="false">
+                        <row>
+                            <input label="Operador: " value="${entity.expediente.operador.razon_social}" readonly="true" />
+                            <input label="CIF: " value="${entity.expediente.operador.cif}" readonly="true" />
+                        </row>
+                    </table>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="FIRMA"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <table border="false" weights="30, 20, 50">
+                        <row>
+                            <p bold="true" value="Firma"/>
+                            <switcher id="switcherFirmaControlDocumental" value="${not empty(entity.firma_procedimiento_autocontrol)?1:0}"/>
+                            <p value=""/>
+                        </row>
+                    </table>
+                    <table border="false" weights="10, 90">
+                        <row>
+                            <p value=""/>
+                            <image id="imageFirmaControlDocumental" converter="b64Image" embedded="true" value="${entity.firma_procedimiento_autocontrol}" render="${view.switcherFirmaControlDocumental eq 'true'}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                    </table>
+
+                    <button label="Exportar incumplimientos">
+                        <action registerInHistory="false" type="job">
+                            <param name="jobId" value="job_exporter_control_documental" />
+                        </action>
+                    </button>
+
+                   <button label="Exportar repository">
+                        <action registerInHistory="false" type="job">
+                            <param name="jobId" value="job_exporter_repository" />
+                        </action>
+                    </button>
+
+                    <!--button label="Prueba upload">
+                        <action registerInHistory="false" type="job">
+                            <param name="jobId" value="job_acta_upload_csv" />
+                        </action>
+                    </button-->
+                </tabitem>
+                <tabitem id="procedimientoAutocontrol" label="Procedimientos de autocontrol">
+                    <p value=""/>
+
+                    <table headerTxt=" PROCEDIMIENTO, EDICIÓN/REVISIÓN, CUMPLE, NOTAS ACLARATORIAS" weights="25, 30, 17, 28">
+                        <row>
+                            <input label="Diagrama de flujo:" hint="Tª conservacion manteca, fases de la elaboración, Tª cocciòn morcilla,…" readonly="true"/>
+                            <textarea value="${entity.diagrama_flujo_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.diagrama_flujo_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.diagrama_flujo_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Ficha de producto:" hint="De todos los productos IGP" readonly="true"/>
+                            <textarea value="${entity.ficha_producto_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_producto_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_producto_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Relación de proveedores:" hint="De las materas primas utilizadas en la morcilla" readonly="true"/>
+                            <textarea value="${entity.relacion_proveedores_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.relacion_proveedores_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.relacion_proveedores_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Ficha de materias primas:" hint="Comprobar que cumplen las características del Pliego" readonly="true"/>
+                            <textarea value="${entity.ficha_materias_primas_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_materias_primas_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_materias_primas_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Cebolla tipo Horcal:" hint="Forma globosa plana. Diametro >80 mm. Peso >100 gr. Color externo marrón y pulpa blanca al amarillo verdoso" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.ficha_cebolla_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_cebolla_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_cebolla_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Arroz:" hint="Grano corto. Tipo Japónica Bahia oBomba. Categoría extra" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.ficha_arroz_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_arroz_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_arroz_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Manteca de Cerdo o Sebo:" hint="Congelada o refrigerada a Tª >4ºC" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.ficha_manteca_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_manteca_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_manteca_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Sangre:" hint="De cerdo, oveja o vaca" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.ficha_sangre_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_sangre_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_sangre_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Sal:" hint="Cloruro Sodico. Uso alimentario" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.ficha_sal_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_sal_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_sal_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Especias:" hint="Pimienta negra, pimentón, orégano, comino, clavo, ajo, canela, alcaravea, perejil, anis" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.ficha_especias_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_especias_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_especias_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Tripas:" hint="Limpia, bien conservada y acondicionada. De vacuno, cerdo, colágeno" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.ficha_tripa_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.ficha_tripa_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.ficha_tripa_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="4">
+                            <p bold="true" value="Registros de comprobación de requisitos de la cebolla Horcal establecidos en el Pliego de condiciones"></p>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Cebolla horcal fresca:" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.registros_cebolla_horcal_fresca_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.registros_cebolla_horcal_fresca_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.registros_cebolla_horcal_fresca_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Cebolla horcal procesada:" hint="Registros del proveedor de cebolla" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.registros_cebolla_horcal_procesada_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.registros_cebolla_horcal_procesada_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.registros_cebolla_horcal_procesada_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Proceso de fabricación:" hint="Loteado, Registros de pesos de ingredientes, lotes de procedencia, tiempos y Tª de cocción, tiempo de oreo y Tª, Peso después del oreo" readonly="true"/>
+                            <textarea value="${entity.proceso_fabricacion_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.proceso_fabricacion_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.proceso_fabricacion_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <input label="Plan de análisis de autocontrol:" readonly="true"/>
+                            <textarea value="${entity.plan_analisis_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.plan_analisis_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.plan_analisis_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row>
+                            <table border="false" weights="20, 80">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Periodicidad de los análisis:" hint="Fisico-químicos, morfológicos y organolépticos" readonly="true"/>
+                                </row>
+                            </table>
+                            <textarea value="${entity.plan_analisis_periodicidad_edicion_revision}" hasDeleteButton="false"/>
+                            <radio value="${entity.plan_analisis_periodicidad_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.plan_analisis_periodicidad_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="2.1,1" weights="55, 15, 30">
+                            <table border="false" weights="9, 91">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Parámetros analizados FQ:" hint="Ph, Humedad, Grasa (sss), Azúcares (sss), Fibra (sss) y Sal" readonly="true"/>
+                                </row>
+                            </table>
+                            <radio value="${entity.plan_analisis_periodicidad_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.plan_analisis_periodicidad_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="2.1,1" weights="55, 15, 30">
+                            <table border="false" weights="9, 91">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Parámetros analizados Morfológicos:" hint="Forma. Diametro 30-100 mm. Long 150-350 mm. Color. Sin rotura ni mohos. Consistencia firme." readonly="true"/>
+                                </row>
+                            </table>
+                            <radio value="${entity.plan_analisis_parametros_morfologicos_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.plan_analisis_parametros_morfologicos_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="2.1,1" weights="55, 15, 30">
+                            <table border="false" weights="9, 91">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Parámetros analizados Sensoriales:" hint=" Al corte punteado blanco. Distribución homogénea. Color marron. Textrura desmenuzable. Integridad de granos.Ligera sensación grasa. Olor y sabor a cebolla y especias" readonly="true"/>
+                                </row>
+                            </table>
+                            <radio value="${entity.plan_analisis_parametros_sensoriales_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.plan_analisis_parametros_sensoriales_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="2.1,1" weights="55, 15, 30">
+                            <table border="false" weights="9, 91">
+                                <row>
+                                    <p value=""/>
+                                    <input label="Ficha de cata:" hint="Existencia y cumplimentación de la ficha de cata" readonly="true"/>
+                                </row>
+                            </table>
+                            <radio value="${entity.plan_analisis_ficha_cata_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.plan_analisis_ficha_cata_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="2.1,1" weights="55, 15, 30">
+                            <input label="Calibración de Equipos de medida (Básculas, etc): " readonly="true"/>
+                            <radio value="${entity.calibracion_equipos_medida_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.calibracion_equipos_medida_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="2.1,1" weights="55, 15, 30">
+                            <input label="Registros de control de uso de contraetiquetas y numeraciones: " readonly="true"/>
+                            <radio value="${entity.registro_contraetiquetas_medida_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.registro_contraetiquetas_medida_notas}" hasDeleteButton="false"/>
+                        </row>
+                        <row colspan="2.1,1" weights="55, 15, 30">
+                            <input label="Procedimiento de segregación y gestión del producto no amparado: " readonly="true"/>
+                            <radio value="${entity.procedimiento_segregacion_gestion_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea value="${entity.procedimiento_segregacion_gestion_notas}" hasDeleteButton="false"/>
+                        </row>
+                    </table>
+                </tabitem>
+                <tabitem id="controlCebollaFresca" label="Control cebolla fresca">
+                    <p value="" />
+                    <p italic="true" value="Registro de autocontrol del cumplimiento de las características del Pliego"/>
+                    <p value="" />
+                    <table headerText=" Parámetros morfológicos">
+                        <row>
+                            <p value="FORMA, COLOR CUBIERTA, COLOR PULPA, PESO, LONGITUD, ALTRA, RELACION LOGITUD/ALTURA" />
+                        </row>
+                    </table>
+                    <p value="" />
+                    <table headerText=" Tamaño del lote(toneladas), Número de muestras de cebolla">
+                        <row>
+                            <p value="Menor que 5"/>
+                            <p value="7"/>
+                        </row>
+                        <row>
+                            <p value="5-500"/>
+                            <p value="2 por tonelada/ 20 máx"/>
+                        </row>
+                        <row>
+                            <p value="Mayor de 500"/>
+                            <p value="Máximo 40"/>
+                        </row>
+                    </table>
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un lote. Antes debe guardar el expediente">
+                        <action type="save" route="loteControlCebollaFresca-editLoteControlCebollaFresca">
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                            <param name="expediente_id" value="${entity.expediente.id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="loteControlCebollaFresca-editLoteControlCebollaFresca"
+                        numVisibleRows="3"
+                        properties="num_lote, proveedor, fecha, cantidad, analisis"
+                        repo="loteControlCebollaFrescaRepo">
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+
+
+                </tabitem>
+                <tabitem id="controlCebollaProcesada" label="Control cebolla procesada">
+                    <p value="" />
+                    <p italic="true" value="Registro de autocontrol del cumplimiento de las características del Pliego"/>
+                    <p value="" />
+                    <table headerText=" Parámetros morfológicos">
+                        <row>
+                            <p value="FORMA, COLOR CUBIERTA, COLOR PULPA, PESO, LONGITUD, ALTRA, RELACION LOGITUD/ALTURA" />
+                        </row>
+                    </table>
+                    <p value="" />
+                    <table headerText=" Tamaño del lote(toneladas), Número de muestras de cebolla">
+                        <row>
+                            <p value="Menor que 5"/>
+                            <p value="7"/>
+                        </row>
+                        <row>
+                            <p value="5-500"/>
+                            <p value="2 por tonelada/ 20 máx"/>
+                        </row>
+                        <row>
+                            <p value="Mayor de 500"/>
+                            <p value="Máximo 40"/>
+                        </row>
+                    </table>
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un lote. Antes debe guardar el expediente">
+                        <action type="save" route="loteControlCebollaProcesada-editLoteControlCebollaProcesada">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="loteControlCebollaProcesada-editLoteControlCebollaProcesada"
+                        numVisibleRows="3"
+                        properties="num_lote, proveedor, fecha, cantidad, rendimiento, analisis"
+                        repo="loteControlCebollaProcesadaRepo">
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem id="planControl" label="Plan de control analítico/análisis">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="RESULTADOS MORFOLÓGICOS: "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un lote. Antes debe guardar el expediente">
+                        <action type="save" route="loteControlResultadosMorfologicos-editLoteControlResultadosMorfologicos">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        onBeforeRender="setCumpleResultadosMorfologicos"
+                        route="loteControlResultadosMorfologicos-editLoteControlResultadosMorfologicos"
+                        numVisibleRows="3"
+                        properties="num_lote, fecha, diametro, longitud, periodicidad, cumple"
+                        repo="loteControlResultadosMorfologicosRepo">
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="RESULTADOS FÍSICO-QUÍMICOS: "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un lote. Antes debe guardar el expediente">
+                        <action type="save" route="loteControlResultadosFq-editLoteControlResultadosFq">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="loteControlResultadosFq-editLoteControlResultadosFq"
+                        numVisibleRows="3"
+                        properties="num_lote, fecha, ph, humedad, grasa, azucares, fibra, sal, periodicidad, cumple"
+                        repo="loteControlResultadosFqRepo">
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="RESULTADOS ORGANOLÉPTICOS: "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un lote. Antes debe guardar el expediente">
+                        <action type="save" route="loteControlResultadosOrganolepticos-editLoteControlResultadosOrganolepticos">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="loteControlResultadosOrganolepticos-editLoteControlResultadosOrganolepticos"
+                        numVisibleRows="3"
+                        properties="num_lote, fecha, resultado, periodicidad, cumple"
+                        repo="loteControlResultadosOrganolepticosRepo">
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem id="comunicacionesOrganoGestion" label="Comunicaciones al órgano de gestión">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="COMUNICACIÓN AL ÓRGANO DE GESTIÓN: "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <p value=""/>
+                    <p italic="true" value="Se contrastará la información enviada al Órgano de gestión mensualmente con la numeración utilizada para cada lote de elaboración con los registros del operador"/>
+                    <p value=""/>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Marcas comunicadas. Solicitud de contraetiquetas u otro material de etiquetado: "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir una marca. Antes debe guardar el expediente">
+                        <action type="save" route="marcaComunicada-editMarcaComunicada">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="marcaComunicada-editMarcaComunicada"
+                        numVisibleRows="3"
+                        repo="marcaComunicadaRepo">
+                        <column id="column_marca_comunicada_nota" headerText="Nota" filtering="true" ordering="true" value="${entity.marca_comunicada_nota}">
+                            <filter property="marca_comunicada_nota" matching="contains" valueExpression="${this.column_marca_comunicada_nota}"/>
+                            <order property="marca_comunicada_nota"/>
+                        </column>
+                        <column id="column_marca_comunicada_fecha_comunicacion" headerText="Fecha" filtering="true" ordering="true" value="${entity.marca_comunicada_fecha_comunicacion}">
+                            <filter property="marca_comunicada_fecha_comunicacion" matching="contains" valueExpression="${this.column_marca_comunicada_fecha_comunicacion}"/>
+                            <order property="marca_comunicada_fecha_comunicacion"/>
+                        </column>
+                        <column id="column_marca_comunicada_cumple" headerText="Cumple" filtering="true" ordering="true" value="${entity.marca_comunicada_cumple}">
+                            <filter property="marca_comunicada_cumple" matching="contains" valueExpression="${this.column_marca_comunicada_cumple}"/>
+                            <order property="marca_comunicada_cumple"/>
+                        </column>
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="Numeraciones utilizadas para el contraetiquetado del ultimo mes: "/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <p value=""/>
+                    <table headerText=" Notas, Fecha, Cumple" weights="60, 20, 20">
+                        <row>
+                            <textarea value="${entity.numeraciones_contraetiquetado_notas}" hasDeleteButton="false"/>
+                            <date value="${entity.numeraciones_contraetiquetado_fecha_comunicacion}" hasDeleteButton="false" hasTodayButton="false"/>
+                            <radio value="${entity.numeraciones_contraetiquetado_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                        </row>
+                    </table>
+
+                    <table border="false" weights="40, 60">
+                        <row>
+                            <select label="Mes: " value="${entity.mes}">
+                                <options>
+                                    <option value="Enero " label="Enero"/>
+                                    <option value="Febrero " label="Febrero"/>
+                                    <option value="Marzo " label="Marzo"/>
+                                    <option value="Abril " label="Abril"/>
+                                    <option value="Mayo " label="Mayo"/>
+                                    <option value="Junio " label="Junio"/>
+                                    <option value="Julio " label="Julio"/>
+                                    <option value="Agosto " label="Agosto"/>
+                                    <option value="Septiembre " label="Septiembre"/>
+                                    <option value="Octubre " label="Octubre"/>
+                                    <option value="Noviembre " label="Noviembre"/>
+                                    <option value="Diciembre " label="Diciembre"/>
+                                </options>
+                            </select>
+                            <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un tipo de morcilla. Antes debe guardar el expediente">
+                                <action type="save" route="tipoMorcillaControlDocumental-editTipoMorcillaControlDocumental">
+                                    <param name="expediente_id" value="${entity.expediente_id}" />
+                                    <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                    <param name="operador_id" value="${entity.expediente.operador.operador_id}" />
+                                    <param name="razon_social" value="${entity.expediente.operador.razon_social}" />
+                                    <param name="instalacion_id" value="${entity.expediente.instalacion.instalacion_id}" />
+                                    <param name="nombre_instalacion" value="${entity.expediente.instalacion.nombre_instalacion}" />
+                                </action>
+                            </button>
+                        </row>
+                    </table>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="tipoMorcillaControlDocumental-editTipoMorcillaControlDocumental"
+                        numVisibleRows="3"
+                        repo="tipoMorcillaControlDocumentalRepo">
+                        <column id="column_tipo_morcilla" headerText="Tipo morcilla" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.tipo_morcilla}"/>
+                        <column id="column_peso_unitario_kg" headerText="Peso unitario Kg" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.peso_unitario_kg}"/>
+                        <column id="column_unidad_kg" headerText="Unidades teóricas/kg" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.peso_unitario_kg gt 0? math:round(math:pow(10,2)/entity.tipoMorcillaInstalacion.peso_unitario_kg)/math:pow(10,2):null}"/>
+                        <param name="expediente_id" value="${entity.expediente_id}" />
+                        <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                        <param name="operador_id" value="${entity.expediente.operador.operador_id}" />
+                        <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                        <param name="instalacion_id" value="${entity.expediente.instalacioninstalacion_id}" />
+                        <param name="nombre_instalacion" value="${entity.expediente.instalacion.nombre_instalacion}" />
+
+                        <repofilter>
+                            <eq property="expediente_id" value="${empty(entity.expediente_id) ? '-1' : entity.expediente_id}" />
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+
+                <tabitem id="registroProductoNoConforme" label="Registro de producto no conforme">
+                    <p value=""/>
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un registro producto no conforme. Antes debe guardar el expediente">
+                        <action type="save" route="registroProductoNoConforme-editRegistroProductoNoConforme">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="registroProductoNoConforme-editRegistroProductoNoConforme"
+                        numVisibleRows="3"
+                        properties="num_lote, fecha_elaboracion, destino, num_albaran, cumple, notas"
+                        repo="registroProductoNoConformeRepo">
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem id="compraProductoEntreOperadores" label="Compra producto entre operadores">
+                    <p value=""/>
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir un registro de compra de producto entre operadores. Antes debe guardar el expediente">
+                        <action type="save" route="compraProductoEntreOperadores-editCompraProductoEntreOperadores">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="compraProductoEntreOperadores-editCompraProductoEntreOperadores"
+                        numVisibleRows="3"
+                        properties="num_lote, fecha_recepcion, documentacion, cumple, notas"
+                        repo="compraProductoEntreOperadoresRepo">
+                        <param name="expediente_id" value="${entity.procedimientoAutocontrol.expediente_id}" />
+                        <param name="num_expediente" value="${entity.procedimientoAutocontrol.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        <repofilter>
+                            <and>
+                                <eq property="procedimiento_autocontrol_id" value="${empty(entity.procedimiento_autocontrol_id) ? '-1' : entity.procedimiento_autocontrol_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem id="verificacionImplantacionAccionesCorrectivas" label="Verificación de la implantación de las accione correctivas">
+                    <p value=""/>
+
+                    <button label="Añadir" readonly="${empty (entity.expediente_id)}" readonlyMessage="No puede añadir una desviación. Antes debe guardar el expediente">
+                        <action type="save" route="desviacion-editDesviacion">
+                            <param name="expediente_id" value="${entity.expediente_id}" />
+                            <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                            <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                            <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        </action>
+                    </button>
+
+                    <datatable
+                        allowsPartialRestore="false"
+                        route="desviacion-editDesviacion"
+                        numVisibleRows="3"
+                        properties="desviacion, comprobacion_implantacion,solucionado, notas_aclaratorias"
+                        repo="desviacionRepo">
+                        <param name="expediente_id" value="${entity.expediente_id}" />
+                        <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                        <param name="procedimiento_autocontrol_id" value="${entity.procedimiento_autocontrol_id}" />
+                        <repofilter>
+                            <and>
+                                <eq property="expediente_id" value="${empty(entity.id) ? '-1' : entity.id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+            </tab>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+            <button label="Cancel">
+                <action type="cancel" route="back"/>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

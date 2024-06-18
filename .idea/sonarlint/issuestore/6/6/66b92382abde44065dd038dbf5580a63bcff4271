@@ -1,0 +1,34 @@
+
+\	java:S112™"FDefine and throw a dedicated exception instead of using a generic one.(Å•×Æ
+a	java:S112ð"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+F
+java:S3740‚"/Provide the parametrized type for this generic.(ßüÌÓ
+E
+java:S3740¢"/Provide the parametrized type for this generic.(º’½
+F
+java:S3740·"/Provide the parametrized type for this generic.(ªÖ—‘
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+U
+java:S1118,":Add a private constructor to hide the implicit public one.(Ø’øýÿÿÿÿ
+9
+java:S21193"Save and re-use this "Random".(šŸ«íøÿÿÿÿ
+4
+java:S2119="Save and re-use this "Random".(¡Å”¦
+9
+java:S2129B"Remove this "Long" constructor(„±¸šýÿÿÿÿ
+G
+java:S1874B",Remove this use of "Long"; it is deprecated.(„±¸šýÿÿÿÿ
+7
+java:S2129Ÿ" Remove this "Double" constructor(çƒ°§
+E
+java:S1874Ÿ".Remove this use of "Double"; it is deprecated.(çƒ°§
+8	java:S131¤""Add a default case to this switch.(ÜŸ•
+8	java:S131¹""Add a default case to this switch.(ÜŸ•
+@
+java:S1659Ó"$Declare "height" on a separate line.(÷¯ë§üÿÿÿÿ
+@
+java:S1659Û"$Declare "height" on a separate line.(÷¯ë§üÿÿÿÿ
+4
+java:S2119á"Save and re-use this "Random".(¼ÝÅf
+V
+java:S1128"4Remove this unused import 'android.graphics.Canvas'.(õž«•üÿÿÿÿ8¡Áé°¿1

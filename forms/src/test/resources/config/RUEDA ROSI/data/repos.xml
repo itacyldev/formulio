@@ -1,0 +1,26 @@
+<repos>
+
+    <repo dbFile="rueda.sqlite" id="actaRepo" dbTable="acta">
+        <meta>
+            <keyGenerator type="numericUUID"/>
+        </meta>
+    </repo>
+
+    <repo dbFile="rueda.sqlite" id="recintoRepo" dbTable="recinto">
+        <mapping fk="acta_id" property="acta" repo="actaRepo"/>
+    </repo>
+
+    <repo dbFile="rueda.sqlite" id="preguntaRepo" dbTable="pregunta" />
+
+    <repo dbFile="rueda.sqlite" id="registroVinedoRepo" dbTable="registro_vinedo">
+        <meta>
+            <keyGenerator type="numericUUID"/>
+        </meta>
+        <mapping fk="recinto_id" property="recinto" repo="recintoRepo"/>
+        <mapping fk="pregunta_id" property="pregunta" repo="preguntaRepo"/>
+    </repo>
+
+    <repo dbFile="rueda.sqlite" id="recintosRuedaRepo" dbTable="recintos" />
+
+
+</repos>

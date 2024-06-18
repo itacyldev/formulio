@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/input_component"
+        android:title="Input"
+        android:icon="@drawable/ic_tool_x" />
+    <item
+        android:id="@+id/select_component"
+        android:title="Select"
+        android:icon="@drawable/ic_tool_x" />
+    <item
+        android:id="@+id/radio_component"
+        android:title="Radio"
+        android:icon="@drawable/ic_tool_x" />
+    <!-- Agrega más elementos de menú según tus necesidades -->
+</menu>

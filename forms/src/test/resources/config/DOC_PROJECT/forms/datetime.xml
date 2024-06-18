@@ -1,0 +1,12 @@
+<main id="formDatetime" name="Datetime" repo="pruebaRepo">
+    <edit>
+        <form>
+            <datetime converter="integer" label="Fecha integer segundos: "
+                pattern="unixepoch_s" value="${entity.fecha_integer_seconds}" />
+            <datetime converter="integer" label="Fecha integer milisegundos: "
+                pattern="unixepoch_m" value="${entity.fecha_integer_milliseconds}" />
+            <datetime converter="string" label="Fecha string: "
+                pattern="yyyy/MM/dd" value="${entity.fecha_text}" />
+        </form>
+    </edit>
+</main>

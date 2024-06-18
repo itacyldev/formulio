@@ -1,0 +1,209 @@
+<main name="acta" description="Acta" id="idActa" repo="actaRepo">
+    <list id="listActa" name="LISTADO DE AUDITORÍAS" description="LISTADO DE AUDITORÍAS">
+        <datatable>
+            <column id="column_acta_id" headerText="Acta" filtering="true" ordering="true" value="${entity.acta_id}">
+                <filter property="acta_id" matching="contains" valueExpression="${this.column_acta_id}"/>
+                <order property="acta_id"/>
+            </column>
+            <column id="column_num_acta" headerText="Nº Acta" filtering="true" ordering="true" value="${entity.num_acta}">
+                <filter property="num_acta" matching="contains" valueExpression="${this.column_num_acta}"/>
+                <order property="num_acta"/>
+            </column>
+            <column id="column_fecha_inspeccion" headerText="Fecha Inspección" filtering="true" ordering="true" value="${entity.fecha_inspeccion}">
+                <filter property="fecha_inspeccion" matching="contains" valueExpression="${this.column_fecha_inspeccion}"/>
+                <order property="fecha_inspeccion"/>
+            </column>
+            <action type="nav" route="idActa-editActa2"/>
+        </datatable>
+
+        <buttonbar type="fab">
+            <button id="createButton">
+                <action id="createActa" type="create" route="idActa-editActa2" >
+                    <param name="repo" value="actaRepo"/>
+                    <param name="fecha" value="${date.now}"/>
+                </action>
+            </button>
+        </buttonbar>
+
+    </list>
+
+    <edit id="editActa2">
+        <form>
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="AUDITORÍA IN SITU. REGISTRO DE VIÑEDOS"/>
+            <p value=""/>
+
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="1. IDENTIFICACIÓN DEL ACTA: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row weights="20, 60, 20">
+                    <input label="Id. acta: " id="acta_id" value="${entity.acta_id}" readonly="true"/>
+                    <input id="num_acta" label="Identificación del acta: " value="${entity.num_acta}" validator="required"/>
+                    <input label="Formato: " value="IT0301-0" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="2. DATOS DE LA AUDIITORÍA: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <date label="Fecha inspección : " value="${entity.fecha_inspeccion}" validator="required" hasTodayButton="false"/>
+                    <input label="Código viticultor: " value="${entity.codigo_viticultor}" validator="required"/>
+                </row>
+                <row colspan="2">
+                    <select id="inspector" label="Inspector: " value="${entity.inspector}">
+                        <options>
+                            <option value="Teresa Yañez Colomo" label="Teresa Yañez Colomo"/>
+                            <option value="Emilio Rodrigo Ramos" label="Emilio Rodrigo Ramos" />
+                            <option value="José Ignacio Marqués Rodríguez" label="José Ignacio Marqués Rodríguez" />
+                            <option value="Cristina Rebollo Acebes" label="Cristina Rebollo Acebes" />
+                            <option value="Inmaculada Sáez González" label="Inmaculada Sáez González" />
+                            <option value="Irene Lara Hergueras" label="Irene Lara Hergueras" />
+                            <option value="Jesús Durán Martín" label="Jesús Durán Martín" />
+                            <option value="Juan Carlos González Ruíz" label="Juan Carlos González Ruíz" />
+                            <option value="Mª Montserrat Gil Pérez" label="Mª Montserrat Gil Pérez" />
+                            <option value="Manuel Fernández Calderón" label="Manuel Fernández Calderón" />
+                            <option value="Maria del Carmen Melendre Frías" label="Maria del Carmen Melendre Frías" />
+                            <option value="Marta Martín Álvarez" label="Marta Martín Álvarez" />
+                            <option value="Ruth Franco Fernández" label="Ruth Franco Fernández" />
+                            <option value="Sátur Jiménez Andrés" label="Sátur Jiménez Andrés" />
+                            <option value="Óscar Díez Sánchez" label="Óscar Díez Sánchez" />
+                        </options>
+                    </select>
+
+                </row>
+            </table>
+
+             <p value=""/>
+             <divisor color="#00766C" strokeWidth="10" />
+             <p bold="true" value="3. RECINTOS: " fontSize="18"/>
+             <divisor color="#00766C" strokeWidth="10" />
+             <p value=""/>
+
+            <!--<table border="false">
+                <row>
+                    <input id="poligonoFilter" label="Polígono: " value="" />
+                    <input id="parcelaFilter" label="Parcela: " value="" />
+                    <input id="recintoFilter" label="Recinto: " value="" />
+                </row>
+            </table>-->
+             <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="3.1 Recintos: " />
+            <divisor color="#00766C" strokeWidth="8" />
+            <p value=""/>
+             <datatable
+                allowsPartialRestore="false"
+                route="idRecinto-editRecinto"
+                properties="C_MUNICIPIO, C_PROVINCIA, C_POLIGONO, C_PARCELA, C_RECINTO, L_SUP_SIGPAC"
+                numVisibleRows="3"
+                repo="recintosRuedaRepo"
+                 action="save">
+                    <param name="acta_id" value="${view.acta_id}" />
+                    <param name="num_acta" value="${view.num_acta}"/>
+                    <param name="recinto_id" value="${entity.PK_UID}"/>
+                    <param name="c_poligono" value="${entity.C_POLIGONO}"/>
+                    <param name="c_parcela" value="${entity.C_PARCELA}"/>
+                    <param name="c_recinto" value="${entity.C_RECINTO}"/>
+
+                 <!--<repofilter>
+                     <and>
+                        <contains property="C_POLIGONO" value="${view.poligonoFilter}" />
+                        <contains property="C_PARCELA" value="${view.parcelaFilter}" />
+                        <contains property="C_RECINTO" value="${view.recintoFilter}" />
+                     </and>
+                 </repofilter>-->
+             </datatable>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="3.2 Recintos inspeccionados: " />
+            <divisor color="#00766C" strokeWidth="8" />
+            <p value=""/>
+            <datatable
+                allowsPartialRestore="false"
+                route="idRecinto-editRecinto"
+                numVisibleRows="2"
+                repo="recintoRepo"
+                action="save">
+                <column id="column_pk_uid" headerText="Id. Recinto" filtering="true" ordering="true" value="${entity.pk_uid}">
+                    <filter property="pk_uid" matching="contains" valueExpression="${this.column_pk_uid}"/>
+                    <order property="pk_uid"/>
+                </column>
+                <column id="column_c_poligono" headerText="Poligono" filtering="true" ordering="true" value="${entity.c_poligono}">
+                    <filter property="c_poligono" matching="contains" valueExpression="${this.column_c_poligono}"/>
+                    <order property="c_poligono"/>
+                </column>
+                <column id="column_c_parcela" headerText="Parcela" filtering="true" ordering="true" value="${entity.c_parcela}">
+                    <filter property="c_parcela" matching="contains" valueExpression="${this.column_c_parcela}"/>
+                    <order property="c_parcela"/>
+                </column>
+                <column id="column_c_recinto" headerText="Recinto" filtering="true" ordering="true" value="${entity.c_recinto}">
+                    <filter property="c_recinto" matching="contains" valueExpression="${this.column_c_recinto}"/>
+                    <order property="c_recinto"/>
+                </column>
+                <param name="acta_id" value="${view.acta_id}" />
+                <param name="num_acta" value="${view.num_acta}"/>
+                <param name="recinto_id" value="${entity.PK_UID}"/>
+                <param name="c_poligono" value="${entity.C_POLIGONO}"/>
+                <param name="c_parcela" value="${entity.C_PARCELA}"/>
+                <param name="c_recinto" value="${entity.C_RECINTO}"/>
+                <repofilter>
+                    <and>
+                       <contains property="acta_id" value="${view.acta_id}" />
+                    </and>
+                </repofilter>
+            </datatable>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p bold="true" value="5. FIRMA: " fontSize="18"/>
+            <divisor color="#00766C" strokeWidth="10" />
+            <p value=""/>
+
+            <table>
+                <row>
+                    <table border="false">
+                        <row>
+                            <p bold="true" value="Inspector"/>
+                        </row>
+                        <row>
+                            <image converter="b64Image" embedded="true" value="${entity.firma_inspector}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <input label="Fdo." value="${view.inspector}" readonly="true"/>
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row>
+                            <p bold="true" value="Representante"/>
+                        </row>
+                        <row>
+                            <image converter="b64Image" embedded="true" value="${entity.firma_representante}" hasDeleteButton="false" inputType="4"/>
+                        </row>
+                        <row>
+                            <input label="Fdo." value="${entity.representante}" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action route="idActa-listActa" type="save" registerInHistory="false" popHistory="1"/>
+            </button>
+            <button label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+</main>

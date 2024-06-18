@@ -1,0 +1,18 @@
+
+K
+java:S3740À"/Provide the parametrized type for this generic.(’ÎÏÒúÿÿÿÿ
+F
+java:S3740Ä"/Provide the parametrized type for this generic.(–”Âï
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+o
+java:S30082"TRename this field "_instance" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯¤Ûäşÿÿÿÿ
+H
+java:S1135*"2Complete the task associated to this TODO comment.(ÇÜáÓ
+Q
+java:S1117b";Rename "scripts" which hides the field declared at line 51.(ªí³Ê
+<
+java:S3457µ"2nd argument is not used.(‰ğúŒıÿÿÿÿ8ÃˆÊºì1
+k
+java:S3824ã"HReplace this "Map.containsKey()" with a call to "Map.computeIfAbsent()".(¬³Íüÿÿÿÿ8ş‹Êºì1
+_
+java:S3824Û"HReplace this "Map.containsKey()" with a call to "Map.computeIfAbsent()".(óˆ›å

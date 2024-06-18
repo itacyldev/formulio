@@ -1,0 +1,19 @@
+
+ž
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(·ƒÚ›8©Áïÿù1
+S
+java:S1874&"8Remove this use of "THEME_HOLO_LIGHT"; it is deprecated.(ÍØ„“ùÿÿÿÿ
+R
+java:S1874&"7Remove this use of "THEME_HOLO_DARK"; it is deprecated.(ÍØ„“ùÿÿÿÿ
+O
+java:S1659U"-Declare "backgroundColor" on a separate line.(êå¸žùÿÿÿÿ8øë­þù1
+V
+java:S1481U"4Remove this unused "backgroundColor" local variable.(êå¸žùÿÿÿÿ8üë­þù1
+M
+java:S1874["0Remove this use of "getColor"; it is deprecated.(½Øíê8ÁŒˆ ú1
+R
+java:S1874\"0Remove this use of "getColor"; it is deprecated.(Õ¬¥»þÿÿÿÿ8ÂŒˆ ú1
+[
+java:S1874j">Remove this use of "startActivityForResult"; it is deprecated.(Á„ˆš8ÞŒˆ ú1
+>
+java:S1604;"(Make this anonymous inner class a lambda(Î¬¯”

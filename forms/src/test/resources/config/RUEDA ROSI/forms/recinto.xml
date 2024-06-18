@@ -1,0 +1,133 @@
+<main name="muestra" description="Recinto" id="idRecinto" repo="recintosRuedaRepo" mainForm="false">
+    <list id="listRecinto" name="RECINTOS">
+        <datatable  route="idRecinto-editRecinto"/>
+        <buttonbar type="fab"/>
+    </list>
+
+    <edit id="editRecinto">
+        <script src="scripts/rueda.js"/>
+        <form>
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="CUESTIONARIO"/>
+            <p value=""/>
+
+            <table headerText=" Id. Acta, Acta" weights="30, 70">
+                <row>
+                    <input id="acta_id" value="${entity.acta_id}" placeHolder="${params.acta_id}" readonly="true"/>
+                    <input id="num_acta" value="${entity.num_acta}" placeHolder="${params.num_acta}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id.Recinto, Polígono, Parcela, Recinto">
+                <row>
+                    <input id="recinto_id" value="${entity.PK_UID}" placeHolder="${params.recinto_id}" readonly="true"/>
+                    <input id="c_poligono" value="${entity.C_POLIGONO}" placeHolder="${params.c_poligono}" readonly="true"/>
+                    <input id="c_parcela" value="${entity.C_PARCELA}" placeHolder="${params.c_parcela}" readonly="true"/>
+                    <input id="c_recinto" value="${entity.C_RECINTO}" placeHolder="${params.c_recinto}" readonly="true"/>
+                </row>
+            </table>
+
+            <datalist id="datalistRegistroVinedo" repo="registroVinedoRepo" onBeforeRender="createRecinto">
+                <repofilter>
+                    <and>
+                        <eq property="pk_uid" value="${view.recinto_id}"/>
+                    </and>
+                </repofilter>
+                <datalistitem>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="${entity.pregunta.texto_pregunta}"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p value=""/>
+                    <table weights="35, 65">
+                        <row>
+                            <p italic="true" value="${entity.pregunta.descripcion_pregunta}"/>
+                        </row>
+                        <row>
+                            <table border="false">
+                                <row>
+                                    <radio label="Cumple: " value="${entity.cumple}" orientation="vertical">
+                                        <options>
+                                            <option label="SI" value="SI" />
+                                            <option label="NO" value="NO" />
+                                            <option label="NA" value="NA" />
+                                        </options>
+                                    </radio>
+                                </row>
+                            </table>
+                            <table border="false">
+                                <row weights="20, 20, 60">
+                                    <p bold="true" value="Imagen: "/>
+                                    <switcher id="switcher" value="${not empty(entity.image)?1:0}"/>
+                                    <p value=""/>
+                                </row>
+                                <row>
+                                    <image converter="b64Image" embedded="true" value="${entity.image}" render="${view.switcher eq 'true'}" hasDeleteButton="false" />
+                                </row>
+                            </table>
+                        </row>
+                        <row>
+                            <textarea label="Observaciones: " value="${entity.observaciones}"/>
+                        </row>
+                    </table>
+                    <!--<table weights="25, 40, 35">
+                        <row colspan="2">
+                            <p italic="true" value="${entity.pregunta.descripcion_pregunta}"/>
+                        </row>
+                        <row>
+                            <radio label="Cumple: " value="${entity.cumple}" orientation="horizontal">
+                                <options>
+                                    <option label="SI" value="SI" />
+                                    <option label="NO" value="NO" />
+                                </options>
+                            </radio>
+                            <textarea label="Observaciones: " value="${entity.observaciones}" />
+                        </row>
+                    </table>
+                    <table border="false">
+                        <row weights="20, 10, 70">
+                            <p bold="true" value="Imagen: "/>
+                            <switcher id="switcher" value="${not empty(entity.image)?1:0}"/>
+                            <p value=""/>
+                        </row>
+                    </table>
+                    <image converter="b64Image" embedded="true" value="${entity.image}" render="${view.switcher eq 'true'}" hasDeleteButton="false" />-->
+                    <p value=""/>
+                </datalistitem>
+            </datalist>
+
+
+            <!--<p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="RECINTO: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p value=""/>-->
+
+            <!--<input id="recinto_id" value="${entity.pk_uid_id}" validator="required"/>-->
+            <!--<autocomplete id="recinto" label="Recinto: " forceSelection="true" repo="recintosRuedaRepo" value="${entity.pk_uid}" validator="required">
+                <options labelExpression="${entity.C_REFREC}" labelFilteringProperty="C_REFREC" valueProperty="pk_uid" />
+                <repofilter>
+                    <contains property="C_REFREC" value="${this.value}"/>
+                </repofilter>
+            </autocomplete>-->
+
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true" controller="datalistRegistroVinedo">
+                    <param name="entityId" value="${params.acta_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.acta_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.muestra_id)}" readonlyMessage="No puede realizar esta acción: No existe recinto" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.acta_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

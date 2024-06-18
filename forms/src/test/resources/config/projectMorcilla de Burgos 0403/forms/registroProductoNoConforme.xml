@@ -1,0 +1,100 @@
+<main id="registroProductoNoConforme" name="Registro producto no conforme" repo="registroProductoNoConformeRepo" mainForm="false">
+    <list id="listRegistroProductoNoConforme" name="Registro producto no conforme" description="Listado registro productos no conforme">
+        <datatable>
+            <column id="column_num_lote" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote}"/>
+                <order property="num_lote"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.expediente.operador.razon_social}"/>
+            <column id="column_fecha_elaboracion" headerText="Fecha elaboración" filtering="true" ordering="true" value="${entity.fecha_elaboracion}">
+                <filter property="fecha_elaboracion" matching="contains" valueExpression="${this.column_fecha_elaboracion}"/>
+                <order property="fecha_elaboracion"/>
+            </column>
+            <column id="column_destino" headerText="Destino" filtering="true" ordering="true" value="${entity.destino}">
+                <filter property="destino" matching="contains" valueExpression="${this.column_destino}"/>
+                <order property="destino"/>
+            </column>
+            <column id="column_num_albaran" headerText="Albarán" filtering="true" ordering="true" value="${entity.num_albaran}">
+                <filter property="num_albaran" matching="contains" valueExpression="${this.column_num_albaran}"/>
+                <order property="num_albaran"/>
+            </column>
+            <column id="column_cumple" headerText="Cumple" filtering="true" ordering="true" value="${entity.cumple}">
+                <filter property="cumple" matching="contains" valueExpression="${this.column_cumple}"/>
+                <order property="cumple"/>
+            </column>
+            <column id="column_notas" headerText="Notas" filtering="true" ordering="true" value="${entity.notas}">
+                <filter property="notas" matching="contains" valueExpression="${this.column_notas}"/>
+                <order property="notas"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editRegistroProductoNoConforme">
+        <form id="formRegistroProductoNoConforme">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="REGISTRO DE PRODUCTO NO CONFORME"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Operador" weights="25, 35, 40" >
+                        <row>
+                            <input value="${entity.procedimientoAutocontrol.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.procedimientoAutocontrol.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <textarea value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="LOTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <input label="Id. procedimiento autocontrol: " value="${entity.procedimiento_autocontrol_id}" placeHolder="${not empty(params.procedimiento_autocontrol_id)?params.procedimiento_autocontrol_id:null}" readonly="true"/>
+
+            <input label="Nº Lote: " value="${entity.num_lote}" validator="required"/>
+
+            <date label="Fecha elaboración/denominación venta: " value="${entity.fecha_elaboracion}" />
+
+            <input label="Destino: " value="${entity.destino}"/>
+
+            <input label="Número albarán: " value="${entity.num_albaran}"/>
+
+            <radio label="Cumple: " value="${entity.cumple}" orientation="horizontal" weights="15, 85">
+                <options>
+                    <option label="Sí" value="S" />
+                    <option label="No" value="N" />
+                </options>
+            </radio>
+
+            <textarea label="Notas aclaratorias: " value="${entity.notas}" />
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.procedimiento_autocontrol_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.procedimiento_autocontrol_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.registro_producto_no_conforme_id)}" readonlyMessage="No puede realizar esta acción: No existe lote registro producto no conforme">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.procedimiento_autocontrol_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

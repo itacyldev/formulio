@@ -1,0 +1,92 @@
+{
+  "description": "Job Acta Muestras",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpointUpload": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/files/",
+    "apikey": "USER-MUNGARRO-UQSERV",
+    "jobType": "FormicGenerarActaTomaMuestra",
+    "endpointActa": "https://serviciosprex.itacyl.es/uqserv/cnt/rest/jobs/"
+  },
+  "executionMode": "FG",
+  "tasks": [
+    {
+      "name": "t1",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/calidad.sqlite",
+        "sqlQuery": "SELECT acta_toma_muestra.acta_id ACTA_ID, acta_toma_muestra.acta ACTA, formato || ' ' || revision FORMATO, operador.razon_social RAZON_SOCIAL, operador.direccion_social || ', ' || municipio_operador.name || ' ' || operador.codigo_postal_social || '-' || provincia_operador.name DOMICILIO_SOCIAL, instalacion.direccion_instalacion || ', ' || municipio_instalacion.name || ' ' || instalacion.codigo_postal_instalacion || '-' || provincia_instalacion.name DIRECCION_INSTALACION, operador.responsable NOMBRE_REPRESENTANTE, acta_toma_muestra.nombre_toma_muestra NOMBRE, acta_toma_muestra.apellidos_toma_muestra APELLIDOS, acta_toma_muestra.dni_toma_muestra DNI, acta_toma_muestra.operador_renuncia OPERADOR_RENUNCIA, acta_toma_muestra.entrega_inspeccionado ENTREGA_INSPECCIONADO, acta_toma_muestra.observaciones_entrega_inspeccionado OBSERVACIONES_ENTREGA_INSPECCIONADO, 'A ' || strftime('%d',acta_toma_muestra.fecha_firma) || ' de ' || case strftime('%m',acta_toma_muestra.fecha_firma) when '01' then 'enero' when '02' then 'febrero' when '03' then 'marzo' when '04' then 'abril' when '05' then 'mayo' when '06' then 'junio' when '07' then 'julio' when '08' then 'agosto' when '09' then 'septiembre' when '10' then 'octubre' when '11' then 'noviembre' when '12' then 'diciembre' end || ' de ' || strftime('%Y',acta_toma_muestra.fecha_firma) FECHA_FIRMA FROM acta_toma_muestra LEFT OUTER JOIN calidad ON acta_toma_muestra.expediente_id = calidad.id LEFT OUTER JOIN operador ON calidad.operador_id = operador.operador_id LEFT OUTER JOIN instalacion ON operador.operador_id = instalacion.operador_id LEFT OUTER JOIN municipio municipio_operador ON operador.provmuni_id_social = municipio_operador.provmuni LEFT OUTER JOIN provincia provincia_operador ON operador.prov_id_social = provincia_operador.id LEFT OUTER JOIN municipio municipio_instalacion ON instalacion.provmuni_id_instalacion = municipio_instalacion.provmuni LEFT OUTER JOIN provincia provincia_instalacion ON instalacion.prov_id_instalacion = provincia_instalacion.id WHERE acta_toma_muestra.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "cabecera.csv"
+      }
+    },
+    {
+      "name": "t2",
+      "reader": {
+        "type": "sqlreader",
+        "dbFile": "data/calidad.sqlite",
+        "sqlQuery": "SELECT muestra, muestra.tipo_muestra, muestra.dispuesta_comercializacion, muestra.denominacion_venta, muestra.marca_comercial, muestra.lote, muestra.fecha_consumo_preferente, muestra.num_contraetiqueta, muestra.cantidad_producto_muestreado, muestra.id_muestra_inicial, muestra.id_muestra_contradictorio, muestra.id_muestra_dirimente, muestra.tipo_deteminaciones FROM muestra LEFT JOIN acta_toma_muestra ON muestra.acta_id = acta_toma_muestra.acta_id WHERE acta_toma_muestra.expediente_id='${params.expediente_id}'"
+      },
+      "writer": {
+        "type": "csvWriter",
+        "outputFile": "muestras.csv"
+      }
+    },
+    {
+      "name": "t3",
+      "processor": {
+        "inputFile": "${t1.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpointUpload}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&execMode=BG"
+      }
+    },
+    {
+      "name": "t4",
+      "processor": {
+        "inputFile": "${t2.outputFile}",
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "headers": {
+          "Content-Type": "multipart/form-data",
+          "Accept": "multipart/form-data"
+        },
+        "url": "${gparams.endpoint}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&execMode=BG"
+      }
+    },
+    {
+      "name": "t5",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "url": "${gparams.endpointActa}?jobType=${gparams.jobType}&apikey=${gparams.apikey}&inputFile=${t3.responseHeaders['Location']}&inputFile=${t4.responseHeaders['Location']}"
+      }
+    },
+    {
+      "name": "t6",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t4.responseHeaders['Location']}?apikey=${gparams.apikey}"
+      }
+    },
+    {
+      "name": "t7",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "get",
+        "url": "${t5.outputJson['resources'][0]}?apikey=${gparams.apikey}",
+        "outputFile": "Acta_Toma_Muestras.docx",
+        "outputFileExtension": "docx"
+      }
+    }
+  ]
+}

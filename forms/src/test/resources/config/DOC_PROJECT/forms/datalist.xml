@@ -1,0 +1,21 @@
+<main id="formDatalist" name="Datalist" repo="pruebaRepo">
+    <edit>
+        <form>
+            <datalist id="datalistProvincia" repo="provinciaRepo">
+                <datalistitem>
+                    <table border="0" weigths="30, 70">
+                        <row>
+                            <input label="Cod.: " value="${entity.c_provincia_id}"/>
+                            <input label="Provincia" value="${entity.d_provincia}"/>
+                        </row>
+                    </table>
+                </datalistitem>
+                <repofilter>
+                    <le property="c_provincia_id" value="9"/>
+               </repofilter>
+            </datalist>
+
+
+        </form>
+    </edit>
+</main>
