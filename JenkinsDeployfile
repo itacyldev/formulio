@@ -96,8 +96,11 @@ pipeline {
                            sh "git push --delete github ${RELEASE_TAG}"
                        }
                    }
+                    // Empujar la etiqueta específica a GitHub
+                   sh "git push github ${RELEASE_TAG}"
 
-                   sh "git push github master --tags"
+                   // Empujar la rama master a GitHub
+                   sh "git push github master"
 
                }
            }
