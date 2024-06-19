@@ -6,6 +6,6 @@ La aplicación incluye componentes de interfaz para cubrir la mayoría de los ca
 
 Formulio también incluye un módulo configurable de ejecución de procesos en segundo plano llamado jayjobs, que permite definir pasos a ejecutar en JSON para tareas como exportar datos, sincronizar datos con una API REST remota, etc.
 
-<div align"center">
+<div align="center">
     <img src="https://github.com/itacyldev/formulio/blob/master/itacyl3.png">
 </div>
