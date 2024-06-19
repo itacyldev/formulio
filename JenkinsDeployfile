@@ -87,7 +87,7 @@ pipeline {
                    '''
                    sh "git fetch github"
                    sh "git checkout master"
-             
+
                    script {
                        def existsTag = sh(script: "git ls-remote --tags github | grep ${RELEASE_TAG} | wc -l", returnStdout: true).trim()
                        if ("${existsTag}" == "1") {
@@ -97,8 +97,8 @@ pipeline {
                        }
                    }
 
-                   // Empujar la última etiqueta solamente
-                   sh "git push github ${RELEASE_TAG}"
+                   sh "git push github master --tags"
+
                }
            }
        }
