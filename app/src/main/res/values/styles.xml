@@ -1,0 +1,129 @@
+<resources>
+
+    <style name="ActionBarPopupStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">?attr/AppBackgroundColor</item>
+        <item name="android:textColor">?attr/onAppBackgroundColor</item>
+    </style>
+
+    <style name="BottomNavigationStyle">
+        <item name="android:background">?attr/primaryColor</item>
+        <item name="itemBackground">?attr/primaryColor</item>
+        <item name="itemIconTint">@drawable/navbar_color</item>
+        <item name="itemTextColor">@drawable/navbar_color</item>
+    </style>
+    
+    <style name="ProjectFormsCardStyle">
+        <item name="cardElevation">5dp</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardBackgroundColor">?attr/surfaceColor</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="FloatingActionAddButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="backgroundTint">?attr/primaryColor</item>
+        <item name="tint">?attr/onPrimaryColor</item>
+        <item name="srcCompat">@android:drawable/ic_input_add</item>
+    </style>
+
+    <!-- Components -->
+
+    <style name="Default_Label_font">
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Default_TextView_font">
+        <item name="android:textAppearance">?attr/textAppearanceListItem</item>
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+    </style>
+
+    <style name="Component_background">
+        <item name="android:background">?attr/surfaceColor</item>
+    </style>
+
+    <!-- Componet Autocomplete -->
+
+    <style name="Autocomplete_label" parent="Default_Label_font">
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="Autocomplete_edittext" parent="Default_TextView_font">
+        <item name="backgroundTint">@color/underline_color_selector</item>
+        <item name="android:popupBackground">?attr/AppBackgroundColor</item>
+    </style>
+
+    <!-- Component TextField -->
+    <style name="Textfield_label" parent="Default_Label_font">
+    </style>
+
+    <style name="Textfield_edittext" parent="Default_TextView_font">
+        <item name="backgroundTint">@color/underline_color_selector</item>
+    </style>
+
+    <style name="Textfield_button">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:background">@drawable/selectablebuttonbackground</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:contentDescription">@string/tool_buttons_x</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_weight">0.3</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="tint">?attr/onSurfaceColor</item>
+    </style>
+
+    <style name="Textfield_cancel_button" parent="Textfield_button">
+        <item name="android:src">@drawable/ic_tool_x_circle_dark</item>
+    </style>
+
+    <style name="Textfield_search_button" parent="Textfield_button">
+        <item name="android:src">@drawable/ic_action_search</item>
+    </style>
+
+    <!-- Component Datatable -->
+
+    <style name="Datatable_header_container">
+        <item name="android:background">?attr/surface2Color</item>
+    </style>
+
+    <style name="Datatable_header_title">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:textColor">?attr/onAppBackgroundColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Datatable_header_filter">
+        <item name="android:textColor">?attr/onSurfaceColor</item>
+    </style>
+
+    <style name="Datatable_header_filter_cancel">
+        <item name="android:background">@drawable/selectableimagebackground</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="Datatable_header_filter_order">
+        <item name="android:background">@drawable/selectableimagebackground</item>
+        <item name="android:contentDescription">@string/layer_aslist</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="DevConsoleTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- border color -->
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+    </style>
+
+    <style name="SwitchStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">?attr/primaryColor</item>
+    </style>
+
+
+</resources>

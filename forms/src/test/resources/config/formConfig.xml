@@ -1,0 +1,11 @@
+<main name="myFirstForm" description="An example of short description" id="form1" repo="contacts">
+    <list id="mylist">
+        <actions>
+            <add route="form1#edit" label="label1"/>
+            <update route="form1#edit" label="label2" />
+        </actions>
+    </list>
+
+    <edit id="form1#edit"></edit>
+    <edit />
+</main>

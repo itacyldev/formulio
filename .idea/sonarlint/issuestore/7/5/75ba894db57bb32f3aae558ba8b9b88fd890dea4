@@ -1,0 +1,32 @@
+
+C
+java:S1659"-Declare "rightMenuLayout" on a separate line.(ŒÙþá
+B
+java:S1659"'Declare "rightMenu" on a separate line.(ö«›»ûÿÿÿÿ
+H
+java:S1659"-Declare "closeLeftButton" on a separate line.(©‡“½üÿÿÿÿ
+y
+java:S1450"^Remove the "closeLeftButton" field and declare it as a local variable in the relevant methods.(©‡“½üÿÿÿÿ
+z
+java:S1450"_Remove the "closeRightButton" field and declare it as a local variable in the relevant methods.(©‡“½üÿÿÿÿ
+s
+java:S1450"XRemove the "rightMenu" field and declare it as a local variable in the relevant methods.(ö«›»ûÿÿÿÿ
+<	java:S131_""Add a default case to this switch.(ãÁð™øÿÿÿÿ
+M
+java:S1874Œ"1Remove this use of "startDrag"; it is deprecated.(¨þÁ±ùÿÿÿÿ
+H
+java:S1068"-Remove this unused "rightMenu" private field.(ö«›»ûÿÿÿÿ
+>
+java:S1604*"(Make this anonymous inner class a lambda(±Œ«Š
+>
+java:S16043"(Make this anonymous inner class a lambda(Ëš˜œ
+>
+java:S1604;"(Make this anonymous inner class a lambda(ÞûéÎ
+=
+java:S1604B"(Make this anonymous inner class a lambda(ªãÝ}
+C
+java:S1604\"(Make this anonymous inner class a lambda(¬ÖËøÿÿÿÿ
+>
+java:S1604‡"(Make this anonymous inner class a lambda(·Ë¢[
+f
+java:S1301_"KReplace this "switch" statement by "if" statements to increase readability.(ãÁð™øÿÿÿÿ

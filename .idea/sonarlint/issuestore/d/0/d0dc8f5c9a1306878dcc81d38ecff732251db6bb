@@ -1,0 +1,70 @@
+
+K
+java:S3740ï"/Provide the parametrized type for this generic.(¦±¨¸ùÿÿÿÿ
+V	java:S125A"<This block of commented-out lines of code should be removed.(ÜœÚãüÿÿÿÿ
+T
+java:S1874E"9Remove this use of "PreferenceManager"; it is deprecated.(ðíÕ€úÿÿÿÿ
+^
+java:S1874E"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(ðíÕ€úÿÿÿÿ
+P	java:S125M"<This block of commented-out lines of code should be removed.(êº¬h
+R
+java:S2696˜"6Make the enclosing method "static" or remove this set.(´‡ãúÿÿÿÿ
+F
+java:S1874š"/Remove this use of "execute"; it is deprecated.(”ªÒ¦
+M
+java:S2696¢"6Make the enclosing method "static" or remove this set.(åÙÓˆ
+P
+java:S1874²"9Remove this use of "PreferenceManager"; it is deprecated.(Òþ£Â
+Z
+java:S1874²"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òþ£Â
+P
+java:S1874¸"9Remove this use of "PreferenceManager"; it is deprecated.(Òþ£Â
+Z
+java:S1874¸"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òþ£Â
+U
+java:S1854Ô">Remove this useless assignment to local variable "originFile".(„ä ¡
+P
+java:S1874Ì"9Remove this use of "PreferenceManager"; it is deprecated.(Òþ£Â
+Z
+java:S1874Ì"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(Òþ£Â
+R	java:S125Ò"<This block of commented-out lines of code should be removed.(®¸úÒ
+F
+java:S1481Ô"/Remove this unused "originFile" local variable.(„ä ¡
+W	java:S125Ú"<This block of commented-out lines of code should be removed.(íäã“þÿÿÿÿ
+W	java:S125œ"<This block of commented-out lines of code should be removed.(ð–®Çøÿÿÿÿ
+V
+java:S1161²":Add the "@Override" annotation above this method signature(‹±ÖÃûÿÿÿÿ
+U
+java:S1874³"9Remove this use of "PreferenceManager"; it is deprecated.(ðíÕ€úÿÿÿÿ
+_
+java:S1874³"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(ðíÕ€úÿÿÿÿ
+F
+java:S1172¼"/Remove this unused method parameter "logLevel".(šÜÍõ
+U
+java:S1874½"9Remove this use of "PreferenceManager"; it is deprecated.(ðíÕ€úÿÿÿÿ
+_
+java:S1874½"CRemove this use of "getDefaultSharedPreferences"; it is deprecated.(ðíÕ€úÿÿÿÿ
+R	java:S125À"<This block of commented-out lines of code should be removed.(˜ýæÍ
+M
+java:S1874Ç"1Remove this use of "AsyncTask"; it is deprecated.(ÀðÐøÿÿÿÿ
+f
+java:S1874é"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(›äÊùÿÿÿÿ
+a
+java:S1874õ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ËÐƒ
+H
+java:S1144Ê"1Remove this unused private "copyLogFiles" method.(ÀÉÐ’
+f	java:S117w"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ¥ôý
+C
+java:S1604z"(Make this anonymous inner class a lambda(áÝ—Ûÿÿÿÿÿ
+?
+java:S1604•"(Make this anonymous inner class a lambda(Ë¦Ú 
+?
+java:S1604Ÿ"(Make this anonymous inner class a lambda(¤ÞÂÃ
+?
+java:S1604û"(Make this anonymous inner class a lambda(çºŠ„
+
+java:S1488³"cImmediately return this expression instead of assigning it to the temporary variable "projectName".(óÜ½òûÿÿÿÿ
+}
+java:S1488¹"fImmediately return this expression instead of assigning it to the temporary variable "projectsFolder".(µýâå
+~
+java:S1488À"bImmediately return this expression instead of assigning it to the temporary variable "logsFolder".(Ë¾·îþÿÿÿÿ

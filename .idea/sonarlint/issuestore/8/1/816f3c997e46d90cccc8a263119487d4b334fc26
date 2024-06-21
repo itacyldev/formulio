@@ -1,0 +1,12 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+‡
+java:S1130B"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(¸Àÿùÿÿÿÿ
+b
+java:S1128"GRemove this unused import 'org.apache.commons.lang3.RandomStringUtils'.(Í¦ª¤ÿÿÿÿÿ
+…
+java:S1319V"oThe type of the "headers" object should be an interface such as "Map" rather than the implementation "HashMap".(­¯´Ö
+ˆ
+java:S1319Z"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(’ó†“ÿÿÿÿÿ
+Œ
+java:S1319v"wThe type of the "responseHeaders" object should be an interface such as "Map" rather than the implementation "HashMap".(Ïí÷W

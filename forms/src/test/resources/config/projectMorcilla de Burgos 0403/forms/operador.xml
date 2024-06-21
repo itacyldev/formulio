@@ -1,0 +1,147 @@
+<main id="operador" name="Operadores" repo="operadorRepo">
+    <list id="listOperadores" name=" OPERADORES">
+       <datatable properties="razon_social" >
+        </datatable>
+    </list>
+    <edit id="editOperadores">
+        <form id="formOperador">
+            <input id="razon_social" label="Empresa: " value="${entity.razon_social}" validator="required"  />
+
+            <input label="CIF: " value="${entity.cif}"  />
+
+            <input label="Nº A.S.F.: " value="${entity.numero_asf}" validator="required"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="DIRECCION SOCIAL"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <textarea label="Domicilio: " value="${entity.direccion_social}" validator="required"  />
+
+            <text label="Código postal: " id="cp_social" value="${entity.codigo_postal_social}" />
+
+            <autocomplete label="Provincia: " forceSelection="true" id="provincia_social" repo="provRepo" value="${entity.prov_id_social}">
+                <options labelExpression="${entity.name}" labelFilteringProperty="name" valueProperty="id" />
+            </autocomplete>
+
+            <autocomplete label="Municipio: " forceSelection="true" id="provmuni_social" repo="muniRepo" value="${entity.provmuni_id_social}">
+                <options labelExpression="${entity.name}" labelFilteringProperty="name" valueProperty="provmuni" />
+                <repofilter>
+                    <eq property="prov" value="${view.provincia_social}" mandatory="true"/>
+                    <contains property="name" value="${this.value}"/>
+                </repofilter>
+            </autocomplete>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="DIRECCIÓN INSTALACIÓN"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <button label="Añadir instalación" readonly="${empty (entity.id)}" readonlyMessage="No puede añadir una instalación. Antes debe guardar el operador">
+                <action type="save" route="instalacion-editInstalacion">
+                    <param name="operador_id" value="${entity.operador_id}" />
+                    <param name="razon_social" value="${view.razon_social}" />
+                </action>
+            </button>
+
+            <datatable
+                allowsPartialRestore="false"
+                numVisibleRows="2"
+                repo="instalacionRepo"
+                route="instalacion-editInstalacion">
+                <column id="column_nombre_instalacion" headerText="Instalación" filtering="true" ordering="true" value="${entity.nombre_instalacion}">
+                    <filter property="nombre_instalacion" matching="contains" valueExpression="${this.column_nombre_instalacion}"/>
+                    <order property="nombre_instalacion"/>
+                </column>
+                <column id="column_direccion_instalacion" headerText="Dirección instalación" filtering="true" ordering="true" value="${entity.direccion_instalacion}">
+                    <filter property="direccion_instalacion" matching="contains" valueExpression="${this.column_direccion_instalacion}"/>
+                    <order property="direccion_instalacion"/>
+                </column>
+                <column id="column_codigo_postal_instalacion" headerText="C.P. instalación" filtering="true" ordering="true" value="${entity.codigo_postal_instalacion}">
+                    <filter property="codigo_postal_instalacion" matching="contains" valueExpression="${this.column_codigo_postal_instalacion}"/>
+                    <order property="codigo_postal_instalacion"/>
+                </column>
+                <column id="column_provincia" headerText="Provincia" filtering="false" ordering="false" value="${entity.provincia.name}"/>
+                <column id="column_municipio" headerText="Municipio" filtering="false" ordering="false" value="${entity.municipio.name}"/>
+                <param name="operador_id" value="${entity.operador_id}" />
+                <param name="razon_social" value="${entity.operador.razon_social}" />
+                <param name="backRoute" value="operador-editOperadores" />
+                <repofilter>
+                    <and>
+                        <eq property="operador_id" value="${empty(entity.operador_id) ? '-1' : entity.operador_id}" />
+                    </and>
+                </repofilter>
+            </datatable>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="CONTACTO"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <input label="Teléfono 1: " value="${entity.telefono1}" validator="required"  />
+
+            <input label="Teléfono 2: " value="${entity.telefono2}" />
+
+            <input label="FAX: " value="${entity.fax}" />
+
+            <input label="Email: " value="${entity.email}" validator="required"  />
+
+            <input label="Web: " value="${entity.web}" />
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="RESPONSABLE"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <input label="Responsable: " value="${entity.responsable}" validator="required"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="MARCAS"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <button label="Añadir marca" readonly="${empty (entity.id)}" readonlyMessage="No puede añadir una marca. Antes debe guardar el operador">
+                <action type="save" route="marca-editMarcas">
+                    <param name="operador_id" value="${entity.operador_id}" />
+                    <param name="razon_social" value="${view.razon_social}" />
+                </action>
+            </button>
+
+            <datatable
+                allowsPartialRestore="false"
+                properties="nombre_marca"
+                numVisibleRows="2"
+                repo="marcaRepo"
+                route="marca-editMarcas">
+                <param name="operador_id" value="${entity.operador_id}" />
+                <param name="razon_social" value="${entity.operador.razon_social}" />
+                <param name="backRoute" value="operador-editOperadores" />
+                <repofilter>
+                    <and>
+                        <eq property="operador_id" value="${empty(entity.operador_id) ? '-1' : entity.operador_id}" />
+                    </and>
+                </repofilter>
+            </datatable>
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.operador_id)}" readonlyMessage="No puede realizar esta acción: No existe el operador" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

@@ -1,0 +1,121 @@
+<main name="Sincronizar" description="Sincronizar" id="sincronizar" repo="inspeccionRepo">
+    <list name="SINCRONIZAR" description="Proceso de sincronización" id="listSincronizar">
+       <datatable id="datatableSincronizar">
+            <column filtering="true" headerText="Identificador" id="column_inspeccion"
+                ordering="true" value="${entity.c_accion_singra_id}">
+                <filter matching="contains" property="c_accion_singra_id"
+                    valueExpression="${this.column_inspeccion}" />
+                <order property="c_accion_singra_id" />
+            </column>
+            <column filtering="true" headerText="Inspección" id="column_c_inspeccion"
+                ordering="true" value="${entity.c_inspeccion}">
+                <filter matching="contains" property="c_inspeccion"
+                    valueExpression="${this.column_c_inspeccion}" />
+                <order property="c_inspeccion" />
+            </column>
+            <column filtering="true" headerText="Usuario" id="column_c_usuario"
+                ordering="true" value="${entity.c_usuario}">
+                <filter matching="contains" property="c_usuario"
+                    valueExpression="${this.column_c_usuario}" />
+                <order property="c_usuario" />
+            </column>
+            <column filtering="true" headerText="Nombre entidad" id="column_nombre_entidad"
+                ordering="true" value="${entity.d_nombre_entidad}">
+                <filter matching="contains" property="d_nombre_entidad"
+                    valueExpression="${this.column_nombre_entidad}" />
+                <order property="d_nombre_entidad" />
+            </column>
+            <column filtering="true" headerText="CIF entidad" id="column_cif_entidad"
+                ordering="true" value="${entity.d_cif_entidad}">
+                <filter matching="contains" property="d_cif_entidad"
+                    valueExpression="${this.column_cif_entidad}" />
+                <order property="d_cif_entidad" />
+            </column>
+            <column id="column_b_cancelada" filtering="false" ordering="false" headerText="Cancelada" value="${entity.b_cancelada == 1?'Sí':'No'}"/>
+            <column id="column_b_firmado" filtering="false" ordering="false" headerText="Inspeccionada" value="${entity.b_firmado == 1?'Sí':'No'}"/>
+           <column id="column_b_telefonico" filtering="false" ordering="false" headerText="Telefónico" value="${entity.b_telefonico == 1?'Sí':'No'}"/>
+        </datatable>
+        <buttonbar type="fab"/>
+        <script>
+            function todasInspeccionadasCanceladas(){
+                var inspeccionRepo = ctx.get("repos").get("inspeccionRepo");
+                var lstInspeccion = inspeccionRepo.listAll();
+                var i = 0;
+                var todas = true;
+                while(i != lstInspeccion.size()){
+                    entityInspeccion = lstInspeccion.get(i);
+                    var b_cancelada = entityInspeccion.get("b_cancelada");
+                    var b_firmado = entityInspeccion.get("b_firmado");
+                    if (b_firmado == 0){
+                        if (b_cancelada == 0){
+                            todas = false;
+                            break;
+                        }
+                    }
+                    i++;
+                }
+                return todas;
+            }
+
+            function isSynchronizable(component){
+               //console.log("isSynchronizable");
+               var todas = todasInspeccionadasCanceladas();
+
+                var valueExpressionFactory = Packages.es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+                component.setRenderExpression(valueExpressionFactory.getInstance().create(todas));
+            }
+
+            function showMessage(component){
+                //console.log("showMessage");
+                var todas = todasInspeccionadasCanceladas();
+
+                var valueExpressionFactory = Packages.es.jcyl.ita.formic.forms.el.ValueExpressionFactory;
+                component.setRenderExpression(valueExpressionFactory.getInstance().create(!todas));
+            }
+
+            function updateDatatable() {
+                //console.log("updateDatatable");
+                vh.updateWidget('datatableSincronizar');
+                var widgetUserId = vh.widget('userId');
+                var componentUserId = widgetUserId.getComponent();
+                vh.setUIValue(componentUserId, '');
+                vh.updateWidget('userId');
+
+              }
+        </script>
+        <form id="formSincronizar">
+
+                <p value="" />
+                <p backgroundColor="#26a69a" bold="true" fontColor="#FFFFFF" fontSize="22"
+                    value="SINCRONIZAR" />
+                <table id="tableSincronizar" border="false" weights="60, 40">
+                    <row>
+                        <select id="userId" label="Usuario: ">
+                            <options>
+                                <!--option value="mungarro" label="Rosa María Muñiz García"/>
+                                <option value="ita-esppazma" label="María Soledad Espiño Pazos"/-->
+                                <option value="ita-durmarjs" label="Jesús Durán Martín"/>
+                                <option value="gilperma" label="María Monserrat Gil Pérez"/>
+                                <option value="ita-yancolte" label="Teresa Yáñez Colomo"/>
+                            </options>
+                        </select>
+                        <button id="syncButton" label="Sincronizar" confirmation="true" labelConfirmation="Se va a iniciar el proceso de sincronización. Debe reiniciar la aplicación cuando éste finalice." readonly="${empty (view.userId)}" readonlyMessage="Debe seleccionar un usuario para realizar la sincronización" messageType="modal" onBeforeRender="isSynchronizable" refresh="datatableSincronizar" >
+                            <action id="compositeAction">
+                                <action registerInHistory="false" type="job" render="${not empty(view.userId)}">
+                                    <param name="jobId" value="singra_sync_job_cmd" />
+                                    <param name="resourceFilter" value="none"/>
+                                    <param name="userId" value="${view.userId}"/>
+                                </action>
+                                <action type="js" registerInHistory="false" refresh="tableSincronizar">
+                                    <param name="method" value="updateDatatable" />
+                                </action>
+                             </action>
+                        </button>
+
+                        <button id="notSyncButton" label="Sincronizar" readonly="true" readonlyMessage="No se puede sincronizar sin que todas las inspecciones estén canceladas o inspeccionadas" messageType="modal" onBeforeRender="showMessage">
+                        </button>
+                    </row>
+                </table>
+            </form>
+    </list>
+</main>

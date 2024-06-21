@@ -1,0 +1,10 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+h
+java:S3776c"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(×Ô•‚
+P
+java:S4838"4Change "View" to the type handled by the Collection.(»³°øÿÿÿÿ
+D
+java:S1604Ğ"(Make this anonymous inner class a lambda(ïÏÿ÷şÿÿÿÿ
+h
+java:S2259ˆ"L"NullPointerException" will be thrown when invoking method "setImageView()".(âş–¨ıÿÿÿÿ

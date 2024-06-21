@@ -1,0 +1,20 @@
+<main id="formButtonbar" name="Buttonbar" repo="pruebaRepo">
+    <list name="Buttonbar">
+        <buttonbar type="fab">
+            <button id="btnFab">
+                <action id="createPrueba" type="create" route="formButtonbar-editButtonbar1">
+                    <param name="repo" value="pruebaRepo"/>
+                </action>
+            </button>
+        </buttonbar>
+    </list>
+    <edit id="editButtonbar1">
+        <form>
+            <input label="Description: " value="${entity.d_prueba}"/>
+        </form>
+        <buttonbar type="bottom">
+            <button id="btnSave" label="Save" action="save" route="back"/>
+            <button id="btnCancel" label="Cancel" route="back"/>
+        </buttonbar>
+    </edit>
+ </main>

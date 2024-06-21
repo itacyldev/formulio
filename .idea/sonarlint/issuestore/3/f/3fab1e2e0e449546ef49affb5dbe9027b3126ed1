@@ -1,0 +1,48 @@
+
+K
+java:S3740Ü"/Provide the parametrized type for this generic.(˜•­ƒýÿÿÿÿ
+K
+java:S3740è"/Provide the parametrized type for this generic.(˜•­ƒýÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ýÿÿÿÿ
+r
+java:S3008z"VRename this field "ACTION_TAGS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ž£¥'8»¢Þºû0
+o
+java:S3008|"TRename this field "BASE_TAGS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(èÄ’‰üÿÿÿÿ
+U
+java:S1118s":Add a private constructor to hide the implicit public one.(íÚâìÿÿÿÿÿ
+T
+java:S1197z"8Move the array designator from the variable to the type.(ž£¥'8Î¢Þºû0
+S
+java:S1197|"8Move the array designator from the variable to the type.(èÄ’‰üÿÿÿÿ
+d
+java:S3878"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(ÆÀ½
+i
+java:S3878"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(ýÕ×¾øÿÿÿÿ
+p
+java:S3878‘"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(Š½‘Œúÿÿÿÿ8×¢Þºû0
+k
+java:S3878“"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(¢ÃÑ”8ÊÊ¦ÐÜ0
+d
+java:S3878”"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(²‘Ì±
+i
+java:S3878•"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(Š¥ÐÃûÿÿÿÿ
+i
+java:S3878–"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(’Ëÿ‹úÿÿÿÿ
+p
+java:S3878—"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(ÑÈ¡øüÿÿÿÿ8Û¢Þºû0
+i
+java:S3878«"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(íæÓ˜øÿÿÿÿ
+i
+java:S3878°"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(÷‡ùÔüÿÿÿÿ
+d
+java:S3878·"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(¼ÇžÐ
+p
+java:S3878¸"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(»ª÷åþÿÿÿÿ8ã¢Þºû0
+d
+java:S3878º"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(ŠŸÀé
+d
+java:S3878Ä"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(™Œ«‹
+i
+java:S3878Ð"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(£ÕíÝÿÿÿÿÿ
+k
+java:S3878Ø"MDisambiguate this call by either casting as "Attribute[]" or "Attribute[][]".(þÆ­ê8ë¢Þºû0

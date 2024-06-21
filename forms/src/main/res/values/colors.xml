@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="TRANSPARENT">#00000000</color>
+    <color name="DARKCYAN_SELECTED">#0099cc</color>
+    <color name="GRAY_SELECTED">#222222</color>
+
+    <!-- LIGHT THEME -->
+    <color name="light_PrimaryColorVariant">#00766c</color>
+    <color name="light_PrimaryColor">#26a69a</color>
+    <color name="light_OnPrimaryColor">#FFFFFF</color>
+    <color name="light_AccentColor">#00b2cc</color>
+
+    <color name="light_SurfaceColor">#F4F4F4</color>
+    <color name="light_OnSurfaceColor">#282828</color>
+    <color name="light_ErrorColor">#EC2A2A</color>
+
+    <color name="light_Surface2Color">#D0D0D0</color>
+    <color name="light_OnSurface2Color">#0C69FE</color>
+
+    <color name="light_Surface3Color">#282828</color>
+    <color name="light_OnSurface3Color">#D7D7D7</color>
+
+    <color name="light_OnSurface4Color">#B1B1B1</color>
+
+    <!--<color name="light_OnSurface5Color">#CECECE</color>-->
+    <color name="light_OnSurface5Color">#D0D0D0</color>
+
+    <color name="light_BackgroundColor">#FFFFFF</color>
+    <color name="light_OnBackgroundColor">#121212</color>
+
+    <color name="buttonNormal_Light">#e30425</color>
+    <color name="buttonHighlight_Light">#ff554f</color>
+    <color name="buttonText_Light">#FFFFFF</color>
+
+    <color name="light_toastText">#D7D7D7</color>
+    <color name="light_toastBackGround">#282828</color>
+
+
+    <!-- DARK THEME -->
+    <color name="dark_PrimaryColorVariant">#26a69a</color>
+    <color name="dark_PrimaryColor">#00766c</color>
+    <color name="dark_OnPrimaryColor">#FFFFFF</color>
+    <color name="dark_AccentColor">#00e5ff</color>
+
+    <color name="dark_SurfaceColor">#282828</color>
+    <color name="dark_OnSurfaceColor">#D7D7D7</color>
+    <color name="dark_ErrorColor">#FF1A1A</color>
+
+    <color name="dark_Surface2Color">#000000</color>
+    <color name="dark_OnSurface2Color">#03a9f4</color>
+
+    <color name="dark_Surface3Color">#282828</color>
+    <color name="dark_OnSurface3Color">#D7D7D7</color>
+
+    <color name="dark_OnSurface4Color">#B1B1B1</color>
+
+    <!--<color name="dark_OnSurface5Color">#CECECE</color>-->
+    <color name="dark_OnSurface5Color">#0D0D0D</color>
+    <!--<color name="dark_OnSurface5Color">#282828</color>-->
+
+    <color name="dark_BackgroundColor">#121212</color>
+    <color name="dark_OnBackgroundColor">#EAEAEA</color>
+
+    <color name="buttonNormal_Dark">#76be2f</color>
+    <color name="buttonHighlight_Dark">#81c784</color>
+    <color name="buttonText_Dark">#FFFFFF</color>
+
+    <color name="dark_toastText">#282828</color>
+    <color name="dark_toastBackGround">#D7D7D7</color>
+</resources>
+

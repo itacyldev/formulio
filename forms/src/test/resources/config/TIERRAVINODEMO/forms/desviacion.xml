@@ -1,0 +1,61 @@
+<main id="desviacion" name="Desviación" repo="desviacionRepo" mainForm="false">
+    <list id="listDesviacion" name="Desviación" description="Listado desviaciones">
+       <datatable>
+           <column id="column_partida" headerText="Partida" filtering="true" ordering="true" value="${entity.partida}">
+               <filter property="partida" matching="contains" valueExpression="${this.column_partida}"/>
+               <order property="partida"/>
+           </column>
+           <column id="column_num_expediente" headerText="Expediente" filtering="false" ordering="false" value="${entity.expediente.num_expediente}"/>
+       </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editDesviacion">
+        <form id="formDesviacion">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="DESVIACIÓN"/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="20, 30, 10, 40">
+                <row>
+                    <input id="expediente_id" value="${entity.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="dop_id" value="${entity.expediente.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                    <input id="dop" value="${entity.expediente.dop.dop}" placeHolder="${params.dop}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="20, 80">
+                <row>
+                    <input id="operador_id" value="${entity.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+
+            <input label="Descripción de la desviación: " value="${entity.desviacion}"/>
+            <textarea label="Documentación/acciones/consejo: " value="${entity.documentacion_accion_consejo}"/>
+
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.desviacion_id)}" readonlyMessage="No puede realizar esta acción: No existe desviación" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

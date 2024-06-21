@@ -1,0 +1,13 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+S
+java:S1854;"=Remove this useless assignment to local variable "jobExecId".(º×Ò¼
+D
+java:S1481;".Remove this unused "jobExecId" local variable.(º×Ò¼
+Q	java:S125<"<This block of commented-out lines of code should be removed.(‰•è¶
+J
+java:S1128"4Remove this unused import 'android.content.Context'.(©Ê‰è
+a
+java:S1192/"FDefine a constant instead of duplicating this literal "jobId" 3 times.(–±©¸úÿÿÿÿ
+]
+java:S1192E"GDefine a constant instead of duplicating this literal "params" 3 times.(Ëáå

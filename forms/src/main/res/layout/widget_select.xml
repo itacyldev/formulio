@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<es.jcyl.ita.formic.forms.view.widget.InputWidget xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    style="@style/Widget_padding">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/label_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <!-- Text Label -->
+        <TextView
+            android:id="@+id/label_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingTop="5dp"
+            android:layout_weight="9.6"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/layout_button"/>
+        <LinearLayout
+            android:id="@+id/layout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_weight="0.4">
+            <ImageView
+                android:id="@+id/field_layout_info"
+                style="@style/Textfield_info_button"
+                android:layout_marginRight="2dp" />
+            <ImageView
+                android:id="@+id/field_layout_x"
+                style="@style/Textfield_cancel_button"
+                android:layout_marginRight="2dp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+         <Spinner
+                android:id="@+id/input_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:padding="6dp"
+                android:background="@drawable/botton_line_selector"/>
+    </LinearLayout>
+</es.jcyl.ita.formic.forms.view.widget.InputWidget>

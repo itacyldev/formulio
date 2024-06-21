@@ -1,0 +1,21 @@
+
+V	java:S125""<This block of commented-out lines of code should be removed.(Í›¸ıÿÿÿÿ
+Q	java:S125O"<This block of commented-out lines of code should be removed.(¤™Ô
+Q
+java:S1161š":Add the "@Override" annotation above this method signature(”ê¡×
+F
+java:S1144®"/Remove this unused private "formatDate" method.(»µîÜ
+C
+java:S1604V"(Make this anonymous inner class a lambda(®øÎ úÿÿÿÿ
+>
+java:S1604J"(Make this anonymous inner class a lambda(ÌÜİ‚
+C
+java:S1604n"(Make this anonymous inner class a lambda(© ¹Íûÿÿÿÿ
+?
+java:S1604ƒ"(Make this anonymous inner class a lambda(Éõ
+?
+java:S1604‘"(Make this anonymous inner class a lambda(‚úé¯
+E
+java:S5411="*Use the primitive boolean expression here.(³‡ ıùÿÿÿÿ
+]
+java:S2184¡"FCast one of the operands of this multiplication operation to a "long".(Óß©

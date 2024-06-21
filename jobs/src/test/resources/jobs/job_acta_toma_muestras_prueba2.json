@@ -1,0 +1,22 @@
+{
+  "description": "Job Acta Muestras",
+  "requiredContexts": [
+    "user",
+    "job"
+  ],
+  "globalParams": {
+    "endpoint": "https://serviciosdes.itacyl.es/uqserv/cnt/rest/jobs/",
+    "apikey": "USER-MUNGARRO-UQSERV"
+  },
+  "executionMode": "FG",
+  "tasks": [
+    {
+      "name": "t1",
+      "processor": {
+        "type": "httpRequestProcessor",
+        "method": "post",
+        "url": "${gparams.endpoint}?apikey=${gparams.apikey}&jobType=FormicGenerarActaTomaMuestra&inputFile=3568"
+      }
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+<main id="loteControlResultadosOrganolepticos" name="Lote control resultados ognanolépticos" repo="loteControlResultadosOrganolepticosRepo" mainForm="false">
+    <list id="listLoteControlResultadosOrganolepticos" name="Lote control resultados ognanolépticos" description="Listado control resultados ognanolépticos">
+        <datatable>
+            <column id="column_num_lote" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote}"/>
+                <order property="num_lote"/>
+            </column>
+            <column id="column_num_expediente" headerText="Nº Exp." filtering="false" ordering="false" value="${entity.procedimientoAutocontrol.expediente.num_expediente}"/>
+            <column id="column_razon_social" headerText="Razón social" filtering="false" ordering="false" value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}"/>
+            <column id="column_fecha" headerText="Fecha" filtering="true" ordering="true" value="${entity.fecha}">
+                <filter property="fecha" matching="contains" valueExpression="${this.column_fecha}"/>
+                <order property="fecha"/>
+            </column>
+            <column id="column_resultado" headerText="Resultado" filtering="true" ordering="true" value="${entity.resultado}">
+                <filter property="resultado" matching="contains" valueExpression="${this.column_resultado}"/>
+                <order property="resultado"/>
+            </column>
+            <column id="column_periodicidad" headerText="Periodicidad" filtering="true" ordering="true" value="${entity.periodicidad}">
+                <filter property="periodicidad" matching="contains" valueExpression="${this.column_periodicidad}"/>
+                <order property="periodicidad"/>
+            </column>
+            <column id="column_cumple" headerText="Cumple" filtering="true" ordering="true" value="${entity.cumple}">
+                <filter property="cumple" matching="contains" valueExpression="${this.column_cumple}"/>
+                <order property="cumple"/>
+            </column>
+        </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editLoteControlResultadosOrganolepticos">
+        <form id="formLoteControlResultadosOrganolepticos">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="PLAN DE CONTROL ANALÍTICO/ANÁLISIS ORGANOLÉPTICOS"/>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="EXPEDIENTE: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <table headerText=" Id. Exp., Nº Expediente, Operador" weights="25, 35, 40">
+                        <row>
+                            <input value="${entity.procedimientoAutocontrol.expediente_id}" placeHolder="${not empty(params.expediente_id)?params.expediente_id:null}" readonly="true"/>
+                            <textarea value="${entity.procedimientoAutocontrol.expediente.num_expediente}" placeHolder="${not empty(params.num_expediente)?params.num_expediente:null}" readonly="true" />
+                            <textarea value="${entity.procedimientoAutocontrol.expediente.operador.razon_social}" placeHolder="${not empty(params.operador)?params.operador:null}" readonly="true" />
+                        </row>
+                    </table>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="RESULTADOS ORGANOLÉPTICOS: "/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <p value=""/>
+            <p italic="true" value="Normas de referencia: "/>
+            <p italic="true" value="    * Forma y aspecto exterior: Marrón hasta casi negro. Sin grietas ni roturas de tripa, sin moho. Consistencia firme y compacta al tacto."/>
+            <p italic="true" value="    * Coloración y aspecto al corte: Punteado en blanco, distribución  homogénea de los ingredientes, se pueden ver trozos de manteca. Color marrón."/>
+            <p italic="true" value="    * Textura: textura desmenuzable, se aprecia la cebolla y la integridad de los granos de arroz, sin durezas. Ligera sensación grasa"/>
+            <p value=""/>
+
+            <table border="false">
+                <row colspan="2">
+                    <input label="Id. procedimiento autocontrol: " value="${entity.procedimiento_autocontrol_id}" placeHolder="${not empty(params.procedimiento_autocontrol_id)?params.procedimiento_autocontrol_id:null}" readonly="true"/>
+                </row>
+                <row>
+                    <input label="Nº Lote: " value="${entity.num_lote}" validator="required" />
+                    <date label="Fecha" value="${entity.fecha}" />
+                </row>
+                <row colspan="2">
+                    <textarea label="Resultado: " value="${entity.resultado}" />
+                </row>
+                <row>
+                    <input label="Periodicidad: " value="${entity.periodicidad}"/>
+                    <radio label="Cumple" value="${entity.cumple}" orientation="horizontal" weights="15, 15">
+                        <options>
+                            <option label="Sí" value="S" />
+                            <option label="No" value="N" />
+                        </options>
+                    </radio>
+                </row>
+            </table>
+        </form>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.procedimiento_autocontrol_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.procedimiento_autocontrol_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.lote_control_resultados_organolepticos_id)}" readonlyMessage="No puede realizar esta acción: No existe lote control resultados organolépticos">
+                <action type="delete" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.procedimiento_autocontrol_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>

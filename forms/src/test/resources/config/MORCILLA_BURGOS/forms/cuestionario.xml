@@ -1,0 +1,1454 @@
+<main id="idCuestionarioControlInSitu" name="PREGUNTAS" description="Preguntas" repo="actasControlRepo">
+    <list id="listCuestionarioControlInSitu" name="Preguntas" description="Listado preguntas">
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editCuestionarioControlInSitu">
+            <script src="scripts/controlLote.js"/>
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="CONTROL IN SITU"/>
+            <p value=""/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. Instalacion, Instalacion" weights="20, 30, 20, 30">
+                <row>
+                    <input id="expediente_id" value="${entity.id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="instalacion_id" value="${entity.instalacion_id}" placeHolder="${params.instalacion_id}" readonly="true"/>
+                    <input id="instalacion" value="${entity.instalacion.nombre_instalacion}" onBeforeRender="updateInstalacion" readonly="true"/>
+                 </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="20, 80">
+                <row>
+                    <input id="operador_id" value="${entity.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.operador.razon_social}" onBeforeRender="updateRazonSocial" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+
+           <tab>
+                <tabitem label="Instalaciones">
+                    <datalist id="datalistInstalaciones" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="1.1 Municipio de la provincia de Burgos"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <textarea label="1.1.1 Evidencias" value="${entity.q1_1_evidencias}" />
+
+                            <textarea id="q1_1_notas" label="1.1.2 Notas aclaratorias" value="${entity.q1_1_notas}">
+
+                            </textarea>
+
+                            <radio id="q1_1_cumple_municipio" label="1.1.3 Cumple: " value="${entity.q1_1_cumple_municipio}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="1.2 Certificado de inscripción en la IGP"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <textarea label="1.2.1 Evidencias" value="${entity.q1_2_evidencias}"  />
+
+                            <textarea id="q1_2_notas" label="1.2.2 Notas aclaratorias" value="${entity.q1_2_notas}">
+                            </textarea>
+
+                            <radio id="q1_2_cumple_certificado" label="1.2.3 Cumple: " value="${entity.q1_2_cumple_certificado}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <p value=""/>
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem id="materiasPrimas" label="Materias primas">
+                    <datalist id="datalistMateriasPrimas" repo="actasControlRepo">
+                            <repofilter>
+                                <and>
+                                    <eq property="id" value="${params.expediente_id}"/>
+                                </and>
+                            </repofilter>
+                        <datalistitem>
+                            <table headerText=" Nº lotes, Lotes a revisar" weights="50, 50">
+                                <row>
+                                    <input id="q2_num_lotes" value="${entity.q2_num_lotes}" hasDeleteButton="false" inputType="4" />
+                                    <input value="${math:floor(math:sqrt(view.q2_num_lotes))}" hasDeleteButton="false" inputType="4" readonly="true"/>
+                                </row>
+                            </table>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.1 Cebolla Horcal fresca "/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteCebollaHorcalFresca">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="1" />
+                                        <param name="nombre_materia_prima" value="Cebolla Horcal fresca" />
+                                    </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="1" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="2.1.1 Identificación de los equipos de medida utilizados"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p italic="true" value="2.1.1.1 Báscula"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <autocomplete  label="Identificación del equipo: " forceSelection="true" repo="equipoMedidaRepo" value="${entity.q2_1_1_1_identif_bascula}">
+                                <options labelExpression="${entity.equipo+' ('+entity.marca_y_modelo+')'}" labelFilteringProperty="equipo" valueProperty="equipo_medida_id" />
+                                <repofilter>
+                                    <eq property="instalacion_id" value="${entity.instalacion_id}" mandatory="true"/>
+                                    <contains property="equipo" value="${this.value}"/>
+                                </repofilter>
+                            </autocomplete>
+
+                            <radio label="Propio/Externo: " value="${entity.q2_1_1_1_propioexterno_bascula}" orientation="horizontal" weights="30, 30">
+                                <options>
+                                    <option value="Propio" label="Propio"/>
+                                    <option value="Externo" label="Externo" />
+                                </options>
+                            </radio>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p italic="true" value="2.1.1.2 Calibre"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <input label="Identificación del equipo: " value="${entity.q2_1_1_2_identif_calibre_digital}"/>
+
+                            <radio label="Propio/Externo: " value="${entity.q2_1_1_2_propioexterno_calibre_digital}" orientation="horizontal" weights="30, 30">
+                                <options>
+                                    <option value="Propio" label="Propio"/>
+                                    <option value="Externo" label="Externo" />
+                                </options>
+                            </radio>
+
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.2 Cebolla Horcal procesada "/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                               <action id="compositeAnadirLoteCebollaHorcalProcesada">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="2" />
+                                        <param name="nombre_materia_prima" value="Cebolla Horcal procesada" />
+                                    </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="2" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.3 Arroz (variedad, categoría) "/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteArroz">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="3" />
+                                        <param name="nombre_materia_prima" value="Arroz (variedad, categoría)" />
+                                    </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="3" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.4 Manteca de Cerdo (Tª almacenamiento) "/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteManteca">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="4" />
+                                        <param name="nombre_materia_prima" value="Manteca de Cerdo (Tª almacenamiento)" />
+                                    </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="4" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.5 Sebo (especie) "/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteSebo">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="5" />
+                                        <param name="nombre_materia_prima" value="Sebo (especie)" />
+                                    </action>
+                                </action>
+                             </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="5" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.6 Sangre (de oveja, vaca o cerdo) "/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteSangre">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="6" />
+                                        <param name="nombre_materia_prima" value="Sangre (de oveja, vaca o cerdo)" />
+                                    </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="6" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.7 Sal (cloruro sódico)"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteSal">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="7" />
+                                        <param name="nombre_materia_prima" value="Sal (cloruro sódico)" />
+                                    </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="7" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.8 Tripas"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteTripas">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="8" />
+                                        <param name="nombre_materia_prima" value="Tripas" />
+                                    </action>
+                                </action>
+                              </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="8" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.9 Especia (Básica): Pimienta Negra"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteEspeciaBasica">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="lote-editLote">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                        <param name="materia_prima_id" value="9" />
+                                        <param name="nombre_materia_prima" value="Especia (Básica): Pimienta Negra" />
+                                    </action>
+                                </action>
+                              </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="lote-editLote"
+                                numVisibleRows="2"
+                                properties="num_lote, proveedor, notas_aclaratorias"
+                                repo="loteRepo">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                                <param name="nombre_materia_prima" value="${entity.materiaPrima.nombre_materia_prima}" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="materia_prima_id" value="9" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="2.10 Especias"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir Lote">
+                                <action id="compositeAnadirLoteEspecias">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="especia-editEspecia">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                    </action>
+                                </action>
+                              </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="especia-editEspecia"
+                                numVisibleRows="2"
+                                repo="loteRepo">
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <or>
+                                            <eq property="materia_prima_id" value="10" />
+                                            <eq property="materia_prima_id" value="11" />
+                                            <eq property="materia_prima_id" value="12" />
+                                            <eq property="materia_prima_id" value="13" />
+                                            <eq property="materia_prima_id" value="14" />
+                                            <eq property="materia_prima_id" value="15" />
+                                            <eq property="materia_prima_id" value="16" />
+                                            <eq property="materia_prima_id" value="17" />
+                                            <eq property="materia_prima_id" value="18" />
+                                            <eq property="materia_prima_id" value="19" />
+                                        </or>
+                                    </and>
+                                </repofilter>
+                                <column id="column_nombre_materia_prima" headerText="Materia prima" filtering="false" ordering="false" value="${entity.materiaPrima.nombre_materia_prima}"/>
+                                <column id="column_num_lote_especia" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                                    <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote_especia}"/>
+                                    <order property="num_lote"/>
+                                </column>
+                                <column id="column_proveedor" headerText="Proveedor" filtering="true" ordering="true" value="${entity.proveedor}">
+                                    <filter property="proveedor" matching="contains" valueExpression="${this.column_proveedor}"/>
+                                    <order property="proveedor"/>
+                                </column>
+                                <column id="column_notas_aclaratorias" headerText="Notas aclaratorias" filtering="true" ordering="true" value="${entity.notas_aclaratorias}">
+                                    <filter property="notas_aclaratorias" matching="contains" valueExpression="${this.column_notas_aclaratorias}"/>
+                                    <order property="notas_aclaratorias"/>
+                                </column>
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <param name="materia_prima_id" value="${entity.materiaPrima.materia_prima_id}" />
+                            </datatable>
+
+                            <radio id="q2_cumple_materias_primas" label="Cumple: " value="${entity.q2_cumple_materias_primas}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem id="procesoFabricacion" label="Proceso de fabricación 'In situ'">
+                    <datalist id="datalistProcesoFabricacion" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+                            <table headerText=" Nº lote, F. fabricación" weights="60, 40">
+                                <row>
+                                    <input value="${entity.q3_num_lote}" hasDeleteButton="false"/>
+                                    <date value="${entity.q3_fecha_fabricacion}" hasDeleteButton="false" hasTodayButton="false" />
+                                </row>
+                            </table>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="3.1 % DE INGREDIENTES EN LA ELABORACIÓN"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="Comprobación de ingredientes"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value=""/>
+
+                            <table headerText=" Peso, %, Cumple, Notas" weights="20, 20, 20, 40">
+                                <row colspan="4">
+                                    <p value="3.1.1 Cebolla Horcal (Mayor del 35%)"/>
+                                </row>
+                                <row>
+                                    <input id="q3_1_1_cebolla_peso" value="${entity.q3_1_1_cebolla_peso}" hasDeleteButton="false" inputType="3"/>
+                                    <input id="q3_1_1_cebolla_porcentaje" value="${view.q3_1_1_cebolla_peso gt 0? math:round(view.q3_1_1_cebolla_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                                    <radio id="cumple_cebolla_peso" value="${view.q3_1_1_cebolla_peso gt 0? (math:round(view.q3_1_1_cebolla_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 35 ? 'S': 'N'):'N'}"  orientation="horizontal" readonly="true">
+                                        <options>
+                                            <option label="Sí" value="S" />
+                                            <option label="No" value="N" />
+                                        </options>
+                                   </radio>
+                                    <textarea value="${entity.q3_1_1_cebolla_notas}" hasDeleteButton="false"/>
+                                </row>
+                                <row colspan="4">
+                                    <p value="3.1.2 Arroz (Del 15% al 30%)"/>
+                                </row>
+                                <row>
+                                    <input id="q3_1_2_arroz_peso" value="${entity.q3_1_2_arroz_peso}" hasDeleteButton="false" inputType="3"/>
+                                    <input value="${view.q3_1_2_arroz_peso gt 0? math:round(view.q3_1_2_arroz_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                                    <radio id="cumple_arroz_peso" value="${view.q3_1_2_arroz_peso gt 0? (math:round(view.q3_1_2_arroz_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 15 and math:round(view.q3_1_2_arroz_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) le 30? 'S': 'N'):'N'}" orientation="horizontal" readonly="true">
+                                        <options>
+                                            <option label="Sí" value="S" />
+                                            <option label="No" value="N" />
+                                        </options>
+                                    </radio>
+                                    <textarea value="${entity.q3_1_2_arroz_notas}" hasDeleteButton="false"/>
+                                </row>
+                                <row colspan="4">
+                                    <p value="3.1.3 Sangre (Mayor del 12%)"/>
+                                </row>
+                                <row>
+                                    <input id="q3_1_3_sangre_peso" value="${entity.q3_1_3_sangre_peso}" hasDeleteButton="false" inputType="3"/>
+                                    <input value="${view.q3_1_3_sangre_peso gt 0? math:round(view.q3_1_3_sangre_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                                    <radio id="cumple_sangre_peso" value="${view.q3_1_3_sangre_peso gt 0 and math:round(view.q3_1_3_sangre_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 12?'S':'N'}" orientation="horizontal" readonly="true">
+                                        <options>
+                                            <option label="Sí" value="S" />
+                                            <option label="No" value="N" />
+                                        </options>
+                                    </radio>
+                                    <textarea value="${entity.q3_1_3_sangre_notas}" hasDeleteButton="false"/>
+                                </row>
+                                <row colspan="4">
+                                    <p value="3.1.4 Manteca de Cerdo o sebo (Del 10% al 22%)"/>
+                                </row>
+                                <row>
+                                    <input id="q3_1_4_manteca_peso" value="${entity.q3_1_4_manteca_peso}" hasDeleteButton="false" inputType="3"/>
+                                    <input value="${view.q3_1_4_manteca_peso gt 0? math:round(view.q3_1_4_manteca_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2):null}" readonly="true" inputType="3"/>
+                                    <radio id="cumple_manteca_peso" value="${view.q3_1_4_manteca_peso gt 0? (math:round(view.q3_1_4_manteca_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) ge 10 and math:round(view.q3_1_4_manteca_peso*100*math:pow(10,2)/view.total_peso)/math:pow(10,2) le 22? 'S': 'N'):'N'}" orientation="horizontal" readonly="true">
+                                        <options>
+                                            <option label="Sí" value="S" />
+                                            <option label="No" value="N" />
+                                        </options>
+                                    </radio>
+                                    <textarea value="${entity.q3_1_4_manteca_notas}" hasDeleteButton="false"/>
+                                </row>
+                                <row colspan="4">
+                                    <p value="3.1.5 Sal"/>
+                                </row>
+                                <row weights="40, 20, 40">
+                                    <input id="q3_1_5_sal_peso" value="${entity.q3_1_5_sal_peso}" hasDeleteButton="false" inputType="3"/>
+                                    <radio id="cumple_sal_peso" value="${entity.q3_1_5_sal_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                        <options>
+                                            <option label="Sí" value="S" />
+                                            <option label="No" value="N" />
+                                        </options>
+                                    </radio>
+                                    <textarea value="${entity.q3_1_5_sal_notas}" hasDeleteButton="false"/>
+                                </row>
+                                <row colspan="4">
+                                    <p value="3.1.6 Especias"/>
+                                </row>
+                                <row weights="40, 20, 40">>
+                                    <input id="q3_1_6_especias_peso" value="${entity.q3_1_6_especias_peso}" hasDeleteButton="false" inputType="3"/>
+                                    <radio id="cumple_especias_peso" value="${entity.q3_1_6_especias_cumple}" orientation="horizontal" hasDeleteButton="false">
+                                        <options>
+                                            <option label="Sí" value="S" />
+                                            <option label="No" value="N" />
+                                        </options>
+                                    </radio>
+                                    <textarea value="${entity.q3_1_6_especias_notas}" hasDeleteButton="false"/>
+                                </row>
+                                <row colspan="4">
+                                    <p value="TOTAL"/>
+                                </row>
+                                <row colspan="4">
+                                    <input id="total_peso" value="${(view.q3_1_1_cebolla_peso + view.q3_1_2_arroz_peso + view.q3_1_3_sangre_peso + view.q3_1_4_manteca_peso + view.q3_1_5_sal_peso + view.q3_1_6_especias_peso) gt 0? math:round((view.q3_1_1_cebolla_peso + view.q3_1_2_arroz_peso + view.q3_1_3_sangre_peso + view.q3_1_4_manteca_peso + view.q3_1_5_sal_peso + view.q3_1_6_especias_peso)*math:pow(10,2))/math:pow(10,2):null}" hasDeleteButton="false" inputType="3" readonly="true"/>
+                                </row>
+                            </table>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="3.2 PROCESO DE ELABORACIÓN "/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.1 Preparación y pesado de las materias primas"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.1.1 Las materias primas se pesan y se anotan"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias:" value="${entity.q3_2_1_1_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_1_1_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.1.2 El arroz se pesa en seco"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias:" value="${entity.q3_2_1_2_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_1_2_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.1.3 Precocción del arroz antes de 48h."/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias:" value="${entity.q3_2_1_3_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_1_3_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.1.4 Acondicionado de la tripa"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias:" value="${entity.q3_2_1_4_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_1_4_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.1.5 Notas aclaratorias"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea value="${entity.q3_2_1_5_notas}" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.2 Picado de la manteca de cerdo o sebo"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.2.1 La manteca de cerdo o sebo se pica"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_2_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_2_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea label="Notas aclaratorias: " value="${entity.q3_2_2_notas}" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.3 Picado de la cebolla"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.3.1 La cebolla se pica"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_3_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_3_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea label="Notas aclaratorias: " value="${entity.q3_2_3_notas}" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.4 Sofrito opcional de la cebolla con toda o parte de la manteca de cerdo"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.4.1 Se sofrie la cebolla con la manteca de cerdo"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_4_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_4_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea label="Notas aclaratorias: " value="${entity.q3_2_4_notas}" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.5 Amasado de las materias primas"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.5.1 Se amasan todas las materias primas formando una masa homogenea"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_5_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_5_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea label="Notas aclaratorias: " value="${entity.q3_2_5_notas}" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.6 Embutido de la masa"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.6.1 Se introduce la masa en la tripa"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_6_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_6_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea label="Notas aclaratorias: " value="${entity.q3_2_6_notas}" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.7 Delimitación de las piezas de morcilla"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.7.1 Atado o grapado"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_7_1_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_7_1_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.7.2 Corte en piezas"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_7_2_evidencias}" />
+                            <radio label="Cumple corte en piezas: " value="${entity.q3_2_7_2_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.7.3 Notas aclaratorias"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea value="${entity.q3_2_7_3_notas}" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.8 Cocción de las morcillas"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.8.1 Temperatura mayor de 90º C"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_8_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_8_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea label="Notas aclaratorias: " value="${entity.q3_2_8_notas}" hasDeleteButton="false" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p value="3.2.9 Oreo"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="4" />
+                            <p italic="true" value="3.2.9.1 Tiempo de oreo"/>
+                            <divisor color="#00766C" strokeWidth="4" />
+
+                            <textarea label="Evidencias: " value="${entity.q3_2_9_evidencias}" />
+                            <radio label="Cumple: " value="${entity.q3_2_9_cumple}" orientation="horizontal" weights="15, 85">
+                                <options>
+                                    <option label="Sí" value="S" />
+                                    <option label="No" value="N" />
+                                </options>
+                            </radio>
+                            <textarea label="Notas aclaratorias: " value="${entity.q3_2_9_notas}" hasDeleteButton="false" />
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem id="productoTerminado" label="Producto terminado">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="4.1 PRODUCTO TERMINADO"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <datalist id="datalistProductoTerminado" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+
+                            <button label="Añadir">
+                                <action id="compositeAnadirProductoTerminado">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="productoTerminado-editProductoTerminado">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                  </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="productoTerminado-editProductoTerminado"
+                                numVisibleRows="3"
+                                properties="num_lote, presentacion, ingredientes, cumple_producto_terminado, notas_aclaratorias"
+                                repo="productoTerminadoRepo"
+                                onBeforeRender="updateDesviacionesProductoTerminado">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <repofilter>
+                                    <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                </repofilter>
+                            </datatable>
+                        </datalistitem>
+                    </datalist>
+
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="4.2 RELACION DE PESOS DE MORCILLA POR TIPOS"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <datalist id="datalistPesosMorcilaTipos" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+
+                            <button label="Añadir">
+                            <action id="compositeAnadirRelacionPesosMorcillaPorTipos">
+                                <action
+                                    type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                </action>
+                                <action type="js" route="tipoMorcillaControlInSitu-editTipoMorcillaControlInSitu">
+                                    <param name="method" value="updateDesviaciones" />
+                                    <param name="expediente_id" value="${entity.id}" />
+                                    <param name="num_expediente" value="${entity.num_expediente}" />
+                                    <param name="operador_id" value="${entity.operador_id}" />
+                                    <param name="razon_social" value="${entity.operador.razon_social}" />
+                                    <param name="instalacion_id" value="${entity.instalacion_id}" />
+                                    <param name="nombre_instalacion" value="${entity.instalacion.nombre_instalacion}" />
+                                </action>
+                            </action>
+                        </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="tipoMorcillaControlInSitu-editTipoMorcillaControlInSitu"
+                                numVisibleRows="3"
+                                repo="tipoMorcillaControlInSituRepo">
+                                <column id="column_tipo_morcilla" headerText="Tipo morcilla" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.tipo_morcilla}"/>
+                                <column id="column_peso_unitario_kg" headerText="Peso unitario Kg" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.peso_unitario_kg}"/>
+                                <column id="column_unidad_kg" headerText="Unidades teóricas/kg" filtering="false" ordering="false" value="${entity.tipoMorcillaInstalacion.peso_unitario_kg gt 0? math:round(math:pow(10,2)/entity.tipoMorcillaInstalacion.peso_unitario_kg)/math:pow(10,2):null}"/>
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador_id" value="${entity.expediente.operador.operador_id}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="instalacion_id" value="${entity.expediente.instalacioninstalacion_id}" />
+                                <param name="nombre_instalacion" value="${entity.expediente.instalacion.nombre_instalacion}" />
+
+                                <repofilter>
+                                    <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                </repofilter>
+                            </datatable>
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem id="productoTransformado" label="Producto transformado">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="5. PRODUCTO TRANSFORMADO"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <datalist id="datalistProductoTransformado" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+
+                            <button label="Añadir">
+                                <action id="compositeAnadirProductoTransformado">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="prodTransformado-editProdTransformado">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                    </action>
+                                </action>
+                             </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="prodTransformado-editProdTransformado"
+                                numVisibleRows="3"
+                                properties="num_lote, presentacion, ingredientes, cumple_producto_transformado, notas_aclaratorias"
+                                repo="productoTransformadoRepo"
+                                onBeforeRender="updateDesviacionesProductoTransformado">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+                        </datalistitem>
+                    </datalist>
+
+                </tabitem>
+
+                <tabitem id="productoEtiquetado" label="Etiquetado">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="6. PRODUCTO ETIQUETADO"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <datalist id="datalistProductoEtiquetado" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+
+                            <button label="Añadir">
+                                <action id="compositeAnadirProductoEtiquetado">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="productoEtiquetado-editProductoEtiquetado">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador_id" value="${entity.operador_id}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                    </action>
+                                </action>
+                             </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                id="datatableProductoEtiquetado"
+                                route="productoEtiquetado-editProductoEtiquetado"
+                                numVisibleRows="3"
+                                repo="productoEtiquetadoRepo"
+                                onBeforeRender="updateDesviacionesProductoEtiquetado">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador_id" value="${entity.expediente.operador.operador_id}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                    </and>
+                                </repofilter>
+                                <column id="column_num_lote_etiquetado" headerText="Nº Lote" filtering="true" ordering="true" value="${entity.num_lote}">
+                                    <filter property="num_lote" matching="contains" valueExpression="${this.column_num_lote_etiquetado}"/>
+                                    <order property="num_lote"/>
+                                </column>
+                                <column id="column_nombre_marca_producto_etiquetado" headerText="Marca" filtering="false" ordering="false" value="${entity.marca.nombre_marca}"/>
+                                <column id="column_presentacion" headerText="Presentación" filtering="true" ordering="true" value="${entity.presentacion}">
+                                    <filter property="presentacion" matching="contains" valueExpression="${this.column_presentacion}"/>
+                                    <order property="presentacion"/>
+                                </column>
+                                <column id="column_ingredientes" headerText="Ingredientes" filtering="true" ordering="true" value="${entity.ingredientes}">
+                                    <filter property="ingredientes" matching="contains" valueExpression="${this.column_ingredientes}"/>
+                                    <order property="ingredientes"/>
+                                </column>
+                                <column id="column_notas_aclaratorias_material_etiquetado" headerText="Notas aclaratorias material etiquetado" filtering="true" ordering="true" value="${entity.notas_aclaratorias_material_etiquetado}">
+                                    <filter property="notas_aclaratorias_material_etiquetado" matching="contains" valueExpression="${this.column_notas_aclaratorias_material_etiquetado}"/>
+                                    <order property="notas_aclaratorias_material_etiquetado"/>
+                                </column>
+                                <column id="column_cumple_material_etiquetado" headerText="Cumple material etiquetado" filtering="true" ordering="true" value="${entity.cumple_material_etiquetado}">
+                                    <filter property="cumple_material_etiquetado" matching="contains" valueExpression="${this.column_cumple_material_etiquetado}"/>
+                                    <order property="cumple_material_etiquetado"/>
+                                </column>
+                                <column id="column_notas_aclaratorias_valor_nutricional" headerText="Notas aclaratorias valor nutricional" filtering="true" ordering="true" value="${entity.notas_aclaratorias_valor_nutricional}">
+                                    <filter property="notas_aclaratorias_valor_nutricional" matching="contains" valueExpression="${this.column_notas_aclaratorias_valor_nutricional}"/>
+                                    <order property="notas_aclaratorias_valor_nutricional"/>
+                                </column>
+                                <column id="column_cumple_valor_nutricional" headerText="Cumple valor nutricional" filtering="true" ordering="true" value="${entity.cumple_valor_nutricional}">
+                                    <filter property="cumple_valor_nutricional" matching="contains" valueExpression="${this.column_cumple_valor_nutricional}"/>
+                                    <order property="cumple_valor_nutricional"/>
+                                </column>
+                                <column id="column_peso1" headerText="Peso 1" filtering="true" ordering="true" value="${entity.peso1}">
+                                    <filter property="peso1" matching="contains" valueExpression="${this.column_peso1}"/>
+                                    <order property="peso1"/>
+                                </column>
+                                <column id="column_peso2" headerText="Peso 2" filtering="true" ordering="true" value="${entity.peso2}">
+                                    <filter property="peso2" matching="contains" valueExpression="${this.column_peso2}"/>
+                                    <order property="peso2"/>
+                                </column>
+                                <column id="column_peso3" headerText="Peso 3" filtering="true" ordering="true" value="${entity.peso3}">
+                                    <filter property="peso3" matching="contains" valueExpression="${this.column_peso3}"/>
+                                    <order property="peso3"/>
+                                </column>
+                                <column id="column_cumple_producto_etiquetado" headerText="Cumple producto etiquetado" filtering="true" ordering="true" value="${entity.cumple_producto_etiquetado}">
+                                    <filter property="cumple_producto_etiquetado" matching="contains" valueExpression="${this.column_cumple_producto_etiquetado}"/>
+                                    <order property="cumple_producto_etiquetado"/>
+                                </column>
+                                <column id="column_notas_aclaratorias_producto_etiquetado" headerText="Notas aclaratorias" filtering="true" ordering="true" value="${entity.notas_aclaratorias}">
+                                    <filter property="notas_aclaratorias" matching="contains" valueExpression="${this.column_notas_aclaratorias_producto_etiquetado}"/>
+                                    <order property="notas_aclaratorias"/>
+                                </column>
+                            </datatable>
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem id="existenciaEtiquetado" label="Existencia etiquetado">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="7. EXISTENCIA ETIQUETADO"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <datalist id="datalistExistenciasEtiquetado" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+
+                            <button label="Añadir">
+                                <action id="compositeAnadirExistenciaEtiquetado">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="existenciaEtiquetado-editExistenciaEtiquetado">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador_id" value="${entity.operador_id}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                    </action>
+                                </action>
+                            </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="existenciaEtiquetado-editExistenciaEtiquetado"
+                                numVisibleRows="3"
+                                repo="existenciaEtiquetadoRepo">
+                                <column id="column_tipo" headerText="Tipo" filtering="true" ordering="true" value="${entity.tipo}">
+                                    <filter property="tipo" matching="contains" valueExpression="${this.column_tipo}"/>
+                                    <order property="tipo"/>
+                                </column>
+                                <column id="column_nombre_marca" headerText="Marca" filtering="false" ordering="false" value="${entity.marca.nombre_marca}"/>
+                                <column id="column_desde" headerText="Desde" filtering="true" ordering="true" value="${entity.desde}">
+                                    <filter property="desde" matching="contains" valueExpression="${this.column_desde}"/>
+                                    <order property="desde"/>
+                                </column>
+                                <column id="column_hasta" headerText="Hasta" filtering="true" ordering="true" value="${entity.hasta}">
+                                    <filter property="hasta" matching="contains" valueExpression="${this.column_hasta}"/>
+                                    <order property="hasta"/>
+                                </column>
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador_id" value="${entity.expediente.operador.operador_id}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+                    </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem id="equipoMedida" label="Equipos de medida">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="8.1 VERIFICACIÓN EQUIPOS DE MEDIDA"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <datalist id="datalistEquiposMedida" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+
+                            <button label="Añadir">
+                                <action id="compositeAnadirVerificacionEquiposMedida">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="verifEquipoMedida-editVerifEquiposMedida">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador_id" value="${entity.operador_id}" />
+                                        <param name="razon_social" value="${entity.operador.razon_social}" />
+                                        <param name="instalacion_id" value="${entity.instalacion_id}" />
+                                        <param name="nombre_instalacion" value="${entity.instalacion.nombre_instalacion}" />
+                                    </action>
+                                </action>
+                               </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="verifEquipoMedida-editVerifEquiposMedida"
+                                numVisibleRows="3"
+                                repo="verificacionEquipoMedidaRepo"
+                                onBeforeRender="updateDesviacionesVerificacionEquipoMedida">
+                                <column id="column_equipo" headerText="Equipo" filtering="false" ordering="false" value="${entity.equipoMedida.equipo}"/>
+                                <column id="column_nombre_instalacion" headerText="Instalación" filtering="false" ordering="false" value="${entity.equipoMedida.instalacion.nombre_instalacion}"/>
+                                <column id="column_marca_y_modelo" headerText="Marca y modelo" filtering="false" ordering="false" value="${entity.equipoMedida.marca_y_modelo}"/>
+                                <column id="column_fecha_verif_equipo_medida" headerText="Fecha" filtering="true" ordering="true" value="${entity.fecha}">
+                                    <filter property="fecha" matching="contains" valueExpression="${this.column_fecha_verif_equipo_medida}"/>
+                                    <order property="fecha"/>
+                                </column>
+                                <column id="column_cumple_equipo_medida" headerText="Cumple equipo medida" filtering="true" ordering="true" value="${entity.cumple_equipo_medida}">
+                                    <filter property="cumple_equipo_medida" matching="contains" valueExpression="${this.column_cumple_equipo_medida}"/>
+                                    <order property="cumple_equipo_medida"/>
+                                </column>
+                                <column id="column_notas_aclaratorias_verif_equipo_medida" headerText="Notas aclaratorias" filtering="true" ordering="true" value="${entity.notas_aclaratorias}">
+                                    <filter property="notas_aclaratorias" matching="contains" valueExpression="${this.column_notas_aclaratorias_verif_equipo_medida}"/>
+                                    <order property="notas_aclaratorias"/>
+                                </column>
+                                <param name="expediente_id" value="${entity.expediente.id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador_id" value="${entity.equipoMedida.instalacion.operador.operador_id}" />
+                                <param name="razon_social" value="${entity.equipoMedida.instalacion.operador.razon_social}" />
+                                <param name="instalacion_id" value="${entity.equipoMedida.instalacion.instalacion_id}" />
+                                <param name="nombre_instalacion" value="${entity.equipoMedida.instalacion.nombre_instalacion}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                        <eq property="instalacion_id" value="${empty(params.instalacion_id) ? '-1' : params.instalacion_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+
+                            <p value=""/>
+                            <divisor color="#00766C" strokeWidth="8" />
+                            <p bold="true" value="8.2 EQUIPOS DE MEDIDA DE LA INSTALACIÓN"/>
+                            <divisor color="#00766C" strokeWidth="8" />
+
+                            <button label="Añadir">
+                                <action id="compositeAnadirEquiposMedidaInstalacion">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="equipoMedida-editEquiposMedida">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="operador_id" value="${entity.operador_id}" />
+                                        <param name="razon_social" value="${entity.operador.razon_social}" />
+                                        <param name="instalacion_id" value="${entity.instalacion_id}" />
+                                        <param name="nombre_instalacion" value="${entity.instalacion.nombre_instalacion}" />
+                                    </action>
+                                </action>
+                             </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="equipoMedida-editEquiposMedida"
+                                numVisibleRows="3"
+                                repo="equipoMedidaRepo">
+                                <column id="column_equipo_medida_equipo" headerText="Equipo" filtering="true" ordering="true" value="${entity.equipo}">
+                                    <filter property="equipo" matching="contains" valueExpression="${this.column_equipo_medida_equipo}"/>
+                                    <order property="equipo"/>
+                                </column>
+
+                                <column id="column_equipo_medida_nombre_instalacion" headerText="Instalación" filtering="false" ordering="false" value="${entity.instalacion.nombre_instalacion}"/>
+
+                                <column id="column_equipo_medida_marca_y_modelo" headerText="Marca y modelo" filtering="true" ordering="true" value="${entity.marca_y_modelo}">
+                                    <filter property="marca_y_modelo" matching="contains" valueExpression="${this.column_equipo_medida_marca_y_modelo}"/>
+                                    <order property="marca_y_modelo"/>
+                                </column>
+                                <param name="expediente_id" value="${entity.expediente.id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador_id" value="${entity.equipoMedida.instalacion.operador.operador_id}" />
+                                <param name="razon_social" value="${entity.equipoMedida.instalacion.operador.razon_social}" />
+                                <param name="instalacion_id" value="${entity.equipoMedida.instalacion.instalacion_id}" />
+                                <param name="nombre_instalacion" value="${entity.equipoMedida.instalacion.nombre_instalacion}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="instalacion_id" value="${empty(params.instalacion_id) ? '-1' : params.instalacion_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+                        </datalistitem>
+                    </datalist>
+
+                </tabitem>
+
+                <tabitem id="productoNoConforme" label="Producto no conforme">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="9. PRODUCTO NO CONFORME"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <datalist id="datalistProductoNoConforme" repo="actasControlRepo">
+                        <repofilter>
+                            <and>
+                                <eq property="id" value="${params.expediente_id}"/>
+                            </and>
+                        </repofilter>
+                        <datalistitem>
+
+                            <button label="Añadir">
+                                <action id="compositeAnadirProductoNoConforme">
+                                    <action
+                                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                                    </action>
+                                    <action type="js" route="productoNoConforme-editProductoNoConforme">
+                                        <param name="method" value="updateDesviaciones" />
+                                        <param name="expediente_id" value="${entity.id}" />
+                                        <param name="num_expediente" value="${entity.num_expediente}" />
+                                        <param name="operador" value="${entity.operador.razon_social}" />
+                                    </action>
+                                </action>
+                           </button>
+
+                            <datatable
+                                allowsPartialRestore="false"
+                                route="productoNoConforme-editProductoNoConforme"
+                                numVisibleRows="3"
+                                properties="num_lote, fecha_elaboracion, sistema_identificacion_segregacion, cumple_producto_no_conforme, notas_aclaratorias"
+                                repo="productoNoConformeRepo"
+                                onBeforeRender="updateDesviacionesProductoNoConforme">
+                                <param name="expediente_id" value="${entity.expediente_id}" />
+                                <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                                <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                                <param name="backRoute" value="controlInSitu-editInSitu" />
+                                <repofilter>
+                                    <and>
+                                        <eq property="expediente_id" value="${empty(params.expediente_id) ? '-1' : params.expediente_id}" />
+                                    </and>
+                                </repofilter>
+                            </datatable>
+                        </datalistitem>
+                    </datalist>
+                </tabitem>
+
+                <tabitem id="desviacion" label="Verificación de la implantación de las acciones correctivas">
+                    <p value=""/>
+                    <divisor color="#00766C" strokeWidth="8" />
+                    <p bold="true" value="10. DESVIACIONES"/>
+                    <divisor color="#00766C" strokeWidth="8" />
+
+                    <!--button label="Añadir" readonly="${empty (entity.id)}" readonlyMessage="No puede añadir una desviación. Antes debe guardar el expediente">
+                        <action type="save" route="desviacion-editDesviacion">
+                            <param name="expediente_id" value="${entity.id}" />
+                            <param name="num_expediente" value="${entity.num_expediente}" />
+                            <param name="operador" value="${entity.operador.razon_social}" />
+                        </action>
+                    </button-->
+
+                    <!--datatable
+                        id="datatableDesviaciones"
+                        route="desviacion-editDesviacion"
+                        allowsPartialRestore="false"
+                        numVisibleRows="3"
+                        properties="apartado, requisito, hallazgo"
+                        repo="desviacionRepo">
+                        <param name="expediente_id" value="${entity.expediente_id}" />
+                        <param name="num_expediente" value="${entity.expediente.num_expediente}" />
+                        <param name="operador" value="${entity.expediente.operador.razon_social}" />
+                        <param name="backRoute" value="controlInSitu-editInSitu" />
+                        <repofilter>
+                            <and>
+                                <eq property="expediente_id" value="${empty(entity.id) ? '-1' : entity.id}" />
+                            </and>
+                        </repofilter>
+                    </datatable-->
+
+                </tabitem>
+            </tab>
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action id="compositeSaveAction">
+                    <action
+                        type="save" controller="datalistInstalaciones, datalistMateriasPrimas, datalistProcesoFabricacion, datalistProductoTerminado, datalistProductoTransformado, datalistProductoEtiquetado, datalistExistenciasEtiquetado, datalistEquiposMedida, datalistProductoNoConforme, datalistPesosMorcilaTipos">
+                    </action>
+                    <action type="js" route="back" restoreView="true" registerInHistory="false" >
+                        <param name="method" value="updateDesviaciones" />
+                        <param name="entityId" value="${view.expediente_id}"/>
+                    </action>
+                </action>
+            </button>
+            <button label="Cancel" route="back" />
+        </buttonbar>
+    </edit>
+</main>

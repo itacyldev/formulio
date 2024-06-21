@@ -1,0 +1,68 @@
+stash@{0}: WIP on FORMIC-477_uqserv_processor: eeebf41d FORMIC-477 http client
+stash@{1}: WIP on develop: 31eef074 Merge branch 'FORMIC-544_Job_Acta_Tierra_Vino' into develop
+stash@{2}: WIP on develop: c39b5bd4 Merge branch 'FORMIC-477_comandos_uqserv' into develop
+stash@{3}: WIP on FORMIC-477_comandos_uqserv: 586d26ba FORMIC-477 configuración de gradle
+stash@{4}: WIP on develop: b2e4861f Merge branch 'FORMIC-520_Renombrar_clase_Config_por_App' into develop
+stash@{5}: WIP on develop: c160f541 Merge branch 'FORMIC-462_Pipeline_deploy_etiquetado_automatico' into develop
+stash@{6}: WIP on develop: c160f541 Merge branch 'FORMIC-462_Pipeline_deploy_etiquetado_automatico' into develop
+stash@{7}: WIP on develop: e82d54aa Merge branch 'FORMIC-462_Pipeline_deploy_etiquetado_automatico' into develop
+stash@{8}: WIP on develop: cbb9e427 Merge branch 'FORMIC-427_InputType_botonera_UIImage' into develop
+stash@{9}: WIP on FORMIC-423_v0.6.1: bee94b5e FORMIC-423 Publicar versión, etiquetar y desplegar 0.6.1
+stash@{10}: WIP on develop: 733f3405 Merge tag 'FORMIC-416_v0.5.7' into develop
+stash@{11}: WIP on develop: 893bae74 Merge tag 'FORMIC-412_v0.5.6' into develop
+stash@{12}: WIP on develop: 0072991a Merge tag 'FORMIC-409_v0.5.4' into develop
+stash@{13}: WIP on FORMIC-409_v0.5.4: 7339d335 FORMIC-409 Publicar versión, etiquetar y desplegar 0.5.4
+stash@{14}: WIP on develop: f40355b8 Merge branch 'FORMIC-391_Ajuste_paragraph_layout_witdh_match_parent' into develop
+stash@{15}: WIP on FORMIC-388_v0.5.1: 95c91a54 FORMIC-388 Publicar versión, etiquetar y desplegar 0.5.1
+stash@{16}: WIP on FORMIC-380_Conf_jacoco_sonarqube: 9ff8cc49 FORMIC-380 Configuración jacoco y sonarqube en formic
+stash@{17}: WIP on FORMIC-359_Atributo_style: c729ef97 FORMIC-359 Asignar estilo en base a atributo style
+stash@{18}: WIP on FORMIC-366_v0.4.1: 39005030 FORMIC-366 Publicar versión, etiquetar y desplegar 0.4.1
+stash@{19}: WIP on develop: 117631d3 Merge branch 'FORMIC-355_revisar_radio' into develop
+stash@{20}: WIP on FORMIC-355_revisar_radio: c7079bc2 FORMIC-355_revisar_radio. Cambios para proyecto Ribera
+stash@{21}: WIP on FORMIC-355_revisar_radio: c7079bc2 FORMIC-355_revisar_radio. Cambios para proyecto Ribera
+stash@{22}: WIP on FORMIC-355_revisar_radio: c7079bc2 FORMIC-355_revisar_radio. Cambios para proyecto Ribera
+stash@{23}: WIP on FORMIC-355_revisar_radio: 04716f15 FORMIC-335 deshabilitar comprobación de mensajes por defecto
+stash@{24}: WIP on master: 08f85f8b FORMIC-354 Publicar versiOn, etiquetar y desplegar 0.4.0
+stash@{25}: WIP on FORMIC-354_v0.4.0: 23777d1f FORMIC-354 Publicar versiOn, etiquetar y desplegar 0.4.0
+stash@{26}: WIP on develop: 4337e378 Merge branch 'FORMIC-353_No_muestra_mensajes_error' into develop
+stash@{27}: WIP on develop: db8eade4 Merge branch 'FORMIC-331_No_aparece_entidad_despues_guardar' into develop
+stash@{28}: WIP on FORMIC-337_Refactorizar_infobutton_reset_label: 32ab9b0f FORMIC-337_Refactorizar_infobutton_reset_label
+stash@{29}: WIP on FORMIC-315_Hint_componentes_input: 21543889 FORMIC-315_Hint_componentes_input
+stash@{30}: WIP on develop: 1b150eae FORMIC-324 refactorización para poder navegar a vistas simples
+stash@{31}: WIP on FORMIC-298_Navegacion_boton_back: bb8c35fe FORMIC-298_Navegacion_boton_back
+stash@{32}: WIP on develop: 629f6741 Merge branch 'FORMIC-243_Datatable_implementar_StatefullWidget' into develop
+stash@{33}: WIP on FORMIC-243_Datatable_implementar_StatefullWidget: 7bb8e36b FORMIC-243_Datatable_implementar_StatefullWidget
+stash@{34}: WIP on FORMIC-282_Autocomplete_desaparecen_valores: 5ee10b19 FORMIC-265_Capa_espera_cargar_proyecto
+stash@{35}: WIP on FORMIC-284_Recuperar_estado_vista: 98ca399d FORMIC-286 eliminada lastAction de router y movida a actionController
+stash@{36}: WIP on FORMIC-265_Capa_espera_cargar_proyecto: a47fd056 FORMIC-265_Capa_espera_cargar_proyecto
+stash@{37}: WIP on develop: d0087c13 Merge branch 'FORMIC-290_No_spinner_progressbar' into develop
+stash@{38}: WIP on develop: d05755a0 Merge branch 'FORMIC-94_Componente_date_y_datetime' into develop
+stash@{39}: WIP on develop: 769eb42b FORMIC-238 Publicar versión, etiquetar y desplegar google play v0.3.0
+stash@{40}: WIP on FORMIC_v0.3.0: ffdbda7d Publicar versión, etiquetar y desplegar google play v0.3.0
+stash@{41}: WIP on FORMIC-191_Refactorizar_devConsole: 65d0681f FORMIC-178 Deshabilitar botones/links de añadir entidades relacionadas hasta que la entidad no esté creada
+stash@{42}: WIP on FORMIC-177_Rutas_dinamicas: 3df98f79 Merge branch 'FORMIC-175_Param_en_route' into develop
+stash@{43}: WIP on FORMIC-124_Mejorar_estilos_cards: efb58c95 FORMIC-124 Mejorar estilos cards
+stash@{44}: WIP on FORMIC-124_Mejorar_estilos_cards: efb58c95 FORMIC-124 Mejorar estilos cards
+stash@{45}: WIP on FORMIC-124_Mejorar_estilos_cards: efb58c95 FORMIC-124 Mejorar estilos cards
+stash@{46}: WIP on FORMIC-124_Mejorar_estilos_cards: efb58c95 FORMIC-124 Mejorar estilos cards
+stash@{47}: WIP on FORMIC-120_Mejorar_estilos_datatable: d33a5fec FORMIC-120 Mejorar estilos datatable
+stash@{48}: WIP on develop: 164cd48b FORMIC-122 Mejorar estilos de los input fileds
+stash@{49}: WIP on master: 51c55887 Merge branch '0.1.4'
+stash@{50}: WIP on master: 51c55887 Merge branch '0.1.4'
+stash@{51}: WIP on develop: 341e342e Merge tag 'v_0.1.3' into develop
+stash@{52}: WIP on FORMIC-105_filtro_avanzado: 3616feff Merge branch 'FORMIC-38_configurar_empaquetado' into develop
+stash@{53}: WIP on develop: 0a076ace Merge branch 'FORMIC-109_Reorganizar_formularios' into develop
+stash@{54}: WIP on develop: 0a076ace Merge branch 'FORMIC-109_Reorganizar_formularios' into develop
+stash@{55}: WIP on develop: 0a076ace Merge branch 'FORMIC-109_Reorganizar_formularios' into develop
+stash@{56}: WIP on develop: 0a076ace Merge branch 'FORMIC-109_Reorganizar_formularios' into develop
+stash@{57}: WIP on develop: 0a076ace Merge branch 'FORMIC-109_Reorganizar_formularios' into develop
+stash@{58}: WIP on develop: 0a076ace Merge branch 'FORMIC-109_Reorganizar_formularios' into develop
+stash@{59}: WIP on develop: 3616feff Merge branch 'FORMIC-38_configurar_empaquetado' into develop
+stash@{60}: WIP on develop: 85155e5 Merge branch 'FORMIC-107_Borrado_radio_requerido' into develop
+stash@{61}: WIP on develop: b1c6b6a Merge branch 'FORMIC-73_Ajuste_formularios' into develop
+stash@{62}: WIP on develop: 10fb143 FORMIC-61_mejoras tests de instrumentacion
+stash@{63}: WIP on FORMIC-58_Ajustar_widget_imagenes: 6ccf1de FORMIC-58 Ajustar estilo widget de imágenes
+stash@{64}: WIP on FORMIC-64_Revisar_renderizado_tabs_color_pestanas: 8bb4e3f FORMIC-64 Revisar renderizado de tabs y color pestanas
+stash@{65}: WIP on FORMIC-64_Revisar_renderizado_tabs_color_pestanas: 283ae7d FORMIC-64 Revisar renderizado de tabs y color pestanas
+stash@{66}: WIP on FORMIC-37_Revisar_estilos: f370d92 FORMIC-37_Revisar_estilos Revisar estilos y organización de interfaz
+stash@{67}: WIP on FORMIC-53: 4c683d0 FORMIC-53 Revisar InputComponents (text, radio, select, auto, switch, date, image)

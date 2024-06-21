@@ -1,0 +1,14 @@
+<main id="formInput" name="Input" repo="pruebaRepo">
+    <edit>
+        <form>
+            <input label="Input: " value="${entity.d_prueba}"/>
+            <input label="Required: " value="${entity.d_prueba}" validator="required"/>
+            <input label="Hint: " value="${entity.d_prueba}" hint="Hint description"/>
+            <input label="Readonly: " value="${entity.d_prueba}" readonly="true"/>
+            <input label="PlaceHolder: " placeHolder="${params.d_prueba}" value="${entity.d_prueba}"/>
+            <input label="InputType: " inputType="3" value="${entity.d_prueba}"/>
+            <input label="HasDeleteButton: " hasDeleteButton="false"  value="${entity.d_prueba}"/>
+            <input label="Converter: " converter="integer" value="${entity.d_prueba}"/>
+        </form>
+    </edit>
+</main>

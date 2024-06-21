@@ -1,0 +1,10 @@
+<main name="Form Image Gallery" description="An example of short description" id="formImagegallery" repo="superHRepo">
+    <list name="Image Gallery">
+        <form>
+            <imagegallery repo="superHImages">
+                <imagegalleryitem>
+                </imagegalleryitem>
+            </imagegallery>
+        </form>
+    </list>
+</main>

@@ -1,0 +1,351 @@
+<main id="partidaAforo" name="Partida aforo" repo="partidaAforoRepo" mainForm="false">
+    <list id="listPartidaAforo" name="Partida aforo" description="Listado partidas aforo">
+       <datatable>
+           <column id="column_partida_aforo" headerText="Partida" filtering="true" ordering="true" value="${entity.partida}">
+               <filter property="partida" matching="contains" valueExpression="${this.column_partida_aforo}"/>
+               <order property="partida"/>
+           </column>
+           <column id="column_anada_aforo" headerText="Añada" filtering="true" ordering="true" value="${entity.anada}">
+               <filter property="anada" matching="contains" valueExpression="${this.column_anada_aforo}"/>
+               <order property="anada"/>
+           </column>
+           <column headerText="Tipo de vino" filtering="false" ordering="false" value="${entity.vino.vino}"/>
+           <column headerText="Nivel de protección" filtering="false" ordering="false" value="${entity.nivelProteccion.nivel_proteccion}"/>
+           <column id="column_total_volumen_aforado" headerText="Volumen aforado" filtering="true" ordering="true" value="${entity.total_volumen_aforado}">
+               <filter property="total_volumen_aforado" matching="contains" valueExpression="${this.column_total_volumen_aforado}"/>
+               <order property="total_volumen_aforado"/>
+           </column>
+       </datatable>
+        <buttonbar type="fab"/>
+    </list>
+    <edit id="editPartidaAforo">
+        <form id="formPartidaAforo">
+
+            <p value=""/>
+            <p backgroundColor="#26a69a" fontSize="22" fontColor="#FFFFFF" bold="true" value="PARTIDA AFORO"/>
+
+            <table headerText=" Id. Exp., Nº Exp., Id. DOP, DOP" weights="20, 30, 10, 40">
+                <row>
+                    <input id="expediente_id" value="${entity.expediente_id}" placeHolder="${params.expediente_id}" readonly="true"/>
+                    <input id="num_expediente" value="${entity.expediente.num_expediente}" placeHolder="${params.num_expediente}" readonly="true"/>
+                    <input id="dop_id" value="${entity.expediente.dop_id}" placeHolder="${params.dop_id}" readonly="true"/>
+                    <input id="dop" value="${entity.expediente.dop.dop}" placeHolder="${params.dop}" readonly="true"/>
+                </row>
+            </table>
+            <table headerText=" Id. Operador, Razón social" weights="20, 80">
+                <row>
+                    <input id="operador_id" value="${entity.expediente.operador_id}" placeHolder="${params.operador_id}" readonly="true"/>
+                    <input id="razon_social" value="${entity.expediente.operador.razon_social}" placeHolder="${params.razon_social}" readonly="true"/>
+                </row>
+            </table>
+
+            <p value=""/>
+            <divisor color="#00766C" strokeWidth="8" />
+            <p bold="true" value="Partida aforo"/>
+            <divisor color="#00766C" strokeWidth="8" />
+
+            <table border="false">
+                <row>
+                    <input id="partida_aforo_id" label="Id.: " value="${entity.partida_aforo_id}" readonly="true"/>
+                    <input id="partida" label="Partida: " value="${entity.partida}" validator="required"/>
+                    <input id="anada" label="Añada: " value="${entity.anada}" inputType="3" validator="required"/>
+                </row>
+                <row>
+                    <autocomplete label="Tipo de vino: " forceSelection="true" id="vino_id" repo="vinoRepo" value="${entity.vino_id}" validator="required">
+                        <options labelExpression="${entity.vino}" labelFilteringProperty="vino" valueProperty="vino_id" />
+                        <repofilter>
+                            <contains property="vino" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                    <autocomplete label="Nivel de protección: " forceSelection="true" id="nivel_proteccion_id" repo="nivelProteccionRepo" value="${entity.nivel_proteccion_id}" validator="required">
+                        <options labelExpression="${entity.nivel_proteccion}" labelFilteringProperty="nivel_proteccion" valueProperty="nivel_proteccion_id" />
+                        <repofilter>
+                            <contains property="nivel_proteccion" value="${this.value}"/>
+                        </repofilter>
+                    </autocomplete>
+                </row>
+            </table>
+            <p value=""/>
+            <tab>
+                <tabitem label="GRANELES DEPÓSITOS">
+                    <button label="AÑADIR GRANEL DEPÓSITO" readonly="${empty (entity.partida)}" readonlyMessage="No puede realizar esta acción: No existe partida aforada">
+                        <action id="createGranelDeposito" type="create" route="granelDeposito-editGranelDeposito">
+                            <param name="repo" value="granelDepositoRepo"/>
+                            <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                            <param name="partida" value="${view.partida}" />
+                            <param name="anada" value="${view.anada}" />
+                            <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                            <param name="vino_id" value="${view.vino_id}" />
+                            <param name="expediente_id" value="${view.expediente_id}" />
+                            <param name="num_expediente" value="${view.num_expediente}" />
+                            <param name="operador_id" value="${view.operador_id}"/>
+                            <param name="razon_social" value="${view.razon_social}"/>
+                            <param name="dop_id" value="${view.dop_id}"/>
+                            <param name="dop" value="${view.dop}"/>
+                        </action>
+                    </button>
+                    <datatable
+                        numVisibleRows="4"
+                        repo="granelDepositoRepo"
+                        route="granelDeposito-editGranelDeposito">
+                        <column headerText="Id granel" filtering="false" ordering="false" value="${entity.granel_deposito_id}"/>
+                        <column headerText="Nº Depósito" filtering="false" ordering="false" value="${entity.deposito.numero}"/>
+                        <column headerText="Partida" filtering="false" ordering="false" value="${entity.partidaAforo.partida}"/>
+                        <column headerText="Añada" filtering="false" ordering="false" value="${entity.partidaAforo.anada}"/>
+                        <column headerText="Volumen nominal" filtering="false" ordering="false" value="${entity.deposito.capacidad}"/>
+                        <column id="column_volumen_aforado_granel_deposito" headerText="Volumen aforado" filtering="true" ordering="true" value="${entity.volumen_aforado}">
+                            <filter property="volumen_aforado" matching="contains" valueExpression="${this.column_volumen_aforado_granel_deposito}"/>
+                            <order property="volumen_aforado"/>
+                        </column>
+                        <column headerText="Tipo de vino" filtering="false" ordering="false" value="${entity.partidaAforo.vino.vino}"/>
+                        <column headerText="Nivel de protección" filtering="false" ordering="false" value="${entity.partidaAforo.nivelProteccion.nivel_proteccion}"/>
+                        <column headerText="Tipo de depósito" filtering="false" ordering="false" value="${entity.tipoDeposito.tipo_deposito}"/>
+                        <column headerText="Material" filtering="false" ordering="false" value="${entity.deposito.material}"/>
+                        <column id="column_observaciones_granel_deposito" headerText="Observaciones" filtering="true" ordering="true" value="${entity.observaciones}">
+                            <filter property="observaciones" matching="contains" valueExpression="${this.column_observaciones_granel_deposito}"/>
+                            <order property="observaciones"/>
+                        </column>
+                        <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                        <param name="partida" value="${view.partida}" />
+                        <param name="anada" value="${view.anada}" />
+                        <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                        <param name="vino_id" value="${view.vino_id}" />
+                        <param name="expediente_id" value="${view.expediente_id}" />
+                        <param name="num_expediente" value="${view.num_expediente}" />
+                        <param name="operador_id" value="${view.operador_id}"/>
+                        <param name="razon_social" value="${view.razon_social}"/>
+                        <param name="dop_id" value="${view.dop_id}"/>
+                        <param name="dop" value="${view.dop}"/>
+                        <param name="granel_deposito_id" value="${entity.granel_deposito_id}"/>
+                        <repofilter>
+                            <and>
+                                <eq property="partida_aforo_id" value="${empty(view.partida_aforo_id) ? '-1' : view.partida_aforo_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem label="GRANELES BARRICAS">
+                    <button label="AÑADIR GRANEL BARRICA" readonly="${empty (entity.partida)}" readonlyMessage="No puede realizar esta acción: No existe partida aforada">
+                        <action id="createGranelBarrica" type="create" route="granelBarrica-editGranelBarrica" >
+                            <param name="repo" value="granelBarricaRepo"/>
+                            <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                            <param name="partida" value="${view.partida}" />
+                            <param name="anada" value="${view.anada}" />
+                            <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                            <param name="vino_id" value="${view.vino_id}" />
+                            <param name="expediente_id" value="${view.expediente_id}" />
+                            <param name="num_expediente" value="${view.num_expediente}" />
+                            <param name="operador_id" value="${view.operador_id}"/>
+                            <param name="razon_social" value="${view.razon_social}"/>
+                            <param name="dop_id" value="${view.dop_id}"/>
+                            <param name="dop" value="${view.dop}"/>
+                        </action>
+                    </button>
+                    <datatable
+                        numVisibleRows="4"
+                        repo="granelBarricaRepo"
+                        route="granelBarrica-editGranelBarrica"
+                        onBeforeRender="updateVolumenAforadoGranelBarrica">
+                        <column headerText="Partida" filtering="false" ordering="false" value="${entity.partidaAforo.partida}"/>
+                        <column headerText="Añada" filtering="false" ordering="false" value="${entity.partidaAforo.anada}"/>
+                        <column id="column_numero_barricas_granel_barrica" headerText="Nº barricas" filtering="true" ordering="true" value="${entity.numero_barricas}">
+                            <filter property="numero_barricas" matching="contains" valueExpression="${this.column_numero_barricas_granel_barrica}"/>
+                            <order property="numero_barricas"/>
+                        </column>
+                        <column id="column_capacidad_granel_barrica" headerText="Capacidad" filtering="true" ordering="true" value="${entity.capacidad}">
+                            <filter property="capacidad" matching="contains" valueExpression="${this.column_capacidad_granel_barrica}"/>
+                            <order property="capacidad"/>
+                        </column>
+                        <column headerText="Volumen total" filtering="false" ordering="false" value="${math:round(entity.volumen_aforado*math:pow(10,2))/math:pow(10,2)}"/>
+                        <column headerText="Tipo de vino" filtering="false" ordering="false" value="${entity.partidaAforo.vino.vino}"/>
+                        <column headerText="Nivel de protección" filtering="false" ordering="false" value="${entity.partidaAforo.nivelProteccion.nivel_proteccion}"/>
+                        <column id="column_observaciones_granel_barrica" headerText="Observaciones" filtering="true" ordering="true" value="${entity.observaciones}">
+                            <filter property="observaciones" matching="contains" valueExpression="${this.column_observaciones_granel_barrica}"/>
+                            <order property="observaciones"/>
+                        </column>
+                        <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                        <param name="partida" value="${view.partida}" />
+                        <param name="anada" value="${view.anada}" />
+                        <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                        <param name="vino_id" value="${view.vino_id}" />
+                        <param name="expediente_id" value="${view.expediente_id}" />
+                        <param name="num_expediente" value="${view.num_expediente}" />
+                        <param name="operador_id" value="${view.operador_id}"/>
+                        <param name="razon_social" value="${view.razon_social}"/>
+                        <param name="dop_id" value="${view.dop_id}"/>
+                        <param name="dop" value="${view.dop}"/>
+                        <param name="granel_barrica_id" value="${entity.granel_barrica_id}"/>
+                        <repofilter>
+                            <and>
+                                <eq property="partida_aforo_id" value="${empty(view.partida_aforo_id) ? '-1' : view.partida_aforo_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem label="ENVASADOS">
+                    <button label="AÑADIR ENVASADO" readonly="${empty (entity.partida)}" readonlyMessage="No puede realizar esta acción: No existe partida aforada">
+                        <action id="createEnvasado" type="create" route="envasado-editEnvasado" >
+                            <param name="repo" value="envasadoRepo"/>
+                            <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                            <param name="partida" value="${view.partida}" />
+                            <param name="anada" value="${view.anada}" />
+                            <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                            <param name="vino_id" value="${view.vino_id}" />
+                            <param name="expediente_id" value="${view.expediente_id}" />
+                            <param name="num_expediente" value="${view.num_expediente}" />
+                            <param name="operador_id" value="${view.operador_id}"/>
+                            <param name="razon_social" value="${view.razon_social}"/>
+                            <param name="dop_id" value="${view.dop_id}"/>
+                            <param name="dop" value="${view.dop}"/>
+                        </action>
+                    </button>
+                    <datatable
+                        numVisibleRows="4"
+                        repo="envasadoRepo"
+                        route="envasado-editEnvasado"
+                        onBeforeRender="updateVolumenAforadoEnvasado">
+                        <column headerText="Partida" filtering="false" ordering="false" value="${entity.partidaAforo.partida}"/>
+                        <column headerText="Añada" filtering="false" ordering="false" value="${entity.partidaAforo.anada}"/>
+                        <column id="column_numero_jaulones_envasado" headerText="Nº jaulones" filtering="true" ordering="true" value="${entity.numero_jaulones}">
+                            <filter property="numero_jaulones" matching="contains" valueExpression="${this.column_numero_jaulones_envasado}"/>
+                            <order property="numero_jaulones"/>
+                        </column>
+                        <column id="column_numero_botellas_jaulon_envasado" headerText="Nº botellas por jaulón" filtering="true" ordering="true" value="${entity.numero_botellas_jaulon}">
+                            <filter property="numero_botellas_jaulon" matching="contains" valueExpression="${this.column_numero_botellas_jaulon_envasado}"/>
+                            <order property="numero_botellas_jaulon"/>
+                        </column>
+                        <column id="column_numero_botellas_sueltas_envasado" headerText="Nº botellas sueltas" filtering="true" ordering="true" value="${entity.numero_botellas_sueltas}">
+                            <filter property="numero_botellas_sueltas" matching="contains" valueExpression="${this.column_numero_botellas_sueltas_envasado}"/>
+                            <order property="numero_botellas_sueltas"/>
+                        </column>
+                        <column headerText="Total de botellas" filtering="false" ordering="false" value="${(entity.numero_jaulones*entity.numero_botellas_jaulon) + entity.numero_botellas_sueltas}"/>
+                        <column id="column_volumen_botella_envasado" headerText="Volumen botella" filtering="true" ordering="true" value="${entity.volumen_botella}">
+                            <filter property="volumen_botella" matching="contains" valueExpression="${this.column_volumen_botella_envasado}"/>
+                            <order property="volumen_botella"/>
+                        </column>
+                        <column headerText="Volumen total" filtering="false" ordering="false" value="${math:round(entity.volumen_aforado*math:pow(10,2))/math:pow(10,2)}"/>
+                        <column headerText="Tipo de vino" filtering="false" ordering="false" value="${entity.partidaAforo.vino.vino}"/>
+                        <column headerText="Nivel de protección" filtering="false" ordering="false" value="${entity.partidaAforo.nivelProteccion.nivel_proteccion}"/>
+                        <column id="column_observaciones_envasado" headerText="Observaciones" filtering="true" ordering="true" value="${entity.observaciones}">
+                            <filter property="observaciones" matching="contains" valueExpression="${this.column_observaciones_envasado}"/>
+                            <order property="observaciones"/>
+                        </column>
+                        <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                        <param name="partida" value="${view.partida}" />
+                        <param name="anada" value="${view.anada}" />
+                        <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                        <param name="vino_id" value="${view.vino_id}" />
+                        <param name="expediente_id" value="${view.expediente_id}" />
+                        <param name="num_expediente" value="${view.num_expediente}" />
+                        <param name="operador_id" value="${view.operador_id}"/>
+                        <param name="razon_social" value="${view.razon_social}"/>
+                        <param name="dop_id" value="${view.dop_id}"/>
+                        <param name="dop" value="${view.dop}"/>
+                        <param name="envasado_id" value="${entity.envasado_id}"/>
+                        <repofilter>
+                            <and>
+                                <eq property="partida_aforo_id" value="${empty(view.partida_aforo_id) ? '-1' : view.partida_aforo_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+                <tabitem label="ETIQUETADOS">
+                    <button label="AÑADIR ETIQUETADO" readonly="${empty (entity.partida)}" readonlyMessage="No puede realizar esta acción: No existe partida aforada">
+                        <action id="createEtiquetado" type="create" route="etiquetado-editEtiquetado" >
+                            <param name="repo" value="etiquetadoRepo"/>
+                            <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                            <param name="partida" value="${view.partida}" />
+                            <param name="anada" value="${view.anada}" />
+                            <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                            <param name="vino_id" value="${view.vino_id}" />
+                            <param name="expediente_id" value="${view.expediente_id}" />
+                            <param name="num_expediente" value="${view.num_expediente}" />
+                            <param name="operador_id" value="${view.operador_id}"/>
+                            <param name="razon_social" value="${view.razon_social}"/>
+                            <param name="dop_id" value="${view.dop_id}"/>
+                            <param name="dop" value="${view.dop}"/>
+                        </action>
+                    </button>
+                    <datatable
+                        numVisibleRows="4"
+                        repo="etiquetadoRepo"
+                        route="etiquetado-editEtiquetado"
+                        onBeforeRender="updateVolumenAforadoEtiquetado">
+                        <column headerText="Partida" filtering="false" ordering="false" value="${entity.partidaAforo.partida}"/>
+                        <column headerText="Añada" filtering="false" ordering="false" value="${entity.partidaAforo.anada}"/>
+                        <column id="column_numero_pales_etiquetado" headerText="Nº palés" filtering="true" ordering="true" value="${entity.numero_pales}">
+                            <filter property="numero_pales" matching="contains" valueExpression="${this.column_numero_pales_etiquetado}"/>
+                            <order property="numero_pales"/>
+                        </column>
+                        <column id="column_numero_cajas_pales_etiquetado" headerText="Nº cajas por palé" filtering="true" ordering="true" value="${entity.numero_cajas_pales}">
+                            <filter property="numero_cajas_pales" matching="contains" valueExpression="${this.column_numero_cajas_pales_etiquetado}"/>
+                            <order property="numero_cajas_pales"/>
+                        </column>
+                        <column id="column_numero_cajas_sueltas_etiquetado" headerText="Nº cajas sueltas" filtering="true" ordering="true" value="${entity.numero_cajas_sueltas}">
+                            <filter property="numero_cajas_sueltas" matching="contains" valueExpression="${this.column_numero_cajas_sueltas_etiquetado}"/>
+                            <order property="numero_cajas_sueltas"/>
+                        </column>
+                        <column id="column_numero_botellas_caja_etiquetado" headerText="Nº botellas por caja" filtering="true" ordering="true" value="${entity.numero_botellas_caja}">
+                            <filter property="numero_botellas_caja" matching="contains" valueExpression="${this.column_numero_botellas_caja_etiquetado}"/>
+                            <order property="numero_botellas_caja"/>
+                        </column>
+                        <column id="column_numero_botellas_sueltas_etiquetado" headerText="Nº botellas sueltas" filtering="true" ordering="true" value="${entity.numero_botellas_sueltas}">
+                            <filter property="numero_botellas_sueltas" matching="contains" valueExpression="${this.column_numero_botellas_sueltas_etiquetado}"/>
+                            <order property="numero_botellas_sueltas"/>
+                        </column>
+                        <column headerText="Total de botellas" filtering="false" ordering="false" value="${(entity.numero_pales*entity.numero_cajas_pales*entity.numero_botellas_caja) + (entity.numero_cajas_sueltas*entity.numero_botellas_caja) + entity.numero_botellas_sueltas}"/>
+                        <column id="column_volumen_botella_etiquetado" headerText="Volumen botella" filtering="true" ordering="true" value="${entity.volumen_botella}">
+                            <filter property="volumen_botella" matching="contains" valueExpression="${this.column_volumen_botella_etiquetado}"/>
+                            <order property="volumen_botella"/>
+                        </column>
+                        <column headerText="Volumen total" filtering="false" ordering="false" value="${math:round(entity.volumen_aforado*math:pow(10,2))/math:pow(10,2)}"/>
+                        <column headerText="Tipo de vino" filtering="false" ordering="false" value="${entity.partidaAforo.vino.vino}"/>
+                        <column headerText="Nivel de protección" filtering="false" ordering="false" value="${entity.partidaAforo.nivelProteccion.nivel_proteccion}"/>
+                        <column id="column_observaciones_etiquetado" headerText="Observaciones" filtering="true" ordering="true" value="${entity.observaciones}">
+                            <filter property="observaciones" matching="contains" valueExpression="${this.column_observaciones_etiquetado}"/>
+                            <order property="observaciones"/>
+                        </column>
+                        <param name="partida_aforo_id" value="${view.partida_aforo_id}" />
+                        <param name="partida" value="${view.partida}" />
+                        <param name="anada" value="${view.anada}" />
+                        <param name="nivel_proteccion_id" value="${view.nivel_proteccion_id}" />
+                        <param name="vino_id" value="${view.vino_id}" />
+                        <param name="expediente_id" value="${view.expediente_id}" />
+                        <param name="num_expediente" value="${view.num_expediente}" />
+                        <param name="operador_id" value="${view.operador_id}"/>
+                        <param name="razon_social" value="${view.razon_social}"/>
+                        <param name="dop_id" value="${view.dop_id}"/>
+                        <param name="dop" value="${view.dop}"/>
+                        <param name="etiquetado_id" value="${entity.etiquetado_id}"/>
+                        <repofilter>
+                            <and>
+                                <eq property="partida_aforo_id" value="${empty(view.partida_aforo_id) ? '-1' : view.partida_aforo_id}" />
+                            </and>
+                        </repofilter>
+                    </datatable>
+                </tabitem>
+            </tab>
+
+        </form>
+
+        <buttonbar type="bottom">
+            <button label="Save">
+                <action type="save" route="back" registerInHistory="false" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Cancel">
+                <action type="cancel" route="back" restoreView="true">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+
+            <button label="Delete" readonly="${empty (entity.partida_aforo_id)}" readonlyMessage="No puede realizar esta acción: No existe partida aforo" restoreView="true">
+                <action type="delete" route="back" registerInHistory="false">
+                    <param name="entityId" value="${params.expediente_id}" />
+                </action>
+            </button>
+        </buttonbar>
+    </edit>
+</main>
