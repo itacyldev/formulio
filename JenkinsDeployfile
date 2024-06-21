@@ -74,6 +74,25 @@ pipeline {
            }
         }
 
+        stage("Preparación de Eliminación de Archivos") {
+            steps {
+                script {
+                    // Verificar si los archivos existen en el repositorio remoto y eliminarlos
+                    def filesToDelete = ['taq', 'Task']  // Lista de archivos a eliminar
+
+                    filesToDelete.each { file ->
+                        def remoteFileExists = sh(script: "git ls-remote --exit-code github refs/heads/master ${file} && echo true || echo false", returnStatus: true).trim()
+                        if (remoteFileExists == 'true') {
+                            echo "Eliminando ${file} del repositorio remoto en GitHub"
+                            sh "git push --delete github master ${file}"
+                        } else {
+                            echo "${file} no existe en el repositorio remoto. No se elimina."
+                        }
+                    }
+                }
+            }
+        }
+
          stage("Push to GitHub") {
            steps {
                echo "Pushing to GitHub"
