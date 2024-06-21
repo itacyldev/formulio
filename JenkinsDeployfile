@@ -81,10 +81,11 @@ pipeline {
                     def filesToDelete = ['taq', 'Task']  // Lista de archivos a eliminar
 
                     filesToDelete.each { file ->
-                        def remoteFileExists = sh(script: "git ls-remote --exit-code github refs/heads/master ${file} && echo true || echo false", returnStatus: true).trim()
-                        if (remoteFileExists == 'true') {
+                        // Usar returnStdout en lugar de returnStatus para obtener la salida como cadena
+                        def remoteFileExists = sh(script: "git ls-remote github refs/heads/master | grep ${file} || true", returnStdout: true).trim()
+                        if (remoteFileExists) {
                             echo "Eliminando ${file} del repositorio remoto en GitHub"
-                            sh "git push --delete github master ${file}"
+                            sh "git push --delete github ${file}"
                         } else {
                             echo "${file} no existe en el repositorio remoto. No se elimina."
                         }
@@ -92,6 +93,7 @@ pipeline {
                 }
             }
         }
+
 
          stage("Push to GitHub") {
            steps {
