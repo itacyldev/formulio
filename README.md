@@ -1,10 +1,10 @@
 # ![Icono de la aplicación](logo.png) Formulio
 
-Permite a los desarrolladores crear aplicaciones basadas en formularios de forma eficaz y sin esfuerzo diseñando la interfaz con plantillas XML y codificando la lógica de la aplicación con JavaScript. Cree sus formularios de encuesta o de recogida de datos con una codificación mínima.
+Empower developers to efficiently and effortlessly create form-based applications by designing the interface with XML templates and coding the application logic with JavaScript. Build your survey or data collection forms with minimal coding.
 
-La aplicación incluye componentes de interfaz para cubrir la mayoría de los casos que surgen al implementar un proceso de recogida de datos. El marco de trabajo utiliza un sistema de "contexto" para acceder a la información de forma coherente desde diferentes fuentes (base de datos, archivos, API REST, información del dispositivo, etc.) y admite la vinculación automática entre las entidades recuperadas del repositorio y los componentes de la pantalla. El mecanismo de actualización entre componentes se basa en un mecanismo reactivo, implementado a partir de dependencias entre componentes de pantalla o entre componentes y contextos.
+The application includes interface components to cover most cases that arise when implementing a data collection process. The framework uses a "context" system to access information consistently from different sources (database, files, REST APIs, device information, etc.) and supports automatic binding between entities retrieved from the repository and screen components. The refresh mechanism between components is based on a reactive mechanism, implemented from dependencies between screen components or between components and contexts.
 
-Formulio también incluye un módulo configurable de ejecución de procesos en segundo plano llamado jayjobs, que permite definir pasos a ejecutar en JSON para tareas como exportar datos, sincronizar datos con una API REST remota, etc.
+Formulio also includes a configurable background process execution module called jayjobs, which allows defining steps to execute in JSON for tasks such as exporting data, synchronizing data with a remote REST API, etc.
 
 <div align="center">
     <img src="itacyl3.png">
