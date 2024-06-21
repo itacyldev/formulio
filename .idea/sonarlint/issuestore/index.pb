@@ -11,6 +11,8 @@ u
 Eforms/src/main/java/es/jcyl/ita/formic/forms/view/widget/IWidget.java,0\d\0dc644af7bf79385d2a49bd25951b505c5c76497
 Å
 Qforms/src/test/java/es/jcyl/ita/formic/forms/utils/dummy/DummyStatefulWidget.java,2\1\2115422e4c27592badf6b49f6c1f00909c7a3bb5
+<
+build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 |
 Lforms/src/test/java/es/jcyl/ita/formic/forms/components/TabRendererTest.java,7\2\72ed4f14d406b41c7e92e3895f93e928df2ae967
 Ü
